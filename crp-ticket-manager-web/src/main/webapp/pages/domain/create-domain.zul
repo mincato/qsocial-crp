@@ -1,27 +1,34 @@
 <?link rel="stylesheet" type="text/css" href="/style.css"?>
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.DomainViewModel')" 
-	border="normal" hflex="1" vflex="1" contentStyle="overflow:auto">
-	<caption sclass="fn-caption" label="${labels.domain.create.title}"/>
-	<vlayout>
-		<grid width="500px" form="@id('fx') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
-			<columns>
-				<column align="right" hflex="min"/>
-				<column/>
-			</columns>
-			<rows>
-				<row>
-					<cell sclass="row-title">${labels.domain.name}:</cell>
-					<cell>
-						<textbox value="@bind(fx.name)" width="200px"
-						constraint="no empty: ${labels.domain.validation.name}" />
-					</cell>
-				</row>
-			</rows>
-		</grid>
-		<hlayout>
-			<button onClick="@command('save')" label="${labels.app.button.save}"/>
-			<button onClick="@command('clear')" label="${labels.app.button.clear}"/>
-		</hlayout>
-	</vlayout>
+	border="normal" hflex="1" vflex="1" contentStyle="overflow:auto" xmlns:n="native">
+	
+	<n:div class="container-fluid">
+		<n:div class="row">
+			<n:div col="col-lg-12">
+				<div class="pane equal">
+					<n:h5>${labels.domain.create.title}</n:h5>
+				</div>
+			</n:div>
+		</n:div>
+	
+		<div class="row">
+			<n:div col="col-lg-12">
+				<div class="pane equal">
+					<n:form id="validation-test">
+						<n:div class="form-group required">
+						    <n:label for="normal_input">${labels.domain.name}:</n:label>
+				    		<textbox type="text" class="form-control" id="normal_input" 
+					    			name="normal_input" value="@bind(vm.currentDomain.name)"></textbox>
+						</n:div>
+						
+						<div class="form-group text-center">
+						    <button onClick="@command('save')" label="${labels.app.button.save}" class="btn btn-success" />
+						    <button onClick="@command('clear')" label="${labels.app.button.clear}" class="btn btn-default"/>
+						</div>
+				    </n:form>
+				</div>
+			</n:div>
+		</div>
+	</n:div>
 </window>
