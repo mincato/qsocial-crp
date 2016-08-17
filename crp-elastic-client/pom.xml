@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.qsocialnow.crp</groupId>
 		<artifactId>case-resolution-platform</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1</version>
 	</parent>
 	<artifactId>crp-elastic-client</artifactId>
 	<packaging>jar</packaging>
@@ -36,8 +36,8 @@
 
 		<!-- QSocialNow -->
 		<dependency>
-			<groupId>com.qsocialnow</groupId>
-			<artifactId>trp-common</artifactId>
+			<groupId>com.qsocialnow.crp</groupId>
+			<artifactId>crp-common</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
