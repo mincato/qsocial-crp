@@ -2,11 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.qsocialnow</groupId>
-	<artifactId>trp-kafka-util</artifactId>
+	<parent>
+		<groupId>com.qsocialnow.crp</groupId>
+		<artifactId>case-resolution-platform</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>crp-kafka-util</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-SNAPSHOT</version>
-	<name>TRP Kafka Util</name>
+	<name>CRP Kafka Util</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,7 +31,7 @@
 	</properties>
 
 	<dependencies>
-	
+
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
@@ -45,7 +48,7 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
-		
+
 		<!-- Apache Commons -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -72,14 +75,14 @@
     		<artifactId>commons-configuration</artifactId>
     		<version>${commons-configuration.version}</version>
 		</dependency>
-	
+
 		<!-- Kafka -->
 		<dependency>
     		<groupId>org.apache.kafka</groupId>
     		<artifactId>kafka_2.10</artifactId>
     		<version>${kafka-version}</version>
 		</dependency>
-		
+
 		<!-- Scala -->
 		<dependency>
     		<groupId>org.scala-lang</groupId>
@@ -91,7 +94,7 @@
     		<artifactId>scala-parser-combinators_2.11</artifactId>
     		<version>1.0.4</version>
 		</dependency>
-		
+
 		<!-- Zookeeper -->
 		<dependency>
     		<groupId>com.101tec</groupId>

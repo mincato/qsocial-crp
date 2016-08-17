@@ -2,11 +2,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.qsocialnow</groupId>
-	<artifactId>trp-elastic-client</artifactId>
+	<parent>
+		<groupId>com.qsocialnow.crp</groupId>
+		<artifactId>case-resolution-platform</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>crp-elastic-client</artifactId>
 	<packaging>jar</packaging>
-	<version>0.1-SNAPSHOT</version>
-	<name>TRP Elastic Client</name>
+	<name>CRP Elastic Client</name>
 
 	<properties>
 		<assembly-plugin-version>2.5.4</assembly-plugin-version>
