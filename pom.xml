@@ -8,14 +8,14 @@
 	<name>QSocialNow: Case Resolution Platform Multi-Project</name>
 
     <modules>
-        <module>trp-common</module>
-        <module>trp-kafka-util</module>
-        <module>trp-zookeeper-util</module>
+        <module>crp-common</module>
+        <module>crp-kafka-util</module>
+        <module>crp-zookeeper-util</module>
 
-        <module>trp-elastic-client</module>
-        <module>trp-event-resolver</module>
-        <module>trp-ticket-manager-service</module>
-        <module>trp-ticket-manager-web</module>
+        <module>crp-elastic-client</module>
+        <module>crp-event-resolver</module>
+        <module>crp-ticket-manager-service</module>
+        <module>crp-ticket-manager-web</module>
   </modules>
 
     <properties>
