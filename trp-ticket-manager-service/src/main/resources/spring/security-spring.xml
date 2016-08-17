@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/security	   http://www.springframework.org/schema/security/spring-security.xsd">
+        
+    <global-method-security pre-post-annotations="enabled" />
+    
+    <http pattern="/services/auth/**" security="none"/>
+    <http pattern="/services/swagger/**" security="none"/>
+    <http pattern="/services/admin/version/**" security="none"/>
+    <http pattern="/services/domains/**" security="none"/>
+    <http pattern="/services/cases/**" security="none"/>
+
+    <http entry-point-ref="entryPointUnauthorizedHandler" use-expressions="true" create-session="stateless">
+        <csrf disabled="true"/>
+        <custom-filter before="FORM_LOGIN_FILTER" ref="authorizationTokenFilter"/>
+        <intercept-url pattern="/services/**" method="OPTIONS" access="permitAll" />
+        <intercept-url pattern="/services/**" access="isAuthenticated()" />
+    </http>
+    
+    <beans:bean id="authorizationTokenFilter" class="com.qsocialnow.rest.security.AuthorizationTokenFilter">
+        <beans:property name="authenticationManager" ref="authenticationManager" />
+    </beans:bean>
+
+	<beans:import resource="security-spring-database.xml" />
+    
+</beans:beans>

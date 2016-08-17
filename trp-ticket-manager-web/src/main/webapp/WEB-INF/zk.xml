@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<zk>
+	<!-- [Optional]
+	Uncomment if you want to defines the application's name 
+	
+	<preference>
+		<name>org.zkoss.zk.ui.WebApp.name</name>
+		<value>trp-ticket-manager-web</value>
+	</preference>
+	-->
+	
+	<system-config>
+    	<label-location>/WEB-INF/i18n/domain.properties</label-location>
+    	<label-location>/WEB-INF/i18n/app.properties</label-location>
+    	<label-location>/WEB-INF/i18n/cases.properties</label-location>
+	</system-config>
+	
+</zk>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://cxf.apache.org/jaxrs
+        http://cxf.apache.org/schemas/jaxrs.xsd ">        
+
+	<bean id="apiListingResource" class="io.swagger.jaxrs.listing.ApiListingResource"/>
+   	<bean id="swaggerSerializers" class="io.swagger.jaxrs.listing.SwaggerSerializers"/>
+	
+
+	<jaxrs:server address="/swagger" id="swagger" basePackages="io.swagger.jaxrs.listing">
+	</jaxrs:server>
+
+	<bean id="swaggerConfig" class="io.swagger.jaxrs.config.BeanConfig">
+		<property name="resourcePackage" value="com.qsocialnow.rest" />
+		<property name="version" value="1.0" />
+		<property name="basePath"
+			value="${app.context}/${app.api}" />
+		<property name="title" value="Ticket Manager" />
+		<property name="description"
+			value="API documentation of TRP Ticket Manager" />
+		<property name="contact" value="adrian@centauri.co" />
+		<property name="scan" value="true" />
+	</bean>	
+    
+</beans>

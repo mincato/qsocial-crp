@@ -1,0 +1,152 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.qsocialnow</groupId>
+	<artifactId>trp-kafka-util</artifactId>
+	<packaging>jar</packaging>
+	<version>0.1-SNAPSHOT</version>
+	<name>TRP Kafka Util</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<version.formatter.maven.plugin>0.5.2</version.formatter.maven.plugin>
+
+		<kafka-version>0.9.0.1</kafka-version>
+		<zkclient.version>0.9</zkclient.version>
+		<junit.version>4.12</junit.version>
+		<log4j.version>2.5</log4j.version>
+		<slf4j.version>1.7.13</slf4j.version>
+		<commons-lang.version>3.4</commons-lang.version>
+		<commons-collection.version>4.1</commons-collection.version>
+		<commons-beanutils.version>1.9.2</commons-beanutils.version>
+		<commons-io.version>2.4</commons-io.version>
+		<commons-configuration.version>1.10</commons-configuration.version>
+	</properties>
+
+	<dependencies>
+	
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		
+		<!-- Apache Commons -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${commons-collection.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons-beanutils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+		<dependency>
+    		<groupId>commons-configuration</groupId>
+    		<artifactId>commons-configuration</artifactId>
+    		<version>${commons-configuration.version}</version>
+		</dependency>
+	
+		<!-- Kafka -->
+		<dependency>
+    		<groupId>org.apache.kafka</groupId>
+    		<artifactId>kafka_2.10</artifactId>
+    		<version>${kafka-version}</version>
+		</dependency>
+		
+		<!-- Scala -->
+		<dependency>
+    		<groupId>org.scala-lang</groupId>
+    		<artifactId>scala-library</artifactId>
+    		<version>2.10.6</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.scala-lang.modules</groupId>
+    		<artifactId>scala-parser-combinators_2.11</artifactId>
+    		<version>1.0.4</version>
+		</dependency>
+		
+		<!-- Zookeeper -->
+		<dependency>
+    		<groupId>com.101tec</groupId>
+    		<artifactId>zkclient</artifactId>
+    		<version>${zkclient.version}</version>
+		</dependency>
+
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>trp-kafka-util</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>format</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>net.revelc.code</groupId>
+						<artifactId>formatter-maven-plugin</artifactId>
+						<version>${version.formatter.maven.plugin}</version>
+						<configuration>
+							<configFile>Centaurico-Code-Style.xml</configFile>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<goal>format</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

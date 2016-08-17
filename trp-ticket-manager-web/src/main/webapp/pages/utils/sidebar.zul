@@ -1,0 +1,14 @@
+<grid hflex="1" vflex="1" sclass="sidebar">
+	<columns>
+		<column width="36px"/>
+		<column/>
+	</columns>
+	<rows>
+		<row>
+			<image src="/imgs/site.png"/><a href="/pages/domain/index.zul">${labels.domain.menu.title}</a>
+		</row>
+		<row>
+			<image src="/imgs/site.png"/><a href="/pages/cases/index.zul">${labels.cases.menu.title}</a>
+		</row>
+	</rows>
+</grid>
