@@ -16,4 +16,13 @@
     	<label-location>/WEB-INF/i18n/cases.properties</label-location>
 	</system-config>
 	
+	<language-config>
+	    <addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
+	</language-config>
+	
+	<desktop-config>
+    	<disable-theme-uri>~./zul/css/zk.wcs</disable-theme-uri>
+	</desktop-config>
+	
+	
 </zk>
