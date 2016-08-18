@@ -20,19 +20,19 @@ import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
 @Component("openCaseAction")
 public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
 
-	@Autowired
+    @Autowired
     private EventResolverConfig appConfig;
-	
-	@Autowired
+
+    @Autowired
     private ElasticConfiguratorFactory elasticConfigConfiguratorFactory;
-	
-	@Autowired
-	private CaseService caseElasticService;
-	
+
+    @Autowired
+    private CaseService caseElasticService;
+
     private static final Logger log = LoggerFactory.getLogger(OpenCaseAction.class);
 
     @Override
-    public Case execute(InPutBeanDocument inputElement, List<String> parameters){
+    public Case execute(InPutBeanDocument inputElement, List<String> parameters) {
         log.info("Creating case...");
         Case newCase = new Case();
         newCase.setOpen(true);
@@ -43,19 +43,19 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         coordinates.setLongitude(inputElement.getLocation().getLongitud());
         newCase.setCoordinates(coordinates);
         newCase.setCaseCategories(Arrays.asList(inputElement.getCategorias()));
-        
-        Configurator elasticConfigConfigurator;
-		try {
-			elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
-			        .getElasticCasesConfiguratorZnodePath());
-			
-	        caseElasticService.indexCase(elasticConfigConfigurator,newCase);
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+        Configurator elasticConfigConfigurator;
+        try {
+            elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
+                    .getElasticCasesConfiguratorZnodePath());
+
+            caseElasticService.indexCase(elasticConfigConfigurator, newCase);
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         return newCase;
     }
 

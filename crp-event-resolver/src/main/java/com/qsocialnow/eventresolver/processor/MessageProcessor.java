@@ -38,8 +38,8 @@ public class MessageProcessor {
     public void process(Message message) throws Exception {
         InPutBeanDocument inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
                 .fromJson(message.getMessage(), InPutBeanDocument.class);
-        log.info(String.format("Processing message for topic %s: %s", message.getTopic(), inputBeanDocument));
-        String domainName = resolveDomain(message);
+        String domainName = message.getGroup();
+        log.info(String.format("Processing message for domain %s: %s", domainName, inputBeanDocument));
         log.info(String.format("Searching for domain: %s", domainName));
         Configurator elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
                 .getElasticConfigConfiguratorZnodePath());
@@ -51,10 +51,6 @@ public class MessageProcessor {
         } else {
             log.info(String.format("Message did not detected to execute an action: %s", inputBeanDocument));
         }
-    }
-
-    private String resolveDomain(Message message) {
-        return message.getTopic().split("\\.", 2)[1];
     }
 
     public void setDomainElasticService(DomainService domainElasticService) {
