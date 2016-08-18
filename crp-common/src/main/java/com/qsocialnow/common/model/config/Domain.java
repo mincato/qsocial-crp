@@ -10,6 +10,8 @@ public class Domain {
 
     private List<Trigger> triggers;
 
+    private List<Long> thematics;
+
     public String getId() {
         return id;
     }
@@ -32,5 +34,13 @@ public class Domain {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Long> getThematics() {
+        return thematics;
+    }
+
+    public void setThematics(List<Long> thematics) {
+        this.thematics = thematics;
     }
 }
