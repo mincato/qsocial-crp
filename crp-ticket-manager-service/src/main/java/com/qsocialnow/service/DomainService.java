@@ -28,7 +28,7 @@ public class DomainService {
         Domain domainSaved = null;
         try {
             domainSaved = repository.save(newDomain);
-            zookeeperClient.create().forPath(domainsPath.concat(newDomain.getName()));
+            zookeeperClient.create().forPath(domainsPath.concat(newDomain.getId()));
         } catch (Exception e) {
             log.error("There was an error saving domain: " + newDomain.getName(), e);
             // TODO rollback;

@@ -9,13 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.qsocial.eventresolver.model.event.InPutBeanDocument;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Coordinates;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
+import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 @Component("openCaseAction")
 public class OpenCaseAction implements Action<InPutBeanDocument, Case> {

@@ -3,11 +3,11 @@ package com.qsocialnow.eventresolver.processor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qsocial.eventresolver.model.event.InPutBeanDocument;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 @Service
 public class DetectionMessageProcessor {
