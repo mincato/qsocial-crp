@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<language-addon>
+	<language-name>xul/html</language-name>
+
+	<component>
+		<component-name>table</component-name>
+		<component-class>org.zkoss.zhtml.Table</component-class>
+	</component>
+	<component>
+		<component-name>tr</component-name>
+		<component-class>org.zkoss.zhtml.Tr</component-class>
+	</component>
+	<component>
+		<component-name>td</component-name>
+		<component-class>org.zkoss.zhtml.Td</component-class>
+	</component>
+	<component>
+		<component-name>th</component-name>
+		<component-class>org.zkoss.zhtml.Th</component-class>
+	</component>
+	<component>
+		<component-name>thead</component-name>
+		<component-class>org.zkoss.zhtml.Thead</component-class>
+	</component>
+	<component>
+		<component-name>tbody</component-name>
+		<component-class>org.zkoss.zhtml.Tbody</component-class>
+	</component>
+	<component>
+		<component-name>i</component-name>
+		<component-class>org.zkoss.zhtml.I</component-class>
+	</component>
+	<component>
+		<component-name>ul</component-name>
+		<component-class>org.zkoss.zhtml.Ul</component-class>
+	</component>
+	<component>
+		<component-name>li</component-name>
+		<component-class>org.zkoss.zhtml.Li</component-class>
+	</component>
+	<component>
+		<component-name>img</component-name>
+		<component-class>org.zkoss.zhtml.Img</component-class>
+	</component>
+	<component>
+		<component-name>h1</component-name>
+		<component-class>org.zkoss.zhtml.H1</component-class>
+	</component>
+	<component>
+		<component-name>input</component-name>
+		<component-class>org.zkoss.zhtml.Input</component-class>
+	</component>
+</language-addon>
