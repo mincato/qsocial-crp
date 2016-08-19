@@ -14,6 +14,7 @@ import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.eventresolver.action.Action;
 
 @Service
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ExecutionMessageProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutionMessageProcessor.class);
