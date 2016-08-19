@@ -14,15 +14,15 @@ import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.eventresolver.action.Action;
 
 @Service
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ExecutionMessageProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(ExecutionMessageProcessor.class);
-    
-	@Resource
+
+    @Resource
     private Map<ActionType, Action> actions;
 
-	public void execute(Object input, DetectionCriteria detectionCriteria) {
+    public void execute(Object input, DetectionCriteria detectionCriteria) {
         Object currentInput = input;
         if (detectionCriteria != null && detectionCriteria.getActionCriterias() != null) {
             for (AutomaticActionCriteria automaticActionCriteria : detectionCriteria.getActionCriterias()) {

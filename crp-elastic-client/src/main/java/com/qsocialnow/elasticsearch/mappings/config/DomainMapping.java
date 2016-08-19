@@ -95,7 +95,7 @@ public class DomainMapping implements Mapping<DomainType, Domain> {
         DomainType domainType = new DomainType();
         domainType.setName(document.getName());
         domainType.setTriggers(document.getTriggers());
-
+        domainType.setThematics(document.getThematics());
         return domainType;
     }
 
