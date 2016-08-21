@@ -29,7 +29,7 @@ public class ServiceDiscoveryRegister {
     private ServiceDiscovery<Object> serviceDiscovery;
 
     public void register(int servicePort) throws Exception {
-        UriSpec uriSpec = new UriSpec("{scheme}://{address}:{port}/trp-ticket-manager-service/services");
+        UriSpec uriSpec = new UriSpec("{scheme}://{address}:{port}/crp-ticket-manager-service/services");
         ServiceInstance<Object> thisInstance = ServiceInstance.builder().name(SERVICE_NAME).uriSpec(uriSpec)
                 .address(host).port(servicePort).build();
         serviceDiscovery = ServiceDiscoveryBuilder.builder(Object.class).client(zookeeperClient).basePath(basePath)

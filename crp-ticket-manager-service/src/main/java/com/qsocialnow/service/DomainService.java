@@ -37,6 +37,22 @@ public class DomainService {
         return domainSaved;
     }
 
+    public Domain findOne(String domainId) {
+        Domain domain = repository.findOne(domainId);
+        return domain;
+    }
+
+    public Domain update(String domainId, Domain domain) {
+        Domain domainSaved = null;
+        try {
+            domainSaved = repository.save(domain);
+        } catch (Exception e) {
+            log.error("There was an error updating domain: " + domain.getName(), e);
+            throw new RuntimeException(e.getMessage());
+        }
+        return domainSaved;
+    }
+
     public void setRepository(DomainRepository repository) {
         this.repository = repository;
     }

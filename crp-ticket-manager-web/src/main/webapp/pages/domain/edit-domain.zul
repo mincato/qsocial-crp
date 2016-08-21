@@ -1,0 +1,60 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<div sclass="modal fade" ca:data-modal="" ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')" 
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditDomainViewModel', domain=arg.domain)">
+		<n:div class="modal-dialog">
+			<n:div class="modal-content" >
+				<n:div class="modal-header">
+    				<n:button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    					<n:span aria-hidden="true">&#x00D7;</n:span>
+					</n:button>
+    				<n:h4 class="modal-title">${labels.domain.edit.title}</n:h4>
+  				</n:div>
+  				<n:div class="modal-body">
+    				<div class="row">
+						<n:div col="col-lg-12">
+							<div zclass="pane equal">
+								<x:form form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
+									<n:div class="form-group">
+									    <x:label sclass="vm.selectedThematics.isEmpty ? 'hidden':''">${labels.app.form.id}:</x:label>
+							    		<n:label>${vm.currentDomain.id}</n:label>
+									</n:div>
+									<n:div class="form-group">
+									    <n:label>${labels.domain.name}:</n:label>
+							    		<textbox type="text" class="form-control" 
+								    			value="@bind(domain.name)"></textbox>
+									</n:div>
+									
+									<div class="form-group" >
+										<n:label>${labels.domain.thematics}:</n:label>
+										<listbox mold="select" zclass="form-control" ca:multiple="" model="@load(vm.thematicsOptions)"
+											 multiple="true"
+											checkmark="true"
+											selectedItems="@bind(vm.selectedThematics)">
+											<template name="model">
+												<listitem>
+													<listcell label="${each.id} - ${each.name}"/>
+												</listitem>
+											</template>
+										</listbox>
+								    	
+			    						<template name="children">
+			    							<div zclass="checkbox blue">
+												<x:input type="checkbox" name="checkbox1"/>
+												<x:label for="checkbox1">${each.id}</x:label>
+								    		</div>
+			    						</template>
+									</div>
+							    </x:form>
+							</div>
+						</n:div>
+					</div>
+  				</n:div>
+  				<div class="modal-footer">
+  					<button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
+  					<button onClick="@command('clear')" label="${labels.app.button.clear}" zclass="btn btn-default"/>
+    				<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
+  				</div>
+			</n:div>
+		</n:div>
+	</div> 
+</zk>

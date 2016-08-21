@@ -6,4 +6,8 @@ public interface DomainService {
 
     Domain create(Domain currentDomain);
 
+    Domain findOne(String domain);
+
+    Domain update(Domain currentDomain);
+
 }
