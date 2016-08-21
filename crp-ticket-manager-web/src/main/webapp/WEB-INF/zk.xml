@@ -14,6 +14,7 @@
     	<label-location>/WEB-INF/i18n/domain.properties</label-location>
     	<label-location>/WEB-INF/i18n/app.properties</label-location>
     	<label-location>/WEB-INF/i18n/cases.properties</label-location>
+    	<label-location>/WEB-INF/i18n/sidebar.properties</label-location>
 	</system-config>
 	
 	<language-config>

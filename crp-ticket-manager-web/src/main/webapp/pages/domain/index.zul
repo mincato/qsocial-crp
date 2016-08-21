@@ -18,7 +18,7 @@
 
 	<!-- SIDEBAR -->
             <n:aside id="sidebar" class="sidebar affix" role="complementary">
-            	<include src="/assets/core/sidebar.html"/>
+            	<include src="/assets/core/sidebar.zul"/>
             </n:aside><!-- sidebar -->
 	<!-- SIDEBAR -->
 	    
