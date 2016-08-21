@@ -44,4 +44,37 @@ public class DomainRepository {
         return null;
     }
 
+    public Domain update(Domain domain) {
+        try {
+            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
+            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
+                    Configurator.class);
+
+            // TODO llamar al update de elastic
+            // String id = domainElasticService.indexDomain(configurator,
+            // domain);
+            // domain.setId(id);
+
+            return domain;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
+    public Domain findOne(String domainId) {
+        try {
+            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
+            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
+                    Configurator.class);
+
+            Domain domain = domainElasticService.findDomainById(configurator, domainId);
+
+            return domain;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
 }

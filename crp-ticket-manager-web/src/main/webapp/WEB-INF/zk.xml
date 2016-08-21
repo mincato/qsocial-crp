@@ -20,9 +20,26 @@
 	    <addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
 	</language-config>
 	
-	<desktop-config>
-    	<disable-theme-uri>~./zul/css/zk.wcs</disable-theme-uri>
-	</desktop-config>
+	<client-config>
+		<data-handler>
+	    	<name>modal</name>
+	    	<script>
+	        	function (wgt, dataValue) {
+	            	$(wgt.$n()).modal();
+	        	}
+	    	</script>
+		</data-handler>
+		<data-handler>
+    		<name>close-event</name>
+    		<script>
+        		function (wgt, dataValue) {
+            		jq(wgt.$n()).on(dataValue, function() {
+                		wgt.fire("onModalClose", null, {toServer: true});
+            		});
+        		}
+    		</script>
+		</data-handler>
+	</client-config>
 	
 	
 </zk>

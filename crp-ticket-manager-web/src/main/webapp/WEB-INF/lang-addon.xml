@@ -2,7 +2,7 @@
 
 <language-addon>
 	<language-name>xul/html</language-name>
-
+	
 	<component>
 		<component-name>table</component-name>
 		<component-class>org.zkoss.zhtml.Table</component-class>
@@ -50,5 +50,9 @@
 	<component>
 		<component-name>input</component-name>
 		<component-class>org.zkoss.zhtml.Input</component-class>
+	</component>
+	<component>
+		<component-name>select</component-name>
+		<component-class>org.zkoss.zhtml.Select</component-class>
 	</component>
 </language-addon>
