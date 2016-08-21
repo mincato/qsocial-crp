@@ -15,7 +15,13 @@
     	<label-location>/WEB-INF/i18n/app.properties</label-location>
     	<label-location>/WEB-INF/i18n/cases.properties</label-location>
     	<label-location>/WEB-INF/i18n/sidebar.properties</label-location>
+    	<label-location>/WEB-INF/i18n/errors.properties</label-location>
 	</system-config>
+	
+	<error-page>
+    	<exception-type>java.lang.Exception</exception-type>
+    	<location>/pages/errors/unknownError.zul</location>
+	</error-page>
 	
 	<language-config>
 	    <addon-uri>/WEB-INF/lang-addon.xml</addon-uri>
