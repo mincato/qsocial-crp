@@ -41,6 +41,33 @@ router.get('/cases', function (req, res) {
 
 });
 
+router.get('/domains', function (req, res) {
+
+	  function asyncResponse(err,responseDomains) {
+	    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(responseDomains !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(responseDomains));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var domainService = javaContext.getBeanSync("domainService");
+	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
+	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+	  domainService.findAll(pageNumber, pageSize, asyncResponse);
+
+});
+
 router.post('/domains', function (req, res) {
 
   function asyncResponse(err,responseDomain) {

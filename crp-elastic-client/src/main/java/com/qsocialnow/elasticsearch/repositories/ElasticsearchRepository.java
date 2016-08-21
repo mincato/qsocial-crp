@@ -178,11 +178,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
-    public <E> SearchResponse<E> search(int from, int size, Mapping<T, E> mapping) {
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> search(int from, int size, String sortField, Mapping<T, E> mapping) {
 
-        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ,"
-                + "\"sort\" : [{ \"openDate\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
+        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
+                + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
 
         Search search = new Search.Builder(query).addType(mapping.getType()).build();
 

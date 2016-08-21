@@ -1,5 +1,9 @@
 package com.qsocialnow.persistence;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.DomainService;
 
@@ -44,4 +50,38 @@ public class DomainRepository {
         return null;
     }
 
+    public List<DomainListView> findAll(PageRequest pageRequest) {
+        List<DomainListView> domains = new ArrayList<>();
+
+        try {
+            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
+            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
+                    Configurator.class);
+
+            List<Domain> domainsRepo = domainElasticService.getDomains(configurator, pageRequest.getOffset(),
+                    pageRequest.getLimit());
+
+            for (Domain domainRepo : domainsRepo) {
+                DomainListView domainListView = new DomainListView();
+                domainListView.setId(domainRepo.getId());
+                domainListView.setName(domainRepo.getName());
+
+                List<Long> thematics = domainRepo.getThematics();
+                if (thematics != null) {
+                    String values = thematics.stream().map(number -> String.valueOf(number))
+                            .collect(Collectors.joining(", "));
+
+                    domainListView.setThematics(values);
+                }
+                domains.add(domainListView);
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return domains;
+    }
+
+    public Long count() {
+        return 50L;
+    }
 }

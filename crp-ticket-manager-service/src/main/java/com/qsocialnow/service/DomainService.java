@@ -1,5 +1,7 @@
 package com.qsocialnow.service;
 
+import java.util.List;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.pagination.PageResponse;
 import com.qsocialnow.persistence.DomainRepository;
 
 @Service
@@ -35,6 +40,15 @@ public class DomainService {
             throw new RuntimeException(e.getMessage());
         }
         return domainSaved;
+    }
+
+    public PageResponse<DomainListView> findAll(Integer pageNumber, Integer pageSize) {
+        List<DomainListView> domains = repository.findAll(new PageRequest(pageNumber, pageSize));
+
+        Long count = repository.count();
+
+        PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize, count);
+        return page;
     }
 
     public void setRepository(DomainRepository repository) {

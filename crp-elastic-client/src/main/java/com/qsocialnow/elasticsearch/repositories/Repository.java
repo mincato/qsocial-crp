@@ -16,5 +16,5 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> query(Mapping<T, E> mapping, String searchValue);
 
-    public <E> SearchResponse<E> search(int from, int size, Mapping<T, E> mapping);
+    public <E> SearchResponse<E> search(int from, int size, String sortField, Mapping<T, E> mapping);
 }

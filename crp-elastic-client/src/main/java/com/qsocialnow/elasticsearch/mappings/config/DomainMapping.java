@@ -87,7 +87,7 @@ public class DomainMapping implements Mapping<DomainType, Domain> {
 
     @Override
     public Class<?> getClassType() {
-        return Domain.class;
+        return DomainType.class;
     }
 
     @Override
