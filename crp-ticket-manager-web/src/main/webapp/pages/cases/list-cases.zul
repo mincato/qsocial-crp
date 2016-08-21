@@ -1,7 +1,7 @@
 <?link rel="stylesheet" type="text/css" href="/style.css"?>
 <window apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CasesViewModel')" 
-	border="normal" hflex="1" vflex="1" contentStyle="overflow:auto" xmlns:n="native">
+	border="normal" contentStyle="overflow:auto" xmlns:n="native">
     <n:div class="container-fluid">
 	<n:div class="row">
 	<n:div col="col-lg-12">

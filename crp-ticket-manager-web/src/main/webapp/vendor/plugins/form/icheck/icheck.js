@@ -6,7 +6,6 @@
  * (c) 2013 Damir Sultanov, http://fronteed.com
  * MIT Licensed
  */
-
 (function($) {
 
   // Cached vars

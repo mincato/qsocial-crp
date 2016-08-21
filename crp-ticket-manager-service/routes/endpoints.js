@@ -72,5 +72,87 @@ router.post('/domains', function (req, res) {
 
 });
 
+router.get('/domains/:id', function (req, res) {
+
+  function asyncResponse(err,responseDomain) {
+    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+
+    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(responseDomain !== null) {
+      try {
+        res.set('Content-Type','application/json');
+        res.send(gson.toJsonSync(responseDomain));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+
+  var domainId = req.param("id");
+
+  var domainService = javaContext.getBeanSync("domainService");
+  domainService.findOne(domainId, asyncResponse);
+
+});
+
+router.put('/domains/:id', function (req, res) {
+
+  function asyncResponse(err,responseDomain) {
+    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+
+    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(responseDomain !== null) {
+      try {
+        res.set('Content-Type','application/json');
+        res.send(gson.toJsonSync(responseDomain));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+
+  var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+  var clazz = java.findClassSync('com.qsocialnow.common.model.config.Domain');
+  var domain = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+  var domainId = req.param("id");
+
+  var domainService = javaContext.getBeanSync("domainService");
+  domainService.update(domainId, domain, asyncResponse);
+
+});
+
+router.get('/thematics', function (req, res) {
+
+  function asyncResponse(err,responseThematics) {
+    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+
+    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(responseThematics !== null) {
+      try {
+        res.set('Content-Type', 'application/json');
+        res.send(gson.toJsonSync(responseThematics));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+
+  var thematicService = javaContext.getBeanSync("thematicService");
+  thematicService.findAll(asyncResponse);
+
+});
+
 
 module.exports = router;

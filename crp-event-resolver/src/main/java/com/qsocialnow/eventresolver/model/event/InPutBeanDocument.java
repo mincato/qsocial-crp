@@ -1,4 +1,4 @@
-package com.qsocial.eventresolver.model.event;
+package com.qsocialnow.eventresolver.model.event;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -10,12 +10,12 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class DomainService {
 
-    public Domain findDomainByName(String name) {
+    public Domain findDomainById(String name) {
         Configurator configurator = new Configurator();
-        return findDomainByName(configurator, name);
+        return findDomainById(configurator, name);
     }
 
-    public Domain findDomainByName(Configurator configurator, String name) {
+    public Domain findDomainById(Configurator configurator, String name) {
 
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();

@@ -6,9 +6,9 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.qsocial.eventresolver.model.event.InPutBeanDocument;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.eventresolver.mocks.MockDetectionCriteriaBuilder;
+import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 public class DetectionCriteriaResolverTest {
 

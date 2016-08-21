@@ -44,12 +44,8 @@ public class KafkaConfig {
         return kafkaConfig.get();
     }
 
-    public String getTopicFilter() {
-        return properties.getString("kafka.topic.filter", "prc.*");
-    }
-
-    public String getGroupId() {
-        return properties.getString("kafka.groupid", "group1");
+    public String getTopic() {
+        return properties.getString("kafka.topic", "PRC");
     }
 
     public int getSessionTimeOutInMs() {
