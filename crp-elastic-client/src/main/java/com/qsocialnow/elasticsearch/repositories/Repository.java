@@ -14,6 +14,10 @@ public interface Repository<T> {
 
     public <E> String indexMapping(Mapping<T, E> mapping, T document);
 
+    public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document);
+
+    public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping);
+
     public <E> SearchResponse<E> query(Mapping<T, E> mapping, String searchValue);
 
     public <E> SearchResponse<E> search(int from, int size, Mapping<T, E> mapping);
