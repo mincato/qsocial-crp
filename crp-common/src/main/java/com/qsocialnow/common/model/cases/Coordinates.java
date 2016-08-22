@@ -1,6 +1,10 @@
 package com.qsocialnow.common.model.cases;
 
-public class Coordinates {
+import java.io.Serializable;
+
+public class Coordinates implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private double longitude;
 

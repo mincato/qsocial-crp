@@ -1,6 +1,10 @@
 package com.qsocialnow.common.model.cases;
 
-public class ContactInfo {
+import java.io.Serializable;
+
+public class ContactInfo implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String phone;
 
