@@ -67,17 +67,17 @@ public class ClientProcessor {
                     switch (commands[1]) {
                         case "domain":
                             response = service.indexDomain(domain);
-                            log.info("Index Response:ID=" + response+" ");
-                            
+                            log.info("Index Response:ID=" + response + " ");
+
                             domain.setId(response);
-                            
+
                             domain.setName("Domain updated 1");
                             response = service.updateDomain(domain);
                             log.info("Index Response updated:ID=" + response);
-                            
-                            Domain document = service.findDomainById(domain.getName());
+
+                            Domain document = service.findDomain(domain.getId());
                             log.info("Validated Index Response updated:ID=" + document.getId());
-                            
+
                             break;
                         case "criteria":
                             response = criteriaService.indexDetectionCriteria(domain.getTriggers().get(0).getSegments()

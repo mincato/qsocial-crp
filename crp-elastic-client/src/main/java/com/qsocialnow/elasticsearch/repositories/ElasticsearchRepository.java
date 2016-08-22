@@ -23,11 +23,11 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.SearchResult.Hit;
-import io.searchbox.core.Update;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
@@ -102,22 +102,22 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
         return idValue;
     }
-    
+
     @Override
-	public <E> String updateIndexMapping(String id,Mapping<T, E> mapping, T document) {
-    	
-    	Index update = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id).build();
-    	String idValue = null;
-    	try {
-    		DocumentResult response = client.execute(update);
-    		if(response.isSucceeded()){
-    			idValue = response.getId();
-    		}
-		} catch (IOException e) {
+    public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document) {
+
+        Index update = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id).build();
+        String idValue = null;
+        try {
+            DocumentResult response = client.execute(update);
+            if (response.isSucceeded()) {
+                idValue = response.getId();
+            }
+        } catch (IOException e) {
             log.error("Unexpected error: ", e);
-		}
-    	return idValue;
-	}
+        }
+        return idValue;
+    }
 
     public void createIndex(String index) {
         try {
@@ -215,6 +215,26 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (result.isSucceeded()) {
             List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
             response.setSources(responses);
+        }
+        return response;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping) {
+        Get get = new Get.Builder(mapping.getIndex(), id).type(mapping.getType()).build();
+
+        DocumentResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(get);
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            response.setSource((E) result.getSourceAsObject(mapping.getClassType()));
+            response.setId(result.getId());
         }
         return response;
     }
