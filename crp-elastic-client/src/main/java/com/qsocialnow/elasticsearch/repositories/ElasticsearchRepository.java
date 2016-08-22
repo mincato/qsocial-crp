@@ -27,6 +27,7 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.SearchResult.Hit;
+import io.searchbox.core.Update;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
@@ -101,6 +102,22 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
         return idValue;
     }
+    
+    @Override
+	public <E> String updateIndexMapping(String id,Mapping<T, E> mapping, T document) {
+    	
+    	Index update = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id).build();
+    	String idValue = null;
+    	try {
+    		DocumentResult response = client.execute(update);
+    		if(response.isSucceeded()){
+    			idValue = response.getId();
+    		}
+		} catch (IOException e) {
+            log.error("Unexpected error: ", e);
+		}
+    	return idValue;
+	}
 
     public void createIndex(String index) {
         try {
@@ -178,7 +195,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> search(int from, int size, Mapping<T, E> mapping) {
 
         String query = "{\"from\" :" + from + ", \"size\" : " + size + " ,"

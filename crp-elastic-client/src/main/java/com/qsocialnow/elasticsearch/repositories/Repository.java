@@ -13,6 +13,8 @@ public interface Repository<T> {
     public boolean validateIndex(String index);
 
     public <E> String indexMapping(Mapping<T, E> mapping, T document);
+    
+    public <E> String updateIndexMapping(String id,Mapping<T, E> mapping, T document);
 
     public <E> SearchResponse<E> query(Mapping<T, E> mapping, String searchValue);
 
