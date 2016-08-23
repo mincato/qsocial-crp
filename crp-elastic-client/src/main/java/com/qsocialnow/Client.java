@@ -9,7 +9,7 @@ import com.qsocialnow.elasticsearch.configuration.ClientProcessor;
 
 public class Client {
 
-    private final static String[] COMMANDS = { "add"};
+    private final static String[] COMMANDS = { "add" };
 
     private static final Logger log = LoggerFactory.getLogger(Client.class);
 

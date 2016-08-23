@@ -22,10 +22,10 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 public class CaseService {
 
     private final static String INDEX_NAME = "cases_";
-    
+
     private static Producer<Case> producer;
-    
-    private static CaseConsumer consumer; 
+
+    private static CaseConsumer consumer;
 
     public String indexCase(Case document) {
         CaseConfigurator configurator = new CaseConfigurator();
@@ -55,26 +55,25 @@ public class CaseService {
         repository.closeClient();
         return response;
     }
-    
-    public void indexCaseByBulkProcess(QueueConfigurator configurator, Case document){
-    	QueueService queueService = QueueService.getInstance(configurator, QueueType.CASES);
-    	if(producer==null){
-    		producer = new Producer<Case>();
-    		consumer = new CaseConsumer() ;
-    		producer.addConsumer(consumer);
-    		
-    		queueService.startConsumer(consumer);
-    		queueService.startProducer(producer);    		
-    	}
-    	producer.addItem(document);
+
+    public void indexCaseByBulkProcess(QueueConfigurator configurator, Case document) {
+        QueueService queueService = QueueService.getInstance(configurator, QueueType.CASES);
+        if (producer == null) {
+            producer = new Producer<Case>();
+            consumer = new CaseConsumer();
+            producer.addConsumer(consumer);
+
+            queueService.startConsumer(consumer);
+            queueService.startProducer(producer);
+        }
+        producer.addItem(document);
     }
-    
+
     public void indexBulkCases(List<Case> documents) {
         CaseConfigurator configurator = new CaseConfigurator();
         indexBulkCases(configurator, documents);
     }
-    
-    
+
     public void indexBulkCases(ConfigurationProvider configurator, List<Case> documents) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(configurator);
@@ -95,13 +94,13 @@ public class CaseService {
         // index document
         List<CaseType> documentsTypes = new ArrayList<>();
         for (Case caseDocument : documents) {
-			documentsTypes.add(mapping.getDocumentType(caseDocument));
+            documentsTypes.add(mapping.getDocumentType(caseDocument));
         }
-        
+
         repository.bulkOperation(mapping, documentsTypes);
         repository.closeClient();
     }
-    
+
     public List<Case> getCases(int from, int size) {
 
         CaseConfigurator configurator = new CaseConfigurator();

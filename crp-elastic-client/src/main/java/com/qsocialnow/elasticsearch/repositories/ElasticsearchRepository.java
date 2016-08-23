@@ -106,35 +106,32 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return idValue;
     }
 
-    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping,List<T> documents){ 	
-        
-    	List<Index> modelList = new ArrayList<Index>();
-    	for (T t : documents) {
-    		modelList.add(new Index.Builder(t).build());		
-		}
-    	
-        Bulk bulk = new Bulk.Builder()
-                .defaultIndex(mapping.getIndex())
-                .defaultType(mapping.getType())
-                .addAction(modelList)
-                .build();
-        
+    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<T> documents) {
+
+        List<Index> modelList = new ArrayList<Index>();
+        for (T t : documents) {
+            modelList.add(new Index.Builder(t).build());
+        }
+
+        Bulk bulk = new Bulk.Builder().defaultIndex(mapping.getIndex()).defaultType(mapping.getType())
+                .addAction(modelList).build();
+
         IndexResponse<E> response = new IndexResponse<>();
         try {
-        	BulkResult result = client.execute(bulk);
-        	List<E> sources = new ArrayList<E>();
-        	
-        	if (result.isSucceeded()) {
-        		//TODO: set items responses
-        	}
+            BulkResult result = client.execute(bulk);
+            List<E> sources = new ArrayList<E>();
+
+            if (result.isSucceeded()) {
+                // TODO: set items responses
+            }
             response.setSources(sources);
-            
+
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
         }
         return response;
     }
-    
+
     @Override
     public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document) {
 

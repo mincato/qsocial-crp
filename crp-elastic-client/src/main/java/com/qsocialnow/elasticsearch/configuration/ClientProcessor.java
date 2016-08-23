@@ -9,9 +9,9 @@ public class ClientProcessor {
     }
 
     public static void executeCommand(final String[] commands) {
-        
-		ProducerTask mTask = new ProducerTask();   
-        
+
+        ProducerTask mTask = new ProducerTask();
+
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(mTask, 0, 5000);
     }

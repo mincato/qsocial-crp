@@ -9,7 +9,7 @@ import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class DomainService {
-	
+
     public Domain findDomainById(String name) {
         Configurator configurator = new Configurator();
         return findDomainById(configurator, name);
