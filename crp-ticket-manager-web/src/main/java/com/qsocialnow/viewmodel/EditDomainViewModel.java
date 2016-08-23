@@ -85,7 +85,7 @@ public class EditDomainViewModel implements Serializable {
 
     @Command
     public void close(@ContextParam(ContextType.VIEW) Div comp) {
-        comp.getParent().removeChild(comp);
+        comp.detach();
     }
 
 }

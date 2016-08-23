@@ -81,11 +81,6 @@
 		<!-- QSocialNow -->
 		<dependency>
 			<groupId>com.qsocialnow.crp</groupId>
-			<artifactId>crp-kafka-util</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.qsocialnow.crp</groupId>
 			<artifactId>crp-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
