@@ -28,7 +28,7 @@ public class ProducerTask extends TimerTask {
         caseDocument.setDescription("Case: " + itemCount.incrementAndGet());
         caseDocument.setOpen(true);
         caseDocument.setOpenDate(new Date());
-        
+
         caseService.indexCaseByBulkProcess(configuration, caseDocument);
     }
 
