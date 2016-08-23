@@ -8,7 +8,7 @@ public class Domain {
 
     private String id;
 
-    @NotBlank(message="{field.empty}")
+    @NotBlank(message = "{field.empty}")
     private String name;
 
     private List<Trigger> triggers;

@@ -58,7 +58,7 @@ public class CaseService {
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        SearchResponse<Case> response = repository.search(from, size, mapping);
+        SearchResponse<Case> response = repository.search(from, size, "openDate", mapping);
 
         List<Case> cases = response.getSources();
 

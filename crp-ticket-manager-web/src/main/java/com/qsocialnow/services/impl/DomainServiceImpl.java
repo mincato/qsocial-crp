@@ -6,17 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.services.DomainService;
+import com.qsocialnow.services.ServiceUrlResolver;
+import org.springframework.http.MediaType;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.services.DomainService;
-import com.qsocialnow.services.ServiceUrlResolver;
 
 @Service("domainService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -71,6 +74,7 @@ public class DomainServiceImpl implements DomainService {
             headers.add("Accept", "application/json");
 
             HttpEntity<Domain> requestEntity = new HttpEntity<Domain>(domain, headers);
+
             ResponseEntity<Domain> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
                     requestEntity, Domain.class);
             return response.getBody();
@@ -80,4 +84,26 @@ public class DomainServiceImpl implements DomainService {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public PageResponse<DomainListView> findAll(int pageNumber, int pageSize) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl))
+                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<PageResponse> response = restTemplate
+                    .getForEntity(builder.toUriString(), PageResponse.class);
+
+            PageResponse<DomainListView> domains = response.getBody();
+            return domains;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call domain service", e);
+            throw new RuntimeException(e);
+        }
+    }
 }
