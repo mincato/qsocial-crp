@@ -1,0 +1,69 @@
+package com.qsocialnow.viewmodel;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zkplus.spring.DelegatingVariableResolver;
+
+import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.services.DomainService;
+
+@VariableResolver(DelegatingVariableResolver.class)
+public class DomainsViewModel implements Serializable {
+
+    private static final long serialVersionUID = 2259179419421396093L;
+
+    private int pageSize = 15;
+    private int activePage = 0;
+
+    @WireVariable
+    private DomainService domainService;
+
+    private boolean moreResults;
+
+    private List<DomainListView> domains = new ArrayList<>();
+
+    @Init
+    public void init() {
+        findDomains();
+    }
+
+    public List<DomainListView> getDomains() {
+        return this.domains;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public boolean isMoreResults() {
+        return moreResults;
+    }
+
+    @Command
+    @NotifyChange({ "domains", "moreResults" })
+    public void moreResults() {
+        this.activePage++;
+        this.findDomains();
+    }
+
+    private PageResponse<DomainListView> findDomains() {
+        PageResponse<DomainListView> pageResponse = domainService.findAll(activePage, pageSize);
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.domains.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
+
+        return pageResponse;
+    }
+
+}
