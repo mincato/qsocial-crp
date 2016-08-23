@@ -1,9 +1,7 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.zkoss.bind.annotation.BindingParam;
@@ -13,14 +11,15 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.resource.Labels;
-import org.zkoss.zk.ui.AbstractComponent;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
+import org.zkoss.zul.Div;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Thematic;
+import com.qsocialnow.model.DomainView;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ThematicService;
 
@@ -35,61 +34,56 @@ public class EditDomainViewModel implements Serializable {
     @WireVariable
     private ThematicService thematicService;
 
-    private Domain currentDomain;
+    private DomainView currentDomain = new DomainView();
 
-    private List<Thematic> thematicsOptions;
+    private List<Thematic> thematics;
 
-    private Set<Thematic> selectedThematics = new HashSet<>();
-
-    public Domain getCurrentDomain() {
+    public DomainView getCurrentDomain() {
         return currentDomain;
     }
 
-    public List<Thematic> getThematicsOptions() {
-        return thematicsOptions;
+    public List<Thematic> getThematics() {
+        return thematics;
     }
-
-    public Set<Thematic> getSelectedThematics() {
-        return selectedThematics;
-    }
-
-    public void setSelectedThematics(Set<Thematic> selectedThematics) {
-        this.selectedThematics = selectedThematics;
-    }
+    
+    public void setCurrentDomain(DomainView currentDomain) {
+		this.currentDomain = currentDomain;
+	}
 
     @Init
     public void init(@BindingParam("domain") String domain) {
-        currentDomain = domainService.findOne(domain);
-        thematicsOptions = thematicService.findAll();
+    	currentDomain.setDomain(domainService.findOne(domain));
+        thematics = thematicService.findAll();
         initThematics();
     }
 
     @Command
-    @NotifyChange({ "currentDomain", "selectThematics" })
+    @NotifyChange({ "currentDomain" })
     public void save() {
-        currentDomain.setThematics(selectedThematics.stream().map(Thematic::getId).collect(Collectors.toList()));
-        currentDomain = domainService.update(currentDomain);
+    	Domain domain = currentDomain.getDomain();
+        domain.setThematics(currentDomain.getSelectedThematics().stream().map(Thematic::getId).collect(Collectors.toList()));
+        currentDomain.setDomain(domainService.update(domain));
         initThematics();
-        Clients.showNotification(Labels.getLabel("domain.create.notification.success",
-                new String[] { currentDomain.getId() }));
+        Clients.showNotification(Labels.getLabel("domain.edit.notification.success",
+                new String[] { currentDomain.getDomain().getId() }));
     }
 
     @Command
-    @NotifyChange({ "currentDomain", "selectedThematics" })
+    @NotifyChange({ "currentDomain", "currentDomain.selectedThematics" })
     public void clear() {
-        initThematics();
+    	initThematics();
     }
 
     private void initThematics() {
-        selectedThematics.clear();
-        selectedThematics.addAll(thematicsOptions.stream()
-                .filter(thematic -> currentDomain.getThematics().contains(thematic.getId()))
+        currentDomain.getSelectedThematics().clear();
+        currentDomain.getSelectedThematics().addAll(thematics.stream()
+                .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))
                 .collect(Collectors.toSet()));
     }
 
     @Command
-    public void close(@ContextParam(ContextType.VIEW) AbstractComponent comp) {
-        comp.detach();
+    public void close(@ContextParam(ContextType.VIEW) Div comp) {
+        comp.getParent().removeChild(comp);
     }
 
 }

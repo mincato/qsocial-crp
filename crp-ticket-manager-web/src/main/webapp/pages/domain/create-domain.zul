@@ -1,5 +1,6 @@
 	<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CreateDomainViewModel')"  xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CreateDomainViewModel')"
+		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 		<n:div class="row">
 			<n:div col="col-lg-12">
 				<div zclass="pane equal">
@@ -12,18 +13,22 @@
 			<n:div col="col-lg-12">
 				<div zclass="pane equal">
 					<x:form form="@id('fx') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
-						<n:div class="form-group">
-						    <n:label>${labels.domain.name}:</n:label>
-				    		<textbox type="text" class="form-control" id="normal_input" 
-					    			name="normal_input" value="@bind(fx.name)"></textbox>
-						</n:div>
+						<x:div sclass="@load(empty vmsgs[name] ? 'form-group' : 'form-group has-error')">
+						    <n:label class="control-label">${labels.domain.name}:</n:label>
+				    		<textbox type="text" class="form-control" id="name" 
+					    			name="normal_input" value="@bind(fx.domain.name) @validator('beanValidator')"></textbox>
+					    	<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
+			    				<label value="@load(vmsgs[name])" />
+			    			</x:span>
+						</x:div>
 						
-						<div class="form-group" >
-							<n:label>${labels.domain.thematics}:</n:label>
-							<listbox mold="select" zclass="form-control" ca:multiple="" model="@load(vm.thematics)"
+						<x:div class="form-group" sclass="@load(empty vmsgs[thematics] ? 'form-group' : 'form-group has-error')">
+							<n:label class="control-label">${labels.domain.thematics}:</n:label>
+							<listbox mold="select" sclass="form-control" model="@load(vm.thematics)"
 								 multiple="true"
 								checkmark="true"
-								selectedItems="@bind(vm.selectedThematics)">
+								selectedItems="@bind(fx.selectedThematics) @validator('beanValidator')"
+								id="thematics">
 								<template name="model">
 									<listitem>
 										<listcell label="${each.id} - ${each.name}" value="@{each.name}" />
@@ -37,7 +42,13 @@
 									<x:label for="checkbox1">${each.id}</x:label>
 					    		</div>
     						</template>
-						</div>
+    						
+    						<x:span sclass="@load(empty vmsgs[thematics] ? 'hidden' : 'help-block')">
+		    					<label value="@load(vmsgs[thematics])" />
+		    				</x:span>
+    						
+    						
+						</x:div>
 						
 						<div class="form-group text-center">
 						    <button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
