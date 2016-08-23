@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
-import com.qsocialnow.elasticsearch.services.DomainService;
+import com.qsocialnow.elasticsearch.services.config.DomainService;
 
 @Service
 public class DomainRepository {

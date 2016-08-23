@@ -1,5 +1,7 @@
 package com.qsocialnow.elasticsearch.repositories;
 
+import java.util.List;
+
 import com.qsocialnow.elasticsearch.mappings.Mapping;
 
 public interface Repository<T> {
@@ -14,6 +16,8 @@ public interface Repository<T> {
 
     public <E> String indexMapping(Mapping<T, E> mapping, T document);
 
+    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping,List<T> documents);
+    
     public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document);
 
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping);

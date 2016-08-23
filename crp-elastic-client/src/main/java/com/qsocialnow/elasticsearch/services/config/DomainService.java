@@ -1,4 +1,4 @@
-package com.qsocialnow.elasticsearch.services;
+package com.qsocialnow.elasticsearch.services.config;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
@@ -9,7 +9,7 @@ import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class DomainService {
-
+	
     public Domain findDomainById(String name) {
         Configurator configurator = new Configurator();
         return findDomainById(configurator, name);

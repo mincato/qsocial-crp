@@ -3,6 +3,7 @@ package com.qsocialnow.elasticsearch.repositories;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,8 @@ import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.BulkResult;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
@@ -103,6 +106,35 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return idValue;
     }
 
+    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping,List<T> documents){ 	
+        
+    	List<Index> modelList = new ArrayList<Index>();
+    	for (T t : documents) {
+    		modelList.add(new Index.Builder(t).build());		
+		}
+    	
+        Bulk bulk = new Bulk.Builder()
+                .defaultIndex(mapping.getIndex())
+                .defaultType(mapping.getType())
+                .addAction(modelList)
+                .build();
+        
+        IndexResponse<E> response = new IndexResponse<>();
+        try {
+        	BulkResult result = client.execute(bulk);
+        	List<E> sources = new ArrayList<E>();
+        	
+        	if (result.isSucceeded()) {
+        		//TODO: set items responses
+        	}
+            response.setSources(sources);
+            
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+        return response;
+    }
+    
     @Override
     public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document) {
 

@@ -23,6 +23,7 @@
 		<elastic.search.version>1.5.0</elastic.search.version>
 		<groovy-version>2.4.5</groovy-version>
 		<junit.version>4.12</junit.version>
+		<bigqueue.version>0.7.0</bigqueue.version>
 	</properties>
 
 	<repositories>
@@ -30,6 +31,10 @@
 			<id>sonatype</id>
 			<name>Sonatype Groups</name>
 			<url>https://oss.sonatype.org/content/groups/public/</url>
+		</repository>
+		<repository>
+  			<id>github.release.repo</id>
+  			<url>https://raw.github.com/bulldog2011/bulldog-repo/master/repo/releases/</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -49,6 +54,13 @@
 			<version>${elastic.search.version}</version>
 		</dependency>
 
+		<!-- Big Queue -->
+		<dependency>
+  			<groupId>com.leansoft</groupId>
+  			<artifactId>bigqueue</artifactId>
+  			<version>${bigqueue.version}</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-expressions</artifactId>
