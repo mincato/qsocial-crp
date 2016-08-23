@@ -50,11 +50,8 @@ public class DomainRepository {
             Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
                     Configurator.class);
 
-            // TODO llamar al update de elastic
-            // String id = domainElasticService.indexDomain(configurator,
-            // domain);
-            // domain.setId(id);
-
+            String id = domainElasticService.updateDomain(configurator, domain);
+            domain.setId(id);
             return domain;
         } catch (Exception e) {
             log.error("Unexpected error", e);
@@ -68,7 +65,7 @@ public class DomainRepository {
             Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
                     Configurator.class);
 
-            Domain domain = domainElasticService.findDomainById(configurator, domainId);
+            Domain domain = domainElasticService.findDomain(configurator, domainId);
 
             return domain;
         } catch (Exception e) {
