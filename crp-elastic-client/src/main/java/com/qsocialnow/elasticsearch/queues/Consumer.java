@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
@@ -21,10 +24,14 @@ public abstract class Consumer<T> extends Thread {
 
     private Object lock = new Object();
 
+    private ConsumerMonitor<T> monitor;
+
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
     private static final AtomicInteger consumingItemCount = new AtomicInteger(0);
 
     public Consumer() {
-
+        monitor = new ConsumerMonitor<T>(this);
     }
 
     public void setQueue(IBigQueue bigQueue) {
@@ -68,6 +75,7 @@ public abstract class Consumer<T> extends Thread {
     public abstract void saveDocuments();
 
     public void run() {
+        startMonitor();
         while (true) {
             synchronized (lock) {
                 try {
@@ -77,9 +85,13 @@ public abstract class Consumer<T> extends Thread {
                     byte[] item = null;
                     int index = consumingItemCount.getAndIncrement();
                     while (index < TOTAL_ITEM_COUNTS) {
-                        item = bigQueue.dequeue();
-                        addDocument(readObjectFromQueue(item));
-                        index = consumingItemCount.getAndIncrement();
+                        if (!bigQueue.isEmpty()) {
+                            item = bigQueue.dequeue();
+                            addDocument(readObjectFromQueue(item));
+                            index = consumingItemCount.getAndIncrement();
+                        } else {
+                            break;
+                        }
                     }
                     log.info("Finish to read the queue");
                     consumingItemCount.set(0);
@@ -87,9 +99,22 @@ public abstract class Consumer<T> extends Thread {
                 } catch (Exception e) {
                     log.error("Error reading information from queue", e);
                 } finally {
-                    log.info("Finishing consumer");
+                    log.info("Consumer waiting items...");
+
                 }
             }
         }
+    }
+
+    private void startMonitor() {
+        log.info("Starting monitor...");
+        executor.scheduleWithFixedDelay(monitor, 8, 8, TimeUnit.SECONDS);
+    }
+
+    private void stopMonitor() {
+        if (!executor.isTerminated()) {
+            log.info("Stoping consumer monitor");
+        }
+        executor.shutdownNow();
     }
 }

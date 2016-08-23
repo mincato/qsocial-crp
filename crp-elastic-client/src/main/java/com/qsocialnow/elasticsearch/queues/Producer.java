@@ -30,12 +30,8 @@ public class Producer<T> extends Thread {
     }
 
     public void addItem(T document) {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutput out = null;
         try {
-            out = new ObjectOutputStream(bos);
-            out.writeObject(document);
-            byte[] item = bos.toByteArray();
+            byte[] item = this.getItemSerialized(document);
 
             bigQueue.enqueue(item);
             producingItemCount.incrementAndGet();
@@ -49,16 +45,8 @@ public class Producer<T> extends Thread {
         } catch (IOException ex) {
             log.error("Error trying to serealize case:" + ex);
         } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                    bos.close();
-                }
-            } catch (IOException ex) {
-                log.error("Error closing stream");
-            }
-        }
 
+        }
     }
 
     public void notifyConsumers() {
@@ -85,5 +73,29 @@ public class Producer<T> extends Thread {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private byte[] getItemSerialized(T document) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutput out = null;
+        byte[] item = null;
+        try {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(document);
+            item = bos.toByteArray();
+
+        } catch (IOException ex) {
+            log.error("Error trying to serealize case:" + ex);
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                    bos.close();
+                }
+            } catch (IOException ex) {
+                log.error("Error closing stream");
+            }
+        }
+        return item;
     }
 }
