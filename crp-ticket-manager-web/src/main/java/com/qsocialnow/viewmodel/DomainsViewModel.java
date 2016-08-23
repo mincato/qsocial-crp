@@ -2,11 +2,15 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
@@ -52,6 +56,13 @@ public class DomainsViewModel implements Serializable {
     public void moreResults() {
         this.activePage++;
         this.findDomains();
+    }
+    
+    @Command
+    public void openEdit(@BindingParam("domainId") String domainId) {
+        Map<String, Object> arg = new HashMap<String, Object>();
+        arg.put("domain", domainId);
+        Executions.createComponents("/pages/domain/edit-domain.zul", null, arg);
     }
 
     private PageResponse<DomainListView> findDomains() {

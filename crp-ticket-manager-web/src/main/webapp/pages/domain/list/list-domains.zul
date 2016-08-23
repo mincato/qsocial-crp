@@ -29,8 +29,7 @@
                        	<td>${each.thematics}</td>
                        	<td>
                        		<ul class="list-inline">
-  								<li><i class="fa fa-search"></i></li>
-  								<li><i class="fa fa-pencil-square-o"></i></li>
+  								<li><a style="color:black"><i onClick="@command('openEdit', domainId=each.id)" class="fa fa-pencil-square-o"></i></a></li>
 							</ul>
                        	</td>
                		</tr>
