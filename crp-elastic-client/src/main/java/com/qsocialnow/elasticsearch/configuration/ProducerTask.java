@@ -1,5 +1,6 @@
 package com.qsocialnow.elasticsearch.configuration;
 
+import java.util.Date;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,7 +24,11 @@ public class ProducerTask extends TimerTask {
 
         System.out.println("Creating case");
         Case caseDocument = new Case();
+        caseDocument.setTitle("Testing cases");
         caseDocument.setDescription("Case: " + itemCount.incrementAndGet());
+        caseDocument.setOpen(true);
+        caseDocument.setOpenDate(new Date());
+        
         caseService.indexCaseByBulkProcess(configuration, caseDocument);
     }
 
