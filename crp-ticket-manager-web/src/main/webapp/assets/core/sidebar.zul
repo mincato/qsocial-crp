@@ -62,6 +62,7 @@
 					    		</n:a>
 				    			<ul>
 									<li><a href="#">${labels.sidebar.menu.list}</a></li>
+									<li><a href="/pages/triggers/index.zul">${labels.sidebar.menu.create}</a></li>
 				    			</ul>
 							</li>
 						

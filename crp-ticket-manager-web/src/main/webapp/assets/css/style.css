@@ -2510,3 +2510,44 @@ TABLE OF CONTENTS
     .owl-carousel.demo .owl-item h4 {
         margin-bottom: 0;
     }
+    
+ .z-datebox-input { 
+    display: table-cell;
+    width: 100%;
+    margin-bottom: 0;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555;
+    vertical-align: middle;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+ }
+ 
+ .z-datebox-button { 
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+    display: table-cell;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-left: 0;
+ }
+ 
+.input-group.z-datebox-popup {
+	position: absolute;
+}

@@ -6,6 +6,8 @@ import java.util.List;
 public class Trigger {
 
     private String id;
+    
+    private String name;
 
     private Date init;
 
@@ -74,5 +76,13 @@ public class Trigger {
     public void setResolutions(List<Resolution> resolutions) {
         this.resolutions = resolutions;
     }
+    
+    public String getName() {
+		return name;
+	}
+    
+    public void setName(String name) {
+		this.name = name;
+	}
 
 }

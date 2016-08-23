@@ -58,12 +58,13 @@ public class CreateDomainViewModel implements Serializable {
     @Command
     @NotifyChange("currentDomain")
     public void save() {
-        List<Long> thematics = currentDomain.getSelectedThematics().stream().map(Thematic::getId).collect(Collectors.toList());
+        List<Long> thematics = currentDomain.getSelectedThematics().stream().map(Thematic::getId)
+                .collect(Collectors.toList());
         Domain newDomain = currentDomain.getDomain();
         newDomain.setThematics(thematics);
         currentDomain.setDomain(domainService.create(newDomain));
-        Clients.showNotification(Labels.getLabel("domain.create.notification.success",
-                new String[] { currentDomain.getDomain().getId() }));
+        Clients.showNotification(Labels.getLabel("domain.create.notification.success", new String[] { currentDomain
+                .getDomain().getId() }));
     }
 
     @Command
@@ -74,7 +75,7 @@ public class CreateDomainViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "currentDomain"})
+    @NotifyChange({ "currentDomain" })
     public void clear() {
     }
 
