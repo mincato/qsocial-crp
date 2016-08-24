@@ -1,6 +1,7 @@
 package com.qsocialnow.elasticsearch.repositories;
 
 import com.qsocialnow.elasticsearch.mappings.Mapping;
+import com.qsocialnow.elasticsearch.mappings.types.ChildType;
 
 public interface Repository<T> {
 
@@ -13,6 +14,8 @@ public interface Repository<T> {
     public boolean validateIndex(String index);
 
     public <E> String indexMapping(Mapping<T, E> mapping, T document);
+
+    public <E> String indexChildMapping(Mapping<T, E> mapping, ChildType document);
 
     public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document);
 
