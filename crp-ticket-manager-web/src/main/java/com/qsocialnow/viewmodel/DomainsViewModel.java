@@ -57,7 +57,7 @@ public class DomainsViewModel implements Serializable {
         this.activePage++;
         this.findDomains();
     }
-    
+
     @Command
     public void openEdit(@BindingParam("domainId") String domainId) {
         Map<String, Object> arg = new HashMap<String, Object>();

@@ -17,6 +17,7 @@ import com.google.common.base.Supplier;
 import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
+import com.qsocialnow.elasticsearch.mappings.types.ChildType;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -36,6 +37,8 @@ import vc.inreach.aws.request.AWSSigner;
 import vc.inreach.aws.request.AWSSigningRequestInterceptor;
 
 public class ElasticsearchRepository<T> implements Repository<T> {
+
+    private static final String PARENT_PARAMETER = "parent";
 
     private static final Logger log = LoggerFactory.getLogger(ElasticsearchRepository.class);
 
@@ -90,6 +93,23 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     @Override
     public <E> String indexMapping(Mapping<T, E> mapping, T document) {
         Index index = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).build();
+        String idValue = null;
+        try {
+            DocumentResult response = client.execute(index);
+            if (response.isSucceeded()) {
+                idValue = response.getId();
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+
+        }
+        return idValue;
+    }
+
+    @Override
+    public <E> String indexChildMapping(Mapping<T, E> mapping, ChildType document) {
+        Index index = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType())
+                .setParameter(PARENT_PARAMETER, document.getIdParent()).build();
         String idValue = null;
         try {
             DocumentResult response = client.execute(index);
@@ -238,5 +258,4 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
         return response;
     }
-
 }
