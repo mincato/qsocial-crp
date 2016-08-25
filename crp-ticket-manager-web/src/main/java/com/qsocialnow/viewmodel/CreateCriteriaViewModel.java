@@ -94,10 +94,10 @@ public class CreateCriteriaViewModel implements Serializable {
         currentCriteria = new DetectionCriteria();
         filter = new FilterView();
         Media media = new Media();
-        media.setName("facebook");
+        media.setName("1");
         mediaTypes.add(media);
         media = new Media();
-        media.setName("twitter");
+        media.setName("2");
         mediaTypes.add(media);
         connotations = Arrays.asList(ConnotationView.values());
     }

@@ -3,6 +3,7 @@ package com.qsocialnow.elasticsearch.repositories;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -171,7 +172,7 @@ public class ConfigurationRepository {
         DetectionCriteria criteria1 = new DetectionCriteria();
         criteria1.setSequenceOrder(1);
         criteria1.setId(id + "- criteria 1");
-        criteria1.setFilter(filter);
+        criteria1.setFilters(Arrays.asList(filter));
         criteria1.setValidateFrom(initDate);
         criteria1.setValidateTo(endDate);
         criteria1.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria1.getId()));
@@ -179,7 +180,7 @@ public class ConfigurationRepository {
         DetectionCriteria criteria2 = new DetectionCriteria();
         criteria2.setSequenceOrder(2);
         criteria2.setId(id + "- criteria 2");
-        criteria2.setFilter(filter2);
+        criteria2.setFilters(Arrays.asList(filter2));
         criteria2.setValidateFrom(initDate);
         criteria2.setValidateTo(endDate);
         criteria2.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria2.getId()));
@@ -187,7 +188,7 @@ public class ConfigurationRepository {
         DetectionCriteria criteria3 = new DetectionCriteria();
         criteria3.setSequenceOrder(3);
         criteria3.setId(id + "- criteria 3");
-        criteria3.setFilter(filter3);
+        criteria3.setFilters(Arrays.asList(filter3));
         criteria3.setValidateFrom(initDate);
         criteria3.setValidateTo(endDate);
         criteria3.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria3.getId()));
