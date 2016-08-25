@@ -66,6 +66,7 @@ public class DomainServiceImpl implements DomainService {
             MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
             mapper.setDateFormat(DateFormat.getDateInstance(DateFormat.SHORT));
             jsonMessageConverter.setObjectMapper(mapper);
             messageConverters.add(jsonMessageConverter);
@@ -85,6 +86,16 @@ public class DomainServiceImpl implements DomainService {
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
                     serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domain.getId());
+
+            List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+            MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            mapper.setDateFormat(DateFormat.getDateInstance(DateFormat.SHORT));
+            jsonMessageConverter.setObjectMapper(mapper);
+            messageConverters.add(jsonMessageConverter);
+            restTemplate.setMessageConverters(messageConverters);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
@@ -137,6 +148,7 @@ public class DomainServiceImpl implements DomainService {
             MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             mapper.setDateFormat(DateFormat.getDateInstance(DateFormat.SHORT));
             jsonMessageConverter.setObjectMapper(mapper);
             messageConverters.add(jsonMessageConverter);

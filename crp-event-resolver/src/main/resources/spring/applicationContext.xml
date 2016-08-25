@@ -41,4 +41,10 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).OPEN_CASE}" value-ref="openCaseAction"/>
 	</util:map>
 	
+	<util:map id="filters">
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).CONNOTATION}" value-ref="connotationDetectionCriteriaFilter"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).PERIOD}" value-ref="periodDetectionCriteriaFilter"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).MEDIA}" value-ref="mediaDetectionCriteriaFilter"/>
+	</util:map>
+	
 </beans>

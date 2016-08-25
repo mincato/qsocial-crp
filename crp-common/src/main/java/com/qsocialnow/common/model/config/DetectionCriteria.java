@@ -16,8 +16,6 @@ public class DetectionCriteria {
 
     private Integer sequenceOrder;
 
-    private Filter filter;
-
     private List<Filter> filters;
 
     private List<AutomaticActionCriteria> actionCriterias;
@@ -56,14 +54,6 @@ public class DetectionCriteria {
 
     public void setSequenceOrder(Integer sequenceOrder) {
         this.sequenceOrder = sequenceOrder;
-    }
-
-    public Filter getFilter() {
-        return filter;
-    }
-
-    public void setFilter(Filter filter) {
-        this.filter = filter;
     }
 
     public List<Filter> getFilters() {

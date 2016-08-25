@@ -20,7 +20,7 @@ function prettyJSON(obj) {
 router.get('/cases', function (req, res) {
 
   function asyncResponse(err,responseCases) {
-    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
     if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -47,7 +47,7 @@ router.get('/cases', function (req, res) {
 router.get('/domains', function (req, res) {
 
 	  function asyncResponse(err,responseDomains) {
-	    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
 	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -74,7 +74,7 @@ router.get('/domains', function (req, res) {
 router.post('/domains', function (req, res) {
 
   function asyncResponse(err,responseDomain) {
-    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
     if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -93,7 +93,7 @@ router.post('/domains', function (req, res) {
 
   prettyJSON(req.body);
 
-  var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
   var clazz = java.findClassSync('com.qsocialnow.common.model.config.Domain');
   var domain = gson.fromJsonSync(JSON.stringify(req.body), clazz);
 
@@ -162,9 +162,9 @@ router.put('/domains/:id/trigger', function (req, res) {
 });
 
 router.put('/domains/:id', function (req, res) {
-  console.log("yeah");
+  
   function asyncResponse(err,responseDomain) {
-    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
     if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -181,7 +181,7 @@ router.put('/domains/:id', function (req, res) {
 
   }
 
-  var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
   var clazz = java.findClassSync('com.qsocialnow.common.model.config.Domain');
   var domain = gson.fromJsonSync(JSON.stringify(req.body), clazz);
   var domainId = req.params.id;
