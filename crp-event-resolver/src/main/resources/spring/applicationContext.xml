@@ -27,7 +27,7 @@
  		</constructor-arg>
 	</bean>
 	
-	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.DomainService">
+	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
