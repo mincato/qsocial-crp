@@ -3,25 +3,31 @@ package com.qsocialnow.elasticsearch.services.cases;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
+import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.CaseConfigurator;
 import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
+import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
+import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
 import com.qsocialnow.elasticsearch.queues.Producer;
 import com.qsocialnow.elasticsearch.queues.QueueService;
 import com.qsocialnow.elasticsearch.queues.QueueType;
+import com.qsocialnow.elasticsearch.repositories.IndexResponse;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
+import io.searchbox.core.BulkResult.BulkResultItem;
+
 public class CaseService {
 
     private final static String INDEX_NAME = "cases_";
+    
+    private final static String INDEX_NAME_REGISTRY = "registry_";
 
     private static Producer<Case> producer;
 
@@ -56,17 +62,23 @@ public class CaseService {
         return response;
     }
 
-    public void indexCaseByBulkProcess(QueueConfigurator configurator, Case document) {
-        QueueService queueService = QueueService.getInstance(configurator, QueueType.CASES);
-        if (producer == null) {
-            producer = new Producer<Case>();
-            consumer = new CaseConsumer();
-            producer.addConsumer(consumer);
-
-            queueService.startConsumer(consumer);
-            queueService.startProducer(producer);
+    public void indexCaseByBulkProcess(QueueConfigurator queueConfigurator,ConfigurationProvider configurator, Case document) {
+        QueueService queueService = QueueService.getInstance(queueConfigurator);
+        if(queueService.initQueue(QueueType.CASES.type())){
+	        if (producer == null) {
+	            producer = new Producer<Case>();
+	            consumer = new CaseConsumer(configurator);
+	            producer.addConsumer(consumer);
+	
+	            queueService.startConsumer(consumer);
+	            queueService.startProducer(producer);
+	        }
+	        producer.addItem(document);
         }
-        producer.addItem(document);
+        else{
+        	//TODO fail process to index without queue?
+        	
+        }
     }
 
     public void indexBulkCases(List<Case> documents) {
@@ -97,8 +109,42 @@ public class CaseService {
             documentsTypes.add(mapping.getDocumentType(caseDocument));
         }
 
-        repository.bulkOperation(mapping, documentsTypes);
+        IndexResponse<Case> response = repository.bulkOperation(mapping, documentsTypes);
         repository.closeClient();
+
+        List<BulkResultItem> items = response.getSourcesBulk();
+        List<ActionRegistryType> registries = new ArrayList<>();
+        ActionRegistryMapping mappingRegistry = ActionRegistryMapping.getInstance();
+        
+        String indexNameRegistry = INDEX_NAME_REGISTRY + generateIndexValue();
+        mappingRegistry.setIndex(indexNameRegistry);
+        
+        for (int i = 0; i < documents.size(); i++) {
+			if(items.get(i) != null){
+				String idCase = items.get(i).id;
+        		Case caseIndexed =  documents.get(i);
+			
+        		List<ActionRegistry> caseRegistries =  caseIndexed.getActionsRegistry();
+        		if(caseRegistries!=null){
+	        		for (ActionRegistry actionRegistry : caseRegistries) {
+	        			ActionRegistryType documentIndexed = mappingRegistry.getDocumentType(actionRegistry);
+	        	        documentIndexed.setIdCase(idCase);
+	        	        registries.add(documentIndexed);
+					}
+        		}
+			}
+		}
+        RepositoryFactory<ActionRegistryType> esRegistryfactory = new RepositoryFactory<ActionRegistryType>(configurator);
+        Repository<ActionRegistryType> repositoryRegistry = esRegistryfactory.initManager();
+        repositoryRegistry.initClient();
+        // validete index name
+        boolean isRegistryIndexCreated = repositoryRegistry.validateIndex(indexNameRegistry);
+        // create index
+        if (!isRegistryIndexCreated) {
+        	repositoryRegistry.createIndex(mappingRegistry.getIndex());
+        }
+        repositoryRegistry.bulkOperation(mappingRegistry, registries);
+        repositoryRegistry.closeClient();
     }
 
     public List<Case> getCases(int from, int size) {
@@ -114,7 +160,7 @@ public class CaseService {
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        SearchResponse<Case> response = repository.search(from, size, mapping);
+        SearchResponse<Case> response = repository.search(from, size, "openDate", mapping);
 
         List<Case> cases = response.getSources();
 

@@ -53,7 +53,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
     @Override
     public CaseType getDocumentType(Case document) {
         CaseType caseType = new CaseType();
-        caseType.setActionsRegistry(document.getActionsRegistry());
+        //caseType.setActionsRegistry(document.getActionsRegistry());
         caseType.setAdminUnits(document.getAdminUnits());
         caseType.setAsignedValue(document.getAsignedValue());
         caseType.setCaseCategories(document.getCaseCategories());

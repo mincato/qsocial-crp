@@ -2,6 +2,8 @@ package com.qsocialnow.elasticsearch.repositories;
 
 import java.util.List;
 
+import io.searchbox.core.BulkResult.BulkResultItem;
+
 public class IndexResponse<T> {
 
     private String id;
@@ -11,6 +13,8 @@ public class IndexResponse<T> {
     private T source;
 
     private List<T> sources;
+    
+    private List<BulkResultItem> sourcesBulk;
 
     public String getId() {
         return id;
@@ -43,4 +47,12 @@ public class IndexResponse<T> {
     public void setSources(List<T> sources) {
         this.sources = sources;
     }
+
+	public List<BulkResultItem> getSourcesBulk() {
+		return sourcesBulk;
+	}
+
+	public void setSourcesBulk(List<BulkResultItem> sourcesBulk) {
+		this.sourcesBulk = sourcesBulk;
+	}
 }

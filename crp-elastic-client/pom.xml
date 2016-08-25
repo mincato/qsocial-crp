@@ -20,7 +20,11 @@
 		<version.formatter.maven.plugin>0.5.2</version.formatter.maven.plugin>
 		<log4j.version>2.5</log4j.version>
 		<slf4j.version>1.7.13</slf4j.version>
-		<elastic.search.version>1.5.0</elastic.search.version>
+		<elastic.search.version>2.3.5</elastic.search.version>
+		<lucene-expressions.version>6.1.0</lucene-expressions.version>
+		<jest.version>2.0.3</jest.version>
+		<aws-java-sdk>1.11.29</aws-java-sdk>
+		<aws-signing>0.0.14</aws-signing>
 		<groovy-version>2.4.5</groovy-version>
 		<junit.version>4.12</junit.version>
 		<bigqueue.version>0.7.0</bigqueue.version>
@@ -64,7 +68,7 @@
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-expressions</artifactId>
-			<version>4.10.4</version>
+			<version>${lucene-expressions.version}</version>
 		</dependency>
 
 		<dependency>
@@ -75,17 +79,17 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
-			<version>1.11.23</version>
+			<version>${aws-java-sdk}</version>
 		</dependency>
 		<dependency>
 			<groupId>io.searchbox</groupId>
 			<artifactId>jest</artifactId>
-			<version>2.0.0</version>
+			<version>${jest.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>vc.inreach.aws</groupId>
 			<artifactId>aws-signing-request-interceptor</artifactId>
-			<version>0.0.12</version>
+			<version>${aws-signing}</version>
 		</dependency>
 		<!-- Logging -->
 		<dependency>

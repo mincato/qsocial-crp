@@ -25,24 +25,27 @@ public class QueueService {
         this.queueDir = queueConfiguration.getQueueDir();
     }
 
-    public static QueueService getInstance(QueueConfigurator queueConfiguration, QueueType queueType) {
+    public static QueueService getInstance(QueueConfigurator queueConfiguration) {
         if (instance == null)
             instance = new QueueService(queueConfiguration);
-        instance.initQueue(queueType.type());
 
         return instance;
     }
-
-    private void initQueue(String type) {
-        if (bigQueue == null) {
+    
+    public boolean initQueue(String type) {
+        boolean isQueueReady=false;
+    	if (bigQueue == null) {
             try {
                 bigQueue = new BigQueueImpl(queueDir, type);
                 log.info("Creating queue successfully..");
-
+                isQueueReady=true;
             } catch (IOException e) {
                 log.error("Error trying to create the queue:", e);
             }
+        }else{
+        	isQueueReady=true;
         }
+    	return isQueueReady;
     }
 
     public <T> void startConsumer(Consumer<T> consumer) {

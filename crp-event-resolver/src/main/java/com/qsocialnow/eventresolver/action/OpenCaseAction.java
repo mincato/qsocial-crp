@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Coordinates;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
+import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
@@ -45,11 +46,14 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         newCase.setCaseCategories(Arrays.asList(inputElement.getCategorias()));
 
         Configurator elasticConfigConfigurator;
+        QueueConfigurator queueConfigurator;
         try {
             elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
                     .getElasticCasesConfiguratorZnodePath());
-
-            caseElasticService.indexCase(elasticConfigConfigurator, newCase);
+            
+            queueConfigurator = new QueueConfigurator();
+            
+            caseElasticService.indexCaseByBulkProcess(queueConfigurator,elasticConfigConfigurator, newCase);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block

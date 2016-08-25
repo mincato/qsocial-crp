@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.zkoss.bind.annotation.Command;
@@ -20,6 +19,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Thematic;
+import com.qsocialnow.model.DomainView;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ThematicService;
 
@@ -34,13 +34,11 @@ public class CreateDomainViewModel implements Serializable {
     @WireVariable
     private ThematicService thematicService;
 
-    private Domain currentDomain;
+    private DomainView currentDomain;
 
     private List<Thematic> thematics;
 
-    private Set<Thematic> selectedThematics;
-
-    public Domain getCurrentDomain() {
+    public DomainView getCurrentDomain() {
         return currentDomain;
     }
 
@@ -48,43 +46,37 @@ public class CreateDomainViewModel implements Serializable {
         return thematics;
     }
 
-    public Set<Thematic> getSelectedThematics() {
-        return selectedThematics;
-    }
-
-    public void setSelectedThematics(Set<Thematic> selectedThematics) {
-        this.selectedThematics = selectedThematics;
-    }
-
     @Init
     public void init() {
-        currentDomain = new Domain();
+        currentDomain = new DomainView();
+        currentDomain.setDomain(new Domain());
+        currentDomain.setSelectedThematics(new HashSet<>());
         thematics = thematicService.findAll();
-        selectedThematics = new HashSet<>();
 
     }
 
     @Command
     @NotifyChange("currentDomain")
     public void save() {
-        List<Long> thematics = selectedThematics.stream().map(Thematic::getId).collect(Collectors.toList());
-        currentDomain.setThematics(thematics);
-        currentDomain = domainService.create(currentDomain);
-        Clients.showNotification(Labels.getLabel("domain.create.notification.success",
-                new String[] { currentDomain.getId() }));
+        List<Long> thematics = currentDomain.getSelectedThematics().stream().map(Thematic::getId)
+                .collect(Collectors.toList());
+        Domain newDomain = currentDomain.getDomain();
+        newDomain.setThematics(thematics);
+        currentDomain.setDomain(domainService.create(newDomain));
+        Clients.showNotification(Labels.getLabel("domain.create.notification.success", new String[] { currentDomain
+                .getDomain().getId() }));
     }
 
     @Command
     public void openEdit() {
         Map<String, Object> arg = new HashMap<String, Object>();
-        arg.put("domain", "ramon");
+        arg.put("domain", "AVaz1z2AszJjIhC3q59G");
         Executions.createComponents("/pages/domain/edit-domain.zul", null, arg);
     }
 
     @Command
-    @NotifyChange({ "currentDomain", "selectedThematics" })
+    @NotifyChange({ "currentDomain" })
     public void clear() {
-        selectedThematics.clear();
     }
 
 }

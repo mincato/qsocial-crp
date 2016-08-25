@@ -1,6 +1,7 @@
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<div sclass="modal fade" ca:data-modal="" ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')" 
-		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditDomainViewModel', domain=arg.domain)">
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditDomainViewModel', domain=arg.domain)"
+			validationMessages="@id('vmsgs')">
 		<n:div class="modal-dialog">
 			<n:div class="modal-content" >
 				<n:div class="modal-header">
@@ -15,21 +16,25 @@
 							<div zclass="pane equal">
 								<x:form form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
 									<n:div class="form-group">
-									    <x:label sclass="vm.selectedThematics.isEmpty ? 'hidden':''">${labels.app.form.id}:</x:label>
-							    		<n:label>${vm.currentDomain.id}</n:label>
+									    <x:label>${labels.app.form.id}:</x:label>
+							    		<n:label>${vm.currentDomain.domain.id}</n:label>
 									</n:div>
-									<n:div class="form-group">
-									    <n:label>${labels.domain.name}:</n:label>
-							    		<textbox type="text" class="form-control" 
-								    			value="@bind(domain.name)"></textbox>
-									</n:div>
-									
-									<div class="form-group" >
-										<n:label>${labels.domain.thematics}:</n:label>
-										<listbox mold="select" zclass="form-control" ca:multiple="" model="@load(vm.thematicsOptions)"
+									<x:div sclass="@load(empty vmsgs[name] ? 'form-group' : 'form-group has-error')">
+									    <n:label class="control-label">${labels.domain.name}:</n:label>
+							    		<textbox type="text" class="form-control" id="name" 
+								    			name="normal_input" value="@bind(domain.domain.name) @validator('beanValidator')"></textbox>
+								    	<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
+						    				<label value="@load(vmsgs[name])" />
+						    			</x:span>
+									</x:div>
+								
+									<x:div class="form-group" sclass="@load(empty vmsgs[thematics] ? 'form-group' : 'form-group has-error')">
+										<n:label class="control-label">${labels.domain.thematics}:</n:label>
+										<listbox mold="select" sclass="form-control" model="@load(vm.thematics)"
 											 multiple="true"
 											checkmark="true"
-											selectedItems="@bind(vm.selectedThematics)">
+											selectedItems="@bind(vm.currentDomain.selectedThematics) @validator('beanValidator')"
+											id="thematics1">
 											<template name="model">
 												<listitem>
 													<listcell label="${each.id} - ${each.name}"/>
@@ -43,7 +48,11 @@
 												<x:label for="checkbox1">${each.id}</x:label>
 								    		</div>
 			    						</template>
-									</div>
+			    						
+			    						<x:span sclass="@load(empty vmsgs[thematics] ? 'hidden' : 'help-block')">
+					    					<label value="@load(vmsgs[thematics])" />
+					    				</x:span>
+									</x:div>
 							    </x:form>
 							</div>
 						</n:div>

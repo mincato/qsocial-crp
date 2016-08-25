@@ -1,11 +1,9 @@
 <?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
-<?link href="/vendor/plugins/form/bootstrap-select/bootstrap-select.css" rel="stylesheet"?>
 <?link href="/assets/css/style.css" rel="stylesheet"?>
 <?link href="/assets/css/ui.css" rel="stylesheet"?>
-<?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
+<?link id="theme" href="/assets/css/themes/theme-default.css" rel="stylesheet" type="text/css"?>
 <?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
 <?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
-<?link href="/vendor/plugins/form/icheck/skins/square/_all.css" rel="stylesheet"?>
 <zk xmlns:n="native">
 	<div class="wrapper">
 	    
@@ -26,7 +24,7 @@
 	    <div class="main">
 	    <!-- CONTENT -->
 		<n:div id="content">
-		    <include src="create-domain.zul"/>
+		    <include src="list-domains.zul"/>
 		</n:div><!-- content -->
 	    <!-- CONTENT -->
 		
@@ -41,10 +39,6 @@
 	</div><!-- wrapper -->
 	
     <!-- REQUIRED SCRIPTS -->
-	<?script src="/vendor/js/required.js" type="text/javascript" ?>
+	<?script src="/vendor/js/required.min.js" type="text/javascript" ?>
 	<?script src="/assets/js/quarca.js" type="text/javascript" ?>
-	
-	<!-- Form Plugins -->
-	<?script src="/vendor/plugins/form/bootstrap-select/bootstrap-select.min.js"?>
-	
 </zk>

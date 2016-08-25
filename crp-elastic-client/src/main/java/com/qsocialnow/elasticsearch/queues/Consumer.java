@@ -16,7 +16,11 @@ import com.leansoft.bigqueue.IBigQueue;
 
 public abstract class Consumer<T> extends Thread {
 
-    private static final Logger log = LoggerFactory.getLogger(Consumer.class);
+    private static final int DELAY = 1;
+
+	private static final int INITIAL_DELAY = 1;
+
+	private static final Logger log = LoggerFactory.getLogger(Consumer.class);
 
     private static final int TOTAL_ITEM_COUNTS = 3;
 
@@ -108,7 +112,7 @@ public abstract class Consumer<T> extends Thread {
 
     private void startMonitor() {
         log.info("Starting monitor...");
-        executor.scheduleWithFixedDelay(monitor, 8, 8, TimeUnit.SECONDS);
+        executor.scheduleWithFixedDelay(monitor, INITIAL_DELAY, DELAY, TimeUnit.MINUTES);
     }
 
     private void stopMonitor() {

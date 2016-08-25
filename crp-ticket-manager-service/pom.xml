@@ -81,11 +81,6 @@
 		<!-- QSocialNow -->
 		<dependency>
 			<groupId>com.qsocialnow.crp</groupId>
-			<artifactId>crp-kafka-util</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.qsocialnow.crp</groupId>
 			<artifactId>crp-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -324,7 +319,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>trp-ticket-manager-service</finalName>
+		<finalName>${project.artifactId}</finalName>
 
 		<plugins>
 			<!-- Compile java -->
@@ -361,6 +356,23 @@
 					<scanIntervalSeconds>5</scanIntervalSeconds>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<descriptor>src/assembly/dep.xml</descriptor>
+				</configuration>
+				<executions>
+					<execution>
+						<id>create-archive</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>			
 
 		</plugins>
 	</build>

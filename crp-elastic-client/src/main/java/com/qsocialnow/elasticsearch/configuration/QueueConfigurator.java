@@ -7,11 +7,11 @@ public class QueueConfigurator {
     private final String queueDir;
 
     public QueueConfigurator() {
-        this.baseDir = "/Users/batoswald/";
-        this.queueDir = this.baseDir + "bigqueue/qsocial";
+        this.baseDir = "/tmp/bigqueue/";
+        this.queueDir = this.baseDir + "qsocial";
     }
 
-    public QueueConfigurator(final String baseDir, final String queueDir, final int totalItems) {
+    public QueueConfigurator(final String baseDir, final String queueDir) {
         this.baseDir = baseDir;
         this.queueDir = queueDir;
     }

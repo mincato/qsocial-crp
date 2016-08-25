@@ -32,7 +32,10 @@
 	    	<name>modal</name>
 	    	<script>
 	        	function (wgt, dataValue) {
-	            	$(wgt.$n()).modal();
+	            	$(wgt.$n()).modal({
+  						backdrop: 'static',   // This disable for click outside event
+    					keyboard: true        // This for keyboard event
+					});
 	        	}
 	    	</script>
 		</data-handler>
@@ -40,7 +43,7 @@
     		<name>close-event</name>
     		<script>
         		function (wgt, dataValue) {
-            		jq(wgt.$n()).on(dataValue, function() {
+            		$(wgt.$n()).on(dataValue, function() {
                 		wgt.fire("onModalClose", null, {toServer: true});
             		});
         		}
