@@ -1,0 +1,91 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<div sclass="modal fade" ca:data-modal="" ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')" 
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CreateCriteriaViewModel')"
+			validationMessages="@id('vmsgs')">
+		<n:div class="modal-dialog">
+			<div class="modal-content" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
+				<n:div class="modal-header">
+    				<n:button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    					<n:span aria-hidden="true">&#x00D7;</n:span>
+					</n:button>
+    				<n:h4 class="modal-title">${labels.trigger.criteria.title}</n:h4>
+  				</n:div>
+  				<n:div class="modal-body">
+    				<div class="row">
+						<n:div>
+							<div zclass="pane equal">
+								<n:form class="form-horizontal pane bottom-line">
+									<x:div sclass="@load(empty vmsgs[name] ? 'form-group' : 'form-group has-error')">
+									    <n:label class="control-label col-sm-2">${labels.trigger.name}</n:label>
+							    		<n:div class="col-sm-10">
+					    					<textbox type="text" class="form-control" id="name" 
+						    					value="@bind(fxCriteria.name) @validator('beanValidator')"></textbox>
+							    			<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
+					    						<label value="@load(vmsgs[name])" />
+					    					</x:span>
+						    			</n:div>
+									</x:div>
+									
+									<n:div class="form-group">
+										<n:label class="control-label col-sm-2">${labels.trigger.criteria.validFrom}</n:label>
+										<n:div class="col-sm-10">
+											<datebox sclass="input-group" format="short" value="@bind(fxCriteria.validateFrom)" />
+										</n:div>
+				    				</n:div>
+				    		
+				    				<n:div class="form-group">
+										<n:label class="control-label col-sm-2">${labels.trigger.criteria.validTo}</n:label>
+										<n:div class="col-sm-10">
+											<datebox sclass="input-group" format="short" value="@bind(fxCriteria.validateTo)" />
+										</n:div>
+				    				</n:div>
+							    </n:form>
+							    <n:form class="form-horizontal pane bottom-line">								
+									<n:div class="form-group">
+										<n:label class="control-label col-sm-2">${labels.trigger.criteria.media}</n:label>
+										<x:div class="col-sm-6" children="@load(vm.mediaTypes)">
+											<template name="children">
+												<checkbox disabled="@load(vm.allMedia)" zclass="icon-input" sclass="@load(each.name)" checked="@bind(each.checked)" />
+        									</template>
+										</x:div>
+    									<checkbox zclass="icon-input" sclass="all" label="${labels.app.select.all}" checked="@bind(vm.allMedia)" onCheck="@command('selectAllMedia', checked=self.checked)" />
+				    				</n:div>
+							    </n:form>
+							    <n:form class="form-horizontal pane bottom-line">								
+									<n:div class="form-group">
+										<n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
+										<n:div class="col-sm-10">
+											<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(vm.filter.startDateTime)" />
+										</n:div>
+				    				</n:div>
+				    				<n:div class="form-group">
+										<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
+										<n:div class="col-sm-10">
+											<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(vm.filter.endDateTime)" />
+										</n:div>
+				    				</n:div>
+							    </n:form>
+							    <n:form class="form-horizontal pane">								
+									<n:div class="form-group">
+										<n:label class="control-label col-sm-2">${labels.trigger.criteria.connotation}</n:label>
+										<n:div class="col-sm-10">
+											<radiogroup model="@bind(vm.connotations)" selectedItem="@bind(vm.filter.connotation)">
+												<template name="model">
+													<radio zclass="icon-input" sclass="@load(each.icon)" label="@bind(each.label)"/>
+												</template>
+        									</radiogroup>
+										</n:div>
+				    				</n:div>
+							    </n:form>
+							</div>
+						</n:div>
+					</div>
+  				</n:div>
+  				<n:div class="modal-footer">
+  					<button onClick="@command('save')" label="${labels.app.button.save}" ca:data-dismiss="modal" zclass="btn btn-primary" />
+    				<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
+  				</n:div>
+			</div>
+		</n:div>
+	</div> 
+</zk>

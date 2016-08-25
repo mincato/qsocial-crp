@@ -24,9 +24,9 @@
 	<!-- MAIN -->
 	    <div class="main">
 	    <!-- CONTENT -->
-		<n:div id="content">
-		    <include src="create-trigger.zul"/>
-		</n:div><!-- content -->
+		<div id="content">
+		    <include src="create-admin-trigger.zul"/>
+		</div><!-- content -->
 	    <!-- CONTENT -->
 		
 	    <!-- FOOTER -->

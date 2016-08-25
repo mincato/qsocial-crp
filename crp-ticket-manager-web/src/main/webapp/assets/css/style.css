@@ -2551,3 +2551,64 @@ TABLE OF CONTENTS
 .input-group.z-datebox-popup {
 	position: absolute;
 }
+
+.icon-input label:before {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+/*--adjust as necessary--*/
+    color: grey;
+    font-size: 30px;
+    padding-right: 0.5em;
+    position: relative;
+    top: 10px;
+    left: 0;
+}
+
+.icon-input-content {
+    font-size: 20px;
+    color: grey;
+}
+
+.icon-input input:checked + .icon-input-content{/*checked icon*/
+    color: green;
+}
+
+
+.icon-input.plus label:before{
+    content: "\f055";
+}
+
+.icon-input.minus label:before{
+    content: "\f056";
+}
+
+.icon-input.neutro label:before{
+    content: "\f192";
+}
+
+.icon-input.facebook label:before{
+    content: "\f082";
+}
+
+.icon-input.twitter label:before{
+    content: "\f081";
+}
+
+.icon-input.all label:before{
+    content: "\f14a";
+}
+
+.icon-input input:checked + label:before{/*checked icon*/
+    color: green;
+}
+
+.icon-input input {
+	position: absolute;
+	opacity: 0;
+}
+
+.bottom-line {
+	border-bottom: 1px solid;
+}
