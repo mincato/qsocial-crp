@@ -15,7 +15,7 @@ import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
-import com.qsocialnow.elasticsearch.services.DomainService;
+import com.qsocialnow.elasticsearch.services.config.DomainService;
 
 @Service
 public class DomainRepository {

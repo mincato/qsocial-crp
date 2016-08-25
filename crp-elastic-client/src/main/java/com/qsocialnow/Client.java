@@ -9,7 +9,7 @@ import com.qsocialnow.elasticsearch.configuration.ClientProcessor;
 
 public class Client {
 
-    private final static String[] COMMANDS = { "createindex", "add", "rmindex", "search", "searchcases" };
+    private final static String[] COMMANDS = { "add" };
 
     private static final Logger log = LoggerFactory.getLogger(Client.class);
 
@@ -18,10 +18,10 @@ public class Client {
             if (validateArgs(args[0])) {
                 ClientProcessor.executeCommand(args);
             } else {
-                log.error("Invalid command ,allowed commands:createindex,add,rmindex,search,searchcases");
+                log.error("Invalid command");
             }
         } else {
-            log.error("Invalid command ,allowed commands:createindex,add,rmindex,search,searchcases");
+            log.error("Invalid command");
         }
     }
 

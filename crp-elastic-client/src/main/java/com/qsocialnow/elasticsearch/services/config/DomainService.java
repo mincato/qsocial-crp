@@ -1,4 +1,4 @@
-package com.qsocialnow.elasticsearch.services;
+package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.List;
 import com.qsocialnow.common.model.config.Domain;

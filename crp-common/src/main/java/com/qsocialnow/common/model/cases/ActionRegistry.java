@@ -1,10 +1,13 @@
 package com.qsocialnow.common.model.cases;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.qsocialnow.common.model.config.ActionType;
 
-public class ActionRegistry {
+public class ActionRegistry implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String id;
 
