@@ -1,18 +1,23 @@
 package com.qsocialnow.elasticsearch.configuration;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.Client;
+import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.Event;
+import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.repositories.ConfigurationRepository;
 import com.qsocialnow.elasticsearch.services.ConfigurationService;
 import com.qsocialnow.elasticsearch.services.DetectionCriteriaService;
 import com.qsocialnow.elasticsearch.services.DomainService;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
+import com.qsocialnow.elasticsearch.services.cases.RegistryService;
 
 public class ClientProcessor {
 
@@ -29,13 +34,28 @@ public class ClientProcessor {
 
         CaseService caseService = new CaseService();
         ConfigurationRepository repo = new ConfigurationRepository();
-
-        Configurator configurator = new Configurator();
-
         DetectionCriteriaService criteriaService = new DetectionCriteriaService();
+        // create instances
         Domain domain = repo.findDomainByName("domain1");
         Case caseDocument = new Case();
         caseDocument.setDescription("Adding new case");
+
+        RegistryService regService = new RegistryService();
+
+        String idCase = "AVa4B9cpl6Mx7gjoktYU";
+        ActionRegistry registry = new ActionRegistry();
+        registry.setAction("Creating post in facebook");
+        registry.setAutomatic(true);
+        registry.setComment("Adding this after create case - 5");
+        registry.setDate(new Date());
+        Event event = new Event();
+        event.setTopic("Topic - ");
+        event.setId("AVa4LmvidBqxX9eCEW7a");
+        event.setDescription("Description event - 5");
+
+        registry.setEvent(event);
+        registry.setType(ActionType.ASSIGN);
+        registry.setUserName("Dick Grayson");
 
         switch (commands[0]) {
             case "createindex":
@@ -89,6 +109,12 @@ public class ClientProcessor {
                             response = caseService.indexCase(caseDocument);
                             log.info("Index Response:ID=" + response);
                             break;
+
+                        case "registry":
+                            response = regService.indexRegistry(idCase, registry);
+                            log.info("Index Response:ID=" + response);
+                            break;
+
                     }
                 } else {
                     log.error("Invalid command ,allowed parameters: domain , criteria");
