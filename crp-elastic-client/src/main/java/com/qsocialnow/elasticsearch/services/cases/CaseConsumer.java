@@ -12,27 +12,26 @@ public class CaseConsumer extends Consumer<Case> {
     private List<Case> bulkDocuments = new ArrayList<Case>();
 
     private CaseService service = new CaseService();
-    
+
     private ConfigurationProvider configurator;
-    
+
     public CaseConsumer(ConfigurationProvider configurator) {
-    	this.configurator = configurator; 
-	}
+        this.configurator = configurator;
+    }
 
     @Override
     public void addDocument(Case caseDoc) {
-    	synchronized (bulkDocuments) {
-    		bulkDocuments.add(caseDoc);
-    	}
+        synchronized (bulkDocuments) {
+            bulkDocuments.add(caseDoc);
+        }
     }
-
 
     @Override
     public void saveDocuments() {
-    	synchronized (bulkDocuments) {
-    		service.indexBulkCases(this.configurator,bulkDocuments);
+        synchronized (bulkDocuments) {
+            service.indexBulkCases(this.configurator, bulkDocuments);
             bulkDocuments.clear();
-    	}
+        }
     }
 
 }

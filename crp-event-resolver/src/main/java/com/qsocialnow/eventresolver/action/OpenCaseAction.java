@@ -50,10 +50,10 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         try {
             elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
                     .getElasticCasesConfiguratorZnodePath());
-            
+
             queueConfigurator = new QueueConfigurator();
-            
-            caseElasticService.indexCaseByBulkProcess(queueConfigurator,elasticConfigConfigurator, newCase);
+
+            caseElasticService.indexCaseByBulkProcess(queueConfigurator, elasticConfigConfigurator, newCase);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block

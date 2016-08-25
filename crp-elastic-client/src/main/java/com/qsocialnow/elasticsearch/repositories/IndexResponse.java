@@ -13,7 +13,7 @@ public class IndexResponse<T> {
     private T source;
 
     private List<T> sources;
-    
+
     private List<BulkResultItem> sourcesBulk;
 
     public String getId() {
@@ -48,11 +48,11 @@ public class IndexResponse<T> {
         this.sources = sources;
     }
 
-	public List<BulkResultItem> getSourcesBulk() {
-		return sourcesBulk;
-	}
+    public List<BulkResultItem> getSourcesBulk() {
+        return sourcesBulk;
+    }
 
-	public void setSourcesBulk(List<BulkResultItem> sourcesBulk) {
-		this.sourcesBulk = sourcesBulk;
-	}
+    public void setSourcesBulk(List<BulkResultItem> sourcesBulk) {
+        this.sourcesBulk = sourcesBulk;
+    }
 }

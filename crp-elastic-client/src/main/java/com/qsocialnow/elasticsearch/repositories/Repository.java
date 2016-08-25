@@ -19,9 +19,9 @@ public interface Repository<T> {
 
     public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<T> documents);
 
-	public <E> String indexChildMapping(Mapping<T, E> mapping, ChildType document);    
-	
-	public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document);
+    public <E> String indexChildMapping(Mapping<T, E> mapping, ChildType document);
+
+    public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document);
 
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping);
 

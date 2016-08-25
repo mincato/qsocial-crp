@@ -26,7 +26,7 @@ import io.searchbox.core.BulkResult.BulkResultItem;
 public class CaseService {
 
     private final static String INDEX_NAME = "cases_";
-    
+
     private final static String INDEX_NAME_REGISTRY = "registry_";
 
     private static Producer<Case> producer;
@@ -62,22 +62,22 @@ public class CaseService {
         return response;
     }
 
-    public void indexCaseByBulkProcess(QueueConfigurator queueConfigurator,ConfigurationProvider configurator, Case document) {
+    public void indexCaseByBulkProcess(QueueConfigurator queueConfigurator, ConfigurationProvider configurator,
+            Case document) {
         QueueService queueService = QueueService.getInstance(queueConfigurator);
-        if(queueService.initQueue(QueueType.CASES.type())){
-	        if (producer == null) {
-	            producer = new Producer<Case>();
-	            consumer = new CaseConsumer(configurator);
-	            producer.addConsumer(consumer);
-	
-	            queueService.startConsumer(consumer);
-	            queueService.startProducer(producer);
-	        }
-	        producer.addItem(document);
-        }
-        else{
-        	//TODO fail process to index without queue?
-        	
+        if (queueService.initQueue(QueueType.CASES.type())) {
+            if (producer == null) {
+                producer = new Producer<Case>();
+                consumer = new CaseConsumer(configurator);
+                producer.addConsumer(consumer);
+
+                queueService.startConsumer(consumer);
+                queueService.startProducer(producer);
+            }
+            producer.addItem(document);
+        } else {
+            // TODO fail process to index without queue?
+
         }
     }
 
@@ -115,33 +115,34 @@ public class CaseService {
         List<BulkResultItem> items = response.getSourcesBulk();
         List<ActionRegistryType> registries = new ArrayList<>();
         ActionRegistryMapping mappingRegistry = ActionRegistryMapping.getInstance();
-        
+
         String indexNameRegistry = INDEX_NAME_REGISTRY + generateIndexValue();
         mappingRegistry.setIndex(indexNameRegistry);
-        
+
         for (int i = 0; i < documents.size(); i++) {
-			if(items.get(i) != null){
-				String idCase = items.get(i).id;
-        		Case caseIndexed =  documents.get(i);
-			
-        		List<ActionRegistry> caseRegistries =  caseIndexed.getActionsRegistry();
-        		if(caseRegistries!=null){
-	        		for (ActionRegistry actionRegistry : caseRegistries) {
-	        			ActionRegistryType documentIndexed = mappingRegistry.getDocumentType(actionRegistry);
-	        	        documentIndexed.setIdCase(idCase);
-	        	        registries.add(documentIndexed);
-					}
-        		}
-			}
-		}
-        RepositoryFactory<ActionRegistryType> esRegistryfactory = new RepositoryFactory<ActionRegistryType>(configurator);
+            if (items.get(i) != null) {
+                String idCase = items.get(i).id;
+                Case caseIndexed = documents.get(i);
+
+                List<ActionRegistry> caseRegistries = caseIndexed.getActionsRegistry();
+                if (caseRegistries != null) {
+                    for (ActionRegistry actionRegistry : caseRegistries) {
+                        ActionRegistryType documentIndexed = mappingRegistry.getDocumentType(actionRegistry);
+                        documentIndexed.setIdCase(idCase);
+                        registries.add(documentIndexed);
+                    }
+                }
+            }
+        }
+        RepositoryFactory<ActionRegistryType> esRegistryfactory = new RepositoryFactory<ActionRegistryType>(
+                configurator);
         Repository<ActionRegistryType> repositoryRegistry = esRegistryfactory.initManager();
         repositoryRegistry.initClient();
         // validete index name
         boolean isRegistryIndexCreated = repositoryRegistry.validateIndex(indexNameRegistry);
         // create index
         if (!isRegistryIndexCreated) {
-        	repositoryRegistry.createIndex(mappingRegistry.getIndex());
+            repositoryRegistry.createIndex(mappingRegistry.getIndex());
         }
         repositoryRegistry.bulkOperation(mappingRegistry, registries);
         repositoryRegistry.closeClient();

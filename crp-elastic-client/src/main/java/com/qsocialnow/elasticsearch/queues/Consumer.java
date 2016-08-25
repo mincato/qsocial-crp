@@ -18,9 +18,9 @@ public abstract class Consumer<T> extends Thread {
 
     private static final int DELAY = 1;
 
-	private static final int INITIAL_DELAY = 1;
+    private static final int INITIAL_DELAY = 1;
 
-	private static final Logger log = LoggerFactory.getLogger(Consumer.class);
+    private static final Logger log = LoggerFactory.getLogger(Consumer.class);
 
     private static final int TOTAL_ITEM_COUNTS = 3;
 

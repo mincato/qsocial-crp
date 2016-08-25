@@ -19,7 +19,7 @@ public class ProducerTask extends TimerTask {
     private static final AtomicInteger itemCount = new AtomicInteger(0);
 
     private QueueConfigurator configuration = new QueueConfigurator();
-    
+
     private CaseConfigurator caseConfig = new CaseConfigurator();
 
     public ProducerTask() {
@@ -31,13 +31,13 @@ public class ProducerTask extends TimerTask {
 
         System.out.println("Creating case");
         Case caseDocument = new Case();
-        caseDocument.setTitle("Testing case:"+itemCount.get());
+        caseDocument.setTitle("Testing case:" + itemCount.get());
         caseDocument.setDescription("Case: " + itemCount.get());
         caseDocument.setOpen(true);
         caseDocument.setOpenDate(new Date());
-        
+
         ActionRegistry registry = new ActionRegistry();
-        registry.setAction("Registry case :"+itemCount.getAndIncrement());
+        registry.setAction("Registry case :" + itemCount.getAndIncrement());
         registry.setAutomatic(true);
         registry.setComment("Registry Comment");
         registry.setDate(new Date());
@@ -47,13 +47,13 @@ public class ProducerTask extends TimerTask {
         event.setId("evento ID");
         event.setTopic("Topico de Evento");
         registry.setEvent(event);
-        
+
         List<ActionRegistry> registries = new ArrayList<>();
         registries.add(registry);
-        
+
         caseDocument.setActionsRegistry(registries);
-        
-        caseService.indexCaseByBulkProcess(configuration,caseConfig,caseDocument);
+
+        caseService.indexCaseByBulkProcess(configuration, caseConfig, caseDocument);
     }
 
 }

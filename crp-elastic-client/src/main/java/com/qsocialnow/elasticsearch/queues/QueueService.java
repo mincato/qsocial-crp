@@ -31,21 +31,21 @@ public class QueueService {
 
         return instance;
     }
-    
+
     public boolean initQueue(String type) {
-        boolean isQueueReady=false;
-    	if (bigQueue == null) {
+        boolean isQueueReady = false;
+        if (bigQueue == null) {
             try {
                 bigQueue = new BigQueueImpl(queueDir, type);
                 log.info("Creating queue successfully..");
-                isQueueReady=true;
+                isQueueReady = true;
             } catch (IOException e) {
                 log.error("Error trying to create the queue:", e);
             }
-        }else{
-        	isQueueReady=true;
+        } else {
+            isQueueReady = true;
         }
-    	return isQueueReady;
+        return isQueueReady;
     }
 
     public <T> void startConsumer(Consumer<T> consumer) {

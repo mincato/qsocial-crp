@@ -163,7 +163,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>executable</id>
+			<id>executable-test</id>
 			<build>
 				<finalName>${project.artifactId}</finalName>
 				<plugins>
