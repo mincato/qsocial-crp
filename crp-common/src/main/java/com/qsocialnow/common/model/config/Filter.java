@@ -31,4 +31,5 @@ public class Filter {
     public void setParameters(String parameters) {
         this.parameters = parameters;
     }
+
 }

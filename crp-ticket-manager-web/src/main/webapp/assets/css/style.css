@@ -2510,3 +2510,105 @@ TABLE OF CONTENTS
     .owl-carousel.demo .owl-item h4 {
         margin-bottom: 0;
     }
+    
+ .z-datebox-input { 
+    display: table-cell;
+    width: 100%;
+    margin-bottom: 0;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555;
+    vertical-align: middle;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+ }
+ 
+ .z-datebox-button { 
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+    display: table-cell;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-left: 0;
+ }
+ 
+.input-group.z-datebox-popup {
+	position: absolute;
+}
+
+.icon-input label:before {
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+/*--adjust as necessary--*/
+    color: grey;
+    font-size: 30px;
+    padding-right: 0.5em;
+    position: relative;
+    top: 10px;
+    left: 0;
+}
+
+.icon-input-content {
+    font-size: 20px;
+    color: grey;
+}
+
+.icon-input input:checked + .icon-input-content{/*checked icon*/
+    color: green;
+}
+
+
+.icon-input.plus label:before{
+    content: "\f055";
+}
+
+.icon-input.minus label:before{
+    content: "\f056";
+}
+
+.icon-input.neutro label:before{
+    content: "\f192";
+}
+
+.icon-input.facebook label:before{
+    content: "\f082";
+}
+
+.icon-input.twitter label:before{
+    content: "\f081";
+}
+
+.icon-input.all label:before{
+    content: "\f14a";
+}
+
+.icon-input input:checked + label:before{/*checked icon*/
+    color: green;
+}
+
+.icon-input input {
+	position: absolute;
+	opacity: 0;
+}
+
+.bottom-line {
+	border-bottom: 1px solid;
+}

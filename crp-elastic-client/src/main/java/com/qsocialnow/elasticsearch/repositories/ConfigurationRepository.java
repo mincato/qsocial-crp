@@ -40,7 +40,7 @@ public class ConfigurationRepository {
             trigger1.setInit(initDate);
             trigger1.setEnd(endDate);
             trigger1.setDescription("Attend complains about new campaigns");
-            trigger1.setSegment(getSegmentsByTriggerId(trigger1.getId()));
+            trigger1.setSegments(getSegmentsByTriggerId(trigger1.getId()));
             trigger1.setResolutions(getResolutionsByTriggerId(trigger1.getId()));
 
             Trigger trigger2 = new Trigger();
@@ -48,7 +48,7 @@ public class ConfigurationRepository {
             trigger2.setInit(initDate);
             trigger2.setEnd(endDate);
             trigger2.setDescription("Send new information about prices increase");
-            trigger2.setSegment(getSegmentsByTriggerId(trigger2.getId()));
+            trigger2.setSegments(getSegmentsByTriggerId(trigger2.getId()));
             trigger2.setResolutions(getResolutionsByTriggerId(trigger2.getId()));
 
             Trigger trigger3 = new Trigger();
@@ -56,7 +56,7 @@ public class ConfigurationRepository {
             trigger3.setInit(initDate);
             trigger3.setEnd(endDate);
             trigger3.setDescription("Review marketing campaing");
-            trigger3.setSegment(getSegmentsByTriggerId(trigger3.getId()));
+            trigger3.setSegments(getSegmentsByTriggerId(trigger3.getId()));
             trigger3.setResolutions(getResolutionsByTriggerId(trigger3.getId()));
 
             List<Trigger> triggers = new ArrayList<>();

@@ -3,7 +3,7 @@
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditDomainViewModel', domain=arg.domain)"
 			validationMessages="@id('vmsgs')">
 		<n:div class="modal-dialog">
-			<n:div class="modal-content" >
+			<x:div class="modal-content" form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
 				<n:div class="modal-header">
     				<n:button type="button" class="close" data-dismiss="modal" aria-label="Close">
     					<n:span aria-hidden="true">&#x00D7;</n:span>
@@ -12,9 +12,9 @@
   				</n:div>
   				<n:div class="modal-body">
     				<div class="row">
-						<n:div col="col-lg-12">
+						<n:div class="col-lg-12">
 							<div zclass="pane equal">
-								<x:form form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
+								<x:form>
 									<n:div class="form-group">
 									    <x:label>${labels.app.form.id}:</x:label>
 							    		<n:label>${vm.currentDomain.domain.id}</n:label>
@@ -63,7 +63,7 @@
   					<button onClick="@command('clear')" label="${labels.app.button.clear}" zclass="btn btn-default"/>
     				<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
   				</div>
-			</n:div>
+			</x:div>
 		</n:div>
 	</div> 
 </zk>

@@ -1,11 +1,14 @@
 package com.qsocialnow.common.model.config;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class DetectionCriteria {
 
     private String id;
+
+    private String name;
 
     private Date validateFrom;
 
@@ -15,7 +18,13 @@ public class DetectionCriteria {
 
     private Filter filter;
 
+    private List<Filter> filters;
+
     private List<AutomaticActionCriteria> actionCriterias;
+
+    public DetectionCriteria() {
+        this.filters = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -57,6 +66,22 @@ public class DetectionCriteria {
         this.filter = filter;
     }
 
+    public List<Filter> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(List<Filter> filters) {
+        this.filters = filters;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public List<AutomaticActionCriteria> getActionCriterias() {
         return actionCriterias;
     }
@@ -64,4 +89,9 @@ public class DetectionCriteria {
     public void setAccionCriterias(List<AutomaticActionCriteria> actionCriterias) {
         this.actionCriterias = actionCriterias;
     }
+
+    public void addFilter(Filter filter) {
+        this.filters.add(filter);
+    }
+
 }

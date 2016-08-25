@@ -1,11 +1,14 @@
 package com.qsocialnow.common.model.config;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Trigger {
 
     private String id;
+
+    private String name;
 
     private Date init;
 
@@ -18,6 +21,12 @@ public class Trigger {
     private List<CustomerGroup> customerGroups;
 
     private List<Resolution> resolutions;
+
+    public Trigger() {
+        this.segments = new ArrayList<>();
+        this.customerGroups = new ArrayList<>();
+        this.resolutions = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -55,7 +64,7 @@ public class Trigger {
         return segments;
     }
 
-    public void setSegment(List<Segment> segments) {
+    public void setSegments(List<Segment> segments) {
         this.segments = segments;
     }
 
@@ -73,6 +82,14 @@ public class Trigger {
 
     public void setResolutions(List<Resolution> resolutions) {
         this.resolutions = resolutions;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
 }

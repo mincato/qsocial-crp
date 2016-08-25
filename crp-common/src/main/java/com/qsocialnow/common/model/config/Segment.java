@@ -1,5 +1,6 @@
 package com.qsocialnow.common.model.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Segment {
@@ -11,6 +12,10 @@ public class Segment {
     private Team team;
 
     private List<DetectionCriteria> detectionCriterias;
+
+    public Segment() {
+        this.detectionCriterias = new ArrayList<>();
+    }
 
     public String getId() {
         return id;

@@ -1,14 +1,17 @@
 package com.qsocialnow.service;
 
 import java.util.List;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.common.pagination.PageResponse;
 import com.qsocialnow.persistence.DomainRepository;
@@ -63,6 +66,20 @@ public class DomainService {
 
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize, count);
         return page;
+    }
+
+    public Domain createTrigger(String domainId, Trigger trigger) {
+        Domain domainSaved = null;
+        try {
+            log.info("estoy aqui");
+            Domain domain = repository.findOne(domainId);
+            domain.addTrigger(trigger);
+            domainSaved = repository.save(domain);
+        } catch (Exception e) {
+            log.error("There was an error creating trigger: " + trigger.getName(), e);
+            throw new RuntimeException(e.getMessage());
+        }
+        return domainSaved;
     }
 
     public void setRepository(DomainRepository repository) {

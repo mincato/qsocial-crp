@@ -153,9 +153,9 @@ zk.afterMount(function() {
 	    // ACCORDION TOGGLE ICONS
 	    function toggleIcon(e) {
 	        $(e.target)
-	            .prev('.panel-heading')
+	            .prev('.row')
 	            .find(".more-less")
-	            .toggleClass('fa-plus fa-minus');
+	            .toggleClass('fa-angle-up fa-angle-down');
 	    }
 	    $('.panel-group').on('hidden.bs.collapse', toggleIcon);
 	    $('.panel-group').on('shown.bs.collapse', toggleIcon);
