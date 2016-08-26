@@ -104,7 +104,7 @@ public class CreateCriteriaViewModel implements Serializable {
                     mediaType.setChecked(isPicked);
                 }
             }
-        } else {
+        } else if (!isPicked) {
             Media.ALL.setChecked(isPicked);
         }
     }
