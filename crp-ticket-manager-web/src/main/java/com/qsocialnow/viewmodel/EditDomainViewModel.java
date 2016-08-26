@@ -70,7 +70,7 @@ public class EditDomainViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "currentDomain", "currentDomain.selectedThematics" })
+    @NotifyChange("currentDomain")
     public void clear() {
         initThematics();
     }

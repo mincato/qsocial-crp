@@ -4,14 +4,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 public class Trigger {
 
     private String id;
 
+    @NotBlank(message = "{field.empty}")
     private String name;
 
+    @NotNull(message = "{field.empty}")
     private Date init;
 
+    @NotNull(message = "{field.empty}")
     private Date end;
 
     private String description;
@@ -21,6 +28,9 @@ public class Trigger {
     private List<CustomerGroup> customerGroups;
 
     private List<Resolution> resolutions;
+
+    @NotNull(message = "{field.empty}")
+    private Status status;
 
     public Trigger() {
         this.segments = new ArrayList<>();
@@ -90,6 +100,14 @@ public class Trigger {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
 }

@@ -1,6 +1,8 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('triggerVm') @init('com.qsocialnow.viewmodel.CreateTriggerViewModel')"
-		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		form="@id('fxTrigger') @load(triggerVm.currentTrigger) @save(triggerVm.currentTrigger, before={'save','createSegment'})">
 	<n:div class="row">
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
@@ -18,7 +20,7 @@
 						    <n:label class="control-label col-md-1">${labels.trigger.name}</n:label>
 						    <n:div class="col-md-11">
 				    			<textbox type="text" class="form-control" id="name" 
-					    			value="@bind(triggerVm.currentTrigger.name) @validator('beanValidator')"></textbox>
+					    			value="@bind(fxTrigger.name) @validator('beanValidator')"></textbox>
 						    	<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
 				    				<label value="@load(vmsgs[name])" />
 				    			</x:span>
@@ -29,7 +31,7 @@
 						    <n:label class="control-label col-sm-1">${labels.trigger.description}</n:label>
 						    <n:div class="col-sm-11">
 				    			<textbox rows="5" type="text" class="form-control"
-					    				value="@bind(triggerVm.currentTrigger.description)"></textbox>
+					    				value="@bind(fxTrigger.description)"></textbox>
 		    				</n:div>
 						</n:div>
 					</x:form>
@@ -37,19 +39,40 @@
 				
 				<n:div class="col-md-5 col-xs-12">
 					<x:form class="form-horizontal">
-						<n:div class="form-group">
+						<x:div sclass="@load(empty vmsgs[startDate] ? 'form-group' : 'form-group has-error')">
 							<n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
 							<n:div class="col-sm-10">
-								<datebox sclass="input-group" format="short" value="@bind(triggerVm.currentTrigger.init)" />
+								<datebox id="startDate" sclass="input-group" format="short" value="@bind(fxTrigger.init)  @validator('beanValidator')" />
+								<x:span sclass="@load(empty vmsgs[startDate] ? 'hidden' : 'help-block')">
+			    					<label value="@load(vmsgs[startDate])" />
+			    				</x:span>
 							</n:div>
-			    		</n:div>
+			    		</x:div>
 			    		
-			    		<n:div class="form-group">
+			    		<x:div sclass="@load(empty vmsgs[endDate] ? 'form-group' : 'form-group has-error')">
 							<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
 							<n:div class="col-sm-10">
-								<datebox sclass="input-group" format="short" value="@bind(triggerVm.currentTrigger.end)" />
+								<datebox id="endDate" sclass="input-group" format="short" value="@bind(fxTrigger.end)  @validator('beanValidator')" />
+								<x:span sclass="@load(empty vmsgs[endDate] ? 'hidden' : 'help-block')">
+			    					<label value="@load(vmsgs[endDate])" />
+			    				</x:span>
 							</n:div>
-			    		</n:div>
+			    		</x:div>
+			    		
+			    		<x:div sclass="@load(empty vmsgs[status] ? 'form-group' : 'form-group has-error')">
+			    			<n:label class="control-label col-sm-2">${labels.trigger.status.title}</n:label>
+			    			<n:div class="col-sm-10">
+					    		<selectbox sclass="form-control" id="status" model="@load(triggerVm.statusOptions)"
+					    				selectedItem="@bind(fxTrigger.status) @validator('beanValidator')" >
+								    <template name="model">
+	        							<label value="${c:l(c:cat('trigger.status.',each))}" />
+	    							</template>
+								</selectbox>
+								<x:span sclass="@load(empty vmsgs[status] ? 'hidden' : 'help-block')">
+				    				<label value="@load(vmsgs[status])" />
+				    			</x:span>
+							</n:div>
+			    		</x:div>
 					</x:form>
 				</n:div>
 			</div>
@@ -154,11 +177,16 @@
 				<div zclass="pane equal">
     				<x:ol class="list-group order" children="@bind(triggerVm.currentTrigger.segments)">
 						<template name="children">
-							<li class="list-group-item">${each.description}</li>
+							<li class="list-group-item">
+								${each.description}
+								<button type="button" sclass="close" label="&#x00D7;" onClick="@command('removeSegment', segment=each)">
+								</button>
+							</li>
+							
 						</template>
 					</x:ol>
 					<div class="form-group text-center">	
-						<button onClick="@global-command('goToSegment')" label="${labels.app.button.add}" zclass="btn btn-success" />
+						<button onClick="@command('createSegment')" label="${labels.app.button.add}" zclass="btn btn-success" />
 					</div>
 				</div>
 			</n:div>

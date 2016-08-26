@@ -1,6 +1,7 @@
 <div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('segmentVm') @init('com.qsocialnow.viewmodel.CreateSegmentViewModel')"
-		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		form="@id('fxSegment') @load(segmentVm.currentSegment) @save(segmentVm.currentSegment, before={'save', 'createNewCriteria'})">
 	
 	<n:div class="row">
 		<n:div class="col-lg-12">
@@ -17,7 +18,7 @@
 					    <n:label class="control-label col-sm-1">${labels.trigger.name}</n:label>
 					    <n:div class="col-sm-11">
 			    			<textbox type="text" class="form-control" id="name" 
-				    			value="@bind(segmentVm.currentSegment.description) @validator('beanValidator')"></textbox>
+				    			value="@bind(fxSegment.description) @validator('beanValidator')"></textbox>
 					    	<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
 			    				<label value="@load(vmsgs[name])" />
 			    			</x:span>
@@ -36,6 +37,8 @@
 				<x:ol class="list-group order" children="@bind(segmentVm.currentSegment.detectionCriterias)">
 					<template name="children">
 						<li class="list-group-item">${each.name}</li>
+						<button type="button" sclass="close" label="&#x00D7;" onClick="@command('removeCriteria', criteria=each)">
+						</button>
 					</template>
 				</x:ol>
 				<div class="form-group text-center">	
