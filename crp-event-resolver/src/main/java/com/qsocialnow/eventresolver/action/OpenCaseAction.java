@@ -1,5 +1,6 @@
 package com.qsocialnow.eventresolver.action;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Coordinates;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
@@ -37,13 +39,25 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         log.info("Creating case...");
         Case newCase = new Case();
         newCase.setOpen(true);
-        newCase.setOpenDate(new Date());
+        Date openDate = new Date();
+        newCase.setOpenDate(openDate);
         newCase.setTitle(inputElement.getTitulo());
         Coordinates coordinates = new Coordinates();
         coordinates.setLatitude(inputElement.getLocation().getLatitud());
         coordinates.setLongitude(inputElement.getLocation().getLongitud());
         newCase.setCoordinates(coordinates);
         newCase.setCaseCategories(Arrays.asList(inputElement.getCategorias()));
+
+        // creating first registry
+        List<ActionRegistry> registries = new ArrayList<>();
+        ActionRegistry registry = new ActionRegistry();
+        registry.setAction("Open Case");
+        registry.setAutomatic(true);
+        registry.setDate(inputElement.getFechaCreacion());
+        registry.setUserName(inputElement.getUsuarioCreacion());
+
+        registries.add(registry);
+        newCase.setActionsRegistry(registries);
 
         Configurator elasticConfigConfigurator;
         QueueConfigurator queueConfigurator;
