@@ -36,9 +36,11 @@
 				</n:h6>
 				<x:ol class="list-group order" children="@bind(segmentVm.currentSegment.detectionCriterias)">
 					<template name="children">
-						<li class="list-group-item">${each.name}</li>
-						<button type="button" sclass="close" label="&#x00D7;" onClick="@command('removeCriteria', criteria=each)">
-						</button>
+						<li class="list-group-item">
+							${each.name}
+							<button type="button" sclass="close" label="&#x00D7;" onClick="@command('removeCriteria', criteria=each)">
+							</button>
+						</li>
 					</template>
 				</x:ol>
 				<div class="form-group text-center">	
