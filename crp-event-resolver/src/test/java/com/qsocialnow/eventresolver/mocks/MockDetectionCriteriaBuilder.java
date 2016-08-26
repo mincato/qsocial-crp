@@ -1,6 +1,7 @@
 package com.qsocialnow.eventresolver.mocks;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.DetectionCriteria;
@@ -15,7 +16,7 @@ public class MockDetectionCriteriaBuilder {
         detectionCriteria.setId("1");
         Filter filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -26,7 +27,7 @@ public class MockDetectionCriteriaBuilder {
         detectionCriteria.setId("1");
         Filter filter = new Filter();
         filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -37,13 +38,13 @@ public class MockDetectionCriteriaBuilder {
         detectionCriteria.setId("1");
         Filter filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("2");
         filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -54,13 +55,13 @@ public class MockDetectionCriteriaBuilder {
         detectionCriteria.setId("1");
         Filter filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("2");
         filter = new Filter();
         filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -71,13 +72,13 @@ public class MockDetectionCriteriaBuilder {
         detectionCriteria.setId("1");
         Filter filter = new Filter();
         filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("2");
         filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -88,19 +89,19 @@ public class MockDetectionCriteriaBuilder {
         detectionCriteria.setId("1");
         Filter filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("2");
         filter = new Filter();
         filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("3");
         filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }

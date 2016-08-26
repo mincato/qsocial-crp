@@ -9,7 +9,7 @@ import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
-import com.qsocialnow.elasticsearch.services.DomainService;
+import com.qsocialnow.elasticsearch.services.config.DomainService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
