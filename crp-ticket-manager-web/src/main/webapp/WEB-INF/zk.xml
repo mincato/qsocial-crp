@@ -14,6 +14,7 @@
     	<label-location>/WEB-INF/i18n/domain.properties</label-location>
     	<label-location>/WEB-INF/i18n/app.properties</label-location>
     	<label-location>/WEB-INF/i18n/cases.properties</label-location>
+    	<label-location>/WEB-INF/i18n/trigger.properties</label-location>
     	<label-location>/WEB-INF/i18n/sidebar.properties</label-location>
     	<label-location>/WEB-INF/i18n/errors.properties</label-location>
 	</system-config>
@@ -32,7 +33,20 @@
 	    	<name>modal</name>
 	    	<script>
 	        	function (wgt, dataValue) {
-	            	$(wgt.$n()).modal();
+	            	$(wgt.$n()).modal({
+  						backdrop: 'static',   // This disable for click outside event
+    					keyboard: true        // This for keyboard event
+					});
+					
+					var self = this;
+        			if (self.after) {
+				    	//closeEvent
+					    self.after('$closeEvent', function (ev) {
+							if (ev) {
+				    			$(wgt.$n()).modal('hide');  
+							}		
+      					});
+				    }
 	        	}
 	    	</script>
 		</data-handler>
@@ -40,7 +54,7 @@
     		<name>close-event</name>
     		<script>
         		function (wgt, dataValue) {
-            		jq(wgt.$n()).on(dataValue, function() {
+            		$(wgt.$n()).on(dataValue, function() {
                 		wgt.fire("onModalClose", null, {toServer: true});
             		});
         		}

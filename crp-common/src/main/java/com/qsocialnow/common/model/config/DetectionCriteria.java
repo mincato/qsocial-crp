@@ -1,11 +1,17 @@
 package com.qsocialnow.common.model.config;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 public class DetectionCriteria {
 
     private String id;
+
+    @NotBlank(message = "{field.empty}")
+    private String name;
 
     private Date validateFrom;
 
@@ -13,9 +19,13 @@ public class DetectionCriteria {
 
     private Integer sequenceOrder;
 
-    private Filter filter;
+    private List<Filter> filters;
 
     private List<AutomaticActionCriteria> actionCriterias;
+
+    public DetectionCriteria() {
+        this.filters = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -49,12 +59,20 @@ public class DetectionCriteria {
         this.sequenceOrder = sequenceOrder;
     }
 
-    public Filter getFilter() {
-        return filter;
+    public List<Filter> getFilters() {
+        return filters;
     }
 
-    public void setFilter(Filter filter) {
-        this.filter = filter;
+    public void setFilters(List<Filter> filters) {
+        this.filters = filters;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<AutomaticActionCriteria> getActionCriterias() {
@@ -64,4 +82,9 @@ public class DetectionCriteria {
     public void setAccionCriterias(List<AutomaticActionCriteria> actionCriterias) {
         this.actionCriterias = actionCriterias;
     }
+
+    public void addFilter(Filter filter) {
+        this.filters.add(filter);
+    }
+
 }

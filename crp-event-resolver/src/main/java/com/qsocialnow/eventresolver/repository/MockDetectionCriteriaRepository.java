@@ -1,6 +1,7 @@
 package com.qsocialnow.eventresolver.repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.DetectionCriteria;
@@ -15,17 +16,17 @@ public class MockDetectionCriteriaRepository implements DetectionCriteriaReposit
         DetectionCriteria detectionCriteria = new DetectionCriteria();
         Filter filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         filter = new Filter();
         filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         filter = new Filter();
         filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilter(filter);
+        detectionCriteria.setFilters(Arrays.asList(filter));
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }

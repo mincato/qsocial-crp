@@ -1,4 +1,6 @@
-package com.qsocialnow.elasticsearch.services;
+package com.qsocialnow.elasticsearch.services.config;
+
+import java.util.List;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
@@ -93,4 +95,33 @@ public class DomainService {
 
         return response;
     }
+
+    public List<Domain> getDomains(Configurator configurator, Integer offset, Integer limit) {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+
+        DomainMapping mapping = DomainMapping.getInstance();
+        SearchResponse<Domain> response = repository.search(offset, limit, "name", mapping);
+
+        List<Domain> domains = response.getSources();
+
+        repository.closeClient();
+        return domains;
+    }
+
+    public List<Domain> getDomainsByName(Configurator configurator, Integer offset, Integer limit, String name) {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+
+        DomainMapping mapping = DomainMapping.getInstance();
+        SearchResponse<Domain> response = repository.search(offset, limit, "name", name, mapping);
+
+        List<Domain> domains = response.getSources();
+
+        repository.closeClient();
+        return domains;
+    }
+
 }

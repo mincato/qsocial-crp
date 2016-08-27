@@ -1,16 +1,24 @@
 package com.qsocialnow.common.model.config;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 public class Segment {
 
     private String id;
 
+    @NotBlank(message = "{field.empty}")
     private String description;
 
     private Team team;
 
     private List<DetectionCriteria> detectionCriterias;
+
+    public Segment() {
+        this.detectionCriterias = new ArrayList<>();
+    }
 
     public String getId() {
         return id;

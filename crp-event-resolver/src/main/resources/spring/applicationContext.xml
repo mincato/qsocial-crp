@@ -27,7 +27,7 @@
  		</constructor-arg>
 	</bean>
 	
-	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.DomainService">
+	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
@@ -39,6 +39,12 @@
 	
 	<util:map id="actions">
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).OPEN_CASE}" value-ref="openCaseAction"/>
+	</util:map>
+	
+	<util:map id="filters">
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).CONNOTATION}" value-ref="connotationDetectionCriteriaFilter"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).PERIOD}" value-ref="periodDetectionCriteriaFilter"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).MEDIA}" value-ref="mediaDetectionCriteriaFilter"/>
 	</util:map>
 	
 </beans>

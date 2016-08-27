@@ -45,14 +45,14 @@ public class EditDomainViewModel implements Serializable {
     public List<Thematic> getThematics() {
         return thematics;
     }
-    
+
     public void setCurrentDomain(DomainView currentDomain) {
-		this.currentDomain = currentDomain;
-	}
+        this.currentDomain = currentDomain;
+    }
 
     @Init
     public void init(@BindingParam("domain") String domain) {
-    	currentDomain.setDomain(domainService.findOne(domain));
+        currentDomain.setDomain(domainService.findOne(domain));
         thematics = thematicService.findAll();
         initThematics();
     }
@@ -60,30 +60,32 @@ public class EditDomainViewModel implements Serializable {
     @Command
     @NotifyChange({ "currentDomain" })
     public void save() {
-    	Domain domain = currentDomain.getDomain();
-        domain.setThematics(currentDomain.getSelectedThematics().stream().map(Thematic::getId).collect(Collectors.toList()));
+        Domain domain = currentDomain.getDomain();
+        domain.setThematics(currentDomain.getSelectedThematics().stream().map(Thematic::getId)
+                .collect(Collectors.toList()));
         currentDomain.setDomain(domainService.update(domain));
         initThematics();
-        Clients.showNotification(Labels.getLabel("domain.edit.notification.success",
-                new String[] { currentDomain.getDomain().getId() }));
+        Clients.showNotification(Labels.getLabel("domain.edit.notification.success", new String[] { currentDomain
+                .getDomain().getId() }));
     }
 
     @Command
-    @NotifyChange({ "currentDomain", "currentDomain.selectedThematics" })
+    @NotifyChange("currentDomain")
     public void clear() {
-    	initThematics();
+        initThematics();
     }
 
     private void initThematics() {
         currentDomain.getSelectedThematics().clear();
-        currentDomain.getSelectedThematics().addAll(thematics.stream()
-                .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))
-                .collect(Collectors.toSet()));
+        currentDomain.getSelectedThematics().addAll(
+                thematics.stream()
+                        .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))
+                        .collect(Collectors.toSet()));
     }
 
     @Command
     public void close(@ContextParam(ContextType.VIEW) Div comp) {
-        comp.getParent().removeChild(comp);
+        comp.detach();
     }
 
 }
