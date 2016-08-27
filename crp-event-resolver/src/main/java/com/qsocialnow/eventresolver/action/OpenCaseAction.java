@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Coordinates;
+import com.qsocialnow.common.model.cases.Event;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
@@ -55,6 +56,11 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         registry.setAutomatic(true);
         registry.setDate(inputElement.getFechaCreacion());
         registry.setUserName(inputElement.getUsuarioCreacion());
+        Event event = new Event();
+        event.setId(inputElement.getId());
+        event.setDescription(inputElement.getName());
+
+        registry.setEvent(event);
 
         registries.add(registry);
         newCase.setActionsRegistry(registries);

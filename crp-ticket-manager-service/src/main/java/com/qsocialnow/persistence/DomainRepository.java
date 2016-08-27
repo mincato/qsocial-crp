@@ -108,6 +108,37 @@ public class DomainRepository {
         }
         return domains;
     }
+    
+    public List<DomainListView> findAllByName(PageRequest pageRequest,String name) {
+        List<DomainListView> domains = new ArrayList<>();
+
+        try {
+            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
+            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
+                    Configurator.class);
+
+            List<Domain> domainsRepo = domainElasticService.getDomainsByName(configurator, pageRequest.getOffset(),
+                    pageRequest.getLimit(),name);
+
+            for (Domain domainRepo : domainsRepo) {
+                DomainListView domainListView = new DomainListView();
+                domainListView.setId(domainRepo.getId());
+                domainListView.setName(domainRepo.getName());
+
+                List<Long> thematics = domainRepo.getThematics();
+                if (thematics != null) {
+                    String values = thematics.stream().map(number -> String.valueOf(number))
+                            .collect(Collectors.joining(", "));
+
+                    domainListView.setThematics(values);
+                }
+                domains.add(domainListView);
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return domains;
+    }
 
     public Long count() {
         return 50L;

@@ -67,7 +67,13 @@ router.get('/domains', function (req, res) {
 	  var domainService = javaContext.getBeanSync("domainService");
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-	  domainService.findAll(pageNumber, pageSize, asyncResponse);
+	  var name = req.query.name ? req.query.name : null;
+	  
+	  if(name === null) {
+		  domainService.findAll(pageNumber, pageSize, asyncResponse);
+	  }else{
+		  domainService.findAllByName(pageNumber, pageSize,name,asyncResponse);
+	  }
 
 });
 

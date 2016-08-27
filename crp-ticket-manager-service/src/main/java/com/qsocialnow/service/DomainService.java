@@ -70,6 +70,15 @@ public class DomainService {
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize, count);
         return page;
     }
+    
+	public PageResponse<DomainListView> findAllByName(Integer pageNumber, Integer pageSize, String name) {
+		List<DomainListView> domains = repository.findAllByName(new PageRequest(pageNumber, pageSize),name);
+
+        Long count = repository.count();
+
+        PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize, count);
+        return page;
+	}
 
     public Domain createTrigger(String domainId, Trigger trigger) {
         Domain domainSaved = null;
@@ -100,5 +109,4 @@ public class DomainService {
     public void setRepository(DomainRepository repository) {
         this.repository = repository;
     }
-
 }
