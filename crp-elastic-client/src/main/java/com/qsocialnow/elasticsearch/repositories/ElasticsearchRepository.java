@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -245,6 +244,33 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> search(int from, int size, String sortField,String name,Mapping<T, E> mapping) {
+
+        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
+                + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
+        
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery("name", name));
+        
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses);
+        }
+        return response;
+    }
+    
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> search(int from, int size, String sortField, Mapping<T, E> mapping) {
 
