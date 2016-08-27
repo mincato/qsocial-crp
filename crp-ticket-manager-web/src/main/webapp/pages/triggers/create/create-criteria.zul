@@ -45,7 +45,7 @@
 										<n:label class="control-label col-sm-2">${labels.trigger.criteria.media}</n:label>
 										<x:div class="col-sm-10" children="@load(vm.mediaTypes)">
 											<template name="children">
-												<checkbox disabled="@load(each.disabled)" onCheck="@command('selectAllMedia', checked=self.checked, media=each)" zclass="icon-input" sclass="@load(each.icon)" checked="@bind(each.checked)" label="@load(each.label)"/>
+												<checkbox onCheck="@command('selectAllMedia', checked=self.checked, media=each)" zclass="icon-input" sclass="@load(each.media.icon)" checked="@bind(each.checked)" label="@load(each.media.label)"/>
         									</template>
 										</x:div>
 				    				</n:div>

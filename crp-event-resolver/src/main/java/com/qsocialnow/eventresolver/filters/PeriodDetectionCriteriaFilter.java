@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 @Component("periodDetectionCriteriaFilter")
@@ -25,11 +26,11 @@ public class PeriodDetectionCriteriaFilter implements DetectionCriteriaFilter {
             Date endDate = dates.length > 1 ? parseDate(dates[1]) : null;
             Date messageDate = message.getFechaCreacion();
             if (startDate != null && endDate != null) {
-                match = messageDate.after(startDate) && messageDate.before(endDate);
+                match = !messageDate.before(startDate) && !messageDate.after(endDate);
             } else if (startDate != null) {
-                match = messageDate.after(startDate);
+                match = !messageDate.before(startDate);
             } else if (endDate != null) {
-                match = messageDate.before(endDate);
+                match = !messageDate.after(endDate);
             }
         }
         return match;
@@ -37,7 +38,7 @@ public class PeriodDetectionCriteriaFilter implements DetectionCriteriaFilter {
 
     private Date parseDate(String dateTime) {
         if (dateTime != null && !dateTime.isEmpty()) {
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy-HH:mm");
+            SimpleDateFormat sdf = new SimpleDateFormat(FilterConstants.DATE_TIME_FORMAT);
             try {
                 return sdf.parse(dateTime);
             } catch (ParseException e) {
