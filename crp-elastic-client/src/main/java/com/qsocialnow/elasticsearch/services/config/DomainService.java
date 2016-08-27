@@ -109,14 +109,14 @@ public class DomainService {
         repository.closeClient();
         return domains;
     }
-    
-    public List<Domain> getDomainsByName(Configurator configurator, Integer offset, Integer limit,String name) {
+
+    public List<Domain> getDomainsByName(Configurator configurator, Integer offset, Integer limit, String name) {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
 
         DomainMapping mapping = DomainMapping.getInstance();
-        SearchResponse<Domain> response = repository.search(offset, limit, "name",name,mapping);
+        SearchResponse<Domain> response = repository.search(offset, limit, "name", name, mapping);
 
         List<Domain> domains = response.getSources();
 

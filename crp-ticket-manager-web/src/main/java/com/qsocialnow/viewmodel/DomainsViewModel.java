@@ -33,7 +33,7 @@ public class DomainsViewModel implements Serializable {
     private boolean moreResults;
 
     private List<DomainListView> domains = new ArrayList<>();
-    
+
     private String keyword;
 
     @Init
@@ -45,14 +45,14 @@ public class DomainsViewModel implements Serializable {
         return this.domains;
     }
 
-    public String getKeyword(){
-    	return this.keyword;
+    public String getKeyword() {
+        return this.keyword;
     }
 
     public void setKeyword(String keyword) {
         this.keyword = keyword;
     }
-    
+
     public Integer getPageSize() {
         return pageSize;
     }
@@ -67,7 +67,7 @@ public class DomainsViewModel implements Serializable {
         this.activePage++;
         this.findDomains();
     }
-    
+
     @Command
     @NotifyChange({ "domains", "moreResults" })
     public void search() {
@@ -82,17 +82,17 @@ public class DomainsViewModel implements Serializable {
     }
 
     private PageResponse<DomainListView> findDomainsByName() {
-        PageResponse<DomainListView> pageResponse = domainService.findAllByName(activePage, pageSize,this.keyword);
+        PageResponse<DomainListView> pageResponse = domainService.findAllByName(activePage, pageSize, this.keyword);
         this.domains.clear();
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
-        	this.domains.addAll(pageResponse.getItems());
+            this.domains.addAll(pageResponse.getItems());
             this.moreResults = true;
         } else {
             this.moreResults = false;
         }
         return pageResponse;
     }
-    
+
     private PageResponse<DomainListView> findDomains() {
         PageResponse<DomainListView> pageResponse = domainService.findAll(activePage, pageSize);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {

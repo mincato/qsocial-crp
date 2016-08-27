@@ -108,8 +108,8 @@ public class DomainRepository {
         }
         return domains;
     }
-    
-    public List<DomainListView> findAllByName(PageRequest pageRequest,String name) {
+
+    public List<DomainListView> findAllByName(PageRequest pageRequest, String name) {
         List<DomainListView> domains = new ArrayList<>();
 
         try {
@@ -118,7 +118,7 @@ public class DomainRepository {
                     Configurator.class);
 
             List<Domain> domainsRepo = domainElasticService.getDomainsByName(configurator, pageRequest.getOffset(),
-                    pageRequest.getLimit(),name);
+                    pageRequest.getLimit(), name);
 
             for (Domain domainRepo : domainsRepo) {
                 DomainListView domainListView = new DomainListView();

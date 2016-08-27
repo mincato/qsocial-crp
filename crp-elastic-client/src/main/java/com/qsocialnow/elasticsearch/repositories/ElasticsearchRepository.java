@@ -245,14 +245,14 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
-    public <E> SearchResponse<E> search(int from, int size, String sortField,String name,Mapping<T, E> mapping) {
+    public <E> SearchResponse<E> search(int from, int size, String sortField, String name, Mapping<T, E> mapping) {
 
         String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
                 + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
-        
+
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchQuery("name", name));
-        
+
         Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
 
         SearchResult result = null;
@@ -270,7 +270,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
         return response;
     }
-    
+
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> search(int from, int size, String sortField, Mapping<T, E> mapping) {
 
