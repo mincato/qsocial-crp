@@ -2,6 +2,7 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,9 +27,11 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.model.config.FilterType;
+import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.model.ConnotationView;
 import com.qsocialnow.model.FilterView;
 import com.qsocialnow.model.Media;
+import com.qsocialnow.model.MediaView;
 
 @VariableResolver(DelegatingVariableResolver.class)
 @NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.saved")
@@ -39,7 +42,7 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private DetectionCriteria currentCriteria;
 
-    private List<Media> mediaTypes;
+    private List<MediaView> mediaTypes;
 
     private List<ConnotationView> connotations;
 
@@ -51,7 +54,7 @@ public class CreateCriteriaViewModel implements Serializable {
         return currentCriteria;
     }
 
-    public List<Media> getMediaTypes() {
+    public List<MediaView> getMediaTypes() {
         return mediaTypes;
     }
 
@@ -90,32 +93,43 @@ public class CreateCriteriaViewModel implements Serializable {
     public void init() {
         currentCriteria = new DetectionCriteria();
         filter = new FilterView();
-        mediaTypes = Arrays.asList(Media.values());
-        mediaTypes.stream().forEach(media -> media.setChecked(false));
+        initMedias();
         connotations = Arrays.asList(ConnotationView.values());
+    }
+
+    private void initMedias() {
+        mediaTypes = new ArrayList<>();
+        for (Media media : Media.values()) {
+            MediaView mediaView = new MediaView();
+            mediaView.setMedia(media);
+            mediaView.setChecked(false);
+            mediaTypes.add(mediaView);
+        }
     }
 
     @Command
     @NotifyChange("mediaTypes")
-    public void selectAllMedia(@BindingParam("checked") boolean isPicked, @BindingParam("media") Media media) {
-        if (Media.ALL.equals(media)) {
-            for (Media mediaType : mediaTypes) {
-                if (!Media.ALL.equals(mediaType)) {
+    public void selectAllMedia(@BindingParam("checked") boolean isPicked, @BindingParam("media") MediaView mediaView) {
+        if (Media.ALL.equals(mediaView.getMedia())) {
+            for (MediaView mediaType : mediaTypes) {
+                if (!Media.ALL.equals(mediaType.getMedia())) {
                     mediaType.setChecked(isPicked);
                 }
             }
         } else if (!isPicked) {
-            Media.ALL.setChecked(isPicked);
+            mediaTypes.stream().filter(media -> Media.ALL.equals(media.getMedia())).findFirst().get()
+                    .setChecked(isPicked);
         }
     }
 
     private void addMediaFilter() {
-        List<Media> mediasPicked = mediaTypes.stream().filter(media -> !Media.ALL.equals(media) && media.isChecked())
-                .collect(Collectors.toList());
+        List<MediaView> mediasPicked = mediaTypes.stream()
+                .filter(media -> !Media.ALL.equals(media.getMedia()) && media.isChecked()).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(mediasPicked)) {
             Filter mediaFilter = new Filter();
             mediaFilter.setType(FilterType.MEDIA);
-            String parameters = mediasPicked.stream().map(Media::getValue).collect(Collectors.joining("|"));
+            String parameters = mediasPicked.stream().map(media -> media.getMedia().getValue())
+                    .collect(Collectors.joining("|"));
             mediaFilter.setParameters(parameters);
             currentCriteria.addFilter(mediaFilter);
         }
@@ -150,7 +164,7 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     private String formatDate(Date dateTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy-HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat(FilterConstants.DATE_TIME_FORMAT);
         return sdf.format(dateTime);
     }
 

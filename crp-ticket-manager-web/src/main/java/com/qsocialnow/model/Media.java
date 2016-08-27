@@ -12,23 +12,11 @@ public enum Media {
         this.icon = icon;
     }
 
-    private boolean disabled;
-
     private String label;
 
     private String value;
 
     private String icon;
-
-    private boolean checked;
-
-    public boolean isChecked() {
-        return checked;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
 
     public String getLabel() {
         return label;
@@ -48,14 +36,6 @@ public enum Media {
 
     public String getIcon() {
         return icon;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
     }
 
 }
