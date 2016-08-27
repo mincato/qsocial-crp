@@ -3,9 +3,15 @@
     border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
 	   <n:div class="col-lg-12">
-	       <div zclass="pane equal">
-		      <n:h5>${labels.domain.list.title}</n:h5>
-		  </div>
+	       <div zclass="pane equal col-md-12 col-xs-12">
+				<n:div class="col-md-7 col-xs-12">
+    				<n:h5>${labels.domain.list.title}</n:h5>
+				</n:div>
+				<n:div class="col-md-5 col-xs-12">
+                    <textbox value="@bind(vm.keyword)" />
+                    <button label="${labels.domain.list.filter.search}" image="/imgs/search.png" onClick="@command('search')" />
+				</n:div>
+		   </div>
 	   </n:div>
     </n:div>
     <div class="row">

@@ -60,4 +60,10 @@ public class CreateSegmentViewModel implements Serializable {
         this.currentSegment.getDetectionCriterias().add(detectionCriteria);
     }
 
+    @Command
+    @NotifyChange("currentSegment")
+    public void removeCriteria(@BindingParam("criteria") DetectionCriteria detectionCriteria) {
+        this.currentSegment.getDetectionCriterias().remove(detectionCriteria);
+    }
+
 }

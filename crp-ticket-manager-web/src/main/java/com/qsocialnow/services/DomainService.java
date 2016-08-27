@@ -15,6 +15,8 @@ public interface DomainService {
 
     PageResponse<DomainListView> findAll(int pageNumber, int pageSize);
 
+    PageResponse<DomainListView> findAllByName(int pageNumber, int pageSize, String name);
+
     void createTrigger(String domain, Trigger trigger);
 
 }

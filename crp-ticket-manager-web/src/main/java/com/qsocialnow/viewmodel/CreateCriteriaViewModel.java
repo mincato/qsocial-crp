@@ -5,10 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -19,6 +17,8 @@ import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.NotifyCommand;
+import org.zkoss.bind.annotation.ToClientCommand;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
@@ -31,19 +31,19 @@ import com.qsocialnow.model.FilterView;
 import com.qsocialnow.model.Media;
 
 @VariableResolver(DelegatingVariableResolver.class)
+@NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.saved")
+@ToClientCommand("modal$closeEvent")
 public class CreateCriteriaViewModel implements Serializable {
 
     private static final long serialVersionUID = -4119198423406156946L;
 
     private DetectionCriteria currentCriteria;
 
-    private Set<Media> mediaTypes = new HashSet<>();
+    private List<Media> mediaTypes;
 
     private List<ConnotationView> connotations;
 
     private FilterView filter;
-
-    private boolean allMedia;
 
     private boolean saved;
 
@@ -51,16 +51,8 @@ public class CreateCriteriaViewModel implements Serializable {
         return currentCriteria;
     }
 
-    public Set<Media> getMediaTypes() {
+    public List<Media> getMediaTypes() {
         return mediaTypes;
-    }
-
-    public boolean isAllMedia() {
-        return allMedia;
-    }
-
-    public void setAllMedia(boolean allMedia) {
-        this.allMedia = allMedia;
     }
 
     public FilterView getFilter() {
@@ -71,7 +63,12 @@ public class CreateCriteriaViewModel implements Serializable {
         return connotations;
     }
 
+    public boolean isSaved() {
+        return saved;
+    }
+
     @Command
+    @NotifyChange("saved")
     public void save() {
         addMediaFilter();
         addDateRangeFilter();
@@ -93,37 +90,32 @@ public class CreateCriteriaViewModel implements Serializable {
     public void init() {
         currentCriteria = new DetectionCriteria();
         filter = new FilterView();
-        Media media = new Media();
-        media.setName("1");
-        mediaTypes.add(media);
-        media = new Media();
-        media.setName("2");
-        mediaTypes.add(media);
+        mediaTypes = Arrays.asList(Media.values());
+        mediaTypes.stream().forEach(media -> media.setChecked(false));
         connotations = Arrays.asList(ConnotationView.values());
     }
 
     @Command
     @NotifyChange("mediaTypes")
-    public void selectAllMedia(@BindingParam("checked") boolean isPicked) {
-        if (isPicked) {
-            for (Media media : mediaTypes) {
-                media.setChecked(isPicked);
+    public void selectAllMedia(@BindingParam("checked") boolean isPicked, @BindingParam("media") Media media) {
+        if (Media.ALL.equals(media)) {
+            for (Media mediaType : mediaTypes) {
+                if (!Media.ALL.equals(mediaType)) {
+                    mediaType.setChecked(isPicked);
+                }
             }
+        } else if (!isPicked) {
+            Media.ALL.setChecked(isPicked);
         }
     }
 
-    @Command
-    @NotifyChange("allMedia")
-    public void selectMedia() {
-        allMedia = false;
-    }
-
     private void addMediaFilter() {
-        List<Media> mediasPicked = mediaTypes.stream().filter(Media::isChecked).collect(Collectors.toList());
+        List<Media> mediasPicked = mediaTypes.stream().filter(media -> !Media.ALL.equals(media) && media.isChecked())
+                .collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(mediasPicked)) {
             Filter mediaFilter = new Filter();
             mediaFilter.setType(FilterType.MEDIA);
-            String parameters = mediasPicked.stream().map(Media::getName).collect(Collectors.joining("|"));
+            String parameters = mediasPicked.stream().map(Media::getValue).collect(Collectors.joining("|"));
             mediaFilter.setParameters(parameters);
             currentCriteria.addFilter(mediaFilter);
         }
@@ -133,7 +125,6 @@ public class CreateCriteriaViewModel implements Serializable {
         if (filter.getStartDateTime() != null || filter.getEndDateTime() != null) {
             Filter dateRangeFilter = new Filter();
             dateRangeFilter.setType(FilterType.PERIOD);
-            System.out.println("creando dates");
             StringBuilder parameters = new StringBuilder();
             if (filter.getStartDateTime() != null) {
                 parameters.append(formatDate(filter.getStartDateTime()));

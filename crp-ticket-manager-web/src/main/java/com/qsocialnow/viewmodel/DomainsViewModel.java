@@ -34,6 +34,8 @@ public class DomainsViewModel implements Serializable {
 
     private List<DomainListView> domains = new ArrayList<>();
 
+    private String keyword;
+
     @Init
     public void init() {
         findDomains();
@@ -41,6 +43,14 @@ public class DomainsViewModel implements Serializable {
 
     public List<DomainListView> getDomains() {
         return this.domains;
+    }
+
+    public String getKeyword() {
+        return this.keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     public Integer getPageSize() {
@@ -59,10 +69,28 @@ public class DomainsViewModel implements Serializable {
     }
 
     @Command
+    @NotifyChange({ "domains", "moreResults" })
+    public void search() {
+        this.findDomainsByName();
+    }
+
+    @Command
     public void openEdit(@BindingParam("domainId") String domainId) {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("domain", domainId);
         Executions.createComponents("/pages/domain/edit-domain.zul", null, arg);
+    }
+
+    private PageResponse<DomainListView> findDomainsByName() {
+        PageResponse<DomainListView> pageResponse = domainService.findAllByName(activePage, pageSize, this.keyword);
+        this.domains.clear();
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.domains.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
+        return pageResponse;
     }
 
     private PageResponse<DomainListView> findDomains() {

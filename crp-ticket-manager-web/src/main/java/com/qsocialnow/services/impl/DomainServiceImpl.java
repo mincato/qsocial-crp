@@ -135,6 +135,29 @@ public class DomainServiceImpl implements DomainService {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public PageResponse<DomainListView> findAllByName(int pageNumber, int pageSize, String name) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl))
+                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize).queryParam("name", name);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<PageResponse> response = restTemplate
+                    .getForEntity(builder.toUriString(), PageResponse.class);
+
+            PageResponse<DomainListView> domains = response.getBody();
+            return domains;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call domain service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
     @Override
     public void createTrigger(String domainId, Trigger trigger) {
         try {

@@ -3,6 +3,7 @@ package com.qsocialnow.elasticsearch.repositories;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.BulkResult;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
@@ -104,6 +107,32 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         }
         return idValue;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<T> documents) {
+
+        List<Index> modelList = new ArrayList<Index>();
+        for (T t : documents) {
+            modelList.add(new Index.Builder(t).build());
+        }
+
+        Bulk bulk = new Bulk.Builder().defaultIndex(mapping.getIndex()).defaultType(mapping.getType())
+                .addAction(modelList).build();
+
+        IndexResponse<E> response = new IndexResponse<>();
+        try {
+            BulkResult result = client.execute(bulk);
+
+            if (result.isSucceeded()) {
+                response.setSourcesBulk(result.getItems());
+            } else {
+                // TODO:implement processing error
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+        return response;
     }
 
     @Override
@@ -211,6 +240,33 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
             response.setSource((E) result.getSourceAsObject(mapping.getClassType()));
             response.setId(id);
+        }
+        return response;
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> search(int from, int size, String sortField, String name, Mapping<T, E> mapping) {
+
+        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
+                + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery("name", name));
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses);
         }
         return response;
     }

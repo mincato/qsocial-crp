@@ -43,12 +43,11 @@
 							    <n:form class="form-horizontal pane bottom-line">								
 									<n:div class="form-group">
 										<n:label class="control-label col-sm-2">${labels.trigger.criteria.media}</n:label>
-										<x:div class="col-sm-6" children="@load(vm.mediaTypes)">
+										<x:div class="col-sm-10" children="@load(vm.mediaTypes)">
 											<template name="children">
-												<checkbox disabled="@load(vm.allMedia)" zclass="icon-input" sclass="@load(each.name)" checked="@bind(each.checked)" />
+												<checkbox disabled="@load(each.disabled)" onCheck="@command('selectAllMedia', checked=self.checked, media=each)" zclass="icon-input" sclass="@load(each.icon)" checked="@bind(each.checked)" label="@load(each.label)"/>
         									</template>
 										</x:div>
-    									<checkbox zclass="icon-input" sclass="all" label="${labels.app.select.all}" checked="@bind(vm.allMedia)" onCheck="@command('selectAllMedia', checked=self.checked)" />
 				    				</n:div>
 							    </n:form>
 							    <n:form class="form-horizontal pane bottom-line">								
@@ -82,7 +81,7 @@
 					</div>
   				</n:div>
   				<n:div class="modal-footer">
-  					<button onClick="@command('save')" label="${labels.app.button.save}" ca:data-dismiss="modal" zclass="btn btn-primary" />
+  					<button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
     				<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
   				</n:div>
 			</div>

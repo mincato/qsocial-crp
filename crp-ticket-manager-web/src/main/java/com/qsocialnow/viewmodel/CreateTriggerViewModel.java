@@ -2,7 +2,9 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -18,6 +20,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.services.DomainService;
 
@@ -33,8 +36,14 @@ public class CreateTriggerViewModel implements Serializable {
 
     private String domain;
 
+    private List<Status> statusOptions;
+
     public Trigger getCurrentTrigger() {
         return currentTrigger;
+    }
+
+    public List<Status> getStatusOptions() {
+        return statusOptions;
     }
 
     @GlobalCommand
@@ -44,11 +53,24 @@ public class CreateTriggerViewModel implements Serializable {
         BindUtils.postGlobalCommand(null, null, "goToTrigger", new HashMap<>());
     }
 
+    @Command
+    @NotifyChange({ "currentTrigger" })
+    public void createSegment() {
+        BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
+    }
+
+    @Command
+    @NotifyChange({ "currentTrigger" })
+    public void removeSegment(@BindingParam("segment") Segment segment) {
+        currentTrigger.getSegments().remove(segment);
+    }
+
     @Init
     public void init(@QueryParam("domain") String domain) {
         this.domain = domain;
         currentTrigger = new Trigger();
         this.currentTrigger.setSegments(new ArrayList<>());
+        this.statusOptions = Arrays.asList(Status.values());
     }
 
     @Command
@@ -56,6 +78,8 @@ public class CreateTriggerViewModel implements Serializable {
     public void save() {
         domainService.createTrigger(domain, currentTrigger);
         Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
+        currentTrigger = new Trigger();
+        currentTrigger.setSegments(new ArrayList<>());
     }
 
 }

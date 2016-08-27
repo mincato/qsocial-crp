@@ -1,5 +1,6 @@
 package com.qsocialnow.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.curator.framework.CuratorFramework;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.Trigger;
@@ -68,12 +71,21 @@ public class DomainService {
         return page;
     }
 
+    public PageResponse<DomainListView> findAllByName(Integer pageNumber, Integer pageSize, String name) {
+        List<DomainListView> domains = repository.findAllByName(new PageRequest(pageNumber, pageSize), name);
+
+        Long count = repository.count();
+
+        PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize, count);
+        return page;
+    }
+
     public Domain createTrigger(String domainId, Trigger trigger) {
         Domain domainSaved = null;
         try {
-            log.info("estoy aqui");
             Domain domain = repository.findOne(domainId);
             domain.addTrigger(trigger);
+            mockActions(trigger);
             domainSaved = repository.save(domain);
         } catch (Exception e) {
             log.error("There was an error creating trigger: " + trigger.getName(), e);
@@ -82,8 +94,19 @@ public class DomainService {
         return domainSaved;
     }
 
+    private void mockActions(Trigger trigger) {
+        trigger.getSegments().stream().forEach(segment -> {
+            segment.getDetectionCriterias().stream().forEach(detectionCriteria -> {
+                List<AutomaticActionCriteria> actions = new ArrayList<>();
+                AutomaticActionCriteria automaticActionCriteria = new AutomaticActionCriteria();
+                automaticActionCriteria.setActionType(ActionType.OPEN_CASE);
+                actions.add(automaticActionCriteria);
+                detectionCriteria.setAccionCriterias(actions);
+            });
+        });
+    }
+
     public void setRepository(DomainRepository repository) {
         this.repository = repository;
     }
-
 }

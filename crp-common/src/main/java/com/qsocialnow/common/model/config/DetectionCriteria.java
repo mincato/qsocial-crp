@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class DetectionCriteria {
 
     private String id;
 
+    @NotBlank(message = "{field.empty}")
     private String name;
 
     private Date validateFrom;

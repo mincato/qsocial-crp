@@ -37,6 +37,16 @@
   						backdrop: 'static',   // This disable for click outside event
     					keyboard: true        // This for keyboard event
 					});
+					
+					var self = this;
+        			if (self.after) {
+				    	//closeEvent
+					    self.after('$closeEvent', function (ev) {
+							if (ev) {
+				    			$(wgt.$n()).modal('hide');  
+							}		
+      					});
+				    }
 	        	}
 	    	</script>
 		</data-handler>
