@@ -6,6 +6,9 @@ var javaInit = require('../javaInit');
 var java = javaInit.getJavaInstance();
 
 var GsonBuilder = java.import('com.google.gson.GsonBuilder');
+var DateClazz = java.findClassSync('java.util.Date');
+var JSONDateDeserialize = java.import('com.qsocialnow.rest.json.JSONDateDeserialize');
+var JSONDateSerialize = java.import('com.qsocialnow.rest.json.JSONDateSerialize');
 
 var JavaApp = java.import('com.qsocialnow.App');
 var javaContext = JavaApp.getInstanceSync();
@@ -17,7 +20,7 @@ function prettyJSON(obj) {
 router.get('/cases', function (req, res) {
 
   function asyncResponse(err,responseCases) {
-    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
     if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -44,7 +47,7 @@ router.get('/cases', function (req, res) {
 router.get('/domains', function (req, res) {
 
 	  function asyncResponse(err,responseDomains) {
-	    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
 	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -64,14 +67,20 @@ router.get('/domains', function (req, res) {
 	  var domainService = javaContext.getBeanSync("domainService");
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-	  domainService.findAll(pageNumber, pageSize, asyncResponse);
+	  var name = req.query.name ? req.query.name : null;
+	  
+	  if(name === null) {
+		  domainService.findAll(pageNumber, pageSize, asyncResponse);
+	  }else{
+		  domainService.findAllByName(pageNumber, pageSize,name,asyncResponse);
+	  }
 
 });
 
 router.post('/domains', function (req, res) {
 
   function asyncResponse(err,responseDomain) {
-    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
     if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -90,7 +99,7 @@ router.post('/domains', function (req, res) {
 
   prettyJSON(req.body);
 
-  var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
   var clazz = java.findClassSync('com.qsocialnow.common.model.config.Domain');
   var domain = gson.fromJsonSync(JSON.stringify(req.body), clazz);
 
@@ -102,7 +111,7 @@ router.post('/domains', function (req, res) {
 router.get('/domains/:id', function (req, res) {
 
   function asyncResponse(err,responseDomain) {
-    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
     if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -119,17 +128,49 @@ router.get('/domains/:id', function (req, res) {
 
   }
 
-  var domainId = req.param("id");
+  var domainId = req.params.id;
 
   var domainService = javaContext.getBeanSync("domainService");
   domainService.findOne(domainId, asyncResponse);
 
 });
 
-router.put('/domains/:id', function (req, res) {
+router.put('/domains/:id/trigger', function (req, res) {
 
+  function asyncResponse(err,responseTrigger) {
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(responseTrigger !== null) {
+      try {
+        res.set('Content-Type','application/json');
+        res.send(gson.toJsonSync(responseTrigger));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+
+  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+  var clazz = java.findClassSync('com.qsocialnow.common.model.config.Trigger');
+  
+  var trigger = gson.fromJsonSync(JSON.stringify(req.body), clazz);  
+  
+  var domainId = req.params.id;
+
+  var domainService = javaContext.getBeanSync("domainService");
+  domainService.createTrigger(domainId, trigger, asyncResponse);
+
+});
+
+router.put('/domains/:id', function (req, res) {
+  
   function asyncResponse(err,responseDomain) {
-    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
     if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -146,10 +187,10 @@ router.put('/domains/:id', function (req, res) {
 
   }
 
-  var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
+  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
   var clazz = java.findClassSync('com.qsocialnow.common.model.config.Domain');
   var domain = gson.fromJsonSync(JSON.stringify(req.body), clazz);
-  var domainId = req.param("id");
+  var domainId = req.params.id;
 
   var domainService = javaContext.getBeanSync("domainService");
   domainService.update(domainId, domain, asyncResponse);

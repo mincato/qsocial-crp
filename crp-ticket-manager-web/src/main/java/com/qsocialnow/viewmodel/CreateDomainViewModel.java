@@ -1,17 +1,14 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.resource.Labels;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
@@ -48,11 +45,15 @@ public class CreateDomainViewModel implements Serializable {
 
     @Init
     public void init() {
+        initDomain();
+        thematics = thematicService.findAll();
+
+    }
+
+    private void initDomain() {
         currentDomain = new DomainView();
         currentDomain.setDomain(new Domain());
         currentDomain.setSelectedThematics(new HashSet<>());
-        thematics = thematicService.findAll();
-
     }
 
     @Command
@@ -65,13 +66,7 @@ public class CreateDomainViewModel implements Serializable {
         currentDomain.setDomain(domainService.create(newDomain));
         Clients.showNotification(Labels.getLabel("domain.create.notification.success", new String[] { currentDomain
                 .getDomain().getId() }));
-    }
-
-    @Command
-    public void openEdit() {
-        Map<String, Object> arg = new HashMap<String, Object>();
-        arg.put("domain", "AVaz1z2AszJjIhC3q59G");
-        Executions.createComponents("/pages/domain/edit-domain.zul", null, arg);
+        initDomain();
     }
 
     @Command

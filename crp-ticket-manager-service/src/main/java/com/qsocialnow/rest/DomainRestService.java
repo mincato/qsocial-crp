@@ -52,6 +52,18 @@ public class DomainRestService {
         return responseHandler.buildSuccessResponse(page, Status.OK);
     }
 
+    @GET
+    @ApiOperation(value = "findAllByName", notes = "Busca todos los domains por nombre.", response = Domain.class, responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 500, message = "Error interno del sistema => Ver code y message lanzados"),
+            @ApiResponse(code = 401, message = "Usuario no autenticado"),
+            @ApiResponse(code = 403, message = "Usuario no autorizado") })
+    public Response findAllByName(@Context HttpServletRequest request, @QueryParam("pageNumber") Integer pageNumber,
+            @QueryParam("pageSize") Integer pageSize, @QueryParam("name") String name) {
+        PageResponse<DomainListView> page = domainService.findAllByName(pageNumber, pageSize, name);
+        return responseHandler.buildSuccessResponse(page, Status.OK);
+    }
+
     @POST
     @ApiOperation(value = "save", notes = "Crea un nuevo domain.", response = Domain.class)
     @ApiResponses(value = {

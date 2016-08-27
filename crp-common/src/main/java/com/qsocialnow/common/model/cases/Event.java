@@ -1,6 +1,10 @@
 package com.qsocialnow.common.model.cases;
 
-public class Event {
+import java.io.Serializable;
+
+public class Event implements Serializable {
+
+    private static final long serialVersionUID = -8403038270455398736L;
 
     private String id;
 

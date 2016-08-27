@@ -15,7 +15,7 @@ import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
-import com.qsocialnow.elasticsearch.services.DomainService;
+import com.qsocialnow.elasticsearch.services.config.DomainService;
 
 @Service
 public class DomainRepository {
@@ -88,6 +88,37 @@ public class DomainRepository {
 
             List<Domain> domainsRepo = domainElasticService.getDomains(configurator, pageRequest.getOffset(),
                     pageRequest.getLimit());
+
+            for (Domain domainRepo : domainsRepo) {
+                DomainListView domainListView = new DomainListView();
+                domainListView.setId(domainRepo.getId());
+                domainListView.setName(domainRepo.getName());
+
+                List<Long> thematics = domainRepo.getThematics();
+                if (thematics != null) {
+                    String values = thematics.stream().map(number -> String.valueOf(number))
+                            .collect(Collectors.joining(", "));
+
+                    domainListView.setThematics(values);
+                }
+                domains.add(domainListView);
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return domains;
+    }
+
+    public List<DomainListView> findAllByName(PageRequest pageRequest, String name) {
+        List<DomainListView> domains = new ArrayList<>();
+
+        try {
+            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
+            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
+                    Configurator.class);
+
+            List<Domain> domainsRepo = domainElasticService.getDomainsByName(configurator, pageRequest.getOffset(),
+                    pageRequest.getLimit(), name);
 
             for (Domain domainRepo : domainsRepo) {
                 DomainListView domainListView = new DomainListView();

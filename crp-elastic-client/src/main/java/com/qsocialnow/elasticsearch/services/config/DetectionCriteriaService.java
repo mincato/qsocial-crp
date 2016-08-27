@@ -1,4 +1,4 @@
-package com.qsocialnow.elasticsearch.services;
+package com.qsocialnow.elasticsearch.services.config;
 
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
