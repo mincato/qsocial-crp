@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -112,7 +113,6 @@ public class DomainServiceImpl implements DomainService {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public PageResponse<DomainListView> findAll(int pageNumber, int pageSize) {
         try {
@@ -124,8 +124,9 @@ public class DomainServiceImpl implements DomainService {
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<PageResponse> response = restTemplate
-                    .getForEntity(builder.toUriString(), PageResponse.class);
+            ResponseEntity<PageResponse<DomainListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<PageResponse<DomainListView>>() {
+                    });
 
             PageResponse<DomainListView> domains = response.getBody();
             return domains;
@@ -135,7 +136,6 @@ public class DomainServiceImpl implements DomainService {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public PageResponse<DomainListView> findAllByName(int pageNumber, int pageSize, String name) {
         try {
@@ -147,8 +147,9 @@ public class DomainServiceImpl implements DomainService {
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize).queryParam("name", name);
 
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<PageResponse> response = restTemplate
-                    .getForEntity(builder.toUriString(), PageResponse.class);
+            ResponseEntity<PageResponse<DomainListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<PageResponse<DomainListView>>() {
+                    });
 
             PageResponse<DomainListView> domains = response.getBody();
             return domains;

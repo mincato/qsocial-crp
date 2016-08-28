@@ -34,7 +34,7 @@
 											 multiple="true"
 											checkmark="true"
 											selectedItems="@bind(vm.currentDomain.selectedThematics) @validator('beanValidator')"
-											id="thematics1">
+											id="thematics">
 											<template name="model">
 												<listitem>
 													<listcell label="${each.id} - ${each.name}"/>
@@ -59,7 +59,7 @@
 					</div>
   				</n:div>
   				<div class="modal-footer">
-  					<button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
+  					<button disabled="@load(!empty vmsgs[thematics] or !empty vmsgs[name])" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
   					<button onClick="@command('clear')" label="${labels.app.button.clear}" zclass="btn btn-default"/>
     				<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
   				</div>
