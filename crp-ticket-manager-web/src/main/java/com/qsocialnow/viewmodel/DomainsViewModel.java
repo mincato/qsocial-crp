@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
@@ -15,6 +18,7 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.DomainService;
@@ -79,6 +83,21 @@ public class DomainsViewModel implements Serializable {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("domain", domainId);
         Executions.createComponents("/pages/domain/edit-domain.zul", null, arg);
+    }
+
+    @GlobalCommand
+    @NotifyChange("domains")
+    public void changeDomain(@BindingParam("domainChanged") Domain domainChanged) {
+        if (domainChanged != null) {
+            Optional<DomainListView> domainOptional = domains.stream()
+                    .filter(domain -> domain.getId().equals(domainChanged.getId())).findFirst();
+            if (domainOptional.isPresent()) {
+                DomainListView domainListView = domainOptional.get();
+                domainListView.setName(domainChanged.getName());
+                domainListView.setThematics(domainChanged.getThematics().stream().map(number -> String.valueOf(number))
+                        .collect(Collectors.joining(", ")));
+            }
+        }
     }
 
     private PageResponse<DomainListView> findDomainsByName() {

@@ -1,6 +1,5 @@
 package com.qsocialnow.model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -19,7 +18,6 @@ public class DomainView {
     private Set<Thematic> selectedThematics;
 
     public DomainView() {
-        selectedThematics = new HashSet<>();
     }
 
     public Domain getDomain() {
