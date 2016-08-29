@@ -10,14 +10,12 @@
     <modules>
         <module>crp-common</module>
         <module>crp-kafka-util</module>
-        <module>crp-zookeeper-util</module>
-
         <module>crp-elastic-client</module>
         <module>crp-event-resolver</module>
         <module>crp-ticket-manager-service</module>
         <module>crp-ticket-manager-web</module>
-    <module>crp-response-detector</module>
-  </modules>
+		<module>crp-response-detector</module>
+	</modules>
 
     <properties>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -51,3 +49,4 @@
 
 	<version>0.2-SNAPSHOT</version>
 </project>
+
