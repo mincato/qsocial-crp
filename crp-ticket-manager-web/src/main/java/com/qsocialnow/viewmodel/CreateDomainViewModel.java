@@ -45,11 +45,15 @@ public class CreateDomainViewModel implements Serializable {
 
     @Init
     public void init() {
+        initDomain();
+        thematics = thematicService.findAll();
+
+    }
+
+    private void initDomain() {
         currentDomain = new DomainView();
         currentDomain.setDomain(new Domain());
         currentDomain.setSelectedThematics(new HashSet<>());
-        thematics = thematicService.findAll();
-
     }
 
     @Command
@@ -62,6 +66,7 @@ public class CreateDomainViewModel implements Serializable {
         currentDomain.setDomain(domainService.create(newDomain));
         Clients.showNotification(Labels.getLabel("domain.create.notification.success", new String[] { currentDomain
                 .getDomain().getId() }));
+        initDomain();
     }
 
     @Command
