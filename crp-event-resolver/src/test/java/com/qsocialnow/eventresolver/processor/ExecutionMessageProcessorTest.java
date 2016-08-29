@@ -10,11 +10,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.qsocial.eventresolver.model.event.InPutBeanDocument;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.eventresolver.action.Action;
+import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ExecutionMessageProcessorTest {

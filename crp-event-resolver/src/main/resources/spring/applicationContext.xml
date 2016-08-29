@@ -14,6 +14,9 @@
  	
  	<context:property-placeholder location="${extPropDir:classpath:}application.properties" ignore-unresolvable="true"/>
  	
+ 	<bean id="app" init-method="start" destroy-method="close" class="com.qsocialnow.eventresolver.App">
+	</bean>
+ 	
  	<bean id="zookeeperClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
  		<constructor-arg value="${app.zookeeper.host}"></constructor-arg>
  		<constructor-arg>
@@ -24,7 +27,7 @@
  		</constructor-arg>
 	</bean>
 	
-	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.DomainService">
+	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
@@ -36,6 +39,12 @@
 	
 	<util:map id="actions">
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).OPEN_CASE}" value-ref="openCaseAction"/>
+	</util:map>
+	
+	<util:map id="filters">
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).CONNOTATION}" value-ref="connotationDetectionCriteriaFilter"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).PERIOD}" value-ref="periodDetectionCriteriaFilter"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.FilterType).MEDIA}" value-ref="mediaDetectionCriteriaFilter"/>
 	</util:map>
 	
 </beans>

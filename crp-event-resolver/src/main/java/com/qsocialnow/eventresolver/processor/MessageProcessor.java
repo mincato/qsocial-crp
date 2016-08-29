@@ -6,13 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.GsonBuilder;
-import com.qsocial.eventresolver.model.event.InPutBeanDocument;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
-import com.qsocialnow.elasticsearch.services.DomainService;
+import com.qsocialnow.elasticsearch.services.config.DomainService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
+import com.qsocialnow.eventresolver.filters.MessageFilter;
+import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 import com.qsocialnow.kafka.model.Message;
 
 @Service
@@ -35,26 +36,28 @@ public class MessageProcessor {
     @Autowired
     private ElasticConfiguratorFactory elasticConfigConfiguratorFactory;
 
+    @Autowired
+    private MessageFilter messageFilter;
+
     public void process(Message message) throws Exception {
         InPutBeanDocument inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
                 .fromJson(message.getMessage(), InPutBeanDocument.class);
-        log.info(String.format("Processing message for topic %s: %s", message.getTopic(), inputBeanDocument));
-        String domainName = resolveDomain(message);
-        log.info(String.format("Searching for domain: %s", domainName));
+        String domainId = message.getGroup();
+        log.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
+        log.info(String.format("Searching for domain: %s", domainId));
         Configurator elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
                 .getElasticConfigConfiguratorZnodePath());
-        Domain domain = domainElasticService.findDomainByName(elasticConfigConfigurator, domainName);
-
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
-        if (detectionCriteria != null) {
-            executionMessageProcessor.execute(inputBeanDocument, detectionCriteria);
+        Domain domain = domainElasticService.findDomain(elasticConfigConfigurator, domainId);
+        if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
+            DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
+            if (detectionCriteria != null) {
+                executionMessageProcessor.execute(inputBeanDocument, detectionCriteria);
+            } else {
+                log.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
+            }
         } else {
-            log.info(String.format("Message did not detected to execute an action: %s", inputBeanDocument));
+            log.info(String.format("Message should not be processed for this domain: %s", domainId));
         }
-    }
-
-    private String resolveDomain(Message message) {
-        return message.getTopic().split("\\.", 2)[1];
     }
 
     public void setDomainElasticService(DomainService domainElasticService) {

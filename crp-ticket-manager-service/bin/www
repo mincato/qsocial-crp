@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('trp-ticket-manager-service:server');
+var debug = require('debug')('crp-ticket-manager-service:server');
 var http = require('http');
 var javaInit = require('../javaInit');
 var java = javaInit.getJavaInstance();

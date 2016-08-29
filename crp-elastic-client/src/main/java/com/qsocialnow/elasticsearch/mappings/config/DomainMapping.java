@@ -87,15 +87,18 @@ public class DomainMapping implements Mapping<DomainType, Domain> {
 
     @Override
     public Class<?> getClassType() {
-        return Domain.class;
+        return DomainType.class;
     }
 
     @Override
     public DomainType getDocumentType(Domain document) {
         DomainType domainType = new DomainType();
+        if (document.getId() != null) {
+            domainType.setIdEntity(document.getId());
+        }
         domainType.setName(document.getName());
         domainType.setTriggers(document.getTriggers());
-
+        domainType.setThematics(document.getThematics());
         return domainType;
     }
 

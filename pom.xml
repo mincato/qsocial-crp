@@ -10,8 +10,6 @@
     <modules>
         <module>crp-common</module>
         <module>crp-kafka-util</module>
-        <module>crp-zookeeper-util</module>
-
         <module>crp-elastic-client</module>
         <module>crp-event-resolver</module>
         <module>crp-ticket-manager-service</module>
@@ -48,5 +46,5 @@
     <dependencies>
     </dependencies>
 
-	<version>0.1</version>
+    <version>0.2</version>
 </project>

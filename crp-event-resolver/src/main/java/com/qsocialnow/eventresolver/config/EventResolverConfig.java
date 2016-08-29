@@ -21,6 +21,9 @@ public class EventResolverConfig {
     @Value("${app.elastic.cases.configurator.path}")
     private String elasticCasesConfiguratorZnodePath;
 
+    @Value("${app.domains.path}")
+    private String domainsPath;
+
     public String getZookeeperHost() {
         return zookeeperHost;
     }
@@ -39,6 +42,10 @@ public class EventResolverConfig {
 
     public String getElasticCasesConfiguratorZnodePath() {
         return elasticCasesConfiguratorZnodePath;
+    }
+
+    public String getDomainsPath() {
+        return domainsPath;
     }
 
 }

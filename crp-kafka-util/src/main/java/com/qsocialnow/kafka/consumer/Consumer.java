@@ -1,7 +1,9 @@
 package com.qsocialnow.kafka.consumer;
 
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.qsocialnow.kafka.config.KafkaConfig;
@@ -11,7 +13,6 @@ import com.qsocialnow.kafka.model.Message;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
-import kafka.consumer.Whitelist;
 import kafka.javaapi.consumer.ConsumerConnector;
 import kafka.message.MessageAndMetadata;
 
@@ -23,19 +24,23 @@ public class Consumer {
 
     private ConsumerIterator<byte[], byte[]> streamIterator;
 
-    public Consumer(String zookeeperPath, KafkaConfig kafkaConfig) {
+    private String group;
+
+    public Consumer(String zookeeperPath, KafkaConfig kafkaConfig, String group) {
         this.kafkaConfig = kafkaConfig;
-        consumer = kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig(zookeeperPath));
-        List<KafkaStream<byte[], byte[]>> streams = consumer.createMessageStreamsByFilter(new Whitelist(kafkaConfig
-                .getTopicFilter()));
-        this.streamIterator = streams.get(0).iterator();
+        this.group = group;
+        consumer = kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig(zookeeperPath, group));
+        HashMap<String, Integer> topicCountMap = new HashMap<>();
+        topicCountMap.put(kafkaConfig.getTopic(), 1);
+        Map<String, List<KafkaStream<byte[], byte[]>>> streams = consumer.createMessageStreams(topicCountMap);
+        this.streamIterator = streams.get(kafkaConfig.getTopic()).get(0).iterator();
 
     }
 
-    private ConsumerConfig createConsumerConfig(String zookeeperPath) {
+    private ConsumerConfig createConsumerConfig(String zookeeperPath, String group) {
         Properties props = new Properties();
         props.put("zookeeper.connect", zookeeperPath);
-        props.put("group.id", kafkaConfig.getGroupId());
+        props.put("group.id", group);
         props.put("zookeeper.session.timeout.ms", Integer.toString(kafkaConfig.getSessionTimeOutInMs()));
         props.put("zookeeper.sync.time.ms", Integer.toString(kafkaConfig.getSyncTimeInMs()));
         props.put("auto.commit.interval.ms", Integer.toString(kafkaConfig.getAutoCommitIntervalInMs()));
@@ -49,7 +54,7 @@ public class Consumer {
                 MessageAndMetadata<byte[], byte[]> currentMessage = streamIterator.next();
                 Message message = new Message();
                 message.setMessage(new String(currentMessage.message(), "UTF-16"));
-                message.setTopic(currentMessage.topic());
+                message.setGroup(group);
                 return message;
             } catch (UnsupportedEncodingException e) {
                 throw new EncodingException(e.getMessage());

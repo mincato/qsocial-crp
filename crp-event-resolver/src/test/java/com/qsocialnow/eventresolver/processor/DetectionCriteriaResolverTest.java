@@ -1,14 +1,19 @@
 package com.qsocialnow.eventresolver.processor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.qsocial.eventresolver.model.event.InPutBeanDocument;
 import com.qsocialnow.common.model.config.DetectionCriteria;
+import com.qsocialnow.common.model.config.FilterType;
+import com.qsocialnow.eventresolver.filters.DetectionCriteriaFilter;
+import com.qsocialnow.eventresolver.filters.FalseDetectionCriteriaFilter;
+import com.qsocialnow.eventresolver.filters.TrueDetectionCriteriaFilter;
 import com.qsocialnow.eventresolver.mocks.MockDetectionCriteriaBuilder;
+import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 public class DetectionCriteriaResolverTest {
 
@@ -16,6 +21,10 @@ public class DetectionCriteriaResolverTest {
 
     public DetectionCriteriaResolverTest() {
         this.detectionCriteriaResolver = new DetectionCriteriaResolver();
+        HashMap<FilterType, DetectionCriteriaFilter> filters = new HashMap<>();
+        filters.put(FilterType.FALSE, new FalseDetectionCriteriaFilter());
+        filters.put(FilterType.TRUE, new TrueDetectionCriteriaFilter());
+        this.detectionCriteriaResolver.setFilters(filters);
     }
 
     @Test
