@@ -29,8 +29,10 @@ public class CaseConsumer extends Consumer<Case> {
     @Override
     public void saveDocuments() {
         synchronized (bulkDocuments) {
-            service.indexBulkCases(this.configurator, bulkDocuments);
-            bulkDocuments.clear();
+            if (bulkDocuments.size() > 0) {
+                service.indexBulkCases(this.configurator, bulkDocuments);
+                bulkDocuments.clear();
+            }
         }
     }
 
