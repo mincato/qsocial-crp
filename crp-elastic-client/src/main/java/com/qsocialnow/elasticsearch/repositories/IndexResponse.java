@@ -16,6 +16,8 @@ public class IndexResponse<T> {
 
     private List<BulkResultItem> sourcesBulk;
 
+    private boolean isSucceeded;
+
     public String getId() {
         return id;
     }
@@ -54,5 +56,13 @@ public class IndexResponse<T> {
 
     public void setSourcesBulk(List<BulkResultItem> sourcesBulk) {
         this.sourcesBulk = sourcesBulk;
+    }
+
+    public boolean isSucceeded() {
+        return isSucceeded;
+    }
+
+    public void setSucceeded(boolean isSucceeded) {
+        this.isSucceeded = isSucceeded;
     }
 }

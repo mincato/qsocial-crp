@@ -126,8 +126,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
             if (result.isSucceeded()) {
                 response.setSourcesBulk(result.getItems());
+                response.setSucceeded(true);
             } else {
                 // TODO:implement processing error
+                response.setSucceeded(false);
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);

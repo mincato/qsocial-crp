@@ -88,64 +88,72 @@ public class CaseService {
 
     public void indexBulkCases(ConfigurationProvider configurator, List<Case> documents) {
 
-        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(configurator);
-        Repository<CaseType> repository = esfactory.initManager();
-        repository.initClient();
+        if (documents != null && documents.size() > 0) {
 
-        CaseMapping mapping = CaseMapping.getInstance();
+            RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(configurator);
+            Repository<CaseType> repository = esfactory.initManager();
+            repository.initClient();
 
-        String indexName = INDEX_NAME + generateIndexValue();
-        mapping.setIndex(indexName);
+            CaseMapping mapping = CaseMapping.getInstance();
 
-        // validete index name
-        boolean isCreated = repository.validateIndex(indexName);
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
-        // index document
-        List<CaseType> documentsTypes = new ArrayList<>();
-        for (Case caseDocument : documents) {
-            documentsTypes.add(mapping.getDocumentType(caseDocument));
-        }
+            String indexName = INDEX_NAME + generateIndexValue();
+            mapping.setIndex(indexName);
 
-        IndexResponse<Case> response = repository.bulkOperation(mapping, documentsTypes);
-        repository.closeClient();
+            // validete index name
+            boolean isCreated = repository.validateIndex(indexName);
+            // create index
+            if (!isCreated) {
+                repository.createIndex(mapping.getIndex());
+            }
+            // index document
+            List<CaseType> documentsTypes = new ArrayList<>();
+            for (Case caseDocument : documents) {
+                documentsTypes.add(mapping.getDocumentType(caseDocument));
+            }
 
-        List<BulkResultItem> items = response.getSourcesBulk();
-        List<ActionRegistryType> registries = new ArrayList<>();
-        ActionRegistryMapping mappingRegistry = ActionRegistryMapping.getInstance();
+            IndexResponse<Case> response = repository.bulkOperation(mapping, documentsTypes);
+            repository.closeClient();
 
-        String indexNameRegistry = INDEX_NAME_REGISTRY + generateIndexValue();
-        mappingRegistry.setIndex(indexNameRegistry);
+            if (response.isSucceeded()) {
+                List<BulkResultItem> items = response.getSourcesBulk();
+                List<ActionRegistryType> registries = new ArrayList<>();
+                ActionRegistryMapping mappingRegistry = ActionRegistryMapping.getInstance();
 
-        for (int i = 0; i < documents.size(); i++) {
-            if (items.get(i) != null) {
-                String idCase = items.get(i).id;
-                Case caseIndexed = documents.get(i);
+                String indexNameRegistry = INDEX_NAME_REGISTRY + generateIndexValue();
+                mappingRegistry.setIndex(indexNameRegistry);
 
-                List<ActionRegistry> caseRegistries = caseIndexed.getActionsRegistry();
-                if (caseRegistries != null) {
-                    for (ActionRegistry actionRegistry : caseRegistries) {
-                        ActionRegistryType documentIndexed = mappingRegistry.getDocumentType(actionRegistry);
-                        documentIndexed.setIdCase(idCase);
-                        registries.add(documentIndexed);
+                for (int i = 0; i < documents.size(); i++) {
+                    if (items.get(i) != null) {
+                        String idCase = items.get(i).id;
+                        Case caseIndexed = documents.get(i);
+
+                        List<ActionRegistry> caseRegistries = caseIndexed.getActionsRegistry();
+                        if (caseRegistries != null) {
+                            for (ActionRegistry actionRegistry : caseRegistries) {
+                                ActionRegistryType documentIndexed = mappingRegistry.getDocumentType(actionRegistry);
+                                documentIndexed.setIdCase(idCase);
+                                registries.add(documentIndexed);
+                            }
+                        }
                     }
+                }
+
+                if (registries.size() > 0) {
+                    RepositoryFactory<ActionRegistryType> esRegistryfactory = new RepositoryFactory<ActionRegistryType>(
+                            configurator);
+                    Repository<ActionRegistryType> repositoryRegistry = esRegistryfactory.initManager();
+                    repositoryRegistry.initClient();
+                    // validete index name
+                    boolean isRegistryIndexCreated = repositoryRegistry.validateIndex(indexNameRegistry);
+                    // create index
+                    if (!isRegistryIndexCreated) {
+                        repositoryRegistry.createIndex(mappingRegistry.getIndex());
+                    }
+                    repositoryRegistry.bulkOperation(mappingRegistry, registries);
+                    repositoryRegistry.closeClient();
                 }
             }
         }
-        RepositoryFactory<ActionRegistryType> esRegistryfactory = new RepositoryFactory<ActionRegistryType>(
-                configurator);
-        Repository<ActionRegistryType> repositoryRegistry = esRegistryfactory.initManager();
-        repositoryRegistry.initClient();
-        // validete index name
-        boolean isRegistryIndexCreated = repositoryRegistry.validateIndex(indexNameRegistry);
-        // create index
-        if (!isRegistryIndexCreated) {
-            repositoryRegistry.createIndex(mappingRegistry.getIndex());
-        }
-        repositoryRegistry.bulkOperation(mappingRegistry, registries);
-        repositoryRegistry.closeClient();
     }
 
     public List<Case> getCases(int from, int size) {
