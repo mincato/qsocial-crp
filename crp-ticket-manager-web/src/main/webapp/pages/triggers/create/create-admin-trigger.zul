@@ -1,0 +1,10 @@
+<div apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('adminVm') @init('com.qsocialnow.viewmodel.CreateTriggerAdminViewModel')"
+		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<x:div class="container-fluid" visible="@load(adminVm.createTrigger)">
+		<include src="create-trigger.zul" />
+	</x:div>
+	<x:div class="container-fluid" visible="@load(adminVm.createSegment)">
+		<include src="create-segment.zul" />
+	</x:div>
+</div>

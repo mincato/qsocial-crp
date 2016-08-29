@@ -5,24 +5,20 @@
  */
 package com.qsocialnow.rest.json;
 
-import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonSerializer;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
-public class JSONDateSerialize extends JsonSerializer<Date> {
-
-    private static final String DATE_FORMAT = "dd/MM/yyyy";
+public class JSONDateSerialize implements JsonSerializer<Date> {
 
     @Override
-    public void serialize(Date t, JsonGenerator jg, SerializerProvider sp) throws IOException, JsonProcessingException {
-        DateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
-        String formattedDate = dateFormat.format(t);
-        jg.writeString(formattedDate);
+    public JsonElement serialize(Date date, Type type, JsonSerializationContext context) {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+        return new JsonPrimitive(df.format(date));
     }
 }

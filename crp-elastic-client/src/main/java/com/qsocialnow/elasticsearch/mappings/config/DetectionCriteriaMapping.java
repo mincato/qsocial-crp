@@ -1,6 +1,5 @@
 package com.qsocialnow.elasticsearch.mappings.config;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.qsocialnow.common.model.config.DetectionCriteria;
@@ -50,7 +49,7 @@ public class DetectionCriteriaMapping implements Mapping<DetectionCriteriaType, 
     public DetectionCriteriaType getDocumentType(DetectionCriteria document) {
         DetectionCriteriaType criteria = new DetectionCriteriaType();
         criteria.setAccionCriterias(document.getActionCriterias());
-        criteria.setFilter(document.getFilter());
+        criteria.setFilters(document.getFilters());
         criteria.setSequenceOrder(document.getSequenceOrder());
         criteria.setValidateFrom(document.getValidateFrom());
         criteria.setValidateTo(document.getValidateTo());

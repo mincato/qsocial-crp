@@ -13,4 +13,8 @@ public class DomainType extends Domain {
     public String getId() {
         return this.idEntity;
     }
+
+    public void setIdEntity(String id) {
+        this.idEntity = id;
+    }
 }

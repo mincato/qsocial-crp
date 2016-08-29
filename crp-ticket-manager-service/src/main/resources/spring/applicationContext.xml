@@ -29,15 +29,7 @@
  		</constructor-arg>
 	</bean>
 
-	<bean id="administrator" class="com.qsocialnow.kafka.admin.Administrator">
-		<property name="kafkaConfig" ref="kafkaConfig"></property>
-	</bean>
-	
-	<bean id="kafkaConfig" class="com.qsocialnow.kafka.config.KafkaConfig">
-		<constructor-arg  value="${extPropDir:}kafka.properties"></constructor-arg>
-	</bean>
-	
-	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.DomainService">
+	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">

@@ -6,7 +6,7 @@
 	version="3.0">
 
 	<description><![CDATA[My ZK Application]]></description>
-	<display-name>trp-ticket-manager-web</display-name>
+	<display-name>crp-ticket-manager-web</display-name>
 
 	<!-- [Optional]
 	Uncomment if you want to use the ZK filter to post process the HTML output

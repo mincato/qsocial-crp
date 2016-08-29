@@ -1,14 +1,24 @@
 package com.qsocialnow.common.model.config;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 public class Domain {
 
     private String id;
 
+    @NotBlank(message = "{field.empty}")
     private String name;
 
     private List<Trigger> triggers;
+
+    private List<Long> thematics;
+
+    public Domain() {
+        triggers = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -32,5 +42,17 @@ public class Domain {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Long> getThematics() {
+        return thematics;
+    }
+
+    public void setThematics(List<Long> thematics) {
+        this.thematics = thematics;
+    }
+
+    public void addTrigger(Trigger trigger) {
+        this.triggers.add(trigger);
     }
 }

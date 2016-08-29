@@ -1,0 +1,22 @@
+<zk xmlns:ca="client/attribute" xmlns:z="zul" xmlns:x="xhtml">
+    <div sclass="modal fade" ca:data-modal="" ca:data-close-event="hidden.bs.modal" onModalClose="self.detach()" >
+        <div xmlns="native" class="modal-dialog">
+			<div class="modal-content" >
+				<div class="modal-header">
+					<x:button class="close" data-dismiss="modal" aria-label="Close" >
+						<span aria-hidden="true">&#x00D7;</span>
+					</x:button>
+    				<h4 class="modal-title">${labels.errors.unknown.title}</h4>
+  				</div>
+  				<div class="modal-body">
+    				<p class="alert alert-danger">
+						${labels.errors.unknown.message}
+					</p>
+  				</div>
+  				<div class="modal-footer">
+    				<z:button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
+  				</div>
+			</div>
+		</div>
+    </div>
+</zk>

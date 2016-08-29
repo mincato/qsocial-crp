@@ -1,0 +1,1349 @@
+/*******************************
+QUARCA SKIN LESS/STYLESHEET
+
+TABLE OF CONTENTS
+    0.0 - SKINS
+    1.0 - GLOBALS
+    2.0 - HEADER
+    3.0 - SIDEBAR
+    4.0 - CHAT/MESSENGER
+    5.0 - TASKS/TO-DO LIST
+    6.0 - INBOX/SENT SIDEBAR
+    7.0 - NOTIFICATIONS SIDEBAR
+    8.0 - MAIN
+    9.0 - GRID
+    10.0 - PANES
+    11.0 - FOOTER
+    12.0 - DRAG & DROP
+    13.0 - LISTS
+    14.0 - PAGINATION
+    15.0 - LABELS
+    16.0 - BADGES
+    17.0 - POPOVER
+    18.0 - BUTTONS
+    19.0 - BUTTON DROPDOWNS
+    20.0 - BUTTON GROUPS
+    21.0 - TABS
+    22.0 - ACCORDION
+    23.0 - PROGRESS BAR
+    24.0 - MODALS
+    25.0 - ALERTS
+    26.0 - CAROUSEL
+    27.0 - TABLES
+    28.0 - FORMS
+    29.0 - PAGE - MEMBERSHIP
+    30.0 - LOGGING OUT PAGE
+    31.0 - PAGE - PROFILE
+*******************************/
+
+/*******************************
+SKINS
+*******************************/
+/* ----- THEME ----- */
+    @skin-primary-bg: #22262e;    /*Header & Sidebar main color 492d38  000c00*/
+    @skin-primary-color: #22262e; /*Headlines*/
+    @skin-main: #16A085;          /*Main elements color - Default: green*/
+    
+/* ----- Main Body Color ----- */
+    @body-text: #666666;
+    @body-bg: #22262e; /*Background Color*/
+    @body-container: #ffffff; /*Page title and panes*/
+    @body-pane-title-border: #f4f4f4;
+    
+/* ----- SIDEBAR COLOR SETTINGS ----- */
+    @sidebar-main-color: #ffffff; /*Sidebar links/text color - Default: white*/
+    @sidebar-scrollbar: #ffffff;  /*Scrollbar color*/
+    
+/* ----- PROFILE STATUS ----- */
+    @sidebar-profile-color: #ffffff;
+    @profile-online: #16A085;
+    @profile-busy: #D24D57;
+    @profile-away: #EB974E;
+    @profile-offline: #95A5A6;
+
+/* ----- MESSENGER SKIN ----- */
+    @messenger-bg: #22262e;
+    @messenger-message-bg: #f6f6f6;
+    @messenger-message-color: #000;
+    @messenger-message-time: #999999;
+    @messenger-dropdown: #de5555;
+
+/* ----- UI SKINS ----- */
+    @default: #f4f4f4;
+    @primary: #4894af;
+    @success: #16A085;
+    @info: #59abe3;
+    @warning: #f1c40f;
+    @danger: #e26a6a;
+    @dark: #666666;
+    
+/* ----- UI KIT ----- */
+    @ui-default: #f4f4f4;
+    @ui-default-color: #666666;
+    
+/*******************************
+GLOBALS
+*******************************/
+    body {
+        color: @body-text;
+    }
+    
+/* ----- HEADINGS ----- */
+    h1, h2, h3, h4, h5, h6 {
+        color: @skin-primary-color;
+    }
+    
+/*******************************
+HEADER
+*******************************/
+    .header {
+        background-color: @skin-primary-bg;
+    }
+
+    .navbar-header {
+        background: darken(@skin-primary-bg, 4%);
+    }
+
+/* ----- SIDEBAR SWITCH ----- */
+    .sidebar-switch,
+    .sidebar-switch:hover {
+        color: @sidebar-main-color;
+    }
+    
+    .sidebar-toggle .sidebar-switch {
+        color: @skin-main;
+    }
+    
+/* ----- HEADER ICONS/BUTTONS ----- */
+    .header-navbar .navbar-toggle {
+        background-color: @skin-primary-bg;
+        color: @sidebar-main-color;
+    }
+    
+    /*Search*/
+        .header-navbar .navbar-form .form-control {
+            background-color: lighten(@skin-primary-bg, 8%);
+            border-color: lighten(@skin-primary-bg, 8%);
+            color: @sidebar-main-color;
+        }
+        
+        .header-navbar .navbar-form .btn {
+            background-color: lighten(@skin-primary-bg, 8%);
+            color: lighten(@skin-primary-bg, 50%);
+        }
+        
+    /*Placeholder*/
+        .header-navbar .navbar-form .form-control::-webkit-input-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .header-navbar .navbar-form .form-control:-moz-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .header-navbar .navbar-form .form-control::-moz-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .header-navbar .navbar-form .form-control:-ms-input-placeholder {  
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+    /*Icons Navigation*/
+        .header-navbar .navbar-nav > li > a {
+            border-color: lighten(@skin-primary-bg, 8%) !important;
+            color: lighten(@skin-primary-bg, 50%);
+        }
+        
+    /*Responsive*/
+        @media (max-width: 767px) {
+        /*Sidebar Switch*/
+            .sidebar-switch {
+                background-color: @skin-primary-bg;
+            }
+            
+        /*Navbar Collapse*/
+            .header-navbar .navbar-collapse {
+                background-color: lighten(@skin-primary-bg, 4%);
+            }
+        }/*End*/
+        
+/*******************************
+SIDEBAR
+*******************************/
+    .sidebar {
+        background-color: @skin-primary-bg;
+    }
+    
+    .sidebar-content h4 {
+         background-color: lighten(@skin-primary-bg, 5%);
+         color: lighten(@skin-primary-bg, 20%);
+    }
+
+/* ----- SIDEBAR/MESSENGER SCROLLPANE ----- */
+    .sidebar-container .jspDrag {
+        background-color: @sidebar-scrollbar;
+    }
+    
+    .chat-scrollpane .jspDrag {
+        background-color: @skin-primary-bg;
+    }
+
+/* ----- SIDEBAR-PROFILE ----- */
+    .sidebar-profile {
+        background-color: @profile-online;
+    }
+
+    .profile-picture img {
+        border-color: @sidebar-profile-color;
+    }
+
+    .sidebar-profile h6 {
+        color: @sidebar-profile-color;
+    }
+    
+    .sidebar-profile h5 {
+        color: @sidebar-profile-color;
+    }
+
+    /*Change Status*/
+        .sidebar-profile .btn-group a {
+            color: @sidebar-profile-color;
+        }
+
+    /*Color*/
+        .sidebar-profile.online {
+            background-color: @profile-online;
+        }
+        
+        .sidebar-profile.busy {
+            background-color: @profile-busy;
+        }
+        
+        .sidebar-profile.away {
+            background-color: @profile-away;
+        }
+        
+        .sidebar-profile.offline {
+            background-color: @profile-offline;
+        }
+
+    /*Chat Labels/Status*/
+        .label-online {
+            background-color: @profile-online;
+        }
+        
+        .label-busy {
+            background-color: @profile-busy;
+        }
+        
+        .label-away {
+            background-color: @profile-away;
+        }
+        
+        .label-offline {
+            background-color: @profile-offline;
+        }
+
+/* ----- SIDEBAR TABS ----- */
+    .sidebar .tab-nav > li {
+        border-bottom-color: lighten(@skin-primary-bg, 8%);
+    }
+
+    .sidebar .tab-nav > li.active {
+        border-bottom-color: @skin-main;
+    }
+    
+    .sidebar .tab-nav > li > a {
+        color: @sidebar-main-color;
+    }
+
+    .sidebar .tab-nav > li.active > a {
+        color: @skin-main;
+    }
+
+    .sidebar .tab-nav > li > a:hover {
+        color: @skin-main;
+    }
+    
+    /*Badge*/
+        .sidebar .tab-nav > li > a .badge {
+            background-color: lighten(@skin-primary-bg, 8%);
+        }
+
+    /*Tab Content*/
+        .sidebar .tab-content {
+            color: @sidebar-main-color;
+        }
+
+/* ----- SIDEBAR NAVIGATION ----- */
+    .sidebar-nav > li {
+        border-color: lighten(@skin-primary-bg, 3%) !important;
+    }
+
+    .sidebar-nav > li > a,
+    .sidebar-nav ul > li > a {
+        color: @sidebar-main-color;
+    }
+    
+    .sidebar-nav > li > a:hover{
+        background-color: lighten(@skin-primary-bg, 2%);
+    }
+
+    .sidebar-nav > li.active > a {
+        background-color: lighten(@skin-primary-bg, 3%);
+    }
+
+    /*Sub Menus*/
+        .sidebar-nav ul {
+            background: lighten(@skin-primary-bg, 1%);
+        }
+
+        .sidebar-nav ul > li > a:hover,
+        .sidebar-nav ul > li.active > a {
+            background-color: lighten(@skin-primary-bg, 2%);
+        }
+
+        .sidebar-nav ul ul {
+            background: @skin-primary-bg;
+        }
+
+/*******************************
+CHAT/MESSENGER
+*******************************/
+    /*Friend List*/
+        .friends-list > li {
+            border-bottom-color: lighten(@skin-primary-bg, 3%);
+        }
+
+        .friends-list > li:first-child {
+            border-top-color: lighten(@skin-primary-bg, 3%);
+        }
+
+        .friends-list > li > a {
+            color: @sidebar-main-color;
+        }
+
+        .friends-list > li > a:hover {
+            background-color: lighten(@skin-primary-bg, 2%);
+        }
+
+    /*Colors*/
+        .friends-list > .online > a {
+            border-color: @profile-online;
+        }
+        
+        .friends-list > .busy > a {
+            border-color: @profile-busy;
+        }
+        
+        .friends-list > .away > a {
+            border-color: @profile-away;
+        }
+        
+        .friends-list > .offline > a {
+            border-color: @profile-offline;
+        }
+
+    /*Chat*/
+        .messenger-wrap {
+            background-color: lighten(@messenger-bg, 15%);
+        }
+
+    /*Messenger*/
+    /*Header*/
+        .messenger-header .toggle-list {
+            color: @sidebar-main-color;
+        }
+
+        .friend-chat-profile {
+            color: @sidebar-main-color;
+        }
+
+        .friend-chat-profile.online {
+            background-color: @profile-online;
+        }
+        
+        .friend-chat-profile.busy {
+            background-color: @profile-busy;
+        }
+        
+        .friend-chat-profile.away {
+            background-color: @profile-away;
+        }
+        
+        .friend-chat-profile.offline {
+            background-color: @profile-offline;
+        }
+
+    /*Content*/
+        .messages .message {
+            background-color: @messenger-message-bg;
+            color: @messenger-message-color;
+        }
+
+        .messages .message .time {
+            color: @messenger-message-time;
+        }
+        
+        .friend-message .message {
+            background-color: darken(@messenger-message-bg, 5%);
+        }
+
+        .friend-message .message:before {
+            border-right-color: darken(@messenger-message-bg, 5%);
+        }
+        
+        .my-message .message:before {
+            border-left-color: @messenger-message-bg;
+        }
+
+    /*Footer*/
+        .messenger-footer {
+            background-color: @skin-primary-bg;
+        }
+    
+    /*Addons*/
+        .messenger-footer .dropdown-toggle {
+            color: @sidebar-main-color;
+        }
+
+        .messenger-footer .dropdown-menu {
+            background-color: @messenger-dropdown;
+        }
+        
+        .messenger-footer .dropdown-menu > li > a:hover, 
+        .messenger-footer .dropdown-menu .divider {
+            background-color: darken(@messenger-dropdown, 3%);
+        }
+        
+        .messenger-footer .dropdown-menu:after {
+            border-top-color: @messenger-dropdown;
+        }
+
+    /*Message box*/
+        .messenger-footer .form-control,
+        .messenger-footer .form-control:focus {
+            background-color: lighten(@skin-primary-bg, 10%);
+            border-color: lighten(@skin-primary-bg, 10%);
+            color: @sidebar-main-color;
+        }
+        
+        /*Placeholder*/
+        .messenger-footer .form-control::-webkit-input-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .messenger-footer .form-control:-moz-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .messenger-footer .form-control::-moz-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .messenger-footer .form-control:-ms-input-placeholder {  
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+/*******************************
+TASKS/TO-DO LIST
+*******************************/
+/* ----- FORM ----- */
+    .tasks form .form-control {
+        border-color: lighten(@skin-primary-bg, 8%);
+        color: @sidebar-main-color;
+    }
+    
+    .tasks form .btn {
+        background-color: lighten(@skin-primary-bg, 8%);
+        color: lighten(@skin-primary-bg, 50%);
+    }
+    
+        /*Placeholder*/
+        .tasks form .form-control::-webkit-input-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .tasks form .form-control:-moz-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .tasks form .form-control::-moz-placeholder {
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+        .tasks form .form-control:-ms-input-placeholder {  
+           color: lighten(@skin-primary-bg, 50%);
+        }
+        
+/* ----- TASKS LIST ----- */
+    .task {
+        background-color: lighten(@skin-primary-bg, 2%);
+    }
+    
+    .check-task,
+    .task .delete-task {
+        background-color: lighten(@skin-primary-bg, 4%);
+    }
+    
+    .check-task {
+        color: lighten(@skin-primary-bg, 10%);
+    }
+    
+    .task.checked .check-task,
+    .task.checked .task-text {
+        color: @skin-main;
+    }
+    
+    .task .delete-task {
+        color: lighten(@skin-primary-bg, 15%);
+    }
+    
+/*******************************
+INBOX/SENT SIDEBAR
+*******************************/
+/* ----- TABS ----- */
+    .sidebar-emails-container .nav-tabs > li {
+        border-color: lighten(@skin-primary-bg, 8%);
+    }
+
+    .sidebar-emails-container .nav-tabs > li.active {
+        border-bottom-color: @skin-main;
+    }
+
+    .sidebar-emails-container .nav-tabs > li > a {
+        color: @sidebar-main-color;
+    }
+
+    .sidebar-emails-container .nav-tabs > li > a:hover,
+    .sidebar-emails-container .nav-tabs > li.active > a:hover,
+    .sidebar-emails-container .nav-tabs > li.active > a:focus {
+        color: @skin-main;
+    }
+
+/* ----- EMAILS LIST ----- */
+    .emails-list > li > a {
+        background-color: lighten(@skin-primary-bg, 2%);
+    }
+
+    /*Short Emails*/
+        .email-thumb {
+            color: @sidebar-main-color;
+            background-color: lighten(@skin-primary-bg, 5%);
+        }
+
+        .email-short h6 {
+            color: @sidebar-main-color;
+        }
+
+        .email-short small {
+            color: @sidebar-main-color;
+        }
+        
+    /*When*/
+        .emails-list .when {
+            color: @sidebar-main-color;
+        }
+
+/*******************************
+NOTIFICATIONS SIDEBAR
+*******************************/
+    .notifications > li {
+        border-bottom-color: lighten(@skin-primary-bg, 3%);
+    }
+
+    .notifications a {
+        color: @sidebar-main-color;
+    }
+
+    .notifications .icon {
+        background-color: lighten(@skin-primary-bg, 3%);
+    }
+
+    .notifications a h6 {
+        color: @sidebar-main-color;
+    }
+
+
+
+
+
+/*******************************
+MAIN
+*******************************/
+    .main {
+        background-color: lighten(@body-bg, 3%);
+    }
+
+/* ----- PAGE TITLE ----- */
+    .page-title {
+        background-color: lighten(@body-bg, 8%);
+    }
+    
+    .page-title h1 {
+        color: #fff;
+    }
+    
+    .page-title h1 small {
+        color: @body-text;
+    }
+
+    .page-title h1:after {
+        background-color: lighten(@body-bg, 8%);
+    }
+
+/*******************************
+GRID
+*******************************/
+    .container-fluid.white {
+        background-color: @body-container;
+    }
+
+/*******************************
+PANES
+*******************************/
+    .pane {
+        background-color: @body-container;
+    }
+
+/* ----- PANE TITLES ----- */
+    .pane h2 {
+        border-bottom-color: @body-pane-title-border;
+    }
+    
+    .pane h2 span {
+        border-bottom-color: @skin-main;
+    }
+
+    .pane h3 {
+        border-bottom-color: @body-pane-title-border;
+    }
+
+/*******************************
+FOOTER
+*******************************/
+    #footer {
+        background-color: lighten(@body-bg, 8%);
+        color: #fff;
+    }
+
+/*******************************
+DRAG & DROP
+*******************************/
+    .grid-stack-item .grid-stack-item-content,
+    .grid-stack-item .placeholder-content {
+        background-color: @body-container;
+    }
+    
+    .grid-stack-item .ui-resizable-handle {
+        color: @body-text;    
+    }
+
+    .widget h2 span {
+        border-bottom-color: @skin-main;
+    }
+
+
+
+
+
+/*******************************
+LISTS
+*******************************/
+/* ----- ORDERED ----- */
+    /*Ordered Normal*/
+        ol.normal>li{
+            border-left-color: @ui-default;
+        }
+    
+    /*Ordered Circle*/
+        ol.circle>li:before {
+            color: @ui-default-color;
+            background-color: @ui-default;
+        }
+
+/* ----- LIST GROUP ----- */
+    .list-group-item {
+        background-color: lighten(@ui-default, 2%);
+    }
+
+    /*List Group Icon*/
+        .list-group-item .icon {
+            background-color: @ui-default;
+        }
+
+    /*List Group Ordered*/
+        .list-group.order .list-group-item:before {
+            color: @ui-default-color;
+            background-color: @ui-default;
+        }
+
+    /*List Group Badges*/
+        .list-group-item .holder {
+            background-color: @ui-default;
+        }
+
+        .list-group-item .badge {
+            color: @ui-default-color;
+            background-color: darken(@ui-default, 5%);
+        }
+
+/*******************************
+PAGINATION
+*******************************/
+    .pagination > li > a,
+    .pagination > li > span {
+        border-color: @ui-default;
+        color: @ui-default-color;
+    }
+
+    .pagination > li > a:hover,
+    .pagination > li > span:hover,
+    .pagination > li > a:focus,
+    .pagination > li > span:focus {
+        background-color: lighten(@ui-default, 3%);
+        border-color: @ui-default;
+        color: @skin-main;
+    }
+    
+   .pagination > .active > a, 
+   .pagination > .active > span, 
+   .pagination > .active > a:hover, 
+   .pagination > .active > span:hover, 
+   .pagination > .active > a:focus, 
+   .pagination > .active > span:focus {
+       background-color: @skin-main;
+       border-color: @skin-main;
+   }
+        
+/* ----- PAGER ----- */
+    .pager li > a,
+    .pager li > span {
+        border-color: @ui-default;
+        color: @ui-default-color;
+    }
+    
+    .pager li > a:hover,
+    .pager li > a:focus {
+        background-color: lighten(@ui-default, 3%);
+        color: @skin-main;
+    }
+        
+/*******************************
+LABELS
+*******************************/
+    .label-default {
+        color: @ui-default-color;
+    }
+    
+/* ----- COLORS ----- */
+    .label-default {background-color: @default;}
+    .label-primary {background-color: @primary;}
+    .label-success {background-color: @success;}
+    .label-info {background-color: @info;}
+    .label-warning {background-color: @warning;}
+    .label-danger {background-color: @danger;}
+        
+/*******************************
+BADGES
+*******************************/
+    .badge-default {
+        color: @ui-default-color;
+    }
+    
+/* ----- COLORS ----- */
+    .badge-default {background-color: @default;}
+    .badge-primary {background-color: @primary;}
+    .badge-success {background-color: @success;}
+    .badge-info {background-color: @info;}
+    .badge-warning {background-color: @warning;}
+    .badge-danger {background-color: @danger;}
+        
+/*******************************
+POPOVER
+*******************************/
+    .popover {
+        border-color: @skin-main;
+    }
+    
+    .popover-title {
+        background-color: @skin-main;
+    }
+    
+    .popover.top>.arrow {border-top-color: darken(@ui-default, 8%);}
+    .popover.right>.arrow {border-right-color: darken(@ui-default, 8%);}
+    .popover.bottom>.arrow {border-bottom-color: darken(@ui-default, 8%);}
+    .popover.left>.arrow {border-left-color: darken(@ui-default, 8%);}
+    
+/*******************************
+BUTTONS
+*******************************/
+/* ----- COLORS ----- */
+    .btn-default {background-color: @default;}
+    .btn-default:hover, .btn-default:focus {background-color: darken(@default, 5%);}
+    
+    .btn-primary {background-color: @primary;}
+    .btn-primary:hover, .btn-primary:focus {background-color: darken(@primary, 5%);}
+    
+    .btn-success {background-color: @success;}
+    .btn-success:hover, .btn-success:focus {background-color: darken(@success, 5%);}
+    
+    .btn-info {background-color: @info;}
+    .btn-info:hover, .btn-info:focus {background-color: darken(@info, 5%);}
+    
+    .btn-warning {background-color: @warning;}
+    .btn-warning:hover, .btn-warning:focus {background-color: darken(@warning, 5%);}
+    
+    .btn-danger {background-color: @danger;}
+    .btn-danger:hover, .btn-danger:focus {background-color: darken(@danger, 5%);}
+    
+    .btn-dark {background-color: @dark; color: #fff;}
+    .btn-dark:hover, .btn-dark:focus {background-color: darken(@dark, 5%); color: #fff;}
+
+/* ----- ICONS COLORS ----- */
+    .btn-default .icon {background-color: darken(@default, 5%);}
+    .btn-default:hover .icon, .btn-default:focus .icon {background-color: darken(@default, 8%);}
+    
+    .btn-primary .icon {background-color: darken(@primary, 5%);}
+    .btn-primary:hover .icon, .btn-primary:focus .icon {background-color: darken(@primary, 8%);}
+    
+    .btn-success .icon {background-color: darken(@success, 5%);}
+    .btn-success:hover .icon, .btn-success:focus .icon {background-color: darken(@success, 8%);}
+    
+    .btn-info .icon {background-color: darken(@info, 5%);}
+    .btn-info:hover .icon, .btn-info:focus .icon {background-color: darken(@info, 8%);}
+    
+    .btn-warning .icon {background-color: darken(@warning, 5%);}
+    .btn-warning:hover .icon, .btn-warning:focus .icon {background-color: darken(@warning, 8%);}
+    
+    .btn-danger .icon {background-color: darken(@danger, 5%);}
+    .btn-danger:hover .icon, .btn-danger:focus .icon {background-color: darken(@danger, 8%);}
+    
+    .btn-dark .icon {background-color: darken(@dark, 5%);}
+    .btn-dark:hover .icon, .btn-dark:focus .icon {background-color: darken(@dark, 8%);}
+        
+/* ----- OUTLINE COLORS ----- */
+    .btn-default.btn-line {border-color: @default;}
+    .btn-default.btn-line:hover, .btn-default.btn-line:focus {background-color: @default;}
+    
+    .btn-primary.btn-line {border-color: @primary; color: @primary;}
+    .btn-primary.btn-line:hover, .btn-primary.btn-line:focus {background-color: @primary;}
+    
+    .btn-success.btn-line {border-color: @success; color: @success;}
+    .btn-success.btn-line:hover, .btn-success.btn-line:focus {background-color: @success;}
+    
+    .btn-info.btn-line {border-color: @info; color: @info;}
+    .btn-info.btn-line:hover, .btn-info.btn-line:focus {background-color: @info;}
+    
+    .btn-warning.btn-line {border-color: @warning; color: @warning;}
+    .btn-warning.btn-line:hover, .btn-warning.btn-line:focus {background-color: @warning;}
+    
+    .btn-danger.btn-line {border-color: @danger; color: @danger;}
+    .btn-danger.btn-line:hover, .btn-danger.btn-line:focus {background-color: @danger;}
+    
+    .btn-dark.btn-line {border-color: @dark; color: @dark;}
+    .btn-dark.btn-line:hover, .btn-dark.btn-line:focus {background-color: @dark;}
+
+/* ----- OUTLINE + ICONS ----- */
+    .btn-default.btn-line.btn-icon:hover .icon,
+    .btn-default.btn-line.btn-icon:focus .icon {background-color: darken(@default, 5%); border-right-color: darken(@default, 5%);}
+    
+    .btn-primary.btn-line.btn-icon:hover .icon,
+    .btn-primary.btn-line.btn-icon:focus .icon {background-color: darken(@primary, 5%); border-right-color: darken(@primary, 5%);}
+    
+    .btn-success.btn-line.btn-icon:hover .icon,
+    .btn-success.btn-line.btn-icon:focus .icon {background-color: darken(@success, 5%); border-right-color: darken(@success, 5%);}
+    
+    .btn-info.btn-line.btn-icon:hover .icon,
+    .btn-info.btn-line.btn-icon:focus .icon {background-color: darken(@info, 5%); border-right-color: darken(@info, 5%);}
+    
+    .btn-warning.btn-line.btn-icon:hover .icon,
+    .btn-warning.btn-line.btn-icon:focus .icon {background-color: darken(@warning, 5%); border-right-color: darken(@warning, 5%);}
+    
+    .btn-danger.btn-line.btn-icon:hover .icon,
+    .btn-danger.btn-line.btn-icon:focus .icon {background-color: darken(@danger, 5%); border-right-color: darken(@danger, 5%);}
+    
+    .btn-dark.btn-line.btn-icon:hover .icon,
+    .btn-dark.btn-line.btn-icon:focus .icon {background-color: darken(@dark, 5%); border-right-color: darken(@dark, 5%);}
+
+/*******************************
+BUTTON DROPDOWNS
+*******************************/
+/* ----- COLORS ----- */
+    .dropdown-toggle.btn-default, .open>.dropdown-toggle.btn-default, .dropdown-menu.default>li>a:hover, .dropdown-menu.default .divider {background-color: darken(@default, 5%);}
+    .dropdown-menu.default {background-color: @default;}
+    
+    .dropdown-toggle.btn-primary, .open>.dropdown-toggle.btn-primary, .dropdown-menu.primary>li>a:hover, .dropdown-menu.primary .divider {background-color: darken(@primary, 5%);}
+    .dropdown-menu.primary {background-color: @primary;}
+    
+    .dropdown-toggle.btn-success, .open>.dropdown-toggle.btn-success, .dropdown-menu.success>li>a:hover, .dropdown-menu.success .divider {background-color: darken(@success, 5%);}
+    .dropdown-menu.success {background-color: @success;}
+    
+    .dropdown-toggle.btn-info, .open>.dropdown-toggle.btn-info, .dropdown-menu.info>li>a:hover, .dropdown-menu.info .divider {background-color: darken(@info, 5%);}
+    .dropdown-menu.info {background-color: @info;}
+    
+    .dropdown-toggle.btn-warning, .open>.dropdown-toggle.btn-warning, .dropdown-menu.warning>li>a:hover, .dropdown-menu.warning .divider {background-color: darken(@warning, 5%);}
+    .dropdown-menu.warning {background-color: @warning;}
+    
+    .dropdown-toggle.btn-danger, .open>.dropdown-toggle.btn-danger, .dropdown-menu.danger>li>a:hover, .dropdown-menu.danger .divider {background-color: darken(@danger, 5%);}
+    .dropdown-menu.danger {background-color: @danger;}
+    
+    .dropdown-toggle.btn-dark, .open>.dropdown-toggle.btn-dark, .dropdown-menu.dark>li>a:hover, .dropdown-menu.dark .divider {background-color: darken(@dark, 5%);}
+    .dropdown-menu.dark {background-color: @dark;}
+
+/*******************************
+BUTTON GROUPS
+*******************************/
+/* ----- COLORS ----- */
+    .btn-group.quarca .btn-default {border: 1px solid darken(@default, 15%);}
+    .btn-group.quarca .btn-primary {border: 1px solid darken(@primary, 15%);}
+    .btn-group.quarca .btn-success {border: 1px solid darken(@success, 10%);}
+    .btn-group.quarca .btn-info {border: 1px solid darken(@info, 15%);}
+    .btn-group.quarca .btn-warning {border: 1px solid darken(@warning, 15%);}
+    .btn-group.quarca .btn-danger {border: 1px solid darken(@danger, 15%);}
+    .btn-group.quarca .btn-dark {border: 1px solid darken(@dark, 15%);}
+
+/*******************************
+TABS
+*******************************/
+/* ----- NAV ----- */
+    .nav-tabs {
+        background-color: @ui-default;
+    }
+    
+    .nav-tabs > li > a {
+        color: lighten(@ui-default-color, 20%);
+    }
+    
+    .nav-tabs > li > a:hover {
+        background-color: @skin-main;
+    }
+    
+    .nav-tabs > li > a:focus {
+        background-color: lighten(@ui-default, 3%);
+        color: lighten(@ui-default-color, 20%);
+    }
+
+    .nav-tabs > li.active > a,
+    .nav-tabs > li.active > a:hover,
+    .nav-tabs > li.active > a:focus {
+        background-color: lighten(@ui-default, 3%);
+        color: @skin-main;
+    }
+
+/* ----- NAV DROPDOWN ----- */
+    .nav .open > a, .nav .open > a:hover,
+    .nav .open > a:focus {
+        background-color: @skin-main;
+    }
+    
+    .nav-tabs .dropdown-menu {
+        background-color: @ui-default;
+    }
+    
+    .nav-tabs .dropdown-menu > li > a {
+        color: lighten(@ui-default-color, 20%);
+    }
+
+    .nav-tabs .dropdown-menu > li > a:hover,
+    .nav-tabs .dropdown-menu > li > a:focus {
+        background-color: darken(@ui-default, 2%);
+    }
+
+    .nav-tabs .dropdown-menu > .active > a, 
+    .nav-tabs .dropdown-menu > .active > a:hover, 
+    .nav-tabs .dropdown-menu > .active > a:focus {
+        background-color: @skin-main;
+    }
+   
+/* ----- TAB CONTENT ----- */
+    .tab-content {
+        background-color: lighten(@ui-default, 3%);
+    } 
+    
+/*******************************
+ACCORDION
+*******************************/
+    .panel {
+        background-color: lighten(@ui-default, 3%);
+    }
+    
+    .panel-default > .panel-heading {
+        background-color: @ui-default;
+        color: lighten(@ui-default-color, 20%);
+    }
+
+    /*Icons*/
+        .more-less {
+            color: @success;
+        }
+        
+        .more-less.fa-minus {
+            color: @danger
+        }
+        
+/*******************************
+PROGRESS BAR
+*******************************/ 
+    .progress {
+        background-color: @ui-default;
+    }
+
+/* ----- COLORS ----- */
+    .progress-bar-success {background-color: @success;}
+    .progress-bar-info {background-color: @info;}
+    .progress-bar-warning {background-color: @warning;}
+    .progress-bar-danger {background-color: @danger;}
+
+/*******************************
+MODALS
+*******************************/
+    .modal-primary .modal-header, .modal-primary .modal-footer {background-color: @primary;}
+    .modal-primary .modal-content {background-color: darken(@primary, 3%);}
+    .modal-primary .btn-modal {background-color: darken(@primary, 5%);}
+    .modal-primary .btn-modal:hover {background-color: darken(@primary, 10%);}
+    
+    .modal-success .modal-header, .modal-success .modal-footer {background-color: @success;}
+    .modal-success .modal-content {background-color: darken(@success, 3%);}
+    .modal-success .btn-modal {background-color: darken(@success, 5%);}
+    .modal-success .btn-modal:hover {background-color: darken(@success, 10%);}
+    
+    .modal-warning .modal-header, .modal-warning .modal-footer {background-color: @warning;}
+    .modal-warning .modal-content {background-color: darken(@warning, 3%);}
+    .modal-warning .btn-modal {background-color: darken(@warning, 5%);}
+    .modal-warning .btn-modal:hover {background-color: darken(@warning, 10%);}
+    
+    .modal-danger .modal-header, .modal-danger .modal-footer {background-color: @danger;}
+    .modal-danger .modal-content {background-color: darken(@danger, 3%);}
+    .modal-danger .btn-modal {background-color: darken(@danger, 5%);}
+    .modal-danger .btn-modal:hover {background-color: darken(@danger, 10%);}
+    
+    .modal-dark .modal-header, .modal-dark .modal-footer {background-color: @dark;}
+    .modal-dark .modal-content {background-color: darken(@dark, 3%);}
+    .modal-dark .btn-modal {background-color: darken(@dark, 5%);}
+    .modal-dark .btn-modal:hover  {background-color: darken(@dark, 10%);}
+
+/*******************************
+ALERTS
+*******************************/
+    .alert-success {background-color: @success;}
+    .alert-success .icon {background-color: darken(@success, 5%); color: lighten(@success, 10%);}
+    
+    .alert-info {background-color: @info;}
+    .alert-info .icon {background-color: darken(@info, 5%); color: lighten(@info, 10%);}
+    
+    .alert-warning {background-color: @warning;}
+    .alert-warning .icon {background-color: darken(@warning, 5%); color: lighten(@warning, 10%);}
+    
+    .alert-danger {background-color: @danger;}
+    .alert-danger .icon {background-color: darken(@danger, 5%); color: lighten(@danger, 10%);}
+
+/*******************************
+CAROUSEL
+*******************************/
+    .owl-theme .owl-controls .owl-nav [class*=owl-]:hover {
+        background-color: @skin-main !important;
+        border-color: @skin-main;
+    }
+    
+    .owl-theme .owl-dots .owl-dot.active span,
+    .owl-theme .owl-dots .owl-dot:hover span {
+        background-color: @skin-main;
+    }
+
+/*******************************
+TABLES
+*******************************/
+    .table > thead > tr > th {
+        background-color: @skin-main;
+    }
+    
+    .table > tbody > tr > td {
+        border-top-color: @ui-default;
+    }
+    
+/* ----- BORDERED ----- */
+    .table-bordered {
+        border-color: @skin-main;
+    }
+    
+    .table-bordered > tbody > tr > td {
+        border-color: @ui-default;
+    }
+
+/* ----- STRIPED ----- */
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: lighten(@ui-default, 2%);    
+    }
+    
+/* ----- HOVER ----- */  
+    .table-hover > tbody > tr:hover {
+        background-color: lighten(@ui-default, 3%);
+    }
+    
+/* ----- RESPONSIVE ----- */  
+    .table-responsive {
+        border-color: @skin-main;
+    }
+    
+/* ----- FILTERABLE ----- */
+    .table-head {
+        background: lighten(@ui-default, 2%);
+    }
+
+
+
+
+
+/*******************************
+FORMS
+*******************************/
+    label,
+    .radio label,
+    .checkbox label {
+        color: @ui-default-color;
+    }
+
+/* ----- INPUT FIELDS ----- */
+    .form-control {
+        border-color: darken(@ui-default, 2%);
+        color: @ui-default-color;
+    }
+
+    .form-control:focus {
+        background-color: lighten(@ui-default, 4%);
+        border-color: darken(@ui-default, 4%);
+        color: darken(@ui-default-color, 50%);
+    }
+
+/* ----- TAGS INPUT ----- */
+    div.tagsinput {
+        border-color: darken(@ui-default, 2%);
+    }
+
+    div.tagsinput span.tag {
+        background-color: @ui-default;
+        color: @ui-default-color;
+    }
+
+    div.tagsinput span.tag a {
+        color: darken(@ui-default, 20%);
+    } 
+
+    div.tagsinput input {
+        color: darken(@ui-default-color, 50%);
+    }
+
+/* ----- SELECTS ----- */
+    .default .btn-select {background-color:@default;}
+    .default .dropdown-menu {background-color: darken(@default, 5%)}
+    .default .dropdown-menu>li>a:hover, .default .dropdown-menu > .active > a {background-color: darken(@default, 10%)}
+    .default .dropdown-menu>li.selected>a {background-color: darken(@default, 8%)}
+    
+    .primary .btn-select {background-color:@primary;}
+    .primary .dropdown-menu {background-color: darken(@primary, 5%)}
+    .primary .dropdown-menu>li>a:hover, .primary .dropdown-menu > .active > a {background-color: darken(@primary, 10%)}
+    .primary .dropdown-menu>li.selected>a {background-color: darken(@primary, 8%)}
+    .primary .dropdown-menu .divider {background-color: darken(@primary, 5%)}
+    .primary .dropdown-header {color: darken(@primary, 25%)}
+    
+    .success .btn-select {background-color:@success;}
+    .success .dropdown-menu {background-color: darken(@success, 5%)}
+    .success .dropdown-menu>li>a:hover, .success .dropdown-menu > .active > a {background-color: darken(@success, 10%)}
+    .success .dropdown-menu>li.selected>a {background-color: darken(@success, 8%)}
+    .success .dropdown-menu .divider {background-color: darken(@success, 5%)}
+    .success .dropdown-header {color: darken(@success, 25%)}
+    
+    .info .btn-select {background-color:@info;}
+    .info .dropdown-menu {background-color: darken(@info, 5%)}
+    .info .dropdown-menu>li>a:hover, .info .dropdown-menu > .active > a {background-color: darken(@info, 10%)}
+    .info .dropdown-menu>li.selected>a {background-color: darken(@info, 8%)}
+    .info .dropdown-menu .divider {background-color: darken(@info, 5%)}
+    .info .dropdown-header {color: darken(@info, 25%)}
+    
+    .warning .btn-select {background-color:@warning;}
+    .warning .dropdown-menu {background-color: darken(@warning, 5%)}
+    .warning .dropdown-menu>li>a:hover, .warning .dropdown-menu > .active > a {background-color: darken(@warning, 10%)}
+    .warning .dropdown-menu>li.selected>a {background-color: darken(@warning, 8%)}
+    .warning .dropdown-menu .divider {background-color: darken(@warning, 5%)}
+    .warning .dropdown-header {color: darken(@warning, 25%)}
+    
+    .danger .btn-select {background-color:@danger;}
+    .danger .dropdown-menu {background-color: darken(@danger, 5%)}
+    .danger .dropdown-menu>li>a:hover, .danger .dropdown-menu > .active > a {background-color: darken(@danger, 10%)}
+    .danger .dropdown-menu>li.selected>a {background-color: darken(@danger, 8%)}
+    .danger .dropdown-menu .divider {background-color: darken(@danger, 5%)}
+    .danger .dropdown-header {color: darken(@danger, 25%)}
+    
+    .dark .btn-select {background-color:@dark;}
+    .dark .dropdown-menu {background-color: darken(@dark, 5%)}
+    .dark .dropdown-menu>li>a:hover, .dark .dropdown-menu > .active > a {background-color: darken(@dark, 10%)}
+    .dark .dropdown-menu>li.selected>a {background-color: darken(@dark, 8%)}
+    .dark .dropdown-menu .divider {background-color: darken(@dark, 5%)}
+    .dark .dropdown-header {color: darken(@dark, 25%)}
+
+/* ----- INPUT GROUP ----- */
+    .input-group-addon {
+        border-color: darken(@ui-default, 2%);
+    }
+
+/* ----- DATETIMEPICKER ----- */
+    .bootstrap-datetimepicker-widget td.active, 
+    .bootstrap-datetimepicker-widget td.active:hover {
+        background-color: @skin-main !important;
+    }
+    
+    .bootstrap-datetimepicker-widget td.today:before {
+        border-bottom-color: @skin-main !important;
+    }
+    
+    .bootstrap-datetimepicker-widget td span.active {
+        background-color: @skin-main !important;
+    }
+    
+    .bootstrap-datetimepicker-widget a[data-action] {
+        color: @skin-main;
+    }
+
+
+
+
+
+/*******************************
+CALENDAR
+*******************************/
+    .fc-unthemed th, 
+    .fc-unthemed td, 
+    .fc-unthemed hr, 
+    .fc-unthemed thead, 
+    .fc-unthemed tbody, 
+    .fc-unthemed .fc-row, 
+    .fc-unthemed .fc-popover {
+        border-color: lighten(@skin-primary-bg, 20%) !important;
+    }
+
+    .fc-unthemed hr, 
+    .fc-unthemed .fc-popover .fc-header {
+        background: lighten(@skin-primary-bg, 20%) !important;
+    }
+    
+    .fc th, 
+    .fc td {
+        color: #fff;
+    }
+    
+    .fc .fc-axis {
+        color: #fff;    
+    }
+
+/*******************************
+PAGE - MEMBERSHIP
+*******************************/
+    .page-membership {
+        background-color: @skin-primary-bg;
+    }
+
+    .member-container p {
+        color: lighten(@skin-primary-bg, 20%);
+    }
+
+
+
+
+
+/*******************************
+LOGGING OUT PAGE
+*******************************/
+    .logging-out {
+        background-color: @skin-primary-bg
+    }
+    
+    
+    
+    
+    
+/*******************************
+PAGE - PROFILE
+*******************************/
+/* ----- PROFILE DETAILS ----- */
+    /*Details*/
+        .profile-details-container .detail {
+            border-color: darken(@ui-default, 5%);
+            color: #fff;
+        }
+        
+        .profile-details-container h2 {
+            color: #fff;
+        }
+        
+        .profile-details-container .detail.about {
+            color: #fff;
+        }
+        
+    /*Social*/
+        .profile-social a {
+            background-color: darken(@ui-default, 3%);
+            color: lighten(@ui-default-color, 40%);
+        }
+        
+        .profile-social a:hover {
+            color: lighten(@ui-default-color, 20%);
+        }
+        
+/* ----- TIMELINE ----- */
+    .profile-timeline-container {
+        background-color: darken(@ui-default, 9%);
+    }
+    
+    .timeline:before {
+        background-color: @body-container;
+    }
+    
+    /*Write Post*/
+        .timeline-write-post {
+            background-color: @body-container;
+        }
+        
+        .write-post-footer {
+            background-color: darken(@ui-default, 3%);
+        }
+        
+    /*Post Icon*/
+        .timeline-post-icon {
+            background-color: @body-container;
+            color: lighten(@ui-default-color, 45%);
+        }
+        
+    /*Post Content*/
+        .timeline-post-content {
+            background-color: @body-container;
+        }
+        
+        .timeline-post-content:after {
+            border-left-color: @body-container;
+        }
+        
+        .right .timeline-post-content:after {
+            border-right-color: @body-container;
+        }
+        
+    /*Post Footer*/
+        .timeline-post-content-footer {
+            background-color: darken(@ui-default, 3%);
+        }
+        
+        .timeline-post-content-footer a {
+            color: lighten(@ui-default-color, 35%);
+        }
+        
+        .timeline-post-content-footer .when {
+            color: lighten(@ui-default-color, 35%);
+        }
+        
+    @media (max-width: 992px) {
+        /* ----- PROFILE TIMELINE ----- */    
+        .timeline-post-content:before {
+            border-bottom-color: @body-container;
+        }
+    }/*END*/

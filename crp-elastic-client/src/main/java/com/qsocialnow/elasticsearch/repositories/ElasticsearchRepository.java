@@ -3,17 +3,13 @@ package com.qsocialnow.elasticsearch.repositories;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import static org.elasticsearch.index.query.FilterBuilders.limitFilter;
-import static org.elasticsearch.index.query.QueryBuilders.filteredQuery;
-import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
-
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +18,16 @@ import com.google.common.base.Supplier;
 import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
+import com.qsocialnow.elasticsearch.mappings.types.ChildType;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
+import io.searchbox.core.Bulk;
+import io.searchbox.core.BulkResult;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -40,6 +40,8 @@ import vc.inreach.aws.request.AWSSigner;
 import vc.inreach.aws.request.AWSSigningRequestInterceptor;
 
 public class ElasticsearchRepository<T> implements Repository<T> {
+
+    private static final String PARENT_PARAMETER = "parent";
 
     private static final Logger log = LoggerFactory.getLogger(ElasticsearchRepository.class);
 
@@ -103,6 +105,67 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
 
+        }
+        return idValue;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<T> documents) {
+
+        List<Index> modelList = new ArrayList<Index>();
+        for (T t : documents) {
+            modelList.add(new Index.Builder(t).build());
+        }
+
+        Bulk bulk = new Bulk.Builder().defaultIndex(mapping.getIndex()).defaultType(mapping.getType())
+                .addAction(modelList).build();
+
+        IndexResponse<E> response = new IndexResponse<>();
+        try {
+            BulkResult result = client.execute(bulk);
+
+            if (result.isSucceeded()) {
+                response.setSourcesBulk(result.getItems());
+                response.setSucceeded(true);
+            } else {
+                // TODO:implement processing error
+                response.setSucceeded(false);
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+        return response;
+    }
+
+    @Override
+    public <E> String indexChildMapping(Mapping<T, E> mapping, ChildType document) {
+        Index index = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType())
+                .setParameter(PARENT_PARAMETER, document.getIdParent()).build();
+        String idValue = null;
+        try {
+            DocumentResult response = client.execute(index);
+            if (response.isSucceeded()) {
+                idValue = response.getId();
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+
+        }
+        return idValue;
+    }
+
+    @Override
+    public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document) {
+
+        Index update = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id).build();
+        String idValue = null;
+        try {
+            DocumentResult response = client.execute(update);
+            if (response.isSucceeded()) {
+                idValue = response.getId();
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
         }
         return idValue;
     }
@@ -183,11 +246,38 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
-    public <E> SearchResponse<E> search(int from, int size, Mapping<T, E> mapping) {
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> search(int from, int size, String sortField, String name, Mapping<T, E> mapping) {
 
-        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ,"
-                + "\"sort\" : [{ \"openDate\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
+        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
+                + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery("name", name));
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses);
+        }
+        return response;
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> search(int from, int size, String sortField, Mapping<T, E> mapping) {
+
+        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
+                + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
 
         Search search = new Search.Builder(query).addType(mapping.getType()).build();
 
@@ -207,4 +297,23 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping) {
+        Get get = new Get.Builder(mapping.getIndex(), id).type(mapping.getType()).build();
+
+        DocumentResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(get);
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            response.setSource((E) result.getSourceAsObject(mapping.getClassType()));
+            response.setId(result.getId());
+        }
+        return response;
+    }
 }
