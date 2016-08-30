@@ -9,8 +9,8 @@ public class EventResolverConfig {
     @Value("${app.zookeeper.host}")
     private String zookeeperHost;
 
-    @Value("${app.kafka.zookeeper.host.path}")
-    private String kafkaZookeeerZnodePath;
+    @Value("${app.kafka.config.znode.path}")
+    private String kafkaConfigZnodePath;
 
     @Value("${app.dateFormat:dd/MM/yyyy}")
     private String dateFormat;
@@ -28,8 +28,8 @@ public class EventResolverConfig {
         return zookeeperHost;
     }
 
-    public String getKafkaZookeeerZnodePath() {
-        return kafkaZookeeerZnodePath;
+    public String getKafkaConfigZnodePath() {
+        return kafkaConfigZnodePath;
     }
 
     public String getDateFormat() {

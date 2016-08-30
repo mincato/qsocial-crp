@@ -21,6 +21,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
+import com.qsocialnow.eventresolver.factories.KafkaConsumerConfigFactory;
 import com.qsocialnow.eventresolver.processor.EventHandlerProcessor;
 import com.qsocialnow.eventresolver.processor.MessageProcessor;
 import com.qsocialnow.kafka.config.KafkaConsumerConfig;
@@ -38,10 +39,10 @@ public class App implements Runnable {
     private EventResolverConfig appConfig;
 
     @Autowired
-    private MessageProcessor messageProcessor;
+    private KafkaConsumerConfigFactory kafkaConsumerConfigFactory;
 
     @Autowired
-    private KafkaConsumerConfig kafkaConfig;
+    private MessageProcessor messageProcessor;
 
     private ExecutorService eventHandlerExecutor;
 
@@ -110,11 +111,10 @@ public class App implements Runnable {
     }
 
     private void createEventHandlerProcessor(String domain) {
-        String kafkaZookeeperHost;
         try {
-            kafkaZookeeperHost = new String(zookeeperClient.getData().forPath(appConfig.getKafkaZookeeerZnodePath()));
-            EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaZookeeperHost,
-                    kafkaConfig, domain), messageProcessor);
+            KafkaConsumerConfig kafkaConfig = kafkaConsumerConfigFactory.create(appConfig.getKafkaConfigZnodePath());
+            EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig, domain),
+                    messageProcessor);
             eventHandlerProcessors.add(eventHandlerProcessor);
             eventHandlerExecutor.execute(eventHandlerProcessor);
         } catch (Exception e) {

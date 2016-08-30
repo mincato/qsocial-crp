@@ -1,77 +1,81 @@
 package com.qsocialnow.kafka.config;
 
-import java.util.Properties;
-
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-
 public class KafkaConsumerConfig {
 
-    private final PropertiesConfiguration properties;
+    private static final String DEFAULT_ZOOKEEPER_CONNECT = "localhost:2181";
+    private static final String DEFAULT_ZOOKEEPER_SESSION_TIMEOUT_MS = "15000";
+    private static final String DEFAULT_ZOOKEEPER_SYNC_TIMES_MS = "200";
+    private static final String DEFAULT_AUTO_COMMIT_INTERVAL_MS = "1000";
+    private static final String DEFAULT_TOPIC = "prc.domain1";
 
-    private static final ThreadLocal<KafkaConsumerConfig> kafkaConfig = new ThreadLocal<KafkaConsumerConfig>() {
+    private String zookeeperConnect = DEFAULT_ZOOKEEPER_CONNECT;
 
-        @Override
-        protected KafkaConsumerConfig initialValue() {
-            // Load the default configuration file first
-            Properties systemProperties = System.getProperties();
-            String configProperty = systemProperties.getProperty("kafkaConfig");
+    private String zookeeperSessionTimeoutMs = DEFAULT_ZOOKEEPER_SESSION_TIMEOUT_MS;
 
-            PropertiesConfiguration properties;
-            try {
-                properties = new PropertiesConfiguration(configProperty);
-            } catch (ConfigurationException e) {
-                throw new RuntimeException("Error loading configuration from " + configProperty);
-            }
+    private String zookeeperSyncTimeMs = DEFAULT_ZOOKEEPER_SYNC_TIMES_MS;
 
-            return new KafkaConsumerConfig(properties);
-        }
-    };
+    private String autoCommitIntervalMs = DEFAULT_AUTO_COMMIT_INTERVAL_MS;
 
-    public KafkaConsumerConfig(PropertiesConfiguration properties) {
-        this.properties = properties;
+    private String topic = DEFAULT_TOPIC;
+
+    public String getZookeeperConnect() {
+        return zookeeperConnect;
     }
 
-    public KafkaConsumerConfig(String propertiesFile) {
-        try {
-            this.properties = new PropertiesConfiguration(propertiesFile);
-        } catch (ConfigurationException e) {
-            throw new RuntimeException("Error loading configuration from " + propertiesFile, e);
-        }
+    public void setZookeeperConnect(String zookeeperConnect) {
+        this.zookeeperConnect = zookeeperConnect;
     }
 
-    public static KafkaConsumerConfig load() {
-        return kafkaConfig.get();
+    public String getZookeeperSessionTimeoutMs() {
+        return zookeeperSessionTimeoutMs;
+    }
+
+    public void setZookeeperSessionTimeoutMs(String zookeeperSessionTimeoutMs) {
+        this.zookeeperSessionTimeoutMs = zookeeperSessionTimeoutMs;
+    }
+
+    public String getZookeeperSyncTimeMs() {
+        return zookeeperSyncTimeMs;
+    }
+
+    public void setZookeeperSyncTimeMs(String zookeeperSyncTimeMs) {
+        this.zookeeperSyncTimeMs = zookeeperSyncTimeMs;
+    }
+
+    public String getAutoCommitIntervalMs() {
+        return autoCommitIntervalMs;
+    }
+
+    public void setAutoCommitIntervalMs(String autoCommitIntervalMs) {
+        this.autoCommitIntervalMs = autoCommitIntervalMs;
     }
 
     public String getTopic() {
-        return properties.getString("kafka.topic", "PRC");
+        return topic;
     }
 
-    public int getSessionTimeOutInMs() {
-        return properties.getInt("kafka.zookeeper.sessionTimeoutInMs", 15 * 1000); // 15
-                                                                                   // secs
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
-    public int getConnectionTimeOutInMs() {
-        return properties.getInt("kafka.zookeeper.connectionTiemoutInMs", 10 * 1000); // 10
-                                                                                      // secs
+    public static String getDefaultZookeeperConnect() {
+        return DEFAULT_ZOOKEEPER_CONNECT;
     }
 
-    public int getNumberOfPartitionsForTopic() {
-        return properties.getInt("kafka.topic.numberOfPartitions", 1);
+    public static String getDefaultZookeeperSessionTimeoutMs() {
+        return DEFAULT_ZOOKEEPER_SESSION_TIMEOUT_MS;
     }
 
-    public int getNumberOfReplicationForTopic() {
-        return properties.getInt("kafka.topic.numberOfReplication", 1);
+    public static String getDefaultZookeeperSyncTimesMs() {
+        return DEFAULT_ZOOKEEPER_SYNC_TIMES_MS;
     }
 
-    public int getSyncTimeInMs() {
-        return properties.getInt("kafka.zookeeper.syncTimeInMs", 200);
+    public static String getDefaultAutoCommitIntervalMs() {
+        return DEFAULT_AUTO_COMMIT_INTERVAL_MS;
     }
 
-    public int getAutoCommitIntervalInMs() {
-        return properties.getInt("kafka.autocommitIntervalInMs", 1000);
+    public static String getDefaultTopic() {
+        return DEFAULT_TOPIC;
     }
 
 }

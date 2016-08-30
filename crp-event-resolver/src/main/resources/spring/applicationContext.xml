@@ -33,10 +33,6 @@
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
 	</bean>
 	
-	<bean id="kafkaConfig" class="com.qsocialnow.kafka.config.KafkaConsumerConfig">
-		<constructor-arg  value="${extPropDir:}kafka.properties"></constructor-arg>
-	</bean>
-	
 	<util:map id="actions">
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).OPEN_CASE}" value-ref="openCaseAction"/>
 	</util:map>
