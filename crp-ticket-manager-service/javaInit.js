@@ -5,7 +5,6 @@ var java = require("java");
 
 java.options.push('-Xmx512m');
 java.options.push('-Xms512m');
-java.options.push('-Dspring.profiles.default=localhost');
 
 var baseDir = path.join(__dirname, "target/dependency");
 var dependencies = fs.readdirSync(baseDir);
