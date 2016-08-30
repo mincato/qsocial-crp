@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.qsocialnow.kafka.config.KafkaConfig;
+import com.qsocialnow.kafka.config.KafkaConsumerConfig;
 import com.qsocialnow.kafka.exceptions.EncodingException;
 import com.qsocialnow.kafka.model.Message;
 
@@ -20,16 +20,16 @@ public class Consumer {
 
     private ConsumerConnector consumer;
 
-    private KafkaConfig kafkaConfig;
+    private KafkaConsumerConfig kafkaConfig;
 
     private ConsumerIterator<byte[], byte[]> streamIterator;
 
     private String group;
 
-    public Consumer(String zookeeperPath, KafkaConfig kafkaConfig, String group) {
+    public Consumer(KafkaConsumerConfig kafkaConfig, String group) {
         this.kafkaConfig = kafkaConfig;
         this.group = group;
-        consumer = kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig(zookeeperPath, group));
+        consumer = kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig(group));
         HashMap<String, Integer> topicCountMap = new HashMap<>();
         topicCountMap.put(kafkaConfig.getTopic(), 1);
         Map<String, List<KafkaStream<byte[], byte[]>>> streams = consumer.createMessageStreams(topicCountMap);
@@ -37,13 +37,13 @@ public class Consumer {
 
     }
 
-    private ConsumerConfig createConsumerConfig(String zookeeperPath, String group) {
+    private ConsumerConfig createConsumerConfig(String group) {
         Properties props = new Properties();
-        props.put("zookeeper.connect", zookeeperPath);
+        props.put("zookeeper.connect", kafkaConfig.getZookeeperConnect());
         props.put("group.id", group);
-        props.put("zookeeper.session.timeout.ms", Integer.toString(kafkaConfig.getSessionTimeOutInMs()));
-        props.put("zookeeper.sync.time.ms", Integer.toString(kafkaConfig.getSyncTimeInMs()));
-        props.put("auto.commit.interval.ms", Integer.toString(kafkaConfig.getAutoCommitIntervalInMs()));
+        props.put("zookeeper.session.timeout.ms", kafkaConfig.getZookeeperSessionTimeoutMs());
+        props.put("zookeeper.sync.time.ms", kafkaConfig.getZookeeperSyncTimeMs());
+        props.put("auto.commit.interval.ms", kafkaConfig.getAutoCommitIntervalMs());
         return new ConsumerConfig(props);
     }
 
