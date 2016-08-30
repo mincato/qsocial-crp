@@ -7,7 +7,7 @@ import org.I0Itec.zkclient.ZkConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.qsocialnow.kafka.config.KafkaConfig;
+import com.qsocialnow.kafka.config.KafkaConsumerConfig;
 
 import kafka.admin.AdminUtils;
 import kafka.utils.ZKStringSerializer$;
@@ -17,7 +17,7 @@ public class Administrator {
 
     private static final Logger log = LoggerFactory.getLogger(Administrator.class);
 
-    private KafkaConfig kafkaConfig;
+    private KafkaConsumerConfig kafkaConfig;
 
     public Administrator() {
     }
@@ -48,7 +48,7 @@ public class Administrator {
         }
     }
 
-    public void setKafkaConfig(KafkaConfig kafkaConfig) {
+    public void setKafkaConfig(KafkaConsumerConfig kafkaConfig) {
         this.kafkaConfig = kafkaConfig;
     }
 
