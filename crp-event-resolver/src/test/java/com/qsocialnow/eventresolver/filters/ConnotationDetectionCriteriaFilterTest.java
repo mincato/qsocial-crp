@@ -3,7 +3,7 @@ package com.qsocialnow.eventresolver.filters;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 
 public class ConnotationDetectionCriteriaFilterTest {
 

@@ -4,7 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 
 @Service
 public class MessageFilterImpl implements MessageFilter {

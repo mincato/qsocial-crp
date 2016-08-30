@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.config.DomainService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
-import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 import com.qsocialnow.kafka.model.Message;
 
 @Service
