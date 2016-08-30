@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 
 @Component("mediaDetectionCriteriaFilter")
 public class MediaDetectionCriteriaFilter implements DetectionCriteriaFilter {

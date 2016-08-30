@@ -1,4 +1,4 @@
-package com.qsocialnow.eventresolver.model.event;
+package com.qsocialnow.common.model.event;
 
 public enum GeoSocialEventLocationMethod {
     GEO_LOCATION("geo_location"), USER_LOCATION("user_location"), POLYGON_LOCATION("polygon_location");
