@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/util
+    	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+ 
+ 	<context:component-scan base-package="com.qsocialnow" />
+ 	
+ 	<context:property-placeholder location="${extPropDir:classpath:}application.properties" ignore-unresolvable="true"/>
+ 	
+ 	<bean id="app" init-method="start" destroy-method="close" class="com.qsocialnow.responsedetector.App" depends-on="zookeeperClient">
+	</bean>
+ 	
+ 	<bean id="zookeeperClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
+ 		<constructor-arg value="${app.zookeeper.host}"></constructor-arg>
+ 		<constructor-arg>
+ 			<bean class="org.apache.curator.retry.ExponentialBackoffRetry">
+				<constructor-arg  value="1000"></constructor-arg>
+				<constructor-arg  value="3"></constructor-arg>
+			</bean>
+ 		</constructor-arg>
+	</bean>
+	
+	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
+	</bean>
+	
+	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
+	</bean>
+	
+	<bean id="kafkaConfig" class="com.qsocialnow.kafka.config.KafkaConfig">
+		<constructor-arg  value="${extPropDir:}kafka.properties"></constructor-arg>
+	</bean>
+	
+	<util:list id="responseDetectors">
+		<ref bean="mockResponseDetectorService" />
+	</util:list>
+	
+	<bean id="mockResponseDetectorService" class="com.qsocialnow.responsedetector.service.ResponseDetectorService">
+		<property name="responseDetectorStrategy" ref="mockResponseDetectorStrategy" />
+	</bean>
+	
+</beans>

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.FilterType;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.eventresolver.filters.DetectionCriteriaFilter;
-import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 @Service
 public class DetectionCriteriaResolver {

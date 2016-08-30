@@ -1,4 +1,4 @@
-package com.qsocialnow.eventresolver.model.event;
+package com.qsocialnow.common.model.event;
 
 import java.io.Serializable;
 

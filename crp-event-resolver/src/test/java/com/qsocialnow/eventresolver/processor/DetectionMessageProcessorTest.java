@@ -14,8 +14,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.eventresolver.mocks.MockDomainBuilder;
-import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 @RunWith(MockitoJUnitRunner.class)
 public class DetectionMessageProcessorTest {

@@ -7,7 +7,7 @@ import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 
 @Service
 public class DetectionMessageProcessor {

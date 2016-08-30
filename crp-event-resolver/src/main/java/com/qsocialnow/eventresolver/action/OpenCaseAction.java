@@ -14,12 +14,12 @@ import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Coordinates;
 import com.qsocialnow.common.model.cases.Event;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
-import com.qsocialnow.eventresolver.model.event.InPutBeanDocument;
 
 @Component("openCaseAction")
 public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
