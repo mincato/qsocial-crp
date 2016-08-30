@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.processor.EventHandlerProcessor;
 import com.qsocialnow.eventresolver.processor.MessageProcessor;
-import com.qsocialnow.kafka.config.KafkaConfig;
+import com.qsocialnow.kafka.config.KafkaConsumerConfig;
 import com.qsocialnow.kafka.consumer.Consumer;
 
 @Component
@@ -41,7 +41,7 @@ public class App implements Runnable {
     private MessageProcessor messageProcessor;
 
     @Autowired
-    private KafkaConfig kafkaConfig;
+    private KafkaConsumerConfig kafkaConfig;
 
     private ExecutorService eventHandlerExecutor;
 

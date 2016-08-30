@@ -5,14 +5,14 @@ import java.util.Properties;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-public class KafkaConfig {
+public class KafkaConsumerConfig {
 
     private final PropertiesConfiguration properties;
 
-    private static final ThreadLocal<KafkaConfig> kafkaConfig = new ThreadLocal<KafkaConfig>() {
+    private static final ThreadLocal<KafkaConsumerConfig> kafkaConfig = new ThreadLocal<KafkaConsumerConfig>() {
 
         @Override
-        protected KafkaConfig initialValue() {
+        protected KafkaConsumerConfig initialValue() {
             // Load the default configuration file first
             Properties systemProperties = System.getProperties();
             String configProperty = systemProperties.getProperty("kafkaConfig");
@@ -24,15 +24,15 @@ public class KafkaConfig {
                 throw new RuntimeException("Error loading configuration from " + configProperty);
             }
 
-            return new KafkaConfig(properties);
+            return new KafkaConsumerConfig(properties);
         }
     };
 
-    public KafkaConfig(PropertiesConfiguration properties) {
+    public KafkaConsumerConfig(PropertiesConfiguration properties) {
         this.properties = properties;
     }
 
-    public KafkaConfig(String propertiesFile) {
+    public KafkaConsumerConfig(String propertiesFile) {
         try {
             this.properties = new PropertiesConfiguration(propertiesFile);
         } catch (ConfigurationException e) {
@@ -40,7 +40,7 @@ public class KafkaConfig {
         }
     }
 
-    public static KafkaConfig load() {
+    public static KafkaConsumerConfig load() {
         return kafkaConfig.get();
     }
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.qsocialnow.kafka.config.KafkaConfig;
+import com.qsocialnow.kafka.config.KafkaConsumerConfig;
 import com.qsocialnow.kafka.exceptions.EncodingException;
 import com.qsocialnow.kafka.model.Message;
 
@@ -20,13 +20,13 @@ public class Consumer {
 
     private ConsumerConnector consumer;
 
-    private KafkaConfig kafkaConfig;
+    private KafkaConsumerConfig kafkaConfig;
 
     private ConsumerIterator<byte[], byte[]> streamIterator;
 
     private String group;
 
-    public Consumer(String zookeeperPath, KafkaConfig kafkaConfig, String group) {
+    public Consumer(String zookeeperPath, KafkaConsumerConfig kafkaConfig, String group) {
         this.kafkaConfig = kafkaConfig;
         this.group = group;
         consumer = kafka.consumer.Consumer.createJavaConsumerConnector(createConsumerConfig(zookeeperPath, group));
