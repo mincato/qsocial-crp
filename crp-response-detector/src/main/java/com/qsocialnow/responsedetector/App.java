@@ -30,12 +30,12 @@ public class App implements Runnable {
     private ExecutorService responseDetectorExecutor;
 
     public static void main(String[] args) {
-        //ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
-        //context.registerShutdownHook();
-    	TwitterClient client = new TwitterClient();
+        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
+        context.registerShutdownHook();
+    	/*TwitterClient client = new TwitterClient();
         client.initClient();
         client.addListeners(new TwitterStatusListener());
-        client.startFiltering();
+        client.startFiltering();*/
         
     }
 

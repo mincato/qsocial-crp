@@ -37,9 +37,9 @@ public class TwitterClient {
 		
 		tweetFilterQuery = new FilterQuery(); // See 
 		tweetFilterQuery.track(new String[]{"Batman","#Batman"}); // OR on keywords
-		//tweetFilterQuery.locations(new double[][]{new double[]{-126.562500,30.448674},new double[]{-61.171875,44.087585}}); // See https://dev.twitter.com/docs/streaming-apis/parameters#locations for proper location doc. 
+		tweetFilterQuery.locations(new double[][]{new double[]{-126.562500,30.448674},new double[]{-61.171875,44.087585}}); // See https://dev.twitter.com/docs/streaming-apis/parameters#locations for proper location doc. 
 		//Note that not all tweets have location metadata set.
-		//tweetFilterQuery.language(new String[]{"en"}); // Note that language does not work properly on Norwegian tweets
+		tweetFilterQuery.language(new String[]{"en"}); // Note that language does not work properly on Norwegian tweets
 		
 
 	}
