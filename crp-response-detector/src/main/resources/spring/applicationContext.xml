@@ -43,7 +43,6 @@
 	</bean>
 	
 	<util:list id="responseDetectors">
-		<ref bean="mockResponseDetectorService" />
 	</util:list>
 	
 	<bean id="mockResponseDetectorService" class="com.qsocialnow.responsedetector.service.ResponseDetectorService">
