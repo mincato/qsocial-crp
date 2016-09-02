@@ -33,6 +33,9 @@ public class DomainService {
     @Value("${app.domains.path}")
     private String domainsPath;
 
+    @Autowired
+    private FilterNormalizer filterNormalizer;
+
     public Domain save(Domain newDomain) {
         Domain domainSaved = null;
         try {
@@ -84,6 +87,11 @@ public class DomainService {
         Domain domainSaved = null;
         try {
             Domain domain = repository.findOne(domainId);
+            trigger.getSegments().stream().forEach(segment -> {
+                segment.getDetectionCriterias().forEach(detectionCriteria -> {
+                    filterNormalizer.normalizeFilter(detectionCriteria.getFilter());
+                });
+            });
             domain.addTrigger(trigger);
             mockActions(trigger);
             domainSaved = repository.save(domain);

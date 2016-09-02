@@ -1,19 +1,18 @@
 package com.qsocialnow.eventresolver.processor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.qsocialnow.common.model.config.DetectionCriteria;
-import com.qsocialnow.common.model.config.FilterType;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
-import com.qsocialnow.eventresolver.filters.DetectionCriteriaFilter;
-import com.qsocialnow.eventresolver.filters.FalseDetectionCriteriaFilter;
-import com.qsocialnow.eventresolver.filters.TrueDetectionCriteriaFilter;
+import com.qsocialnow.eventresolver.mocks.FalseDetectionCriteriaFilter;
 import com.qsocialnow.eventresolver.mocks.MockDetectionCriteriaBuilder;
+import com.qsocialnow.eventresolver.mocks.TrueDetectionCriteriaFilter;
+import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class DetectionCriteriaResolverTest {
 
@@ -21,18 +20,16 @@ public class DetectionCriteriaResolverTest {
 
     public DetectionCriteriaResolverTest() {
         this.detectionCriteriaResolver = new DetectionCriteriaResolver();
-        HashMap<FilterType, DetectionCriteriaFilter> filters = new HashMap<>();
-        filters.put(FilterType.FALSE, new FalseDetectionCriteriaFilter());
-        filters.put(FilterType.TRUE, new TrueDetectionCriteriaFilter());
-        this.detectionCriteriaResolver.setFilters(filters);
+        this.detectionCriteriaResolver.setFilters(Arrays.asList(new TrueDetectionCriteriaFilter(),
+                new FalseDetectionCriteriaFilter()));
     }
 
     @Test
     public void testResolveNull() {
         List<DetectionCriteria> detectionCriterias = null;
 
-        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new InPutBeanDocument(),
-                detectionCriterias);
+        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new NormalizedInputBeanDocument(
+                new InPutBeanDocument()), detectionCriterias);
 
         Assert.assertNull(detectionCriteria);
     }
@@ -41,8 +38,8 @@ public class DetectionCriteriaResolverTest {
     public void testResolveEmpty() {
         List<DetectionCriteria> detectionCriterias = new ArrayList<>();
 
-        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new InPutBeanDocument(),
-                detectionCriterias);
+        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new NormalizedInputBeanDocument(
+                new InPutBeanDocument()), detectionCriterias);
 
         Assert.assertNull(detectionCriteria);
     }
@@ -51,8 +48,8 @@ public class DetectionCriteriaResolverTest {
     public void testResolveOneFalse() {
         List<DetectionCriteria> detectionCriterias = MockDetectionCriteriaBuilder.buildOneFalse();
 
-        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new InPutBeanDocument(),
-                detectionCriterias);
+        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new NormalizedInputBeanDocument(
+                new InPutBeanDocument()), detectionCriterias);
 
         Assert.assertNull(detectionCriteria);
     }
@@ -61,8 +58,8 @@ public class DetectionCriteriaResolverTest {
     public void testResolveOneTrue() {
         List<DetectionCriteria> detectionCriterias = MockDetectionCriteriaBuilder.buildOneTrue();
 
-        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new InPutBeanDocument(),
-                detectionCriterias);
+        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new NormalizedInputBeanDocument(
+                new InPutBeanDocument()), detectionCriterias);
 
         Assert.assertEquals("1", detectionCriteria.getId());
     }
@@ -71,8 +68,8 @@ public class DetectionCriteriaResolverTest {
     public void testResolveTwoFalseTrue() {
         List<DetectionCriteria> detectionCriterias = MockDetectionCriteriaBuilder.buildTwoFalseTrue();
 
-        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new InPutBeanDocument(),
-                detectionCriterias);
+        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new NormalizedInputBeanDocument(
+                new InPutBeanDocument()), detectionCriterias);
 
         Assert.assertEquals("2", detectionCriteria.getId());
     }
@@ -81,8 +78,8 @@ public class DetectionCriteriaResolverTest {
     public void testResolveTwoTrueFalse() {
         List<DetectionCriteria> detectionCriterias = MockDetectionCriteriaBuilder.buildTwoTrueFalse();
 
-        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new InPutBeanDocument(),
-                detectionCriterias);
+        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new NormalizedInputBeanDocument(
+                new InPutBeanDocument()), detectionCriterias);
 
         Assert.assertEquals("1", detectionCriteria.getId());
     }
@@ -91,8 +88,8 @@ public class DetectionCriteriaResolverTest {
     public void testResolveThree() {
         List<DetectionCriteria> detectionCriterias = MockDetectionCriteriaBuilder.buildThree();
 
-        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new InPutBeanDocument(),
-                detectionCriterias);
+        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new NormalizedInputBeanDocument(
+                new InPutBeanDocument()), detectionCriterias);
 
         Assert.assertEquals("2", detectionCriteria.getId());
     }

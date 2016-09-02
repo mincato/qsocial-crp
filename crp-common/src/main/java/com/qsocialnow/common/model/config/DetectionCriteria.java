@@ -19,13 +19,9 @@ public class DetectionCriteria {
 
     private Integer sequenceOrder;
 
-    private List<Filter> filters;
+    private Filter filter;
 
     private List<AutomaticActionCriteria> actionCriterias;
-
-    public DetectionCriteria() {
-        this.filters = new ArrayList<>();
-    }
 
     public String getId() {
         return id;
@@ -59,12 +55,12 @@ public class DetectionCriteria {
         this.sequenceOrder = sequenceOrder;
     }
 
-    public List<Filter> getFilters() {
-        return filters;
+    public Filter getFilter() {
+        return filter;
     }
 
-    public void setFilters(List<Filter> filters) {
-        this.filters = filters;
+    public void setFilter(Filter filter) {
+        this.filter = filter;
     }
 
     public String getName() {
@@ -81,10 +77,6 @@ public class DetectionCriteria {
 
     public void setAccionCriterias(List<AutomaticActionCriteria> actionCriterias) {
         this.actionCriterias = actionCriterias;
-    }
-
-    public void addFilter(Filter filter) {
-        this.filters.add(filter);
     }
 
 }

@@ -4,48 +4,47 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.qsocialnow.common.model.config.Filter;
-import com.qsocialnow.common.model.config.MediaFilter;
+import com.qsocialnow.common.model.config.LanguageFilter;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
-public class MediaDetectionCriteriaFilterTest {
+public class LanguageDetectionCriteriaFilterTest {
 
-    private MediaDetectionCriteriaFilter filter;
+    private LanguageDetectionCriteriaFilter filter;
     private Filter filterConfig;
 
-    public MediaDetectionCriteriaFilterTest() {
-        filter = new MediaDetectionCriteriaFilter();
+    public LanguageDetectionCriteriaFilterTest() {
+        filter = new LanguageDetectionCriteriaFilter();
         filterConfig = new Filter();
     }
 
     @Test
     public void testApplyTrue() {
-        MediaFilter mediaFilter = new MediaFilter();
-        mediaFilter.setOptions(new Long[] { 1l });
-        filterConfig.setMediaFilter(mediaFilter);
+        LanguageFilter languageFilter = new LanguageFilter();
+        languageFilter.setOptions(new String[] { "1" });
+        filterConfig.setLanguageFilter(languageFilter);
 
         Assert.assertTrue(filter.apply(filterConfig));
     }
 
     @Test
-    public void testApplyFalseNullMediaFilter() {
+    public void testApplyFalseNullLanguageFilter() {
         Assert.assertFalse(filter.apply(filterConfig));
     }
 
     @Test
     public void testApplyFalseNullOptions() {
-        MediaFilter mediaFilter = new MediaFilter();
-        filterConfig.setMediaFilter(mediaFilter);
+        LanguageFilter languageFilter = new LanguageFilter();
+        filterConfig.setLanguageFilter(languageFilter);
 
         Assert.assertFalse(filter.apply(filterConfig));
     }
 
     @Test
     public void testApplyFalseEmptyOptions() {
-        MediaFilter mediaFilter = new MediaFilter();
-        mediaFilter.setOptions(new Long[0]);
-        filterConfig.setMediaFilter(mediaFilter);
-
+        LanguageFilter languageFilter = new LanguageFilter();
+        languageFilter.setOptions(new String[0]);
+        filterConfig.setLanguageFilter(languageFilter);
         Assert.assertFalse(filter.apply(filterConfig));
     }
 
@@ -53,9 +52,9 @@ public class MediaDetectionCriteriaFilterTest {
     public void testMatchInputNull() {
         InPutBeanDocument input = new InPutBeanDocument();
 
-        MediaFilter mediaFilter = new MediaFilter();
-        mediaFilter.setOptions(new Long[] { 1l });
-        filterConfig.setMediaFilter(mediaFilter);
+        LanguageFilter languageFilter = new LanguageFilter();
+        languageFilter.setOptions(new String[] { "es" });
+        filterConfig.setLanguageFilter(languageFilter);
 
         Assert.assertFalse(filter.match(new NormalizedInputBeanDocument(input), filterConfig));
     }
@@ -63,11 +62,11 @@ public class MediaDetectionCriteriaFilterTest {
     @Test
     public void testMatchTrue() {
         InPutBeanDocument input = new InPutBeanDocument();
-        input.setMedioId(1L);
+        input.setLanguage("es");
 
-        MediaFilter mediaFilter = new MediaFilter();
-        mediaFilter.setOptions(new Long[] { 1l });
-        filterConfig.setMediaFilter(mediaFilter);
+        LanguageFilter languageFilter = new LanguageFilter();
+        languageFilter.setOptions(new String[] { "es" });
+        filterConfig.setLanguageFilter(languageFilter);
 
         Assert.assertTrue(filter.match(new NormalizedInputBeanDocument(input), filterConfig));
     }
@@ -75,24 +74,23 @@ public class MediaDetectionCriteriaFilterTest {
     @Test
     public void testMatchTrueMultipleValues() {
         InPutBeanDocument input = new InPutBeanDocument();
-        input.setMedioId(1L);
+        input.setLanguage("es");
 
-        MediaFilter mediaFilter = new MediaFilter();
-        mediaFilter.setOptions(new Long[] { 1l, 2l });
-        filterConfig.setMediaFilter(mediaFilter);
+        LanguageFilter languageFilter = new LanguageFilter();
+        languageFilter.setOptions(new String[] { "pt", "es" });
+        filterConfig.setLanguageFilter(languageFilter);
 
         Assert.assertTrue(filter.match(new NormalizedInputBeanDocument(input), filterConfig));
-
     }
 
     @Test
     public void testMatchFalse() {
         InPutBeanDocument input = new InPutBeanDocument();
-        input.setMedioId(1L);
+        input.setLanguage("es");
 
-        MediaFilter mediaFilter = new MediaFilter();
-        mediaFilter.setOptions(new Long[] { 2l });
-        filterConfig.setMediaFilter(mediaFilter);
+        LanguageFilter languageFilter = new LanguageFilter();
+        languageFilter.setOptions(new String[] { "pt" });
+        filterConfig.setLanguageFilter(languageFilter);
 
         Assert.assertFalse(filter.match(new NormalizedInputBeanDocument(input), filterConfig));
     }
@@ -100,11 +98,11 @@ public class MediaDetectionCriteriaFilterTest {
     @Test
     public void testMatchFalseMultipleValues() {
         InPutBeanDocument input = new InPutBeanDocument();
-        input.setMedioId(1L);
+        input.setLanguage("es");
 
-        MediaFilter mediaFilter = new MediaFilter();
-        mediaFilter.setOptions(new Long[] { 2l, 3l });
-        filterConfig.setMediaFilter(mediaFilter);
+        LanguageFilter languageFilter = new LanguageFilter();
+        languageFilter.setOptions(new String[] { "en", "pt" });
+        filterConfig.setLanguageFilter(languageFilter);
 
         Assert.assertFalse(filter.match(new NormalizedInputBeanDocument(input), filterConfig));
     }

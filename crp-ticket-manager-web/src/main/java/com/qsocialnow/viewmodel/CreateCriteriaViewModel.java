@@ -1,10 +1,7 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,10 +21,12 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.ConnotationFilter;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Filter;
-import com.qsocialnow.common.model.config.FilterType;
-import com.qsocialnow.common.util.FilterConstants;
+import com.qsocialnow.common.model.config.MediaFilter;
+import com.qsocialnow.common.model.config.PeriodFilter;
+import com.qsocialnow.model.Connotation;
 import com.qsocialnow.model.ConnotationView;
 import com.qsocialnow.model.FilterView;
 import com.qsocialnow.model.Media;
@@ -46,7 +45,7 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private List<ConnotationView> connotations;
 
-    private FilterView filter;
+    private FilterView filterView;
 
     private boolean saved;
 
@@ -59,7 +58,7 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     public FilterView getFilter() {
-        return filter;
+        return filterView;
     }
 
     public List<ConnotationView> getConnotations() {
@@ -73,9 +72,11 @@ public class CreateCriteriaViewModel implements Serializable {
     @Command
     @NotifyChange("saved")
     public void save() {
-        addMediaFilter();
-        addDateRangeFilter();
-        addConnotationFilter();
+        Filter filter = new Filter();
+        addMediaFilter(filter);
+        addDateRangeFilter(filter);
+        addConnotationFilter(filter);
+        currentCriteria.setFilter(filter);
         saved = true;
     }
 
@@ -92,9 +93,19 @@ public class CreateCriteriaViewModel implements Serializable {
     @Init
     public void init() {
         currentCriteria = new DetectionCriteria();
-        filter = new FilterView();
+        filterView = new FilterView();
         initMedias();
-        connotations = Arrays.asList(ConnotationView.values());
+        initConnotations();
+    }
+
+    private void initConnotations() {
+        connotations = new ArrayList<>();
+        for (Connotation connotation : Connotation.values()) {
+            ConnotationView connotationView = new ConnotationView();
+            connotationView.setConnotation(connotation);
+            connotationView.setChecked(false);
+            connotations.add(connotationView);
+        }
     }
 
     private void initMedias() {
@@ -122,50 +133,68 @@ public class CreateCriteriaViewModel implements Serializable {
         }
     }
 
-    private void addMediaFilter() {
-        List<MediaView> mediasPicked = mediaTypes.stream()
-                .filter(media -> !Media.ALL.equals(media.getMedia()) && media.isChecked()).collect(Collectors.toList());
-        if (CollectionUtils.isNotEmpty(mediasPicked)) {
-            Filter mediaFilter = new Filter();
-            mediaFilter.setType(FilterType.MEDIA);
-            String parameters = mediasPicked.stream().map(media -> media.getMedia().getValue())
-                    .collect(Collectors.joining("|"));
-            mediaFilter.setParameters(parameters);
-            currentCriteria.addFilter(mediaFilter);
-        }
-    }
-
-    private void addDateRangeFilter() {
-        if (filter.getStartDateTime() != null || filter.getEndDateTime() != null) {
-            Filter dateRangeFilter = new Filter();
-            dateRangeFilter.setType(FilterType.PERIOD);
-            StringBuilder parameters = new StringBuilder();
-            if (filter.getStartDateTime() != null) {
-                parameters.append(formatDate(filter.getStartDateTime()));
+    @Command
+    @NotifyChange("connotations")
+    public void selectAllConnotations(@BindingParam("checked") boolean isPicked,
+            @BindingParam("connotation") ConnotationView connotationView) {
+        if (Connotation.ALL.equals(connotationView.getConnotation())) {
+            for (ConnotationView connotation : connotations) {
+                if (!Connotation.ALL.equals(connotation.getConnotation())) {
+                    connotation.setChecked(isPicked);
+                }
             }
-            if (filter.getEndDateTime() != null) {
-                parameters.append("|");
-                parameters.append(formatDate(filter.getEndDateTime()));
+        } else if (!isPicked) {
+            connotations.stream().filter(connotation -> Connotation.ALL.equals(connotation.getConnotation()))
+                    .findFirst().get().setChecked(isPicked);
+        }
+    }
+
+    private void addMediaFilter(Filter filter) {
+        boolean allSelected = mediaTypes.stream().anyMatch(
+                media -> Media.ALL.equals(media.getMedia()) && media.isChecked());
+        if (!allSelected) {
+            List<MediaView> mediasPicked = mediaTypes.stream()
+                    .filter(media -> !Media.ALL.equals(media.getMedia()) && media.isChecked())
+                    .collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(mediasPicked)) {
+                MediaFilter mediaFilter = new MediaFilter();
+                Long[] options = mediasPicked.stream().map(media -> media.getMedia().getValue())
+                        .toArray(size -> new Long[size]);
+                mediaFilter.setOptions(options);
+                filter.setMediaFilter(mediaFilter);
             }
-            dateRangeFilter.setParameters(parameters.toString());
-            currentCriteria.addFilter(dateRangeFilter);
+        }
+    }
+
+    private void addDateRangeFilter(Filter filter) {
+        if (filterView.getStartDateTime() != null || filterView.getEndDateTime() != null) {
+            PeriodFilter periodFilter = new PeriodFilter();
+            if (filterView.getStartDateTime() != null) {
+                periodFilter.setStartDateTime(filterView.getStartDateTime().getTime());
+            }
+            if (filterView.getEndDateTime() != null) {
+                periodFilter.setEndDateTime(filterView.getEndDateTime().getTime());
+            }
+            filter.setPeriodFilter(periodFilter);
         }
 
     }
 
-    private void addConnotationFilter() {
-        if (filter.getConnotation() != null && !ConnotationView.ALL.equals(filter.getConnotation())) {
-            Filter connotationFilter = new Filter();
-            connotationFilter.setType(FilterType.CONNOTATION);
-            connotationFilter.setParameters(filter.getConnotation().getValue());
-            currentCriteria.addFilter(connotationFilter);
+    private void addConnotationFilter(Filter filter) {
+        boolean allSelected = connotations.stream().anyMatch(
+                connotation -> Connotation.ALL.equals(connotation.getConnotation()) && connotation.isChecked());
+        if (!allSelected) {
+            List<ConnotationView> connotationsPicked = connotations
+                    .stream()
+                    .filter(connotation -> !Connotation.ALL.equals(connotation.getConnotation())
+                            && connotation.isChecked()).collect(Collectors.toList());
+            if (CollectionUtils.isNotEmpty(connotationsPicked)) {
+                ConnotationFilter connotationFilter = new ConnotationFilter();
+                Short[] options = connotationsPicked.stream()
+                        .map(connotation -> connotation.getConnotation().getValue()).toArray(size -> new Short[size]);
+                connotationFilter.setOptions(options);
+                filter.setConnotationFilter(connotationFilter);
+            }
         }
-
     }
-
-    private String formatDate(Date dateTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat(FilterConstants.DATE_TIME_FORMAT);
-        return sdf.format(dateTime);
-    }
-
 }
