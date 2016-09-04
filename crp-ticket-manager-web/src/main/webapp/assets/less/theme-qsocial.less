@@ -40,7 +40,7 @@ TABLE OF CONTENTS
 SKINS
 *******************************/
 /* ----- THEME ----- */
-    @skin-primary-bg: #000000;    /*Header & Sidebar main color*/
+    @skin-primary-bg: #393c46;    /*Header & Sidebar main color*/
     @skin-primary-color: #553537; /*Headlines*/
     @skin-main: #000000;          /*Main elements color - Default: green*/
     
@@ -69,7 +69,7 @@ SKINS
     @messenger-dropdown: #de5555;
 
 /* ----- UI SKINS ----- */
-    @default: #f4f4f4;
+    @default: #fcb141;
     @primary: #4894af;
     @success: #16A085;
     @info: #59abe3;
@@ -77,15 +77,37 @@ SKINS
     @danger: #e26a6a;
     @dark: #666666;
     
+/* ----- HEADER BUTTONS SKINS ----- */
+	@header-button-logo:#f15b29;
+	@header-button-search: #58595b ;
+	@header-button-bell:#00a89e;
+	@header-button-cog:#dbbf73;
+	@header-button-note:#f15b29;
+	@header-button-envelope:#00a89e;
+	
+    
 /* ----- UI KIT ----- */
     @ui-default: #f4f4f4;
     @ui-default-color: #666666;
+    
+	/* ----- HEADER COLOR SETTINGS ----- */
+    @header-main-color: @default; 
+    @header-font-color: #ffffff;  
+    
+     /* ----- FOOTER COLOR SETTINGS ----- */
+    @footer-main-color: @skin-primary-bg; 
+    @footer-font-color: #ffffff;  
+
+	/* ----- TABLE COLOR SETTINGS ----- */
+    @table-header-color: @skin-primary-bg;
+    
     
 /*******************************
 GLOBALS
 *******************************/
     body {
         color: @body-text;
+        font-family: Open Sans;
     }
     
 /* ----- HEADINGS ----- */
@@ -97,11 +119,12 @@ GLOBALS
 HEADER
 *******************************/
     .header {
-        background-color: @skin-primary-bg;
+        background-color: @header-main-color;
+        color: @header-font-color;
     }
 
     .navbar-header {
-        background: darken(@skin-primary-bg, 4%);
+    	background-color: @header-main-color;
     }
 
 /* ----- SIDEBAR SWITCH ----- */
@@ -115,8 +138,13 @@ HEADER
     }
     
 /* ----- HEADER ICONS/BUTTONS ----- */
+	.btn-header {
+		width: 70px;
+     	height: 60px;
+	}
+
     .header-navbar .navbar-toggle {
-        background-color: @skin-primary-bg;
+        background-color: @default;
         color: @sidebar-main-color;
     }
     
@@ -124,7 +152,7 @@ HEADER
         .header-navbar .navbar-form .form-control {
             background-color: lighten(@skin-primary-bg, 8%);
             border-color: lighten(@skin-primary-bg, 8%);
-            color: @sidebar-main-color;
+            color: @header-font-color;
         }
         
         .header-navbar .navbar-form .btn {
@@ -132,6 +160,44 @@ HEADER
             color: lighten(@skin-primary-bg, 50%);
         }
         
+    /*Button Logo*/
+		.btn-logo {
+			background-color: @header-button-logo;
+		}
+    	.btn-logo:hover, .btn-logo:focus {background-color: darken(@header-button-logo, 5%) !important; }
+	
+	
+    /*Button Search*/
+		.btn-search {
+			background-color: @header-button-search;
+		}
+    	.btn-search:hover, .btn-search:focus {background-color: darken(@header-button-search, 5%) !important;}
+
+	/*Button Bell*/
+		.btn-bell {
+			background-color: @header-button-bell;
+		}
+    	.btn-bell:hover, .btn-bell:focus {background-color: darken(@header-button-bell, 5%) !important;}
+	
+	/*Button Cog*/
+		.btn-cog {
+			background-color: @header-button-cog;
+		}
+    	.btn-cog:hover, .btn-cog:focus {background-color: darken(@header-button-cog, 5%) !important;}
+    	
+    /*Button Note*/
+		.btn-note {
+			background-color: @header-button-note;
+		}
+    	.btn-note:hover, .btn-note:focus {background-color: darken(@header-button-note, 5%) !important;}	
+	
+	/*Button Envelope*/
+		.btn-envelope {
+			background-color: @header-button-envelope;
+		}
+    	.btn-envelope:hover, .btn-envelope:focus {background-color: darken(@header-button-envelope, 5%) !important;}
+	
+	    
     /*Placeholder*/
         .header-navbar .navbar-form .form-control::-webkit-input-placeholder {
            color: lighten(@skin-primary-bg, 50%);
@@ -151,20 +217,20 @@ HEADER
         
     /*Icons Navigation*/
         .header-navbar .navbar-nav > li > a {
-            border-color: lighten(@skin-primary-bg, 8%) !important;
-            color: lighten(@skin-primary-bg, 50%);
+            color: @header-font-color;
+            border-style:none;
         }
         
     /*Responsive*/
         @media (max-width: 767px) {
         /*Sidebar Switch*/
             .sidebar-switch {
-                background-color: @skin-primary-bg;
+                background-color: @default;
             }
             
         /*Navbar Collapse*/
             .header-navbar .navbar-collapse {
-                background-color: lighten(@skin-primary-bg, 4%);
+                background-color: lighten(@default, 4%);
             }
         }/*End*/
         
@@ -268,7 +334,7 @@ SIDEBAR
     
     /*Badge*/
         .sidebar .tab-nav > li > a .badge {
-            background-color: lighten(@skin-primary-bg, 8%);
+            background-color: darken(@skin-primary-bg, 8%);
         }
 
     /*Tab Content*/
@@ -291,17 +357,18 @@ SIDEBAR
     }
 
     .sidebar-nav > li.active > a {
-        background-color: lighten(@skin-primary-bg, 3%);
+        background-color: darken(@skin-primary-bg, 8%);
+		color: @default; 
     }
 
     /*Sub Menus*/
         .sidebar-nav ul {
-            background: lighten(@skin-primary-bg, 1%);
+            background: darken(@skin-primary-bg, 8%);
         }
 
         .sidebar-nav ul > li > a:hover,
         .sidebar-nav ul > li.active > a {
-            background-color: lighten(@skin-primary-bg, 2%);
+            background-color: darken(@skin-primary-bg, 2%);
         }
 
         .sidebar-nav ul ul {
@@ -624,9 +691,26 @@ PANES
 FOOTER
 *******************************/
     #footer {
-        background-color: darken(@body-container, 2%);
-        color: @body-text;
+        background-color: @footer-main-color;
+        color: @footer-font-color;
+		bottom: 0;
+		padding: 2em;
+		margin-top: 1em
+	}
+   
+   .footer-links ul > li > a {
+    	color: @footer-font-color;
     }
+    
+    .footer-mail > a {
+    	color: @default;
+	}
+    
+    .footer-social > a {
+    	color: @footer-font-color;
+    }
+    
+    
 
 /*******************************
 DRAG & DROP
@@ -780,7 +864,7 @@ POPOVER
 BUTTONS
 *******************************/
 /* ----- COLORS ----- */
-    .btn-default {background-color: @default;}
+    .btn-default {background-color: @default;color:#ffffff}
     .btn-default:hover, .btn-default:focus {background-color: darken(@default, 5%);}
     
     .btn-primary {background-color: @primary;}
@@ -1056,7 +1140,7 @@ CAROUSEL
 TABLES
 *******************************/
     .table > thead > tr > th {
-        background-color: @skin-main;
+        background-color: @table-header-color;
     }
     
     .table > tbody > tr > td {
@@ -1084,7 +1168,7 @@ TABLES
     
 /* ----- RESPONSIVE ----- */  
     .table-responsive {
-        border-color: @skin-main;
+        border: none;
     }
     
 /* ----- FILTERABLE ----- */
@@ -1315,3 +1399,14 @@ PAGE - PROFILE
             border-bottom-color: @body-container;
         }
     }/*END*/
+    
+    
+.link-button > a > i {
+	color: @default
+} 
+
+.link-button > a  {
+	color: @body-text
+} 
+
+  
