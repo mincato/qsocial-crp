@@ -4,14 +4,23 @@
 	<n:div class="row">
 	   <n:div class="col-lg-12">
 	       <div zclass="pane equal col-md-12 col-xs-12">
-				<n:div class="col-md-7 col-xs-12">
+				<n:div class="col-md-6 col-xs-12">
     				<n:h5>${labels.domain.list.title}</n:h5>
 				</n:div>
-				<n:div class="col-md-5 col-xs-12">
-                    <textbox value="@bind(vm.keyword)" />
-                    <button label="${labels.domain.list.filter.search}" image="/imgs/search.png" onClick="@command('search')" />
-				</n:div>
-		   </div>
+				<n:div class="col-md-offset-1 col-md-3 col-xs-8">
+					<div zclass="input-group input-group-sm">
+						  <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" />
+							<span zclass="input-group-btn">
+							    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+							</span>
+			    	</div>
+                </n:div>
+                <n:div class="col-md-2 col-xs-4">
+                	<n:div class="link-button">
+					<a href="/pages/domain/create/index.zul">${labels.domain.create.domain} <i class="fa fa-plus-circle fa-2x"></i></a>
+	    			</n:div>
+	    		</n:div>
+	       </div>
 	   </n:div>
     </n:div>
     <div class="row">
