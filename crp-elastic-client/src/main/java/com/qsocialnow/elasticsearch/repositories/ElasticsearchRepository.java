@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Supplier;
 import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
+import com.qsocialnow.elasticsearch.mappings.ChildMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
-import com.qsocialnow.elasticsearch.mappings.types.ChildType;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -138,14 +138,17 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @Override
-    public <E> String indexChildMapping(Mapping<T, E> mapping, ChildType document) {
+    public <E> String indexChildMapping(ChildMapping<T, E> mapping, T document) {
         Index index = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType())
-                .setParameter(PARENT_PARAMETER, document.getIdParent()).build();
+                .setParameter(PARENT_PARAMETER, mapping.getIdParent()).build();
         String idValue = null;
         try {
             DocumentResult response = client.execute(index);
             if (response.isSucceeded()) {
                 idValue = response.getId();
+            } else {
+                log.error("There was an error indexing child mapping: " + response.getErrorMessage());
+                throw new RuntimeException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
