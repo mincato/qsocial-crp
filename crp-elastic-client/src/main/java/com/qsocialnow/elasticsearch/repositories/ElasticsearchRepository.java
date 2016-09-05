@@ -158,6 +158,26 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @Override
+    public <E> String updateChildMapping(String id, ChildMapping<T, E> mapping, T document) {
+        Index index = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id)
+                .setParameter(PARENT_PARAMETER, mapping.getIdParent()).build();
+        String idValue = null;
+        try {
+            DocumentResult response = client.execute(index);
+            if (response.isSucceeded()) {
+                idValue = response.getId();
+            } else {
+                log.error("There was an error indexing child mapping: " + response.getErrorMessage());
+                throw new RuntimeException(response.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+
+        }
+        return idValue;
+    }
+
+    @Override
     public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document) {
 
         Index update = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id).build();

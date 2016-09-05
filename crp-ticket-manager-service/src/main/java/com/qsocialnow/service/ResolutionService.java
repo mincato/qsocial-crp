@@ -27,4 +27,16 @@ public class ResolutionService {
         return resolutionSaved;
     }
 
+    public Resolution update(String domainId, String resolutionId, Resolution resolution) {
+        Resolution resolutionSaved = null;
+        try {
+            resolution.setId(resolutionId);
+            resolutionSaved = resolutionRepository.update(domainId, resolution);
+        } catch (Exception e) {
+            log.error("There was an error updating resolution: " + resolution.getDescription(), e);
+            throw new RuntimeException(e.getMessage());
+        }
+        return resolutionSaved;
+    }
+
 }
