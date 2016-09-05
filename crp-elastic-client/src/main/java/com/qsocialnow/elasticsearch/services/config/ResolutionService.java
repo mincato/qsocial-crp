@@ -32,4 +32,21 @@ public class ResolutionService {
         return response;
     }
 
+    public String updateResolution(Configurator elasticConfig, String domainId, Resolution resolution) {
+        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(elasticConfig);
+
+        Repository<ResolutionType> repository = esfactory.initManager();
+        repository.initClient();
+
+        ResolutionMapping mapping = ResolutionMapping.getInstance();
+        mapping.setIdParent(domainId);
+
+        ResolutionType documentIndexed = mapping.getDocumentType(resolution);
+
+        String response = repository.updateChildMapping(resolution.getId(), mapping, documentIndexed);
+        repository.closeClient();
+
+        return response;
+    }
+
 }
