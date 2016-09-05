@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.GsonBuilder;
-import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.config.ResolutionService;
@@ -38,6 +36,18 @@ public class ResolutionRepository {
         try {
             String id = resolutionElasticService.updateResolution(elasticConfig, domainId, resolution);
             resolution.setId(id);
+            return resolution;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
+    public Resolution delete(String domainId, String resolutionId) {
+        try {
+            resolutionElasticService.deleteResolution(elasticConfig, domainId, resolutionId);
+            Resolution resolution = new Resolution();
+            resolution.setId(resolutionId);
             return resolution;
         } catch (Exception e) {
             log.error("Unexpected error", e);

@@ -78,4 +78,23 @@ public class ResolutionServiceImpl implements ResolutionService {
         }
     }
 
+    @Override
+    public void delete(String domainId, String resolutionId) {
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .path("/resolutions/").path(resolutionId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            headers.add("Accept", "application/json");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            restTemplate.delete(builder.toUriString());
+        } catch (Exception e) {
+            log.error("There was an error while trying to call resolution service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }
