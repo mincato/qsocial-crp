@@ -28,11 +28,19 @@
 			</bean>
  		</constructor-arg>
 	</bean>
+	
+	<bean id="elasticConfig" class="com.qsocialnow.config.ElasticConfigFactory" factory-method="findConfig">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${app.elastic.config.configurator.path}"></constructor-arg>
+	</bean>
 
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
+	</bean>
+	
+	<bean id="resolutionElasticService" class="com.qsocialnow.elasticsearch.services.config.ResolutionService">
 	</bean>
 	
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">

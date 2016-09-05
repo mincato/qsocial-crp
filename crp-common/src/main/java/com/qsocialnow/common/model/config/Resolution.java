@@ -1,12 +1,8 @@
 package com.qsocialnow.common.model.config;
 
-import java.sql.Date;
-
 public class Resolution {
 
     private String id;
-
-    private Date resolvedDate;
 
     private String description;
 
@@ -16,14 +12,6 @@ public class Resolution {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Date getResolvedDate() {
-        return resolvedDate;
-    }
-
-    public void setResolvedDate(Date resolvedDate) {
-        this.resolvedDate = resolvedDate;
     }
 
     public String getDescription() {
