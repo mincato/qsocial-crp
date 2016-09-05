@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.qsocialnow.common.model.config.AdmUnitFilter;
 import com.qsocialnow.common.model.config.WordFilter;
 
 public class FilterView {
@@ -14,11 +15,13 @@ public class FilterView {
 
     private Date endDateTime;
 
-    private String followersGreaterThan;
+    private Long followersGreaterThan;
 
-    private String followersLessThan;
+    private Long followersLessThan;
 
     private List<WordFilter> filterWords;
+
+    private List<AdmUnitFilter> admUnitFilters;
 
     public FilterView() {
         filterWords = new ArrayList<>();
@@ -48,19 +51,19 @@ public class FilterView {
         this.endDateTime = endDateTime;
     }
 
-    public String getFollowersGreaterThan() {
+    public Long getFollowersGreaterThan() {
         return followersGreaterThan;
     }
 
-    public void setFollowersGreaterThan(String followersGreaterThan) {
+    public void setFollowersGreaterThan(Long followersGreaterThan) {
         this.followersGreaterThan = followersGreaterThan;
     }
 
-    public String getFollowersLessThan() {
+    public Long getFollowersLessThan() {
         return followersLessThan;
     }
 
-    public void setFollowersLessThan(String followersLessThan) {
+    public void setFollowersLessThan(Long followersLessThan) {
         this.followersLessThan = followersLessThan;
     }
 
@@ -70,6 +73,14 @@ public class FilterView {
 
     public void setFilterWords(List<WordFilter> filterWords) {
         this.filterWords = filterWords;
+    }
+
+    public void setAdmUnitFilters(List<AdmUnitFilter> admUnitFilters) {
+        this.admUnitFilters = admUnitFilters;
+    }
+
+    public List<AdmUnitFilter> getAdmUnitFilters() {
+        return admUnitFilters;
     }
 
 }

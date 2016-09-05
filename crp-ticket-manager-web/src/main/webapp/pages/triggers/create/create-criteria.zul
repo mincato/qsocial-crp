@@ -99,12 +99,12 @@
 							    	<n:form class="form-inline text-center">								
 										<n:div class="form-group">
 											<n:label class="control-label">${labels.trigger.criteria.followers.greater}</n:label>
-					    					<textbox type="text" class="form-control" 
+					    					<textbox type="text" ca:data-only-number="" class="form-control" 
 						    					value="@bind(vm.filter.followersGreaterThan)"></textbox>
 				    					</n:div>
 				    					<n:div class="form-group">
 						    				<n:label class="control-label">${labels.trigger.criteria.followers.less}</n:label>
-					    					<textbox type="text" sclass="form-control"
+					    					<textbox type="text" ca:data-only-number="" sclass="form-control"
 						    					value="@bind(vm.filter.followersLessThan)"></textbox>
 					    				</n:div>
 								    </n:form>
