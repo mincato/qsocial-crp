@@ -1,20 +1,34 @@
 package com.qsocialnow.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.qsocialnow.common.model.config.WordFilter;
 
 public class FilterView {
 
-    private ConnotationView connotation;
+    private Connotation connotation;
 
     private Date startDateTime;
 
     private Date endDateTime;
 
-    public ConnotationView getConnotation() {
+    private String followersGreaterThan;
+
+    private String followersLessThan;
+
+    private List<WordFilter> filterWords;
+
+    public FilterView() {
+        filterWords = new ArrayList<>();
+    }
+
+    public Connotation getConnotation() {
         return connotation;
     }
 
-    public void setConnotation(ConnotationView connotation) {
+    public void setConnotation(Connotation connotation) {
         this.connotation = connotation;
     }
 
@@ -32,6 +46,30 @@ public class FilterView {
 
     public void setEndDateTime(Date endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public String getFollowersGreaterThan() {
+        return followersGreaterThan;
+    }
+
+    public void setFollowersGreaterThan(String followersGreaterThan) {
+        this.followersGreaterThan = followersGreaterThan;
+    }
+
+    public String getFollowersLessThan() {
+        return followersLessThan;
+    }
+
+    public void setFollowersLessThan(String followersLessThan) {
+        this.followersLessThan = followersLessThan;
+    }
+
+    public List<WordFilter> getFilterWords() {
+        return filterWords;
+    }
+
+    public void setFilterWords(List<WordFilter> filterWords) {
+        this.filterWords = filterWords;
     }
 
 }

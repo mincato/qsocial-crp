@@ -1,12 +1,10 @@
 package com.qsocialnow.eventresolver.mocks;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Filter;
-import com.qsocialnow.common.model.config.FilterType;
 
 public class MockDetectionCriteriaBuilder {
 
@@ -15,8 +13,8 @@ public class MockDetectionCriteriaBuilder {
         DetectionCriteria detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("1");
         Filter filter = new Filter();
-        filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("false");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -26,8 +24,8 @@ public class MockDetectionCriteriaBuilder {
         DetectionCriteria detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("1");
         Filter filter = new Filter();
-        filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("true");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -37,14 +35,14 @@ public class MockDetectionCriteriaBuilder {
         DetectionCriteria detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("1");
         Filter filter = new Filter();
-        filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("false");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("2");
         filter = new Filter();
-        filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("false");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -54,14 +52,14 @@ public class MockDetectionCriteriaBuilder {
         DetectionCriteria detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("1");
         Filter filter = new Filter();
-        filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("false");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("2");
         filter = new Filter();
-        filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("true");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -71,14 +69,14 @@ public class MockDetectionCriteriaBuilder {
         DetectionCriteria detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("1");
         Filter filter = new Filter();
-        filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("true");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("2");
         filter = new Filter();
-        filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("false");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }
@@ -88,20 +86,20 @@ public class MockDetectionCriteriaBuilder {
         DetectionCriteria detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("1");
         Filter filter = new Filter();
-        filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("false");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("2");
         filter = new Filter();
-        filter.setType(FilterType.TRUE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("true");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         detectionCriteria = new DetectionCriteria();
         detectionCriteria.setId("3");
         filter = new Filter();
-        filter.setType(FilterType.FALSE);
-        detectionCriteria.setFilters(Arrays.asList(filter));
+        filter.setId("false");
+        detectionCriteria.setFilter(filter);
         detectionCriterias.add(detectionCriteria);
         return detectionCriterias;
     }

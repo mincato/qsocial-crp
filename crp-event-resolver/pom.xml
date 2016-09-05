@@ -115,8 +115,13 @@
 			<artifactId>gson</artifactId>
 			<version>${gson-version}</version>
 		</dependency>
-
-
+		
+		<!-- Lucene -->
+		<dependency>
+    		<groupId>org.apache.lucene</groupId>
+   			<artifactId>lucene-analyzers-common</artifactId>
+    		<version>6.2.0</version>
+		</dependency>
 
 		<!-- Test -->
 		<dependency>

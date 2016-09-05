@@ -60,6 +60,11 @@
         		}
     		</script>
 		</data-handler>
+		<data-handler>
+    		<name>filter</name>
+    		<script src="/assets/js/filters.js">
+    		</script>
+		</data-handler>		
 	</client-config>
 	
 	
