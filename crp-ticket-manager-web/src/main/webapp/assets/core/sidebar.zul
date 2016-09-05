@@ -1,74 +1,143 @@
-<div class="sidebar-container" xmlns:n="native" xmlns:x="xhtml">
-    <div class="sidebar-scrollpane">
-		<div class="sidebar-content">
-		    <ul class="sidebar-profile clearfix list-inline">
-		    	<li>
-					<n:h5>${labels.sidebar.title1}</n:h5>
-					<n:h5>${labels.sidebar.title2}</n:h5>
-				</li>
-				<li class="pull-right">
-					<a class="sidebar-switch"><i class="fa fa-navicon"></i></a>
-				</li>
-	    	</ul>
-	    </div><!-- sidebar-profile -->
-			    
-	    <n:div role="tabpanel">
-			<!-- Tab panes -->
-			<div class="tab-content">
-			    
-			    <n:div role="tabpanel" class="tab-pane fade in active" id="nav">
-					<n:nav class="main-nav">
-					    <ul id="sidebar-nav" class="sidebar-nav">
-							<li>
-							    <n:a href="#">
-									<i class="fa fa-user fa-fw fa-lg"></i> ${labels.sidebar.menu.users} <span class="fa chevron-down-left"></span>
-					    		</n:a>
-				    			<ul>
-									<li><a href="#">Usuario 1</a></li>
-									<li><a href="#">Usuario 2</a></li>
-					    		</ul>
-							</li>
-					
-							<li>
-					    		<n:a href="#">
-									<i class="fa fa-sitemap fa-fw fa-lg"></i> ${labels.sidebar.menu.teams} <span class="fa chevron-down-left"></span>
-					    		</n:a>
-					    		<ul>
-									<li><a href="#">Equipo 1</a></li>
-					    		</ul>
-							</li>
-							<li>
-					    		<n:a href="#">
-					    			<i class="fa fa-file-text-o fa-fw fa-lg"></i>${labels.sidebar.menu.cases} <span class="fa chevron-down-left"></span>
-		    					</n:a>
-				    			<ul>
-									<li><a href="/pages/cases/index.zul">${labels.sidebar.menu.list}</a></li>
-					    		</ul>
-							</li>
-						
-							<li>
-					    		<n:a href="#">
-									<i class="fa fa-desktop fa-fw fa-lg"></i> ${labels.sidebar.menu.domains} <span class="fa chevron-down-left"></span>
-					    		</n:a>
-					    		<ul>
-									<li><a href="/pages/domain/list/index.zul">${labels.sidebar.menu.list}</a></li>
-									<li><a href="/pages/domain/create/index.zul">${labels.sidebar.menu.create}</a></li>
-					    		</ul>
-							</li>
-					
-							<li>
-					    		<n:a href="#">
-									<i class="fa fa-list fa-fw fa-lg"></i> ${labels.sidebar.menu.triggers} <span class="fa chevron-down-left"></span>
-					    		</n:a>
-				    			<ul>
-									<li><a href="#">${labels.sidebar.menu.list}</a></li>
-				    			</ul>
-							</li>
-						
-			    		</ul><!-- sidebar-nav -->
-					</n:nav>
-				</n:div><!-- tab-content -->
-		    </div><!-- tabpanel -->
-		</n:div><!-- sidebar-content -->
-    </div><!-- scrollpane -->
-</div><!-- sidebar-container -->
+<div xmlns:n="native" xmlns:x="xhtml">
+
+	<n:aside id="sidebar" class="sidebar affix" role="complementary">
+		<div class="sidebar-container">
+			<div class="sidebar-scrollpane">
+				<div class="sidebar-content">
+					<ul class="sidebar-profile clearfix list-inline">
+						<li>
+							<n:h5>${labels.sidebar.title1}</n:h5>
+							<n:h5>${labels.sidebar.title2}</n:h5>
+						</li>
+						<li class="pull-right">
+							<a class="sidebar-switch">
+								<i class="fa fa-navicon"></i>
+							</a>
+						</li>
+					</ul>
+				</div><!-- sidebar-profile -->
+
+				<n:div role="tabpanel">
+					<!-- Tab panes -->
+					<div class="tab-content">
+
+						<n:div role="tabpanel"
+							class="tab-pane fade in active" id="nav">
+							<n:nav class="main-nav">
+								<ul id="sidebar-nav"
+									class="sidebar-nav">
+									<li>
+										<n:a href="#"
+											class="menu-first-level">
+											<i
+												class="fa fa-user fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.users}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a href="#">
+													Usuario 1
+												</a>
+											</li>
+											<li>
+												<a href="#">
+													Usuario 2
+												</a>
+											</li>
+										</ul>
+									</li>
+
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-sitemap fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.teams}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a href="#">Equipo 1</a>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-file-text-o fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.cases}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a
+													href="/pages/cases/index.zul">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+										</ul>
+									</li>
+
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-desktop fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.domains}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a
+													href="/pages/domain/list/index.zul">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+											<li>
+												<a
+													href="/pages/domain/create/index.zul">
+													${labels.sidebar.menu.create}
+												</a>
+											</li>
+										</ul>
+									</li>
+
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-list fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.triggers}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a href="#">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+										</ul>
+									</li>
+
+								</ul><!-- sidebar-nav -->
+							</n:nav>
+						</n:div><!-- tab-content -->
+					</div><!-- tabpanel -->
+				</n:div><!-- sidebar-content -->
+			</div><!-- scrollpane -->
+		</div><!-- sidebar-container -->
+	</n:aside>
+</div>

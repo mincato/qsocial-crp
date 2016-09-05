@@ -112,7 +112,7 @@ TABLE OF CONTENTS
         z-index: 999;
         top: 0;
         width: 100%;
-        height: 50px;
+        height: 60px;
     }
     
     .navbar-header {
@@ -184,10 +184,14 @@ TABLE OF CONTENTS
 
     /*Icons Navigation*/
         .header-navbar .navbar-nav > li > a {
-            min-width: 95px;
-            padding: 5px 10px;
+            min-width: 70px;
+            min-height: 60px;
             border-left: 1px solid;
             text-align: center;
+        }
+        
+         .header-navbar .navbar-nav > li > a > i {
+            vertical-align: middle;
         }
         
         .header-navbar .navbar-nav > li > a > span {
@@ -208,6 +212,7 @@ TABLE OF CONTENTS
             color: #d24d57;
         }
         
+       
     /*Navbar Collapse*/
         .header-navbar .navbar-collapse {
             border: none;
@@ -215,29 +220,43 @@ TABLE OF CONTENTS
         }
         
 /* ----- HEADER RESPONSIVE ----- */
-    @media (max-width: 1024px) {
+    @media (min-width: 993px) {
     /*Search*/
         .header-navbar .navbar-form .form-control {
             width: auto;
         }
+        
+        .btn-logo, .btn-logo:hover, .btn-logo:focus {
+			padding:5px 15px !important;
+		}
+        
     }/*End*/
     
     @media (max-width: 992px) and (min-width: 768px) {
     /*Icons Navigation*/
         .header-navbar .navbar-nav > li > a {
-            min-width: 70px;
+            min-width: 60px;
+            min-height: 60px;
         }
         
-        .header-navbar .navbar-nav > li > a > span {
-            font-size: 10px;
-        }
+        .btn-logo {
+			padding:5px 15px !important;
+		}
+    	.btn-logo:hover, .btn-logo:focus {padding:5px 15px !important;} 
+        
     }/*End*/
     
     @media (max-width: 830px) and (min-width: 768px) {
     /*Search*/
-        .header-navbar .navbar-form .form-control {
-            width: 90px;
+        .header-navbar .navbar-collapse {
+            min-height: 60px;
         }
+        
+        .btn-logo {
+			padding:5px 15px !important;
+		}
+    	.btn-logo:hover, .btn-logo:focus {padding:5px 15px !important;} 
+        
     }/*End*/
     
     @media (max-width: 767px) {
@@ -245,40 +264,26 @@ TABLE OF CONTENTS
         .navbar-header {
             width: 100%;
         }
-        
-        .logo {
-            width: 80%;
-            text-align: center;
-        }
-        
+    
     /*Sidebar Switch*/
         .sidebar-switch {
             width: 10%;
         }
         
-    /*Search*/
-        .header-navbar .navbar-form {
-            margin: 15px 0;
-            padding: 0;
-        }
-    
-        .header-navbar .navbar-form .form-control {
-            width: 100%;
-        }
-        
     /*Icons Navigation*/
         .header-navbar .navbar-nav {
-            margin: 15px 0;
+            margin: 0px 0;
             text-align: center;
         }
-        
         .header-navbar .navbar-nav > li {
             display: inline-block;
         }
         
-        .header-navbar .navbar-nav > li:last-child > a {
-            border-right: 1px solid;
+        .header-navbar .navbar-nav > li > a {
+        	line-height: 50px;
         }
+        
+        
     }/*End*/
     
     @media (max-width: 460px) {
@@ -1162,7 +1167,7 @@ TABLE OF CONTENTS
     .main {
         position: relative;
         padding-top: 50px;
-        padding-bottom: 50px;
+        padding-bottom: 150px;
     }
     
 /* ----- CONTENT ----- */
@@ -1363,15 +1368,60 @@ TABLE OF CONTENTS
 14.0 - FOOTER
 *******************************/
     #footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
         text-align: center;
         font-weight: 400;
         font-size: 12px;
+        vertical-align: middle;
     }
+    
+            
+/* ----- FOOTER RESPONSIVE ----- */
+	@media (min-width: 769px) {
+        #footer {
+        	height: 150px;
+        	bottom: 0;
+            width: 100%;
+            position: absolute;
+        }
+    }
+    @media (max-width: 768px) {
+        #footer {
+        	bottom: 0;
+            width: auto;
+            position: relative;
+        }
+    }
+    
+    .footer-links ul > li  {
+        text-align: left !important;
+    }
+    
+    .footer-links ul {
+		margin: 0.75em 0;
+		padding: 0 1em;
+		display: inline-block
+	}
+	
+    .footer-links ul > li > a {
+        text-decoration: none;
+        font-size: 0.7em;
+    }
+    
+    .footer-mail > a {
+    	font-size: 0.7em;
+		font-weight: bold;
+		text-decoration: none;
+		text-align: center;
+    }
+    
+    .footer-social > a {
+    	vertical-align: middle;
+	}
+    
+    .footer-newsletter {
+    	font-size: 0.7em;
+    }
+    
 
 /*******************************
 15.0 - DRAG & DROP
@@ -2694,4 +2744,9 @@ TABLE OF CONTENTS
 
 .bottom-line {
 	border-bottom: 1px solid;
+}
+
+.link-button > a {
+	text-decoration: none !important;
+	font-size: 0.8em;
 }
