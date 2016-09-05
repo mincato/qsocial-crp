@@ -229,6 +229,32 @@ router.put('/domains/:id/resolutions/:resolutionId', function (req, res) {
 	  
 });
 
+router.delete('/domains/:id/resolutions/:resolutionId', function (req, res) {
+
+	function asyncResponse(err,responseResolution) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(responseResolution !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(responseResolution));
+	      } catch(ex) {
+	    	  	res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	    	res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+	}
+	  
+	var domainId = req.params.id;
+	var resolutionId = req.params.resolutionId;
+	var resolutionService = javaContext.getBeanSync("resolutionService");
+	resolutionService.delete(domainId, resolutionId, asyncResponse);
+	  
+});
+
 
 
 router.put('/domains/:id', function (req, res) {

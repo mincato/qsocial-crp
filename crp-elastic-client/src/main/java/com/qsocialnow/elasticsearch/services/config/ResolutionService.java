@@ -49,4 +49,17 @@ public class ResolutionService {
         return response;
     }
 
+    public void deleteResolution(Configurator elasticConfig, String domainId, String resolutionId) {
+        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(elasticConfig);
+
+        Repository<ResolutionType> repository = esfactory.initManager();
+        repository.initClient();
+
+        ResolutionMapping mapping = ResolutionMapping.getInstance();
+        mapping.setIdParent(domainId);
+
+        repository.removeChildMapping(resolutionId, mapping);
+        repository.closeClient();
+    }
+
 }

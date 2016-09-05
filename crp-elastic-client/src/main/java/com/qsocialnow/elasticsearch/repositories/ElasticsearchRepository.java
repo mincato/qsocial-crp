@@ -26,6 +26,7 @@ import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.BulkResult;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
@@ -175,6 +176,22 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         }
         return idValue;
+    }
+
+    @Override
+    public <E> void removeChildMapping(String id, ChildMapping<T, E> mapping) {
+        Delete delete = new Delete.Builder(id).index(mapping.getIndex()).type(mapping.getType())
+                .setParameter(PARENT_PARAMETER, mapping.getIdParent()).build();
+        try {
+            DocumentResult response = client.execute(delete);
+            if (!response.isSucceeded()) {
+                log.error("There was an error removing mapping: " + response.getErrorMessage());
+                throw new RuntimeException(response.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

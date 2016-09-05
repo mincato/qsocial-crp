@@ -8,4 +8,6 @@ public interface ResolutionService {
 
     Resolution update(String domainId, Resolution resolution);
 
+    void delete(String domainId, String resolutionId);
+
 }

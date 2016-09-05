@@ -39,4 +39,13 @@ public class ResolutionService {
         return resolutionSaved;
     }
 
+    public Resolution delete(String domainId, String resolutionId) {
+        try {
+            return resolutionRepository.delete(domainId, resolutionId);
+        } catch (Exception e) {
+            log.error("There was an error deleting resolution: " + resolutionId, e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
 }
