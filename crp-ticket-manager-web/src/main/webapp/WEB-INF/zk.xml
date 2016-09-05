@@ -64,7 +64,12 @@
     		<name>filter</name>
     		<script src="/assets/js/filters.js">
     		</script>
-		</data-handler>		
+		</data-handler>
+		<data-handler>
+    		<name>only-number</name>
+    		<script src="/assets/js/inputNumber.js">
+    		</script>
+		</data-handler>				
 	</client-config>
 	
 	

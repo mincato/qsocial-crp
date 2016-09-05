@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -217,11 +216,10 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     private void addFollowersFilter(Filter filter) {
-        if (StringUtils.isNotEmpty(filterView.getFollowersGreaterThan())
-                || StringUtils.isNotEmpty(filterView.getFollowersLessThan())) {
+        if (filterView.getFollowersLessThan() != null || filterView.getFollowersLessThan() != null) {
             FollowersFilter followersFilter = new FollowersFilter();
-            followersFilter.setMinFollowers(Long.parseLong(filterView.getFollowersGreaterThan()));
-            followersFilter.setMaxFollowers(Long.parseLong(filterView.getFollowersLessThan()));
+            followersFilter.setMinFollowers(filterView.getFollowersGreaterThan());
+            followersFilter.setMaxFollowers(filterView.getFollowersLessThan());
             filter.setFollowersFilter(followersFilter);
         }
 
