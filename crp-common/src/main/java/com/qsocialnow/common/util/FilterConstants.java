@@ -15,4 +15,10 @@ public class FilterConstants {
     public static final short CONNOTATION_NEGATIVE = 2;
 
     public static final short CONNOTATION_NEUTRAL = 3;
+
+    public static final String LANGUAGE_SPANISH = "es";
+
+    public static final String LANGUAGE_ENGLISH = "en";
+
+    public static final String LANGUAGE_PORTUGUESE = "pt";
 }

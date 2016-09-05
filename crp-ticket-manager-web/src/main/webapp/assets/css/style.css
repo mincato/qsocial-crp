@@ -2571,7 +2571,8 @@ TABLE OF CONTENTS
     color: grey;
 }
 
-.icon-input input:checked + .icon-input-content{/*checked icon*/
+.icon-input input:checked + .icon-input-content,
+.image-input input:checked + .image-input-content {/*checked icon*/
     color: green;
 }
 
@@ -2600,13 +2601,95 @@ TABLE OF CONTENTS
     content: "\f14a";
 }
 
-.icon-input input:checked + label:before{/*checked icon*/
+.icon-input input:checked + label:before {/*checked icon*/
     color: green;
 }
 
-.icon-input input {
+.icon-input input,
+.image-input input {
 	position: absolute;
 	opacity: 0;
+}
+
+.image-input input + label
+{
+	height: 20px;
+	width: 40px;
+	display: inline-block;
+	padding: 0 0 0 0px;
+}
+
+.image-input.portuguese input:checked + label
+{
+	background: url('/crp-ticket-manager-web/imgs/br.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: grayscale(0);
+	-o-filter: grayscale(0);
+	-webkit-filter: grayscale(0);
+	filter: grayscale(0);
+}
+
+.image-input.english input:checked + label
+{
+	background: url('/crp-ticket-manager-web/imgs/gb.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: grayscale(0);
+	-o-filter: grayscale(0);
+	-webkit-filter: grayscale(0);
+	filter: grayscale(0);
+}
+
+.image-input.spanish input:checked + label
+{
+	background: url('/crp-ticket-manager-web/imgs/es.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: grayscale(0);
+	-o-filter: grayscale(0);
+	-webkit-filter: grayscale(0);
+	filter: grayscale(0);
+}
+
+.image-input.spanish input + label
+{
+	background: url('/crp-ticket-manager-web/imgs/es.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+	-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-webkit-filter: grayscale(100%);
+	filter: gray;
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+}
+
+.image-input.english input + label {
+	background: url('/crp-ticket-manager-web/imgs/gb.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-webkit-filter: grayscale(100%);
+	filter: gray;
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+}
+
+.image-input.portuguese input + label {
+	background: url('/crp-ticket-manager-web/imgs/br.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-webkit-filter: grayscale(100%);
+	filter: gray;
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
 }
 
 .bottom-line {

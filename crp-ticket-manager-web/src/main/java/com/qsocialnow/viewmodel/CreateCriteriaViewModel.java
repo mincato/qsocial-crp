@@ -2,12 +2,15 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -24,11 +27,17 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.config.ConnotationFilter;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Filter;
+import com.qsocialnow.common.model.config.FollowersFilter;
+import com.qsocialnow.common.model.config.LanguageFilter;
 import com.qsocialnow.common.model.config.MediaFilter;
 import com.qsocialnow.common.model.config.PeriodFilter;
+import com.qsocialnow.common.model.config.WordFilter;
+import com.qsocialnow.common.model.config.WordFilterType;
 import com.qsocialnow.model.Connotation;
 import com.qsocialnow.model.ConnotationView;
 import com.qsocialnow.model.FilterView;
+import com.qsocialnow.model.Language;
+import com.qsocialnow.model.LanguageView;
 import com.qsocialnow.model.Media;
 import com.qsocialnow.model.MediaView;
 
@@ -45,9 +54,13 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private List<ConnotationView> connotations;
 
+    private List<LanguageView> languages;
+
     private FilterView filterView;
 
     private boolean saved;
+
+    private Set<WordFilterType> wordFilterTypeOptions;
 
     public DetectionCriteria getCurrentCriteria() {
         return currentCriteria;
@@ -65,6 +78,14 @@ public class CreateCriteriaViewModel implements Serializable {
         return connotations;
     }
 
+    public List<LanguageView> getLanguages() {
+        return languages;
+    }
+
+    public Set<WordFilterType> getWordFilterTypeOptions() {
+        return wordFilterTypeOptions;
+    }
+
     public boolean isSaved() {
         return saved;
     }
@@ -74,8 +95,11 @@ public class CreateCriteriaViewModel implements Serializable {
     public void save() {
         Filter filter = new Filter();
         addMediaFilter(filter);
+        addLanguageFilter(filter);
         addDateRangeFilter(filter);
         addConnotationFilter(filter);
+        addFollowersFilter(filter);
+        addWordFilters(filter);
         currentCriteria.setFilter(filter);
         saved = true;
     }
@@ -94,8 +118,10 @@ public class CreateCriteriaViewModel implements Serializable {
     public void init() {
         currentCriteria = new DetectionCriteria();
         filterView = new FilterView();
+        wordFilterTypeOptions = Arrays.stream(WordFilterType.values()).collect(Collectors.toSet());
         initMedias();
         initConnotations();
+        initLanguages();
     }
 
     private void initConnotations() {
@@ -118,51 +144,49 @@ public class CreateCriteriaViewModel implements Serializable {
         }
     }
 
-    @Command
-    @NotifyChange("mediaTypes")
-    public void selectAllMedia(@BindingParam("checked") boolean isPicked, @BindingParam("media") MediaView mediaView) {
-        if (Media.ALL.equals(mediaView.getMedia())) {
-            for (MediaView mediaType : mediaTypes) {
-                if (!Media.ALL.equals(mediaType.getMedia())) {
-                    mediaType.setChecked(isPicked);
-                }
-            }
-        } else if (!isPicked) {
-            mediaTypes.stream().filter(media -> Media.ALL.equals(media.getMedia())).findFirst().get()
-                    .setChecked(isPicked);
+    private void initLanguages() {
+        languages = new ArrayList<>();
+        for (Language language : Language.values()) {
+            LanguageView languageView = new LanguageView();
+            languageView.setLanguage(language);
+            languageView.setChecked(false);
+            languages.add(languageView);
         }
     }
 
     @Command
-    @NotifyChange("connotations")
-    public void selectAllConnotations(@BindingParam("checked") boolean isPicked,
-            @BindingParam("connotation") ConnotationView connotationView) {
-        if (Connotation.ALL.equals(connotationView.getConnotation())) {
-            for (ConnotationView connotation : connotations) {
-                if (!Connotation.ALL.equals(connotation.getConnotation())) {
-                    connotation.setChecked(isPicked);
-                }
-            }
-        } else if (!isPicked) {
-            connotations.stream().filter(connotation -> Connotation.ALL.equals(connotation.getConnotation()))
-                    .findFirst().get().setChecked(isPicked);
-        }
+    @NotifyChange("filter")
+    public void addFilterWord() {
+        this.filterView.getFilterWords().add(new WordFilter());
+    }
+
+    @Command
+    @NotifyChange("filter")
+    public void removeFilterWord(@BindingParam("filter") WordFilter filter) {
+        this.filterView.getFilterWords().remove(filter);
     }
 
     private void addMediaFilter(Filter filter) {
-        boolean allSelected = mediaTypes.stream().anyMatch(
-                media -> Media.ALL.equals(media.getMedia()) && media.isChecked());
-        if (!allSelected) {
-            List<MediaView> mediasPicked = mediaTypes.stream()
-                    .filter(media -> !Media.ALL.equals(media.getMedia()) && media.isChecked())
-                    .collect(Collectors.toList());
-            if (CollectionUtils.isNotEmpty(mediasPicked)) {
-                MediaFilter mediaFilter = new MediaFilter();
-                Long[] options = mediasPicked.stream().map(media -> media.getMedia().getValue())
-                        .toArray(size -> new Long[size]);
-                mediaFilter.setOptions(options);
-                filter.setMediaFilter(mediaFilter);
-            }
+        List<MediaView> mediasPicked = mediaTypes.stream().filter(media -> media.isChecked())
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(mediasPicked) && mediasPicked.size() < mediaTypes.size()) {
+            MediaFilter mediaFilter = new MediaFilter();
+            Long[] options = mediasPicked.stream().map(media -> media.getMedia().getValue())
+                    .toArray(size -> new Long[size]);
+            mediaFilter.setOptions(options);
+            filter.setMediaFilter(mediaFilter);
+        }
+    }
+
+    private void addLanguageFilter(Filter filter) {
+        List<LanguageView> languagesPicked = languages.stream().filter(language -> language.isChecked())
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(languagesPicked) && languagesPicked.size() < languages.size()) {
+            LanguageFilter languageFilter = new LanguageFilter();
+            String[] options = languagesPicked.stream().map(language -> language.getLanguage().getValue())
+                    .toArray(size -> new String[size]);
+            languageFilter.setOptions(options);
+            filter.setLanguageFilter(languageFilter);
         }
     }
 
@@ -181,20 +205,32 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     private void addConnotationFilter(Filter filter) {
-        boolean allSelected = connotations.stream().anyMatch(
-                connotation -> Connotation.ALL.equals(connotation.getConnotation()) && connotation.isChecked());
-        if (!allSelected) {
-            List<ConnotationView> connotationsPicked = connotations
-                    .stream()
-                    .filter(connotation -> !Connotation.ALL.equals(connotation.getConnotation())
-                            && connotation.isChecked()).collect(Collectors.toList());
-            if (CollectionUtils.isNotEmpty(connotationsPicked)) {
-                ConnotationFilter connotationFilter = new ConnotationFilter();
-                Short[] options = connotationsPicked.stream()
-                        .map(connotation -> connotation.getConnotation().getValue()).toArray(size -> new Short[size]);
-                connotationFilter.setOptions(options);
-                filter.setConnotationFilter(connotationFilter);
-            }
+        List<ConnotationView> connotationsPicked = connotations.stream().filter(connotation -> connotation.isChecked())
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(connotationsPicked) && connotationsPicked.size() < connotations.size()) {
+            ConnotationFilter connotationFilter = new ConnotationFilter();
+            Short[] options = connotationsPicked.stream().map(connotation -> connotation.getConnotation().getValue())
+                    .toArray(size -> new Short[size]);
+            connotationFilter.setOptions(options);
+            filter.setConnotationFilter(connotationFilter);
         }
+    }
+
+    private void addFollowersFilter(Filter filter) {
+        if (StringUtils.isNotEmpty(filterView.getFollowersGreaterThan())
+                || StringUtils.isNotEmpty(filterView.getFollowersLessThan())) {
+            FollowersFilter followersFilter = new FollowersFilter();
+            followersFilter.setMinFollowers(Long.parseLong(filterView.getFollowersGreaterThan()));
+            followersFilter.setMaxFollowers(Long.parseLong(filterView.getFollowersLessThan()));
+            filter.setFollowersFilter(followersFilter);
+        }
+
+    }
+
+    private void addWordFilters(Filter filter) {
+        if (CollectionUtils.isNotEmpty(filterView.getFilterWords())) {
+            filter.setWordFilters(filterView.getFilterWords());
+        }
+
     }
 }
