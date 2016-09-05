@@ -42,12 +42,12 @@
 		<constructor-arg value="${app.kafka.config.znode.path}" />
 	</bean>
 	
-	<util:list id="responseDetectors">
-		<ref bean="mockResponseDetectorService" />
+	<util:list id="sourcesDetectors">
+		<ref bean="twitterDetectorService" />
 	</util:list>
 	
-	<bean id="mockResponseDetectorService" class="com.qsocialnow.responsedetector.service.ResponseDetectorService">
-		<property name="responseDetectorStrategy" ref="mockResponseDetectorStrategy" />
+	<bean id="twitterDetectorService" class="com.qsocialnow.responsedetector.service.TwitterDetectorService">
+		
 	</bean>
 	
 </beans>

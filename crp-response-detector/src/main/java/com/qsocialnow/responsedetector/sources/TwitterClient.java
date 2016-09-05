@@ -1,5 +1,7 @@
 package com.qsocialnow.responsedetector.sources;
 
+import com.qsocialnow.responsedetector.config.TwitterConfigurator;
+
 import twitter4j.FilterQuery;
 import twitter4j.StatusListener;
 import twitter4j.TwitterStream;
@@ -13,40 +15,36 @@ public class TwitterClient {
 	private FilterQuery tweetFilterQuery;
 	
 	private ConfigurationBuilder configurationBuilder;
-	
-	
-	
-	public TwitterClient(){
+
+	public TwitterClient(TwitterConfigurator twitterConfigurator){
 		configurationBuilder = new ConfigurationBuilder();
-        configurationBuilder.setOAuthConsumerKey("3urjVF7PN4bVATDa2hndrhfOI")
-                .setOAuthConsumerSecret("mpVGF9xtwY6TXDsBTn9bFLpIKoyXgwbMj9Ym7x7aq4dgdNOLdl")
-                .setOAuthAccessToken("768149646548041729-8UUVuboZZxpHctDZFtCDuz9lTdIYjXO")
-                .setOAuthAccessTokenSecret("2DqixWkUMYBTiImApgsHofUjUmabZHhiEKzXFiJf8CRTG");
+        configurationBuilder.setOAuthConsumerKey(twitterConfigurator.getOAuthConsumerKey())
+                .setOAuthConsumerSecret(twitterConfigurator.getOAuthConsumerSecret())
+                .setOAuthAccessToken(twitterConfigurator.getOAuthAccessToken())
+                .setOAuthAccessTokenSecret(twitterConfigurator.getOAuthAccessTokenSecret());
+        configurationBuilder.setUserStreamRepliesAllEnabled(true);
 	}
 	
 	public void initClient(){
-		twitterStream = new TwitterStreamFactory(configurationBuilder.build()).getInstance();
-		initialConfiguration();
+		this.twitterStream = new TwitterStreamFactory(configurationBuilder.build()).getInstance();
+		this.twitterStream.addListener(new ResponseDetectorStreamListener());
 	}
-	
+
 	public void addListeners(StatusListener listener){
 		this.twitterStream.addListener(listener);
 	}
 	
-	private void initialConfiguration(){
-		
-		tweetFilterQuery = new FilterQuery(); // See 
-		tweetFilterQuery.track(new String[]{"Batman","#Batman"}); // OR on keywords
-		tweetFilterQuery.locations(new double[][]{new double[]{-126.562500,30.448674},new double[]{-61.171875,44.087585}}); // See https://dev.twitter.com/docs/streaming-apis/parameters#locations for proper location doc. 
-		//Note that not all tweets have location metadata set.
-		tweetFilterQuery.language(new String[]{"en"}); // Note that language does not work properly on Norwegian tweets
-		
-
+	public void removeListeners(StatusListener listener){
+		this.twitterStream.removeListener(listener);
 	}
-	
-	public void startFiltering(){
+
+	public void addTrackFilter(String track){
+		tweetFilterQuery = new FilterQuery(); // See 
+		tweetFilterQuery.track(new String[]{track}); // OR on keywords
 		twitterStream.filter(tweetFilterQuery);
 	}
-	
-	
+
+	public void start(){
+		twitterStream.user();
+	}
 }

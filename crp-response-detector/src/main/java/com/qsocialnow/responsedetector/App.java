@@ -14,6 +14,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.qsocialnow.responsedetector.service.ResponseDetectorService;
+import com.qsocialnow.responsedetector.service.SourceDetectorService;
 import com.qsocialnow.responsedetector.sources.TwitterClient;
 import com.qsocialnow.responsedetector.sources.TwitterStatusListener;
 
@@ -25,18 +26,13 @@ public class App implements Runnable {
     private ExecutorService appExecutor;
 
     @Resource
-    private List<ResponseDetectorService> responseDetectors;
+    private List<SourceDetectorService> sourceDetectors;
 
     private ExecutorService responseDetectorExecutor;
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
         context.registerShutdownHook();
-    	/*TwitterClient client = new TwitterClient();
-        client.initClient();
-        client.addListeners(new TwitterStatusListener());
-        client.startFiltering();*/
-        
     }
 
     public void start() {
@@ -46,16 +42,16 @@ public class App implements Runnable {
 
     @Override
     public void run() {
-        responseDetectorExecutor = Executors.newFixedThreadPool(responseDetectors.size());
-        for (Runnable responseDetector : responseDetectors) {
-            responseDetectorExecutor.execute(responseDetector);
+        responseDetectorExecutor = Executors.newFixedThreadPool(sourceDetectors.size());
+        for (Runnable sourceDetector : sourceDetectors) {
+            responseDetectorExecutor.execute(sourceDetector);
         }
     }
 
     public void close() {
         log.info("Starting exit...");
-        for (ResponseDetectorService responseDetector : responseDetectors) {
-            responseDetector.stop();
+        for (SourceDetectorService sourceDetector : sourceDetectors) {
+            sourceDetector.stop();
         }
         try {
             if (responseDetectorExecutor != null) {
