@@ -35,4 +35,6 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> search(int from, int size, String sortField, String name, Mapping<T, E> mapping);
 
+    public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping);
+
 }

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
-import com.qsocialnow.common.pagination.PageResponse;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.rest.response.RestResponseHandler;
 import com.qsocialnow.service.DomainService;
 

@@ -22,7 +22,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.services.DomainService;
+import com.qsocialnow.services.TriggerService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateTriggerViewModel implements Serializable {
@@ -30,7 +30,7 @@ public class CreateTriggerViewModel implements Serializable {
     private static final long serialVersionUID = 2259179419421396093L;
 
     @WireVariable
-    private DomainService domainService;
+    private TriggerService triggerService;
 
     private Trigger currentTrigger;
 
@@ -76,7 +76,7 @@ public class CreateTriggerViewModel implements Serializable {
     @Command
     @NotifyChange("currentTrigger")
     public void save() {
-        domainService.createTrigger(domain, currentTrigger);
+        triggerService.create(domain, currentTrigger);
         Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
         currentTrigger = new Trigger();
         currentTrigger.setSegments(new ArrayList<>());
