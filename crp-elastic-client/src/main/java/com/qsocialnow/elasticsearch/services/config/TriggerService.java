@@ -51,4 +51,21 @@ public class TriggerService {
         return triggers;
     }
 
+    public List<Trigger> getTriggers(Configurator configurator, String domainId) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TriggerMapping mapping = TriggerMapping.getInstance();
+        mapping.setIdParent(domainId);
+
+        SearchResponse<Trigger> response = repository.searchChildMapping(mapping);
+
+        List<Trigger> triggers = response.getSources();
+
+        repository.closeClient();
+        return triggers;
+
+    }
+
 }

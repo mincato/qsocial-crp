@@ -12,6 +12,8 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class DomainService {
 
+    private TriggerService triggerService;
+
     public Domain findDomainById(String name) {
         Configurator configurator = new Configurator();
         return findDomainById(configurator, name);
@@ -122,6 +124,16 @@ public class DomainService {
 
         repository.closeClient();
         return domains;
+    }
+
+    public Domain findDomainWithTriggers(Configurator configurator, String domainId) {
+        Domain domain = findDomain(domainId);
+        domain.setTriggers(triggerService.getTriggers(configurator, domainId));
+        return domain;
+    }
+
+    public void setTriggerService(TriggerService triggerService) {
+        this.triggerService = triggerService;
     }
 
 }

@@ -19,6 +19,7 @@ import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
+import com.qsocialnow.elasticsearch.mappings.config.TriggerMapping;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -365,6 +366,31 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @Override
+    public <E> SearchResponse<E> searchChildMapping(TriggerMapping mapping) {
+        String query = "{\"query\":{ \"has_parent\" : { \"parent_type\":\"" + mapping.getParentType()
+                + "\", \"query\":{ \"term\":{\"_id\":\"" + mapping.getIdParent() + "\"}}}}}";
+
+        Search search = new Search.Builder(query).addIndex(mapping.getIndex()).addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses);
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping) {
         Get get = new Get.Builder(mapping.getIndex(), id).type(mapping.getType()).build();
@@ -383,4 +409,5 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
         return response;
     }
+
 }
