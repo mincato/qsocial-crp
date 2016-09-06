@@ -1,0 +1,49 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<n:hr />
+	<x:div class="form-group">
+		<n:label class="control-label">
+			${labels.domain.resolutions}:
+		</n:label>
+		<n:div class="col-md-2 col-xs-4 pull-right">
+			<n:div class="link-button">
+				<a onClick="@command('addResolution')">
+					${labels.domain.add.resolution}
+					<i class="fa fa-plus-circle fa-2x"></i>
+				</a>
+			</n:div>
+		</n:div>
+	</x:div>
+	<div zclass="col-sm-12">
+		<div visible="@load(empty vm.resolutions)">
+			${labels.domain.without.resolutions}
+		</div>
+		<div>
+			<table class="table table-condensed table-striped">
+				<tbody children="@bind(vm.resolutions)">
+					<template name="children">
+						<tr>
+							<td>
+								<n:div class="form-group">
+									<textbox type="text"
+										class="form-control" value="@bind(each.description)">
+									</textbox>
+								</n:div>
+							</td>
+							<td>
+								<div zclass="link-button">
+									<a
+										onClick="@command('deleteResolution', index = forEachStatus.index)">
+										<i
+											class="glyphicon glyphicon-erase fa-2x">
+										</i>
+										${labels.domain.delete.resolution}
+									</a>
+								</div>
+							</td>
+						</tr>
+					</template>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</zk>

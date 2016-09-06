@@ -1,10 +1,12 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -15,6 +17,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.model.DomainView;
 import com.qsocialnow.services.DomainService;
@@ -34,6 +37,8 @@ public class CreateDomainViewModel implements Serializable {
     private DomainView currentDomain;
 
     private List<Thematic> thematics;
+    
+    private List<Resolution> resolutions;
 
     public DomainView getCurrentDomain() {
         return currentDomain;
@@ -47,6 +52,7 @@ public class CreateDomainViewModel implements Serializable {
     public void init() {
         initDomain();
         thematics = thematicService.findAll();
+        resolutions = new ArrayList<Resolution>();
 
     }
 
@@ -72,6 +78,29 @@ public class CreateDomainViewModel implements Serializable {
     @Command
     @NotifyChange({ "currentDomain" })
     public void clear() {
+    	resolutions = new ArrayList<Resolution>();
     }
+    
+    @Command
+    @NotifyChange("resolutions")
+    public void addResolution() {
+    	resolutions.add(new Resolution());
+    }
+    
+    @Command
+    @NotifyChange("resolutions")
+    public void deleteResolution(@BindingParam("index") int idx) {
+    	resolutions.remove(idx);
+    }
+     
+	public List<Resolution> getResolutions() {
+		return resolutions;
+	}
+
+	public void setResolutions(List<Resolution> resolutions) {
+		this.resolutions = resolutions;
+	}
+    
+    
 
 }
