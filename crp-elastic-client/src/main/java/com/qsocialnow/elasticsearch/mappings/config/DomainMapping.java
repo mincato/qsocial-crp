@@ -101,4 +101,13 @@ public class DomainMapping implements Mapping<DomainType, Domain> {
         return domainType;
     }
 
+    @Override
+    public Domain getDocument(DomainType documentType) {
+        Domain domain = new Domain();
+        domain.setId(documentType.getId());
+        domain.setName(documentType.getName());
+        domain.setThematics(documentType.getThematics());
+        return domain;
+    }
+
 }

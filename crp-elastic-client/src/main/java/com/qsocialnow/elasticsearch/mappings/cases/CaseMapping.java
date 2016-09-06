@@ -71,4 +71,26 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         return caseType;
     }
 
+    @Override
+    public Case getDocument(CaseType documentType) {
+        Case caseDocument = new Case();
+        caseDocument.setId(documentType.getId());
+        // caseType.setActionsRegistry(document.getActionsRegistry());
+        caseDocument.setAdminUnits(documentType.getAdminUnits());
+        caseDocument.setAsignedValue(documentType.getAsignedValue());
+        caseDocument.setCaseCategories(documentType.getCaseCategories());
+        caseDocument.setCloseDate(documentType.getCloseDate());
+        caseDocument.setCoordinates(documentType.getCoordinates());
+        caseDocument.setCustomer(documentType.getCustomer());
+        caseDocument.setDescription(documentType.getDescription());
+        caseDocument.setOpen(documentType.getOpen());
+        caseDocument.setOpenDate(documentType.getOpenDate());
+        caseDocument.setPendingResponse(documentType.getPendingResponse());
+        caseDocument.setResolution(documentType.getResolution());
+        caseDocument.setTitle(documentType.getTitle());
+        caseDocument.setTriggerEvent(documentType.getTriggerEvent());
+        caseDocument.setUnitValue(documentType.getUnitValue());
+        return caseDocument;
+    }
+
 }

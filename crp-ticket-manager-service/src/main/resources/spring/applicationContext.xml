@@ -35,6 +35,8 @@
 	</bean>
 
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
+		<property name="triggerService" ref="triggerElasticService"></property>
+		<property name="resolutionService" ref="resolutionElasticService"></property>
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
