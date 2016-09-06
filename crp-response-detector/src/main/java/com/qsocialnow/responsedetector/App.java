@@ -13,10 +13,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.qsocialnow.responsedetector.service.ResponseDetectorService;
 import com.qsocialnow.responsedetector.service.SourceDetectorService;
-import com.qsocialnow.responsedetector.sources.TwitterClient;
-import com.qsocialnow.responsedetector.sources.TwitterStatusListener;
 
 @Component
 public class App implements Runnable {
@@ -31,7 +28,8 @@ public class App implements Runnable {
     private ExecutorService responseDetectorExecutor;
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
+        ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
+                "classpath:spring/applicationContext.xml");
         context.registerShutdownHook();
     }
 

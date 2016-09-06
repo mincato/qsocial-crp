@@ -16,7 +16,7 @@ public class TwitterConfiguratorFactory {
     public TwitterConfigurator getConfigurator(String twitterConfiguratorZnodePath) throws Exception {
         byte[] configuratorBytes = zookeeperClient.getData().forPath(twitterConfiguratorZnodePath);
         TwitterConfigurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
-        		TwitterConfigurator.class);
+                TwitterConfigurator.class);
         return configurator;
     }
 

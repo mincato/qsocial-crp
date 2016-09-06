@@ -17,7 +17,7 @@ public class ResponseDetectorConfig {
 
     @Value("${app.twitter.app.configurator.path}")
     private String twitterAppConfiguratorZnodePath;
-    
+
     @Value("${app.event.twitter.messages}")
     private String twitterMessagesPath;
 
@@ -33,12 +33,12 @@ public class ResponseDetectorConfig {
         return elasticCasesConfiguratorZnodePath;
     }
 
-	public String getTwitterAppConfiguratorZnodePath() {
-		return twitterAppConfiguratorZnodePath;
-	}
+    public String getTwitterAppConfiguratorZnodePath() {
+        return twitterAppConfiguratorZnodePath;
+    }
 
-	public String getTwitterMessagesPath() {
-		return twitterMessagesPath;
-	}
+    public String getTwitterMessagesPath() {
+        return twitterMessagesPath;
+    }
 
 }
