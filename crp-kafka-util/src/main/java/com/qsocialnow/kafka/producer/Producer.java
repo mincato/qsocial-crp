@@ -50,20 +50,25 @@ public class Producer {
     public void send(List<String> messages) {
         if (CollectionUtils.isNotEmpty(messages)) {
             for (String message : messages) {
-                ProducerRecord<String, String> record = new ProducerRecord<>(kafkaConfig.getTopic(), message);
-                producer.send(record, new Callback() {
-
-                    @Override
-                    public void onCompletion(RecordMetadata record, Exception ex) {
-                        if (ex != null) {
-                            log.error("There was an error sending the record", ex);
-                            // TODO meter en bigqueue? Si es asi, hacerlo en
-                            // otro thread para no bloquear
-                        }
-                    }
-                });
+                send(message);
             }
         }
+    }
+
+    public void send(String message) {
+        ProducerRecord<String, String> record = new ProducerRecord<>(kafkaConfig.getTopic(), message);
+        producer.send(record, new Callback() {
+
+            @Override
+            public void onCompletion(RecordMetadata record, Exception ex) {
+                if (ex != null) {
+                    log.error("There was an error sending the record", ex);
+                    // TODO meter en bigqueue? Si es asi, hacerlo en
+                    // otro thread para no bloquear
+                }
+            }
+        });
+
     }
 
     public void close() {
