@@ -28,9 +28,13 @@
 	</bean>
 	
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
+		<property name="triggerService" ref="triggerElasticService"></property>
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
+	</bean>
+	
+	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
 	</bean>
 	
 	<util:map id="actions">

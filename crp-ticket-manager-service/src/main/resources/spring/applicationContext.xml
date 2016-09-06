@@ -43,6 +43,9 @@
 	<bean id="resolutionElasticService" class="com.qsocialnow.elasticsearch.services.config.ResolutionService">
 	</bean>
 	
+	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
+	</bean>
+	
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">
 	</bean>
 

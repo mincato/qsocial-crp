@@ -30,6 +30,7 @@
 		<gson-version>2.7</gson-version>
 		<spring.version>4.3.2.RELEASE</spring.version>
 		<curator.version>2.9.1</curator.version>
+		<twitter4j.version>4.0.4</twitter4j.version>
 	</properties>
 
 	<dependencies>
@@ -69,6 +70,19 @@
 			<artifactId>spring-core</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
+		
+		<!-- Twitter -->
+		<dependency>
+	        <groupId>org.twitter4j</groupId>
+	        <artifactId>twitter4j-core</artifactId>
+	        <version>${twitter4j.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-stream</artifactId>
+            <version>${twitter4j.version}</version>
+        </dependency>
 
 		<!-- Logging -->
 		<dependency>

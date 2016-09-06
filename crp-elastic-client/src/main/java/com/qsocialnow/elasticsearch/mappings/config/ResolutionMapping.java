@@ -4,7 +4,6 @@ import org.json.simple.JSONObject;
 
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
-import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
 import com.qsocialnow.elasticsearch.mappings.types.config.ResolutionType;
 
 public class ResolutionMapping implements ChildMapping<ResolutionType, Resolution> {
@@ -44,7 +43,7 @@ public class ResolutionMapping implements ChildMapping<ResolutionType, Resolutio
 
     @Override
     public Class<?> getClassType() {
-        return ActionRegistryType.class;
+        return ResolutionType.class;
     }
 
     @Override
@@ -62,6 +61,11 @@ public class ResolutionMapping implements ChildMapping<ResolutionType, Resolutio
     @Override
     public void setIdParent(String idParent) {
         this.idParent = idParent;
+    }
+
+    @Override
+    public String getParentType() {
+        return DomainMapping.TYPE;
     }
 
 }

@@ -1,5 +1,8 @@
 package com.qsocialnow.service;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.model.config.Filter;
@@ -26,6 +29,8 @@ public class FilterNormalizer {
                                             wordFilter.setText(StringUtils.convertLowerCaseAsciiFolding(wordFilter
                                                     .getInputText().split(FilterConstants.COMMA_SEPARATOR)));
                                         default:
+                                            wordFilter.setText(new HashSet<>(Arrays.asList(wordFilter.getInputText()
+                                                    .split(FilterConstants.COMMA_SEPARATOR))));
                                             break;
                                     }
                                 }

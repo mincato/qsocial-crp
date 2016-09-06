@@ -10,16 +10,14 @@ public class PageResponse<T> implements Serializable {
     private List<T> items;
     private Integer pageNumber;
     private Integer pageSize;
-    private Long totalSize;
 
     public PageResponse() {
     }
 
-    public PageResponse(List<T> items, Integer pageNumber, Integer pageSize, Long totalSize) {
+    public PageResponse(List<T> items, Integer pageNumber, Integer pageSize) {
         this.items = items;
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
-        this.totalSize = totalSize;
     }
 
     public List<T> getItems() {
@@ -32,10 +30,6 @@ public class PageResponse<T> implements Serializable {
 
     public Integer getPageSize() {
         return pageSize;
-    }
-
-    public Long getTotalSize() {
-        return totalSize;
     }
 
 }

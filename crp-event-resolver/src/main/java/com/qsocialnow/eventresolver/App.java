@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
@@ -131,15 +130,6 @@ public class App implements Runnable {
                     case CHILD_ADDED: {
                         log.info("Node added: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
                         createEventHandlerProcessor(ZKPaths.getNodeFromPath(event.getData().getPath()));
-                        break;
-                    }
-                    case INITIALIZED: {
-                        log.info("PathChildrenCache initialized");
-                        List<ChildData> initialData = event.getInitialData();
-                        for (ChildData childData : initialData) {
-                            createEventHandlerProcessor(ZKPaths.getNodeFromPath(childData.getPath()));
-                            log.info("initial node: " + ZKPaths.getNodeFromPath(childData.getPath()));
-                        }
                         break;
                     }
                     default:

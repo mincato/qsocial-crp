@@ -47,7 +47,7 @@ public class MessageProcessor {
         log.info(String.format("Searching for domain: %s", domainId));
         Configurator elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
                 .getElasticConfigConfiguratorZnodePath());
-        Domain domain = domainElasticService.findDomain(elasticConfigConfigurator, domainId);
+        Domain domain = domainElasticService.findDomainWithTriggers(elasticConfigConfigurator, domainId);
         if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
             DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
             if (detectionCriteria != null) {

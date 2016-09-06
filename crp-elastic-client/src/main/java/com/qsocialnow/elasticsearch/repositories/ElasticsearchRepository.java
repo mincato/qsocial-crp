@@ -19,6 +19,7 @@ import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
+import com.qsocialnow.elasticsearch.mappings.config.TriggerMapping;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -26,6 +27,7 @@ import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.BulkResult;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
 import io.searchbox.core.Index;
@@ -155,6 +157,42 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         }
         return idValue;
+    }
+
+    @Override
+    public <E> String updateChildMapping(String id, ChildMapping<T, E> mapping, T document) {
+        Index index = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id)
+                .setParameter(PARENT_PARAMETER, mapping.getIdParent()).build();
+        String idValue = null;
+        try {
+            DocumentResult response = client.execute(index);
+            if (response.isSucceeded()) {
+                idValue = response.getId();
+            } else {
+                log.error("There was an error indexing child mapping: " + response.getErrorMessage());
+                throw new RuntimeException(response.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+
+        }
+        return idValue;
+    }
+
+    @Override
+    public <E> void removeChildMapping(String id, ChildMapping<T, E> mapping) {
+        Delete delete = new Delete.Builder(id).index(mapping.getIndex()).type(mapping.getType())
+                .setParameter(PARENT_PARAMETER, mapping.getIdParent()).build();
+        try {
+            DocumentResult response = client.execute(delete);
+            if (!response.isSucceeded()) {
+                log.error("There was an error removing mapping: " + response.getErrorMessage());
+                throw new RuntimeException(response.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -300,6 +338,58 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping) {
+
+        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
+                + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"has_parent\" : { \"parent_type\":\""
+                + mapping.getParentType() + "\", \"query\":{ \"term\":{\"_id\":\"" + mapping.getIdParent() + "\"}}}}}";
+
+        Search search = new Search.Builder(query).addIndex(mapping.getIndex()).addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses);
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public <E> SearchResponse<E> searchChildMapping(TriggerMapping mapping) {
+        String query = "{\"query\":{ \"has_parent\" : { \"parent_type\":\"" + mapping.getParentType()
+                + "\", \"query\":{ \"term\":{\"_id\":\"" + mapping.getIdParent() + "\"}}}}}";
+
+        Search search = new Search.Builder(query).addIndex(mapping.getIndex()).addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses);
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping) {
@@ -319,4 +409,5 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
         return response;
     }
+
 }

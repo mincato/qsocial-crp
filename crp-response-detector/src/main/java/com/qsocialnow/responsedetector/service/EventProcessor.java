@@ -29,4 +29,9 @@ public class EventProcessor {
 
     }
 
+    public void process(InPutBeanDocument event) {
+        Gson gson = new GsonBuilder().setDateFormat(EVENT_DATE_FORMAT).create();
+        String message = gson.toJson(event);
+        kafkaProducer.send(message);
+    }
 }
