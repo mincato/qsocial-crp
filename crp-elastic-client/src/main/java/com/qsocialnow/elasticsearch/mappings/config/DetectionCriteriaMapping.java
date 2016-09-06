@@ -55,4 +55,17 @@ public class DetectionCriteriaMapping implements Mapping<DetectionCriteriaType, 
 
         return criteria;
     }
+
+    @Override
+    public DetectionCriteria getDocument(DetectionCriteriaType documentType) {
+        DetectionCriteria criteria = new DetectionCriteria();
+        criteria.setId(documentType.getId());
+        criteria.setAccionCriterias(documentType.getActionCriterias());
+        criteria.setFilter(documentType.getFilter());
+        criteria.setSequenceOrder(documentType.getSequenceOrder());
+        criteria.setValidateFrom(documentType.getValidateFrom());
+        criteria.setValidateTo(documentType.getValidateTo());
+
+        return criteria;
+    }
 }

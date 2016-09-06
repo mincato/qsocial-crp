@@ -68,4 +68,12 @@ public class ResolutionMapping implements ChildMapping<ResolutionType, Resolutio
         return DomainMapping.TYPE;
     }
 
+    @Override
+    public Resolution getDocument(ResolutionType documentType) {
+        Resolution resolution = new Resolution();
+        resolution.setId(documentType.getId());
+        resolution.setDescription(documentType.getDescription());
+        return resolution;
+    }
+
 }

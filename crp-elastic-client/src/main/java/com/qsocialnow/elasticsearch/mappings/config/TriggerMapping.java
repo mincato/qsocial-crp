@@ -75,4 +75,19 @@ public class TriggerMapping implements ChildMapping<TriggerType, Trigger> {
         return DomainMapping.TYPE;
     }
 
+    @Override
+    public Trigger getDocument(TriggerType documentType) {
+        Trigger trigger = new Trigger();
+        trigger.setId(documentType.getId());
+        trigger.setCustomerGroups(documentType.getCustomerGroups());
+        trigger.setDescription(documentType.getDescription());
+        trigger.setEnd(documentType.getEnd());
+        trigger.setInit(documentType.getInit());
+        trigger.setName(documentType.getName());
+        trigger.setResolutions(documentType.getResolutions());
+        trigger.setSegments(documentType.getSegments());
+        trigger.setStatus(documentType.getStatus());
+        return trigger;
+    }
+
 }

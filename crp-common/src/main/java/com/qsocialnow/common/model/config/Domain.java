@@ -16,6 +16,8 @@ public class Domain {
 
     private List<Long> thematics;
 
+    private List<Resolution> resolutions;
+
     public Domain() {
         triggers = new ArrayList<>();
     }
@@ -54,5 +56,13 @@ public class Domain {
 
     public void addTrigger(Trigger trigger) {
         this.triggers.add(trigger);
+    }
+
+    public List<Resolution> getResolutions() {
+        return resolutions;
+    }
+
+    public void setResolutions(List<Resolution> resolutions) {
+        this.resolutions = resolutions;
     }
 }
