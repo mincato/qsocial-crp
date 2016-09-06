@@ -6,4 +6,6 @@ public interface ChildMapping<T, E> extends Mapping<T, E> {
 
     public void setIdParent(String idParent);
 
+    public String getParentType();
+
 }

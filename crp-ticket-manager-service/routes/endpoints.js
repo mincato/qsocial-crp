@@ -162,8 +162,40 @@ router.put('/domains/:id/trigger', function (req, res) {
   
   var domainId = req.params.id;
 
-  var domainService = javaContext.getBeanSync("domainService");
-  domainService.createTrigger(domainId, trigger, asyncResponse);
+  var triggerService = javaContext.getBeanSync("triggerService");
+  triggerService.createTrigger(domainId, trigger, asyncResponse);
+
+});
+
+router.get('/domains/:id/trigger', function (req, res) {
+
+	  function asyncResponse(err,responseTriggers) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(responseTriggers !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(responseTriggers));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
+	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+	  var name = req.query.name ? req.query.name : null;
+	  
+	  if(name === null) {
+		  triggerService.findAll(domainId, pageNumber, pageSize, asyncResponse);
+	  }
 
 });
 

@@ -18,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
-import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.DomainService;
@@ -132,19 +131,4 @@ public class DomainServiceImpl implements DomainService {
         }
     }
 
-    @Override
-    public void createTrigger(String domainId, Trigger trigger) {
-        try {
-            UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
-                    .path("/trigger");
-
-            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-
-            restTemplate.put(builder.toUriString(), trigger);
-        } catch (Exception e) {
-            log.error("There was an error while trying to call domain service", e);
-            throw new RuntimeException(e);
-        }
-    }
 }

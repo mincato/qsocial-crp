@@ -14,8 +14,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.unitils.reflectionassert.ReflectionAssert;
 
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.pagination.PageRequest;
-import com.qsocialnow.common.pagination.PageResponse;
 import com.qsocialnow.mock.CaseBuilder;
 import com.qsocialnow.persistence.CaseRepository;
 
@@ -44,7 +44,7 @@ public class CaseServiceTest {
     public void find() {
         List<CaseListView> expectedCases = Arrays.asList(case1ListView, case2ListView, case3ListView);
 
-        PageResponse<CaseListView> expectedPageCases = new PageResponse<CaseListView>(expectedCases, 0, 0, 0l);
+        PageResponse<CaseListView> expectedPageCases = new PageResponse<CaseListView>(expectedCases, 0, 0);
         when(caseRepository.findAll(Mockito.any(PageRequest.class))).thenReturn(expectedCases);
 
         PageResponse<CaseListView> results = caseService.findAll(0, 0);

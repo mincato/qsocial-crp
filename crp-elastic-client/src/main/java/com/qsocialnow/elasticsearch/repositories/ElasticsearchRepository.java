@@ -337,6 +337,33 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping) {
+
+        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
+                + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"has_parent\" : { \"parent_type\":\""
+                + mapping.getParentType() + "\", \"query\":{ \"term\":{\"_id\":\"" + mapping.getIdParent() + "\"}}}}}";
+
+        Search search = new Search.Builder(query).addIndex(mapping.getIndex()).addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses);
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping) {
