@@ -6,11 +6,13 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -281,8 +283,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             Map source = (Map) hit.source;
             String id = (String) source.get(JestResult.ES_METADATA_ID);
 
-            response.setSource((E) result.getSourceAsObject(mapping.getClassType()));
-            response.setId(id);
+            T sourceType = (T) result.getSourceAsObject(mapping.getClassType());
+            response.setSource(mapping.getDocument(sourceType));
         }
         return response;
     }
@@ -290,11 +292,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> search(int from, int size, String sortField, String name, Mapping<T, E> mapping) {
 
-        String query = "{\"from\" :" + from + ", \"size\" : " + size + " ," + "\"sort\" : [{ \"" + sortField
-                + "\" : {\"order\" : \"asc\"}}] ," + "\"query\":{ \"match_all\" : { }}}";
-
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.matchQuery("name", name));
+        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC)
+                .query(QueryBuilders.matchQuery("name", name));
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
 
@@ -308,8 +308,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
 
         if (result.isSucceeded()) {
-            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
-            response.setSources(responses);
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
         }
         return response;
     }
@@ -332,8 +333,69 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
 
         if (result.isSucceeded()) {
-            List<E> responses = (List<E>) result.getSourceAsObjectList(mapping.getClassType());
-            response.setSources(responses);
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        }
+        return response;
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping) {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder
+                .from(from)
+                .size(size)
+                .sort(sortField, SortOrder.ASC)
+                .query(QueryBuilders.hasParentQuery(mapping.getParentType(),
+                        QueryBuilders.termQuery("_id", mapping.getIdParent())));
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public <E> SearchResponse<E> searchChildMapping(ChildMapping<T, E> mapping) {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.hasParentQuery(mapping.getParentType(),
+                QueryBuilders.termQuery("_id", mapping.getIdParent())));
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
         }
         return response;
     }
@@ -352,9 +414,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
 
         if (result.isSucceeded()) {
-            response.setSource((E) result.getSourceAsObject(mapping.getClassType()));
-            response.setId(result.getId());
+            T source = (T) result.getSourceAsObject(mapping.getClassType());
+            response.setSource(mapping.getDocument(source));
         }
         return response;
     }
+
 }

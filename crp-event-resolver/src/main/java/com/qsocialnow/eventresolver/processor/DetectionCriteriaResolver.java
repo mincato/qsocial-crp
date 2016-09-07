@@ -23,6 +23,7 @@ public class DetectionCriteriaResolver {
 
     public DetectionCriteria resolve(NormalizedInputBeanDocument normalizedMessage,
             List<DetectionCriteria> detectionCriterias) {
+        log.info("resolving detection criteria...");
         DetectionCriteria detectionCriteria = null;
         if (detectionCriterias != null) {
             boolean match = false;

@@ -69,7 +69,7 @@ public class DomainRepository {
             Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
                     Configurator.class);
 
-            Domain domain = domainElasticService.findDomain(configurator, domainId);
+            Domain domain = domainElasticService.findDomainWithResolutions(configurator, domainId);
 
             return domain;
         } catch (Exception e) {

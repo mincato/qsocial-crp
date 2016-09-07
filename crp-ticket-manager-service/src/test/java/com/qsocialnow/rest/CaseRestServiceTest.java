@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.qsocialnow.common.model.cases.CaseListView;
-import com.qsocialnow.common.pagination.PageResponse;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.rest.response.RestResponseHandler;
 import com.qsocialnow.service.CaseService;
 
@@ -35,7 +35,7 @@ public class CaseRestServiceTest {
     @Test
     public void find() {
         PageResponse<CaseListView> cases = new PageResponse<CaseListView>(Arrays.asList(new CaseListView(),
-                new CaseListView(), new CaseListView()), 0, 0, 0l);
+                new CaseListView(), new CaseListView()), 0, 0);
         Mockito.when(caseService.findAll(Mockito.any(Integer.class), Mockito.any(Integer.class))).thenReturn(cases);
 
         Response response = service.findAll(null, null, null);
