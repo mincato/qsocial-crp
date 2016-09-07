@@ -1,13 +1,8 @@
 package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.CollectionUtils;
 
 import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.config.DomainMapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.DomainType;
@@ -88,17 +83,9 @@ public class DomainService {
         String response = repository.indexMapping(mapping, document);
         repository.closeClient();
 
-        indexResolutions(configurator, response, domain.getResolutions());
+        resolutionService.indexResolutions(configurator, response, domain.getResolutions());
 
         return response;
-    }
-
-    private void indexResolutions(Configurator configurator, String domainId, List<Resolution> resolutions) {
-        if (CollectionUtils.isNotEmpty(resolutions)) {
-            for (Resolution resolution : resolutions) {
-                resolutionService.indexResolution(configurator, domainId, resolution);
-            }
-        }
     }
 
     public String updateDomain(Domain document) {
@@ -118,28 +105,9 @@ public class DomainService {
         String response = repository.updateIndexMapping(domain.getId(), mapping, document);
         repository.closeClient();
 
-        updateResolutions(configurator, domain.getId(), domain.getResolutions());
+        resolutionService.updateResolutions(configurator, domain.getId(), domain.getResolutions());
 
         return response;
-    }
-
-    private void updateResolutions(Configurator configurator, String domainId, List<Resolution> newResolutions) {
-        List<Resolution> oldResolutions = resolutionService.getResolutions(configurator, domainId);
-        Set<String> oldResolutionsIds = oldResolutions.stream().map(Resolution::getId).collect(Collectors.toSet());
-        if (CollectionUtils.isNotEmpty(newResolutions)) {
-            for (Resolution resolution : newResolutions) {
-                if (resolution.getId() != null) {
-                    oldResolutionsIds.remove(resolution.getId());
-                    resolutionService.updateResolution(configurator, domainId, resolution);
-                } else {
-                    resolutionService.indexResolution(configurator, domainId, resolution);
-                }
-            }
-        }
-        for (String resolutionsToRemove : oldResolutionsIds) {
-            resolutionService.deleteResolution(configurator, domainId, resolutionsToRemove);
-        }
-
     }
 
     public List<Domain> getDomains(Configurator configurator, Integer offset, Integer limit) {
