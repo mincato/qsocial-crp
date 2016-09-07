@@ -17,8 +17,9 @@ import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
-import com.qsocialnow.elasticsearch.queues.Producer;
+import com.qsocialnow.elasticsearch.queues.QueueProducer;
 import com.qsocialnow.elasticsearch.queues.QueueService;
+import com.qsocialnow.elasticsearch.queues.QueueServiceFactory;
 import com.qsocialnow.elasticsearch.queues.QueueType;
 import com.qsocialnow.elasticsearch.repositories.IndexResponse;
 import com.qsocialnow.elasticsearch.repositories.Repository;
@@ -35,9 +36,11 @@ public class CaseService {
 
     private final static String INDEX_NAME_REGISTRY = "registry_";
 
-    private static Producer<Case> producer;
+    private static QueueService queueService;
 
-    private static Producer<Case> failProducer;
+    private static QueueProducer<Case> producer;
+
+    private static QueueProducer<Case> failProducer;
 
     private static CaseConsumer consumer;
 
@@ -222,43 +225,44 @@ public class CaseService {
 
     private boolean addItemInQueue(Case item) {
         boolean isQueueCreatedOK = false;
-        QueueService queueService = QueueService.getInstance(caseQueueConfigurator);
-        if (queueService.initQueue(QueueType.CASES.type())) {
+        if (queueService == null) {
+            QueueServiceFactory queueServiceFactory = QueueServiceFactory.getInstance();
+            queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
+
             if (producer == null) {
-                producer = new Producer<Case>();
+                producer = new QueueProducer<Case>();
                 consumer = new CaseConsumer(elasticSearchCaseConfigurator);
                 producer.addConsumer(consumer);
 
                 queueService.startConsumer(consumer);
                 queueService.startProducer(producer);
             }
-            producer.addItem(item);
-            isQueueCreatedOK = true;
         }
+        producer.addItem(item);
+        isQueueCreatedOK = true;
         return isQueueCreatedOK;
     }
 
     private boolean addFailItemInQueue(Case item, boolean isDeadItem) {
         boolean isQueueCreatedOK = false;
-        QueueService queueService = QueueService.getInstance(caseQueueConfigurator);
-        if (queueService.initFailQueue(QueueType.CASES.type())) {
+        if (queueService == null) {
+            QueueServiceFactory queueServiceFactory = QueueServiceFactory.getInstance();
+            queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
             if (failProducer == null) {
-                failProducer = new Producer<Case>();
+                failProducer = new QueueProducer<Case>();
                 failConsumer = new CaseConsumer(elasticSearchCaseConfigurator);
                 failProducer.addConsumer(failConsumer);
 
                 queueService.startFailConsumer(failConsumer);
                 queueService.startFailProducer(failProducer);
             }
-            if (!isDeadItem) {
-                failProducer.addItem(item);
-            } else {
-                failProducer.addDeadItem(item);
-            }
-            isQueueCreatedOK = true;
-        } else {
-            log.error("Unable to create fail queues instances to allow bulk fail index-cases: ");
         }
+        if (!isDeadItem) {
+            failProducer.addItem(item);
+        } else {
+            failProducer.addDeadItem(item);
+        }
+        isQueueCreatedOK = true;
         return isQueueCreatedOK;
     }
 }

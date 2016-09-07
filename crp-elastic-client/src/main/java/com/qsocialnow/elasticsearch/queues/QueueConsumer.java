@@ -14,15 +14,15 @@ import org.slf4j.LoggerFactory;
 
 import com.leansoft.bigqueue.IBigQueue;
 
-public abstract class Consumer<T> extends Thread {
+public abstract class QueueConsumer<T> extends Thread {
 
-    private static final Logger log = LoggerFactory.getLogger(Consumer.class);
+    private static final Logger log = LoggerFactory.getLogger(QueueConsumer.class);
 
     private IBigQueue bigQueue;
 
     private Object lock = new Object();
 
-    private ConsumerMonitor<T> monitor;
+    private QueueConsumerMonitor<T> monitor;
 
     private int totalItemCounts;
 
@@ -34,8 +34,8 @@ public abstract class Consumer<T> extends Thread {
 
     private static final AtomicInteger consumingItemCount = new AtomicInteger(0);
 
-    public Consumer() {
-        monitor = new ConsumerMonitor<T>(this);
+    public QueueConsumer() {
+        monitor = new QueueConsumerMonitor<T>(this);
     }
 
     public void setQueue(IBigQueue bigQueue) {
@@ -74,9 +74,9 @@ public abstract class Consumer<T> extends Thread {
         }
     };
 
-    public abstract void addDocument(T document);
+    public abstract void process(T document);
 
-    public abstract void saveDocuments();
+    public abstract void save();
 
     public void run() {
         startMonitor();
@@ -91,7 +91,7 @@ public abstract class Consumer<T> extends Thread {
                     while (index < getTotalItemCounts()) {
                         if (!bigQueue.isEmpty()) {
                             item = bigQueue.dequeue();
-                            addDocument(readObjectFromQueue(item));
+                            process(readObjectFromQueue(item));
                             index = consumingItemCount.getAndIncrement();
                         } else {
                             break;
@@ -99,7 +99,7 @@ public abstract class Consumer<T> extends Thread {
                     }
                     log.info("Finish to read the queue");
                     consumingItemCount.set(0);
-                    saveDocuments();
+                    save();
                 } catch (Exception e) {
                     log.error("Error reading information from queue", e);
                 } finally {

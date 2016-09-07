@@ -3,13 +3,13 @@ package com.qsocialnow.elasticsearch.queues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConsumerMonitor<T> implements Runnable {
+public class QueueConsumerMonitor<T> implements Runnable {
 
-    private static final Logger log = LoggerFactory.getLogger(ConsumerMonitor.class);
+    private static final Logger log = LoggerFactory.getLogger(QueueConsumerMonitor.class);
 
-    private Consumer<T> consumerToMonitor;
+    private QueueConsumer<T> consumerToMonitor;
 
-    public ConsumerMonitor(final Consumer<T> consumer) {
+    public QueueConsumerMonitor(final QueueConsumer<T> consumer) {
         this.consumerToMonitor = consumer;
     }
 

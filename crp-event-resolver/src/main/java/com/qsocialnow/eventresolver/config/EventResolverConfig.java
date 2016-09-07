@@ -24,6 +24,9 @@ public class EventResolverConfig {
     @Value("${app.cases.queue.configurator.path}")
     private String casesQueueConfiguratorZnodePath;
 
+    @Value("${app.events.queue.configurator.path}")
+    private String eventsQueueConfiguratorZnodePath;
+
     @Value("${app.domains.path}")
     private String domainsPath;
 
@@ -53,6 +56,10 @@ public class EventResolverConfig {
 
     public String getCasesQueueConfiguratorZnodePath() {
         return casesQueueConfiguratorZnodePath;
+    }
+
+    public String getEventsQueueConfiguratorZnodePath() {
+        return eventsQueueConfiguratorZnodePath;
     }
 
 }

@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
 import com.qsocialnow.responsedetector.model.TwitterMessageEvent;
-import com.qsocialnow.responsedetector.service.EventProcessor;
+import com.qsocialnow.responsedetector.service.SourceDetectorService;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -26,14 +26,14 @@ public class TwitterClient {
 
     private ConfigurationBuilder configurationBuilder;
 
-    private EventProcessor eventProcessor;
+    private SourceDetectorService sourceService;
 
     private static Twitter twitter;
 
     private static final Logger log = LoggerFactory.getLogger(TwitterClient.class);
 
-    public TwitterClient(EventProcessor eventProcessor) {
-        this.eventProcessor = eventProcessor;
+    public TwitterClient(SourceDetectorService sourceService) {
+        this.sourceService = sourceService;
     }
 
     public void initTwitterClient(TwitterConfigurator twitterConfigurator) {
@@ -78,7 +78,8 @@ public class TwitterClient {
                             event.setResponseDetected(true);
 
                             log.info("Creating event to handle automatic response detection");
-                            eventProcessor.process(event);
+                            sourceService.processEvent(event);
+                            sourceService.removeSourceConversation(messageEvent.getMessageId());
                             break;
                         }
                     }

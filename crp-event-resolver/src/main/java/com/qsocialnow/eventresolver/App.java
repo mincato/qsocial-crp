@@ -19,7 +19,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
+import com.qsocialnow.elasticsearch.queues.QueueService;
+import com.qsocialnow.elasticsearch.queues.QueueServiceFactory;
+import com.qsocialnow.elasticsearch.queues.QueueType;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
+import com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory;
 import com.qsocialnow.eventresolver.factories.KafkaConsumerConfigFactory;
 import com.qsocialnow.eventresolver.processor.EventHandlerProcessor;
 import com.qsocialnow.eventresolver.processor.MessageProcessor;
@@ -39,6 +44,9 @@ public class App implements Runnable {
 
     @Autowired
     private KafkaConsumerConfigFactory kafkaConsumerConfigFactory;
+
+    @Autowired
+    private BigQueueConfiguratorFactory bigQueueConfiguratorFactory;
 
     @Autowired
     private MessageProcessor messageProcessor;
@@ -112,8 +120,14 @@ public class App implements Runnable {
     private void createEventHandlerProcessor(String domain) {
         try {
             KafkaConsumerConfig kafkaConfig = kafkaConsumerConfigFactory.create(appConfig.getKafkaConfigZnodePath());
+            QueueConfigurator queueConfig = bigQueueConfiguratorFactory.getConfigurator(appConfig
+                    .getEventsQueueConfiguratorZnodePath());
+
+            QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
+                    queueConfig);
             EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig, domain),
-                    messageProcessor);
+                    messageProcessor, queueService);
+
             eventHandlerProcessors.add(eventHandlerProcessor);
             eventHandlerExecutor.execute(eventHandlerProcessor);
         } catch (Exception e) {
