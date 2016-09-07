@@ -18,7 +18,8 @@ public class ProducerTask extends TimerTask {
 
     private static final AtomicInteger itemCount = new AtomicInteger(0);
 
-    private QueueConfigurator configuration = new QueueConfigurator();
+    private QueueConfigurator configuration = new QueueConfigurator("/tmp/bigqueue/", "centaurico/",
+            "centaurico/error/");
 
     private CaseConfigurator caseConfig = new CaseConfigurator();
 

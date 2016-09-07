@@ -132,6 +132,10 @@ public class TwitterDetectorService extends SourceDetectorService {
 
     @Override
     public void removeSourceConversation(String converstation) {
-        this.pathChildrenCache.clearDataBytes(appConfig.getTwitterAppConfiguratorZnodePath() + "/" + converstation);
+        try {
+            zookeeperClient.delete().forPath(appConfig.getTwitterAppConfiguratorZnodePath() + "/" + converstation);
+        } catch (Exception e) {
+            log.error("Unable to remove message conversation:: " + converstation, e);
+        }
     }
 }
