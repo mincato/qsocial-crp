@@ -21,6 +21,9 @@ public class EventResolverConfig {
     @Value("${app.elastic.cases.configurator.path}")
     private String elasticCasesConfiguratorZnodePath;
 
+    @Value("${app.cases.queue.configurator.path}")
+    private String casesQueueConfiguratorZnodePath;
+
     @Value("${app.domains.path}")
     private String domainsPath;
 
@@ -46,6 +49,10 @@ public class EventResolverConfig {
 
     public String getDomainsPath() {
         return domainsPath;
+    }
+
+    public String getCasesQueueConfiguratorZnodePath() {
+        return casesQueueConfiguratorZnodePath;
     }
 
 }

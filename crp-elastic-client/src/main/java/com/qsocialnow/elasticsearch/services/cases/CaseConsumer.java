@@ -3,11 +3,16 @@ package com.qsocialnow.elasticsearch.services.cases;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.queues.Consumer;
 
 public class CaseConsumer extends Consumer<Case> {
+
+    private static final Logger log = LoggerFactory.getLogger(CaseConsumer.class);
 
     private List<Case> bulkDocuments = new ArrayList<Case>();
 
@@ -22,6 +27,7 @@ public class CaseConsumer extends Consumer<Case> {
     @Override
     public void addDocument(Case caseDoc) {
         synchronized (bulkDocuments) {
+            log.info("Adding to index bulk case:" + caseDoc.getTitle());
             bulkDocuments.add(caseDoc);
         }
     }
@@ -30,6 +36,7 @@ public class CaseConsumer extends Consumer<Case> {
     public void saveDocuments() {
         synchronized (bulkDocuments) {
             if (bulkDocuments.size() > 0) {
+                log.info("CaseConsumer start to perform a bulk index");
                 service.indexBulkCases(this.configurator, bulkDocuments);
                 bulkDocuments.clear();
             }

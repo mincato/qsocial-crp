@@ -16,19 +16,19 @@ import com.leansoft.bigqueue.IBigQueue;
 
 public abstract class Consumer<T> extends Thread {
 
-    private static final int DELAY = 1;
-
-    private static final int INITIAL_DELAY = 1;
-
     private static final Logger log = LoggerFactory.getLogger(Consumer.class);
-
-    private static final int TOTAL_ITEM_COUNTS = 3;
 
     private IBigQueue bigQueue;
 
     private Object lock = new Object();
 
     private ConsumerMonitor<T> monitor;
+
+    private int totalItemCounts;
+
+    private int initialDelay;
+
+    private int delay;
 
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
@@ -69,7 +69,7 @@ public abstract class Consumer<T> extends Thread {
 
     public synchronized void nofityQueueReady() {
         synchronized (lock) {
-            log.info("Consumer notified ready to read..");
+            log.info("Consumer notified starting to read from queue.");
             lock.notify();
         }
     };
@@ -88,7 +88,7 @@ public abstract class Consumer<T> extends Thread {
                     log.info("Starting to read..");
                     byte[] item = null;
                     int index = consumingItemCount.getAndIncrement();
-                    while (index < TOTAL_ITEM_COUNTS) {
+                    while (index < getTotalItemCounts()) {
                         if (!bigQueue.isEmpty()) {
                             item = bigQueue.dequeue();
                             addDocument(readObjectFromQueue(item));
@@ -112,7 +112,7 @@ public abstract class Consumer<T> extends Thread {
 
     private void startMonitor() {
         log.info("Starting monitor...");
-        executor.scheduleWithFixedDelay(monitor, INITIAL_DELAY, DELAY, TimeUnit.MINUTES);
+        executor.scheduleWithFixedDelay(monitor, getInitialDelay(), getDelay(), TimeUnit.MINUTES);
     }
 
     private void stopMonitor() {
@@ -120,5 +120,29 @@ public abstract class Consumer<T> extends Thread {
             log.info("Stoping consumer monitor");
         }
         executor.shutdownNow();
+    }
+
+    public int getTotalItemCounts() {
+        return totalItemCounts;
+    }
+
+    public void setTotalItemCounts(int totalItemCounts) {
+        this.totalItemCounts = totalItemCounts;
+    }
+
+    public int getInitialDelay() {
+        return initialDelay;
+    }
+
+    public void setInitialDelay(int initialDelay) {
+        this.initialDelay = initialDelay;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public void setDelay(int delay) {
+        this.delay = delay;
     }
 }

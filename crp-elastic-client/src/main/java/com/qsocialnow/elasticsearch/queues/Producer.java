@@ -17,13 +17,21 @@ public class Producer<T> extends Thread {
 
     private static final Logger log = LoggerFactory.getLogger(Producer.class);
 
-    private static final int TOTAL_ITEM_COUNTS = 3;
-
     private IBigQueue bigQueue;
+
+    private IBigQueue deadLetterQueue;
 
     private List<Consumer<T>> consumers;
 
+    private int totalItemCounts;
+
+    private int totalMaxDeadItemCounts;
+
     private static final AtomicInteger producingItemCount = new AtomicInteger(0);
+
+    private static final AtomicInteger producingDeadItemCount = new AtomicInteger(0);
+
+    private boolean stop = false;
 
     public Producer() {
         consumers = new ArrayList<Consumer<T>>();
@@ -32,26 +40,40 @@ public class Producer<T> extends Thread {
     public void addItem(T document) {
         try {
             byte[] item = this.getItemSerialized(document);
-
             bigQueue.enqueue(item);
             producingItemCount.incrementAndGet();
-            log.info("Adding item into the queue");
-
-            if (producingItemCount.get() >= TOTAL_ITEM_COUNTS) {
+            log.info("Adding item " + producingItemCount.get() + " into the queue");
+            if (producingItemCount.get() >= getTotalItemCounts()) {
                 this.notifyConsumers();
-                log.info("Finish to write the queue");
                 producingItemCount.set(0);
             }
         } catch (IOException ex) {
-            log.error("Error trying to serealize case:" + ex);
+            log.error("Error trying to serealize item:" + ex);
+        } finally {
+
+        }
+    }
+
+    public void addDeadItem(T document) {
+        try {
+            if (producingDeadItemCount.get() <= getTotalMaxDeadItemCounts()) {
+                byte[] item = this.getItemSerialized(document);
+                deadLetterQueue.enqueue(item);
+                producingDeadItemCount.incrementAndGet();
+                log.info("Adding dead item into the queue");
+            } else {
+                this.stop = true;
+            }
+        } catch (IOException ex) {
+            log.error("Error trying to serealize item:" + ex);
         } finally {
 
         }
     }
 
     public void notifyConsumers() {
+        log.info("Notifying consumers to perform index bulk");
         for (Consumer<T> consumer : consumers) {
-            log.info("Notifying consumers...");
             consumer.nofityQueueReady();
         }
     }
@@ -60,16 +82,19 @@ public class Producer<T> extends Thread {
         this.bigQueue = bigQueue;
     }
 
+    public void setDeadLetterQueue(IBigQueue deadLetterQueue) {
+        this.deadLetterQueue = deadLetterQueue;
+    }
+
     public void addConsumer(Consumer<T> consumer) {
         this.consumers.add(consumer);
     }
 
     public void run() {
         try {
-            while (true) {
+            while (!this.stop) {
 
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -97,5 +122,21 @@ public class Producer<T> extends Thread {
             }
         }
         return item;
+    }
+
+    public int getTotalItemCounts() {
+        return totalItemCounts;
+    }
+
+    public void setTotalItemCounts(int totalItemCounts) {
+        this.totalItemCounts = totalItemCounts;
+    }
+
+    public int getTotalMaxDeadItemCounts() {
+        return totalMaxDeadItemCounts;
+    }
+
+    public void setTotalMaxDeadItemCounts(int totalMaxDeadItemCounts) {
+        this.totalMaxDeadItemCounts = totalMaxDeadItemCounts;
     }
 }

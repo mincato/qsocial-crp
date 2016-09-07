@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Supplier;
+import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
@@ -110,10 +111,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return idValue;
     }
 
-    @SuppressWarnings("unchecked")
     public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<T> documents) {
 
         List<Index> modelList = new ArrayList<Index>();
+
         for (T t : documents) {
             modelList.add(new Index.Builder(t).build());
         }
@@ -129,8 +130,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 response.setSourcesBulk(result.getItems());
                 response.setSucceeded(true);
             } else {
-                // TODO:implement processing error
                 response.setSucceeded(false);
+                response.setFailedItems(result.getFailedItems());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
