@@ -51,7 +51,7 @@ public class DomainService {
         Domain domainSaved = null;
         try {
             domain.setId(domainId);
-            domainSaved = domainRepository.save(domain);
+            domainSaved = domainRepository.update(domain);
         } catch (Exception e) {
             log.error("There was an error updating domain: " + domain.getName(), e);
             throw new RuntimeException(e.getMessage());
