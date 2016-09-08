@@ -60,10 +60,10 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private static final long serialVersionUID = -4119198423406156946L;
 
-    @WireVariable
+    @WireVariable("mockThematicService")
     private ThematicService thematicService;
 
-    @WireVariable
+    @WireVariable("mockCategoryService")
     private CategoryService categoryService;
 
     private DetectionCriteria currentCriteria;
