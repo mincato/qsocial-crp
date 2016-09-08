@@ -12,4 +12,6 @@ public interface Mapping<T, E> {
 
     public T getDocumentType(E document);
 
+    public E getDocument(T documentType);
+
 }

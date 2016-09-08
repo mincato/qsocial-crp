@@ -14,6 +14,8 @@ public class DomainService {
 
     private TriggerService triggerService;
 
+    private ResolutionService resolutionService;
+
     public Domain findDomainById(String name) {
         Configurator configurator = new Configurator();
         return findDomainById(configurator, name);
@@ -23,6 +25,7 @@ public class DomainService {
 
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
+
         repository.initClient();
 
         DomainMapping mapping = DomainMapping.getInstance();
@@ -52,9 +55,14 @@ public class DomainService {
         SearchResponse<Domain> response = repository.find(id, mapping);
 
         Domain domain = response.getSource();
-        domain.setId(response.getId());
 
         repository.closeClient();
+        return domain;
+    }
+
+    public Domain findDomainWithResolutions(Configurator configurator, String id) {
+        Domain domain = findDomain(configurator, id);
+        domain.setResolutions(resolutionService.getResolutions(configurator, id));
         return domain;
     }
 
@@ -75,6 +83,8 @@ public class DomainService {
         String response = repository.indexMapping(mapping, document);
         repository.closeClient();
 
+        resolutionService.indexResolutions(configurator, response, domain.getResolutions());
+
         return response;
     }
 
@@ -94,6 +104,8 @@ public class DomainService {
 
         String response = repository.updateIndexMapping(domain.getId(), mapping, document);
         repository.closeClient();
+
+        resolutionService.updateResolutions(configurator, domain.getId(), domain.getResolutions());
 
         return response;
     }
@@ -136,4 +148,7 @@ public class DomainService {
         this.triggerService = triggerService;
     }
 
+    public void setResolutionService(ResolutionService resolutionService) {
+        this.resolutionService = resolutionService;
+    }
 }

@@ -18,7 +18,7 @@ public class FilterNormalizer {
                     .stream()
                     .forEach(
                             wordFilter -> {
-                                if (wordFilter.getText() != null) {
+                                if (wordFilter.getInputText() != null) {
                                     switch (wordFilter.getType()) {
                                         case HASHTAG:
                                         case MENTION:
@@ -28,6 +28,7 @@ public class FilterNormalizer {
                                         case TEXT:
                                             wordFilter.setText(StringUtils.convertLowerCaseAsciiFolding(wordFilter
                                                     .getInputText().split(FilterConstants.COMMA_SEPARATOR)));
+                                            break;
                                         default:
                                             wordFilter.setText(new HashSet<>(Arrays.asList(wordFilter.getInputText()
                                                     .split(FilterConstants.COMMA_SEPARATOR))));

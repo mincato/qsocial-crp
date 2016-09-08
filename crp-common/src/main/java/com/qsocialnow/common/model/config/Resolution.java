@@ -1,9 +1,12 @@
 package com.qsocialnow.common.model.config;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class Resolution {
 
     private String id;
 
+    @NotBlank(message = "{field.empty}")
     private String description;
 
     public String getId() {

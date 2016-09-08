@@ -9,10 +9,6 @@ public class NormalizedInputBeanDocument {
 
     private final InPutBeanDocument inputBeanDocument;
 
-    private String normalizedUsuarioCreacion;
-
-    private String normalizedUsuarioReproduccion;
-
     private Set<String> normalizedHashTags;
 
     private Set<String> normalizedActores;
@@ -57,6 +53,10 @@ public class NormalizedInputBeanDocument {
 
     public Long[] getCategorias() {
         return inputBeanDocument.getCategorias();
+    }
+
+    public Long[] getConjuntos() {
+        return inputBeanDocument.getConjuntos();
     }
 
     public Short getConnotacion() {
@@ -118,6 +118,18 @@ public class NormalizedInputBeanDocument {
             normalizedTexto = textNormalizer.normalize(getTexto());
         }
         return normalizedTexto;
+    }
+
+    public Long getTokenId() {
+        return inputBeanDocument.getTokenId();
+    }
+
+    public Long[] getSerieIds() {
+        return inputBeanDocument.getSeriesId();
+    }
+
+    public Long[] getSubSerieIds() {
+        return inputBeanDocument.getSubSeriesId();
     }
 
 }

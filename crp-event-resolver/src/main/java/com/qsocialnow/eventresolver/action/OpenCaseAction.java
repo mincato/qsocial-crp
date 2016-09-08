@@ -19,6 +19,7 @@ import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
+import com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory;
 import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
 
 @Component("openCaseAction")
@@ -29,6 +30,9 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
 
     @Autowired
     private ElasticConfiguratorFactory elasticConfigConfiguratorFactory;
+
+    @Autowired
+    private BigQueueConfiguratorFactory bigQueueConfiguratorFactory;
 
     @Autowired
     private CaseService caseElasticService;
@@ -71,7 +75,8 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
             elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
                     .getElasticCasesConfiguratorZnodePath());
 
-            queueConfigurator = new QueueConfigurator();
+            queueConfigurator = bigQueueConfiguratorFactory.getConfigurator(appConfig
+                    .getCasesQueueConfiguratorZnodePath());
 
             caseElasticService.indexCaseByBulkProcess(queueConfigurator, elasticConfigConfigurator, newCase);
 

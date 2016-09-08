@@ -37,7 +37,7 @@
 											id="thematics">
 											<template name="model">
 												<listitem>
-													<listcell label="${each.id} - ${each.name}"/>
+													<listcell label="${each.id} - ${each.nombre}"/>
 												</listitem>
 											</template>
 										</listbox>
@@ -53,6 +53,7 @@
 					    					<label value="@load(vmsgs[thematics])" />
 					    				</x:span>
 									</x:div>
+									<include src="/pages/domain/edit-resolutions.zul"/>
 							    </x:form>
 							</div>
 						</n:div>
