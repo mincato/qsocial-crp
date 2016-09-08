@@ -1,11 +1,10 @@
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
-	<n:hr />
 	<n:div class="pane">
-		<x:div class="pane">
+		<x:div class="row">
 			<n:label class="control-label">
 				${labels.domain.resolutions}
 			</n:label>
-			<n:div class="col-md-3 col-sm-4 col-xs-4 pull-right">
+			<n:div class="col-md-3 col-sm-4 col-xs-6 pull-right">
 				<n:div class="link-button">
 					<a onClick="@command('addResolution')">
 						${labels.domain.add.resolution}
