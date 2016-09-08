@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -17,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Supplier;
-import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
@@ -350,6 +350,42 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 .sort(sortField, SortOrder.ASC)
                 .query(QueryBuilders.hasParentQuery(mapping.getParentType(),
                         QueryBuilders.termQuery("_id", mapping.getIdParent())));
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> searchChildMappingWithFilters(int from, int size, String sortField,
+            QueryBuilder filters, ChildMapping<T, E> mapping) {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder
+                .from(from)
+                .size(size)
+                .sort(sortField, SortOrder.ASC)
+                .query(QueryBuilders
+                        .boolQuery()
+                        .must(filters)
+                        .must(QueryBuilders.hasParentQuery(mapping.getParentType(),
+                                QueryBuilders.termQuery("_id", mapping.getIdParent()))));
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 
