@@ -19,8 +19,9 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Resolution;
-import com.qsocialnow.common.model.config.Thematic;
+
 import com.qsocialnow.model.DomainView;
+import com.qsocialnow.model.Thematic;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ThematicService;
 
@@ -32,7 +33,7 @@ public class CreateDomainViewModel implements Serializable {
     @WireVariable
     private DomainService domainService;
 
-    @WireVariable
+    @WireVariable("mockThematicService")
     private ThematicService thematicService;
 
     private DomainView currentDomain;
