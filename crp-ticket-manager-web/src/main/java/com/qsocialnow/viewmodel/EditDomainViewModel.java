@@ -38,7 +38,7 @@ public class EditDomainViewModel implements Serializable {
     @WireVariable
     private DomainService domainService;
 
-    @WireVariable
+    @WireVariable("mockThematicService")
     private ThematicService thematicService;
 
     private DomainView currentDomain;
