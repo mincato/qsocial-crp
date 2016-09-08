@@ -248,10 +248,18 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "serieOptions", "filter" })
+    @NotifyChange("filter")
+    public void removeCategory(@BindingParam("filter") CategoryFilterView filter,
+            @BindingParam("category") Category category) {
+        filter.getCategories().remove(category);
+    }
+
+    @Command
+    @NotifyChange({ "serieOptions", "filter", "categoryGroupOptions", "subSerieOptions" })
     public void selectThematic() {
         serieOptions.clear();
         filterView.setSerie(null);
+        selectSerie();
     }
 
     @Command

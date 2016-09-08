@@ -22,7 +22,7 @@ public class SerieDetectionCriteriaFilter implements DetectionCriteriaFilter {
             if (match && filter.getSerieFilter().getSerieId() != null) {
                 match = ArrayUtils.contains(message.getSerieIds(), filter.getSerieFilter().getSerieId());
                 if (match && filter.getSerieFilter().getSubSerieId() != null) {
-                    match = ArrayUtils.contains(message.getSubSerieIds(), filter.getSerieFilter().getSerieId());
+                    match = ArrayUtils.contains(message.getSubSerieIds(), filter.getSerieFilter().getSubSerieId());
                 }
             }
         }
