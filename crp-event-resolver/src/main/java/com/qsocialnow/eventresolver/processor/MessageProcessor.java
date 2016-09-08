@@ -12,6 +12,7 @@ import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.config.DomainService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
+import com.qsocialnow.eventresolver.exception.InvalidDomainException;
 import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
 import com.qsocialnow.kafka.model.Message;
@@ -40,6 +41,7 @@ public class MessageProcessor {
     private MessageFilter messageFilter;
 
     public void process(Message message) throws Exception {
+        // reintentar ES
         InPutBeanDocument inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
                 .fromJson(message.getMessage(), InPutBeanDocument.class);
         String domainId = message.getGroup();
@@ -48,15 +50,20 @@ public class MessageProcessor {
         Configurator elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
                 .getElasticConfigConfiguratorZnodePath());
         Domain domain = domainElasticService.findDomainWithTriggers(elasticConfigConfigurator, domainId);
-        if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
-            DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
-            if (detectionCriteria != null) {
-                executionMessageProcessor.execute(inputBeanDocument, detectionCriteria);
+
+        if (domain != null) {
+            if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
+                DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
+                if (detectionCriteria != null) {
+                    executionMessageProcessor.execute(inputBeanDocument, detectionCriteria);
+                } else {
+                    log.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
+                }
             } else {
-                log.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
+                log.info(String.format("Message should not be processed for this domain: %s", domainId));
             }
         } else {
-            log.info(String.format("Message should not be processed for this domain: %s", domainId));
+            throw new InvalidDomainException("Error trying to retrieve a domain");
         }
     }
 

@@ -14,13 +14,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.GsonBuilder;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.responsedetector.config.ResponseDetectorConfig;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
 import com.qsocialnow.responsedetector.factories.TwitterConfiguratorFactory;
 import com.qsocialnow.responsedetector.model.TwitterMessageEvent;
-import com.qsocialnow.responsedetector.sources.TwitterStreamClient;
 import com.qsocialnow.responsedetector.sources.TwitterClient;
 import com.qsocialnow.responsedetector.sources.TwitterStatusListener;
+import com.qsocialnow.responsedetector.sources.TwitterStreamClient;
 
 public class TwitterDetectorService extends SourceDetectorService {
 
@@ -111,8 +112,7 @@ public class TwitterDetectorService extends SourceDetectorService {
         try {
             if (startListening) {
                 log.info("Adding message:" + message.getMessageId() + "from Case:" + message.getCaseId());
-                twitterStreamClient.addListeners(new TwitterStatusListener(this, twitterStreamClient,
-                        this.eventProcessor, message));
+                twitterStreamClient.addListeners(new TwitterStatusListener(this, twitterStreamClient, message));
             }
         } catch (Exception e) {
             log.error("There was an error creating the message handler processor for tweet: " + message.getMessageId(),
@@ -121,7 +121,7 @@ public class TwitterDetectorService extends SourceDetectorService {
     }
 
     private void checkMessageResponses(TwitterMessageEvent message) {
-        TwitterClient twitterClient = new TwitterClient(eventProcessor);
+        TwitterClient twitterClient = new TwitterClient(this);
         twitterClient.initTwitterClient(configurator);
         twitterClient.checkAnyMention(message);
     }
@@ -133,9 +133,19 @@ public class TwitterDetectorService extends SourceDetectorService {
     @Override
     public void removeSourceConversation(String converstation) {
         try {
-            zookeeperClient.delete().forPath(appConfig.getTwitterAppConfiguratorZnodePath() + "/" + converstation);
+            zookeeperClient.delete().forPath(appConfig.getTwitterMessagesPath() + "/" + converstation);
         } catch (Exception e) {
             log.error("Unable to remove message conversation:: " + converstation, e);
+        }
+    }
+
+    @Override
+    public void processEvent(InPutBeanDocument event) {
+        try {
+            eventProcessor.process(event);
+            log.info("Creating event to handle automatic response detection");
+        } catch (Exception e) {
+            log.error("Error trying to register event :" + e);
         }
     }
 }

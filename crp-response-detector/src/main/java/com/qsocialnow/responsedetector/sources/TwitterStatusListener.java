@@ -19,8 +19,6 @@ public class TwitterStatusListener implements StatusListener {
 
     private static final Logger log = LoggerFactory.getLogger(TwitterStatusListener.class);
 
-    private EventProcessor eventProcessor;
-
     private TwitterStreamClient twitterClient;
 
     private TwitterMessageEvent messageEvent;
@@ -28,9 +26,8 @@ public class TwitterStatusListener implements StatusListener {
     private SourceDetectorService sourceService;
 
     public TwitterStatusListener(SourceDetectorService sourceService, TwitterStreamClient twitterClient,
-            EventProcessor eventProcessor, TwitterMessageEvent messageEvent) {
+            TwitterMessageEvent messageEvent) {
         this.sourceService = sourceService;
-        this.eventProcessor = eventProcessor;
         this.messageEvent = messageEvent;
         this.twitterClient = twitterClient;
     }
@@ -74,16 +71,12 @@ public class TwitterStatusListener implements StatusListener {
     }
 
     private void generateEvent(Status status) {
-        try {
-            InPutBeanDocument event = new InPutBeanDocument();
-            event.setId(this.messageEvent.getEventId());
-            event.setTexto(status.getText());
-            event.setFechaCreacion(new Date());
-            event.setResponseDetected(true);
-            eventProcessor.process(event);
-            log.info("Creating event to handle automatic response detection");
-        } catch (Exception e) {
-            log.error("Error trying to register event :" + e);
-        }
+        InPutBeanDocument event = new InPutBeanDocument();
+        event.setId(this.messageEvent.getEventId());
+        event.setTexto(status.getText());
+        event.setFechaCreacion(new Date());
+        event.setResponseDetected(true);
+        sourceService.processEvent(event);
+        log.info("Creating event to handle automatic response detection");
     }
 }
