@@ -39,7 +39,7 @@ public class CreateDomainViewModel implements Serializable {
     private DomainView currentDomain;
 
     private List<Thematic> thematics;
-    
+
     public DomainView getCurrentDomain() {
         return currentDomain;
     }
@@ -78,19 +78,19 @@ public class CreateDomainViewModel implements Serializable {
     @Command
     @NotifyChange({ "currentDomain" })
     public void clear() {
-    	initDomain();
+        initDomain();
     }
-    
-    @Command
-	public void addResolution() {
-		currentDomain.getResolutions().add(new Resolution());
-		BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
-	}
 
-	@Command
-	public void deleteResolution(@BindingParam("index") int idx) {
-		currentDomain.getResolutions().remove(idx);
-		BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
-	}
+    @Command
+    public void addResolution() {
+        currentDomain.getResolutions().add(new Resolution());
+        BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
+    }
+
+    @Command
+    public void deleteResolution(@BindingParam("index") int idx) {
+        currentDomain.getResolutions().remove(idx);
+        BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
+    }
 
 }

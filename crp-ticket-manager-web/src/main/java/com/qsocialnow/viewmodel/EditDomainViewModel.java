@@ -106,27 +106,26 @@ public class EditDomainViewModel implements Serializable {
                         .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))
                         .collect(Collectors.toSet()));
     }
-    
+
     private void initResolutions() {
-    	currentDomain.setResolutions(new ArrayList<Resolution>());
-    	if (currentDomain.getDomain().getResolutions() != null) {
-    		currentDomain.getResolutions().addAll(currentDomain.getDomain().getResolutions());
-    	}
+        currentDomain.setResolutions(new ArrayList<Resolution>());
+        if (currentDomain.getDomain().getResolutions() != null) {
+            currentDomain.getResolutions().addAll(currentDomain.getDomain().getResolutions());
+        }
     }
 
     @Command
-	public void addResolution() {
-		currentDomain.getResolutions().add(new Resolution());
-		BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
-	}
+    public void addResolution() {
+        currentDomain.getResolutions().add(new Resolution());
+        BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
+    }
 
-	@Command
-	public void deleteResolution(@BindingParam("index") int idx) {
-		currentDomain.getResolutions().remove(idx);
-		BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
-	}
+    @Command
+    public void deleteResolution(@BindingParam("index") int idx) {
+        currentDomain.getResolutions().remove(idx);
+        BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
+    }
 
-    
     @Command
     public void close(@ContextParam(ContextType.VIEW) Div comp) {
         comp.detach();
@@ -137,5 +136,4 @@ public class EditDomainViewModel implements Serializable {
         }
     }
 
-    
 }
