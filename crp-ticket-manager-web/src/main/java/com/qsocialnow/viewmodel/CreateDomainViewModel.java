@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -38,8 +39,6 @@ public class CreateDomainViewModel implements Serializable {
 
     private List<Thematic> thematics;
     
-    private List<Resolution> resolutions;
-
     public DomainView getCurrentDomain() {
         return currentDomain;
     }
@@ -52,14 +51,13 @@ public class CreateDomainViewModel implements Serializable {
     public void init() {
         initDomain();
         thematics = thematicService.findAll();
-        resolutions = new ArrayList<Resolution>();
-
     }
 
     private void initDomain() {
         currentDomain = new DomainView();
         currentDomain.setDomain(new Domain());
         currentDomain.setSelectedThematics(new HashSet<>());
+        currentDomain.setResolutions(new ArrayList<Resolution>());
     }
 
     @Command
@@ -69,6 +67,7 @@ public class CreateDomainViewModel implements Serializable {
                 .collect(Collectors.toList());
         Domain newDomain = currentDomain.getDomain();
         newDomain.setThematics(thematics);
+        newDomain.setResolutions(currentDomain.getResolutions());
         currentDomain.setDomain(domainService.create(newDomain));
         Clients.showNotification(Labels.getLabel("domain.create.notification.success", new String[] { currentDomain
                 .getDomain().getId() }));
@@ -78,29 +77,19 @@ public class CreateDomainViewModel implements Serializable {
     @Command
     @NotifyChange({ "currentDomain" })
     public void clear() {
-    	resolutions = new ArrayList<Resolution>();
+    	initDomain();
     }
     
     @Command
-    @NotifyChange("resolutions")
-    public void addResolution() {
-    	resolutions.add(new Resolution());
-    }
-    
-    @Command
-    @NotifyChange("resolutions")
-    public void deleteResolution(@BindingParam("index") int idx) {
-    	resolutions.remove(idx);
-    }
-     
-	public List<Resolution> getResolutions() {
-		return resolutions;
+	public void addResolution() {
+		currentDomain.getResolutions().add(new Resolution());
+		BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
 	}
 
-	public void setResolutions(List<Resolution> resolutions) {
-		this.resolutions = resolutions;
+	@Command
+	public void deleteResolution(@BindingParam("index") int idx) {
+		currentDomain.getResolutions().remove(idx);
+		BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
 	}
-    
-    
 
 }
