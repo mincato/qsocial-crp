@@ -1,0 +1,276 @@
+{
+  "clientOrganizationId": 52,
+  "thematics": [
+    {
+      "id": 65,
+      "nombre": "his",
+      "running": true,
+      "series": [
+        {
+          "id": 11,
+          "nombre": "to",
+          "subSeries": [
+            {
+              "id": 45,
+              "nombre": "days"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "nombre": "the",
+          "subSeries": [
+            {
+              "id": -55,
+              "nombre": "text"
+            },
+            {
+              "id": 46,
+              "nombre": "ecuadors"
+            },
+            {
+              "id": 87,
+              "nombre": "shade"
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "nombre": "court",
+          "subSeries": [
+            {
+              "id": -84,
+              "nombre": "so"
+            },
+            {
+              "id": -81,
+              "nombre": "stay"
+            },
+            {
+              "id": -20,
+              "nombre": "tourists"
+            }
+          ]
+        },
+        {
+          "id": -2,
+          "nombre": "so",
+          "subSeries": [
+            {
+              "id": 20,
+              "nombre": "was"
+            },
+            {
+              "id": 22,
+              "nombre": "similarly"
+            },
+            {
+              "id": 87,
+              "nombre": "guests"
+            },
+            {
+              "id": 97,
+              "nombre": "new"
+            },
+            {
+              "id": -5,
+              "nombre": "of"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "nombre": "years",
+      "running": true,
+      "series": [
+        {
+          "id": -43,
+          "nombre": "ascot",
+          "subSeries": [
+            {
+              "id": 96,
+              "nombre": "to"
+            },
+            {
+              "id": 61,
+              "nombre": "pleaded"
+            },
+            {
+              "id": 77,
+              "nombre": "as"
+            },
+            {
+              "id": -17,
+              "nombre": "abstract"
+            },
+            {
+              "id": 3,
+              "nombre": "faulting"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "nombre": "with",
+          "subSeries": [
+            {
+              "id": 57,
+              "nombre": "by"
+            },
+            {
+              "id": 15,
+              "nombre": "or"
+            },
+            {
+              "id": 26,
+              "nombre": "that"
+            },
+            {
+              "id": 38,
+              "nombre": "was"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "nombre": "revolting",
+          "subSeries": [
+            {
+              "id": -83,
+              "nombre": "squadron"
+            },
+            {
+              "id": 91,
+              "nombre": "british"
+            },
+            {
+              "id": 68,
+              "nombre": "to"
+            },
+            {
+              "id": 67,
+              "nombre": "include"
+            }
+          ]
+        },
+        {
+          "id": 68,
+          "nombre": "the",
+          "subSeries": [
+            {
+              "id": -33,
+              "nombre": "the"
+            },
+            {
+              "id": 48,
+              "nombre": "posting"
+            },
+            {
+              "id": -44,
+              "nombre": "membership"
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "nombre": "later",
+          "subSeries": [
+            {
+              "id": 6,
+              "nombre": "of"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "nombre": "hlothheres",
+      "running": true,
+      "series": [
+        {
+          "id": 45,
+          "nombre": "in",
+          "subSeries": [
+            {
+              "id": 27,
+              "nombre": "such"
+            },
+            {
+              "id": 36,
+              "nombre": "this"
+            },
+            {
+              "id": 56,
+              "nombre": "accident"
+            }
+          ]
+        },
+        {
+          "id": -56,
+          "nombre": "barracks",
+          "subSeries": [
+            {
+              "id": -92,
+              "nombre": "woods"
+            },
+            {
+              "id": -87,
+              "nombre": "either"
+            },
+            {
+              "id": 4,
+              "nombre": "he"
+            },
+            {
+              "id": -56,
+              "nombre": "-year"
+            },
+            {
+              "id": -31,
+              "nombre": "dry"
+            }
+          ]
+        },
+        {
+          "id": 99,
+          "nombre": "region",
+          "subSeries": [
+            {
+              "id": 91,
+              "nombre": "the"
+            }
+          ]
+        },
+        {
+          "id": -95,
+          "nombre": "richard",
+          "subSeries": [
+            {
+              "id": 60,
+              "nombre": "of"
+            },
+            {
+              "id": 45,
+              "nombre": "carnivoresc"
+            },
+            {
+              "id": -14,
+              "nombre": "can"
+            },
+            {
+              "id": -40,
+              "nombre": "unwilling"
+            },
+            {
+              "id": -84,
+              "nombre": "the"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

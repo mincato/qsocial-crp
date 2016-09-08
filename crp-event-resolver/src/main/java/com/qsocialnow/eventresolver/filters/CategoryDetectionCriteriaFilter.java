@@ -25,7 +25,7 @@ public class CategoryDetectionCriteriaFilter implements DetectionCriteriaFilter 
                     .stream()
                     .anyMatch(
                             categoryFilter -> ObjectUtils.containsAll(message.getCategorias(),
-                                    categoryFilter.getOptions()));
+                                    categoryFilter.getCategories()));
         }
         return match;
     }
@@ -34,7 +34,7 @@ public class CategoryDetectionCriteriaFilter implements DetectionCriteriaFilter 
     public boolean apply(Filter filter) {
         return CollectionUtils.isNotEmpty(filter.getCategoryFilter())
                 && filter.getCategoryFilter().stream()
-                        .anyMatch(categoryFilter -> ArrayUtils.isNotEmpty(categoryFilter.getOptions()));
+                        .anyMatch(categoryFilter -> ArrayUtils.isNotEmpty(categoryFilter.getCategories()));
     }
 
 }

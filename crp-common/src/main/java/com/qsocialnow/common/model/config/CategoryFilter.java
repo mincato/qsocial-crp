@@ -2,14 +2,24 @@ package com.qsocialnow.common.model.config;
 
 public class CategoryFilter {
 
-    private Long[] options;
+    private Long[] categories;
 
-    public Long[] getOptions() {
-        return options;
+    private Long categoryGroup;
+
+    public Long[] getCategories() {
+        return categories;
     }
 
-    public void setOptions(Long[] options) {
-        this.options = options;
+    public void setCategories(Long[] categories) {
+        this.categories = categories;
+    }
+
+    public void setCategoryGroup(Long categoryGroup) {
+        this.categoryGroup = categoryGroup;
+    }
+
+    public Long getCategoryGroup() {
+        return categoryGroup;
     }
 
 }
