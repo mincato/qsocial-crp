@@ -46,10 +46,10 @@
     						<x:span sclass="@load(empty vmsgs[thematics] ? 'hidden' : 'help-block')">
 		    					<label value="@load(vmsgs[thematics])" />
 		    				</x:span>
-    						
-    						
-						</x:div>
+    					</x:div>
 						
+						<include src="/pages/domain/edit-resolutions.zul"/>
+    					
 						<div class="form-group text-center">
 						    <button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
 						    <button onClick="@command('clear')" label="${labels.app.button.clear}" zclass="btn btn-default"/>

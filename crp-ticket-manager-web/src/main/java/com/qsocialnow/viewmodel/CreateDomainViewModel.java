@@ -1,10 +1,13 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -15,6 +18,8 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.Resolution;
+
 import com.qsocialnow.model.DomainView;
 import com.qsocialnow.model.Thematic;
 import com.qsocialnow.services.DomainService;
@@ -28,7 +33,7 @@ public class CreateDomainViewModel implements Serializable {
     @WireVariable
     private DomainService domainService;
 
-    @WireVariable
+    @WireVariable("mockThematicService")
     private ThematicService thematicService;
 
     private DomainView currentDomain;
@@ -47,13 +52,13 @@ public class CreateDomainViewModel implements Serializable {
     public void init() {
         initDomain();
         thematics = thematicService.findAll();
-
     }
 
     private void initDomain() {
         currentDomain = new DomainView();
         currentDomain.setDomain(new Domain());
         currentDomain.setSelectedThematics(new HashSet<>());
+        currentDomain.setResolutions(new ArrayList<Resolution>());
     }
 
     @Command
@@ -63,6 +68,7 @@ public class CreateDomainViewModel implements Serializable {
                 .collect(Collectors.toList());
         Domain newDomain = currentDomain.getDomain();
         newDomain.setThematics(thematics);
+        newDomain.setResolutions(currentDomain.getResolutions());
         currentDomain.setDomain(domainService.create(newDomain));
         Clients.showNotification(Labels.getLabel("domain.create.notification.success", new String[] { currentDomain
                 .getDomain().getId() }));
@@ -72,6 +78,19 @@ public class CreateDomainViewModel implements Serializable {
     @Command
     @NotifyChange({ "currentDomain" })
     public void clear() {
+        initDomain();
+    }
+
+    @Command
+    public void addResolution() {
+        currentDomain.getResolutions().add(new Resolution());
+        BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
+    }
+
+    @Command
+    public void deleteResolution(@BindingParam("index") int idx) {
+        currentDomain.getResolutions().remove(idx);
+        BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
     }
 
 }

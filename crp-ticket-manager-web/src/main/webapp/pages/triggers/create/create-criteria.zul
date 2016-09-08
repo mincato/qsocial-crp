@@ -11,7 +11,7 @@
 					</n:button>
     				<n:h4 class="modal-title">${labels.trigger.criteria.title}</n:h4>
   				</n:div>
-  				<n:div class="modal-body">
+  				<n:div class="modal-body" contentStyle="overflow:auto;" >
     				<div class="row">
 						<n:div>
 							<div zclass="pane equal">

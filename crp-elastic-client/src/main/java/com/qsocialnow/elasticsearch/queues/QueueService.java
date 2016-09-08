@@ -19,11 +19,11 @@ public class QueueService {
 
     private static final int TOTAL_MAX_DEAD_ITEM_COUNTS = 30;
 
-    private static final int DELAY = 1;
+    private static final int DELAY = 10;
 
-    private static final int FAIL_DELAY = 3;
+    private static final int FAIL_DELAY = 20;
 
-    private static final int INITIAL_DELAY = 1;
+    private static final int INITIAL_DELAY = 5;
 
     private static final String DEAD_LETTER_QUEUE_DIR = "deadLetterQueue";
 
@@ -37,27 +37,28 @@ public class QueueService {
 
     private final String deadLetterQueueDir;
 
-    private static IBigQueue bigQueue;
+    private IBigQueue bigQueue;
 
-    private static IBigQueue bigQueueFail;
+    private IBigQueue bigQueueFail;
 
-    private static IBigQueue deadLetterQueue;
+    private IBigQueue deadLetterQueue;
 
-    private static QueueService instance;
+    // private static QueueService instance;
 
-    private QueueService(QueueConfigurator queueConfiguration) {
+    QueueService(QueueConfigurator queueConfiguration) {
         this.baseDir = queueConfiguration.getBaseDir();
         this.queueDir = this.baseDir + queueConfiguration.getQueueDir();
         this.queueFailDir = this.baseDir + queueConfiguration.getErrorQueueDir();
         this.deadLetterQueueDir = this.queueFailDir + DEAD_LETTER_QUEUE_DIR;
     }
 
-    public static QueueService getInstance(QueueConfigurator queueConfiguration) {
-        if (instance == null)
-            instance = new QueueService(queueConfiguration);
-
-        return instance;
-    }
+    /*
+     * public static QueueService getInstance(QueueConfigurator
+     * queueConfiguration) { if (instance == null) instance = new
+     * QueueService(queueConfiguration);
+     * 
+     * return instance; }
+     */
 
     public boolean initQueue(String type) {
         boolean isQueueReady = false;
@@ -93,7 +94,7 @@ public class QueueService {
         return isQueueReady;
     }
 
-    public <T> void startConsumer(Consumer<T> consumer) {
+    public <T> void startConsumer(QueueConsumer<T> consumer) {
         ExecutorService service = Executors.newSingleThreadExecutor();
         consumer.setDelay(DELAY);
         consumer.setInitialDelay(INITIAL_DELAY);
@@ -102,14 +103,14 @@ public class QueueService {
         service.execute(consumer);
     }
 
-    public <T> void startProducer(Producer<T> producer) {
+    public <T> void startProducer(QueueProducer<T> producer) {
         producer.setQueue(bigQueue);
         producer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
         log.info("Starting producer");
         producer.start();
     }
 
-    public <T> void startFailConsumer(Consumer<T> consumer) {
+    public <T> void startFailConsumer(QueueConsumer<T> consumer) {
         ExecutorService service = Executors.newSingleThreadExecutor();
         consumer.setDelay(FAIL_DELAY);
         consumer.setInitialDelay(INITIAL_DELAY);
@@ -118,7 +119,7 @@ public class QueueService {
         service.execute(consumer);
     }
 
-    public <T> void startFailProducer(Producer<T> producer) {
+    public <T> void startFailProducer(QueueProducer<T> producer) {
         producer.setQueue(bigQueueFail);
         producer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
         producer.setTotalMaxDeadItemCounts(TOTAL_MAX_DEAD_ITEM_COUNTS);

@@ -13,15 +13,15 @@ import org.slf4j.LoggerFactory;
 
 import com.leansoft.bigqueue.IBigQueue;
 
-public class Producer<T> extends Thread {
+public class QueueProducer<T> extends Thread {
 
-    private static final Logger log = LoggerFactory.getLogger(Producer.class);
+    private static final Logger log = LoggerFactory.getLogger(QueueProducer.class);
 
     private IBigQueue bigQueue;
 
     private IBigQueue deadLetterQueue;
 
-    private List<Consumer<T>> consumers;
+    private List<QueueConsumer<T>> consumers;
 
     private int totalItemCounts;
 
@@ -33,8 +33,8 @@ public class Producer<T> extends Thread {
 
     private boolean stop = false;
 
-    public Producer() {
-        consumers = new ArrayList<Consumer<T>>();
+    public QueueProducer() {
+        consumers = new ArrayList<QueueConsumer<T>>();
     }
 
     public void addItem(T document) {
@@ -73,7 +73,7 @@ public class Producer<T> extends Thread {
 
     public void notifyConsumers() {
         log.info("Notifying consumers to perform index bulk");
-        for (Consumer<T> consumer : consumers) {
+        for (QueueConsumer<T> consumer : consumers) {
             consumer.nofityQueueReady();
         }
     }
@@ -86,7 +86,7 @@ public class Producer<T> extends Thread {
         this.deadLetterQueue = deadLetterQueue;
     }
 
-    public void addConsumer(Consumer<T> consumer) {
+    public void addConsumer(QueueConsumer<T> consumer) {
         this.consumers.add(consumer);
     }
 

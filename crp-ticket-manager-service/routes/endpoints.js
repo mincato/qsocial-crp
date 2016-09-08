@@ -193,10 +193,7 @@ router.get('/domains/:id/trigger', function (req, res) {
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
 	  var name = req.query.name ? req.query.name : null;
 	  
-	  if(name === null) {
-		  triggerService.findAll(domainId, pageNumber, pageSize, asyncResponse);
-	  }
-
+	  triggerService.findAll(domainId, pageNumber, pageSize, name, asyncResponse);
 });
 
 router.put('/domains/:id/resolutions', function (req, res) {

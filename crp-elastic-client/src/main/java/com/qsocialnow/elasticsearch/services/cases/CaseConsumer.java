@@ -8,9 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
-import com.qsocialnow.elasticsearch.queues.Consumer;
+import com.qsocialnow.elasticsearch.queues.QueueConsumer;
 
-public class CaseConsumer extends Consumer<Case> {
+public class CaseConsumer extends QueueConsumer<Case> {
 
     private static final Logger log = LoggerFactory.getLogger(CaseConsumer.class);
 
@@ -25,7 +25,7 @@ public class CaseConsumer extends Consumer<Case> {
     }
 
     @Override
-    public void addDocument(Case caseDoc) {
+    public void process(Case caseDoc) {
         synchronized (bulkDocuments) {
             log.info("Adding to index bulk case:" + caseDoc.getTitle());
             bulkDocuments.add(caseDoc);
@@ -33,7 +33,7 @@ public class CaseConsumer extends Consumer<Case> {
     }
 
     @Override
-    public void saveDocuments() {
+    public void save() {
         synchronized (bulkDocuments) {
             if (bulkDocuments.size() > 0) {
                 log.info("CaseConsumer start to perform a bulk index");
