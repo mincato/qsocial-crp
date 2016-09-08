@@ -319,30 +319,4 @@ router.put('/domains/:id', function (req, res) {
 
 });
 
-router.get('/thematics', function (req, res) {
-
-  function asyncResponse(err,responseThematics) {
-    var gson = new GsonBuilder().setPrettyPrintingSync().createSync();
-
-    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
-
-    if(responseThematics !== null) {
-      try {
-        res.set('Content-Type', 'application/json');
-        res.send(gson.toJsonSync(responseThematics));
-      } catch(ex) {
-        res.status(500).json(ex.cause.getMessageSync());
-      }
-    } else {
-      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
-    }
-
-  }
-
-  var thematicService = javaContext.getBeanSync("thematicService");
-  thematicService.findAll(asyncResponse);
-
-});
-
-
 module.exports = router;

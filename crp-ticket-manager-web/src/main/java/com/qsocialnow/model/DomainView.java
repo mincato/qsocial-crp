@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.common.model.config.Thematic;
 
 public class DomainView {
 

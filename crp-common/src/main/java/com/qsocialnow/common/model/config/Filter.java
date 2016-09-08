@@ -22,6 +22,8 @@ public class Filter {
 
     private List<CategoryFilter> categoryFilter;
 
+    private SerieFilter serieFilter;
+
     public String getId() {
         return id;
     }
@@ -92,6 +94,14 @@ public class Filter {
 
     public void setCategoryFilter(List<CategoryFilter> categoryFilter) {
         this.categoryFilter = categoryFilter;
+    }
+
+    public SerieFilter getSerieFilter() {
+        return serieFilter;
+    }
+
+    public void setSerieFilter(SerieFilter serieFilter) {
+        this.serieFilter = serieFilter;
     }
 
 }

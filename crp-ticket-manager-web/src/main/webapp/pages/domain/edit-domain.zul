@@ -37,7 +37,7 @@
 											id="thematics">
 											<template name="model">
 												<listitem>
-													<listcell label="${each.id} - ${each.name}"/>
+													<listcell label="${each.id} - ${each.nombre}"/>
 												</listitem>
 											</template>
 										</listbox>

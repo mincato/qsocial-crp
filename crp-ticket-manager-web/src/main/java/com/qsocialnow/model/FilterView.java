@@ -23,8 +23,17 @@ public class FilterView {
 
     private List<AdmUnitFilter> admUnitFilters;
 
+    private Thematic thematic;
+
+    private Series serie;
+
+    private SubSeries subSerie;
+
+    private List<CategoryFilterView> filterCategories;
+
     public FilterView() {
         filterWords = new ArrayList<>();
+        filterCategories = new ArrayList<>();
     }
 
     public Connotation getConnotation() {
@@ -81,6 +90,38 @@ public class FilterView {
 
     public List<AdmUnitFilter> getAdmUnitFilters() {
         return admUnitFilters;
+    }
+
+    public Thematic getThematic() {
+        return thematic;
+    }
+
+    public void setThematic(Thematic thematic) {
+        this.thematic = thematic;
+    }
+
+    public Series getSerie() {
+        return serie;
+    }
+
+    public void setSerie(Series serie) {
+        this.serie = serie;
+    }
+
+    public SubSeries getSubSerie() {
+        return subSerie;
+    }
+
+    public void setSubSerie(SubSeries subSerie) {
+        this.subSerie = subSerie;
+    }
+
+    public List<CategoryFilterView> getFilterCategories() {
+        return filterCategories;
+    }
+
+    public void setFilterCategories(List<CategoryFilterView> filterCategories) {
+        this.filterCategories = filterCategories;
     }
 
 }
