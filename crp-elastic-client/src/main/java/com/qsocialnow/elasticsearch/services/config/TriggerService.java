@@ -2,6 +2,9 @@ package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.List;
 
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.config.TriggerMapping;
@@ -35,15 +38,22 @@ public class TriggerService {
         return response;
     }
 
-    public List<Trigger> getTriggers(Configurator configurator, String domainId, Integer offset, Integer limit) {
+    public List<Trigger> getTriggers(Configurator configurator, String domainId, Integer offset, Integer limit,
+            String name) {
         RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
         TriggerMapping mapping = TriggerMapping.getInstance();
         mapping.setIdParent(domainId);
-
-        SearchResponse<Trigger> response = repository.searchChildMapping(offset, limit, "name", mapping);
+        SearchResponse<Trigger> response;
+        if (name != null) {
+            System.out.println("aca " + name);
+            QueryBuilder filter = QueryBuilders.matchQuery("name", name);
+            response = repository.searchChildMappingWithFilters(offset, limit, "name", filter, mapping);
+        } else {
+            response = repository.searchChildMapping(offset, limit, "name", mapping);
+        }
 
         List<Trigger> triggers = response.getSources();
 

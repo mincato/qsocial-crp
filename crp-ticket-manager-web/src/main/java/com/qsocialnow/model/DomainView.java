@@ -19,7 +19,7 @@ public class DomainView {
     private Set<Thematic> selectedThematics;
 
     private List<Resolution> resolutions;
-    
+
     public DomainView() {
     }
 
@@ -39,11 +39,11 @@ public class DomainView {
         this.selectedThematics = selectedThematics;
     }
 
-	public List<Resolution> getResolutions() {
-		return resolutions;
-	}
+    public List<Resolution> getResolutions() {
+        return resolutions;
+    }
 
-	public void setResolutions(List<Resolution> resolutions) {
-		this.resolutions = resolutions;
-	}
+    public void setResolutions(List<Resolution> resolutions) {
+        this.resolutions = resolutions;
+    }
 }
