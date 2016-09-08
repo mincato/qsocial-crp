@@ -35,12 +35,17 @@
 	</bean>
 
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
+		<property name="triggerService" ref="triggerElasticService"></property>
+		<property name="resolutionService" ref="resolutionElasticService"></property>
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
 	</bean>
 	
 	<bean id="resolutionElasticService" class="com.qsocialnow.elasticsearch.services.config.ResolutionService">
+	</bean>
+	
+	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
 	</bean>
 	
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">

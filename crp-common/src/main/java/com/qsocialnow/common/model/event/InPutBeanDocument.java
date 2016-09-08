@@ -154,6 +154,8 @@ public class InPutBeanDocument implements Serializable {
 
     private Long neighborhood;
 
+    private Boolean responseDetected;
+
     public InPutBeanDocument() {
 
     }
@@ -668,6 +670,14 @@ public class InPutBeanDocument implements Serializable {
 
     public void setNeighborhood(Long neighborhood) {
         this.neighborhood = neighborhood;
+    }
+
+    public Boolean getResponseDetected() {
+        return responseDetected;
+    }
+
+    public void setResponseDetected(Boolean responseDetected) {
+        this.responseDetected = responseDetected;
     }
 
     @Override

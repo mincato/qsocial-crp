@@ -11,7 +11,7 @@ public class DomainMapping implements Mapping<DomainType, Domain> {
 
     private static final String INDEX_NAME = "configuration";
 
-    private static final String TYPE = "domain";
+    public static final String TYPE = "domain";
 
     private static DomainMapping instance;
 
@@ -97,9 +97,17 @@ public class DomainMapping implements Mapping<DomainType, Domain> {
             domainType.setIdEntity(document.getId());
         }
         domainType.setName(document.getName());
-        domainType.setTriggers(document.getTriggers());
         domainType.setThematics(document.getThematics());
         return domainType;
+    }
+
+    @Override
+    public Domain getDocument(DomainType documentType) {
+        Domain domain = new Domain();
+        domain.setId(documentType.getId());
+        domain.setName(documentType.getName());
+        domain.setThematics(documentType.getThematics());
+        return domain;
     }
 
 }

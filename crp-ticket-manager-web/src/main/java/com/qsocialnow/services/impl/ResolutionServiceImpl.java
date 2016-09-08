@@ -50,7 +50,49 @@ public class ResolutionServiceImpl implements ResolutionService {
                     requestEntity, Resolution.class);
             return response.getBody();
         } catch (Exception e) {
-            log.error("There was an error while trying to call domain service", e);
+            log.error("There was an error while trying to call resolution service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Resolution update(String domainId, Resolution resolution) {
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .path("/resolutions/").path(resolution.getId());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            headers.add("Accept", "application/json");
+
+            HttpEntity<Resolution> requestEntity = new HttpEntity<Resolution>(resolution, headers);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<Resolution> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
+                    requestEntity, Resolution.class);
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call resolution service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void delete(String domainId, String resolutionId) {
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .path("/resolutions/").path(resolutionId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            headers.add("Accept", "application/json");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            restTemplate.delete(builder.toUriString());
+        } catch (Exception e) {
+            log.error("There was an error while trying to call resolution service", e);
             throw new RuntimeException(e);
         }
     }

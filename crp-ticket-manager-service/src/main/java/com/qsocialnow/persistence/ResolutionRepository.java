@@ -32,4 +32,27 @@ public class ResolutionRepository {
         return null;
     }
 
+    public Resolution update(String domainId, Resolution resolution) {
+        try {
+            String id = resolutionElasticService.updateResolution(elasticConfig, domainId, resolution);
+            resolution.setId(id);
+            return resolution;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
+    public Resolution delete(String domainId, String resolutionId) {
+        try {
+            resolutionElasticService.deleteResolution(elasticConfig, domainId, resolutionId);
+            Resolution resolution = new Resolution();
+            resolution.setId(resolutionId);
+            return resolution;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
 }

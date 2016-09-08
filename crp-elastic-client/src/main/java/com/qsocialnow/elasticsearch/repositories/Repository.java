@@ -19,7 +19,11 @@ public interface Repository<T> {
 
     public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<T> documents);
 
+    public <E> void removeChildMapping(String id, ChildMapping<T, E> mapping);
+
     public <E> String indexChildMapping(ChildMapping<T, E> mapping, T document);
+
+    public <E> String updateChildMapping(String id, ChildMapping<T, E> mapping, T document);
 
     public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document);
 
@@ -30,4 +34,9 @@ public interface Repository<T> {
     public <E> SearchResponse<E> search(int from, int size, String sortField, Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> search(int from, int size, String sortField, String name, Mapping<T, E> mapping);
+
+    public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping);
+
+    public <E> SearchResponse<E> searchChildMapping(ChildMapping<T, E> mapping);
+
 }
