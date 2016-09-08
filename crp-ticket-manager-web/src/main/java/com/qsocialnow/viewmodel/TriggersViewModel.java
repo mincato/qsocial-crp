@@ -2,7 +2,9 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -21,8 +23,12 @@ public class TriggersViewModel implements Serializable {
 
 	private static final long serialVersionUID = 9145343693641922196L;
 
-	private int pageSize = 15;
-	private int activePage = 0;
+	private static final int PAGE_SIZE_DEFAULT = 15;
+	
+	private static final int ACTIVE_PAGE_DEFAULT = 0;
+	
+	private int pageSize = PAGE_SIZE_DEFAULT;
+	private int activePage = ACTIVE_PAGE_DEFAULT;
 
 	private String domain;
 
@@ -34,6 +40,8 @@ public class TriggersViewModel implements Serializable {
 	private List<TriggerListView> triggers = new ArrayList<>();
 
 	private String keyword;
+	
+	private boolean filterActive = false;
 
 	@Init
 	public void init(@QueryParam("domain") String domain) {
@@ -74,7 +82,7 @@ public class TriggersViewModel implements Serializable {
 
 	private PageResponse<TriggerListView> findTriggers(String domainId) {
 		PageResponse<TriggerListView> pageResponse = triggerService.findAll(
-				domainId, activePage, pageSize);
+				domainId, activePage, pageSize, getFilters());
 		if (pageResponse.getItems() != null
 				&& !pageResponse.getItems().isEmpty()) {
 			this.triggers.addAll(pageResponse.getItems());
@@ -85,5 +93,29 @@ public class TriggersViewModel implements Serializable {
 
 		return pageResponse;
 	}
+	
+	 @Command
+	 @NotifyChange({ "triggers", "moreResults" })
+	 public void search() {
+		 this.filterActive = true;
+		 this.setDefaultPage();
+		 this.triggers.clear();
+		 this.findTriggers(this.domain);
+	 }
+	
+	
+	private Map<String, String> getFilters() {
+		if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
+			return null;
+		}
+		Map<String, String> filters = new HashMap<String, String>();
+		filters.put("name", this.keyword);
+		return filters;
+	}
+	 
+	 private void setDefaultPage() {
+		 this.pageSize = PAGE_SIZE_DEFAULT;
+		 this.activePage = ACTIVE_PAGE_DEFAULT;
+	 }
 
 }
