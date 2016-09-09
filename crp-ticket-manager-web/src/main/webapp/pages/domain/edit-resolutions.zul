@@ -1,44 +1,60 @@
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<n:div class="pane">
 		<x:div class="row">
-			<n:label class="control-label">
-				${labels.domain.resolutions}
-			</n:label>
+			<x:div
+				sclass="@load(empty vmsgs['resolutions'] ? 'col-sm-6 form-group' : 'col-sm-6 form-group has-error')">
+				<n:label class="control-label">
+					${labels.domain.resolution.list}
+				</n:label>
+				<x:span
+					sclass="@load(empty vmsgs['resolutions'] ? 'hidden' : 'help-block')">
+					<label value="@bind(vmsgs['resolutions'])" />
+				</x:span>
+			</x:div>
 			<n:div class="col-md-3 col-sm-4 col-xs-6 pull-right">
 				<n:div class="link-button">
-					<a onClick="@command('addResolution')">
+					<a onClick="@command('addResolution', domain = domain)">
 						${labels.domain.add.resolution}
 						<i class="fa fa-plus-circle fa-2x"></i>
 					</a>
 				</n:div>
 			</n:div>
 		</x:div>
-		<div visible="@load(empty vm.currentDomain.resolutions)">
+		<div
+			visible="@load(empty domain.resolutions and empty vmsgs['resolutions'])">
 			${labels.domain.without.resolutions}
 		</div>
-		<x:div children="@bind(vm.currentDomain.resolutions)">
+		<div id="resolutions" children="@bind(domain.resolutions)">
 			<template name="children">
-				<div zclass="row">
-					<div zclass="col-sm-6">
-						<n:div class="form-group">
-							<textbox type="text" class="form-control"
+				<x:div class="row">
+					<x:div class="col-sm-6">
+						<x:div
+							sclass="@load(empty vmsgs['description_'.concat(forEachStatus.index)] ? 'form-group' : 'form-group has-error')">
+							<textbox
+								id="description_${forEachStatus.index}" type="text"
+								class="form-control" 
 								value="@bind(each.description)">
 							</textbox>
-						</n:div>
-					</div>
+							<x:span
+								sclass="@load(vmsgs['description_'.concat(forEachStatus.index)] ? 'hidden' : 'help-block')">
+								<label
+									value="@bind(vmsgs['description_'.concat(forEachStatus.index)])" />
+							</x:span>
+						</x:div>
+
+					</x:div>
 					<div zclass="col-sm-2 link-button">
 						<a
-							onClick="@command('deleteResolution', index = forEachStatus.index)">
+							onClick="@command('deleteResolution', index = forEachStatus.index, domain = domain)">
 							<i
 								class="glyphicon glyphicon-erase fa-2x">
 							</i>
 							${labels.domain.delete.resolution}
 						</a>
-
 					</div>
-				</div>
-
+				</x:div>
 			</template>
-		</x:div>
+
+		</div>
 	</n:div>
 </zk>
