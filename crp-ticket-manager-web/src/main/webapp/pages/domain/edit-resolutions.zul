@@ -22,7 +22,7 @@
 		</x:div>
 		<div
 			visible="@load(empty domain.resolutions and empty vmsgs['resolutions'])">
-			${labels.domain.without.resolutions}
+			${labels.domain.resolutions.unfilled}
 		</div>
 		<div id="resolutions" children="@bind(domain.resolutions)">
 			<template name="children">
@@ -48,8 +48,7 @@
 							onClick="@command('deleteResolution', index = forEachStatus.index, domain = domain)">
 							<i
 								class="glyphicon glyphicon-erase fa-2x">
-							</i>
-							${labels.domain.delete.resolution}
+							</i>${labels.domain.delete.resolution}
 						</a>
 					</div>
 				</x:div>

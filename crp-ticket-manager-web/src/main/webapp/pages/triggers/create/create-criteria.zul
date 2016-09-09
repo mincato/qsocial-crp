@@ -1,3 +1,9 @@
+<?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
+<?link href="/assets/css/style.css" rel="stylesheet"?>
+<?link href="/assets/css/ui.css" rel="stylesheet"?>
+<?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
+<?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
+<?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<div sclass="modal fade" ca:data-modal="" ca:data-close-event="hidden.bs.modal" ca:data-filter="" onModalClose="@command('close')"
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CreateCriteriaViewModel')"
@@ -11,7 +17,7 @@
 					</n:button>
     				<n:h4 class="modal-title">${labels.trigger.criteria.title}</n:h4>
   				</n:div>
-  				<n:div class="modal-body" contentStyle="overflow:auto;" >
+  				<n:div class="modal-body">
     				<div class="row">
 						<n:div>
 							<div zclass="pane equal">
