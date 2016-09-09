@@ -139,7 +139,7 @@ public class DomainService {
     }
 
     public Domain findDomainWithTriggers(Configurator configurator, String domainId) {
-        Domain domain = findDomain(domainId);
+        Domain domain = findDomain(configurator, domainId);
         domain.setTriggers(triggerService.getTriggers(configurator, domainId));
         return domain;
     }
