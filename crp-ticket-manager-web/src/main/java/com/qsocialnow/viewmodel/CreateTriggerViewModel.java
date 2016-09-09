@@ -22,64 +22,78 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.model.DomainView;
+import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.TriggerService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateTriggerViewModel implements Serializable {
 
-    private static final long serialVersionUID = 2259179419421396093L;
+	private static final long serialVersionUID = 2259179419421396093L;
 
-    @WireVariable
-    private TriggerService triggerService;
+	@WireVariable
+	private TriggerService triggerService;
 
-    private Trigger currentTrigger;
+	@WireVariable
+	private DomainService domainService;
 
-    private String domain;
+	private Trigger currentTrigger;
 
-    private List<Status> statusOptions;
+	private String domain;
 
-    public Trigger getCurrentTrigger() {
-        return currentTrigger;
-    }
+	private DomainView currentDomain;
 
-    public List<Status> getStatusOptions() {
-        return statusOptions;
-    }
+	private List<Status> statusOptions;
 
-    @GlobalCommand
-    @NotifyChange({ "currentTrigger" })
-    public void addSegment(@BindingParam("segment") Segment segment) {
-        currentTrigger.getSegments().add(segment);
-        BindUtils.postGlobalCommand(null, null, "goToTrigger", new HashMap<>());
-    }
+	public Trigger getCurrentTrigger() {
+		return currentTrigger;
+	}
 
-    @Command
-    @NotifyChange({ "currentTrigger" })
-    public void createSegment() {
-        BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
-    }
+	public List<Status> getStatusOptions() {
+		return statusOptions;
+	}
 
-    @Command
-    @NotifyChange({ "currentTrigger" })
-    public void removeSegment(@BindingParam("segment") Segment segment) {
-        currentTrigger.getSegments().remove(segment);
-    }
+	@GlobalCommand
+	@NotifyChange({ "currentTrigger" })
+	public void addSegment(@BindingParam("segment") Segment segment) {
+		currentTrigger.getSegments().add(segment);
+		BindUtils.postGlobalCommand(null, null, "goToTrigger", new HashMap<>());
+	}
 
-    @Init
-    public void init(@QueryParam("domain") String domain) {
-        this.domain = domain;
-        currentTrigger = new Trigger();
-        this.currentTrigger.setSegments(new ArrayList<>());
-        this.statusOptions = Arrays.asList(Status.values());
-    }
+	@Command
+	@NotifyChange({ "currentTrigger" })
+	public void createSegment() {
+		BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
+	}
 
-    @Command
-    @NotifyChange("currentTrigger")
-    public void save() {
-        triggerService.create(domain, currentTrigger);
-        Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
-        currentTrigger = new Trigger();
-        currentTrigger.setSegments(new ArrayList<>());
-    }
+	@Command
+	@NotifyChange({ "currentTrigger" })
+	public void removeSegment(@BindingParam("segment") Segment segment) {
+		currentTrigger.getSegments().remove(segment);
+	}
+
+	@Init
+	public void init(@QueryParam("domain") String domain) {
+		this.domain = domain;
+		this.currentDomain = new DomainView();
+		this.currentDomain.setDomain(domainService.findOne(domain));
+		currentTrigger = new Trigger();
+		this.currentTrigger.setSegments(new ArrayList<>());
+		this.statusOptions = Arrays.asList(Status.values());
+	}
+
+	@Command
+	@NotifyChange("currentTrigger")
+	public void save() {
+		triggerService.create(domain, currentTrigger);
+		Clients.showNotification(Labels
+				.getLabel("trigger.create.notification.success"));
+		currentTrigger = new Trigger();
+		currentTrigger.setSegments(new ArrayList<>());
+	}
+
+	public DomainView getCurrentDomain() {
+		return currentDomain;
+	}
 
 }
