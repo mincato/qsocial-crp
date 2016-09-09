@@ -28,7 +28,7 @@ public class WordDetectionCriteriaFilter implements DetectionCriteriaFilter {
         boolean match = false;
         if (messageHasWords(message)) {
             match = filter.getWordFilters().stream()
-                    .anyMatch(wordFilter -> matchers.get(wordFilter.getText()).match(message, wordFilter.getText()));
+                    .anyMatch(wordFilter -> matchers.get(wordFilter.getType()).match(message, wordFilter.getText()));
         }
         return match;
     }
