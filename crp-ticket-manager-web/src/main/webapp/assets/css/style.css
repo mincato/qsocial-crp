@@ -1396,19 +1396,14 @@ TABLE OF CONTENTS
         text-align: left !important;
     }
     
-    .footer-links ul {
-		margin: 0.75em 0;
-		padding: 0 1em;
-		display: inline-block
-	}
-	
-    .footer-links ul > li > a {
+    
+	.footer-links ul > li > a {
         text-decoration: none;
-        font-size: 0.7em;
+        font-size: 0.8em;
     }
     
     .footer-mail > a {
-    	font-size: 0.7em;
+    	font-size: 0.8em;
 		font-weight: bold;
 		text-decoration: none;
 		text-align: center;

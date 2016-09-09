@@ -3,7 +3,7 @@
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditDomainViewModel', domain=arg.domain)"
 			validationMessages="@id('vmsgs')">
 		<n:div class="modal-dialog">
-			<x:div class="modal-content" form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
+			<x:div class="modal-content" form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save') @validator('com.qsocialnow.validators.ResolutionListValidator')">
 				<n:div class="modal-header">
     				<n:button type="button" class="close" data-dismiss="modal" aria-label="Close">
     					<n:span aria-hidden="true">&#x00D7;</n:span>
