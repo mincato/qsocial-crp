@@ -19,7 +19,7 @@ public class ResolutionListValidator extends AbstractValidator {
     	Map<String,Property> beanProps = context.getProperties(context.getProperty().getBase());
         DomainView domainView = (DomainView)beanProps.get(".").getValue();
         if(domainView.getResolutions().isEmpty()) {
-        	addInvalidMessage(context, "resolutions", Labels.getLabel("domain.resolutions.size.zero.validation"));
+        	addInvalidMessage(context, "resolutions", Labels.getLabel("domain.resolutions.least.one.validation"));
         	return;
         }
         for (int i = 0; i < domainView.getResolutions().size() ; i++ ) {

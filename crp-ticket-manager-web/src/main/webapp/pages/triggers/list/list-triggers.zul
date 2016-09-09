@@ -42,13 +42,13 @@
 			    	<template name="children">
 					<tr>
 						<td>${each.id}</td>
-                   		<td>${each.name}</td>
+                   		<td class="list-text-column">${each.name}</td>
                    		<td>${each.description}</td>
                    		<td>${c:l(c:cat('trigger.status.',each.status))}</td>
                    		<td>
                    			<ul class="list-inline">
-  								<li><a style="color:black"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="${labels.trigger.view.action}"></i></a></li>
-  								<li><a style="color:black"><i 	class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.trigger.edit.action}"></i></a></li>
+  								<li><a class="list-action"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="${labels.trigger.view.action}"></i></a></li>
+  								<li><a class="list-action"><i 	class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.trigger.edit.action}"></i></a></li>
 							</ul>
                    		</td>
                		</tr>
@@ -56,7 +56,7 @@
 				</tbody>
 			</table>
 		  </div>
-			<div class="text-center" zclass="@bind(vm.moreResults?'':'hidden')">
+			<div class="text-center" zclass="@bind(vm.moreResults?'more-results':'hidden')">
 				<a style="text-decoration:none" onClick="@command('moreResults')"  >
 				 	${labels.app.pagination.moreResults}
 				</a>
