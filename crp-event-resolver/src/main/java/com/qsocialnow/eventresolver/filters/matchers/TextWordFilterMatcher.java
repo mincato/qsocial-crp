@@ -26,4 +26,8 @@ public class TextWordFilterMatcher implements WordFilterMatcher {
         return match;
     }
 
+    public void setTextNormalizer(TextNormalizer textNormalizer) {
+        this.textNormalizer = textNormalizer;
+    }
+
 }
