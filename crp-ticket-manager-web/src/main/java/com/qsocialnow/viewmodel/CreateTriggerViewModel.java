@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -29,71 +30,72 @@ import com.qsocialnow.services.TriggerService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateTriggerViewModel implements Serializable {
 
-	private static final long serialVersionUID = 2259179419421396093L;
+    private static final long serialVersionUID = 2259179419421396093L;
 
-	@WireVariable
-	private TriggerService triggerService;
+    @WireVariable
+    private TriggerService triggerService;
 
-	@WireVariable
-	private DomainService domainService;
+    @WireVariable
+    private DomainService domainService;
 
-	private Trigger currentTrigger;
+    private Trigger currentTrigger;
 
-	private String domain;
+    private String domain;
 
-	private DomainView currentDomain;
+    private DomainView currentDomain;
 
-	private List<Status> statusOptions;
+    private List<Status> statusOptions;
 
-	public Trigger getCurrentTrigger() {
-		return currentTrigger;
-	}
+    public Trigger getCurrentTrigger() {
+        return currentTrigger;
+    }
 
-	public List<Status> getStatusOptions() {
-		return statusOptions;
-	}
+    public List<Status> getStatusOptions() {
+        return statusOptions;
+    }
 
-	@GlobalCommand
-	@NotifyChange({ "currentTrigger" })
-	public void addSegment(@BindingParam("segment") Segment segment) {
-		currentTrigger.getSegments().add(segment);
-		BindUtils.postGlobalCommand(null, null, "goToTrigger", new HashMap<>());
-	}
+    @GlobalCommand
+    @NotifyChange({ "currentTrigger" })
+    public void addSegment(@BindingParam("segment") Segment segment) {
+        currentTrigger.getSegments().add(segment);
+        BindUtils.postGlobalCommand(null, null, "goToTrigger", new HashMap<>());
+    }
 
-	@Command
-	@NotifyChange({ "currentTrigger" })
-	public void createSegment() {
-		BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
-	}
+    @Command
+    @NotifyChange({ "currentTrigger" })
+    public void createSegment() {
+        Map<String, Object> args = new HashMap<>();
+        args.put("currentDomain", currentDomain.getDomain());
+        BindUtils.postGlobalCommand(null, null, "goToSegment", args);
+    }
 
-	@Command
-	@NotifyChange({ "currentTrigger" })
-	public void removeSegment(@BindingParam("segment") Segment segment) {
-		currentTrigger.getSegments().remove(segment);
-	}
+    @Command
+    @NotifyChange({ "currentTrigger" })
+    public void removeSegment(@BindingParam("segment") Segment segment) {
+        currentTrigger.getSegments().remove(segment);
+    }
 
-	@Init
-	public void init(@QueryParam("domain") String domain) {
-		this.domain = domain;
-		this.currentDomain = new DomainView();
-		this.currentDomain.setDomain(domainService.findOne(domain));
-		currentTrigger = new Trigger();
-		this.currentTrigger.setSegments(new ArrayList<>());
-		this.statusOptions = Arrays.asList(Status.values());
-	}
+    @Init
+    public void init(@QueryParam("domain") String domain) {
+        this.domain = domain;
+        this.currentDomain = new DomainView();
+        this.currentDomain.setDomain(domainService.findOne(domain));
+        currentTrigger = new Trigger();
+        this.currentTrigger.setSegments(new ArrayList<>());
+        this.statusOptions = Arrays.asList(Status.values());
+    }
 
-	@Command
-	@NotifyChange("currentTrigger")
-	public void save() {
-		triggerService.create(domain, currentTrigger);
-		Clients.showNotification(Labels
-				.getLabel("trigger.create.notification.success"));
-		currentTrigger = new Trigger();
-		currentTrigger.setSegments(new ArrayList<>());
-	}
+    @Command
+    @NotifyChange("currentTrigger")
+    public void save() {
+        triggerService.create(domain, currentTrigger);
+        Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
+        currentTrigger = new Trigger();
+        currentTrigger.setSegments(new ArrayList<>());
+    }
 
-	public DomainView getCurrentDomain() {
-		return currentDomain;
-	}
+    public DomainView getCurrentDomain() {
+        return currentDomain;
+    }
 
 }

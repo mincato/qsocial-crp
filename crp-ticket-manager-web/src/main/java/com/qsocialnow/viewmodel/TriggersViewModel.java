@@ -23,115 +23,114 @@ import com.qsocialnow.services.TriggerService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class TriggersViewModel implements Serializable {
 
-	private static final long serialVersionUID = 9145343693641922196L;
+    private static final long serialVersionUID = 9145343693641922196L;
 
-	private static final int PAGE_SIZE_DEFAULT = 15;
+    private static final int PAGE_SIZE_DEFAULT = 15;
 
-	private static final int ACTIVE_PAGE_DEFAULT = 0;
+    private static final int ACTIVE_PAGE_DEFAULT = 0;
 
-	private int pageSize = PAGE_SIZE_DEFAULT;
-	private int activePage = ACTIVE_PAGE_DEFAULT;
+    private int pageSize = PAGE_SIZE_DEFAULT;
+    private int activePage = ACTIVE_PAGE_DEFAULT;
 
-	private String domain;
+    private String domain;
 
-	private DomainView currentDomain;
+    private DomainView currentDomain;
 
-	@WireVariable
-	private TriggerService triggerService;
+    @WireVariable
+    private TriggerService triggerService;
 
-	@WireVariable
-	private DomainService domainService;
+    @WireVariable
+    private DomainService domainService;
 
-	private boolean moreResults;
+    private boolean moreResults;
 
-	private List<TriggerListView> triggers = new ArrayList<>();
+    private List<TriggerListView> triggers = new ArrayList<>();
 
-	private String keyword;
+    private String keyword;
 
-	private boolean filterActive = false;
+    private boolean filterActive = false;
 
-	@Init
-	public void init(@QueryParam("domain") String domain) {
-		this.domain = domain;
-		this.currentDomain = new DomainView();
-		this.currentDomain.setDomain(domainService.findOne(domain));
-		findTriggers(this.domain);
-	}
+    @Init
+    public void init(@QueryParam("domain") String domain) {
+        this.domain = domain;
+        this.currentDomain = new DomainView();
+        this.currentDomain.setDomain(domainService.findOne(domain));
+        findTriggers(this.domain);
+    }
 
-	public List<TriggerListView> getTriggers() {
-		return this.triggers;
-	}
+    public List<TriggerListView> getTriggers() {
+        return this.triggers;
+    }
 
-	public String getKeyword() {
-		return this.keyword;
-	}
+    public String getKeyword() {
+        return this.keyword;
+    }
 
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
-	public Integer getPageSize() {
-		return pageSize;
-	}
+    public Integer getPageSize() {
+        return pageSize;
+    }
 
-	public boolean isMoreResults() {
-		return moreResults;
-	}
+    public boolean isMoreResults() {
+        return moreResults;
+    }
 
-	public String getDomain() {
-		return domain;
-	}
+    public String getDomain() {
+        return domain;
+    }
 
-	@Command
-	@NotifyChange({ "triggers", "moreResults" })
-	public void moreResults() {
-		this.activePage++;
-		this.findTriggers(this.domain);
-	}
+    @Command
+    @NotifyChange({ "triggers", "moreResults" })
+    public void moreResults() {
+        this.activePage++;
+        this.findTriggers(this.domain);
+    }
 
-	private PageResponse<TriggerListView> findTriggers(String domainId) {
-		PageResponse<TriggerListView> pageResponse = triggerService.findAll(
-				domainId, activePage, pageSize, getFilters());
-		if (pageResponse.getItems() != null
-				&& !pageResponse.getItems().isEmpty()) {
-			this.triggers.addAll(pageResponse.getItems());
-			this.moreResults = true;
-		} else {
-			this.moreResults = false;
-		}
+    private PageResponse<TriggerListView> findTriggers(String domainId) {
+        PageResponse<TriggerListView> pageResponse = triggerService.findAll(domainId, activePage, pageSize,
+                getFilters());
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.triggers.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
 
-		return pageResponse;
-	}
+        return pageResponse;
+    }
 
-	@Command
-	@NotifyChange({ "triggers", "moreResults" })
-	public void search() {
-		this.filterActive = true;
-		this.setDefaultPage();
-		this.triggers.clear();
-		this.findTriggers(this.domain);
-	}
+    @Command
+    @NotifyChange({ "triggers", "moreResults" })
+    public void search() {
+        this.filterActive = true;
+        this.setDefaultPage();
+        this.triggers.clear();
+        this.findTriggers(this.domain);
+    }
 
-	private Map<String, String> getFilters() {
-		if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
-			return null;
-		}
-		Map<String, String> filters = new HashMap<String, String>();
-		filters.put("name", this.keyword);
-		return filters;
-	}
+    private Map<String, String> getFilters() {
+        if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
+            return null;
+        }
+        Map<String, String> filters = new HashMap<String, String>();
+        filters.put("name", this.keyword);
+        return filters;
+    }
 
-	private void setDefaultPage() {
-		this.pageSize = PAGE_SIZE_DEFAULT;
-		this.activePage = ACTIVE_PAGE_DEFAULT;
-	}
+    private void setDefaultPage() {
+        this.pageSize = PAGE_SIZE_DEFAULT;
+        this.activePage = ACTIVE_PAGE_DEFAULT;
+    }
 
-	public DomainView getCurrentDomain() {
-		return currentDomain;
-	}
+    public DomainView getCurrentDomain() {
+        return currentDomain;
+    }
 
-	public void setCurrentDomain(DomainView currentDomain) {
-		this.currentDomain = currentDomain;
-	}
+    public void setCurrentDomain(DomainView currentDomain) {
+        this.currentDomain = currentDomain;
+    }
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.zkoss.bind.BindUtils;
@@ -28,6 +29,7 @@ import org.zkoss.zul.ListModelList;
 import com.qsocialnow.common.model.config.CategoryFilter;
 import com.qsocialnow.common.model.config.ConnotationFilter;
 import com.qsocialnow.common.model.config.DetectionCriteria;
+import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.model.config.FollowersFilter;
 import com.qsocialnow.common.model.config.LanguageFilter;
@@ -181,16 +183,24 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     @Init
-    public void init() {
+    public void init(@BindingParam("currentDomain") Domain currentDomain) {
         currentCriteria = new DetectionCriteria();
         filterCategory = null;
         filterView = new FilterView();
         wordFilterTypeOptions = Arrays.stream(WordFilterType.values()).collect(Collectors.toSet());
-        thematicsOptions.addAll(thematicService.findAll());
+        System.out.println("criteria domain: " + currentDomain);
+        initThematics(currentDomain);
         initMedias();
         initConnotations();
         initLanguages();
 
+    }
+
+    private void initThematics(Domain domain) {
+        List<Thematic> allThematics = thematicService.findAll();
+        Stream<Thematic> thematics = allThematics.stream().filter(
+                thematic -> (domain.getThematics().contains(thematic.getId())));
+        thematicsOptions.addAll(thematics.collect(Collectors.toList()));
     }
 
     private void initConnotations() {

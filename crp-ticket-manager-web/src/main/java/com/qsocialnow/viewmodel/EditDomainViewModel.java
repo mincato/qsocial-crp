@@ -115,16 +115,16 @@ public class EditDomainViewModel implements Serializable {
     }
 
     @Command
-	public void addResolution(@BindingParam("domain") DomainView domain) {
-		domain.getResolutions().add(new Resolution());
-		BindUtils.postNotifyChange(null, null, domain, "resolutions");
-	}
+    public void addResolution(@BindingParam("domain") DomainView domain) {
+        domain.getResolutions().add(new Resolution());
+        BindUtils.postNotifyChange(null, null, domain, "resolutions");
+    }
 
-	@Command
-	public void deleteResolution(@BindingParam("index") int idx, @BindingParam("domain") DomainView domain) {
-		domain.getResolutions().remove(idx);
-		BindUtils.postNotifyChange(null, null, domain, "resolutions");
-	}
+    @Command
+    public void deleteResolution(@BindingParam("index") int idx, @BindingParam("domain") DomainView domain) {
+        domain.getResolutions().remove(idx);
+        BindUtils.postNotifyChange(null, null, domain, "resolutions");
+    }
 
     @Command
     public void close(@ContextParam(ContextType.VIEW) Div comp) {
