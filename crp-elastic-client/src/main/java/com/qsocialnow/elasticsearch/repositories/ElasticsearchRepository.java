@@ -378,6 +378,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.hasParentQuery(mapping.getParentType(),
                 QueryBuilders.termQuery("_id", mapping.getIdParent())));
+
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 

@@ -1,5 +1,6 @@
 package com.qsocialnow.responsedetector.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.curator.framework.CuratorFramework;
@@ -22,6 +23,8 @@ import com.qsocialnow.responsedetector.model.TwitterMessageEvent;
 import com.qsocialnow.responsedetector.sources.TwitterClient;
 import com.qsocialnow.responsedetector.sources.TwitterStatusListener;
 import com.qsocialnow.responsedetector.sources.TwitterStreamClient;
+
+import twitter4j.Status;
 
 public class TwitterDetectorService extends SourceDetectorService {
 
@@ -140,8 +143,17 @@ public class TwitterDetectorService extends SourceDetectorService {
     }
 
     @Override
-    public void processEvent(InPutBeanDocument event) {
+    public void processEvent(TwitterMessageEvent messageEvent,Status status) {
         try {
+            InPutBeanDocument event = new InPutBeanDocument();
+            event.setId(messageEvent.getEventId());
+            event.setTexto(status.getText());
+            event.setFechaCreacion(new Date());
+            event.setResponseDetected(true);
+
+            event.setIdPadre(messageEvent.getEventId());
+            event.setOriginIdCase(messageEvent.getCaseId());
+            
             eventProcessor.process(event);
             log.info("Creating event to handle automatic response detection");
         } catch (Exception e) {

@@ -31,7 +31,7 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
     public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
         log.info("Starting to merge case...");
 
-        // creating first registry
+        // Adding a registry
         List<ActionRegistry> registries = new ArrayList<>();
         ActionRegistry registry = new ActionRegistry();
         registry.setAction("Merge Event - Case");
