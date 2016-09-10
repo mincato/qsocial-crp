@@ -15,16 +15,17 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 public class RegistryService {
 
     private final static String INDEX_NAME = "registry_";
-    
+
     private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
-    
-    public RegistryService (AWSElasticsearchConfigurationProvider configurationProvider){
-    	elasticSearchCaseConfigurator = configurationProvider;
+
+    public RegistryService(AWSElasticsearchConfigurationProvider configurationProvider) {
+        elasticSearchCaseConfigurator = configurationProvider;
     }
 
     public String indexRegistry(String idCase, ActionRegistry document) {
 
-        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(elasticSearchCaseConfigurator);
+        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
+                elasticSearchCaseConfigurator);
         Repository<ActionRegistryType> repository = esfactory.initManager();
         repository.initClient();
 

@@ -55,10 +55,10 @@ public class CaseService {
 
     private static final int TOTAL_BULK_INDEX_RETRIES_COUNT = 5;
 
-	public CaseService(QueueConfigurator queueConfigurator, AWSElasticsearchConfigurationProvider configurationProvider) {
-		caseQueueConfigurator = queueConfigurator;
-		elasticSearchCaseConfigurator = configurationProvider;
-	}
+    public CaseService(QueueConfigurator queueConfigurator, AWSElasticsearchConfigurationProvider configurationProvider) {
+        caseQueueConfigurator = queueConfigurator;
+        elasticSearchCaseConfigurator = configurationProvider;
+    }
 
     public String indexCase(Case document) {
 
@@ -92,6 +92,7 @@ public class CaseService {
             indexCase(document);
         }
     }
+
     public void indexBulkCases(List<Case> documents) {
 
         if (documents != null && documents.size() > 0) {
@@ -176,9 +177,9 @@ public class CaseService {
             }
         }
     }
-    
-	public Case findCaseById(String originIdCase) {
-		RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+
+    public Case findCaseById(String originIdCase) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
 
@@ -188,7 +189,7 @@ public class CaseService {
         Case caseDocument = response.getSource();
         repository.closeClient();
         return caseDocument;
-	}
+    }
 
     public List<Case> getCases(int from, int size) {
 
@@ -260,13 +261,13 @@ public class CaseService {
         return isQueueCreatedOK;
     }
 
-	public Case findCaseByEventId(String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Case findCaseByEventId(String id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public Case findCaseByTriggers(List<Trigger> triggers) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public Case findCaseByTriggers(List<Trigger> triggers) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

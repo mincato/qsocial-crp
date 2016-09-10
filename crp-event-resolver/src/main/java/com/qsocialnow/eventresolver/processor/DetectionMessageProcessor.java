@@ -20,12 +20,12 @@ public class DetectionMessageProcessor {
     public DetectionCriteria detect(InPutBeanDocument message, Domain domain) {
         DetectionCriteria detectionCriteria = null;
 
-        //validate response detected 
-        if(message!= null && message.isResponseDetected()){
-        	detectionCriteria = new DetectionCriteria();
-        	detectionCriteria.setExecuteMergeAction(true);
-        	detectionCriteria.setFindCaseByDomain(true);
-        	return detectionCriteria;
+        // validate response detected
+        if (message != null && message.isResponseDetected()) {
+            detectionCriteria = new DetectionCriteria();
+            detectionCriteria.setExecuteMergeAction(true);
+            detectionCriteria.setFindCaseByDomain(true);
+            return detectionCriteria;
         }
 
         boolean found = false;

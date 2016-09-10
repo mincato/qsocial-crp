@@ -6,29 +6,28 @@ import com.qsocialnow.common.model.event.InPutBeanDocument;
 
 public class ExecutionMessageRequest {
 
-	private final InPutBeanDocument input;
+    private final InPutBeanDocument input;
 
-	private final DetectionCriteria detectionCriteria;
+    private final DetectionCriteria detectionCriteria;
 
-	private final Domain domain;
+    private final Domain domain;
 
-	public ExecutionMessageRequest(final InPutBeanDocument input, final Domain domain,
-			final DetectionCriteria detectionCriteria) {
-		this.input = input;
-		this.domain = domain;
-		this.detectionCriteria = detectionCriteria;
-	}
+    public ExecutionMessageRequest(final InPutBeanDocument input, final Domain domain,
+            final DetectionCriteria detectionCriteria) {
+        this.input = input;
+        this.domain = domain;
+        this.detectionCriteria = detectionCriteria;
+    }
 
-	public InPutBeanDocument getInput() {
-		return input;
-	}
-	
-	public DetectionCriteria getDetectionCriteria() {
-		return detectionCriteria;
-	}
+    public InPutBeanDocument getInput() {
+        return input;
+    }
 
+    public DetectionCriteria getDetectionCriteria() {
+        return detectionCriteria;
+    }
 
-	public Domain getDomain() {
-		return domain;
-	}
+    public Domain getDomain() {
+        return domain;
+    }
 }

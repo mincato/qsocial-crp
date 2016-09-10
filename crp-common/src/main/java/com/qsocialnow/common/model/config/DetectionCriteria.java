@@ -19,9 +19,9 @@ public class DetectionCriteria {
     private Integer sequenceOrder;
 
     private Filter filter;
-    
+
     private boolean executeMergeAction;
-    
+
     private boolean findCaseByDomain;
 
     private List<AutomaticActionCriteria> actionCriterias;
@@ -82,22 +82,20 @@ public class DetectionCriteria {
         this.actionCriterias = actionCriterias;
     }
 
-	
+    public boolean isExecuteMergeAction() {
+        return executeMergeAction;
+    }
 
-	public boolean isExecuteMergeAction() {
-		return executeMergeAction;
-	}
+    public void setExecuteMergeAction(boolean executeMergeAction) {
+        this.executeMergeAction = executeMergeAction;
+    }
 
-	public void setExecuteMergeAction(boolean executeMergeAction) {
-		this.executeMergeAction = executeMergeAction;
-	}
+    public boolean isFindCaseByDomain() {
+        return findCaseByDomain;
+    }
 
-	public boolean isFindCaseByDomain() {
-		return findCaseByDomain;
-	}
-
-	public void setFindCaseByDomain(boolean findCaseByDomain) {
-		this.findCaseByDomain = findCaseByDomain;
-	}
+    public void setFindCaseByDomain(boolean findCaseByDomain) {
+        this.findCaseByDomain = findCaseByDomain;
+    }
 
 }

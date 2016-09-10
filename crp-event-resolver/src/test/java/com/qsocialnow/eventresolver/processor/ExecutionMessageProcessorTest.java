@@ -38,33 +38,35 @@ public class ExecutionMessageProcessorTest {
 
     @Test
     public void testExecuteNull() {
-    	executionMessageProcessor.execute(null);
+        executionMessageProcessor.execute(null);
     }
 
-	@Test
-	public void testExecuteInputNull() {
-		ExecutionMessageRequest request = new ExecutionMessageRequest(null, null, new DetectionCriteria());
-		executionMessageProcessor.execute(request);
-	}
+    @Test
+    public void testExecuteInputNull() {
+        ExecutionMessageRequest request = new ExecutionMessageRequest(null, null, new DetectionCriteria());
+        executionMessageProcessor.execute(request);
+    }
 
     @Test
     public void testExecuteDetectionCriteriaNull() {
-    	ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), null, null);
+        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), null, null);
         executionMessageProcessor.execute(request);
     }
 
     @Test
     public void testExecuteAutomaticActionCriteriaDomainNull() {
-    	ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(),null,new DetectionCriteria());
+        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), null,
+                new DetectionCriteria());
         executionMessageProcessor.execute(request);
     }
-    
+
     @Test
     public void testExecuteAutomaticActionCriteriaDomain() {
-    	ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(),new Domain(),new DetectionCriteria());
+        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), new Domain(),
+                new DetectionCriteria());
         executionMessageProcessor.execute(request);
     }
-    
+
     @Test
     public void testExecuteOneAction() {
 
@@ -74,8 +76,9 @@ public class ExecutionMessageProcessorTest {
         automaticActionCriteria.setActionType(ActionType.OPEN_CASE);
         automaticActions.add(automaticActionCriteria);
         detectionCriteria.setAccionCriterias(automaticActions);
-        
-        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(),new Domain(),detectionCriteria);
+
+        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), new Domain(),
+                detectionCriteria);
         executionMessageProcessor.execute(request);
 
         Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class));
@@ -94,7 +97,8 @@ public class ExecutionMessageProcessorTest {
         automaticActions.add(automaticActionCriteria);
         detectionCriteria.setAccionCriterias(automaticActions);
 
-        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(),new Domain(),detectionCriteria);
+        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), new Domain(),
+                detectionCriteria);
         executionMessageProcessor.execute(request);
 
         Mockito.verify(action, Mockito.times(2)).execute(Mockito.any(), Mockito.anyListOf(String.class));
@@ -112,8 +116,9 @@ public class ExecutionMessageProcessorTest {
         automaticActionCriteria.setActionType(ActionType.CLOSE);
         automaticActions.add(automaticActionCriteria);
         detectionCriteria.setAccionCriterias(automaticActions);
-        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(),new Domain(),detectionCriteria);
-        
+        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), new Domain(),
+                detectionCriteria);
+
         executionMessageProcessor.execute(request);
 
         Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class));

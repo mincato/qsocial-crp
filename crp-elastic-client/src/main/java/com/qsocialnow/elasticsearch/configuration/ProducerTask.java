@@ -23,9 +23,8 @@ public class ProducerTask extends TimerTask {
 
     private AWSElasticsearchConfigurationProvider caseConfig = new CaseConfigurator();
 
-    
     public ProducerTask() {
-        this.caseService = new CaseService(configuration,caseConfig);
+        this.caseService = new CaseService(configuration, caseConfig);
     }
 
     @Override

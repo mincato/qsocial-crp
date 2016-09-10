@@ -25,7 +25,7 @@ public class MessageProcessor {
 
     @Autowired
     private EventResolverConfig appConfig;
-    
+
     @Autowired
     private CuratorFramework zookeeperClient;
 
@@ -48,16 +48,17 @@ public class MessageProcessor {
         String domainId = message.getGroup();
         log.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
         log.info(String.format("Searching for domain: %s", domainId));
-        
-        Configurator elasticConfigConfigurator = ElasticConfiguratorFactory.getConfigurator(zookeeperClient,appConfig
-                .getElasticConfigConfiguratorZnodePath());
+
+        Configurator elasticConfigConfigurator = ElasticConfiguratorFactory.getConfigurator(zookeeperClient,
+                appConfig.getElasticConfigConfiguratorZnodePath());
 
         Domain domain = domainElasticService.findDomainWithTriggers(elasticConfigConfigurator, domainId);
         if (domain != null) {
             if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
-            	DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
+                DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
                 if (detectionCriteria != null) {
-                	ExecutionMessageRequest request = new ExecutionMessageRequest(inputBeanDocument,domain,detectionCriteria);
+                    ExecutionMessageRequest request = new ExecutionMessageRequest(inputBeanDocument, domain,
+                            detectionCriteria);
                     executionMessageProcessor.execute(request);
                 } else {
                     log.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));

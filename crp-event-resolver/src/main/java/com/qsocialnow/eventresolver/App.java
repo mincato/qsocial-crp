@@ -117,8 +117,8 @@ public class App implements Runnable {
     private void createEventHandlerProcessor(String domain) {
         try {
             KafkaConsumerConfig kafkaConfig = kafkaConsumerConfigFactory.create(appConfig.getKafkaConfigZnodePath());
-            QueueConfigurator queueConfig = BigQueueConfiguratorFactory.getConfigurator(zookeeperClient,appConfig
-                    .getEventsQueueConfiguratorZnodePath());
+            QueueConfigurator queueConfig = BigQueueConfiguratorFactory.getConfigurator(zookeeperClient,
+                    appConfig.getEventsQueueConfiguratorZnodePath());
 
             QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
                     queueConfig);

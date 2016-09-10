@@ -36,8 +36,7 @@ public class CaseRepository {
 
         try {
             byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
-            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(),
-                    pageRequest.getLimit());
+            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit());
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();

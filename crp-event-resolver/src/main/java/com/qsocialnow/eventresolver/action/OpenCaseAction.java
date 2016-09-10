@@ -59,9 +59,9 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
 
         registries.add(registry);
         newCase.setActionsRegistry(registries);
-        
+
         try {
-        	caseElasticService.indexCaseByBulkProcess(newCase);
+            caseElasticService.indexCaseByBulkProcess(newCase);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -71,10 +71,10 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         return newCase;
     }
 
-	@Override
-	public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

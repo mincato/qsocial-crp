@@ -24,13 +24,12 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
 
     @Override
     public Case execute(InPutBeanDocument inputElement, List<String> parameters) {
-      return null;
+        return null;
     }
 
-	@Override
-	public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
-		log.info("Starting to merge case...");
-        
+    @Override
+    public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
+        log.info("Starting to merge case...");
 
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
@@ -47,9 +46,9 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
 
         registries.add(registry);
         outputElement.setActionsRegistry(registries);
-        
+
         try {
-        	caseElasticService.indexCaseByBulkProcess(outputElement);
+            caseElasticService.indexCaseByBulkProcess(outputElement);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -57,6 +56,6 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
         }
 
         return outputElement;
-	}
+    }
 
 }
