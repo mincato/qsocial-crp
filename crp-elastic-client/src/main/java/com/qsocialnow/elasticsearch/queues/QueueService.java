@@ -25,7 +25,7 @@ public class QueueService {
 
     private static final int INITIAL_DELAY = 5;
 
-    private static final String DEAD_LETTER_QUEUE_DIR = "deadLetterQueue";
+    private static final String DEAD_LETTER_QUEUE_DIR = "/deadLetterQueue";
 
     private static final Logger log = LoggerFactory.getLogger(QueueService.class);
 
@@ -43,6 +43,8 @@ public class QueueService {
 
     private IBigQueue deadLetterQueue;
 
+    private String type;
+
     // private static QueueService instance;
 
     QueueService(QueueConfigurator queueConfiguration) {
@@ -52,16 +54,9 @@ public class QueueService {
         this.deadLetterQueueDir = this.queueFailDir + DEAD_LETTER_QUEUE_DIR;
     }
 
-    /*
-     * public static QueueService getInstance(QueueConfigurator
-     * queueConfiguration) { if (instance == null) instance = new
-     * QueueService(queueConfiguration);
-     * 
-     * return instance; }
-     */
-
     public boolean initQueue(String type) {
         boolean isQueueReady = false;
+        this.type = type;
         try {
             if (bigQueue == null) {
                 bigQueue = new BigQueueImpl(queueDir, type);
@@ -70,7 +65,7 @@ public class QueueService {
             isQueueReady = true;
 
         } catch (IOException e) {
-            log.error("Error trying to create queues:", e);
+            log.error("Error trying to create queues type: " + this.type, e);
         }
         return isQueueReady;
     }
@@ -84,7 +79,7 @@ public class QueueService {
             }
             if (deadLetterQueue == null) {
                 deadLetterQueue = new BigQueueImpl(deadLetterQueueDir, type);
-                log.info("Creating dead letter queue:" + type + " successfully..");
+                log.info("Creating dead letter queue type: " + this.type + " successfully..");
             }
             isQueueReady = true;
 
@@ -100,13 +95,14 @@ public class QueueService {
         consumer.setInitialDelay(INITIAL_DELAY);
         consumer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
         consumer.setQueue(bigQueue);
+        log.info("Starting consumer queue for type :" + this.type);
         service.execute(consumer);
     }
 
     public <T> void startProducer(QueueProducer<T> producer) {
         producer.setQueue(bigQueue);
         producer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
-        log.info("Starting producer");
+        log.info("Starting producer queue for type :" + this.type);
         producer.start();
     }
 
@@ -116,6 +112,7 @@ public class QueueService {
         consumer.setInitialDelay(INITIAL_DELAY);
         consumer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
         consumer.setQueue(bigQueueFail);
+        log.info("Starting fail consumer queue for type :" + this.type);
         service.execute(consumer);
     }
 
@@ -124,7 +121,7 @@ public class QueueService {
         producer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
         producer.setTotalMaxDeadItemCounts(TOTAL_MAX_DEAD_ITEM_COUNTS);
         producer.setDeadLetterQueue(deadLetterQueue);
-        log.info("Starting fail producer");
+        log.info("Starting fail producer queue for type :" + this.type);
         producer.start();
     }
 }

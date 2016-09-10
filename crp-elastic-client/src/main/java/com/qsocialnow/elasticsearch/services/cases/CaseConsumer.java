@@ -20,7 +20,8 @@ public class CaseConsumer extends QueueConsumer<Case> {
 
     private ConfigurationProvider configurator;
 
-    public CaseConsumer(ConfigurationProvider configurator) {
+    public CaseConsumer(String type, ConfigurationProvider configurator) {
+        super(type);
         this.configurator = configurator;
     }
 

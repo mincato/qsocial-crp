@@ -15,7 +15,7 @@ public class QueueConsumerMonitor<T> implements Runnable {
 
     @Override
     public void run() {
-        log.info("Monitor is notifing Consumer to read queue..");
+        // log.info("Monitor is notifing Consumer of "+consumerToMonitor.getType()+" to read queue");
         this.consumerToMonitor.nofityQueueReady();
     }
 

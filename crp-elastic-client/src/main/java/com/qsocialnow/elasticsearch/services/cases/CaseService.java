@@ -228,15 +228,14 @@ public class CaseService {
         if (queueService == null) {
             QueueServiceFactory queueServiceFactory = QueueServiceFactory.getInstance();
             queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
+        }
+        if (producer == null) {
+            producer = new QueueProducer<Case>(QueueType.CASES.type());
+            consumer = new CaseConsumer(QueueType.CASES.type(), elasticSearchCaseConfigurator);
+            producer.addConsumer(consumer);
 
-            if (producer == null) {
-                producer = new QueueProducer<Case>();
-                consumer = new CaseConsumer(elasticSearchCaseConfigurator);
-                producer.addConsumer(consumer);
-
-                queueService.startConsumer(consumer);
-                queueService.startProducer(producer);
-            }
+            queueService.startConsumer(consumer);
+            queueService.startProducer(producer);
         }
         producer.addItem(item);
         isQueueCreatedOK = true;
@@ -248,14 +247,14 @@ public class CaseService {
         if (queueService == null) {
             QueueServiceFactory queueServiceFactory = QueueServiceFactory.getInstance();
             queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
-            if (failProducer == null) {
-                failProducer = new QueueProducer<Case>();
-                failConsumer = new CaseConsumer(elasticSearchCaseConfigurator);
-                failProducer.addConsumer(failConsumer);
+        }
+        if (failProducer == null) {
+            failProducer = new QueueProducer<Case>(QueueType.CASES.type());
+            failConsumer = new CaseConsumer(QueueType.CASES.type(), elasticSearchCaseConfigurator);
+            failProducer.addConsumer(failConsumer);
 
-                queueService.startFailConsumer(failConsumer);
-                queueService.startFailProducer(failProducer);
-            }
+            queueService.startFailConsumer(failConsumer);
+            queueService.startFailProducer(failProducer);
         }
         if (!isDeadItem) {
             failProducer.addItem(item);
