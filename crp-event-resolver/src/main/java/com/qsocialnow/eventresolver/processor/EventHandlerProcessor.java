@@ -52,7 +52,7 @@ public class EventHandlerProcessor implements Runnable {
         if (queueService != null) {
             if (queueProducer == null) {
                 queueProducer = new QueueProducer<Message>(QueueType.EVENTS.type());
-                queueConsumer = new MessageQueueConsumer(QueueType.EVENTS.type(),messageProcessor, queueProducer);
+                queueConsumer = new MessageQueueConsumer(QueueType.EVENTS.type(), messageProcessor, queueProducer);
                 queueProducer.addConsumer(queueConsumer);
 
                 queueService.startFailConsumer(queueConsumer);

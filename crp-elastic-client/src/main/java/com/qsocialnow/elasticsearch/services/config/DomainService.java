@@ -140,8 +140,8 @@ public class DomainService {
 
     public Domain findDomainWithTriggers(Configurator configurator, String domainId) {
         Domain domain = findDomain(configurator, domainId);
-        if(domain!=null){
-        	domain.setTriggers(triggerService.getTriggers(configurator, domainId));
+        if (domain != null) {
+            domain.setTriggers(triggerService.getTriggers(configurator, domainId));
         }
         return domain;
     }

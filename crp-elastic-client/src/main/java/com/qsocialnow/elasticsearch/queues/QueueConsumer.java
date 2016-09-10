@@ -31,13 +31,13 @@ public abstract class QueueConsumer<T> extends Thread {
     private int delay;
 
     private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-    
+
     private final String type;
 
     private static final AtomicInteger consumingItemCount = new AtomicInteger(0);
 
     public QueueConsumer(final String type) {
-    	this.type = type;
+        this.type = type;
         monitor = new QueueConsumerMonitor<T>(this);
     }
 
@@ -72,7 +72,8 @@ public abstract class QueueConsumer<T> extends Thread {
 
     public synchronized void nofityQueueReady() {
         synchronized (lock) {
-            log.info("Consumer type "+this.type+" notified! Starting to read "+ bigQueue.size()+" elements from queue.");
+            log.info("Consumer type " + this.type + " notified! Starting to read " + bigQueue.size()
+                    + " elements from queue.");
             lock.notify();
         }
     };
@@ -92,18 +93,18 @@ public abstract class QueueConsumer<T> extends Thread {
                     while (index < getTotalItemCounts()) {
                         if (!bigQueue.isEmpty()) {
                             item = bigQueue.dequeue();
-                            log.info("Consumer type "+this.type+" reading documents from queue.");
+                            log.info("Consumer type " + this.type + " reading documents from queue.");
                             process(readObjectFromQueue(item));
                             index = consumingItemCount.getAndIncrement();
                         } else {
-                        	log.info("Consumer type "+this.type+" queue empty.");
-                        	break;
+                            log.info("Consumer type " + this.type + " queue empty.");
+                            break;
                         }
                     }
                     consumingItemCount.set(0);
                     save();
                 } catch (Exception e) {
-                    log.error("Error reading information from queue: "+this.type, e);
+                    log.error("Error reading information from queue: " + this.type, e);
                 } finally {
                     log.info("Consumer waiting items...");
 
@@ -113,7 +114,7 @@ public abstract class QueueConsumer<T> extends Thread {
     }
 
     private void startMonitor() {
-        log.info("Starting monitor to check elements from queue - type:"+this.type);
+        log.info("Starting monitor to check elements from queue - type:" + this.type);
         executor.scheduleWithFixedDelay(monitor, getInitialDelay(), getDelay(), TimeUnit.MINUTES);
     }
 
@@ -148,7 +149,7 @@ public abstract class QueueConsumer<T> extends Thread {
         this.delay = delay;
     }
 
-	public String getType() {
-		return type;
-	}
+    public String getType() {
+        return type;
+    }
 }

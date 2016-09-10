@@ -231,7 +231,7 @@ public class CaseService {
         }
         if (producer == null) {
             producer = new QueueProducer<Case>(QueueType.CASES.type());
-            consumer = new CaseConsumer(QueueType.CASES.type(),elasticSearchCaseConfigurator);
+            consumer = new CaseConsumer(QueueType.CASES.type(), elasticSearchCaseConfigurator);
             producer.addConsumer(consumer);
 
             queueService.startConsumer(consumer);
@@ -250,7 +250,7 @@ public class CaseService {
         }
         if (failProducer == null) {
             failProducer = new QueueProducer<Case>(QueueType.CASES.type());
-            failConsumer = new CaseConsumer(QueueType.CASES.type(),elasticSearchCaseConfigurator);
+            failConsumer = new CaseConsumer(QueueType.CASES.type(), elasticSearchCaseConfigurator);
             failProducer.addConsumer(failConsumer);
 
             queueService.startFailConsumer(failConsumer);
