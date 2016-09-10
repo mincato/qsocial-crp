@@ -26,15 +26,6 @@ import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
 public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
 
     @Autowired
-    private EventResolverConfig appConfig;
-
-    @Autowired
-    private ElasticConfiguratorFactory elasticConfigConfiguratorFactory;
-
-    @Autowired
-    private BigQueueConfiguratorFactory bigQueueConfiguratorFactory;
-
-    @Autowired
     private CaseService caseElasticService;
 
     private static final Logger log = LoggerFactory.getLogger(OpenCaseAction.class);
@@ -68,17 +59,9 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
 
         registries.add(registry);
         newCase.setActionsRegistry(registries);
-
-        Configurator elasticConfigConfigurator;
-        QueueConfigurator queueConfigurator;
+        
         try {
-            elasticConfigConfigurator = elasticConfigConfiguratorFactory.getConfigurator(appConfig
-                    .getElasticCasesConfiguratorZnodePath());
-
-            queueConfigurator = bigQueueConfiguratorFactory.getConfigurator(appConfig
-                    .getCasesQueueConfiguratorZnodePath());
-
-            caseElasticService.indexCaseByBulkProcess(queueConfigurator, elasticConfigConfigurator, newCase);
+        	caseElasticService.indexCaseByBulkProcess(newCase);
 
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -87,5 +70,11 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
 
         return newCase;
     }
+
+	@Override
+	public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Supplier;
 import com.qsocialnow.common.model.cases.ActionRegistry;
-import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
+import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
@@ -49,13 +49,13 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     private static final Logger log = LoggerFactory.getLogger(ElasticsearchRepository.class);
 
-    private ConfigurationProvider config;
+    private AWSElasticsearchConfigurationProvider config;
 
     private JestClient client;
 
     private AWSSigningRequestInterceptor requestInterceptor;
 
-    public ElasticsearchRepository(ConfigurationProvider config) {
+    public ElasticsearchRepository(AWSElasticsearchConfigurationProvider config) {
         this.config = config;
     }
 

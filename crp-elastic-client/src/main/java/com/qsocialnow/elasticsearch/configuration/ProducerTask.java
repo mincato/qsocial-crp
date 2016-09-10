@@ -21,10 +21,11 @@ public class ProducerTask extends TimerTask {
     private QueueConfigurator configuration = new QueueConfigurator("/tmp/bigqueue/", "centaurico/",
             "centaurico/error/");
 
-    private CaseConfigurator caseConfig = new CaseConfigurator();
+    private AWSElasticsearchConfigurationProvider caseConfig = new CaseConfigurator();
 
+    
     public ProducerTask() {
-        this.caseService = new CaseService();
+        this.caseService = new CaseService(configuration,caseConfig);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class ProducerTask extends TimerTask {
 
         caseDocument.setActionsRegistry(registries);
 
-        caseService.indexCaseByBulkProcess(configuration, caseConfig, caseDocument);
+        caseService.indexCaseByBulkProcess(caseDocument);
     }
 
 }

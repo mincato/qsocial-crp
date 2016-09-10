@@ -12,9 +12,15 @@ public class MessageFilterImpl implements MessageFilter {
     @Override
     public boolean shouldProcess(InPutBeanDocument message, Domain domain) {
         boolean shouldProcess = false;
+
+        if (message!=null && message.isResponseDetected()){
+        	return true;
+        }
+
         if (domain != null && CollectionUtils.isNotEmpty(domain.getThematics())) {
             shouldProcess = domain.getThematics().stream().anyMatch(thematic -> thematic.equals(message.getTokenId()));
         }
+
         return shouldProcess;
     }
 

@@ -3,6 +3,7 @@ package com.qsocialnow.eventresolver.processor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.amazonaws.services.dynamodbv2.xspec.NULL;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Segment;
@@ -18,6 +19,15 @@ public class DetectionMessageProcessor {
 
     public DetectionCriteria detect(InPutBeanDocument message, Domain domain) {
         DetectionCriteria detectionCriteria = null;
+
+        //validate response detected 
+        if(message!= null && message.isResponseDetected()){
+        	detectionCriteria = new DetectionCriteria();
+        	detectionCriteria.setExecuteMergeAction(true);
+        	detectionCriteria.setFindCaseByDomain(true);
+        	return detectionCriteria;
+        }
+
         boolean found = false;
         if (domain != null && domain.getTriggers() != null) {
             NormalizedInputBeanDocument normalizedMessage = new NormalizedInputBeanDocument(message);

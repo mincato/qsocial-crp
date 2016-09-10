@@ -154,7 +154,9 @@ public class InPutBeanDocument implements Serializable {
 
     private Long neighborhood;
 
-    private Boolean responseDetected;
+    private boolean responseDetected;
+    
+    private String originIdCase;
 
     public InPutBeanDocument() {
 
@@ -671,16 +673,24 @@ public class InPutBeanDocument implements Serializable {
     public void setNeighborhood(Long neighborhood) {
         this.neighborhood = neighborhood;
     }
+ 
+    public boolean isResponseDetected() {
+		return responseDetected;
+	}
 
-    public Boolean getResponseDetected() {
-        return responseDetected;
-    }
+	public void setResponseDetected(boolean responseDetected) {
+		this.responseDetected = responseDetected;
+	}
 
-    public void setResponseDetected(Boolean responseDetected) {
-        this.responseDetected = responseDetected;
-    }
+	public String getOriginIdCase() {
+		return originIdCase;
+	}
 
-    @Override
+	public void setOriginIdCase(String originIdCase) {
+		this.originIdCase = originIdCase;
+	}
+
+	@Override
     public String toString() {
         return new GsonBuilder().serializeNulls().create().toJson(this);
     }

@@ -46,9 +46,6 @@ public class App implements Runnable {
     private KafkaConsumerConfigFactory kafkaConsumerConfigFactory;
 
     @Autowired
-    private BigQueueConfiguratorFactory bigQueueConfiguratorFactory;
-
-    @Autowired
     private MessageProcessor messageProcessor;
 
     private ExecutorService eventHandlerExecutor;
@@ -120,11 +117,12 @@ public class App implements Runnable {
     private void createEventHandlerProcessor(String domain) {
         try {
             KafkaConsumerConfig kafkaConfig = kafkaConsumerConfigFactory.create(appConfig.getKafkaConfigZnodePath());
-            QueueConfigurator queueConfig = bigQueueConfiguratorFactory.getConfigurator(appConfig
+            QueueConfigurator queueConfig = BigQueueConfiguratorFactory.getConfigurator(zookeeperClient,appConfig
                     .getEventsQueueConfiguratorZnodePath());
 
             QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
                     queueConfig);
+
             EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig, domain),
                     messageProcessor, queueService);
 

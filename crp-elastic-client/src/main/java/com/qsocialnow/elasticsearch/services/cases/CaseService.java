@@ -10,8 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
-import com.qsocialnow.elasticsearch.configuration.CaseConfigurator;
-import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
+import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
@@ -48,20 +49,20 @@ public class CaseService {
 
     private static QueueConfigurator caseQueueConfigurator;
 
-    private static ConfigurationProvider elasticSearchCaseConfigurator;
+    private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
     private static final AtomicInteger failRetriesCount = new AtomicInteger(0);
 
     private static final int TOTAL_BULK_INDEX_RETRIES_COUNT = 5;
 
+	public CaseService(QueueConfigurator queueConfigurator, AWSElasticsearchConfigurationProvider configurationProvider) {
+		caseQueueConfigurator = queueConfigurator;
+		elasticSearchCaseConfigurator = configurationProvider;
+	}
+
     public String indexCase(Case document) {
-        CaseConfigurator configurator = new CaseConfigurator();
-        return indexCase(configurator, document);
-    }
 
-    public String indexCase(ConfigurationProvider configurator, Case document) {
-
-        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(configurator);
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
 
@@ -83,34 +84,19 @@ public class CaseService {
         return response;
     }
 
-    public void indexCaseByBulkProcess(QueueConfigurator queueConfigurator, ConfigurationProvider configurator,
-            Case document) {
-
-        if (caseQueueConfigurator == null)
-            caseQueueConfigurator = queueConfigurator;
-
-        if (elasticSearchCaseConfigurator == null)
-            elasticSearchCaseConfigurator = configurator;
-
+    public void indexCaseByBulkProcess(Case document) {
         boolean isSucceeded = addItemInQueue(document);
-
         if (!isSucceeded) {
             // TODO fail process to index without queue?
             log.error("Unable to create bigqueue instance to allow bulk index-cases: ");
-            indexCase(configurator, document);
+            indexCase(document);
         }
     }
-
     public void indexBulkCases(List<Case> documents) {
-        CaseConfigurator configurator = new CaseConfigurator();
-        indexBulkCases(configurator, documents);
-    }
-
-    public void indexBulkCases(ConfigurationProvider configurator, List<Case> documents) {
 
         if (documents != null && documents.size() > 0) {
 
-            RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(configurator);
+            RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
             Repository<CaseType> repository = esfactory.initManager();
             repository.initClient();
 
@@ -162,7 +148,7 @@ public class CaseService {
 
                 if (registries.size() > 0) {
                     RepositoryFactory<ActionRegistryType> esRegistryfactory = new RepositoryFactory<ActionRegistryType>(
-                            configurator);
+                            elasticSearchCaseConfigurator);
                     Repository<ActionRegistryType> repositoryRegistry = esRegistryfactory.initManager();
                     repositoryRegistry.initClient();
                     // validete index name
@@ -190,15 +176,23 @@ public class CaseService {
             }
         }
     }
+    
+	public Case findCaseById(String originIdCase) {
+		RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+        SearchResponse<Case> response = repository.find(originIdCase, mapping);
+
+        Case caseDocument = response.getSource();
+        repository.closeClient();
+        return caseDocument;
+	}
 
     public List<Case> getCases(int from, int size) {
-        CaseConfigurator configurator = new CaseConfigurator();
-        return getCases(configurator, from, size);
-    }
 
-    public List<Case> getCases(ConfigurationProvider configurator, int from, int size) {
-
-        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(configurator);
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
 
@@ -231,7 +225,7 @@ public class CaseService {
 
             if (producer == null) {
                 producer = new QueueProducer<Case>();
-                consumer = new CaseConsumer(elasticSearchCaseConfigurator);
+                consumer = new CaseConsumer(this);
                 producer.addConsumer(consumer);
 
                 queueService.startConsumer(consumer);
@@ -250,7 +244,7 @@ public class CaseService {
             queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
             if (failProducer == null) {
                 failProducer = new QueueProducer<Case>();
-                failConsumer = new CaseConsumer(elasticSearchCaseConfigurator);
+                failConsumer = new CaseConsumer(this);
                 failProducer.addConsumer(failConsumer);
 
                 queueService.startFailConsumer(failConsumer);
@@ -265,4 +259,14 @@ public class CaseService {
         isQueueCreatedOK = true;
         return isQueueCreatedOK;
     }
+
+	public Case findCaseByEventId(String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Case findCaseByTriggers(List<Trigger> triggers) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
