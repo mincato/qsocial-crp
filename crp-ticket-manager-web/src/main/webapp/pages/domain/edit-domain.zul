@@ -61,8 +61,7 @@
   				</n:div>
   				<div class="modal-footer">
   					<button disabled="@load(!empty vmsgs[thematics] or !empty vmsgs[name])" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
-  					<button onClick="@command('clear')" label="${labels.app.button.clear}" zclass="btn btn-default"/>
-    				<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
+  					<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.cancel}"/>
   				</div>
 			</x:div>
 		</n:div>
