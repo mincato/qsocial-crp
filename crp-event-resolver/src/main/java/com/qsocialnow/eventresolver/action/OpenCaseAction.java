@@ -43,7 +43,7 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         coordinates.setLongitude(inputElement.getLocation().getLongitud());
         newCase.setCoordinates(coordinates);
         newCase.setCaseCategories(Arrays.asList(inputElement.getCategorias()));
-
+        newCase.setPendingResponse(true);
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
         ActionRegistry registry = new ActionRegistry();

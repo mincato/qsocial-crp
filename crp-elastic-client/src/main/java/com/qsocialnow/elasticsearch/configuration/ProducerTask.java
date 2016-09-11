@@ -53,8 +53,9 @@ public class ProducerTask extends TimerTask {
         registries.add(registry);
 
         caseDocument.setActionsRegistry(registries);
+        caseService.findCaseById("AVcUobF7yccmhBtJ002a");
 
-        caseService.indexCaseByBulkProcess(caseDocument);
+        // caseService.indexCaseByBulkProcess(caseDocument);
     }
 
 }

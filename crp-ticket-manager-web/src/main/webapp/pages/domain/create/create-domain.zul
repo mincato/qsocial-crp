@@ -12,11 +12,11 @@
 		<div class="row">
 			<n:div class="col-lg-12">
 				<div zclass="pane equal">
-					<x:form form="@id('fx') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
+					<x:form form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')  @validator('com.qsocialnow.validators.ResolutionListValidator')">
 						<x:div sclass="@load(empty vmsgs[name] ? 'form-group' : 'form-group has-error')">
 						    <n:label class="control-label">${labels.domain.name}:</n:label>
 				    		<textbox type="text" class="form-control" id="name" 
-					    			name="normal_input" value="@bind(fx.domain.name) @validator('beanValidator')"></textbox>
+					    			name="normal_input" value="@bind(domain.domain.name) @validator('beanValidator')"></textbox>
 					    	<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
 			    				<label value="@load(vmsgs[name])" />
 			    			</x:span>
@@ -27,7 +27,7 @@
 							<listbox mold="select" sclass="form-control" model="@load(vm.thematics)"
 								 multiple="true"
 								checkmark="true"
-								selectedItems="@bind(fx.selectedThematics) @validator('beanValidator')"
+								selectedItems="@bind(domain.selectedThematics) @validator('beanValidator')"
 								id="thematics">
 								<template name="model">
 									<listitem>
@@ -48,7 +48,7 @@
 		    				</x:span>
     					</x:div>
 						
-						<include src="/pages/domain/create/create-resolution.zul"/>
+						<include src="/pages/domain/edit-resolutions.zul"/>
     					
 						<div class="form-group text-center">
 						    <button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />

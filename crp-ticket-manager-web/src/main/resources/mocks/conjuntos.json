@@ -1,11 +1,11 @@
 {
-  "id": 38,
+  "id": 1,
   "conjuntos": [
     {
-      "id": 0,
-      "numeroDeOrden": 25,
+      "id": 1,
+      "numeroDeOrden": 1,
       "descripcion": "Sick victims were quarantined and prevented from leaving the city.",
-      "nombre": "leading",
+      "nombre": "Sentimientos",
       "iconoHabilitado": "http://hhhhold.com/s?1533402",
       "iconoDesHabilitado": "http://hhhhold.com/s?12511695",
       "nombrePorIdioma": [
@@ -28,9 +28,9 @@
       ],
       "categorias": [
         {
-          "id": 70,
+          "id": 1,
           "descripcion": "Superficially frail by 2008, she nevertheless had the stamina and agility to teach her granddaughter the skills of chasing and capturing goannas.",
-          "nombre": "affected",
+          "nombre": "Alegria",
           "idCategoriaOpuesta": 71,
           "nombrePorIdioma": [
             {
@@ -52,9 +52,9 @@
           ]
         },
         {
-          "id": -44,
+          "id": 2,
           "descripcion": "A collection of Edwardian buildings in the city's old downtown core were, in their day, the tallest commercial buildings in the British Empire.",
-          "nombre": "many",
+          "nombre": "Odio",
           "idCategoriaOpuesta": -74,
           "nombrePorIdioma": [
             {
@@ -80,9 +80,9 @@
           ]
         },
         {
-          "id": -26,
+          "id": 3,
           "descripcion": "There they faced the Chicago Bulls, led by shooting guard Michael Jordan, a five-time scoring champion regarded as the finest player of his era.",
-          "nombre": "witchcraft",
+          "nombre": "Incomodo",
           "idCategoriaOpuesta": -61,
           "nombrePorIdioma": [
             {
@@ -110,10 +110,10 @@
       ]
     },
     {
-      "id": -56,
-      "numeroDeOrden": -58,
+      "id": 2,
+      "numeroDeOrden": 2,
       "descripcion": "It is known that the Winchester manuscript is at least two removes from the original Chronicle; as a result, there is no proof that the Chronicle was compiled at Winchester.",
-      "nombre": "western",
+      "nombre": "Division",
       "iconoHabilitado": "http://hhhhold.com/s?16057139",
       "iconoDesHabilitado": "http://hhhhold.com/s?1019902",
       "nombrePorIdioma": [
@@ -134,7 +134,7 @@
         {
           "id": 4,
           "descripcion": "63806°N 8.",
-          "nombre": "alice",
+          "nombre": "Primera",
           "idCategoriaOpuesta": 59,
           "nombrePorIdioma": [
             {
@@ -144,9 +144,9 @@
           ]
         },
         {
-          "id": 62,
+          "id": 5,
           "descripcion": "It was attended by 19 countries and 300 delegates.",
-          "nombre": "northeast-southwest-trending",
+          "nombre": "Segunda",
           "idCategoriaOpuesta": -17,
           "nombrePorIdioma": [
             {
@@ -160,9 +160,9 @@
           ]
         },
         {
-          "id": 72,
+          "id": 6,
           "descripcion": ") In the household of Henry Stafford in 1469, gentle members received 2.",
-          "nombre": "comprising",
+          "nombre": "Tercera",
           "idCategoriaOpuesta": -88,
           "nombrePorIdioma": [
             {
@@ -172,158 +172,6 @@
             {
               "idioma": "woodward",
               "name": "jobs"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": -90,
-      "numeroDeOrden": 97,
-      "descripcion": "\" And Vladimir Nabokov once complained of Chekhov's \"medley of dreadful prosaisms, ready-made epithets, repetitions.",
-      "nombre": "has",
-      "iconoHabilitado": "http://hhhhold.com/s?6116476",
-      "iconoDesHabilitado": "http://hhhhold.com/s?13207058",
-      "nombrePorIdioma": [
-        {
-          "idioma": "north",
-          "nombre": "the"
-        },
-        {
-          "idioma": "points",
-          "nombre": "south"
-        },
-        {
-          "idioma": "all",
-          "nombre": "stripe"
-        },
-        {
-          "idioma": "acting",
-          "nombre": "groups"
-        },
-        {
-          "idioma": "avian",
-          "nombre": "later"
-        }
-      ],
-      "categorias": [
-        {
-          "id": 31,
-          "descripcion": "By 2008, this proportion had grown to 51%.",
-          "nombre": "and",
-          "idCategoriaOpuesta": -94,
-          "nombrePorIdioma": [
-            {
-              "idioma": "the",
-              "name": "painting"
-            },
-            {
-              "idioma": "been",
-              "name": "and"
-            },
-            {
-              "idioma": "the",
-              "name": "of"
-            },
-            {
-              "idioma": "a",
-              "name": "animals"
-            },
-            {
-              "idioma": "the",
-              "name": "thought"
-            }
-          ]
-        },
-        {
-          "id": 16,
-          "descripcion": "A larger second expedition led by the Castilian king himself reached and besieged Lisbon for four months before being forced to retreat by a shortage of food supplies due to harassment from Nuno Álvares Pereira, and the bubonic plague.",
-          "nombre": "time",
-          "idCategoriaOpuesta": 52,
-          "nombrePorIdioma": [
-            {
-              "idioma": "at",
-              "name": "a"
-            },
-            {
-              "idioma": "probably",
-              "name": "duchess"
-            },
-            {
-              "idioma": "engl",
-              "name": "s"
-            },
-            {
-              "idioma": "a",
-              "name": "of"
-            }
-          ]
-        },
-        {
-          "id": -31,
-          "descripcion": "Whittle himself was ill for a fortnight due to swallowing some of the foul water in the ornamental lake.",
-          "nombre": "that",
-          "idCategoriaOpuesta": 73,
-          "nombrePorIdioma": [
-            {
-              "idioma": "present-day",
-              "name": "house"
-            },
-            {
-              "idioma": "powerful",
-              "name": "made"
-            },
-            {
-              "idioma": "criterion",
-              "name": "poor"
-            },
-            {
-              "idioma": "in",
-              "name": "served"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": -39,
-      "numeroDeOrden": 11,
-      "descripcion": "It has a very fast flight, with its wings slightly swept-back, rather than straight out from the body like other ducks.",
-      "nombre": "is",
-      "iconoHabilitado": "http://hhhhold.com/s?3471971",
-      "iconoDesHabilitado": "http://hhhhold.com/s?8796659",
-      "nombrePorIdioma": [
-        {
-          "idioma": "james",
-          "nombre": "johnson"
-        },
-        {
-          "idioma": "to",
-          "nombre": "of"
-        },
-        {
-          "idioma": "it",
-          "nombre": "in"
-        }
-      ],
-      "categorias": [
-        {
-          "id": -91,
-          "descripcion": "Scout training was first introduced to boys in Hong Kong in 1910, only a few years after the beginning of the Scout movement in the United Kingdom, when Rev.",
-          "nombre": "forces",
-          "idCategoriaOpuesta": 82,
-          "nombrePorIdioma": [
-            {
-              "idioma": "name",
-              "name": "per"
-            },
-            {
-              "idioma": "the",
-              "name": "of"
-            },
-            {
-              "idioma": "accused",
-              "name": "h"
             }
           ]
         }

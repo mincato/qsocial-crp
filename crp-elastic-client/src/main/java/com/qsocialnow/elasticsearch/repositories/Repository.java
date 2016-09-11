@@ -2,8 +2,11 @@ package com.qsocialnow.elasticsearch.repositories;
 
 import java.util.List;
 
+import org.elasticsearch.index.query.QueryBuilder;
+
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
+import com.qsocialnow.elasticsearch.mappings.types.cases.IdentityType;
 
 public interface Repository<T> {
 
@@ -17,7 +20,7 @@ public interface Repository<T> {
 
     public <E> String indexMapping(Mapping<T, E> mapping, T document);
 
-    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<T> documents);
+    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<IdentityType> documents);
 
     public <E> void removeChildMapping(String id, ChildMapping<T, E> mapping);
 
@@ -38,5 +41,8 @@ public interface Repository<T> {
     public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchChildMapping(ChildMapping<T, E> mapping);
+
+    public <E> SearchResponse<E> searchChildMappingWithFilters(int from, int size, String sortField,
+            QueryBuilder filters, ChildMapping<T, E> mapping);
 
 }

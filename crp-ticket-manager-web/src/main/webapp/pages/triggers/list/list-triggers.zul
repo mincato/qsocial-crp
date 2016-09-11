@@ -1,11 +1,12 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
-    viewModel="@id('vm') @init('com.qsocialnow.viewmodel.DomainsViewModel')" 
-    border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
+    viewModel="@id('vm') @init('com.qsocialnow.viewmodel.TriggersViewModel')" 
+    border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml" xmlns:ca="client/attribute">
 	<n:div class="row">
 	   <n:div class="col-lg-12">
 	       <div zclass="pane equal col-md-12 col-xs-12">
 				<n:div class="col-md-6 col-xs-12">
-    				<n:h5>${labels.domain.list.title}</n:h5>
+    				<n:h5>${labels.trigger.list.title} / ${vm.currentDomain.domain.name} </n:h5>
 				</n:div>
 				<n:div class="col-md-offset-1 col-md-3 col-xs-8">
 					<div zclass="input-group input-group-sm">
@@ -17,7 +18,7 @@
                 </n:div>
                 <n:div class="col-md-2 col-xs-4">
                 	<n:div class="link-button">
-					<a href="/pages/domain/create/index.zul">${labels.domain.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
+					<a href="/pages/triggers/create/index.zul?domain=${vm.domain}">${labels.trigger.create.trigger.action} <i class="fa fa-plus-circle fa-2x"></i></a>
 	    			</n:div>
 	    		</n:div>
 	       </div>
@@ -30,24 +31,26 @@
 			<table class="table table-striped table-hover">
 			    <thead>
 					<tr>
-					    <th>${labels.domain.list.column.id}</th>
-					    <th>${labels.domain.list.column.name}</th>
-					    <th>${labels.domain.list.column.thematics}</th>
-					    <th>${labels.domain.list.column.action}</th>
+					    <th>${labels.trigger.list.column.id}</th>
+					    <th>${labels.trigger.list.column.name}</th>
+					    <th>${labels.trigger.list.column.description}</th>
+					    <th>${labels.trigger.list.column.status}</th>
+					    <th>${labels.trigger.list.column.action}</th>
 					</tr>
 			    </thead>
-			    <tbody children="@bind(vm.domains)">
+			    <tbody children="@bind(vm.triggers)">
 			    	<template name="children">
 					<tr>
 						<td>${each.id}</td>
                    		<td class="list-text-column">${each.name}</td>
-                       	<td>${each.thematics}</td>
-                       	<td>
-                       		<ul class="list-inline">
-  								<li><a class="list-action"><i onClick="@command('openEdit', domainId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.domain.edit.action}"></i></a></li>
-								<li><a class="list-action" href="/pages/triggers/list/index.zul?domain=${each.id}"><i class="fa fa-list" data-toggle="tooltip" data-placement="top" title="${labels.domain.view.triggers.action}"></i></a></li>
+                   		<td>${each.description}</td>
+                   		<td>${c:l(c:cat('trigger.status.',each.status))}</td>
+                   		<td>
+                   			<ul class="list-inline">
+  								<li><a class="list-action"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="${labels.trigger.view.action}"></i></a></li>
+  								<li><a class="list-action"><i 	class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.trigger.edit.action}"></i></a></li>
 							</ul>
-			           	</td>
+                   		</td>
                		</tr>
                		</template>
 				</tbody>

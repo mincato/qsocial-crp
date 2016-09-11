@@ -38,11 +38,14 @@ public class ExecutionMessageProcessor {
                     Case originCase = null;
                     if (detectionCriteria.isFindCaseByDomain()) {
                         if (input.getOriginIdCase() != null) {
+                            log.info("Trying to merge case: " + input.getOriginIdCase());
                             originCase = caseService.findCaseById(input.getOriginIdCase());
                         } else {
+                            log.info("Trying to merge case by event: " + input.getOriginIdCase());
                             originCase = caseService.findCaseByEventId(input.getId());
                         }
                     } else {
+                        log.info("Trying to merge case finding by triggers from Domain: " + request.getDomain().getId());
                         originCase = caseService.findCaseByTriggers(request.getDomain().getTriggers());
                     }
                     Action action = actions.get(ActionType.MERGE_CASE);

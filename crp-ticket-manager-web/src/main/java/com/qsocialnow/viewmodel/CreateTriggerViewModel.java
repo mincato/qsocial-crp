@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -22,6 +23,8 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.model.DomainView;
+import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.TriggerService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -32,9 +35,14 @@ public class CreateTriggerViewModel implements Serializable {
     @WireVariable
     private TriggerService triggerService;
 
+    @WireVariable
+    private DomainService domainService;
+
     private Trigger currentTrigger;
 
     private String domain;
+
+    private DomainView currentDomain;
 
     private List<Status> statusOptions;
 
@@ -56,7 +64,9 @@ public class CreateTriggerViewModel implements Serializable {
     @Command
     @NotifyChange({ "currentTrigger" })
     public void createSegment() {
-        BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
+        Map<String, Object> args = new HashMap<>();
+        args.put("currentDomain", currentDomain.getDomain());
+        BindUtils.postGlobalCommand(null, null, "goToSegment", args);
     }
 
     @Command
@@ -68,6 +78,8 @@ public class CreateTriggerViewModel implements Serializable {
     @Init
     public void init(@QueryParam("domain") String domain) {
         this.domain = domain;
+        this.currentDomain = new DomainView();
+        this.currentDomain.setDomain(domainService.findOne(domain));
         currentTrigger = new Trigger();
         this.currentTrigger.setSegments(new ArrayList<>());
         this.statusOptions = Arrays.asList(Status.values());
@@ -80,6 +92,10 @@ public class CreateTriggerViewModel implements Serializable {
         Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
         currentTrigger = new Trigger();
         currentTrigger.setSegments(new ArrayList<>());
+    }
+
+    public DomainView getCurrentDomain() {
+        return currentDomain;
     }
 
 }

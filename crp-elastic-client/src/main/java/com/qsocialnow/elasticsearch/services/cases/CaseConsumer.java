@@ -15,7 +15,8 @@ public class CaseConsumer extends QueueConsumer<Case> {
 
     private CaseService service;
 
-    public CaseConsumer(CaseService caseService) {
+    public CaseConsumer(String type, CaseService caseService) {
+        super(type);
         this.service = caseService;
     }
 

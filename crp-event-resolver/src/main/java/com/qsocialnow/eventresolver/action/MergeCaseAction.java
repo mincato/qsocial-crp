@@ -1,6 +1,7 @@
 package com.qsocialnow.eventresolver.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
 
     @Override
     public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
-        log.info("Starting to merge case...");
+        log.info("Starting to merge case: " + outputElement.getId());
 
         // Adding a registry
         List<ActionRegistry> registries = new ArrayList<>();
@@ -40,12 +41,12 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
         registry.setUserName(inputElement.getUsuarioCreacion());
         Event event = new Event();
         event.setId(inputElement.getId());
-        event.setDescription(inputElement.getName());
-
+        event.setDescription(inputElement.getTexto());
+        event.setTopic(inputElement.getName());
         registry.setEvent(event);
-
         registries.add(registry);
         outputElement.setActionsRegistry(registries);
+        outputElement.setPendingResponse(false);
 
         try {
             caseElasticService.indexCaseByBulkProcess(outputElement);

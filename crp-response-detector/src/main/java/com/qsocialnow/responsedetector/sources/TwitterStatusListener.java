@@ -40,7 +40,7 @@ public class TwitterStatusListener implements StatusListener {
 
             twitterClient.removeListeners(this);
             log.info("Reply detected : " + status.getId() + " Text: " + status.getText());
-            sourceService.processEvent(this.messageEvent,status);
+            sourceService.processEvent(this.messageEvent, status);
             this.sourceService.removeSourceConversation(this.messageEvent.getMessageId());
         }
     }

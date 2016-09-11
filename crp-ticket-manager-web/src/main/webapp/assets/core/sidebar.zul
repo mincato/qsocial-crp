@@ -112,26 +112,6 @@
 											</li>
 										</ul>
 									</li>
-
-									<li>
-										<n:a href="#">
-											<i
-												class="fa fa-list fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.triggers}
-											<span
-												class="fa chevron-down-left">
-											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a href="#">
-													${labels.sidebar.menu.list}
-												</a>
-											</li>
-										</ul>
-									</li>
-
 								</ul><!-- sidebar-nav -->
 							</n:nav>
 						</n:div><!-- tab-content -->

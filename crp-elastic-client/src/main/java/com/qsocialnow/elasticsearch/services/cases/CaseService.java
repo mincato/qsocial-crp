@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
-import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
@@ -18,6 +17,7 @@ import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
+import com.qsocialnow.elasticsearch.mappings.types.cases.IdentityType;
 import com.qsocialnow.elasticsearch.queues.QueueProducer;
 import com.qsocialnow.elasticsearch.queues.QueueService;
 import com.qsocialnow.elasticsearch.queues.QueueServiceFactory;
@@ -58,6 +58,28 @@ public class CaseService {
     public CaseService(QueueConfigurator queueConfigurator, AWSElasticsearchConfigurationProvider configurationProvider) {
         caseQueueConfigurator = queueConfigurator;
         elasticSearchCaseConfigurator = configurationProvider;
+        initQueues();
+    }
+
+    private void initQueues() {
+        QueueServiceFactory queueServiceFactory = QueueServiceFactory.getInstance();
+        queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
+
+        if (queueService != null) {
+            producer = new QueueProducer<Case>(QueueType.CASES.type());
+            consumer = new CaseConsumer(QueueType.CASES.type(), this);
+            producer.addConsumer(consumer);
+
+            queueService.startConsumer(consumer);
+            queueService.startProducer(producer);
+
+            failProducer = new QueueProducer<Case>(QueueType.CASES.type());
+            failConsumer = new CaseConsumer(QueueType.CASES.type(), this);
+            failProducer.addConsumer(failConsumer);
+
+            queueService.startFailConsumer(failConsumer);
+            queueService.startFailProducer(failProducer);
+        }
     }
 
     public String indexCase(Case document) {
@@ -113,7 +135,7 @@ public class CaseService {
                 repository.createIndex(mapping.getIndex());
             }
             // index document
-            List<CaseType> documentsTypes = new ArrayList<>();
+            List<IdentityType> documentsTypes = new ArrayList<>();
             for (Case caseDocument : documents) {
                 documentsTypes.add(mapping.getDocumentType(caseDocument));
             }
@@ -125,7 +147,7 @@ public class CaseService {
                 failRetriesCount.set(0);
 
                 List<BulkResultItem> items = response.getSourcesBulk();
-                List<ActionRegistryType> registries = new ArrayList<>();
+                List<IdentityType> registries = new ArrayList<>();
                 ActionRegistryMapping mappingRegistry = ActionRegistryMapping.getInstance();
 
                 String indexNameRegistry = INDEX_NAME_REGISTRY + generateIndexValue();
@@ -184,9 +206,11 @@ public class CaseService {
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
+        mapping.setIndex(INDEX_NAME + generateIndexValue());
         SearchResponse<Case> response = repository.find(originIdCase, mapping);
 
         Case caseDocument = response.getSource();
+        log.info("Retrieving from ES Case:" + caseDocument.getId());
         repository.closeClient();
         return caseDocument;
     }
@@ -210,54 +234,32 @@ public class CaseService {
         String indexSufix = null;
 
         LocalDateTime dateTime = LocalDateTime.now();
-        int day = dateTime.getDayOfMonth();
         int month = dateTime.getMonthValue();
         int year = dateTime.getYear();
-        indexSufix = year + "_" + month + "_" + day;
+        indexSufix = year + "_" + month;
 
         return indexSufix;
     }
 
     private boolean addItemInQueue(Case item) {
         boolean isQueueCreatedOK = false;
-        if (queueService == null) {
-            QueueServiceFactory queueServiceFactory = QueueServiceFactory.getInstance();
-            queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
-
-            if (producer == null) {
-                producer = new QueueProducer<Case>();
-                consumer = new CaseConsumer(this);
-                producer.addConsumer(consumer);
-
-                queueService.startConsumer(consumer);
-                queueService.startProducer(producer);
-            }
+        if (producer != null) {
+            producer.addItem(item);
+            isQueueCreatedOK = true;
         }
-        producer.addItem(item);
-        isQueueCreatedOK = true;
         return isQueueCreatedOK;
     }
 
     private boolean addFailItemInQueue(Case item, boolean isDeadItem) {
         boolean isQueueCreatedOK = false;
-        if (queueService == null) {
-            QueueServiceFactory queueServiceFactory = QueueServiceFactory.getInstance();
-            queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
-            if (failProducer == null) {
-                failProducer = new QueueProducer<Case>();
-                failConsumer = new CaseConsumer(this);
-                failProducer.addConsumer(failConsumer);
-
-                queueService.startFailConsumer(failConsumer);
-                queueService.startFailProducer(failProducer);
+        if (failProducer == null) {
+            if (!isDeadItem) {
+                failProducer.addItem(item);
+            } else {
+                failProducer.addDeadItem(item);
             }
+            isQueueCreatedOK = true;
         }
-        if (!isDeadItem) {
-            failProducer.addItem(item);
-        } else {
-            failProducer.addDeadItem(item);
-        }
-        isQueueCreatedOK = true;
         return isQueueCreatedOK;
     }
 

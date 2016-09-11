@@ -69,9 +69,9 @@ public class TwitterClient {
                         if (user != null && messageEvent.getUserId().equals(String.valueOf(user.getId()))) {
                             log.info("Historical reply detected : " + statusReply.getId() + " Text: "
                                     + statusReply.getText());
-                            
+
                             log.info("Creating event to handle automatic response detection");
-                            sourceService.processEvent(messageEvent,statusReply);
+                            sourceService.processEvent(messageEvent, statusReply);
                             sourceService.removeSourceConversation(messageEvent.getMessageId());
                             break;
                         }

@@ -1,5 +1,7 @@
 package com.qsocialnow.services.impl;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +62,8 @@ public class TriggerServiceImpl implements TriggerService {
     }
 
     @Override
-    public PageResponse<TriggerListView> findAll(String domainId, int pageNumber, int pageSize) {
+    public PageResponse<TriggerListView> findAll(String domainId, int pageNumber, int pageSize,
+            Map<String, String> filters) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -68,6 +71,12 @@ public class TriggerServiceImpl implements TriggerService {
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
                     .path("/trigger").queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+
+            if (filters != null) {
+                for (Map.Entry<String, String> filter : filters.entrySet()) {
+                    builder.queryParam(filter.getKey(), filter.getValue());
+                }
+            }
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<PageResponse<TriggerListView>> response = restTemplate.exchange(builder.toUriString(),

@@ -32,16 +32,16 @@ public class StringUtils {
 
     public static String removeAccentuation(String s) {
         /**
-         * Remove accents (but keep tilde in �, � and diaeresis in �, �)
+         * Remove accents (but keep tilde in ñ, Ñ and diaeresis in ü, Ü)
          * 
          * @param s
          *            a string.
-         * @return The string without diacritics (keeps only tilde in �, � and
-         *         diaeresis in �, �)
+         * @return The string without diacritics (keeps only tilde in ñ, Ñ and
+         *         diaeresis in ü, Ü)
          */
         String res = java.text.Normalizer.normalize(s, decomposed);
-        return res.replaceAll("\u006E\u0303", "�").replaceAll("\u004E\u0303", "�").replaceAll("\u0075\u0308", "�")
-                .replaceAll("\u0055\u0308", "�").replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        return res.replaceAll("\u006E\u0303", "ñ").replaceAll("\u004E\u0303", "Ñ").replaceAll("\u0075\u0308", "ü")
+                .replaceAll("\u0055\u0308", "Ü").replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
     }
 
 }

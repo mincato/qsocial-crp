@@ -1,6 +1,7 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Div;
 
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.model.DomainView;
 import com.qsocialnow.model.Thematic;
 import com.qsocialnow.services.DomainService;
@@ -71,6 +73,7 @@ public class EditDomainViewModel implements Serializable {
         currentDomain.setSelectedThematics(thematics.stream()
                 .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))
                 .collect(Collectors.toSet()));
+        initResolutions();
     }
 
     @Command
@@ -79,8 +82,11 @@ public class EditDomainViewModel implements Serializable {
         Domain domain = currentDomain.getDomain();
         domain.setThematics(currentDomain.getSelectedThematics().stream().map(Thematic::getId)
                 .collect(Collectors.toList()));
+        domain.setResolutions(new ArrayList<Resolution>());
+        domain.getResolutions().addAll(currentDomain.getResolutions());
         currentDomain.setDomain(domainService.update(domain));
         initThematics();
+        initResolutions();
         Clients.showNotification(Labels.getLabel("domain.edit.notification.success", new String[] { currentDomain
                 .getDomain().getId() }));
         saved = true;
@@ -90,6 +96,7 @@ public class EditDomainViewModel implements Serializable {
     @NotifyChange("currentDomain")
     public void clear() {
         initThematics();
+        initResolutions();
     }
 
     private void initThematics() {
@@ -98,6 +105,25 @@ public class EditDomainViewModel implements Serializable {
                 thematics.stream()
                         .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))
                         .collect(Collectors.toSet()));
+    }
+
+    private void initResolutions() {
+        currentDomain.setResolutions(new ArrayList<Resolution>());
+        if (currentDomain.getDomain().getResolutions() != null) {
+            currentDomain.getResolutions().addAll(currentDomain.getDomain().getResolutions());
+        }
+    }
+
+    @Command
+    public void addResolution(@BindingParam("domain") DomainView domain) {
+        domain.getResolutions().add(new Resolution());
+        BindUtils.postNotifyChange(null, null, domain, "resolutions");
+    }
+
+    @Command
+    public void deleteResolution(@BindingParam("index") int idx, @BindingParam("domain") DomainView domain) {
+        domain.getResolutions().remove(idx);
+        BindUtils.postNotifyChange(null, null, domain, "resolutions");
     }
 
     @Command

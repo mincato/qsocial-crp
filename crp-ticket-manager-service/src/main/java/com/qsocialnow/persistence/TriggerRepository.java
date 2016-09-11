@@ -37,12 +37,12 @@ public class TriggerRepository {
         return null;
     }
 
-    public List<TriggerListView> findAll(String domainId, PageRequest pageRequest) {
+    public List<TriggerListView> findAll(String domainId, PageRequest pageRequest, String name) {
         List<TriggerListView> triggers = new ArrayList<>();
 
         try {
             List<Trigger> triggersRepo = triggerElasticService.getTriggers(elasticConfig, domainId,
-                    pageRequest.getOffset(), pageRequest.getLimit());
+                    pageRequest.getOffset(), pageRequest.getLimit(), name);
 
             for (Trigger triggerRepo : triggersRepo) {
                 TriggerListView triggerListView = new TriggerListView();

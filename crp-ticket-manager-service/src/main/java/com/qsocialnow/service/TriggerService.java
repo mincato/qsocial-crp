@@ -44,8 +44,9 @@ public class TriggerService {
         return triggerSaved;
     }
 
-    public PageResponse<TriggerListView> findAll(String domainId, Integer pageNumber, Integer pageSize) {
-        List<TriggerListView> triggers = triggerRepository.findAll(domainId, new PageRequest(pageNumber, pageSize));
+    public PageResponse<TriggerListView> findAll(String domainId, Integer pageNumber, Integer pageSize, String name) {
+        List<TriggerListView> triggers = triggerRepository.findAll(domainId, new PageRequest(pageNumber, pageSize),
+                name);
 
         PageResponse<TriggerListView> page = new PageResponse<TriggerListView>(triggers, pageNumber, pageSize);
         return page;
