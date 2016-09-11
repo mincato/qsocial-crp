@@ -1,7 +1,6 @@
-package com.qsocialnow.eventresolver.factories;
+package com.qsocialnow.config;
 
 import org.apache.curator.framework.CuratorFramework;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.GsonBuilder;

@@ -1,13 +1,9 @@
 package com.qsocialnow.responsedetector.sources;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.responsedetector.model.TwitterMessageEvent;
-import com.qsocialnow.responsedetector.service.EventProcessor;
 import com.qsocialnow.responsedetector.service.SourceDetectorService;
 
 import twitter4j.StallWarning;
@@ -44,7 +40,7 @@ public class TwitterStatusListener implements StatusListener {
 
             twitterClient.removeListeners(this);
             log.info("Reply detected : " + status.getId() + " Text: " + status.getText());
-            generateEvent(status);
+            sourceService.processEvent(this.messageEvent, status);
             this.sourceService.removeSourceConversation(this.messageEvent.getMessageId());
         }
     }
@@ -68,15 +64,5 @@ public class TwitterStatusListener implements StatusListener {
     @Override
     public void onStallWarning(StallWarning warning) {
 
-    }
-
-    private void generateEvent(Status status) {
-        InPutBeanDocument event = new InPutBeanDocument();
-        event.setId(this.messageEvent.getEventId());
-        event.setTexto(status.getText());
-        event.setFechaCreacion(new Date());
-        event.setResponseDetected(true);
-        sourceService.processEvent(event);
-        log.info("Creating event to handle automatic response detection");
     }
 }

@@ -11,11 +11,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.pagination.PageRequest;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
 
 @Service
@@ -38,11 +36,7 @@ public class CaseRepository {
 
         try {
             byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
-            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
-                    Configurator.class);
-
-            List<Case> casesRepo = caseElasticService.getCases(configurator, pageRequest.getOffset(),
-                    pageRequest.getLimit());
+            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit());
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();

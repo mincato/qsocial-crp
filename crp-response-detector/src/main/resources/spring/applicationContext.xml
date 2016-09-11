@@ -34,9 +34,6 @@
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 	</bean>
 	
-	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
-	</bean>
-	
 	<bean id="kafkaConfig" class="com.qsocialnow.responsedetector.factories.KafkaProducerConfigFactory" factory-method="create">
 		<constructor-arg ref="zookeeperClient" />
 		<constructor-arg value="${app.kafka.config.znode.path}" />

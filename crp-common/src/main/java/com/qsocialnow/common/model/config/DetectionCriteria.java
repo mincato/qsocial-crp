@@ -1,6 +1,5 @@
 package com.qsocialnow.common.model.config;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +19,10 @@ public class DetectionCriteria {
     private Integer sequenceOrder;
 
     private Filter filter;
+
+    private boolean executeMergeAction;
+
+    private boolean findCaseByDomain;
 
     private List<AutomaticActionCriteria> actionCriterias;
 
@@ -77,6 +80,22 @@ public class DetectionCriteria {
 
     public void setAccionCriterias(List<AutomaticActionCriteria> actionCriterias) {
         this.actionCriterias = actionCriterias;
+    }
+
+    public boolean isExecuteMergeAction() {
+        return executeMergeAction;
+    }
+
+    public void setExecuteMergeAction(boolean executeMergeAction) {
+        this.executeMergeAction = executeMergeAction;
+    }
+
+    public boolean isFindCaseByDomain() {
+        return findCaseByDomain;
+    }
+
+    public void setFindCaseByDomain(boolean findCaseByDomain) {
+        this.findCaseByDomain = findCaseByDomain;
     }
 
 }

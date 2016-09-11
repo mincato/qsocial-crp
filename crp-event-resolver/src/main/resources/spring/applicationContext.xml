@@ -32,13 +32,30 @@
 	</bean>
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
-	</bean>
-	
+	   <constructor-arg ref="queueConfigurator" />
+       <constructor-arg ref="configurationProvider" />
+    </bean>
+   
+   <bean id="registryService" class="com.qsocialnow.elasticsearch.services.cases.RegistryService">
+        <constructor-arg ref="configurationProvider" />
+    </bean>
+   
+    <bean id="queueConfigurator" class="com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+        <constructor-arg ref="zookeeperClient"></constructor-arg>
+        <constructor-arg value="${app.cases.queue.configurator.path}" />
+    </bean>
+    
+    <bean id="configurationProvider" class="com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory" factory-method="getConfigurator">
+         <constructor-arg ref="zookeeperClient"></constructor-arg>
+         <constructor-arg value="${app.elastic.cases.configurator.path}" />
+    </bean>
+
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
 	</bean>
 	
 	<util:map id="actions">
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).OPEN_CASE}" value-ref="openCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).MERGE_CASE}" value-ref="mergeCaseAction"/>
 	</util:map>
 	
 	<util:map id="matchers">

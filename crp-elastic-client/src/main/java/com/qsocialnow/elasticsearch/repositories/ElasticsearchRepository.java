@@ -18,10 +18,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Supplier;
-import com.qsocialnow.elasticsearch.configuration.ConfigurationProvider;
+import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
+import com.qsocialnow.elasticsearch.mappings.types.cases.IdentityType;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
@@ -49,13 +50,13 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     private static final Logger log = LoggerFactory.getLogger(ElasticsearchRepository.class);
 
-    private ConfigurationProvider config;
+    private AWSElasticsearchConfigurationProvider config;
 
     private JestClient client;
 
     private AWSSigningRequestInterceptor requestInterceptor;
 
-    public ElasticsearchRepository(ConfigurationProvider config) {
+    public ElasticsearchRepository(AWSElasticsearchConfigurationProvider config) {
         this.config = config;
     }
 
@@ -113,16 +114,23 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return idValue;
     }
 
-    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<T> documents) {
+    public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<IdentityType> documents) {
 
         List<Index> modelList = new ArrayList<Index>();
-
-        for (T t : documents) {
-            modelList.add(new Index.Builder(t).build());
+        // TODO:index by alias
+        for (IdentityType identity : documents) {
+            Index indexDocument;
+            if (identity.getId() != null) {
+                log.info("Updating case: " + identity.getId());
+                indexDocument = new Index.Builder(identity).index(mapping.getIndex()).type(mapping.getType())
+                        .id(identity.getId()).build();
+            } else {
+                indexDocument = new Index.Builder(identity).index(mapping.getIndex()).type(mapping.getType()).build();
+            }
+            modelList.add(indexDocument);
         }
 
-        Bulk bulk = new Bulk.Builder().defaultIndex(mapping.getIndex()).defaultType(mapping.getType())
-                .addAction(modelList).build();
+        Bulk bulk = new Bulk.Builder().addAction(modelList).build();
 
         IndexResponse<E> response = new IndexResponse<>();
         try {
