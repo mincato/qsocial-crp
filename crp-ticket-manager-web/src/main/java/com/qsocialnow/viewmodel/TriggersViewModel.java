@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -103,9 +104,9 @@ public class TriggersViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "triggers", "moreResults" })
+    @NotifyChange({ "triggers", "moreResults", "filterActive" })
     public void search() {
-        this.filterActive = true;
+    	this.filterActive = !StringUtils.isEmpty(this.keyword);
         this.setDefaultPage();
         this.triggers.clear();
         this.findTriggers(this.domain);
@@ -132,5 +133,9 @@ public class TriggersViewModel implements Serializable {
     public void setCurrentDomain(DomainView currentDomain) {
         this.currentDomain = currentDomain;
     }
+
+	public boolean isFilterActive() {
+		return filterActive;
+	}
 
 }
