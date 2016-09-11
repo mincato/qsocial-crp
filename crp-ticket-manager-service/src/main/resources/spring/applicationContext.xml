@@ -44,7 +44,7 @@
        <constructor-arg ref="configurationProvider" />
     </bean>
    
-    <bean id="queueConfigurator" class="com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+    <bean id="queueConfigurator" class="com.qsocialnow.config.BigQueueConfiguratorFactory" factory-method="getConfigurator">
         <constructor-arg ref="zookeeperClient"></constructor-arg>
         <constructor-arg value="${app.cases.queue.configurator.path}" />
     </bean>
