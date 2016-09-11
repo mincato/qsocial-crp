@@ -39,6 +39,8 @@ public class CreateTriggerViewModel implements Serializable {
     private DomainService domainService;
 
     private Trigger currentTrigger;
+    
+    private Trigger fxTrigger;
 
     private String domain;
 
@@ -55,32 +57,33 @@ public class CreateTriggerViewModel implements Serializable {
     }
 
     @GlobalCommand
-    @NotifyChange({ "currentTrigger" })
     public void addSegment(@BindingParam("segment") Segment segment) {
-        currentTrigger.getSegments().add(segment);
+        this.fxTrigger.getSegments().add(segment);
         BindUtils.postGlobalCommand(null, null, "goToTrigger", new HashMap<>());
+        BindUtils.postNotifyChange(null, null, this.fxTrigger, "segments");
+        this.fxTrigger = null;
     }
 
     @Command
-    @NotifyChange({ "currentTrigger" })
-    public void createSegment() {
+    public void createSegment(@BindingParam("fxTrigger") Trigger fxTrigger) {
+    	this.fxTrigger = fxTrigger;
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain.getDomain());
         BindUtils.postGlobalCommand(null, null, "goToSegment", args);
     }
 
     @Command
-    @NotifyChange({ "currentTrigger" })
-    public void removeSegment(@BindingParam("segment") Segment segment) {
-        currentTrigger.getSegments().remove(segment);
+    public void removeSegment(@BindingParam("segment") Segment segment, @BindingParam("fxTrigger") Trigger fxTrigger) {
+        fxTrigger.getSegments().remove(segment);
+        BindUtils.postNotifyChange(null, null, fxTrigger, "segments");
     }
 
     @Init
     public void init(@QueryParam("domain") String domain) {
         this.domain = domain;
         this.currentDomain = new DomainView();
-        this.currentDomain.setDomain(domainService.findOne(domain));
-        currentTrigger = new Trigger();
+        this.currentDomain.setDomain(domainService.findOne(this.domain));
+        this.currentTrigger = new Trigger();
         this.currentTrigger.setSegments(new ArrayList<>());
         this.statusOptions = Arrays.asList(Status.values());
     }
@@ -88,7 +91,7 @@ public class CreateTriggerViewModel implements Serializable {
     @Command
     @NotifyChange("currentTrigger")
     public void save() {
-        triggerService.create(domain, currentTrigger);
+    	triggerService.create(domain, currentTrigger);
         Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
         currentTrigger = new Trigger();
         currentTrigger.setSegments(new ArrayList<>());
