@@ -19,7 +19,6 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Resolution;
-
 import com.qsocialnow.model.DomainView;
 import com.qsocialnow.model.Thematic;
 import com.qsocialnow.services.DomainService;
@@ -82,15 +81,15 @@ public class CreateDomainViewModel implements Serializable {
     }
 
     @Command
-    public void addResolution() {
-        currentDomain.getResolutions().add(new Resolution());
-        BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
+    public void addResolution(@BindingParam("domain") DomainView domain) {
+        domain.getResolutions().add(new Resolution());
+        BindUtils.postNotifyChange(null, null, domain, "resolutions");
     }
 
     @Command
-    public void deleteResolution(@BindingParam("index") int idx) {
-        currentDomain.getResolutions().remove(idx);
-        BindUtils.postNotifyChange(null, null, currentDomain, "resolutions");
+    public void deleteResolution(@BindingParam("index") int idx, @BindingParam("domain") DomainView domain) {
+        domain.getResolutions().remove(idx);
+        BindUtils.postNotifyChange(null, null, domain, "resolutions");
     }
 
 }
