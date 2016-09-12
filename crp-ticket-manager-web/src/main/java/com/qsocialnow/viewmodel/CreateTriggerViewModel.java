@@ -39,7 +39,7 @@ public class CreateTriggerViewModel implements Serializable {
     private DomainService domainService;
 
     private Trigger currentTrigger;
-    
+
     private Trigger fxTrigger;
 
     private String domain;
@@ -66,7 +66,7 @@ public class CreateTriggerViewModel implements Serializable {
 
     @Command
     public void createSegment(@BindingParam("fxTrigger") Trigger fxTrigger) {
-    	this.fxTrigger = fxTrigger;
+        this.fxTrigger = fxTrigger;
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain.getDomain());
         BindUtils.postGlobalCommand(null, null, "goToSegment", args);
@@ -91,7 +91,7 @@ public class CreateTriggerViewModel implements Serializable {
     @Command
     @NotifyChange("currentTrigger")
     public void save() {
-    	triggerService.create(domain, currentTrigger);
+        triggerService.create(domain, currentTrigger);
         Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
         currentTrigger = new Trigger();
         currentTrigger.setSegments(new ArrayList<>());

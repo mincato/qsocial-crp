@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.pagination.PageRequest;
-import com.qsocialnow.elasticsearch.services.cases.CaseService;
+import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
 @Service
 public class CaseRepository {
@@ -22,7 +22,7 @@ public class CaseRepository {
     private Logger log = LoggerFactory.getLogger(CaseRepository.class);
 
     @Autowired
-    private CaseService caseElasticService;
+    private CaseTicketService caseElasticService;
 
     @Value("${app.elastic.cases.configurator.path}")
     private String elasticConfiguratorZnodePath;
@@ -35,9 +35,8 @@ public class CaseRepository {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
-            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
-            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit());
 
+            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit());
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();
                 caseListView.setId(caseRepo.getId());

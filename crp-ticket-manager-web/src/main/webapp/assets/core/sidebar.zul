@@ -80,7 +80,7 @@
 										<ul>
 											<li>
 												<a
-													href="/pages/cases/index.zul">
+													href="/pages/cases/list/index.zul">
 													${labels.sidebar.menu.list}
 												</a>
 											</li>
