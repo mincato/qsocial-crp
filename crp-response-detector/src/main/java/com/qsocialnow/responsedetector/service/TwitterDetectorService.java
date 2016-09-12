@@ -1,5 +1,6 @@
 package com.qsocialnow.responsedetector.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -133,7 +134,16 @@ public class TwitterDetectorService extends SourceDetectorService {
     }
 
     public void stop() {
-        this.twitterStreamClient.stop();
+        if (twitterStreamClient != null) {
+            this.twitterStreamClient.stop();
+        }
+        try {
+            if (pathChildrenCache != null) {
+                pathChildrenCache.close();
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error. Cause", e);
+        }
     }
 
     @Override

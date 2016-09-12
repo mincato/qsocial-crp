@@ -48,8 +48,10 @@ public class App implements Runnable {
 
     public void close() {
         log.info("Starting exit...");
-        for (SourceDetectorService sourceDetector : sourceDetectors) {
-            sourceDetector.stop();
+        if (sourceDetectors != null) {
+            for (SourceDetectorService sourceDetector : sourceDetectors) {
+                sourceDetector.stop();
+            }
         }
         try {
             if (responseDetectorExecutor != null) {

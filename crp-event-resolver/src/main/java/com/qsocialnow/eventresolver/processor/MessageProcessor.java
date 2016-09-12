@@ -1,6 +1,5 @@
 package com.qsocialnow.eventresolver.processor;
 
-import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +9,10 @@ import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
-import com.qsocialnow.elasticsearch.services.config.DomainService;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.exception.InvalidDomainException;
-import com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
+import com.qsocialnow.eventresolver.service.DomainService;
 import com.qsocialnow.kafka.model.Message;
 
 @Service
@@ -27,16 +24,13 @@ public class MessageProcessor {
     private EventResolverConfig appConfig;
 
     @Autowired
-    private CuratorFramework zookeeperClient;
-
-    @Autowired
     private DetectionMessageProcessor detectionMessageProcessor;
 
     @Autowired
     private ExecutionMessageProcessor executionMessageProcessor;
 
     @Autowired
-    private DomainService domainElasticService;
+    private DomainService domainService;
 
     @Autowired
     private MessageFilter messageFilter;
@@ -49,10 +43,7 @@ public class MessageProcessor {
         log.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
         log.info(String.format("Searching for domain: %s", domainId));
 
-        Configurator elasticConfigConfigurator = ElasticConfiguratorFactory.getConfigurator(zookeeperClient,
-                appConfig.getElasticConfigConfiguratorZnodePath());
-
-        Domain domain = domainElasticService.findDomainWithTriggers(elasticConfigConfigurator, domainId);
+        Domain domain = domainService.findDomainWithTriggers(domainId);
         if (domain != null) {
             if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
                 DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
@@ -72,7 +63,7 @@ public class MessageProcessor {
     }
 
     public void setDomainElasticService(DomainService domainElasticService) {
-        this.domainElasticService = domainElasticService;
+        this.domainService = domainElasticService;
     }
 
     public void setDetectionMessageProcessor(DetectionMessageProcessor detectionMessageProcessor) {

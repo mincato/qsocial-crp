@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 
-@Component
 public class ElasticConfiguratorFactory {
 
     public static Configurator getConfigurator(CuratorFramework zookeeperClient, String elasticConfiguratorZnodePath)
