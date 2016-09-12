@@ -1,7 +1,14 @@
+<?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
+<?link href="/assets/css/style.css" rel="stylesheet"?>
+<?link href="/assets/css/ui.css" rel="stylesheet"?>
+<?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
+<?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
+<?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
-	<div sclass="modal fade" ca:data-modal="" ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')" 
-		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CreateCriteriaViewModel')"
+	<div sclass="modal fade" ca:data-modal="" ca:data-close-event="hidden.bs.modal" ca:data-filter="" onModalClose="@command('close')"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CreateCriteriaViewModel', currentDomain=arg.currentDomain)"
 			validationMessages="@id('vmsgs')">
+		<div visible="@load(vm.filterCategory eq null)">
 		<n:div class="modal-dialog">
 			<div class="modal-content" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
 				<n:div class="modal-header">
@@ -43,10 +50,26 @@
 							    <n:form class="form-horizontal pane bottom-line">								
 									<n:div class="form-group">
 										<n:label class="control-label col-sm-2">${labels.trigger.criteria.media}</n:label>
-										<x:div class="col-sm-10" children="@load(vm.mediaTypes)">
+										<x:div class="col-sm-6 text-center" children="@load(vm.mediaTypes)">
 											<template name="children">
-												<checkbox onCheck="@command('selectAllMedia', checked=self.checked, media=each)" zclass="icon-input" sclass="@load(each.media.icon)" checked="@bind(each.checked)" label="@load(each.media.label)"/>
+												<checkbox zclass="icon-input media" sclass="@load(each.media.icon)" checked="@bind(each.checked)" />
         									</template>
+										</x:div>
+										<x:div class="col-sm-4 all icon-input">
+											<checkbox zclass="icon-input all media_select_all" label="${labels.app.select.all}"/>
+										</x:div>
+				    				</n:div>
+							    </n:form>
+							    <n:form class="form-horizontal pane bottom-line">								
+									<n:div class="form-group">
+										<n:label class="control-label col-sm-2">${labels.trigger.criteria.language}</n:label>
+										<x:div class="col-sm-6 text-center" children="@load(vm.languages)">
+											<template name="children">
+												<checkbox zclass="image-input language" sclass="@load(each.language.image)" checked="@bind(each.checked)" />
+        									</template>
+										</x:div>
+										<x:div class="col-sm-4 all icon-input">
+											<checkbox zclass="icon-input all language_select_all" label="${labels.app.select.all}"/>
 										</x:div>
 				    				</n:div>
 							    </n:form>
@@ -64,18 +87,128 @@
 										</n:div>
 				    				</n:div>
 							    </n:form>
-							    <n:form class="form-horizontal pane">								
+							    <n:form class="form-horizontal pane bottom-line">					
 									<n:div class="form-group">
 										<n:label class="control-label col-sm-2">${labels.trigger.criteria.connotation}</n:label>
-										<n:div class="col-sm-10">
-											<radiogroup model="@bind(vm.connotations)" selectedItem="@bind(vm.filter.connotation)">
-												<template name="model">
-													<radio zclass="icon-input" sclass="@load(each.icon)" label="@bind(each.label)"/>
-												</template>
-        									</radiogroup>
-										</n:div>
+										<x:div class="col-sm-6 text-center" children="@load(vm.connotations)">
+											<template name="children">
+												<checkbox zclass="icon-input connotation" sclass="@load(each.connotation.icon)" checked="@bind(each.checked)" />
+        									</template>
+										</x:div>
+										<x:div class="col-sm-4 all icon-input">
+											<checkbox zclass="icon-input all connotation_select_all" label="${labels.app.select.all}"/>
+										</x:div>
+										
 				    				</n:div>
 							    </n:form>
+							    <n:div class="pane bottom-line">
+									<n:label class="control-label">${labels.trigger.criteria.followers.title}</n:label>
+							    	<n:form class="form-inline text-center">								
+										<n:div class="form-group">
+											<n:label class="control-label">${labels.trigger.criteria.followers.greater}</n:label>
+					    					<textbox type="text" ca:data-only-number="" class="form-control" 
+						    					value="@bind(vm.filter.followersGreaterThan)"></textbox>
+				    					</n:div>
+				    					<n:div class="form-group">
+						    				<n:label class="control-label">${labels.trigger.criteria.followers.less}</n:label>
+					    					<textbox type="text" ca:data-only-number="" sclass="form-control"
+						    					value="@bind(vm.filter.followersLessThan)"></textbox>
+					    				</n:div>
+								    </n:form>
+							    </n:div>
+							    <n:div class="pane bottom-line">
+									<x:div class="pane">
+										<n:label class="control-label">${labels.trigger.criteria.word.title}</n:label>
+										<button onClick="@command('addFilterWord')" label="${labels.trigger.criteria.add}" zclass="btn btn-primary pull-right" />
+									</x:div>
+									<x:div children="@bind(vm.filter.filterWords)">
+								        <template name="children" var="filterWord">
+							                <n:form class="form-inline text-center">								
+												<n:div class="form-group">
+													<selectbox sclass="form-control" model="@load(vm.wordFilterTypeOptions)"
+			    										selectedItem="@bind(filterWord.type)" >
+						    							<template name="model">
+       														<label value="@load(each)" />
+   														</template>
+													</selectbox>
+						    					</n:div>
+						    					<n:div class="form-group">
+								    				<textbox type="text" class="form-control" 
+								    					value="@bind(filterWord.inputText)"></textbox>
+							    				</n:div>
+							    				<button type="button" sclass="close" label="&#x00D7;" onClick="@command('removeFilterWord', filter=filterWord)">
+												</button>
+									    	</n:form>
+							    	    </template>
+								    </x:div>
+							    </n:div>
+							     <n:div class="pane bottom-line">
+									<n:label class="control-label">${labels.trigger.criteria.thematics.title}</n:label>
+							    	<n:form class="form-inline">								
+										<n:div class="form-group">
+											<n:label class="control-label">${labels.trigger.criteria.thematics.thematic}</n:label>
+					    					<selectbox sclass="form-control" model="@load(vm.thematicsOptions)"
+					    						onSelect="@command('selectThematic')"
+					    						selectedItem="@bind(vm.filter.thematic)">
+			    								<template name="model">
+													<label value="@load(each.nombre)" />
+												</template>
+											</selectbox>
+				    					</n:div>
+				    					<x:div class="form-group" visible="@load(vm.serieOptions ne null and not empty vm.serieOptions)">
+											<n:label class="control-label">${labels.trigger.criteria.thematics.serie}</n:label>
+					    					<selectbox sclass="form-control"  model="@load(vm.serieOptions)"
+					    						onSelect="@command('selectSerie')"
+					    						selectedItem="@bind(vm.filter.serie)">
+			    								<template name="model">
+													<label value="@load(each.nombre)" />
+												</template>
+											</selectbox>
+				    					</x:div>
+				    					<x:div class="form-group" visible="@load(vm.subSerieOptions ne null and not empty vm.subSerieOptions)">
+											<n:label class="control-label">${labels.trigger.criteria.thematics.subSerie}</n:label>
+					    					<selectbox sclass="form-control" model="@load(vm.subSerieOptions)"
+					    						selectedItem="@bind(vm.filter.subSerie)">
+			    								<template name="model">
+													<label value="@load(each.nombre)" />
+												</template>
+											</selectbox>
+				    					</x:div>
+								    </n:form>
+							    </n:div>
+							    <x:div class="pane" visible="@load(vm.categoryGroupOptions ne null and not empty vm.categoryGroupOptions)">
+									<x:div class="pane">
+										<n:label class="control-label">${labels.trigger.criteria.category.title}</n:label>
+										<button onClick="@command('addFilterCategory')" label="${labels.trigger.criteria.add}" zclass="btn btn-primary pull-right" />
+									</x:div>
+									<x:div children="@bind(vm.filter.filterCategories)">
+								        <template name="children" var="filterCategory">
+							                <n:form class="form-inline">								
+												<n:div class="form-group">
+													<selectbox sclass="form-control" model="@load(vm.categoryGroupOptions)"
+														onSelect="@command('selectGroupCategory', filter=filterCategory)"
+			    										selectedItem="@bind(filterCategory.categoryGroup)" >
+						    							<template name="model">
+       														<label value="@load(each.nombre)" />
+   														</template>
+													</selectbox>
+						    					</n:div>
+						    					<div class="form-group" children="@load(filterCategory.categories)">
+													<template name="children">
+														<span>
+															<label value="${each.nombre}"/>
+															<span>
+																<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', filter=filterCategory, category=each)"/>
+															</span>
+														</span>
+													</template>
+						    					</div>
+							    				<button type="button" sclass="close" label="&#x00D7;" onClick="@command('removeFilterCategory', filter=filterCategory)">
+												</button>
+									    	</n:form>
+							    	    </template>
+								    </x:div>
+							    </x:div>
 							</div>
 						</n:div>
 					</div>
@@ -86,5 +219,40 @@
   				</n:div>
 			</div>
 		</n:div>
-	</div> 
+		</div>
+		<div visible="@load(vm.filterCategory ne null and not empty vm.filterCategory.categoryOptions)">
+			<n:div class="modal-dialog">
+				<div class="modal-content">
+					<n:div class="modal-header">
+	    				<n:h4 class="modal-title">Select categories</n:h4>
+	  				</n:div>
+	  				<n:div class="modal-body">
+	    				<div class="row">
+							<n:div>
+								<div zclass="pane equal">
+								    <n:form class="form-inline text-center">								
+										<n:div class="form-group">
+			    							<listbox mold="select" sclass="form-control" model="@load(vm.filterCategory.categoryOptions)"
+						 						multiple="true"
+												checkmark="true"
+												selectedItems="@bind(vm.filterCategory.categories)">
+												<template name="model">
+													<listitem>
+														<listcell label="${each.nombre}" />
+													</listitem>
+												</template>
+											</listbox>
+				    					</n:div>
+							    	</n:form>
+								</div>
+							</n:div>
+						</div>
+	  				</n:div>
+	  				<n:div class="modal-footer">
+  						<button onClick="@command('closeCategories')" label="${labels.app.button.save}" zclass="btn btn-primary" />
+  					</n:div>
+				</div>
+			</n:div>
+		</div>
+	</div>
 </zk>

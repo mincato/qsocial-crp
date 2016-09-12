@@ -6,7 +6,7 @@ import com.qsocialnow.common.model.cases.Event;
 import com.qsocialnow.common.model.config.ActionType;
 import io.searchbox.annotations.JestId;
 
-public class ActionRegistryType {
+public class ActionRegistryType implements IdentityType {
 
     @JestId
     private String id;

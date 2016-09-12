@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
-import com.qsocialnow.common.pagination.PageResponse;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.rest.response.RestResponseHandler;
 import com.qsocialnow.service.CaseService;
 

@@ -9,8 +9,8 @@ public class EventResolverConfig {
     @Value("${app.zookeeper.host}")
     private String zookeeperHost;
 
-    @Value("${app.kafka.zookeeper.host.path}")
-    private String kafkaZookeeerZnodePath;
+    @Value("${app.kafka.config.znode.path}")
+    private String kafkaConfigZnodePath;
 
     @Value("${app.dateFormat:dd/MM/yyyy}")
     private String dateFormat;
@@ -21,6 +21,12 @@ public class EventResolverConfig {
     @Value("${app.elastic.cases.configurator.path}")
     private String elasticCasesConfiguratorZnodePath;
 
+    @Value("${app.cases.queue.configurator.path}")
+    private String casesQueueConfiguratorZnodePath;
+
+    @Value("${app.events.queue.configurator.path}")
+    private String eventsQueueConfiguratorZnodePath;
+
     @Value("${app.domains.path}")
     private String domainsPath;
 
@@ -28,8 +34,8 @@ public class EventResolverConfig {
         return zookeeperHost;
     }
 
-    public String getKafkaZookeeerZnodePath() {
-        return kafkaZookeeerZnodePath;
+    public String getKafkaConfigZnodePath() {
+        return kafkaConfigZnodePath;
     }
 
     public String getDateFormat() {
@@ -46,6 +52,14 @@ public class EventResolverConfig {
 
     public String getDomainsPath() {
         return domainsPath;
+    }
+
+    public String getCasesQueueConfiguratorZnodePath() {
+        return casesQueueConfiguratorZnodePath;
+    }
+
+    public String getEventsQueueConfiguratorZnodePath() {
+        return eventsQueueConfiguratorZnodePath;
     }
 
 }

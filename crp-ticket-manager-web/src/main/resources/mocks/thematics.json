@@ -1,0 +1,188 @@
+{
+  "clientOrganizationId": 52,
+  "thematics": [
+    {
+      "id": 1,
+      "nombre": "Preocupaciones",
+      "running": true,
+      "series": [
+        {
+          "id": 1,
+          "nombre": "Buenos Aires",
+          "subSeries": [
+            {
+              "id": 1,
+              "nombre": "Inflacion"
+            },
+            {
+              "id": 2,
+              "nombre": "Inseguridad"
+            },
+            {
+              "id": 3,
+              "nombre": "Economia"
+            },
+            {
+              "id": 4,
+              "nombre": "Metrobus"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "nombre": "Cordoba",
+          "subSeries": [
+            {
+              "id": 1,
+              "nombre": "Inflacion"
+            },
+            {
+              "id": 2,
+              "nombre": "Inseguridad"
+            },
+            {
+              "id": 3,
+              "nombre": "Economia"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "nombre": "Santa Fe",
+          "subSeries": [
+            {
+              "id": 1,
+              "nombre": "Inflacion"
+            },
+            {
+              "id": 2,
+              "nombre": "Inseguridad"
+            },
+            {
+              "id": 3,
+              "nombre": "Economia"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "nombre": "Rosario",
+          "subSeries": [
+            {
+              "id": 1,
+              "nombre": "Inflacion"
+            },
+            {
+              "id": 2,
+              "nombre": "Inseguridad"
+            },
+            {
+              "id": 3,
+              "nombre": "Economia"
+            },
+            {
+              "id": 5,
+              "nombre": "Narcotrafico"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nombre": "Futbol",
+      "running": true,
+      "series": [
+        {
+          "id": 5,
+          "nombre": "Afa",
+          "subSeries": [
+            {
+              "id": 6,
+              "nombre": "Elecciones"
+            },
+            {
+              "id": 7,
+              "nombre": "Corrupcion"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "nombre": "Torneo",
+          "subSeries": [
+            {
+              "id": 8,
+              "nombre": "Fixture"
+            },
+            {
+              "id": 9,
+              "nombre": "Estadistica"
+            },
+            {
+              "id": 10,
+              "nombre": "Posiciones"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "nombre": "Mundial",
+          "subSeries": [
+            {
+              "id": 8,
+              "nombre": "Fixture"
+            },
+            {
+              "id": 9,
+              "nombre": "Estadistica"
+            },
+            {
+              "id": 10,
+              "nombre": "Posiciones"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "nombre": "Politica",
+      "running": true,
+      "series": [
+        {
+          "id": 8,
+          "nombre": "Elecciones",
+          "subSeries": [
+            {
+              "id": 11,
+              "nombre": "Encuestas"
+            },
+            {
+              "id": 12,
+              "nombre": "Votaciones"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "nombre": "Partidos",
+          "subSeries": [
+            {
+              "id": 13,
+              "nombre": "Pro"
+            },
+            {
+              "id": 14,
+              "nombre": "FPV"
+            },
+            {
+              "id": 15,
+              "nombre": "UCR"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

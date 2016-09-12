@@ -1,0 +1,181 @@
+{
+  "id": 1,
+  "conjuntos": [
+    {
+      "id": 1,
+      "numeroDeOrden": 1,
+      "descripcion": "Sick victims were quarantined and prevented from leaving the city.",
+      "nombre": "Sentimientos",
+      "iconoHabilitado": "http://hhhhold.com/s?1533402",
+      "iconoDesHabilitado": "http://hhhhold.com/s?12511695",
+      "nombrePorIdioma": [
+        {
+          "idioma": "pay",
+          "nombre": "commoners"
+        },
+        {
+          "idioma": "travelling",
+          "nombre": "a"
+        },
+        {
+          "idioma": "event",
+          "nombre": "to"
+        },
+        {
+          "idioma": "house",
+          "nombre": "rebounds"
+        }
+      ],
+      "categorias": [
+        {
+          "id": 1,
+          "descripcion": "Superficially frail by 2008, she nevertheless had the stamina and agility to teach her granddaughter the skills of chasing and capturing goannas.",
+          "nombre": "Alegria",
+          "idCategoriaOpuesta": 71,
+          "nombrePorIdioma": [
+            {
+              "idioma": "was",
+              "name": "on"
+            },
+            {
+              "idioma": "manra",
+              "name": "hospital"
+            },
+            {
+              "idioma": "notorious",
+              "name": "and"
+            },
+            {
+              "idioma": "particular",
+              "name": "animals"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "descripcion": "A collection of Edwardian buildings in the city's old downtown core were, in their day, the tallest commercial buildings in the British Empire.",
+          "nombre": "Odio",
+          "idCategoriaOpuesta": -74,
+          "nombrePorIdioma": [
+            {
+              "idioma": "killed",
+              "name": "angeles"
+            },
+            {
+              "idioma": "albert",
+              "name": "points"
+            },
+            {
+              "idioma": "a",
+              "name": "no"
+            },
+            {
+              "idioma": "classified",
+              "name": "was"
+            },
+            {
+              "idioma": "under",
+              "name": "solo"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "descripcion": "There they faced the Chicago Bulls, led by shooting guard Michael Jordan, a five-time scoring champion regarded as the finest player of his era.",
+          "nombre": "Incomodo",
+          "idCategoriaOpuesta": -61,
+          "nombrePorIdioma": [
+            {
+              "idioma": "james",
+              "name": "became"
+            },
+            {
+              "idioma": "verons",
+              "name": "son"
+            },
+            {
+              "idioma": "and",
+              "name": "grow"
+            },
+            {
+              "idioma": "born",
+              "name": "not"
+            },
+            {
+              "idioma": "of",
+              "name": "of"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "numeroDeOrden": 2,
+      "descripcion": "It is known that the Winchester manuscript is at least two removes from the original Chronicle; as a result, there is no proof that the Chronicle was compiled at Winchester.",
+      "nombre": "Division",
+      "iconoHabilitado": "http://hhhhold.com/s?16057139",
+      "iconoDesHabilitado": "http://hhhhold.com/s?1019902",
+      "nombrePorIdioma": [
+        {
+          "idioma": "criminal",
+          "nombre": "in"
+        },
+        {
+          "idioma": "unit",
+          "nombre": "cat"
+        },
+        {
+          "idioma": "circular",
+          "nombre": "these"
+        }
+      ],
+      "categorias": [
+        {
+          "id": 4,
+          "descripcion": "63806°N 8.",
+          "nombre": "Primera",
+          "idCategoriaOpuesta": 59,
+          "nombrePorIdioma": [
+            {
+              "idioma": "is",
+              "name": "lbs"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "descripcion": "It was attended by 19 countries and 300 delegates.",
+          "nombre": "Segunda",
+          "idCategoriaOpuesta": -17,
+          "nombrePorIdioma": [
+            {
+              "idioma": "force",
+              "name": "university"
+            },
+            {
+              "idioma": "the",
+              "name": "rehearsals"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "descripcion": ") In the household of Henry Stafford in 1469, gentle members received 2.",
+          "nombre": "Tercera",
+          "idCategoriaOpuesta": -88,
+          "nombrePorIdioma": [
+            {
+              "idioma": "years",
+              "name": "was"
+            },
+            {
+              "idioma": "woodward",
+              "name": "jobs"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

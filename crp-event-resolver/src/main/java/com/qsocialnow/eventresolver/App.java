@@ -7,7 +7,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
@@ -20,10 +19,16 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
+import com.qsocialnow.elasticsearch.queues.QueueService;
+import com.qsocialnow.elasticsearch.queues.QueueServiceFactory;
+import com.qsocialnow.elasticsearch.queues.QueueType;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
+import com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory;
+import com.qsocialnow.eventresolver.factories.KafkaConsumerConfigFactory;
 import com.qsocialnow.eventresolver.processor.EventHandlerProcessor;
 import com.qsocialnow.eventresolver.processor.MessageProcessor;
-import com.qsocialnow.kafka.config.KafkaConfig;
+import com.qsocialnow.kafka.config.KafkaConsumerConfig;
 import com.qsocialnow.kafka.consumer.Consumer;
 
 @Component
@@ -38,10 +43,10 @@ public class App implements Runnable {
     private EventResolverConfig appConfig;
 
     @Autowired
-    private MessageProcessor messageProcessor;
+    private KafkaConsumerConfigFactory kafkaConsumerConfigFactory;
 
     @Autowired
-    private KafkaConfig kafkaConfig;
+    private MessageProcessor messageProcessor;
 
     private ExecutorService eventHandlerExecutor;
 
@@ -110,11 +115,17 @@ public class App implements Runnable {
     }
 
     private void createEventHandlerProcessor(String domain) {
-        String kafkaZookeeperHost;
         try {
-            kafkaZookeeperHost = new String(zookeeperClient.getData().forPath(appConfig.getKafkaZookeeerZnodePath()));
-            EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaZookeeperHost,
-                    kafkaConfig, domain), messageProcessor);
+            KafkaConsumerConfig kafkaConfig = kafkaConsumerConfigFactory.create(appConfig.getKafkaConfigZnodePath());
+            QueueConfigurator queueConfig = BigQueueConfiguratorFactory.getConfigurator(zookeeperClient,
+                    appConfig.getEventsQueueConfiguratorZnodePath());
+
+            QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
+                    queueConfig);
+
+            EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig, domain),
+                    messageProcessor, queueService);
+
             eventHandlerProcessors.add(eventHandlerProcessor);
             eventHandlerExecutor.execute(eventHandlerProcessor);
         } catch (Exception e) {
@@ -131,15 +142,6 @@ public class App implements Runnable {
                     case CHILD_ADDED: {
                         log.info("Node added: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
                         createEventHandlerProcessor(ZKPaths.getNodeFromPath(event.getData().getPath()));
-                        break;
-                    }
-                    case INITIALIZED: {
-                        log.info("PathChildrenCache initialized");
-                        List<ChildData> initialData = event.getInitialData();
-                        for (ChildData childData : initialData) {
-                            createEventHandlerProcessor(ZKPaths.getNodeFromPath(childData.getPath()));
-                            log.info("initial node: " + ZKPaths.getNodeFromPath(childData.getPath()));
-                        }
                         break;
                     }
                     default:

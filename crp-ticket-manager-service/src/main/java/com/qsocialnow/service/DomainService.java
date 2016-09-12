@@ -1,6 +1,5 @@
 package com.qsocialnow.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.curator.framework.CuratorFramework;
@@ -10,13 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
-import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.pagination.PageRequest;
-import com.qsocialnow.common.pagination.PageResponse;
 import com.qsocialnow.persistence.DomainRepository;
 
 @Service
@@ -25,7 +21,7 @@ public class DomainService {
     private static final Logger log = LoggerFactory.getLogger(DomainService.class);
 
     @Autowired
-    private DomainRepository repository;
+    private DomainRepository domainRepository;
 
     @Autowired
     private CuratorFramework zookeeperClient;
@@ -36,7 +32,7 @@ public class DomainService {
     public Domain save(Domain newDomain) {
         Domain domainSaved = null;
         try {
-            domainSaved = repository.save(newDomain);
+            domainSaved = domainRepository.save(newDomain);
             zookeeperClient.create().forPath(domainsPath.concat(newDomain.getId()));
         } catch (Exception e) {
             log.error("There was an error saving domain: " + newDomain.getName(), e);
@@ -47,14 +43,15 @@ public class DomainService {
     }
 
     public Domain findOne(String domainId) {
-        Domain domain = repository.findOne(domainId);
+        Domain domain = domainRepository.findOne(domainId);
         return domain;
     }
 
     public Domain update(String domainId, Domain domain) {
         Domain domainSaved = null;
         try {
-            domainSaved = repository.save(domain);
+            domain.setId(domainId);
+            domainSaved = domainRepository.update(domain);
         } catch (Exception e) {
             log.error("There was an error updating domain: " + domain.getName(), e);
             throw new RuntimeException(e.getMessage());
@@ -63,50 +60,20 @@ public class DomainService {
     }
 
     public PageResponse<DomainListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<DomainListView> domains = repository.findAll(new PageRequest(pageNumber, pageSize));
+        List<DomainListView> domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize));
 
-        Long count = repository.count();
-
-        PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize, count);
+        PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
         return page;
     }
 
     public PageResponse<DomainListView> findAllByName(Integer pageNumber, Integer pageSize, String name) {
-        List<DomainListView> domains = repository.findAllByName(new PageRequest(pageNumber, pageSize), name);
+        List<DomainListView> domains = domainRepository.findAllByName(new PageRequest(pageNumber, pageSize), name);
 
-        Long count = repository.count();
-
-        PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize, count);
+        PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
         return page;
     }
 
-    public Domain createTrigger(String domainId, Trigger trigger) {
-        Domain domainSaved = null;
-        try {
-            Domain domain = repository.findOne(domainId);
-            domain.addTrigger(trigger);
-            mockActions(trigger);
-            domainSaved = repository.save(domain);
-        } catch (Exception e) {
-            log.error("There was an error creating trigger: " + trigger.getName(), e);
-            throw new RuntimeException(e.getMessage());
-        }
-        return domainSaved;
-    }
-
-    private void mockActions(Trigger trigger) {
-        trigger.getSegments().stream().forEach(segment -> {
-            segment.getDetectionCriterias().stream().forEach(detectionCriteria -> {
-                List<AutomaticActionCriteria> actions = new ArrayList<>();
-                AutomaticActionCriteria automaticActionCriteria = new AutomaticActionCriteria();
-                automaticActionCriteria.setActionType(ActionType.OPEN_CASE);
-                actions.add(automaticActionCriteria);
-                detectionCriteria.setAccionCriterias(actions);
-            });
-        });
-    }
-
     public void setRepository(DomainRepository repository) {
-        this.repository = repository;
+        this.domainRepository = repository;
     }
 }

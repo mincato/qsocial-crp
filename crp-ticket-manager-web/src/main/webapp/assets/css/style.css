@@ -112,7 +112,7 @@ TABLE OF CONTENTS
         z-index: 999;
         top: 0;
         width: 100%;
-        height: 50px;
+        height: 60px;
     }
     
     .navbar-header {
@@ -184,10 +184,14 @@ TABLE OF CONTENTS
 
     /*Icons Navigation*/
         .header-navbar .navbar-nav > li > a {
-            min-width: 95px;
-            padding: 5px 10px;
+            min-width: 70px;
+            min-height: 60px;
             border-left: 1px solid;
             text-align: center;
+        }
+        
+         .header-navbar .navbar-nav > li > a > i {
+            vertical-align: middle;
         }
         
         .header-navbar .navbar-nav > li > a > span {
@@ -208,6 +212,7 @@ TABLE OF CONTENTS
             color: #d24d57;
         }
         
+       
     /*Navbar Collapse*/
         .header-navbar .navbar-collapse {
             border: none;
@@ -215,29 +220,43 @@ TABLE OF CONTENTS
         }
         
 /* ----- HEADER RESPONSIVE ----- */
-    @media (max-width: 1024px) {
+    @media (min-width: 993px) {
     /*Search*/
         .header-navbar .navbar-form .form-control {
             width: auto;
         }
+        
+        .btn-logo, .btn-logo:hover, .btn-logo:focus {
+			padding:5px 15px !important;
+		}
+        
     }/*End*/
     
     @media (max-width: 992px) and (min-width: 768px) {
     /*Icons Navigation*/
         .header-navbar .navbar-nav > li > a {
-            min-width: 70px;
+            min-width: 60px;
+            min-height: 60px;
         }
         
-        .header-navbar .navbar-nav > li > a > span {
-            font-size: 10px;
-        }
+        .btn-logo {
+			padding:5px 15px !important;
+		}
+    	.btn-logo:hover, .btn-logo:focus {padding:5px 15px !important;} 
+        
     }/*End*/
     
     @media (max-width: 830px) and (min-width: 768px) {
     /*Search*/
-        .header-navbar .navbar-form .form-control {
-            width: 90px;
+        .header-navbar .navbar-collapse {
+            min-height: 60px;
         }
+        
+        .btn-logo {
+			padding:5px 15px !important;
+		}
+    	.btn-logo:hover, .btn-logo:focus {padding:5px 15px !important;} 
+        
     }/*End*/
     
     @media (max-width: 767px) {
@@ -245,40 +264,26 @@ TABLE OF CONTENTS
         .navbar-header {
             width: 100%;
         }
-        
-        .logo {
-            width: 80%;
-            text-align: center;
-        }
-        
+    
     /*Sidebar Switch*/
         .sidebar-switch {
             width: 10%;
         }
         
-    /*Search*/
-        .header-navbar .navbar-form {
-            margin: 15px 0;
-            padding: 0;
-        }
-    
-        .header-navbar .navbar-form .form-control {
-            width: 100%;
-        }
-        
     /*Icons Navigation*/
         .header-navbar .navbar-nav {
-            margin: 15px 0;
+            margin: 0px 0;
             text-align: center;
         }
-        
         .header-navbar .navbar-nav > li {
             display: inline-block;
         }
         
-        .header-navbar .navbar-nav > li:last-child > a {
-            border-right: 1px solid;
+        .header-navbar .navbar-nav > li > a {
+        	line-height: 50px;
         }
+        
+        
     }/*End*/
     
     @media (max-width: 460px) {
@@ -1162,7 +1167,7 @@ TABLE OF CONTENTS
     .main {
         position: relative;
         padding-top: 50px;
-        padding-bottom: 50px;
+        padding-bottom: 150px;
     }
     
 /* ----- CONTENT ----- */
@@ -1363,15 +1368,55 @@ TABLE OF CONTENTS
 14.0 - FOOTER
 *******************************/
     #footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 50px;
-        line-height: 50px;
         text-align: center;
         font-weight: 400;
         font-size: 12px;
+        vertical-align: middle;
     }
+    
+            
+/* ----- FOOTER RESPONSIVE ----- */
+	@media (min-width: 769px) {
+        #footer {
+        	height: 150px;
+        	bottom: 0;
+            width: 100%;
+            position: absolute;
+        }
+    }
+    @media (max-width: 768px) {
+        #footer {
+        	bottom: 0;
+            width: auto;
+            position: relative;
+        }
+    }
+    
+    .footer-links ul > li  {
+        text-align: left !important;
+    }
+    
+    
+	.footer-links ul > li > a {
+        text-decoration: none;
+        font-size: 0.8em;
+    }
+    
+    .footer-mail > a {
+    	font-size: 0.8em;
+		font-weight: bold;
+		text-decoration: none;
+		text-align: center;
+    }
+    
+    .footer-social > a {
+    	vertical-align: middle;
+	}
+    
+    .footer-newsletter {
+    	font-size: 0.7em;
+    }
+    
 
 /*******************************
 15.0 - DRAG & DROP
@@ -2571,7 +2616,8 @@ TABLE OF CONTENTS
     color: grey;
 }
 
-.icon-input input:checked + .icon-input-content{/*checked icon*/
+.icon-input input:checked + .icon-input-content,
+.image-input input:checked + .image-input-content {/*checked icon*/
     color: green;
 }
 
@@ -2600,15 +2646,119 @@ TABLE OF CONTENTS
     content: "\f14a";
 }
 
-.icon-input input:checked + label:before{/*checked icon*/
+.icon-input input:checked + label:before {/*checked icon*/
     color: green;
 }
 
-.icon-input input {
+.icon-input input,
+.image-input input {
 	position: absolute;
 	opacity: 0;
 }
 
+.image-input input + label
+{
+	height: 20px;
+	width: 40px;
+	display: inline-block;
+	padding: 0 0 0 0px;
+}
+
+.image-input.portuguese input:checked + label
+{
+	background: url('/crp-ticket-manager-web/imgs/br.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: grayscale(0);
+	-o-filter: grayscale(0);
+	-webkit-filter: grayscale(0);
+	filter: grayscale(0);
+}
+
+.image-input.english input:checked + label
+{
+	background: url('/crp-ticket-manager-web/imgs/gb.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: grayscale(0);
+	-o-filter: grayscale(0);
+	-webkit-filter: grayscale(0);
+	filter: grayscale(0);
+}
+
+.image-input.spanish input:checked + label
+{
+	background: url('/crp-ticket-manager-web/imgs/es.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: grayscale(0);
+	-o-filter: grayscale(0);
+	-webkit-filter: grayscale(0);
+	filter: grayscale(0);
+}
+
+.image-input.spanish input + label
+{
+	background: url('/crp-ticket-manager-web/imgs/es.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+	-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-webkit-filter: grayscale(100%);
+	filter: gray;
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+}
+
+.image-input.english input + label {
+	background: url('/crp-ticket-manager-web/imgs/gb.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-webkit-filter: grayscale(100%);
+	filter: gray;
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+}
+
+.image-input.portuguese input + label {
+	background: url('/crp-ticket-manager-web/imgs/br.svg');
+	background-size: contain;
+  	background-position: 50%;
+  	background-repeat: no-repeat;
+  	-moz-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-o-filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+	-webkit-filter: grayscale(100%);
+	filter: gray;
+	filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+}
+
 .bottom-line {
 	border-bottom: 1px solid;
+}
+
+.link-button > a {
+	text-decoration: none !important;
+	font-size: 0.8em;
+}
+
+.remove {
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    filter: alpha(opacity=20);
+    opacity: .2;
+}
+button.remove {
+    -webkit-appearance: none;
+    padding: 0;
+    cursor: pointer;
+    background: 0 0;
+    border: 0;
 }

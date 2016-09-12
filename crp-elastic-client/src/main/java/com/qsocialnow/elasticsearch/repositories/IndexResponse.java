@@ -16,6 +16,8 @@ public class IndexResponse<T> {
 
     private List<BulkResultItem> sourcesBulk;
 
+    private List<BulkResultItem> failedItems;
+
     private boolean isSucceeded;
 
     public String getId() {
@@ -56,6 +58,14 @@ public class IndexResponse<T> {
 
     public void setSourcesBulk(List<BulkResultItem> sourcesBulk) {
         this.sourcesBulk = sourcesBulk;
+    }
+
+    public List<BulkResultItem> getFailedItems() {
+        return failedItems;
+    }
+
+    public void setFailedItems(List<BulkResultItem> failedItems) {
+        this.failedItems = failedItems;
     }
 
     public boolean isSucceeded() {

@@ -18,12 +18,13 @@ public class ProducerTask extends TimerTask {
 
     private static final AtomicInteger itemCount = new AtomicInteger(0);
 
-    private QueueConfigurator configuration = new QueueConfigurator();
+    private QueueConfigurator configuration = new QueueConfigurator("/tmp/bigqueue/", "centaurico/",
+            "centaurico/error/");
 
-    private CaseConfigurator caseConfig = new CaseConfigurator();
+    private AWSElasticsearchConfigurationProvider caseConfig = new CaseConfigurator();
 
     public ProducerTask() {
-        this.caseService = new CaseService();
+        this.caseService = new CaseService(configuration, caseConfig);
     }
 
     @Override
@@ -52,8 +53,9 @@ public class ProducerTask extends TimerTask {
         registries.add(registry);
 
         caseDocument.setActionsRegistry(registries);
+        caseService.findCaseById("AVcUobF7yccmhBtJ002a");
 
-        caseService.indexCaseByBulkProcess(configuration, caseConfig, caseDocument);
+        // caseService.indexCaseByBulkProcess(caseDocument);
     }
 
 }

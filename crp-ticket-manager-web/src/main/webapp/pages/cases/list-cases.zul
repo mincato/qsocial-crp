@@ -25,12 +25,12 @@
 			    			<template name="children">
 								<tr>
 									<td>${each.id}</td>
-                   					<td>${each.title}</td>
+                   					<td class="list-text-column">${each.title}</td>
                        				<td>${each.description}</td>
                        				<td>
                        					<ul class="list-inline">
-  											<li><i class="fa fa-search"></i></li>
-  											<li><i class="fa fa-pencil-square-o"></i></li>
+  											<li><a class="list-action"><i class="fa fa-search"></i></a></li>
+  											<li><a class="list-action"><i class="fa fa-pencil-square-o"></i></a></li>
 										</ul>
                        				</td>
                					</tr>
@@ -39,7 +39,7 @@
 					</table>
 				</div>
 				
-				<div class="text-center" zclass="@bind(vm.moreResults?'':'hidden')">
+				<div class="text-center" zclass="@bind(vm.moreResults? 'more-results':'hidden')">
 					<a style="text-decoration:none" onClick="@command('moreResults')"  >
 			 			${labels.app.pagination.moreResults}
 					</a>

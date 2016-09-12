@@ -1,13 +1,12 @@
 package com.qsocialnow.common.model.config;
 
-import java.sql.Date;
+import org.hibernate.validator.constraints.NotBlank;
 
 public class Resolution {
 
     private String id;
 
-    private Date resolvedDate;
-
+    @NotBlank(message = "{field.empty}")
     private String description;
 
     public String getId() {
@@ -16,14 +15,6 @@ public class Resolution {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Date getResolvedDate() {
-        return resolvedDate;
-    }
-
-    public void setResolvedDate(Date resolvedDate) {
-        this.resolvedDate = resolvedDate;
     }
 
     public String getDescription() {

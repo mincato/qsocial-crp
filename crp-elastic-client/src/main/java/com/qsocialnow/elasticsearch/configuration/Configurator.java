@@ -2,7 +2,7 @@ package com.qsocialnow.elasticsearch.configuration;
 
 import com.amazonaws.auth.AWSCredentials;
 
-public class Configurator extends ConfigurationProvider {
+public class Configurator extends AWSElasticsearchConfigurationProvider {
 
     public static final String SERVICE_NAME = "es";
 

@@ -13,50 +13,115 @@ import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 
 public class QueueService {
 
+    private static final int TOTAL_ITEM_COUNTS = 5;
+
+    private static final int TOTAL_FAIL_ITEM_COUNTS = 10;
+
+    private static final int TOTAL_MAX_DEAD_ITEM_COUNTS = 30;
+
+    private static final int DELAY = 5;
+
+    private static final int FAIL_DELAY = 10;
+
+    private static final int INITIAL_DELAY = 3;
+
+    private static final String DEAD_LETTER_QUEUE_DIR = "/deadLetterQueue";
+
     private static final Logger log = LoggerFactory.getLogger(QueueService.class);
+
+    private final String baseDir;
 
     private final String queueDir;
 
-    private static IBigQueue bigQueue;
+    private final String queueFailDir;
 
-    private static QueueService instance;
+    private final String deadLetterQueueDir;
 
-    private QueueService(QueueConfigurator queueConfiguration) {
-        this.queueDir = queueConfiguration.getQueueDir();
-    }
+    private IBigQueue bigQueue;
 
-    public static QueueService getInstance(QueueConfigurator queueConfiguration) {
-        if (instance == null)
-            instance = new QueueService(queueConfiguration);
+    private IBigQueue bigQueueFail;
 
-        return instance;
+    private IBigQueue deadLetterQueue;
+
+    private String type;
+
+    // private static QueueService instance;
+
+    QueueService(QueueConfigurator queueConfiguration) {
+        this.baseDir = queueConfiguration.getBaseDir();
+        this.queueDir = this.baseDir + queueConfiguration.getQueueDir();
+        this.queueFailDir = this.baseDir + queueConfiguration.getErrorQueueDir();
+        this.deadLetterQueueDir = this.queueFailDir + DEAD_LETTER_QUEUE_DIR;
     }
 
     public boolean initQueue(String type) {
         boolean isQueueReady = false;
-        if (bigQueue == null) {
-            try {
+        this.type = type;
+        try {
+            if (bigQueue == null) {
                 bigQueue = new BigQueueImpl(queueDir, type);
-                log.info("Creating queue successfully..");
-                isQueueReady = true;
-            } catch (IOException e) {
-                log.error("Error trying to create the queue:", e);
+                log.info("Creating queue:" + type + " successfully..");
             }
-        } else {
             isQueueReady = true;
+
+        } catch (IOException e) {
+            log.error("Error trying to create queues type: " + this.type, e);
         }
         return isQueueReady;
     }
 
-    public <T> void startConsumer(Consumer<T> consumer) {
+    public boolean initFailQueue(String type) {
+        boolean isQueueReady = false;
+        try {
+            if (bigQueueFail == null) {
+                bigQueueFail = new BigQueueImpl(queueFailDir, type);
+                log.info("Creating fail queue:" + type + " successfully..");
+            }
+            if (deadLetterQueue == null) {
+                deadLetterQueue = new BigQueueImpl(deadLetterQueueDir, type);
+                log.info("Creating dead letter queue type: " + this.type + " successfully..");
+            }
+            isQueueReady = true;
+
+        } catch (IOException e) {
+            log.error("Error trying to create fail - error queues:", e);
+        }
+        return isQueueReady;
+    }
+
+    public <T> void startConsumer(QueueConsumer<T> consumer) {
         ExecutorService service = Executors.newSingleThreadExecutor();
+        consumer.setDelay(DELAY);
+        consumer.setInitialDelay(INITIAL_DELAY);
+        consumer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
         consumer.setQueue(bigQueue);
+        log.info("Starting consumer queue for type :" + this.type);
         service.execute(consumer);
     }
 
-    public <T> void startProducer(Producer<T> producer) {
+    public <T> void startProducer(QueueProducer<T> producer) {
         producer.setQueue(bigQueue);
-        log.info("Starting producer");
+        producer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
+        log.info("Starting producer queue for type :" + this.type);
+        producer.start();
+    }
+
+    public <T> void startFailConsumer(QueueConsumer<T> consumer) {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        consumer.setDelay(FAIL_DELAY);
+        consumer.setInitialDelay(INITIAL_DELAY);
+        consumer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
+        consumer.setQueue(bigQueueFail);
+        log.info("Starting fail consumer queue for type :" + this.type);
+        service.execute(consumer);
+    }
+
+    public <T> void startFailProducer(QueueProducer<T> producer) {
+        producer.setQueue(bigQueueFail);
+        producer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
+        producer.setTotalMaxDeadItemCounts(TOTAL_MAX_DEAD_ITEM_COUNTS);
+        producer.setDeadLetterQueue(deadLetterQueue);
+        log.info("Starting fail producer queue for type :" + this.type);
         producer.start();
     }
 }

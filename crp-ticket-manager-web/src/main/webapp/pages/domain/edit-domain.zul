@@ -3,7 +3,7 @@
 		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditDomainViewModel', domain=arg.domain)"
 			validationMessages="@id('vmsgs')">
 		<n:div class="modal-dialog">
-			<x:div class="modal-content" form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')">
+			<x:div class="modal-content" form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save') @validator('com.qsocialnow.validators.ResolutionListValidator')">
 				<n:div class="modal-header">
     				<n:button type="button" class="close" data-dismiss="modal" aria-label="Close">
     					<n:span aria-hidden="true">&#x00D7;</n:span>
@@ -37,7 +37,7 @@
 											id="thematics">
 											<template name="model">
 												<listitem>
-													<listcell label="${each.id} - ${each.name}"/>
+													<listcell label="${each.id} - ${each.nombre}"/>
 												</listitem>
 											</template>
 										</listbox>
@@ -53,6 +53,7 @@
 					    					<label value="@load(vmsgs[thematics])" />
 					    				</x:span>
 									</x:div>
+									<include src="/pages/domain/edit-resolutions.zul"/>
 							    </x:form>
 							</div>
 						</n:div>
@@ -60,8 +61,7 @@
   				</n:div>
   				<div class="modal-footer">
   					<button disabled="@load(!empty vmsgs[thematics] or !empty vmsgs[name])" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
-  					<button onClick="@command('clear')" label="${labels.app.button.clear}" zclass="btn btn-default"/>
-    				<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
+  					<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.cancel}"/>
   				</div>
 			</x:div>
 		</n:div>

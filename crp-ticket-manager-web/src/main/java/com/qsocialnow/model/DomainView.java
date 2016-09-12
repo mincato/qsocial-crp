@@ -1,5 +1,6 @@
 package com.qsocialnow.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -7,7 +8,7 @@ import javax.validation.Valid;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.common.model.config.Thematic;
+import com.qsocialnow.common.model.config.Resolution;
 
 public class DomainView {
 
@@ -16,6 +17,8 @@ public class DomainView {
 
     @NotEmpty(message = "{thematics.size}")
     private Set<Thematic> selectedThematics;
+
+    private List<Resolution> resolutions;
 
     public DomainView() {
     }
@@ -36,4 +39,11 @@ public class DomainView {
         this.selectedThematics = selectedThematics;
     }
 
+    public List<Resolution> getResolutions() {
+        return resolutions;
+    }
+
+    public void setResolutions(List<Resolution> resolutions) {
+        this.resolutions = resolutions;
+    }
 }

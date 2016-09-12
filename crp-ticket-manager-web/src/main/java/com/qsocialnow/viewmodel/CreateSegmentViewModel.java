@@ -15,6 +15,7 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.DetectionCriteria;
+import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Segment;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -24,6 +25,8 @@ public class CreateSegmentViewModel implements Serializable {
 
     private Segment currentSegment;
 
+    private Domain currentDomain;
+
     public Segment getCurrentSegment() {
         return currentSegment;
     }
@@ -31,6 +34,14 @@ public class CreateSegmentViewModel implements Serializable {
     @Init
     public void init() {
         this.currentSegment = new Segment();
+    }
+
+    @GlobalCommand
+    @NotifyChange({ "currentSegment" })
+    public void initSegment(@BindingParam("currentDomain") Domain currentDomain) {
+        this.currentSegment = new Segment();
+        this.currentDomain = currentDomain;
+        System.out.println("segment domain: " + currentDomain);
     }
 
     @Command
@@ -44,7 +55,10 @@ public class CreateSegmentViewModel implements Serializable {
 
     @Command
     public void createNewCriteria() {
-        Executions.createComponents("create-criteria.zul", null, null);
+        Map<String, Object> args = new HashMap<>();
+        args.put("currentDomain", currentDomain);
+        System.out.println("segment domain: " + currentDomain);
+        Executions.createComponents("create-criteria.zul", null, args);
     }
 
     @Command

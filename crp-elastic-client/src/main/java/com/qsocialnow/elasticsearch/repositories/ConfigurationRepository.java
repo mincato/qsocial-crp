@@ -3,7 +3,6 @@ package com.qsocialnow.elasticsearch.repositories;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +11,8 @@ import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Filter;
-import com.qsocialnow.common.model.config.FilterType;
+import com.qsocialnow.common.model.config.LanguageFilter;
+import com.qsocialnow.common.model.config.MediaFilter;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Team;
@@ -155,24 +155,19 @@ public class ConfigurationRepository {
 
         Filter filter = new Filter();
         filter.setId(id + "filter 1");
-        filter.setType(FilterType.MEDIA);
-        filter.setParameters("Facebook|Twitter|GooglePlus");
+        MediaFilter mediaFilter = new MediaFilter();
+        mediaFilter.setOptions(new Long[] { 1087L, 1086L });
+        filter.setMediaFilter(mediaFilter);
 
-        Filter filter2 = new Filter();
-        filter2.setId(id + "filter 2");
-        filter2.setType(FilterType.TRUE);
-        filter2.setParameters("Spanish|English|German");
-
-        Filter filter3 = new Filter();
-        filter3.setId(id + "filter 3");
-        filter3.setType(FilterType.PERIOD);
-        filter3.setParameters("01-06-2016|01-12-2016");
+        LanguageFilter languageFilter = new LanguageFilter();
+        languageFilter.setOptions(new String[] { "es", "en", "pt" });
+        filter.setLanguageFilter(languageFilter);
 
         List<DetectionCriteria> detectionCriteriasFromSegment = new ArrayList<>();
         DetectionCriteria criteria1 = new DetectionCriteria();
         criteria1.setSequenceOrder(1);
         criteria1.setId(id + "- criteria 1");
-        criteria1.setFilters(Arrays.asList(filter));
+        criteria1.setFilter(filter);
         criteria1.setValidateFrom(initDate);
         criteria1.setValidateTo(endDate);
         criteria1.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria1.getId()));
@@ -180,7 +175,7 @@ public class ConfigurationRepository {
         DetectionCriteria criteria2 = new DetectionCriteria();
         criteria2.setSequenceOrder(2);
         criteria2.setId(id + "- criteria 2");
-        criteria2.setFilters(Arrays.asList(filter2));
+        criteria2.setFilter(filter);
         criteria2.setValidateFrom(initDate);
         criteria2.setValidateTo(endDate);
         criteria2.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria2.getId()));
@@ -188,7 +183,7 @@ public class ConfigurationRepository {
         DetectionCriteria criteria3 = new DetectionCriteria();
         criteria3.setSequenceOrder(3);
         criteria3.setId(id + "- criteria 3");
-        criteria3.setFilters(Arrays.asList(filter3));
+        criteria3.setFilter(filter);
         criteria3.setValidateFrom(initDate);
         criteria3.setValidateTo(endDate);
         criteria3.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria3.getId()));

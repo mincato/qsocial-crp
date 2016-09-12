@@ -34,7 +34,6 @@ public class DetectionCriteriaMapping implements Mapping<DetectionCriteriaType, 
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public String getMappingDefinition() {
         JSONObject mapping = new JSONObject();
         return mapping.toJSONString();
@@ -49,10 +48,23 @@ public class DetectionCriteriaMapping implements Mapping<DetectionCriteriaType, 
     public DetectionCriteriaType getDocumentType(DetectionCriteria document) {
         DetectionCriteriaType criteria = new DetectionCriteriaType();
         criteria.setAccionCriterias(document.getActionCriterias());
-        criteria.setFilters(document.getFilters());
+        criteria.setFilter(document.getFilter());
         criteria.setSequenceOrder(document.getSequenceOrder());
         criteria.setValidateFrom(document.getValidateFrom());
         criteria.setValidateTo(document.getValidateTo());
+
+        return criteria;
+    }
+
+    @Override
+    public DetectionCriteria getDocument(DetectionCriteriaType documentType) {
+        DetectionCriteria criteria = new DetectionCriteria();
+        criteria.setId(documentType.getId());
+        criteria.setAccionCriterias(documentType.getActionCriterias());
+        criteria.setFilter(documentType.getFilter());
+        criteria.setSequenceOrder(documentType.getSequenceOrder());
+        criteria.setValidateFrom(documentType.getValidateFrom());
+        criteria.setValidateTo(documentType.getValidateTo());
 
         return criteria;
     }
