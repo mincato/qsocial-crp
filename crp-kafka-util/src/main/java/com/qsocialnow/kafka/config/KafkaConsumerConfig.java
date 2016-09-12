@@ -1,6 +1,8 @@
 package com.qsocialnow.kafka.config;
 
-public class KafkaConsumerConfig {
+import com.qsocialnow.common.config.RefreshableConfig;
+
+public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfig> {
 
     private static final String DEFAULT_ZOOKEEPER_CONNECT = "localhost:2181";
     private static final String DEFAULT_ZOOKEEPER_SESSION_TIMEOUT_MS = "15000";
@@ -76,6 +78,15 @@ public class KafkaConsumerConfig {
 
     public static String getDefaultTopic() {
         return DEFAULT_TOPIC;
+    }
+
+    @Override
+    public void refresh(KafkaConsumerConfig newConfig) {
+        this.autoCommitIntervalMs = newConfig.autoCommitIntervalMs;
+        this.topic = newConfig.topic;
+        this.zookeeperConnect = newConfig.zookeeperConnect;
+        this.zookeeperSessionTimeoutMs = newConfig.zookeeperSessionTimeoutMs;
+        this.zookeeperSyncTimeMs = newConfig.zookeeperSyncTimeMs;
     }
 
 }

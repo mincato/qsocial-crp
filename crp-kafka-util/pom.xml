@@ -31,6 +31,14 @@
 	</properties>
 
 	<dependencies>
+	
+		<!-- QSocialNow -->
+		<dependency>
+			<groupId>com.qsocialnow.crp</groupId>
+			<artifactId>crp-common</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<!-- Logging -->
 		<dependency>

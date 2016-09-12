@@ -13,6 +13,14 @@
 	<bean id="kafkaConfig" class="com.qsocialnow.eventresolver.factories.KafkaConsumerConfigFactory" factory-method="create">
 		<constructor-arg ref="zookeeperClient" />
 		<constructor-arg value="${app.kafka.config.znode.path}" />
+		<constructor-arg ref="kafkaConfigWatcher" />
+	</bean>
+	
+	<bean id="kafkaConfigWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
+		<constructor-arg value="kafkaConfig" />
+		<constructor-arg>
+			<value type="java.lang.Class">com.qsocialnow.kafka.config.KafkaConsumerConfig</value>
+		</constructor-arg>
 	</bean>
 	
 </beans>

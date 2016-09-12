@@ -31,11 +31,27 @@
     <bean id="configurationProvider" class="com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory" factory-method="getConfigurator">
          <constructor-arg ref="zookeeperClient"></constructor-arg>
          <constructor-arg value="${app.elastic.cases.configurator.path}" />
+         <constructor-arg ref="elasticCaseConfigWatcher" />
     </bean>
+    
+    <bean id="elasticCaseConfigWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
+		<constructor-arg value="configurationProvider" />
+		<constructor-arg>
+			<value type="java.lang.Class">com.qsocialnow.elasticsearch.configuration.Configurator</value>
+		</constructor-arg>
+	</bean> 
     
 	<bean id="elasticDomainConfig" class="com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory" factory-method="getConfigurator">
 		<constructor-arg ref="zookeeperClient" />
 		<constructor-arg value="${app.elastic.config.configurator.path}" />
+		<constructor-arg ref="elasticDomainConfigWatcher" />
+	</bean>
+	
+	<bean id="elasticDomainConfigWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
+		<constructor-arg value="elasticDomainConfig" />
+		<constructor-arg>
+			<value type="java.lang.Class">com.qsocialnow.elasticsearch.configuration.Configurator</value>
+		</constructor-arg>
 	</bean>
 	
 </beans>
