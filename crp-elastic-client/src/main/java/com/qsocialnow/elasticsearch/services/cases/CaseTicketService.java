@@ -6,9 +6,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
+import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
+import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
@@ -19,6 +22,8 @@ public class CaseTicketService {
     private static final Logger log = LoggerFactory.getLogger(CaseService.class);
 
     private final static String INDEX_NAME = "cases_";
+
+    private final static String INDEX_NAME_REGISTRY = "registry_";
 
     private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
@@ -54,6 +59,25 @@ public class CaseTicketService {
 
         repository.closeClient();
         return cases;
+    }
+
+    public List<ActionRegistry> findCaseWithRegistries(int from, int size, String caseId) {
+
+        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
+                elasticSearchCaseConfigurator);
+        Repository<ActionRegistryType> repository = esfactory.initManager();
+        repository.initClient();
+
+        ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
+        mapping.setIndex(INDEX_NAME_REGISTRY + generateIndexValue());
+
+        log.info("Retriving registries from case: " + caseId);
+        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, "idCase", caseId);
+
+        List<ActionRegistry> registries = response.getSources();
+
+        repository.closeClient();
+        return registries;
     }
 
     private String generateIndexValue() {

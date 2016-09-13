@@ -8,6 +8,7 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
@@ -33,7 +34,7 @@ public class EditCaseViewModel implements Serializable {
     private List<RegistryListView> registries = new ArrayList<>();
 
     @Init
-    public void init(@BindingParam("case") String caseSelected) {
+    public void init(@QueryParam("case") String caseSelected) {
         findRegistriesByCase(caseSelected);
     }
 
@@ -63,7 +64,8 @@ public class EditCaseViewModel implements Serializable {
     }
 
     private PageResponse<RegistryListView> findRegistriesByCase(String caseSelected) {
-        PageResponse<RegistryListView> pageResponse = caseService.findRegistriesByCase(activePage, pageSize);
+        PageResponse<RegistryListView> pageResponse = caseService.findCaseWithRegistries(activePage, pageSize,
+                caseSelected);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;

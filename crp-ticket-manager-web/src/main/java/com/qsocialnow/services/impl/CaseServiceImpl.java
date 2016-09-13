@@ -1,9 +1,5 @@
 package com.qsocialnow.services.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,18 +54,27 @@ public class CaseServiceImpl implements CaseService {
         }
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public PageResponse<RegistryListView> findRegistriesByCase(int activePage, int pageSize) {
-        List<RegistryListView> items = new ArrayList<RegistryListView>();
-        RegistryListView registry = new RegistryListView();
-        registry.setUser("Bruce");
-        registry.setAction("Open Action");
-        registry.setDate(new Date());
-        registry.setDescription("Hey Gotham what's up?");
-        items.add(registry);
+    public PageResponse<RegistryListView> findCaseWithRegistries(int pageNumber, int pageSize, String caseId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-        PageResponse<RegistryListView> registries = new PageResponse<RegistryListView>(items, 0, 1);
-        return registries;
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
+                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<PageResponse> response = restTemplate
+                    .getForEntity(builder.toUriString(), PageResponse.class);
+
+            PageResponse<RegistryListView> registries = response.getBody();
+            return registries;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call case service", e);
+            throw new RuntimeException(e);
+        }
     }
 
 }

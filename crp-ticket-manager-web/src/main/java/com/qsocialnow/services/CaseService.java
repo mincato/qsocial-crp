@@ -8,6 +8,6 @@ public interface CaseService {
 
     PageResponse<CaseListView> findAll(int pageNumber, int pageSize);
 
-    PageResponse<RegistryListView> findRegistriesByCase(int activePage, int pageSize);
+    PageResponse<RegistryListView> findCaseWithRegistries(int activePage, int pageSize, String caseId);
 
 }
