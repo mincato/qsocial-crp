@@ -298,9 +298,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
-    public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, String searchField, String searchValue) {
+    public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, int from, int size, String sortField,
+            String searchField, String searchValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.matchQuery(searchField, searchValue));
+        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC)
+                .query(QueryBuilders.matchQuery(searchField, searchValue));
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();

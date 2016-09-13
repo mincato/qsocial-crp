@@ -45,6 +45,10 @@ public class CaseService {
         return page;
     }
 
+    public PageResponse<RegistryListView> findOne(String caseId, Integer pageNumber, Integer pageSize) {
+        return null;
+    }
+
     public Case executeAction(String caseId, ActionRequest actionRequest) {
         Case caseObject = repository.findOne(caseId);
         if (caseObject != null) {
@@ -66,13 +70,6 @@ public class CaseService {
             throw new RuntimeException("The case was not found");
         }
         return caseObject;
-    }
-
-    public PageResponse<RegistryListView> findCaseWithRegistries(String caseId, Integer pageNumber, Integer pageSize) {
-        List<RegistryListView> cases = repository.findCaseWithRegistries(new PageRequest(pageNumber, pageSize), caseId);
-
-        PageResponse<RegistryListView> page = new PageResponse<RegistryListView>(cases, pageNumber, pageSize);
-        return page;
     }
 
     public void setRepository(CaseRepository repository) {
