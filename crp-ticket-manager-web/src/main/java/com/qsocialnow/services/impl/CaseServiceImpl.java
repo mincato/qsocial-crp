@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.cases.ActionRequest;
+import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.ServiceUrlResolver;
 
@@ -75,6 +78,27 @@ public class CaseServiceImpl implements CaseService {
             log.error("There was an error while trying to call case service", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Case executeAction(String caseId, ActionRequest actionRequest) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
+                    .path("/action");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            Case caseUpdated = restTemplate.postForObject(builder.toUriString(), actionRequest, Case.class);
+
+            return caseUpdated;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call case service", e);
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

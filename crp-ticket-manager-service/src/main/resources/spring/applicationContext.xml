@@ -65,5 +65,9 @@
 	<context:component-scan base-package="com.qsocialnow.service, com.qsocialnow.persistence"
 		annotation-config="true" />
 	<context:annotation-config />
+	
+	<util:map id="actions">
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CLOSE}" value-ref="closeCaseAction"/>
+	</util:map>
 
 </beans>
