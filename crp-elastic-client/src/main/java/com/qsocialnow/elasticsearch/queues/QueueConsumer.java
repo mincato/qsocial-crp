@@ -114,12 +114,12 @@ public abstract class QueueConsumer<T> extends Thread {
             }
         }
     }
-    
-    public void stopConsumer(){
-    	this.stopMonitor();
-    	this.stop = true;
+
+    public void stopConsumer() {
+        this.stopMonitor();
+        this.stop = true;
     }
-    
+
     private void startMonitor() {
         log.info("Starting monitor to check elements from queue - type:" + this.type);
         executor.scheduleWithFixedDelay(monitor, getInitialDelay(), getDelay(), TimeUnit.MINUTES);

@@ -32,7 +32,7 @@ public class QueueProducer<T> extends Thread {
     private static final AtomicInteger producingDeadItemCount = new AtomicInteger(0);
 
     private boolean stop = false;
-    
+
     private Object lock = new Object();
 
     private final String type;
@@ -97,23 +97,23 @@ public class QueueProducer<T> extends Thread {
     public void run() {
         try {
             while (!this.stop) {
-            	synchronized (lock) {
-            		lock.wait();
-            		notifyConsumers();
-            	}
+                synchronized (lock) {
+                    lock.wait();
+                    notifyConsumers();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    public void stopProducer(){
-    	synchronized (lock) {
+
+    public void stopProducer() {
+        synchronized (lock) {
             lock.notify();
         }
-    	this.stop=true;
+        this.stop = true;
     }
-    
+
     private byte[] getItemSerialized(T document) {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutput out = null;

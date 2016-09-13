@@ -76,7 +76,7 @@ public class CaseService {
             failConsumer = new CaseConsumer(QueueType.CASES.type(), this);
             failProducer.addConsumer(failConsumer);
 
-            queueService.startFailProducerConsumer(failProducer,failConsumer);
+            queueService.startFailProducerConsumer(failProducer, failConsumer);
         }
     }
 

@@ -33,7 +33,7 @@ public class QueueService {
     private ExecutorService serviceProducerConsumer;
 
     private ExecutorService serviceFailProducerConsumer;
-    
+
     private final String baseDir;
 
     private final String queueDir;
@@ -94,28 +94,28 @@ public class QueueService {
         return isQueueReady;
     }
 
-    public <T> void startProducerConsumer(QueueProducer<T> producer,QueueConsumer<T> consumer) {
-    	serviceProducerConsumer = Executors.newFixedThreadPool(2);
+    public <T> void startProducerConsumer(QueueProducer<T> producer, QueueConsumer<T> consumer) {
+        serviceProducerConsumer = Executors.newFixedThreadPool(2);
 
-    	consumer.setDelay(DELAY);
+        consumer.setDelay(DELAY);
         consumer.setInitialDelay(INITIAL_DELAY);
         consumer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
         consumer.setQueue(bigQueue);
         log.info("Starting consumer queue for type :" + this.type);
-    	producer.setQueue(bigQueue);
+        producer.setQueue(bigQueue);
         producer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
         log.info("Starting producer queue for type :" + this.type);
         serviceProducerConsumer.execute(consumer);
         serviceProducerConsumer.execute(producer);
     }
 
-    public <T> void startFailProducerConsumer(QueueProducer<T> producer,QueueConsumer<T> consumer) {
-    	serviceFailProducerConsumer = Executors.newFixedThreadPool(2);
-    	consumer.setDelay(FAIL_DELAY);
+    public <T> void startFailProducerConsumer(QueueProducer<T> producer, QueueConsumer<T> consumer) {
+        serviceFailProducerConsumer = Executors.newFixedThreadPool(2);
+        consumer.setDelay(FAIL_DELAY);
         consumer.setInitialDelay(INITIAL_DELAY);
         consumer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
         consumer.setQueue(bigQueueFail);
-    	producer.setQueue(bigQueueFail);
+        producer.setQueue(bigQueueFail);
         producer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
         producer.setTotalMaxDeadItemCounts(TOTAL_MAX_DEAD_ITEM_COUNTS);
         producer.setDeadLetterQueue(deadLetterQueue);
@@ -125,19 +125,19 @@ public class QueueService {
         serviceFailProducerConsumer.execute(producer);
     }
 
-	public void shutdownQueueService() {
-		try {
-			if (serviceProducerConsumer != null) {
-				serviceProducerConsumer.shutdown();
-				serviceProducerConsumer.awaitTermination(10L, TimeUnit.SECONDS);
-			}
-			if (serviceFailProducerConsumer != null) {
-				serviceFailProducerConsumer.shutdown();
-				serviceFailProducerConsumer.awaitTermination(10L, TimeUnit.SECONDS);
-			}
-		} catch (InterruptedException e) {
-			log.error("Unexpected error trying to shutdown queue service. Cause", e);
-		}
+    public void shutdownQueueService() {
+        try {
+            if (serviceProducerConsumer != null) {
+                serviceProducerConsumer.shutdown();
+                serviceProducerConsumer.awaitTermination(10L, TimeUnit.SECONDS);
+            }
+            if (serviceFailProducerConsumer != null) {
+                serviceFailProducerConsumer.shutdown();
+                serviceFailProducerConsumer.awaitTermination(10L, TimeUnit.SECONDS);
+            }
+        } catch (InterruptedException e) {
+            log.error("Unexpected error trying to shutdown queue service. Cause", e);
+        }
 
-	}
+    }
 }
