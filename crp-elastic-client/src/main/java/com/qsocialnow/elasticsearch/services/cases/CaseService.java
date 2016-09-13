@@ -70,15 +70,13 @@ public class CaseService {
             consumer = new CaseConsumer(QueueType.CASES.type(), this);
             producer.addConsumer(consumer);
 
-            queueService.startConsumer(consumer);
-            queueService.startProducer(producer);
+            queueService.startProducerConsumer(producer, consumer);
 
             failProducer = new QueueProducer<Case>(QueueType.CASES.type());
             failConsumer = new CaseConsumer(QueueType.CASES.type(), this);
             failProducer.addConsumer(failConsumer);
 
-            queueService.startFailConsumer(failConsumer);
-            queueService.startFailProducer(failProducer);
+            queueService.startFailProducerConsumer(failProducer,failConsumer);
         }
     }
 

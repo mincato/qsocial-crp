@@ -3,6 +3,7 @@ package com.qsocialnow.elasticsearch.queues;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,10 @@ public class QueueService {
 
     private static final Logger log = LoggerFactory.getLogger(QueueService.class);
 
+    private ExecutorService serviceProducerConsumer;
+
+    private ExecutorService serviceFailProducerConsumer;
+    
     private final String baseDir;
 
     private final String queueDir;
@@ -89,39 +94,50 @@ public class QueueService {
         return isQueueReady;
     }
 
-    public <T> void startConsumer(QueueConsumer<T> consumer) {
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        consumer.setDelay(DELAY);
+    public <T> void startProducerConsumer(QueueProducer<T> producer,QueueConsumer<T> consumer) {
+    	serviceProducerConsumer = Executors.newFixedThreadPool(2);
+
+    	consumer.setDelay(DELAY);
         consumer.setInitialDelay(INITIAL_DELAY);
         consumer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
         consumer.setQueue(bigQueue);
         log.info("Starting consumer queue for type :" + this.type);
-        service.execute(consumer);
-    }
-
-    public <T> void startProducer(QueueProducer<T> producer) {
-        producer.setQueue(bigQueue);
+    	producer.setQueue(bigQueue);
         producer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
         log.info("Starting producer queue for type :" + this.type);
-        producer.start();
+        serviceProducerConsumer.execute(consumer);
+        serviceProducerConsumer.execute(producer);
     }
 
-    public <T> void startFailConsumer(QueueConsumer<T> consumer) {
-        ExecutorService service = Executors.newSingleThreadExecutor();
-        consumer.setDelay(FAIL_DELAY);
+    public <T> void startFailProducerConsumer(QueueProducer<T> producer,QueueConsumer<T> consumer) {
+    	serviceFailProducerConsumer = Executors.newFixedThreadPool(2);
+    	consumer.setDelay(FAIL_DELAY);
         consumer.setInitialDelay(INITIAL_DELAY);
         consumer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
         consumer.setQueue(bigQueueFail);
-        log.info("Starting fail consumer queue for type :" + this.type);
-        service.execute(consumer);
-    }
-
-    public <T> void startFailProducer(QueueProducer<T> producer) {
-        producer.setQueue(bigQueueFail);
+    	producer.setQueue(bigQueueFail);
         producer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
         producer.setTotalMaxDeadItemCounts(TOTAL_MAX_DEAD_ITEM_COUNTS);
         producer.setDeadLetterQueue(deadLetterQueue);
+        log.info("Starting fail consumer queue for type :" + this.type);
+        serviceFailProducerConsumer.execute(consumer);
         log.info("Starting fail producer queue for type :" + this.type);
-        producer.start();
+        serviceFailProducerConsumer.execute(producer);
     }
+
+	public void shutdownQueueService() {
+		try {
+			if (serviceProducerConsumer != null) {
+				serviceProducerConsumer.shutdown();
+				serviceProducerConsumer.awaitTermination(10L, TimeUnit.SECONDS);
+			}
+			if (serviceFailProducerConsumer != null) {
+				serviceFailProducerConsumer.shutdown();
+				serviceFailProducerConsumer.awaitTermination(10L, TimeUnit.SECONDS);
+			}
+		} catch (InterruptedException e) {
+			log.error("Unexpected error trying to shutdown queue service. Cause", e);
+		}
+
+	}
 }
