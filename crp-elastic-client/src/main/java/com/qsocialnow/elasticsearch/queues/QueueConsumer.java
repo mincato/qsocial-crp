@@ -22,6 +22,8 @@ public abstract class QueueConsumer<T> extends Thread {
 
     private Object lock = new Object();
 
+    private boolean stop = false;
+
     private QueueConsumerMonitor<T> monitor;
 
     private int totalItemCounts;
@@ -84,7 +86,7 @@ public abstract class QueueConsumer<T> extends Thread {
 
     public void run() {
         startMonitor();
-        while (true) {
+        while (!this.stop) {
             synchronized (lock) {
                 try {
                     lock.wait();
@@ -111,6 +113,11 @@ public abstract class QueueConsumer<T> extends Thread {
                 }
             }
         }
+    }
+
+    public void stopConsumer() {
+        this.stopMonitor();
+        this.stop = true;
     }
 
     private void startMonitor() {
