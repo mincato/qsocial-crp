@@ -30,7 +30,7 @@
                        				<td>
                        					<ul class="list-inline">
   											<li><a class="list-action"><i class="fa fa-search"></i></a></li>
-  											<li><a class="list-action"><i class="fa fa-pencil-square-o"></i></a></li>
+  											<li><a class="list-action" href="/pages/cases/edit/index.zul?case=${each.id}"><i class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.cases.list.edit.action}"></i></a></li>
 										</ul>
                        				</td>
                					</tr>

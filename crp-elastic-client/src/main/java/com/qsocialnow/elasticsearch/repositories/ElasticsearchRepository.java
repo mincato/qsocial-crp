@@ -297,6 +297,31 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @SuppressWarnings({ "unchecked", "deprecation", "rawtypes" })
+    public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, String searchField, String searchValue) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery(searchField, searchValue));
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+        SearchResponse<E> response = new SearchResponse<E>();
+        if (result.isSucceeded()) {
+            // retrieve metadata value
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        }
+        return response;
+    }
+
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> search(int from, int size, String sortField, String name, Mapping<T, E> mapping) {
 
