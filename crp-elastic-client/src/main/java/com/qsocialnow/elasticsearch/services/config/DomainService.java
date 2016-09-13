@@ -3,7 +3,7 @@ package com.qsocialnow.elasticsearch.services.config;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
+import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.DomainMapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.DomainType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
@@ -16,12 +16,9 @@ public class DomainService {
 
     private ResolutionService resolutionService;
 
-    public Domain findDomainById(String name) {
-        Configurator configurator = new Configurator();
-        return findDomainById(configurator, name);
-    }
+    private AWSElasticsearchConfigurationProvider configurator;
 
-    public Domain findDomainById(Configurator configurator, String name) {
+    public Domain findDomainById(String name) {
 
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
@@ -40,11 +37,6 @@ public class DomainService {
     }
 
     public Domain findDomain(String id) {
-        Configurator configurator = new Configurator();
-        return findDomain(configurator, id);
-    }
-
-    public Domain findDomain(Configurator configurator, String id) {
 
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
@@ -60,18 +52,13 @@ public class DomainService {
         return domain;
     }
 
-    public Domain findDomainWithResolutions(Configurator configurator, String id) {
-        Domain domain = findDomain(configurator, id);
-        domain.setResolutions(resolutionService.getResolutions(configurator, id));
+    public Domain findDomainWithResolutions(String id) {
+        Domain domain = findDomain(id);
+        domain.setResolutions(resolutionService.getResolutions(id));
         return domain;
     }
 
-    public String indexDomain(Domain document) {
-        Configurator configurator = new Configurator();
-        return indexDomain(configurator, document);
-    }
-
-    public String indexDomain(Configurator configurator, Domain domain) {
+    public String indexDomain(Domain domain) {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
 
         Repository<DomainType> repository = esfactory.initManager();
@@ -83,17 +70,12 @@ public class DomainService {
         String response = repository.indexMapping(mapping, document);
         repository.closeClient();
 
-        resolutionService.indexResolutions(configurator, response, domain.getResolutions());
+        resolutionService.indexResolutions(response, domain.getResolutions());
 
         return response;
     }
 
-    public String updateDomain(Domain document) {
-        Configurator configurator = new Configurator();
-        return updateDomain(configurator, document);
-    }
-
-    public String updateDomain(Configurator configurator, Domain domain) {
+    public String updateDomain(Domain domain) {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
 
         Repository<DomainType> repository = esfactory.initManager();
@@ -105,12 +87,12 @@ public class DomainService {
         String response = repository.updateIndexMapping(domain.getId(), mapping, document);
         repository.closeClient();
 
-        resolutionService.updateResolutions(configurator, domain.getId(), domain.getResolutions());
+        resolutionService.updateResolutions(domain.getId(), domain.getResolutions());
 
         return response;
     }
 
-    public List<Domain> getDomains(Configurator configurator, Integer offset, Integer limit) {
+    public List<Domain> getDomains(Integer offset, Integer limit) {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
@@ -124,7 +106,7 @@ public class DomainService {
         return domains;
     }
 
-    public List<Domain> getDomainsByName(Configurator configurator, Integer offset, Integer limit, String name) {
+    public List<Domain> getDomainsByName(Integer offset, Integer limit, String name) {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
@@ -138,10 +120,10 @@ public class DomainService {
         return domains;
     }
 
-    public Domain findDomainWithTriggers(Configurator configurator, String domainId) {
-        Domain domain = findDomain(configurator, domainId);
+    public Domain findDomainWithTriggers(String domainId) {
+        Domain domain = findDomain(domainId);
         if (domain != null) {
-            domain.setTriggers(triggerService.getTriggers(configurator, domainId));
+            domain.setTriggers(triggerService.getTriggers(domainId));
         }
         return domain;
     }
@@ -153,4 +135,9 @@ public class DomainService {
     public void setResolutionService(ResolutionService resolutionService) {
         this.resolutionService = resolutionService;
     }
+
+    public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
+        this.configurator = configurator;
+    }
+
 }

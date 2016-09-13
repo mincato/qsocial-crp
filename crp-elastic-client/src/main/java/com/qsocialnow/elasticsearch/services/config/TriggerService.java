@@ -6,7 +6,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
+import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.TriggerMapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.TriggerType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
@@ -15,8 +15,10 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class TriggerService {
 
-    public String indexTrigger(Configurator elasticConfig, String domainId, Trigger trigger) {
-        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(elasticConfig);
+    private AWSElasticsearchConfigurationProvider configurator;
+
+    public String indexTrigger(String domainId, Trigger trigger) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
 
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
@@ -38,8 +40,7 @@ public class TriggerService {
         return response;
     }
 
-    public List<Trigger> getTriggers(Configurator configurator, String domainId, Integer offset, Integer limit,
-            String name) {
+    public List<Trigger> getTriggers(String domainId, Integer offset, Integer limit, String name) {
         RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
@@ -61,7 +62,7 @@ public class TriggerService {
         return triggers;
     }
 
-    public List<Trigger> getTriggers(Configurator configurator, String domainId) {
+    public List<Trigger> getTriggers(String domainId) {
         RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
@@ -76,6 +77,10 @@ public class TriggerService {
         repository.closeClient();
         return triggers;
 
+    }
+
+    public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
+        this.configurator = configurator;
     }
 
 }
