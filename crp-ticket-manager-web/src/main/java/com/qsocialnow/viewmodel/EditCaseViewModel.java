@@ -16,6 +16,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.CaseService;
+import com.qsocialnow.services.RegistryService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class EditCaseViewModel implements Serializable {
@@ -25,9 +26,14 @@ public class EditCaseViewModel implements Serializable {
     @WireVariable
     private CaseService caseService;
 
+    @WireVariable
+    private RegistryService registryService;
+
     private int pageSize = 15;
 
     private int activePage = 0;
+
+    private String caseId;
 
     private boolean moreResults;
 
@@ -35,7 +41,9 @@ public class EditCaseViewModel implements Serializable {
 
     @Init
     public void init(@QueryParam("case") String caseSelected) {
-        findRegistriesByCase(caseSelected);
+        this.caseId = caseSelected;
+        findCase(this.caseId);
+        findRegistriesByCase(this.caseId);
     }
 
     public List<RegistryListView> getRegistries() {
@@ -54,7 +62,7 @@ public class EditCaseViewModel implements Serializable {
     @NotifyChange({ "registries", "moreResults" })
     public void moreResults() {
         this.activePage++;
-        this.findRegistriesByCase("");
+        this.findRegistriesByCase(this.caseId);
     }
 
     @Command
@@ -63,8 +71,12 @@ public class EditCaseViewModel implements Serializable {
 
     }
 
+    private void findCase(String caseSelected) {
+
+    }
+
     private PageResponse<RegistryListView> findRegistriesByCase(String caseSelected) {
-        PageResponse<RegistryListView> pageResponse = caseService.findCaseWithRegistries(activePage, pageSize,
+        PageResponse<RegistryListView> pageResponse = registryService.findCaseWithRegistries(activePage, pageSize,
                 caseSelected);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());

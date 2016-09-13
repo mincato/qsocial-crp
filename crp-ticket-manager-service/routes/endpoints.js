@@ -68,9 +68,37 @@ router.get('/cases/:id', function (req, res) {
 	  var caseService = javaContext.getBeanSync("caseService");
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-	  caseService.findCaseWithRegistries(caseId,pageNumber, pageSize, asyncResponse);
+	  caseService.findOne(caseId,pageNumber, pageSize,asyncResponse);
 	  
 	});
+
+router.get('/cases/:id/registries', function (req, res) {
+
+	  function asyncResponse(err,responseDomain) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(responseDomain !== null) {
+	      try {
+	        res.set('Content-Type','application/json');
+	        res.send(gson.toJsonSync(responseDomain));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var caseId = req.params.id;
+	  var registryService = javaContext.getBeanSync("registryService");
+	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
+	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+	  registryService.findAll(caseId,pageNumber, pageSize,asyncResponse);
+});
+
 
 
 router.get('/domains', function (req, res) {

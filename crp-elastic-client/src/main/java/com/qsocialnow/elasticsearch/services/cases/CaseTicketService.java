@@ -72,7 +72,8 @@ public class CaseTicketService {
         mapping.setIndex(INDEX_NAME_REGISTRY + generateIndexValue());
 
         log.info("Retriving registries from case: " + caseId);
-        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, "idCase", caseId);
+        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
+                caseId);
 
         List<ActionRegistry> registries = response.getSources();
 
