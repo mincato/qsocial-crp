@@ -69,4 +69,18 @@ public class CaseRepository {
         return 50L;
     }
 
+    public Case findOne(String caseId) {
+        return caseElasticService.findCaseById(caseId);
+    }
+
+    public void save(Case caseObject) {
+        caseElasticService.indexCase(caseObject);
+
+    }
+
+    public boolean update(Case caseObject) {
+        String id = caseElasticService.update(caseObject);
+        return id != null;
+    }
+
 }

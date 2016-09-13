@@ -1,7 +1,10 @@
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditCaseViewModel')" 
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
-	<div class="row">
+	<div zclass="row">
+		<include zclass="col-lg-12" src="/pages/cases/actions/master-action.zul"/>
+	</div>
+	<div zclass="row">
     	<n:div class="col-lg-12">
     		<div zclass="pane equal">
 				<div zclass="table-responsive" >

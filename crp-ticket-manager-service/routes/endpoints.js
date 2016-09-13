@@ -47,31 +47,61 @@ router.get('/cases', function (req, res) {
 router.get('/cases/:id', function (req, res) {
 
 	  function asyncResponse(err,responseDomain) {
-	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+		  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
-	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
-
-	    if(responseDomain !== null) {
-	      try {
-	        res.set('Content-Type','application/json');
-	        res.send(gson.toJsonSync(responseDomain));
-	      } catch(ex) {
-	        res.status(500).json(ex.cause.getMessageSync());
-	      }
-	    } else {
-	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
-	    }
+		  if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+		  if(responseDomain !== null) {
+			  try {
+				  res.set('Content-Type','application/json');
+				  res.send(gson.toJsonSync(responseDomain));
+			  } catch(ex) {
+				  res.status(500).json(ex.cause.getMessageSync());
+			  }
+		  } else {
+			  res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		  }
 
 	  }
-
 	  var caseId = req.params.id;
 	  var caseService = javaContext.getBeanSync("caseService");
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
 	  caseService.findCaseWithRegistries(caseId,pageNumber, pageSize, asyncResponse);
-	  
-	});
+  
+});
 
+router.post('/cases/:id/action', function (req, res) {
+
+	function asyncResponse(err,responseCase) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.getMessageSync()); return; }
+
+		if(responseCase !== null) {
+			try {
+				res.set('Content-Type', 'application/json');
+				res.send(gson.toJsonSync(responseCase));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+
+	}
+
+	var caseService = javaContext.getBeanSync("caseService");
+	var caseId = req.params.id;
+	  
+	prettyJSON(req.body);
+
+	var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	var clazz = java.findClassSync('com.qsocialnow.common.model.cases.ActionRequest');
+	var actionRequest = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+	  
+	caseService.executeAction(caseId, actionRequest, asyncResponse);
+
+});
 
 router.get('/domains', function (req, res) {
 
