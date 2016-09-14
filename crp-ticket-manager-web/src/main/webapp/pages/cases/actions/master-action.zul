@@ -17,4 +17,7 @@
 	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'REOPEN')">
 		<include src="/pages/cases/actions/reopen-action.zul"/>
 	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'PENDING_RESPONSE')">
+		<include src="/pages/cases/actions/pending-response-action.zul"/>
+	</div>
 </div>
