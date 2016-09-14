@@ -20,4 +20,7 @@
 	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'PENDING_RESPONSE')">
 		<include src="/pages/cases/actions/pending-response-action.zul"/>
 	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'REGISTER_COMMENT')">
+		<include src="/pages/cases/actions/register-comment-action.zul"/>
+	</div>
 </div>
