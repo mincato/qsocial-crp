@@ -1,0 +1,26 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('resolveActionVm') @init('com.qsocialnow.viewmodel.ResolveActionViewModel')"
+		validationMessages="@id('vmsgs')">
+	<x:form>
+		<x:div sclass="form-group">
+			<n:label class="control-label">${labels.cases.actions.resolve.resolutions}:</n:label>
+			<selectbox sclass="form-control" id="resolutions" model="@load(resolveActionVm.resolutionOptions)"
+				selectedItem="@bind(resolveActionVm.selectedResolution) @validator('beanValidator')">
+			    <template name="model">
+					<label value="${each.description}" />
+				</template>
+			</selectbox>
+		</x:div>
+		
+		<x:div sclass="form-group">
+		    <n:label class="control-label">${labels.cases.actions.comment}:</n:label>
+    		<textbox type="text" class="form-control" 
+    			value="@bind(registerCommentActionVm.comment)"></textbox>
+		</x:div>
+		<div class="form-group text-center">
+	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
+		</div>
+	</x:form>
+</div>

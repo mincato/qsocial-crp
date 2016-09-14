@@ -105,6 +105,33 @@ router.post('/cases/:id/action', function (req, res) {
 
 });
 
+router.get('/cases/:id/availableResolutions', function (req, res) {
+
+	function asyncResponse(err,responseResolutions) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.getMessageSync()); return; }
+
+		if(responseCase !== null) {
+			try {
+				res.set('Content-Type', 'application/json');
+				res.send(gson.toJsonSync(responseResolutions));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+
+	}
+
+	var caseService = javaContext.getBeanSync("caseService");
+	var caseId = req.params.id;
+	  
+	caseService.getAvailableResolutions(caseId, asyncResponse);
+
+});
+
 router.get('/cases/:id/registries', function (req, res) {
 
 	  function asyncResponse(err,responseDomain) {

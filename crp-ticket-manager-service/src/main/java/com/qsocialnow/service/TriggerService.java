@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -30,6 +31,9 @@ public class TriggerService {
     private TriggerRepository triggerRepository;
 
     @Autowired
+    private DomainService domainService;
+
+    @Autowired
     private CuratorFramework zookeeperClient;
 
     @Value("${app.domains.path}")
@@ -44,6 +48,7 @@ public class TriggerService {
                 });
             });
             mockActions(trigger);
+            mockResoultions(trigger, domainId);
             triggerSaved = triggerRepository.save(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -71,6 +76,11 @@ public class TriggerService {
                 detectionCriteria.setAccionCriterias(actions);
             });
         });
+    }
+
+    private void mockResoultions(Trigger trigger, String domainId) {
+        Domain domain = domainService.findOne(domainId);
+        trigger.setResolutions(domain.getResolutions());
     }
 
 }

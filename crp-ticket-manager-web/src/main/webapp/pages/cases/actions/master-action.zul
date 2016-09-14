@@ -3,8 +3,9 @@
 	<x:form class="form">
 		<n:div class="form-group">
 			<n:label class="control-label">${labels.cases.actions.title}:</n:label>
-			<selectbox sclass="form-control" id="status" model="@load(vm.actionOptions)"
-				selectedItem="@bind(vm.selectedAction)">
+			<selectbox sclass="form-control" model="@load(vm.actionOptions)"
+				selectedItem="@bind(vm.selectedAction)"
+				onSelect="@global-command('show')">
 			    <template name="model">
 					<label value="${c:l(c:cat('cases.actions.',each))}" />
 				</template>
@@ -22,5 +23,8 @@
 	</div>
 	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'REGISTER_COMMENT')">
 		<include src="/pages/cases/actions/register-comment-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'RESOLVE')">
+		<include src="/pages/cases/actions/resolve-action.zul"/>
 	</div>
 </div>
