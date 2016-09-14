@@ -21,13 +21,13 @@ public class ActionRegistryRepository {
 
     @Autowired
     private CaseTicketService caseElasticService;
-    
+
     public void create(String caseId, ActionRegistry actionRegistry) {
         // TODO guardarlo en Elastic
         log.info("Saving action registry: " + new GsonBuilder().create().toJson(actionRegistry));
 
     }
-    
+
     public List<RegistryListView> findAll(String caseId, PageRequest pageRequest) {
         List<RegistryListView> registriesView = new ArrayList<>();
 

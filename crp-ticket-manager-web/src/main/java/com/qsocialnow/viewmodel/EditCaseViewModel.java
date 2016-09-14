@@ -110,8 +110,8 @@ public class EditCaseViewModel implements Serializable {
     }
 
     private PageResponse<RegistryListView> findRegistriesByCase(String caseSelected) {
-        PageResponse<RegistryListView> pageResponse = actionRegistryService.findCaseWithRegistries(activePage, pageSize,
-                caseSelected);
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findCaseWithRegistries(activePage,
+                pageSize, caseSelected);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;
