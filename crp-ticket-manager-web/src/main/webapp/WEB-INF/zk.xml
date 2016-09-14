@@ -15,6 +15,7 @@
     	<label-location>/WEB-INF/i18n/app.properties</label-location>
     	<label-location>/WEB-INF/i18n/cases.properties</label-location>
     	<label-location>/WEB-INF/i18n/trigger.properties</label-location>
+    	<label-location>/WEB-INF/i18n/userresolver.properties</label-location>
     	<label-location>/WEB-INF/i18n/sidebar.properties</label-location>
     	<label-location>/WEB-INF/i18n/errors.properties</label-location>
 	</system-config>

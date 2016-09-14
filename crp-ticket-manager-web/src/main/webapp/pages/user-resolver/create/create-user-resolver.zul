@@ -1,0 +1,77 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.userresolver.CreateUserResolverViewModel')"
+	validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native"	xmlns:ca="client/attribute">
+	<n:div class="row">
+		<n:div class="col-lg-12">
+			<div zclass="pane equal">
+				<n:h5>${labels.userresolver.create.title}</n:h5>
+			</div>
+		</n:div>
+	</n:div>
+
+	<div class="row">
+		<n:div class="col-lg-12">
+			<div zclass="pane equal">
+				<x:form class="form-horizontal"
+					form="@id('fx') @load(vm.currentUserResolver) @save(vm.currentUserResolver, before='save') ">
+					<x:div
+						sclass="@load(empty vmsgs[source] ? 'form-group' : 'form-group has-error')">
+						<n:label class="control-label col-sm-2">
+							${labels.userresolver.source}
+						</n:label>
+						<x:div class="col-sm-10">
+							<radiogroup id="source"  selectedItem="@bind(fx.source) @validator('beanValidator')"/>
+							<x:div children="@load(vm.mediaTypes)">
+								<template name="children">
+									<radio radiogroup="source" value="@load(each.media.icon)"
+										zclass="icon-input media" sclass="@load(each.media.icon)" />
+								</template>
+							</x:div>
+							<x:span
+								sclass="@load(empty vmsgs[source] ? 'hidden' : 'help-block')">
+								<label value="@load(vmsgs[source])" />
+							</x:span>
+						</x:div>
+					</x:div>
+					<x:div
+						sclass="@load(empty vmsgs[identifier] ? 'form-group' : 'form-group has-error')">
+						<n:label class="control-label col-sm-2">
+							${labels.userresolver.identifier}
+						</n:label>
+						<x:div class="col-sm-10">
+							<textbox type="text" class="form-control"
+								id="identifier"
+								name="normal_input"
+								value="@bind(fx.identifier) @validator('beanValidator')">
+							</textbox>
+							<x:span
+								sclass="@load(empty vmsgs[identifier] ? 'hidden' : 'help-block')">
+								<label value="@load(vmsgs[identifier])" />
+							</x:span>
+						</x:div>
+					</x:div>
+					<x:div class="form-group">
+						<n:label class="control-label col-sm-2">
+							${labels.userresolver.active}
+						</n:label>
+						<x:div class="col-sm-10">
+							<checkbox checked="@bind(fx.active)" />
+						</x:div>
+					</x:div>
+					<div class="form-group text-center" visible="@load(not empty fx.source)">
+						<button label="@load(c:cat(c:cat(labels.userresolver.conect.action, ' '),fx.source))" zclass="btn btn-primary" />
+					</div>
+	
+					<n:br/>
+					<div class="form-group text-center">
+						<button onClick="@command('save')"
+							label="${labels.app.button.save}" zclass="btn btn-success" />
+						<button onClick="@command('clear')"
+							label="${labels.app.button.clear}" zclass="btn btn-default" />
+					</div>
+				</x:form>
+			</div>
+		</n:div>
+	</div>
+</x:div>
