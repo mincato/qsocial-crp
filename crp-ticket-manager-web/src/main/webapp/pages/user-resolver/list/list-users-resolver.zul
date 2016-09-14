@@ -1,3 +1,4 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
     viewModel="@id('vm') @init('com.qsocialnow.viewmodel.userresolver.UsersResolverViewModel')" 
     border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
@@ -39,10 +40,10 @@
 			    <tbody children="@bind(vm.usersResolver)">
 			    	<template name="children">
 					<tr>
-						<td><i sclass="@load('fa fa-'.concat(each.source))" /></td>
+						<td><span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.media.icon))"><i sclass="@load('fa fa-'.concat(each.media.icon))" /></span></td>
 						<td>${each.identifier}</td>
-						<td>${each.active}</td>
-                   	   	<td>
+						<td>${c:l(c:cat('userresolver.active.',each.active))}</td>
+						<td>
                        		<ul class="list-inline">
   								<li><a class="list-action"><i class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.userresolver.edit.action}"></i></a></li>
 							</ul>

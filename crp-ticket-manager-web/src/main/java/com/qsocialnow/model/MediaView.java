@@ -1,5 +1,7 @@
 package com.qsocialnow.model;
 
+import com.qsocialnow.common.model.config.Media;
+
 public class MediaView {
 
     private Media media;

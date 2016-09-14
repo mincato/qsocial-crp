@@ -8,12 +8,12 @@ public class UserResolverListView implements Serializable {
 
 	private String id;
 
-	private String source;
+	private Long source;
 
 	private String identifier;
 
 	private Boolean active;
-
+	
 	public String getId() {
 		return id;
 	}
@@ -22,11 +22,11 @@ public class UserResolverListView implements Serializable {
 		this.id = id;
 	}
 
-	public String getSource() {
+	public Long getSource() {
 		return source;
 	}
 
-	public void setSource(String source) {
+	public void setSource(Long source) {
 		this.source = source;
 	}
 
@@ -44,6 +44,10 @@ public class UserResolverListView implements Serializable {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+	
+	public Media getMedia(){
+		return Media.getByValue(this.source);
 	}
 
 }
