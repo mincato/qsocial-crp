@@ -54,6 +54,7 @@ public class EditCaseViewModel implements Serializable {
         this.caseId = caseSelected;
         findCase(this.caseId);
         findRegistriesByCase(this.caseId);
+        actionOptions = Arrays.asList(ActionType.values());
     }
 
     public List<RegistryListView> getRegistries() {
