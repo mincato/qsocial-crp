@@ -1,0 +1,14 @@
+[
+    {
+      "id": 1,
+      "source": 1087,
+      "identifier":"@usuarioenojado",
+      "active": true
+    },
+    {
+      "id": 2,
+      "source": 1086,
+      "identifier":"usuarioenojado",
+      "active": false
+    }
+]

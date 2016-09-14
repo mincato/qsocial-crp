@@ -50,6 +50,25 @@
 											</li>
 										</ul>
 									</li>
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-comments-o fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.usersResolver}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a
+													href="/pages/user-resolver/list/index.zul">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+										</ul>
+									</li>
 
 									<li>
 										<n:a href="#">
