@@ -46,6 +46,7 @@
 						<td>
                        		<ul class="list-inline">
   								<li><a class="list-action"><i onClick="@command('openEdit', userresolver=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.userresolver.edit.action}"></i></a></li>
+  								<li><a class="list-action"><i onClick="@command('openDelete', userresolver=each.id)" class="glyphicon glyphicon-erase" data-toggle="tooltip" data-placement="top" title="${labels.userresolver.delete.action}"></i></a></li>
 							</ul>
 			           	</td>
                		</tr>
