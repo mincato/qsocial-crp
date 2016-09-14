@@ -4,50 +4,50 @@ import java.io.Serializable;
 
 public class UserResolverListView implements Serializable {
 
-	private static final long serialVersionUID = -4642800987682580389L;
+    private static final long serialVersionUID = -4642800987682580389L;
 
-	private String id;
+    private String id;
 
-	private Long source;
+    private Long source;
 
-	private String identifier;
+    private String identifier;
 
-	private Boolean active;
-	
-	public String getId() {
-		return id;
-	}
+    private Boolean active;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public Long getSource() {
-		return source;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setSource(Long source) {
-		this.source = source;
-	}
+    public Long getSource() {
+        return source;
+    }
 
-	public String getIdentifier() {
-		return identifier;
-	}
+    public void setSource(Long source) {
+        this.source = source;
+    }
 
-	public void setIdentifier(String identifier) {
-		this.identifier = identifier;
-	}
+    public String getIdentifier() {
+        return identifier;
+    }
 
-	public Boolean getActive() {
-		return active;
-	}
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
-	
-	public Media getMedia(){
-		return Media.getByValue(this.source);
-	}
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Media getMedia() {
+        return Media.getByValue(this.source);
+    }
 
 }

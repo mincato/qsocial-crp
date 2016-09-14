@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public class UserResolver extends User {
 
-	private Long source;
+    private Long source;
 
     @NotBlank(message = "{field.empty}")
     private String identifier;
@@ -12,7 +12,7 @@ public class UserResolver extends User {
     private SourceCredentials credentials;
 
     private Boolean active;
-    
+
     public Long getSource() {
         return source;
     }

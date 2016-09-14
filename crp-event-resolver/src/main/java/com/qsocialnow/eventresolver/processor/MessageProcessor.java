@@ -52,10 +52,10 @@ public class MessageProcessor {
                             detectionCriteria);
                     executionMessageProcessor.execute(request);
                 } else {
-                	LOGGER.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
+                    LOGGER.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
                 }
             } else {
-            	LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
+                LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
             }
         } else {
             throw new InvalidDomainException("Error trying to retrieve a domain");

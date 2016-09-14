@@ -12,19 +12,19 @@ import com.qsocialnow.eventresolver.processor.MessageProcessor;
 
 @Component
 public class DomainService {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(MessageProcessor.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageProcessor.class);
 
     @Autowired
     private com.qsocialnow.elasticsearch.services.config.DomainService domainElasticService;
 
     @Cacheable(value = CacheConfig.DOMAINS_CACHE)
     public Domain findDomainWithTriggers(String domainId) {
-    	
-    	if (LOGGER.isInfoEnabled()) {
-    		LOGGER.info("======== Recovering Domain from Configuration Storage ========");
-    	}
-    	
+
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("======== Recovering Domain from Configuration Storage ========");
+        }
+
         return domainElasticService.findDomainWithTriggers(domainId);
     }
 

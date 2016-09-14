@@ -25,37 +25,35 @@ import com.qsocialnow.services.UserResolverService;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MockUserResolverService implements UserResolverService {
 
-	@Override
-	public UserResolver create(UserResolver currentUserResolver) {
-		return currentUserResolver;
-	}
+    @Override
+    public UserResolver create(UserResolver currentUserResolver) {
+        return currentUserResolver;
+    }
 
-	@Override
-	public UserResolver findOne(String userResolverId) {
-		// TODO Auto-generated method stub	
-		return null;
-	}
+    @Override
+    public UserResolver findOne(String userResolverId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public UserResolver update(UserResolver currentUserResolver) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public UserResolver update(UserResolver currentUserResolver) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public PageResponse<UserResolverListView> findAll(int pageNumber,
-			int pageSize, Map<String, String> filters) {
-		GsonBuilder gsonBuilder = new GsonBuilder();
+    @Override
+    public PageResponse<UserResolverListView> findAll(int pageNumber, int pageSize, Map<String, String> filters) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
         InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/usersresolver.json");
-        
-        Type listType = new TypeToken<ArrayList<UserResolverListView>>(){}.getType();
-        
-        List<UserResolverListView> list = gsonBuilder.create()
-                .fromJson(new InputStreamReader(systemResourceAsStream), listType);
-        
-        return new PageResponse<UserResolverListView>(list, ACTIVE_PAGE_DEFAULT,  PAGE_SIZE_DEFAULT );
-	}
 
-   
+        Type listType = new TypeToken<ArrayList<UserResolverListView>>() {
+        }.getType();
+
+        List<UserResolverListView> list = gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream),
+                listType);
+
+        return new PageResponse<UserResolverListView>(list, ACTIVE_PAGE_DEFAULT, PAGE_SIZE_DEFAULT);
+    }
 
 }

@@ -20,65 +20,64 @@ import com.qsocialnow.services.UserResolverService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateUserResolverViewModel implements Serializable {
 
-	private static final long serialVersionUID = 2083244017777546585L;
+    private static final long serialVersionUID = 2083244017777546585L;
 
-	@WireVariable("mockUserResolverService")
-	private UserResolverService userResolverService;
+    @WireVariable("mockUserResolverService")
+    private UserResolverService userResolverService;
 
-	private UserResolverView currentUserResolver;
+    private UserResolverView currentUserResolver;
 
-	private List<Media> mediaTypes;
+    private List<Media> mediaTypes;
 
-	@Init
-	public void init() {
-		initUserResolver();
-	}
+    @Init
+    public void init() {
+        initUserResolver();
+    }
 
-	private void initUserResolver() {
-		currentUserResolver = new UserResolverView();
-		currentUserResolver.setUserResolver(new UserResolver());
-		currentUserResolver.getUserResolver().setActive(Boolean.FALSE);
-		initMedias();
-	}
+    private void initUserResolver() {
+        currentUserResolver = new UserResolverView();
+        currentUserResolver.setUserResolver(new UserResolver());
+        currentUserResolver.getUserResolver().setActive(Boolean.FALSE);
+        initMedias();
+    }
 
-	@Command
-	@NotifyChange("currentUserResolver")
-	public void save() {
-		UserResolver userResolver = new UserResolver();
-		userResolver.setSource(currentUserResolver.getSource().getValue());
-		userResolver.setIdentifier(currentUserResolver.getUserResolver().getIdentifier());
-		userResolver.setActive(currentUserResolver.getUserResolver().getActive());
-		userResolver = userResolverService.create(userResolver);
-        Clients.showNotification(Labels.getLabel(
-				"userresolver.create.notification.success",
-				new String[] { userResolver.getIdentifier() }));
-		initUserResolver();
-	}
+    @Command
+    @NotifyChange("currentUserResolver")
+    public void save() {
+        UserResolver userResolver = new UserResolver();
+        userResolver.setSource(currentUserResolver.getSource().getValue());
+        userResolver.setIdentifier(currentUserResolver.getUserResolver().getIdentifier());
+        userResolver.setActive(currentUserResolver.getUserResolver().getActive());
+        userResolver = userResolverService.create(userResolver);
+        Clients.showNotification(Labels.getLabel("userresolver.create.notification.success",
+                new String[] { userResolver.getIdentifier() }));
+        initUserResolver();
+    }
 
-	@Command
-	@NotifyChange({ "currentUserResolver" })
-	public void clear() {
-		initUserResolver();
-	}
+    @Command
+    @NotifyChange({ "currentUserResolver" })
+    public void clear() {
+        initUserResolver();
+    }
 
-	private void initMedias() {
-		mediaTypes = Arrays.asList(Media.values());
-	}
+    private void initMedias() {
+        mediaTypes = Arrays.asList(Media.values());
+    }
 
-	public UserResolverView getCurrentUserResolver() {
-		return currentUserResolver;
-	}
+    public UserResolverView getCurrentUserResolver() {
+        return currentUserResolver;
+    }
 
-	public void setCurrentUserResolver(UserResolverView currentUserResolver) {
-		this.currentUserResolver = currentUserResolver;
-	}
+    public void setCurrentUserResolver(UserResolverView currentUserResolver) {
+        this.currentUserResolver = currentUserResolver;
+    }
 
-	public List<Media> getMediaTypes() {
-		return mediaTypes;
-	}
+    public List<Media> getMediaTypes() {
+        return mediaTypes;
+    }
 
-	public void setMediaTypes(List<Media> mediaTypes) {
-		this.mediaTypes = mediaTypes;
-	}
+    public void setMediaTypes(List<Media> mediaTypes) {
+        this.mediaTypes = mediaTypes;
+    }
 
 }

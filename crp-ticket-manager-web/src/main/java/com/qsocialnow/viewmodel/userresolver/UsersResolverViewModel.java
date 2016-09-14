@@ -24,100 +24,99 @@ import com.qsocialnow.services.UserResolverService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class UsersResolverViewModel implements Serializable {
 
-	private static final long serialVersionUID = -6677122190515536127L;
+    private static final long serialVersionUID = -6677122190515536127L;
 
-	private int pageSize = PAGE_SIZE_DEFAULT;
-	private int activePage = ACTIVE_PAGE_DEFAULT;
+    private int pageSize = PAGE_SIZE_DEFAULT;
+    private int activePage = ACTIVE_PAGE_DEFAULT;
 
-	@WireVariable("mockUserResolverService")
-	private UserResolverService userResolverService;
+    @WireVariable("mockUserResolverService")
+    private UserResolverService userResolverService;
 
-	private boolean moreResults;
+    private boolean moreResults;
 
-	private List<UserResolverListView> usersResolver = new ArrayList<>();
+    private List<UserResolverListView> usersResolver = new ArrayList<>();
 
-	private String keyword;
+    private String keyword;
 
-	private boolean filterActive = false;
+    private boolean filterActive = false;
 
-	@Init
-	public void init() {
-		findUsersResolver();
-	}
+    @Init
+    public void init() {
+        findUsersResolver();
+    }
 
-	public List<UserResolverListView> getUserResolvers() {
-		return this.usersResolver;
-	}
+    public List<UserResolverListView> getUserResolvers() {
+        return this.usersResolver;
+    }
 
-	public String getKeyword() {
-		return this.keyword;
-	}
+    public String getKeyword() {
+        return this.keyword;
+    }
 
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
-	public Integer getPageSize() {
-		return pageSize;
-	}
+    public Integer getPageSize() {
+        return pageSize;
+    }
 
-	public boolean isMoreResults() {
-		return moreResults;
-	}
+    public boolean isMoreResults() {
+        return moreResults;
+    }
 
-	@Command
-	@NotifyChange({ "usersResolver", "moreResults" })
-	public void moreResults() {
-		this.activePage++;
-		this.findUsersResolver();
-	}
+    @Command
+    @NotifyChange({ "usersResolver", "moreResults" })
+    public void moreResults() {
+        this.activePage++;
+        this.findUsersResolver();
+    }
 
-	private PageResponse<UserResolverListView> findUsersResolver() {
-		PageResponse<UserResolverListView> pageResponse = userResolverService
-				.findAll(activePage, pageSize, getFilters());
-		if (pageResponse.getItems() != null
-				&& !pageResponse.getItems().isEmpty()) {
-			this.usersResolver.addAll(pageResponse.getItems());
-			this.moreResults = true;
-		} else {
-			this.moreResults = false;
-		}
+    private PageResponse<UserResolverListView> findUsersResolver() {
+        PageResponse<UserResolverListView> pageResponse = userResolverService.findAll(activePage, pageSize,
+                getFilters());
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.usersResolver.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
 
-		return pageResponse;
-	}
+        return pageResponse;
+    }
 
-	@Command
-	@NotifyChange({ "usersResolver", "moreResults", "filterActive" })
-	public void search() {
-		this.filterActive = !StringUtils.isEmpty(this.keyword);
-		this.setDefaultPage();
-		this.usersResolver.clear();
-		this.findUsersResolver();
-	}
+    @Command
+    @NotifyChange({ "usersResolver", "moreResults", "filterActive" })
+    public void search() {
+        this.filterActive = !StringUtils.isEmpty(this.keyword);
+        this.setDefaultPage();
+        this.usersResolver.clear();
+        this.findUsersResolver();
+    }
 
-	private Map<String, String> getFilters() {
-		if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
-			return null;
-		}
-		Map<String, String> filters = new HashMap<String, String>();
-		return filters;
-	}
+    private Map<String, String> getFilters() {
+        if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
+            return null;
+        }
+        Map<String, String> filters = new HashMap<String, String>();
+        return filters;
+    }
 
-	private void setDefaultPage() {
-		this.pageSize = PAGE_SIZE_DEFAULT;
-		this.activePage = ACTIVE_PAGE_DEFAULT;
-	}
+    private void setDefaultPage() {
+        this.pageSize = PAGE_SIZE_DEFAULT;
+        this.activePage = ACTIVE_PAGE_DEFAULT;
+    }
 
-	public boolean isFilterActive() {
-		return filterActive;
-	}
+    public boolean isFilterActive() {
+        return filterActive;
+    }
 
-	public List<UserResolverListView> getUsersResolver() {
-		return usersResolver;
-	}
+    public List<UserResolverListView> getUsersResolver() {
+        return usersResolver;
+    }
 
-	public void setUsersResolver(List<UserResolverListView> usersResolver) {
-		this.usersResolver = usersResolver;
-	}
+    public void setUsersResolver(List<UserResolverListView> usersResolver) {
+        this.usersResolver = usersResolver;
+    }
 
 }
