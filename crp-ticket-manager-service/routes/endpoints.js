@@ -126,10 +126,10 @@ router.get('/cases/:id/registries', function (req, res) {
 	  }
 
 	  var caseId = req.params.id;
-	  var registryService = javaContext.getBeanSync("registryService");
+	  var actionRegistryService = javaContext.getBeanSync("actionRegistryService");
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-	  registryService.findAll(caseId,pageNumber, pageSize,asyncResponse);
+	  actionRegistryService.findAll(caseId,pageNumber, pageSize,asyncResponse);
 });
 
 

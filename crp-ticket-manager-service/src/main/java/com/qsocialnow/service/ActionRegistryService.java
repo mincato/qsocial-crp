@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.pagination.PageRequest;
-import com.qsocialnow.persistence.RegistryRepository;
+import com.qsocialnow.persistence.ActionRegistryRepository;
 
 @Service
-public class RegistryService {
+public class ActionRegistryService {
 
     @Autowired
-    private RegistryRepository repository;
+    private ActionRegistryRepository repository;
 
     public PageResponse<RegistryListView> findAll(String caseId, Integer pageNumber, Integer pageSize) {
         List<RegistryListView> cases = repository.findAll(caseId, new PageRequest(pageNumber, pageSize));
@@ -23,7 +23,7 @@ public class RegistryService {
         return page;
     }
 
-    public void setRepository(RegistryRepository repository) {
+    public void setRepository(ActionRegistryRepository repository) {
         this.repository = repository;
     }
 
