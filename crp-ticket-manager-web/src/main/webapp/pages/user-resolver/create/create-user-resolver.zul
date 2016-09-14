@@ -68,10 +68,6 @@
   						</div>
 						</div>
 					</div>
-					<div zclass="row" >
-						
-					</div>
-	
 					<n:br/>
 					<div class="form-group text-center">
 						<button onClick="@command('save')"
