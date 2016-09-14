@@ -99,7 +99,7 @@ public class QueueProducer<T> extends Thread {
             while (!this.stop) {
                 synchronized (lock) {
                     lock.wait();
-                    // notifyConsumers();
+                    notifyConsumers();
                 }
             }
         } catch (Exception e) {
