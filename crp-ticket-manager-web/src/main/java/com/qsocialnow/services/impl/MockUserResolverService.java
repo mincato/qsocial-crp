@@ -32,14 +32,25 @@ public class MockUserResolverService implements UserResolverService {
 
 	@Override
 	public UserResolver findOne(String userResolverId) {
-		// TODO Auto-generated method stub	
-		return null;
+		GsonBuilder gsonBuilder = new GsonBuilder();
+        InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/usersresolver.json");
+        
+        @SuppressWarnings("serial")
+		Type listType = new TypeToken<ArrayList<UserResolver>>(){}.getType();
+        
+        List<UserResolver> list = gsonBuilder.create()
+                .fromJson(new InputStreamReader(systemResourceAsStream), listType);
+        for (UserResolver user : list){
+        	if (userResolverId.equals(user.getId())) {
+        		return user;
+        	}
+        }
+        return null;
 	}
 
 	@Override
 	public UserResolver update(UserResolver currentUserResolver) {
-		// TODO Auto-generated method stub
-		return null;
+		return currentUserResolver;
 	}
 
 	@Override
@@ -48,7 +59,8 @@ public class MockUserResolverService implements UserResolverService {
 		GsonBuilder gsonBuilder = new GsonBuilder();
         InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/usersresolver.json");
         
-        Type listType = new TypeToken<ArrayList<UserResolverListView>>(){}.getType();
+        @SuppressWarnings("serial")
+		Type listType = new TypeToken<ArrayList<UserResolverListView>>(){}.getType();
         
         List<UserResolverListView> list = gsonBuilder.create()
                 .fromJson(new InputStreamReader(systemResourceAsStream), listType);

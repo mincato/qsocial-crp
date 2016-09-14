@@ -8,15 +8,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.config.UserResolverListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.UserResolverService;
@@ -94,6 +99,28 @@ public class UsersResolverViewModel implements Serializable {
 		this.usersResolver.clear();
 		this.findUsersResolver();
 	}
+	
+	 @Command
+	    public void openEdit(@BindingParam("userresolver") String userResolverId) {
+	        Map<String, Object> arg = new HashMap<String, Object>();
+	        arg.put("userresolver", userResolverId);
+	        Executions.createComponents("/pages/user-resolver/edit-user-resolver.zul", null, arg);
+	    }
+
+	    @GlobalCommand
+	    @NotifyChange("usersResolver")
+	    public void changeUserResolver(@BindingParam("userResolverChanged") UserResolver userResolverChanged) {
+	        if (userResolverChanged != null) {
+	            Optional<UserResolverListView> userResolverOptional = usersResolver.stream()
+	                    .filter(userResolver -> userResolver.getId().equals(userResolverChanged.getId())).findFirst();
+	            if (userResolverOptional.isPresent()) {
+	                UserResolverListView userResolverListView = userResolverOptional.get();
+	                userResolverListView.setSource(userResolverChanged.getSource());
+	                userResolverListView.setIdentifier(userResolverChanged.getIdentifier());
+	                userResolverListView.setActive(userResolverChanged.getActive());
+	            }
+	        }
+	    }
 
 	private Map<String, String> getFilters() {
 		if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
