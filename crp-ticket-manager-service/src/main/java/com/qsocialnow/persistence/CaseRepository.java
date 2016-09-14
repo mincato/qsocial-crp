@@ -27,8 +27,8 @@ public class CaseRepository {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
-
             List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit());
+
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();
                 caseListView.setId(caseRepo.getId());
@@ -67,6 +67,20 @@ public class CaseRepository {
 
     public Long count() {
         return 50L;
+    }
+
+    public Case findOne(String caseId) {
+        return caseElasticService.findCaseById(caseId);
+    }
+
+    public void save(Case caseObject) {
+        caseElasticService.indexCase(caseObject);
+
+    }
+
+    public boolean update(Case caseObject) {
+        String id = caseElasticService.update(caseObject);
+        return id != null;
     }
 
 }

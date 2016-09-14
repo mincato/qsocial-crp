@@ -2,10 +2,12 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.QueryParam;
@@ -13,7 +15,9 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.RegistryListView;
+import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.RegistryService;
@@ -29,6 +33,8 @@ public class EditCaseViewModel implements Serializable {
     @WireVariable
     private RegistryService registryService;
 
+    private Case currentCase;
+
     private int pageSize = 15;
 
     private int activePage = 0;
@@ -39,11 +45,16 @@ public class EditCaseViewModel implements Serializable {
 
     private List<RegistryListView> registries = new ArrayList<>();
 
+    private List<ActionType> actionOptions = new ArrayList<>();
+
+    private ActionType selectedAction;
+
     @Init
     public void init(@QueryParam("case") String caseSelected) {
         this.caseId = caseSelected;
         findCase(this.caseId);
         findRegistriesByCase(this.caseId);
+        actionOptions = Arrays.asList(ActionType.values());
     }
 
     public List<RegistryListView> getRegistries() {
@@ -56,6 +67,22 @@ public class EditCaseViewModel implements Serializable {
 
     public boolean isMoreResults() {
         return moreResults;
+    }
+
+    public List<ActionType> getActionOptions() {
+        return actionOptions;
+    }
+
+    public ActionType getSelectedAction() {
+        return selectedAction;
+    }
+
+    public void setSelectedAction(ActionType selectedAction) {
+        this.selectedAction = selectedAction;
+    }
+
+    public Case getCurrentCase() {
+        return currentCase;
     }
 
     @Command
@@ -73,6 +100,13 @@ public class EditCaseViewModel implements Serializable {
 
     private void findCase(String caseSelected) {
 
+    }
+
+    @GlobalCommand
+    @NotifyChange({ "currentCase", "selectedAction" })
+    public void actionExecuted(@BindingParam("caseUpdated") Case caseUpdated) {
+        this.currentCase = caseUpdated;
+        this.selectedAction = null;
     }
 
     private PageResponse<RegistryListView> findRegistriesByCase(String caseSelected) {

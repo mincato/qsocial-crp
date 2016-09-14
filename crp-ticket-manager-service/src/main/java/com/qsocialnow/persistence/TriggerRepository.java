@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.pagination.PageRequest;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.config.TriggerService;
 
 @Service
@@ -22,12 +21,9 @@ public class TriggerRepository {
     @Autowired
     private TriggerService triggerElasticService;
 
-    @Autowired
-    private Configurator elasticConfig;
-
     public Trigger save(String domainId, Trigger newTrigger) {
         try {
-            String id = triggerElasticService.indexTrigger(elasticConfig, domainId, newTrigger);
+            String id = triggerElasticService.indexTrigger(domainId, newTrigger);
             newTrigger.setId(id);
 
             return newTrigger;
@@ -41,8 +37,8 @@ public class TriggerRepository {
         List<TriggerListView> triggers = new ArrayList<>();
 
         try {
-            List<Trigger> triggersRepo = triggerElasticService.getTriggers(elasticConfig, domainId,
-                    pageRequest.getOffset(), pageRequest.getLimit(), name);
+            List<Trigger> triggersRepo = triggerElasticService.getTriggers(domainId, pageRequest.getOffset(),
+                    pageRequest.getLimit(), name);
 
             for (Trigger triggerRepo : triggersRepo) {
                 TriggerListView triggerListView = new TriggerListView();

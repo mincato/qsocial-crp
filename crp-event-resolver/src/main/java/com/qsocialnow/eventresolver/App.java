@@ -1,7 +1,7 @@
 package com.qsocialnow.eventresolver;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +15,7 @@ import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
@@ -23,9 +24,8 @@ import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 import com.qsocialnow.elasticsearch.queues.QueueService;
 import com.qsocialnow.elasticsearch.queues.QueueServiceFactory;
 import com.qsocialnow.elasticsearch.queues.QueueType;
+import com.qsocialnow.eventresolver.config.CacheConfig;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
-import com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory;
-import com.qsocialnow.eventresolver.factories.KafkaConsumerConfigFactory;
 import com.qsocialnow.eventresolver.processor.EventHandlerProcessor;
 import com.qsocialnow.eventresolver.processor.MessageProcessor;
 import com.qsocialnow.kafka.config.KafkaConsumerConfig;
@@ -43,16 +43,22 @@ public class App implements Runnable {
     private EventResolverConfig appConfig;
 
     @Autowired
-    private KafkaConsumerConfigFactory kafkaConsumerConfigFactory;
+    private KafkaConsumerConfig kafkaConfig;
 
     @Autowired
     private MessageProcessor messageProcessor;
+
+    @Autowired
+    private QueueConfigurator queueConfig;
+
+    @Autowired
+    private CacheManager cacheManager;
 
     private ExecutorService eventHandlerExecutor;
 
     private ExecutorService appExecutor;
 
-    private List<EventHandlerProcessor> eventHandlerProcessors;
+    private Map<String, EventHandlerProcessor> eventHandlerProcessors;
 
     private PathChildrenCache pathChildrenCache;
 
@@ -84,7 +90,7 @@ public class App implements Runnable {
             pathChildrenCache.start(StartMode.POST_INITIALIZED_EVENT);
 
             eventHandlerExecutor = Executors.newCachedThreadPool();
-            eventHandlerProcessors = new ArrayList<>();
+            eventHandlerProcessors = new HashMap<>();
         } catch (Exception e) {
             log.error("There was an unexpected error", e);
             System.exit(1);
@@ -94,7 +100,7 @@ public class App implements Runnable {
 
     public void close() {
         log.info("Starting exit...");
-        for (EventHandlerProcessor eventHandlerProcessor : eventHandlerProcessors) {
+        for (EventHandlerProcessor eventHandlerProcessor : eventHandlerProcessors.values()) {
             eventHandlerProcessor.stop();
         }
         try {
@@ -116,17 +122,13 @@ public class App implements Runnable {
 
     private void createEventHandlerProcessor(String domain) {
         try {
-            KafkaConsumerConfig kafkaConfig = kafkaConsumerConfigFactory.create(appConfig.getKafkaConfigZnodePath());
-            QueueConfigurator queueConfig = BigQueueConfiguratorFactory.getConfigurator(zookeeperClient,
-                    appConfig.getEventsQueueConfiguratorZnodePath());
-
             QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
                     queueConfig);
 
             EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig, domain),
                     messageProcessor, queueService);
 
-            eventHandlerProcessors.add(eventHandlerProcessor);
+            eventHandlerProcessors.put(domain, eventHandlerProcessor);
             eventHandlerExecutor.execute(eventHandlerProcessor);
         } catch (Exception e) {
             log.error("There was an error creating the event handler processor for domain: " + domain, e);
@@ -140,9 +142,22 @@ public class App implements Runnable {
             public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                 switch (event.getType()) {
                     case CHILD_ADDED: {
-                        log.info("Node added: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
-                        createEventHandlerProcessor(ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        String domain = ZKPaths.getNodeFromPath(event.getData().getPath());
+                        log.info("Node added: " + domain);
+                        createEventHandlerProcessor(domain);
                         break;
+                    }
+                    case CHILD_REMOVED: {
+                        String domain = ZKPaths.getNodeFromPath(event.getData().getPath());
+                        log.info("Node removed: " + domain);
+                        eventHandlerProcessors.get(domain).stop();
+                        eventHandlerProcessors.remove(domain);
+                        break;
+                    }
+                    case CHILD_UPDATED: {
+                        String domain = ZKPaths.getNodeFromPath(event.getData().getPath());
+                        log.info("Node updated: " + domain);
+                        cacheManager.getCache(CacheConfig.DOMAINS_CACHE).evict(domain);
                     }
                     default:
                         break;

@@ -1,0 +1,39 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/util
+    	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    	
+    <bean id="queueConfigurator" class="com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+        <constructor-arg ref="zookeeperClient"></constructor-arg>
+        <constructor-arg value="${app.cases.queue.configurator.path}" />
+        <constructor-arg ref="queueConfiguratorWatcher" />
+    </bean>
+    
+     <bean id="queueConfiguratorWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
+		<constructor-arg value="queueConfigurator" />
+		<constructor-arg>
+			<value type="java.lang.Class">com.qsocialnow.elasticsearch.configuration.QueueConfigurator</value>
+		</constructor-arg>
+	</bean>
+    
+	<bean id="queueConfig" class="com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+		<constructor-arg ref="zookeeperClient" />
+		<constructor-arg value="${app.events.queue.configurator.path}" />
+		<constructor-arg ref="queueConfigWatcher" />
+	</bean>
+	
+	 <bean id="queueConfigWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
+		<constructor-arg value="queueConfig" />
+		<constructor-arg>
+			<value type="java.lang.Class">com.qsocialnow.elasticsearch.configuration.QueueConfigurator</value>
+		</constructor-arg>
+	</bean>
+	
+</beans>

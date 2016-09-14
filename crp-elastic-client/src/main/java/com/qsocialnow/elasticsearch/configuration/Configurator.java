@@ -1,23 +1,24 @@
 package com.qsocialnow.elasticsearch.configuration;
 
 import com.amazonaws.auth.AWSCredentials;
+import com.qsocialnow.common.config.RefreshableConfig;
 
-public class Configurator extends AWSElasticsearchConfigurationProvider {
+public class Configurator extends AWSElasticsearchConfigurationProvider implements RefreshableConfig<Configurator> {
 
     public static final String SERVICE_NAME = "es";
 
-    private final String region;
+    private String region;
 
-    private final String host;
+    private String host;
 
-    private final String environment;
+    private String environment;
 
     private static final String ENDPOINT_ROOT = "https://";
 
     private static final String PATH = "/";
 
-    private final String accessKey;
-    private final String secretAccessKey;
+    private String accessKey;
+    private String secretAccessKey;
 
     public Configurator() {
         this.host = "search-qsocial-config-ls2uikgtez6zcbjmfmwtwfuboi.us-west-2.es.amazonaws.com";
@@ -68,5 +69,13 @@ public class Configurator extends AWSElasticsearchConfigurationProvider {
     public void refresh() {
         // TODO Auto-generated method stub
 
+    }
+
+    public void refresh(Configurator newConfig) {
+        this.host = newConfig.host;
+        this.region = newConfig.region;
+        this.accessKey = newConfig.accessKey;
+        this.secretAccessKey = newConfig.secretAccessKey;
+        this.environment = newConfig.environment;
     }
 }

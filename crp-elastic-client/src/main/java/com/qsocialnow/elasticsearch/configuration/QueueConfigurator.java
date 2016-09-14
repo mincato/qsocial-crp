@@ -1,12 +1,14 @@
 package com.qsocialnow.elasticsearch.configuration;
 
-public class QueueConfigurator {
+import com.qsocialnow.common.config.RefreshableConfig;
 
-    private final String baseDir;
+public class QueueConfigurator implements RefreshableConfig<QueueConfigurator> {
 
-    private final String queueDir;
+    private String baseDir;
 
-    private final String errorQueueDir;
+    private String queueDir;
+
+    private String errorQueueDir;
 
     public QueueConfigurator(final String baseDir, final String queueDir, final String errorQueueDir) {
         this.baseDir = baseDir;
@@ -24,5 +26,12 @@ public class QueueConfigurator {
 
     public String getErrorQueueDir() {
         return errorQueueDir;
+    }
+
+    @Override
+    public void refresh(QueueConfigurator newConfig) {
+        this.baseDir = newConfig.baseDir;
+        this.queueDir = newConfig.queueDir;
+        this.errorQueueDir = newConfig.errorQueueDir;
     }
 }

@@ -81,6 +81,53 @@ public class CaseTicketService {
         return registries;
     }
 
+    public String indexCase(Case document) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+
+        String indexName = INDEX_NAME + generateIndexValue();
+        mapping.setIndex(indexName);
+
+        // validete index name
+        boolean isCreated = repository.validateIndex(indexName);
+        // create index
+        if (!isCreated) {
+            repository.createIndex(mapping.getIndex());
+        }
+        // index document
+        CaseType documentIndexed = mapping.getDocumentType(document);
+        String response = repository.indexMapping(mapping, documentIndexed);
+        repository.closeClient();
+        return response;
+
+    }
+
+    public String update(Case document) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+
+        String indexName = INDEX_NAME + generateIndexValue();
+        mapping.setIndex(indexName);
+
+        // validete index name
+        boolean isCreated = repository.validateIndex(indexName);
+        // create index
+        if (!isCreated) {
+            repository.createIndex(mapping.getIndex());
+        }
+        // index document
+        CaseType documentIndexed = mapping.getDocumentType(document);
+        String response = repository.updateIndexMapping(document.getId(), mapping, documentIndexed);
+        repository.closeClient();
+        return response;
+    }
+
     private String generateIndexValue() {
         String indexSufix = null;
 
@@ -91,4 +138,5 @@ public class CaseTicketService {
 
         return indexSufix;
     }
+
 }

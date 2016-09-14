@@ -29,12 +29,13 @@
  		</constructor-arg>
 	</bean>
 	
-	<bean id="elasticConfig" class="com.qsocialnow.config.ElasticConfigFactory" factory-method="findConfig">
+	<bean id="elasticDomainConfig" class="com.qsocialnow.config.ElasticConfigFactory" factory-method="findConfig">
  		<constructor-arg ref="zookeeperClient"></constructor-arg>
  		<constructor-arg value="${app.elastic.config.configurator.path}"></constructor-arg>
 	</bean>
 
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
 		<property name="triggerService" ref="triggerElasticService"></property>
 		<property name="resolutionService" ref="resolutionElasticService"></property>
 	</bean>
@@ -49,9 +50,11 @@
     </bean>
 	
 	<bean id="resolutionElasticService" class="com.qsocialnow.elasticsearch.services.config.ResolutionService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">
@@ -62,5 +65,12 @@
 	<context:component-scan base-package="com.qsocialnow.service, com.qsocialnow.persistence"
 		annotation-config="true" />
 	<context:annotation-config />
+	
+	<util:map id="actions">
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CLOSE}" value-ref="closeCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REOPEN}" value-ref="reopenCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).PENDING_RESPONSE}" value-ref="pendingResponseCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REGISTER_COMMENT}" value-ref="registerCommentCaseAction"/>
+	</util:map>
 
 </beans>

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Resolution;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.config.ResolutionService;
 
 @Service
@@ -17,12 +16,9 @@ public class ResolutionRepository {
     @Autowired
     private ResolutionService resolutionElasticService;
 
-    @Autowired
-    private Configurator elasticConfig;
-
     public Resolution save(String domainId, Resolution newResolution) {
         try {
-            String id = resolutionElasticService.indexResolution(elasticConfig, domainId, newResolution);
+            String id = resolutionElasticService.indexResolution(domainId, newResolution);
             newResolution.setId(id);
 
             return newResolution;
@@ -34,7 +30,7 @@ public class ResolutionRepository {
 
     public Resolution update(String domainId, Resolution resolution) {
         try {
-            String id = resolutionElasticService.updateResolution(elasticConfig, domainId, resolution);
+            String id = resolutionElasticService.updateResolution(domainId, resolution);
             resolution.setId(id);
             return resolution;
         } catch (Exception e) {
@@ -45,7 +41,7 @@ public class ResolutionRepository {
 
     public Resolution delete(String domainId, String resolutionId) {
         try {
-            resolutionElasticService.deleteResolution(elasticConfig, domainId, resolutionId);
+            resolutionElasticService.deleteResolution(domainId, resolutionId);
             Resolution resolution = new Resolution();
             resolution.setId(resolutionId);
             return resolution;
