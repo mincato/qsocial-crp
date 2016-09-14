@@ -2,7 +2,7 @@ package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.List;
 
-import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import com.qsocialnow.common.model.config.Trigger;
@@ -24,7 +24,6 @@ public class TriggerService {
         repository.initClient();
 
         TriggerMapping mapping = TriggerMapping.getInstance();
-        mapping.setIdParent(domainId);
 
         // validete index name
         boolean isCreated = repository.validateIndex(mapping.getIndex());
@@ -35,7 +34,8 @@ public class TriggerService {
 
         // index document
         TriggerType documentIndexed = mapping.getDocumentType(trigger);
-        String response = repository.indexChildMapping(mapping, documentIndexed);
+        documentIndexed.setDomainId(domainId);
+        String response = repository.indexMapping(mapping, documentIndexed);
         repository.closeClient();
         return response;
     }
@@ -46,16 +46,13 @@ public class TriggerService {
         repository.initClient();
 
         TriggerMapping mapping = TriggerMapping.getInstance();
-        mapping.setIdParent(domainId);
-        SearchResponse<Trigger> response;
-        if (name != null) {
-            System.out.println("aca " + name);
-            QueryBuilder filter = QueryBuilders.matchQuery("name", name);
-            response = repository.searchChildMappingWithFilters(offset, limit, "name", filter, mapping);
-        } else {
-            response = repository.searchChildMapping(offset, limit, "name", mapping);
-        }
 
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        if (name != null) {
+            filters = filters.must(QueryBuilders.matchQuery("name", name));
+        }
+        SearchResponse<Trigger> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
         List<Trigger> triggers = response.getSources();
 
         repository.closeClient();
@@ -68,15 +65,31 @@ public class TriggerService {
         repository.initClient();
 
         TriggerMapping mapping = TriggerMapping.getInstance();
-        mapping.setIdParent(domainId);
 
-        SearchResponse<Trigger> response = repository.searchChildMapping(mapping);
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        SearchResponse<Trigger> response = repository.searchWithFilters(filters, mapping);
 
         List<Trigger> triggers = response.getSources();
 
         repository.closeClient();
         return triggers;
 
+    }
+
+    public Trigger findOne(String triggerId) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TriggerMapping mapping = TriggerMapping.getInstance();
+
+        SearchResponse<Trigger> response = repository.find(triggerId, mapping);
+
+        Trigger triggers = response.getSource();
+
+        repository.closeClient();
+        return triggers;
     }
 
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {

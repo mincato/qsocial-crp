@@ -1,12 +1,16 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,7 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.cases.RegistryListView;
+import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.CaseService;
@@ -94,6 +99,29 @@ public class CaseServiceImpl implements CaseService {
             Case caseUpdated = restTemplate.postForObject(builder.toUriString(), actionRequest, Case.class);
 
             return caseUpdated;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call case service", e);
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    public List<Resolution> getAvailableResolutions(String caseId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
+                    .path("/availableResolutions");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<Resolution>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null, new ParameterizedTypeReference<List<Resolution>>() {
+                    });
+
+            return response.getBody();
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);
             throw new RuntimeException(e);
