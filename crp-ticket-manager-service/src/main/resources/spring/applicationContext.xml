@@ -69,6 +69,7 @@
 	<util:map id="actions">
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CLOSE}" value-ref="closeCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REOPEN}" value-ref="reopenCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).PENDING_RESPONSE}" value-ref="pendingResponseCaseAction"/>
 	</util:map>
 
 </beans>
