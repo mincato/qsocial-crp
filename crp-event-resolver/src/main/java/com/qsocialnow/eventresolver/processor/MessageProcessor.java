@@ -18,7 +18,7 @@ import com.qsocialnow.kafka.model.Message;
 @Service
 public class MessageProcessor {
 
-    private Logger log = LoggerFactory.getLogger(MessageProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageProcessor.class);
 
     @Autowired
     private EventResolverConfig appConfig;
@@ -40,8 +40,8 @@ public class MessageProcessor {
         InPutBeanDocument inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
                 .fromJson(message.getMessage(), InPutBeanDocument.class);
         String domainId = message.getGroup();
-        log.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
-        log.info(String.format("Searching for domain: %s", domainId));
+        LOGGER.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
+        LOGGER.info(String.format("Searching for domain: %s", domainId));
 
         Domain domain = domainService.findDomainWithTriggers(domainId);
         if (domain != null) {
@@ -52,10 +52,10 @@ public class MessageProcessor {
                             detectionCriteria);
                     executionMessageProcessor.execute(request);
                 } else {
-                    log.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
+                	LOGGER.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
                 }
             } else {
-                log.info(String.format("Message should not be processed for this domain: %s", domainId));
+            	LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
             }
         } else {
             throw new InvalidDomainException("Error trying to retrieve a domain");
