@@ -58,7 +58,8 @@ public class ExecutionMessageProcessor {
                         Action action = actions.get(automaticActionCriteria.getActionType());
                         if (action != null) {
                             log.info(String.format("Executing action: %s", automaticActionCriteria.getActionType()));
-                            currentInput = action.execute(currentInput, automaticActionCriteria.getParameters());
+                            currentInput = action.execute(currentInput, automaticActionCriteria.getParameters(),
+                                    request);
                         } else {
                             log.warn(String.format("There is no implementation action for: %s",
                                     automaticActionCriteria.getActionType()));

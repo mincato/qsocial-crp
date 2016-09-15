@@ -26,6 +26,8 @@ public class DetectionCriteria {
 
     private List<AutomaticActionCriteria> actionCriterias;
 
+    private String triggerId;
+
     public String getId() {
         return id;
     }
@@ -96,6 +98,14 @@ public class DetectionCriteria {
 
     public void setFindCaseByDomain(boolean findCaseByDomain) {
         this.findCaseByDomain = findCaseByDomain;
+    }
+
+    public String getTriggerId() {
+        return triggerId;
+    }
+
+    public void setTriggerId(String triggerId) {
+        this.triggerId = triggerId;
     }
 
 }

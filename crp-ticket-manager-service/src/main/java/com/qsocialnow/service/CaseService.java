@@ -81,7 +81,7 @@ public class CaseService {
         Case caseObject = repository.findOne(caseId);
         if (caseObject != null) {
             String triggerId = caseObject.getTriggerId();
-            Trigger trigger = triggerRepository.findOne("AVcqgiITpTRv2fuNtDNk");
+            Trigger trigger = triggerRepository.findOne(triggerId);
             availableResolutions = trigger.getResolutions();
         } else {
             log.warn("The case was not found");

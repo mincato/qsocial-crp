@@ -3,21 +3,24 @@
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('resolveActionVm') @init('com.qsocialnow.viewmodel.ResolveActionViewModel')"
 		validationMessages="@id('vmsgs')">
-	<x:form>
-		<x:div sclass="form-group">
+	<x:form form="@id('fxResolutionAction') @load(resolveActionVm.resolveAction) @save(resolveActionVm.resolveAction, before='execute')">
+		<x:div sclass="@load(empty vmsgs[resolutions] ? 'form-group' : 'form-group has-error')">
 			<n:label class="control-label">${labels.cases.actions.resolve.resolutions}:</n:label>
 			<selectbox sclass="form-control" id="resolutions" model="@load(resolveActionVm.resolutionOptions)"
-				selectedItem="@bind(resolveActionVm.selectedResolution) @validator('beanValidator')">
+				selectedItem="@bind(fxResolutionAction.selectedResolution) @validator('beanValidator')">
 			    <template name="model">
 					<label value="${each.description}" />
 				</template>
 			</selectbox>
+			<x:span sclass="@load(empty vmsgs[resolutions] ? 'hidden' : 'help-block')">
+				<label value="@load(vmsgs[resolutions])" />
+			</x:span>
 		</x:div>
 		
 		<x:div sclass="form-group">
-		    <n:label class="control-label">${labels.cases.actions.comment}:</n:label>
+		    <n:label class="control-label">${labels.cases.actions.comment.optional}:</n:label>
     		<textbox type="text" class="form-control" 
-    			value="@bind(registerCommentActionVm.comment)"></textbox>
+    			value="@bind(resolveActionVm.comment)"></textbox>
 		</x:div>
 		<div class="form-group text-center">
 	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
