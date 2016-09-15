@@ -19,7 +19,7 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class CaseTicketService {
 
-    private static final Logger log = LoggerFactory.getLogger(CaseService.class);
+    private static final Logger log = LoggerFactory.getLogger(CaseTicketService.class);
 
     private final static String INDEX_NAME = "cases_";
 
@@ -53,32 +53,12 @@ public class CaseTicketService {
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        SearchResponse<Case> response = repository.search(from, size, "openDate", mapping);
+        SearchResponse<Case> response = repository.queryMatchAll(from, size, "openDate", mapping);
 
         List<Case> cases = response.getSources();
 
         repository.closeClient();
         return cases;
-    }
-
-    public List<ActionRegistry> findCaseWithRegistries(int from, int size, String caseId) {
-
-        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
-                elasticSearchCaseConfigurator);
-        Repository<ActionRegistryType> repository = esfactory.initManager();
-        repository.initClient();
-
-        ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
-        mapping.setIndex(INDEX_NAME_REGISTRY + generateIndexValue());
-
-        log.info("Retriving registries from case: " + caseId);
-        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
-                caseId);
-
-        List<ActionRegistry> registries = response.getSources();
-
-        repository.closeClient();
-        return registries;
     }
 
     public String indexCase(Case document) {
@@ -102,7 +82,6 @@ public class CaseTicketService {
         String response = repository.indexMapping(mapping, documentIndexed);
         repository.closeClient();
         return response;
-
     }
 
     public String update(Case document) {

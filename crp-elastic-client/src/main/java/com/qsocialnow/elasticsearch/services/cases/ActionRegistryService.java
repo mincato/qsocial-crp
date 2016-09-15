@@ -1,10 +1,11 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.qsocialnow.common.model.cases.ActionRegistry;
-import com.qsocialnow.elasticsearch.configuration.CaseConfigurator;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
@@ -12,13 +13,13 @@ import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
-public class RegistryService {
+public class ActionRegistryService extends DynamicIndexService{
 
-    private final static String INDEX_NAME = "registry_";
-
+	private static final Logger log = LoggerFactory.getLogger(ActionRegistryService.class);
+	
     private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
-    public RegistryService(AWSElasticsearchConfigurationProvider configurationProvider) {
+    public ActionRegistryService(AWSElasticsearchConfigurationProvider configurationProvider) {
         elasticSearchCaseConfigurator = configurationProvider;
     }
 
@@ -30,16 +31,8 @@ public class RegistryService {
         repository.initClient();
 
         ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
+        mapping.setIndex(this.getIndex(repository));
 
-        String indexName = INDEX_NAME + generateIndexValue();
-        mapping.setIndex(indexName);
-
-        // validete index name
-        boolean isCreated = repository.validateIndex(indexName);
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
         // index document
         ActionRegistryType documentIndexed = mapping.getDocumentType(document);
         documentIndexed.setIdCase(idCase);
@@ -48,20 +41,19 @@ public class RegistryService {
         return response;
     }
 
-    public List<ActionRegistry> getRegistries(int from, int size) {
+    public List<ActionRegistry> findRegistries(int from, int size, String caseId) {
 
-        CaseConfigurator configurator = new CaseConfigurator();
-        return getRegistries(configurator, from, size);
-    }
-
-    public List<ActionRegistry> getRegistries(AWSElasticsearchConfigurationProvider configurator, int from, int size) {
-
-        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(configurator);
+        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
+                elasticSearchCaseConfigurator);
         Repository<ActionRegistryType> repository = esfactory.initManager();
         repository.initClient();
 
         ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
-        SearchResponse<ActionRegistry> response = repository.search(from, size, "openDate", mapping);
+        mapping.setIndex(this.getQueryIndex());
+        
+        log.info("Retriving registries from case: " + caseId);
+        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
+                caseId);
 
         List<ActionRegistry> registries = response.getSources();
 
@@ -69,17 +61,23 @@ public class RegistryService {
         return registries;
     }
 
-    private String generateIndexValue() {
-        String indexSufix = null;
+    public List<ActionRegistry> findRegistriesByText(int from, int size, String caseId,String textValue) {
 
-        LocalDateTime dateTime = LocalDateTime.now();
-        int day = dateTime.getDayOfMonth();
-        int month = dateTime.getMonthValue();
-        int year = dateTime.getYear();
+        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
+                elasticSearchCaseConfigurator);
+        Repository<ActionRegistryType> repository = esfactory.initManager();
+        repository.initClient();
 
-        indexSufix = year + "_" + month + "_" + day;
+        ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
+        mapping.setIndex(this.getQueryIndex());
 
-        return indexSufix;
-    }
+        log.info("Retriving registries from case: " + caseId +" - text:"+textValue);
+        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
+                caseId);
 
+        List<ActionRegistry> registries = response.getSources();
+
+        repository.closeClient();
+        return registries;
+    }    
 }

@@ -18,24 +18,6 @@ public class DomainService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
-    public Domain findDomainById(String name) {
-
-        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
-        Repository<DomainType> repository = esfactory.initManager();
-
-        repository.initClient();
-
-        DomainMapping mapping = DomainMapping.getInstance();
-
-        SearchResponse<Domain> response = repository.query(mapping, name);
-
-        Domain domain = response.getSource();
-        domain.setId(response.getId());
-
-        repository.closeClient();
-        return domain;
-    }
-
     public Domain findDomain(String id) {
 
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
@@ -98,7 +80,7 @@ public class DomainService {
         repository.initClient();
 
         DomainMapping mapping = DomainMapping.getInstance();
-        SearchResponse<Domain> response = repository.search(offset, limit, "name", mapping);
+        SearchResponse<Domain> response = repository.queryMatchAll(offset, limit, "name", mapping);
 
         List<Domain> domains = response.getSources();
 
@@ -110,12 +92,9 @@ public class DomainService {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
-
         DomainMapping mapping = DomainMapping.getInstance();
-        SearchResponse<Domain> response = repository.search(offset, limit, "name", name, mapping);
-
+        SearchResponse<Domain> response = repository.queryByField(mapping,offset, limit, "name","name",name);
         List<Domain> domains = response.getSources();
-
         repository.closeClient();
         return domains;
     }

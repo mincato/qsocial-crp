@@ -32,7 +32,7 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public PageResponse<RegistryListView> findCaseWithRegistries(int pageNumber, int pageSize, String caseId) {
+    public PageResponse<RegistryListView> findRegistries(int pageNumber, int pageSize, String caseId) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -40,6 +40,29 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
                     .path("/registries").queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<PageResponse> response = restTemplate
+                    .getForEntity(builder.toUriString(), PageResponse.class);
+
+            PageResponse<RegistryListView> registries = response.getBody();
+            return registries;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call registry service", e);
+            throw new RuntimeException(e);
+        }
+    }
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public PageResponse<RegistryListView> findRegistriesByText(int pageNumber, int pageSize, String caseId,String keyword) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
+                    .path("/registries").queryParam("text",keyword).queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate

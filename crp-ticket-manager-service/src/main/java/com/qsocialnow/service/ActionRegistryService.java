@@ -22,6 +22,13 @@ public class ActionRegistryService {
         PageResponse<RegistryListView> page = new PageResponse<RegistryListView>(cases, pageNumber, pageSize);
         return page;
     }
+    
+    public PageResponse<RegistryListView> findAllByText(String caseId,String textValue,Integer pageNumber, Integer pageSize) {
+        List<RegistryListView> cases = repository.findAllByText(caseId,textValue,new PageRequest(pageNumber, pageSize));
+
+        PageResponse<RegistryListView> page = new PageResponse<RegistryListView>(cases, pageNumber, pageSize);
+        return page;
+    }
 
     public void setRepository(ActionRegistryRepository repository) {
         this.repository = repository;

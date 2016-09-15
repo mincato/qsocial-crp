@@ -44,6 +44,10 @@
          <constructor-arg ref="configurationProvider" />
     </bean>
     
+    <bean id="registryService" class="com.qsocialnow.elasticsearch.services.cases.ActionRegistryService">
+         <constructor-arg ref="configurationProvider" />
+    </bean>
+    
     <bean id="configurationProvider" class="com.qsocialnow.config.ElasticConfigFactory" factory-method="findConfig">
          <constructor-arg ref="zookeeperClient"></constructor-arg>
          <constructor-arg value="${app.elastic.cases.configurator.path}" />

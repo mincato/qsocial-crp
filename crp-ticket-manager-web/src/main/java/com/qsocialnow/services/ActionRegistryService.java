@@ -5,6 +5,8 @@ import com.qsocialnow.common.model.pagination.PageResponse;
 
 public interface ActionRegistryService {
 
-    PageResponse<RegistryListView> findCaseWithRegistries(int activePage, int pageSize, String caseId);
+    PageResponse<RegistryListView> findRegistries(int activePage, int pageSize, String caseId);
 
+    PageResponse<RegistryListView> findRegistriesByText(int activePage, int pageSize, String caseId,String textValue);
 }
+
