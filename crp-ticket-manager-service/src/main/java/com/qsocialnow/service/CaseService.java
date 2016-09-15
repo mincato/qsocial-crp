@@ -1,5 +1,6 @@
 package com.qsocialnow.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
@@ -54,26 +56,40 @@ public class CaseService {
     }
 
     public Case executeAction(String caseId, ActionRequest actionRequest) {
-        Case caseObject = repository.findOne(caseId);
-        if (caseObject != null) {
-            Action action = actions.get(actionRequest.getActionType());
-            if (action != null) {
-                ActionRegistry actionRegistry = action.execute(caseObject, actionRequest.getParameters());
-                boolean updated = repository.update(caseObject);
-                if (!updated) {
-                    log.error("There was an error trying to update the case");
-                    throw new RuntimeException("There was an error trying to update the case");
+        try {
+            Case caseObject = repository.findOne(caseId);
+            if (caseObject != null) {
+                Action action = actions.get(actionRequest.getActionType());
+                if (action != null) {
+                    boolean needsUpdate = action.execute(caseObject, actionRequest.getParameters());
+                    boolean updated = needsUpdate ? repository.update(caseObject) : !needsUpdate;
+                    if (!updated) {
+                        log.error("There was an error trying to update the case");
+                        throw new RuntimeException("There was an error trying to update the case");
+                    }
+                    ActionRegistry actionRegistry = new ActionRegistry();
+                    actionRegistry.setType(actionRequest.getActionType());
+                    actionRegistry.setDate(new Date());
+                    if (actionRequest.getParameters() != null) {
+                        Object comment = actionRequest.getParameters().get(ActionParameter.COMMENT);
+                        if (comment != null) {
+                            actionRegistry.setComment((String) comment);
+                        }
+                    }
+                    actionRegistryRepository.create(caseId, actionRegistry);
+                } else {
+                    log.warn("The action does not exist");
+                    throw new RuntimeException("The action does not exist");
                 }
-                actionRegistryRepository.create(caseId, actionRegistry);
             } else {
-                log.warn("The action does not exist");
-                throw new RuntimeException("The action does not exist");
+                log.warn("The case was not found");
+                throw new RuntimeException("The case was not found");
             }
-        } else {
-            log.warn("The case was not found");
-            throw new RuntimeException("The case was not found");
+            return caseObject;
+        } catch (Exception e) {
+            log.error("There was an error executing action", e);
+            throw e;
         }
-        return caseObject;
     }
 
     public List<Resolution> getAvailableResolutions(String caseId) {

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -19,6 +18,7 @@ import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.model.RegisterCommentActionView;
 import com.qsocialnow.services.CaseService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -29,40 +29,37 @@ public class RegisterCommentActionViewModel implements Serializable {
     @WireVariable
     private CaseService caseService;
 
-    private String comment;
+    private RegisterCommentActionView registerCommentAction;
 
     private String caseId;
 
     @Init
     public void init(@QueryParam("case") String caseId) {
-        comment = null;
+        registerCommentAction = new RegisterCommentActionView();
         this.caseId = caseId;
     }
 
-    public String getComment() {
-        return comment;
+    public RegisterCommentActionView getRegisterCommentAction() {
+        return registerCommentAction;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setRegisterCommentAction(RegisterCommentActionView registerCommentAction) {
+        this.registerCommentAction = registerCommentAction;
     }
 
     @GlobalCommand
-    @NotifyChange({ "comment" })
+    @NotifyChange({ "registerCommentAction" })
     public void show() {
-        this.comment = null;
+        this.registerCommentAction = new RegisterCommentActionView();
     }
 
     @Command
-    @NotifyChange({ "comment" })
     public void execute() {
         ActionRequest actionRequest = new ActionRequest();
         actionRequest.setActionType(ActionType.REGISTER_COMMENT);
-        if (StringUtils.isNotBlank(comment)) {
-            Map<ActionParameter, Object> parameters = new HashMap<>();
-            parameters.put(ActionParameter.COMMENT, comment);
-            actionRequest.setParameters(parameters);
-        }
+        Map<ActionParameter, Object> parameters = new HashMap<>();
+        parameters.put(ActionParameter.COMMENT, registerCommentAction.getComment());
+        actionRequest.setParameters(parameters);
         Case caseUpdated = caseService.executeAction(caseId, actionRequest);
 
         HashMap<String, Object> args = new HashMap<>();
