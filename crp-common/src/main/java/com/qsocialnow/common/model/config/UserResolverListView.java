@@ -2,6 +2,8 @@ package com.qsocialnow.common.model.config;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 public class UserResolverListView implements Serializable {
 
     private static final long serialVersionUID = -4642800987682580389L;
@@ -48,6 +50,21 @@ public class UserResolverListView implements Serializable {
 
     public Media getMedia() {
         return Media.getByValue(this.source);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        UserResolverListView urlv = (UserResolverListView) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(id, urlv.id).isEquals();
     }
 
 }
