@@ -28,7 +28,7 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 import io.searchbox.core.BulkResult.BulkResultItem;
 
-public class CaseService extends DynamicIndexService{
+public class CaseService extends DynamicIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(CaseService.class);
 
@@ -225,7 +225,7 @@ public class CaseService extends DynamicIndexService{
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        mapping.setIndex(this.getQueryIndex());	
+        mapping.setIndex(this.getQueryIndex());
         SearchResponse<Case> response = repository.queryMatchAll(from, size, "openDate", mapping);
 
         List<Case> cases = response.getSources();

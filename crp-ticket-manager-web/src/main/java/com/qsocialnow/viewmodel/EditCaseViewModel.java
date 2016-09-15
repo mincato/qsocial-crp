@@ -42,9 +42,9 @@ public class EditCaseViewModel implements Serializable {
     private String caseId;
 
     private boolean moreResults;
-    
+
     private String keyword;
-    
+
     private String action;
 
     private List<RegistryListView> registries = new ArrayList<>();
@@ -105,7 +105,7 @@ public class EditCaseViewModel implements Serializable {
     private void findCase(String caseSelected) {
 
     }
-    
+
     @Command
     @NotifyChange({ "registries", "moreResults" })
     public void search() {
@@ -120,8 +120,8 @@ public class EditCaseViewModel implements Serializable {
     }
 
     private PageResponse<RegistryListView> findRegistriesByCase(String caseSelected) {
-        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistries(activePage,
-                pageSize, caseSelected);
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistries(activePage, pageSize,
+                caseSelected);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;
@@ -130,10 +130,10 @@ public class EditCaseViewModel implements Serializable {
         }
         return pageResponse;
     }
-    
+
     private PageResponse<RegistryListView> findRegistriesByName() {
-        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistriesByText(activePage,
-                pageSize, this.caseId,this.keyword);
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistriesByText(activePage, pageSize,
+                this.caseId, this.keyword);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;
@@ -142,21 +142,21 @@ public class EditCaseViewModel implements Serializable {
         }
         return pageResponse;
     }
-    
-	public String getKeyword() {
-		return keyword;
-	}
 
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
+    public String getKeyword() {
+        return keyword;
+    }
 
-	public String getAction() {
-		return action;
-	}
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
 
-	public void setAction(String action) {
-		this.action = action;
-	}
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
 
 }

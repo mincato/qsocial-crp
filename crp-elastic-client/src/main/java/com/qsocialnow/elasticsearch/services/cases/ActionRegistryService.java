@@ -13,10 +13,10 @@ import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
-public class ActionRegistryService extends DynamicIndexService{
+public class ActionRegistryService extends DynamicIndexService {
 
-	private static final Logger log = LoggerFactory.getLogger(ActionRegistryService.class);
-	
+    private static final Logger log = LoggerFactory.getLogger(ActionRegistryService.class);
+
     private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
     public ActionRegistryService(AWSElasticsearchConfigurationProvider configurationProvider) {
@@ -50,7 +50,7 @@ public class ActionRegistryService extends DynamicIndexService{
 
         ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
-        
+
         log.info("Retriving registries from case: " + caseId);
         SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
                 caseId);
@@ -61,7 +61,7 @@ public class ActionRegistryService extends DynamicIndexService{
         return registries;
     }
 
-    public List<ActionRegistry> findRegistriesByText(int from, int size, String caseId,String textValue) {
+    public List<ActionRegistry> findRegistriesByText(int from, int size, String caseId, String textValue) {
 
         RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
                 elasticSearchCaseConfigurator);
@@ -71,7 +71,7 @@ public class ActionRegistryService extends DynamicIndexService{
         ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
 
-        log.info("Retriving registries from case: " + caseId +" - text:"+textValue);
+        log.info("Retriving registries from case: " + caseId + " - text:" + textValue);
         SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
                 caseId);
 
@@ -79,5 +79,5 @@ public class ActionRegistryService extends DynamicIndexService{
 
         repository.closeClient();
         return registries;
-    }    
+    }
 }

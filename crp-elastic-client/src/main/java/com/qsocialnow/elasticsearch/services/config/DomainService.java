@@ -93,7 +93,7 @@ public class DomainService {
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
         DomainMapping mapping = DomainMapping.getInstance();
-        SearchResponse<Domain> response = repository.queryByField(mapping,offset, limit, "name","name",name);
+        SearchResponse<Domain> response = repository.queryByField(mapping, offset, limit, "name", "name", name);
         List<Domain> domains = response.getSources();
         repository.closeClient();
         return domains;

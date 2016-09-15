@@ -7,6 +7,5 @@ public interface ActionRegistryService {
 
     PageResponse<RegistryListView> findRegistries(int activePage, int pageSize, String caseId);
 
-    PageResponse<RegistryListView> findRegistriesByText(int activePage, int pageSize, String caseId,String textValue);
+    PageResponse<RegistryListView> findRegistriesByText(int activePage, int pageSize, String caseId, String textValue);
 }
-

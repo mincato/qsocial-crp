@@ -71,11 +71,13 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             AWSSigner signer = getSigner();
             requestInterceptor = new AWSSigningRequestInterceptor(signer);
             JestClientFactory factory = new JestClientFactory() {
+
                 @Override
                 protected HttpClientBuilder configureHttpClient(HttpClientBuilder builder) {
                     builder.addInterceptorLast(requestInterceptor);
                     return builder;
                 }
+
                 @Override
                 protected HttpAsyncClientBuilder configureHttpClient(HttpAsyncClientBuilder builder) {
                     builder.addInterceptorLast(requestInterceptor);
@@ -99,7 +101,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         AWSSigner awsSigner = new AWSSigner(this.config, this.config.getRegion(), Configurator.SERVICE_NAME, clock);
         return awsSigner;
     }
-    
+
     public void createIndex(String index) {
         try {
             client.execute(new CreateIndex.Builder(index).build());
@@ -122,13 +124,12 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return indexExists;
     }
 
-    public boolean updateIndexAlias(String index,String alias) {
+    public boolean updateIndexAlias(String index, String alias) {
         boolean indexExists = false;
         try {
-        	AddAliasMapping addAliasMapping = new AddAliasMapping
-                    .Builder(index, alias).build();
-        	
-        	ModifyAliases modifyAliases = new ModifyAliases.Builder(addAliasMapping).build();
+            AddAliasMapping addAliasMapping = new AddAliasMapping.Builder(index, alias).build();
+
+            ModifyAliases modifyAliases = new ModifyAliases.Builder(addAliasMapping).build();
             JestResult result = client.execute(modifyAliases);
             indexExists = result.isSucceeded();
         } catch (IOException e) {
@@ -136,7 +137,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
         return indexExists;
     }
-    
 
     public void deleteIndex(String index) {
         DeleteIndex deleteIndex = new DeleteIndex.Builder(index).build();
@@ -280,7 +280,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return idValue;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation"})
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, int from, int size, String sortField,
             String searchField, String searchValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -319,23 +319,23 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
-    @SuppressWarnings({"unchecked","deprecation"})
-    private <E> SearchResponse<E> executeSearch(Mapping<T, E> mapping,Search search){
-    	SearchResult result = null;
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    private <E> SearchResponse<E> executeSearch(Mapping<T, E> mapping, Search search) {
+        SearchResult result = null;
         SearchResponse<E> response = new SearchResponse<E>();
         try {
-            result = client.execute(search);	
+            result = client.execute(search);
             if (result.isSucceeded()) {
-				List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+                List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
                 response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                         .collect(Collectors.toList()));
             }
         } catch (IOException e) {
             log.error("Serching documents - Unexpected error: ", e);
-        }        
+        }
         return response;
     }
- 
+
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping) {
 
@@ -426,8 +426,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
-        }        
+        }
         return response;
-    }    
+    }
 
 }

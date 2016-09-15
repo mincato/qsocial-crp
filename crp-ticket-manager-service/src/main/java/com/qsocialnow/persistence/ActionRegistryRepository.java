@@ -35,40 +35,40 @@ public class ActionRegistryRepository {
 
             List<ActionRegistry> registries = registryService.findRegistries(pageRequest.getOffset(),
                     pageRequest.getLimit(), caseId);
-            if(registries!=null){
-	            for (ActionRegistry registry : registries) {
-	                RegistryListView registryListView = new RegistryListView();
-	                registryListView.setId(registry.getId());
-	                registryListView.setUser(registry.getUserName());
-	                registryListView.setAction(registry.getAction());
-	                if (registry.getEvent() != null)
-	                    registryListView.setDescription(registry.getEvent().getDescription());
-	                registryListView.setDate(registry.getDate());
-	                registriesView.add(registryListView);
-	            }
+            if (registries != null) {
+                for (ActionRegistry registry : registries) {
+                    RegistryListView registryListView = new RegistryListView();
+                    registryListView.setId(registry.getId());
+                    registryListView.setUser(registry.getUserName());
+                    registryListView.setAction(registry.getAction());
+                    if (registry.getEvent() != null)
+                        registryListView.setDescription(registry.getEvent().getDescription());
+                    registryListView.setDate(registry.getDate());
+                    registriesView.add(registryListView);
+                }
             }
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
         return registriesView;
     }
-    
-    public List<RegistryListView> findAllByText(String caseId,String textValue,PageRequest pageRequest) {
+
+    public List<RegistryListView> findAllByText(String caseId, String textValue, PageRequest pageRequest) {
         List<RegistryListView> registriesView = new ArrayList<>();
         try {
             List<ActionRegistry> registries = registryService.findRegistriesByText(pageRequest.getOffset(),
-                    pageRequest.getLimit(), caseId,textValue);
-            if(registries!=null){
-		        for (ActionRegistry registry : registries) {
-		            RegistryListView registryListView = new RegistryListView();
-		            registryListView.setId(registry.getId());
-		            registryListView.setUser(registry.getUserName());
-		            registryListView.setAction(registry.getAction());
-		            if (registry.getEvent() != null)
-		                registryListView.setDescription(registry.getEvent().getDescription());
-		            registryListView.setDate(registry.getDate());
-		            registriesView.add(registryListView);
-		        }
+                    pageRequest.getLimit(), caseId, textValue);
+            if (registries != null) {
+                for (ActionRegistry registry : registries) {
+                    RegistryListView registryListView = new RegistryListView();
+                    registryListView.setId(registry.getId());
+                    registryListView.setUser(registry.getUserName());
+                    registryListView.setAction(registry.getAction());
+                    if (registry.getEvent() != null)
+                        registryListView.setDescription(registry.getEvent().getDescription());
+                    registryListView.setDate(registry.getDate());
+                    registriesView.add(registryListView);
+                }
             }
         } catch (Exception e) {
             log.error("Unexpected error", e);
