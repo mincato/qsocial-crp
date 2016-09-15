@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -487,6 +488,61 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (result.isSucceeded()) {
             T source = (T) result.getSourceAsObject(mapping.getClassType());
             response.setSource(mapping.getDocument(source));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
+            BoolQueryBuilder filters, Mapping<T, E> mapping) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC).query(filters);
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(filters);
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
         }
         return response;
     }

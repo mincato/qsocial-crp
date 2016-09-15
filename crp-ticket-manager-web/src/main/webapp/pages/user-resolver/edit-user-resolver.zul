@@ -1,0 +1,111 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<div sclass="modal fade" ca:data-modal=""
+		ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.userresolver.EditUserResolverViewModel', userresolver=arg.userresolver)"
+		validationMessages="@id('vmsgs')">
+		<n:div class="modal-dialog">
+			<x:div class="modal-content"
+				form="@id('fx') @load(vm.currentUserResolver) @save(vm.currentUserResolver, before='save') ">
+				<n:div class="modal-header">
+					<n:button type="button" class="close"
+						data-dismiss="modal" aria-label="Close">
+						<n:span aria-hidden="true">&#x00D7;</n:span>
+					</n:button>
+					<n:h4 class="modal-title">
+						${labels.userresolver.edit.title}
+					</n:h4>
+				</n:div>
+				<n:div class="modal-body">
+					<div class="row">
+						<n:div class="col-lg-12">
+							<div zclass="pane equal">
+								<x:form class="form-horizontal">
+									<x:div
+										sclass="@load(empty vmsgs[source] ? 'form-group' : 'form-group has-error')">
+										<n:label
+											class="control-label col-sm-2">
+											${labels.userresolver.source.label}
+										</n:label>
+										<x:div class="col-sm-10">
+											<radiogroup id="source"
+												selectedItem="@bind(fx.source) @validator('beanValidator')" />
+											<x:div
+												children="@load(vm.mediaTypes)">
+												<template
+													name="children">
+													<radio
+														radiogroup="source" value="@load(each)"
+														zclass="icon-input media" sclass="@load(each.icon)" />
+												</template>
+											</x:div>
+											<x:span
+												sclass="@load(empty vmsgs[source] ? 'hidden' : 'help-block')">
+												<label
+													value="@load(vmsgs[source])" />
+											</x:span>
+										</x:div>
+									</x:div>
+									<x:div
+										sclass="@load(empty vmsgs[identifier] ? 'form-group' : 'form-group has-error')">
+										<n:label
+											class="control-label col-sm-2">
+											${labels.userresolver.identifier.label}
+										</n:label>
+										<x:div class="col-sm-10">
+											<textbox type="text"
+												class="form-control" id="identifier" name="normal_input"
+												value="@bind(fx.userResolver.identifier) @validator('beanValidator')">
+											</textbox>
+											<x:span
+												sclass="@load(empty vmsgs[identifier] ? 'hidden' : 'help-block')">
+												<label
+													value="@load(vmsgs[identifier])" />
+											</x:span>
+										</x:div>
+									</x:div>
+									<x:div class="form-group">
+										<n:label
+											class="control-label col-sm-2">
+											${labels.userresolver.active.label}
+										</n:label>
+										<x:div class="col-sm-10">
+											<checkbox
+												checked="@bind(fx.userResolver.active)" />
+										</x:div>
+									</x:div>
+									<div class="form-group"
+										visible="@load(not empty fx.source)">
+										<div
+											zclass="col-sm-offset-2 col-sm-10">
+											<div
+												zclass="col-sm-6"
+												style="padding:0 0 !important;">
+												<a
+													zclass="btn btn-block btn-social"
+													sclass="@load(c:cat('btn-',fx.source.icon))">
+													<span zclass="fa"
+														sclass="@load(c:cat('fa-',fx.source.icon))">
+													</span>
+													<label
+														value="@load(c:cat(c:cat(labels.userresolver.conect.action, ' '),fx.source.name))" />
+												</a>
+											</div>
+										</div>
+									</div>
+								</x:form>
+							</div>
+						</n:div>
+					</div>
+				</n:div>
+				<div class="modal-footer">
+					<button
+						onClick="@command('save')" label="${labels.app.button.save}"
+						zclass="btn btn-primary" />
+					<button zclass="btn" sclass="btn-default"
+						ca:data-dismiss="modal" label="${labels.app.button.cancel}" />
+				</div>
+			</x:div>
+		</n:div>
+	</div>
+</zk>

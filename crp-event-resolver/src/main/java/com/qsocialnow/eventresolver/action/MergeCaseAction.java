@@ -13,6 +13,7 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Event;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
+import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
 
 @Component("mergeCaseAction")
 public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
@@ -23,7 +24,7 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
     private static final Logger log = LoggerFactory.getLogger(MergeCaseAction.class);
 
     @Override
-    public Case execute(InPutBeanDocument inputElement, List<String> parameters) {
+    public Case execute(InPutBeanDocument inputElement, List<String> parameters, ExecutionMessageRequest request) {
         return null;
     }
 

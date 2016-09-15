@@ -10,6 +10,8 @@ public class Case implements Serializable {
 
     private String id;
 
+    private String triggerId;
+
     private Boolean open;
 
     private Boolean pendingResponse;
@@ -28,7 +30,7 @@ public class Case implements Serializable {
 
     private Coordinates adminUnits;
 
-    private Integer resolution;
+    private String resolution;
 
     private Integer asignedValue;
 
@@ -120,20 +122,20 @@ public class Case implements Serializable {
         this.coordinates = coordinates;
     }
 
+    public void setResolution(String resolution) {
+        this.resolution = resolution;
+    }
+
+    public String getResolution() {
+        return resolution;
+    }
+
     public Coordinates getAdminUnits() {
         return adminUnits;
     }
 
     public void setAdminUnits(Coordinates adminUnits) {
         this.adminUnits = adminUnits;
-    }
-
-    public Integer getResolution() {
-        return resolution;
-    }
-
-    public void setResolution(Integer resolution) {
-        this.resolution = resolution;
     }
 
     public Integer getAsignedValue() {
@@ -166,6 +168,14 @@ public class Case implements Serializable {
 
     public void setActionsRegistry(List<ActionRegistry> actionsRegistry) {
         this.actionsRegistry = actionsRegistry;
+    }
+
+    public void setTriggerId(String triggerId) {
+        this.triggerId = triggerId;
+    }
+
+    public String getTriggerId() {
+        return triggerId;
     }
 
 }

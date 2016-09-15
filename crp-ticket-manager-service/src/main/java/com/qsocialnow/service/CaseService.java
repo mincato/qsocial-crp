@@ -16,10 +16,13 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.config.Resolution;
+import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
+import com.qsocialnow.persistence.TriggerRepository;
 import com.qsocialnow.service.action.Action;
 
 @Service
@@ -32,6 +35,9 @@ public class CaseService {
 
     @Autowired
     private ActionRegistryRepository actionRegistryRepository;
+
+    @Autowired
+    private TriggerRepository triggerRepository;
 
     @Resource
     private Map<ActionType, Action> actions;
@@ -68,6 +74,20 @@ public class CaseService {
             throw new RuntimeException("The case was not found");
         }
         return caseObject;
+    }
+
+    public List<Resolution> getAvailableResolutions(String caseId) {
+        List<Resolution> availableResolutions = null;
+        Case caseObject = repository.findOne(caseId);
+        if (caseObject != null) {
+            String triggerId = caseObject.getTriggerId();
+            Trigger trigger = triggerRepository.findOne(triggerId);
+            availableResolutions = trigger.getResolutions();
+        } else {
+            log.warn("The case was not found");
+            throw new RuntimeException("The case was not found");
+        }
+        return availableResolutions;
     }
 
     public void setRepository(CaseRepository repository) {

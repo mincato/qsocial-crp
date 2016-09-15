@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.QueryParam;
@@ -46,8 +47,13 @@ public class ReopenActionViewModel implements Serializable {
         this.comment = comment;
     }
 
-    @Command
+    @GlobalCommand
     @NotifyChange({ "comment" })
+    public void show() {
+        this.comment = null;
+    }
+
+    @Command
     public void execute() {
         ActionRequest actionRequest = new ActionRequest();
         actionRequest.setActionType(ActionType.REOPEN);
@@ -57,7 +63,6 @@ public class ReopenActionViewModel implements Serializable {
             actionRequest.setParameters(parameters);
         }
         Case caseUpdated = caseService.executeAction(caseId, actionRequest);
-        this.comment = null;
 
         HashMap<String, Object> args = new HashMap<>();
         args.put("caseUpdated", caseUpdated);

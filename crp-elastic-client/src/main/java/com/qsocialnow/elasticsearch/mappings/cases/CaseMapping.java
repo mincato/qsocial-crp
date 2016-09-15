@@ -69,6 +69,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setTitle(document.getTitle());
         caseType.setTriggerEvent(document.getTriggerEvent());
         caseType.setUnitValue(document.getUnitValue());
+        caseType.setTriggerId(document.getTriggerId());
         return caseType;
     }
 
@@ -91,6 +92,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setTitle(documentType.getTitle());
         caseDocument.setTriggerEvent(documentType.getTriggerEvent());
         caseDocument.setUnitValue(documentType.getUnitValue());
+        caseDocument.setTriggerId(documentType.getTriggerId());
         return caseDocument;
     }
 

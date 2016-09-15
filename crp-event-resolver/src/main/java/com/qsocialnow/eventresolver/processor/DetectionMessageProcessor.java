@@ -40,6 +40,9 @@ public class DetectionMessageProcessor {
                         found = detectionCriteria != null;
                     }
                 }
+                if (found) {
+                    detectionCriteria.setTriggerId(trigger.getId());
+                }
             }
         }
         return detectionCriteria;

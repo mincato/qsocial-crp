@@ -20,7 +20,7 @@ import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.CaseService;
-import com.qsocialnow.services.RegistryService;
+import com.qsocialnow.services.ActionRegistryService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class EditCaseViewModel implements Serializable {
@@ -31,7 +31,7 @@ public class EditCaseViewModel implements Serializable {
     private CaseService caseService;
 
     @WireVariable
-    private RegistryService registryService;
+    private ActionRegistryService actionRegistryService;
 
     private Case currentCase;
 
@@ -110,8 +110,8 @@ public class EditCaseViewModel implements Serializable {
     }
 
     private PageResponse<RegistryListView> findRegistriesByCase(String caseSelected) {
-        PageResponse<RegistryListView> pageResponse = registryService.findCaseWithRegistries(activePage, pageSize,
-                caseSelected);
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findCaseWithRegistries(activePage,
+                pageSize, caseSelected);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;

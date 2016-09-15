@@ -81,7 +81,8 @@ public class ExecutionMessageProcessorTest {
                 detectionCriteria);
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class));
+        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class),
+                Mockito.any(ExecutionMessageRequest.class));
     }
 
     @Test
@@ -101,7 +102,8 @@ public class ExecutionMessageProcessorTest {
                 detectionCriteria);
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(2)).execute(Mockito.any(), Mockito.anyListOf(String.class));
+        Mockito.verify(action, Mockito.times(2)).execute(Mockito.any(), Mockito.anyListOf(String.class),
+                Mockito.any(ExecutionMessageRequest.class));
     }
 
     @Test
@@ -121,7 +123,8 @@ public class ExecutionMessageProcessorTest {
 
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class));
+        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class),
+                Mockito.any(ExecutionMessageRequest.class));
     }
 
 }

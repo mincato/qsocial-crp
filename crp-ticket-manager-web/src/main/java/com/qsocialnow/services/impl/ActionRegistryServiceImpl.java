@@ -15,14 +15,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.services.RegistryService;
+import com.qsocialnow.services.ActionRegistryService;
 import com.qsocialnow.services.ServiceUrlResolver;
 
-@Service("registryService")
+@Service("actionRegistryService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class RegistryServiceImpl implements RegistryService {
+public class ActionRegistryServiceImpl implements ActionRegistryService {
 
-    private static final Logger log = LoggerFactory.getLogger(RegistryServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ActionRegistryServiceImpl.class);
 
     @Value("${cases.serviceurl}")
     private String caseServiceUrl;
