@@ -18,7 +18,7 @@ public class DomainService {
     @Autowired
     private com.qsocialnow.elasticsearch.services.config.DomainService domainElasticService;
 
-    @Cacheable(value = CacheConfig.DOMAINS_CACHE, unless="#result == null")
+    @Cacheable(value = CacheConfig.DOMAINS_CACHE, unless = "#result == null")
     public Domain findDomainWithTriggers(String domainId) {
 
         if (LOGGER.isInfoEnabled()) {
