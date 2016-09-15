@@ -21,6 +21,7 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Resolution;
+import com.qsocialnow.model.ResolveActionView;
 import com.qsocialnow.services.CaseService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -37,12 +38,14 @@ public class ResolveActionViewModel implements Serializable {
 
     private List<Resolution> resolutionOptions;
 
-    private Resolution selectedResolution;
+    private ResolveActionView resolveAction;
 
     @Init
     public void init(@QueryParam("case") String caseId) {
         comment = null;
         this.caseId = caseId;
+        resolutionOptions = caseService.getAvailableResolutions(caseId);
+        resolveAction = new ResolveActionView();
     }
 
     public String getComment() {
@@ -53,10 +56,6 @@ public class ResolveActionViewModel implements Serializable {
         this.comment = comment;
     }
 
-    public Resolution getSelectedResolution() {
-        return selectedResolution;
-    }
-
     public List<Resolution> getResolutionOptions() {
         return resolutionOptions;
     }
@@ -65,30 +64,31 @@ public class ResolveActionViewModel implements Serializable {
         this.resolutionOptions = resolutionOptions;
     }
 
-    public void setSelectedResolution(Resolution selectedResolution) {
-        this.selectedResolution = selectedResolution;
+    public ResolveActionView getResolveAction() {
+        return resolveAction;
+    }
+
+    public void setResolveAction(ResolveActionView resolveAction) {
+        this.resolveAction = resolveAction;
     }
 
     @GlobalCommand
-    @NotifyChange({ "comment", "resolutionOptions", "selectedResolution" })
+    @NotifyChange({ "comment", "resolveAction" })
     public void show() {
         this.comment = null;
-        if (resolutionOptions == null) {
-            resolutionOptions = caseService.getAvailableResolutions(caseId);
-        }
-        this.selectedResolution = null;
+        this.resolveAction = new ResolveActionView();
     }
 
     @Command
     public void execute() {
         ActionRequest actionRequest = new ActionRequest();
-        actionRequest.setActionType(ActionType.REOPEN);
+        actionRequest.setActionType(ActionType.RESOLVE);
         Map<ActionParameter, Object> parameters = new HashMap<>();
-        parameters.put(ActionParameter.RESOLUTION, selectedResolution.getId());
+        parameters.put(ActionParameter.RESOLUTION, resolveAction.getSelectedResolution().getId());
         if (StringUtils.isNotBlank(comment)) {
             parameters.put(ActionParameter.COMMENT, comment);
-            actionRequest.setParameters(parameters);
         }
+        actionRequest.setParameters(parameters);
         Case caseUpdated = caseService.executeAction(caseId, actionRequest);
 
         HashMap<String, Object> args = new HashMap<>();

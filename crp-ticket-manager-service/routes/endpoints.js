@@ -112,7 +112,7 @@ router.get('/cases/:id/availableResolutions', function (req, res) {
 
 		if(err)  { res.status(500).json(err.getMessageSync()); return; }
 
-		if(responseCase !== null) {
+		if(responseResolutions !== null) {
 			try {
 				res.set('Content-Type', 'application/json');
 				res.send(gson.toJsonSync(responseResolutions));

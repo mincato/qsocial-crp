@@ -16,7 +16,7 @@ public class ResolveCaseAction implements Action {
     @Override
     public ActionRegistry execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         caseObject.setCloseDate(new Date());
-        caseObject.setOpen(true);
+        caseObject.setOpen(false);
         caseObject.setResolution((String) parameters.get(ActionParameter.RESOLUTION));
         ActionRegistry actionRegistry = buildActionRegistry(parameters);
         return actionRegistry;
