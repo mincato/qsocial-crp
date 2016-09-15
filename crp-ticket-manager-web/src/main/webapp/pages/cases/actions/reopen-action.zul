@@ -4,7 +4,7 @@
 		viewModel="@id('reopenActionVm') @init('com.qsocialnow.viewmodel.ReopenActionViewModel')">
 	<x:form>
 		<x:div sclass="form-group">
-		    <n:label class="control-label">${labels.cases.actions.comment}:</n:label>
+		    <n:label class="control-label">${labels.cases.actions.comment.optional}:</n:label>
     		<textbox type="text" class="form-control" 
     			value="@bind(reopenActionVm.comment)"></textbox>
 		</x:div>

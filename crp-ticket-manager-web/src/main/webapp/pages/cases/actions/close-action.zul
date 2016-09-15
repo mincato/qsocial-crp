@@ -4,7 +4,7 @@
 		viewModel="@id('closeActionVm') @init('com.qsocialnow.viewmodel.CloseActionViewModel')">
 	<x:form>
 		<x:div sclass="form-group">
-		    <n:label class="control-label">${labels.cases.actions.comment}:</n:label>
+		    <n:label class="control-label">${labels.cases.actions.comment.optional}:</n:label>
     		<textbox type="text" class="form-control" 
     			value="@bind(closeActionVm.comment)"></textbox>
 		</x:div>
