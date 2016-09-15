@@ -105,7 +105,7 @@ public class UsersResolverViewModel implements Serializable {
         arg.put("userresolver", userResolverId);
         Executions.createComponents("/pages/user-resolver/edit-user-resolver.zul", null, arg);
     }
-    
+
     @Command
     public void openDelete(@BindingParam("userresolver") String userResolverId) {
         Map<String, Object> arg = new HashMap<String, Object>();
@@ -127,7 +127,7 @@ public class UsersResolverViewModel implements Serializable {
             }
         }
     }
-    
+
     @GlobalCommand
     @NotifyChange("usersResolver")
     public void deleteUserResolver(@BindingParam("userResolverDeleted") UserResolver userResolverDeleted) {
@@ -135,8 +135,8 @@ public class UsersResolverViewModel implements Serializable {
             Optional<UserResolverListView> userResolverOptional = usersResolver.stream()
                     .filter(userResolver -> userResolver.getId().equals(userResolverDeleted.getId())).findFirst();
             if (userResolverOptional.isPresent()) {
-            	UserResolverListView userResolverListView = userResolverOptional.get();
-                usersResolver.remove(userResolverListView );
+                UserResolverListView userResolverListView = userResolverOptional.get();
+                usersResolver.remove(userResolverListView);
             }
         }
     }

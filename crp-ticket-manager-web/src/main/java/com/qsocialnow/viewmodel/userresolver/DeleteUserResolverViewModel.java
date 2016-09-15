@@ -59,7 +59,7 @@ public class DeleteUserResolverViewModel implements Serializable {
     @Command
     @NotifyChange({ "currentUserResolver", "deleted" })
     public void delete() {
-    	userResolverService.delete(currentUserResolver.getUserResolver().getId());
+        userResolverService.delete(currentUserResolver.getUserResolver().getId());
         Clients.showNotification(Labels.getLabel("userresolver.delete.notification.success",
                 new String[] { currentUserResolver.getUserResolver().getIdentifier() }));
         deleted = true;
@@ -75,11 +75,11 @@ public class DeleteUserResolverViewModel implements Serializable {
         }
     }
 
-    public String[] getArgs(){
-    	if (this.currentUserResolver != null) {
-    		return new String[] { this.currentUserResolver.getUserResolver().getIdentifier() };
-    	}
-    	return null;
+    public String[] getArgs() {
+        if (this.currentUserResolver != null) {
+            return new String[] { this.currentUserResolver.getUserResolver().getIdentifier() };
+        }
+        return null;
     }
 
 }

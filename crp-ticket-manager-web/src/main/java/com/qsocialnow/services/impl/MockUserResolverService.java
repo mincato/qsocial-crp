@@ -69,9 +69,9 @@ public class MockUserResolverService implements UserResolverService {
         return new PageResponse<UserResolverListView>(list, ACTIVE_PAGE_DEFAULT, PAGE_SIZE_DEFAULT);
     }
 
-	@Override
-	public void delete(String id) {
-		// TODO Auto-generated method stub
-	}
+    @Override
+    public void delete(String id) {
+        // TODO Auto-generated method stub
+    }
 
 }
