@@ -70,6 +70,19 @@ public class MockUserResolverService implements UserResolverService {
     }
 
     @Override
+    public List<UserResolverListView> findAll(Map<String, String> filters) {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/usersresolver.json");
+
+        @SuppressWarnings("serial")
+        Type listType = new TypeToken<ArrayList<UserResolverListView>>() {
+        }.getType();
+
+        return gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream), listType);
+
+    }
+
+    @Override
     public void delete(String id) {
         // TODO Auto-generated method stub
     }

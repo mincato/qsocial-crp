@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections4.ListUtils;
+
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.DetectionCriteria;
@@ -130,7 +132,10 @@ public class ConfigurationRepository {
         userResolver.setLastName("Goodman");
         userResolver.setSource(1l);
 
-        team.setUserResolver(userResolver);
+        List<UserResolver> usersResolver = new ArrayList<UserResolver>();
+        usersResolver.add(userResolver);
+        team.setUsersResolver(usersResolver);
+        team.getUsersResolver();
 
         User user1 = new User();
         user1.setId("user 1");
