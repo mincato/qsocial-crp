@@ -66,9 +66,7 @@ router.get('/cases/:id', function (req, res) {
 
 	  var caseId = req.params.id;
 	  var caseService = javaContext.getBeanSync("caseService");
-	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
-	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-	  caseService.findOne(caseId,pageNumber, pageSize,asyncResponse);
+	  caseService.findOne(caseId,asyncResponse);
 	  
 	});
 

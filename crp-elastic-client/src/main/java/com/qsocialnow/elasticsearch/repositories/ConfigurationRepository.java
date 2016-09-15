@@ -3,6 +3,7 @@ package com.qsocialnow.elasticsearch.repositories;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -130,7 +131,7 @@ public class ConfigurationRepository {
         userResolver.setLastName("Goodman");
         userResolver.setSource(1l);
 
-        team.setUserResolver(userResolver);
+        team.setUserResolvers(Arrays.asList(userResolver.getId()));
 
         User user1 = new User();
         user1.setId("user 1");

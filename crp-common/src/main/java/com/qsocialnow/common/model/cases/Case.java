@@ -42,6 +42,14 @@ public class Case implements Serializable {
 
     private List<ActionRegistry> actionsRegistry;
 
+    private String teamId;
+
+    private String userResolverId;
+
+    private String sourceUser;
+
+    private Long lastPostId;
+
     public String getId() {
         return id;
     }
@@ -176,6 +184,38 @@ public class Case implements Serializable {
 
     public String getTriggerId() {
         return triggerId;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
+    }
+
+    public String getUserResolverId() {
+        return userResolverId;
+    }
+
+    public void setUserResolverId(String userResolverId) {
+        this.userResolverId = userResolverId;
+    }
+
+    public String getSourceUser() {
+        return sourceUser;
+    }
+
+    public void setSourceUser(String sourceUser) {
+        this.sourceUser = sourceUser;
+    }
+
+    public Long getLastPostId() {
+        return lastPostId;
+    }
+
+    public void setLastPostId(Long lastPostId) {
+        this.lastPostId = lastPostId;
     }
 
 }

@@ -46,11 +46,10 @@ public class MessageProcessor {
         Domain domain = domainService.findDomainWithTriggers(domainId);
         if (domain != null) {
             if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
-                DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(inputBeanDocument, domain);
-                if (detectionCriteria != null) {
-                    ExecutionMessageRequest request = new ExecutionMessageRequest(inputBeanDocument, domain,
-                            detectionCriteria);
-                    executionMessageProcessor.execute(request);
+                ExecutionMessageRequest executionMessageRequest = detectionMessageProcessor.detect(inputBeanDocument,
+                        domain);
+                if (executionMessageRequest != null) {
+                    executionMessageProcessor.execute(executionMessageRequest);
                 } else {
                     LOGGER.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
                 }

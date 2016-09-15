@@ -16,7 +16,6 @@ import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
-import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Trigger;
@@ -51,8 +50,8 @@ public class CaseService {
         return page;
     }
 
-    public PageResponse<RegistryListView> findOne(String caseId, Integer pageNumber, Integer pageSize) {
-        return null;
+    public Case findOne(String caseId) {
+        return repository.findOne(caseId);
     }
 
     public Case executeAction(String caseId, ActionRequest actionRequest) {

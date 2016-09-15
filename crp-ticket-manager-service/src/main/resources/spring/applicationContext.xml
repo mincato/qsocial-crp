@@ -72,6 +72,14 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).PENDING_RESPONSE}" value-ref="pendingResponseCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REGISTER_COMMENT}" value-ref="registerCommentCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).RESOLVE}" value-ref="resolveCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
 	</util:map>
+	
+	<util:map id="sources">
+    	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}" value-ref="facebookSourceStrategy"/>
+    	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWIITER}" value-ref="twitterSourceStrategy"/>
+	</util:map>
+	
+	
 
 </beans>

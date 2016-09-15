@@ -10,7 +10,7 @@ public class Team {
 
     private List<User> users;
 
-    private UserResolver userResolver;
+    private List<String> userResolvers;
 
     public String getId() {
         return id;
@@ -36,11 +36,11 @@ public class Team {
         this.users = users;
     }
 
-    public UserResolver getUserResolver() {
-        return userResolver;
+    public List<String> getUserResolvers() {
+        return userResolvers;
     }
 
-    public void setUserResolver(UserResolver userResolver) {
-        this.userResolver = userResolver;
+    public void setUserResolvers(List<String> userResolvers) {
+        this.userResolvers = userResolvers;
     }
 }

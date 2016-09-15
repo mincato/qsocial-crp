@@ -31,7 +31,7 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         log.info("Creating case...");
         Case newCase = new Case();
         newCase.setOpen(true);
-        newCase.setTriggerId(request.getDetectionCriteria().getTriggerId());
+        newCase.setTriggerId(request.getTrigger().getId());
         Date openDate = new Date();
         newCase.setOpenDate(openDate);
         newCase.setTitle(inputElement.getTitulo());
@@ -41,6 +41,7 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         newCase.setCoordinates(coordinates);
         newCase.setCaseCategories(Arrays.asList(inputElement.getCategorias()));
         newCase.setPendingResponse(true);
+        newCase.setTeamId(request.getSegment().getTeam().getId());
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
         ActionRegistry registry = new ActionRegistry();

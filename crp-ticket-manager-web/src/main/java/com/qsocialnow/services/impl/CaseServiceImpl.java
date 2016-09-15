@@ -20,7 +20,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
-import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
@@ -62,23 +61,19 @@ public class CaseServiceImpl implements CaseService {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public PageResponse<RegistryListView> findCaseWithRegistries(int pageNumber, int pageSize, String caseId) {
+    public Case findCase(String caseId) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
-                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl("diego", caseServiceUrl)).path("/" + caseId);
 
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<PageResponse> response = restTemplate
-                    .getForEntity(builder.toUriString(), PageResponse.class);
+            Case response = restTemplate.getForObject(builder.toUriString(), Case.class);
 
-            PageResponse<RegistryListView> registries = response.getBody();
-            return registries;
+            return response;
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);
             throw new RuntimeException(e);
