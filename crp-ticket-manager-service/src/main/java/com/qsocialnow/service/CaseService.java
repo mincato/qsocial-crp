@@ -1,5 +1,6 @@
 package com.qsocialnow.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -93,12 +94,18 @@ public class CaseService {
     }
 
     public List<Resolution> getAvailableResolutions(String caseId) {
-        List<Resolution> availableResolutions = null;
+        List<Resolution> availableResolutions = new ArrayList<Resolution>();
+        log.info("Retrieving resolution from case:" + caseId);
         Case caseObject = repository.findOne(caseId);
+        log.info("Case:" + caseObject.getId());
         if (caseObject != null) {
             String triggerId = caseObject.getTriggerId();
-            Trigger trigger = triggerRepository.findOne(triggerId);
-            availableResolutions = trigger.getResolutions();
+            if (triggerId != null) {
+                Trigger trigger = triggerRepository.findOne(triggerId);
+                if (trigger != null) {
+                    availableResolutions = trigger.getResolutions();
+                }
+            }
         } else {
             log.warn("The case was not found");
             throw new RuntimeException("The case was not found");

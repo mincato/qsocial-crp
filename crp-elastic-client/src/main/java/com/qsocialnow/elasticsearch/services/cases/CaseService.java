@@ -1,6 +1,5 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,13 +28,9 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 import io.searchbox.core.BulkResult.BulkResultItem;
 
-public class CaseService {
+public class CaseService extends DynamicIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(CaseService.class);
-
-    private final static String INDEX_NAME = "cases_";
-
-    private final static String INDEX_NAME_REGISTRY = "registry_";
 
     private static QueueService queueService;
 
@@ -88,7 +83,7 @@ public class CaseService {
 
         CaseMapping mapping = CaseMapping.getInstance();
 
-        String indexName = INDEX_NAME + generateIndexValue();
+        String indexName = this.getIndex(repository);
         mapping.setIndex(indexName);
 
         // validete index name
@@ -100,6 +95,7 @@ public class CaseService {
         // index document
         CaseType documentIndexed = mapping.getDocumentType(document);
         String response = repository.indexMapping(mapping, documentIndexed);
+
         repository.closeClient();
         return response;
     }
@@ -111,7 +107,7 @@ public class CaseService {
 
         CaseMapping mapping = CaseMapping.getInstance();
 
-        String indexName = INDEX_NAME + generateIndexValue();
+        String indexName = this.getIndex(repository);
         mapping.setIndex(indexName);
 
         // validete index name
@@ -146,15 +142,9 @@ public class CaseService {
 
             CaseMapping mapping = CaseMapping.getInstance();
 
-            String indexName = INDEX_NAME + generateIndexValue();
+            String indexName = this.getIndex(repository);
             mapping.setIndex(indexName);
 
-            // validete index name
-            boolean isCreated = repository.validateIndex(indexName);
-            // create index
-            if (!isCreated) {
-                repository.createIndex(mapping.getIndex());
-            }
             // index document
             List<IdentityType> documentsTypes = new ArrayList<>();
             for (Case caseDocument : documents) {
@@ -170,9 +160,7 @@ public class CaseService {
                 List<BulkResultItem> items = response.getSourcesBulk();
                 List<IdentityType> registries = new ArrayList<>();
                 ActionRegistryMapping mappingRegistry = ActionRegistryMapping.getInstance();
-
-                String indexNameRegistry = INDEX_NAME_REGISTRY + generateIndexValue();
-                mappingRegistry.setIndex(indexNameRegistry);
+                mappingRegistry.setIndex(indexName);
 
                 for (int i = 0; i < documents.size(); i++) {
                     if (items.get(i) != null) {
@@ -195,12 +183,6 @@ public class CaseService {
                             elasticSearchCaseConfigurator);
                     Repository<ActionRegistryType> repositoryRegistry = esRegistryfactory.initManager();
                     repositoryRegistry.initClient();
-                    // validete index name
-                    boolean isRegistryIndexCreated = repositoryRegistry.validateIndex(indexNameRegistry);
-                    // create index
-                    if (!isRegistryIndexCreated) {
-                        repositoryRegistry.createIndex(mappingRegistry.getIndex());
-                    }
                     repositoryRegistry.bulkOperation(mappingRegistry, registries);
                     repositoryRegistry.closeClient();
                 }
@@ -227,7 +209,7 @@ public class CaseService {
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        mapping.setIndex(INDEX_NAME + generateIndexValue());
+        mapping.setIndex(this.getQueryIndex());
         SearchResponse<Case> response = repository.find(originIdCase, mapping);
 
         Case caseDocument = response.getSource();
@@ -243,23 +225,13 @@ public class CaseService {
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        SearchResponse<Case> response = repository.search(from, size, "openDate", mapping);
+        mapping.setIndex(this.getQueryIndex());
+        SearchResponse<Case> response = repository.queryMatchAll(from, size, "openDate", mapping);
 
         List<Case> cases = response.getSources();
 
         repository.closeClient();
         return cases;
-    }
-
-    private String generateIndexValue() {
-        String indexSufix = null;
-
-        LocalDateTime dateTime = LocalDateTime.now();
-        int month = dateTime.getMonthValue();
-        int year = dateTime.getYear();
-        indexSufix = year + "_" + month;
-
-        return indexSufix;
     }
 
     private boolean addItemInQueue(Case item) {

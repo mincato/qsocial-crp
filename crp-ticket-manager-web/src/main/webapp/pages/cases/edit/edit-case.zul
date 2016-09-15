@@ -4,6 +4,38 @@
 	<div zclass="row">
 		<include zclass="col-lg-12" src="/pages/cases/actions/master-action.zul"/>
 	</div>
+	<n:div class="row">
+       <n:div class="col-lg-12">
+           <div zclass="pane equal col-md-12 col-xs-12">
+                <n:div class="col-md-2 col-xs-12">
+                    <n:h5>${labels.cases.registry.list.title}</n:h5>
+                </n:div>
+	            <n:div class="col-md-2">
+	                    <div zclass="input-group input-group-sm">
+	                          <textbox zclass="form-control" value="@bind(vm.action)" onOK="@command('search')" placeholder="${labels.cases.registry.list.column.action}"/>
+	                    </div>
+	            </n:div>
+                <n:div class="col-md-2">
+                    <div zclass="input-group input-group-sm">
+                          <textbox zclass="form-control" value="@bind(vm.user)" onOK="@command('search')" placeholder="${labels.cases.registry.list.column.user}"/>
+                    </div>
+                </n:div>
+                <n:div class="col-md-3">
+                    <div zclass="input-group input-group-sm">
+                          <textbox zclass="form-control" value="@bind(vm.date)" onOK="@command('search')" placeholder="${labels.cases.registry.list.column.date}"/>
+                    </div>
+                </n:div>
+                <n:div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                          <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" placeholder="${labels.cases.registry.list.column.description}"/>
+                          <span zclass="input-group-btn">
+                                <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+                           </span>
+                    </div>
+	            </n:div>
+	        </div>
+       </n:div>
+    </n:div>
 	<div zclass="row">
     	<n:div class="col-lg-12">
     		<div zclass="pane equal">

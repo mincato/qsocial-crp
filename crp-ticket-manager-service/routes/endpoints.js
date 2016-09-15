@@ -156,7 +156,15 @@ router.get('/cases/:id/registries', function (req, res) {
 	  var actionRegistryService = javaContext.getBeanSync("actionRegistryService");
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-	  actionRegistryService.findAll(caseId,pageNumber, pageSize,asyncResponse);
+	  var text = req.query.text ? req.query.text : null;
+	  var action = req.query.action ? req.query.action : null;
+	  var user = req.query.user ? req.query.user : null;
+	  
+	  if(text === null && action === null && user === null) {
+		  actionRegistryService.findAll(caseId,pageNumber, pageSize,asyncResponse);
+	  }else{
+		  actionRegistryService.findAllBy(caseId,text,action,user,pageNumber, pageSize,asyncResponse);
+	  }
 });
 
 

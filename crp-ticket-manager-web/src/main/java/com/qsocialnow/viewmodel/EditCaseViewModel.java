@@ -43,6 +43,14 @@ public class EditCaseViewModel implements Serializable {
 
     private boolean moreResults;
 
+    private String keyword;
+
+    private String action;
+
+    private String user;
+
+    private String date;
+
     private List<RegistryListView> registries = new ArrayList<>();
 
     private List<ActionType> actionOptions = new ArrayList<>();
@@ -102,6 +110,12 @@ public class EditCaseViewModel implements Serializable {
 
     }
 
+    @Command
+    @NotifyChange({ "registries", "moreResults" })
+    public void search() {
+        this.findRegistriesBy();
+    }
+
     @GlobalCommand
     @NotifyChange({ "currentCase", "selectedAction" })
     public void actionExecuted(@BindingParam("caseUpdated") Case caseUpdated) {
@@ -110,8 +124,8 @@ public class EditCaseViewModel implements Serializable {
     }
 
     private PageResponse<RegistryListView> findRegistriesByCase(String caseSelected) {
-        PageResponse<RegistryListView> pageResponse = actionRegistryService.findCaseWithRegistries(activePage,
-                pageSize, caseSelected);
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistries(activePage, pageSize,
+                caseSelected);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;
@@ -119,6 +133,51 @@ public class EditCaseViewModel implements Serializable {
             this.moreResults = false;
         }
         return pageResponse;
+    }
+
+    private PageResponse<RegistryListView> findRegistriesBy() {
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistriesBy(activePage, pageSize,
+                this.caseId, this.keyword, this.action, this.user, this.date);
+        this.registries.clear();
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.registries.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
+        return pageResponse;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
 }
