@@ -24,9 +24,10 @@ public class ActionRegistryService {
     }
 
     public PageResponse<RegistryListView> findAllBy(String caseId, String textValue, String action, String user,
-            Integer pageNumber, Integer pageSize) {
-        List<RegistryListView> cases = repository.findAllBy(caseId, textValue, action, user, new PageRequest(
-                pageNumber, pageSize));
+            String fromDate, String toDate, Integer pageNumber, Integer pageSize) {
+
+        List<RegistryListView> cases = repository.findAllBy(caseId, textValue, action, user, fromDate, toDate,
+                new PageRequest(pageNumber, pageSize));
 
         PageResponse<RegistryListView> page = new PageResponse<RegistryListView>(cases, pageNumber, pageSize);
         return page;
