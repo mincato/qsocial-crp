@@ -12,22 +12,30 @@
                 </n:div>
 	            <n:div class="col-md-2">
 	                    <div zclass="input-group input-group-sm">
-	                          <textbox zclass="form-control" value="@bind(vm.action)" onOK="@command('search')" placeholder="${labels.cases.registry.list.column.action}"/>
+	                          <textbox zclass="form-control" value="@bind(vm.action)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.action}"/>
 	                    </div>
 	            </n:div>
                 <n:div class="col-md-2">
                     <div zclass="input-group input-group-sm">
-                          <textbox zclass="form-control" value="@bind(vm.user)" onOK="@command('search')" placeholder="${labels.cases.registry.list.column.user}"/>
+                          <textbox zclass="form-control" value="@bind(vm.user)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.user}"/>
                     </div>
                 </n:div>
-                <n:div class="col-md-3">
+                <n:div class="col-md-2">
                     <div zclass="input-group input-group-sm">
-                          <textbox zclass="form-control" value="@bind(vm.date)" onOK="@command('search')" placeholder="${labels.cases.registry.list.column.date}"/>
+                          <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.fromDate)" placeholder="${labels.cases.registry.filter.fromdate}" />
                     </div>
                 </n:div>
-                <n:div class="col-md-3">
+                
+                <n:div class="col-md-2">
+                    <div zclass="input-group input-group-sm">
+                       <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.toDate)" placeholder="${labels.cases.registry.filter.todate}" />
+                    </div>
+                </n:div>
+                
+                
+                <n:div class="col-md-2">
                     <div class="input-group input-group-sm">
-                          <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" placeholder="${labels.cases.registry.list.column.description}"/>
+                          <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.description}"/>
                           <span zclass="input-group-btn">
                                 <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
                            </span>

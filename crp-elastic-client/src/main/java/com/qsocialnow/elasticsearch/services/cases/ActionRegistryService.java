@@ -64,7 +64,7 @@ public class ActionRegistryService extends DynamicIndexService {
     }
 
     public List<ActionRegistry> findRegistriesBy(int from, int size, String caseId, String textValue, String action,
-            String user) {
+            String user, String fromDate, String toDate) {
 
         RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
                 elasticSearchCaseConfigurator);
@@ -85,7 +85,8 @@ public class ActionRegistryService extends DynamicIndexService {
         if (user != null)
             searchValues.put("user", user);
 
-        SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", searchValues);
+        SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", searchValues,
+                "date", fromDate, toDate);
         List<ActionRegistry> registries = response.getSources();
 
         repository.closeClient();
