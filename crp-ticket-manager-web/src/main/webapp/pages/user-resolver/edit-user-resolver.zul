@@ -13,7 +13,7 @@
 						<n:span aria-hidden="true">&#x00D7;</n:span>
 					</n:button>
 					<n:h4 class="modal-title">
-						${labels.domain.edit.title}
+						${labels.userresolver.edit.title}
 					</n:h4>
 				</n:div>
 				<n:div class="modal-body">
@@ -100,7 +100,6 @@
 				</n:div>
 				<div class="modal-footer">
 					<button
-						disabled="@load(!empty vmsgs[thematics] or !empty vmsgs[name])"
 						onClick="@command('save')" label="${labels.app.button.save}"
 						zclass="btn btn-primary" />
 					<button zclass="btn" sclass="btn-default"

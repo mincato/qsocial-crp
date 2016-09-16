@@ -5,14 +5,15 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
-import org.elasticsearch.action.admin.indices.alias.exists.AliasesExistAction;
-import org.elasticsearch.cluster.metadata.AliasAction;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.search.MatchQuery;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -31,7 +32,6 @@ import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.BulkResult;
-import io.searchbox.core.Cat.AliasesBuilder;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Get;
@@ -42,8 +42,6 @@ import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
 import io.searchbox.indices.aliases.AddAliasMapping;
-import io.searchbox.indices.aliases.AliasMapping;
-import io.searchbox.indices.aliases.GetAliases;
 import io.searchbox.indices.aliases.ModifyAliases;
 import io.searchbox.indices.mapping.PutMapping;
 import vc.inreach.aws.request.AWSSigner;
@@ -70,6 +68,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
             AWSSigner signer = getSigner();
             requestInterceptor = new AWSSigningRequestInterceptor(signer);
+
             JestClientFactory factory = new JestClientFactory() {
 
                 @Override
@@ -293,6 +292,23 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
+            Map<String, String> searchValues) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC);
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        for (String searchField : searchValues.keySet()) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+        return executeSearch(mapping, search);
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC).query(QueryBuilders.matchAllQuery());
@@ -304,7 +320,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     @SuppressWarnings("unchecked")
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping) {
         Get get = new Get.Builder(mapping.getIndex(), id).type(mapping.getType()).build();
-
+        log.info("Elasticsearch get document with id" + id);
         DocumentResult result = null;
         SearchResponse<E> response = new SearchResponse<E>();
         try {
@@ -315,6 +331,27 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+        }
+        return response;
+    }
+
+    @Override
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> findByAlias(String id, Mapping<T, E> mapping) {
+        log.info("Elasticsearch get document with id" + id);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.termsQuery("_id", id));
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+            if (result.isSucceeded()) {
+                response.setSource((E) result.getSourceAsObject(mapping.getClassType()));
+            }
+        } catch (IOException e) {
+            log.error("Serching documents - Unexpected error: ", e);
         }
         return response;
     }
@@ -417,15 +454,70 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         SearchResponse<E> response = new SearchResponse<E>();
         try {
             result = client.execute(search);
-            if (result.isSucceeded()) {
-                List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
-                response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
-                        .collect(Collectors.toList()));
-            } else {
-                throw new RuntimeException(result.getErrorMessage());
-            }
+
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
+            BoolQueryBuilder filters, Mapping<T, E> mapping) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC).query(filters);
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(filters);
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RuntimeException(result.getErrorMessage());
         }
         return response;
     }

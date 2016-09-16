@@ -1,29 +1,21 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
-import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
-import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
-public class CaseTicketService {
+public class CaseTicketService extends DynamicIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(CaseTicketService.class);
-
-    private final static String INDEX_NAME = "cases_";
-
-    private final static String INDEX_NAME_REGISTRY = "registry_";
 
     private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
@@ -37,11 +29,10 @@ public class CaseTicketService {
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        mapping.setIndex(INDEX_NAME + generateIndexValue());
-        SearchResponse<Case> response = repository.find(originIdCase, mapping);
+        mapping.setIndex(getQueryIndex());
+        SearchResponse<Case> response = repository.findByAlias(originIdCase, mapping);
 
         Case caseDocument = response.getSource();
-        log.info("Retrieving from ES Case:" + caseDocument.getId());
         repository.closeClient();
         return caseDocument;
     }
@@ -68,15 +59,9 @@ public class CaseTicketService {
 
         CaseMapping mapping = CaseMapping.getInstance();
 
-        String indexName = INDEX_NAME + generateIndexValue();
+        String indexName = this.getIndex(repository);
         mapping.setIndex(indexName);
 
-        // validete index name
-        boolean isCreated = repository.validateIndex(indexName);
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
         // index document
         CaseType documentIndexed = mapping.getDocumentType(document);
         String response = repository.indexMapping(mapping, documentIndexed);
@@ -91,31 +76,13 @@ public class CaseTicketService {
 
         CaseMapping mapping = CaseMapping.getInstance();
 
-        String indexName = INDEX_NAME + generateIndexValue();
+        String indexName = this.getIndex(repository);
         mapping.setIndex(indexName);
 
-        // validete index name
-        boolean isCreated = repository.validateIndex(indexName);
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
         // index document
         CaseType documentIndexed = mapping.getDocumentType(document);
         String response = repository.updateIndexMapping(document.getId(), mapping, documentIndexed);
         repository.closeClient();
         return response;
     }
-
-    private String generateIndexValue() {
-        String indexSufix = null;
-
-        LocalDateTime dateTime = LocalDateTime.now();
-        int month = dateTime.getMonthValue();
-        int year = dateTime.getYear();
-        indexSufix = year + "_" + month;
-
-        return indexSufix;
-    }
-
 }

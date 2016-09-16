@@ -55,15 +55,16 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public PageResponse<RegistryListView> findRegistriesByText(int pageNumber, int pageSize, String caseId,
-            String keyword) {
+    public PageResponse<RegistryListView> findRegistriesBy(int pageNumber, int pageSize, String caseId, String keyword,
+            String action, String user, String date) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
-                    .path("/registries").queryParam("text", keyword).queryParam("pageNumber", pageNumber)
+                    .path("/registries").queryParam("text", keyword).queryParam("action", action)
+                    .queryParam("user", user).queryParam("date", date).queryParam("pageNumber", pageNumber)
                     .queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = new RestTemplate();

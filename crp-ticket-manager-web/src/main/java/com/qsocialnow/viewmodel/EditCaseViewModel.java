@@ -47,6 +47,10 @@ public class EditCaseViewModel implements Serializable {
 
     private String action;
 
+    private String user;
+
+    private String date;
+
     private List<RegistryListView> registries = new ArrayList<>();
 
     private List<ActionType> actionOptions = new ArrayList<>();
@@ -109,7 +113,7 @@ public class EditCaseViewModel implements Serializable {
     @Command
     @NotifyChange({ "registries", "moreResults" })
     public void search() {
-        this.findRegistriesByName();
+        this.findRegistriesBy();
     }
 
     @GlobalCommand
@@ -131,9 +135,10 @@ public class EditCaseViewModel implements Serializable {
         return pageResponse;
     }
 
-    private PageResponse<RegistryListView> findRegistriesByName() {
-        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistriesByText(activePage, pageSize,
-                this.caseId, this.keyword);
+    private PageResponse<RegistryListView> findRegistriesBy() {
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistriesBy(activePage, pageSize,
+                this.caseId, this.keyword, this.action, this.user, this.date);
+        this.registries.clear();
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;
@@ -157,6 +162,22 @@ public class EditCaseViewModel implements Serializable {
 
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
 }

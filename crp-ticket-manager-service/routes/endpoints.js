@@ -105,6 +105,33 @@ router.post('/cases/:id/action', function (req, res) {
 
 });
 
+router.get('/cases/:id/availableResolutions', function (req, res) {
+
+	function asyncResponse(err,responseResolutions) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.getMessageSync()); return; }
+
+		if(responseResolutions !== null) {
+			try {
+				res.set('Content-Type', 'application/json');
+				res.send(gson.toJsonSync(responseResolutions));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+
+	}
+
+	var caseService = javaContext.getBeanSync("caseService");
+	var caseId = req.params.id;
+	  
+	caseService.getAvailableResolutions(caseId, asyncResponse);
+
+});
+
 router.get('/cases/:id/registries', function (req, res) {
 
 	  function asyncResponse(err,responseDomain) {
@@ -130,11 +157,13 @@ router.get('/cases/:id/registries', function (req, res) {
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
 	  var text = req.query.text ? req.query.text : null;
+	  var action = req.query.action ? req.query.action : null;
+	  var user = req.query.user ? req.query.user : null;
 	  
-	  if(text === null) {
+	  if(text === null && action === null && user === null) {
 		  actionRegistryService.findAll(caseId,pageNumber, pageSize,asyncResponse);
 	  }else{
-		  actionRegistryService.findAllByText(caseId,text,pageNumber, pageSize,asyncResponse);
+		  actionRegistryService.findAllBy(caseId,text,action,user,pageNumber, pageSize,asyncResponse);
 	  }
 });
 

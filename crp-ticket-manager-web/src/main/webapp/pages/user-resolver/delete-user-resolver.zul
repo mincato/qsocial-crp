@@ -1,0 +1,37 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<div sclass="modal fade" ca:data-modal=""
+		ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.userresolver.DeleteUserResolverViewModel', userresolver=arg.userresolver)"
+		validationMessages="@id('vmsgs')">
+		<n:div class="modal-dialog">
+			<x:div class="modal-content">
+				<n:div class="modal-header">
+					<n:button type="button" class="close"
+						data-dismiss="modal" aria-label="Close">
+						<n:span aria-hidden="true">&#x00D7;</n:span>
+					</n:button>
+					<n:h4 class="modal-title">
+						${labels.userresolver.delete.title}
+					</n:h4>
+				</n:div>
+				<n:div class="modal-body">
+					<div class="row">
+						<n:div class="col-lg-12">
+							<div zclass="pane equal">
+								${c:l2('userresolver.delete.msj', vm.args)}
+							</div>
+						</n:div>
+					</div>
+				</n:div>
+				<div class="modal-footer">
+					<button
+						onClick="@command('delete')" label="${labels.app.button.ok}"
+						zclass="btn btn-primary" />
+					<button zclass="btn" sclass="btn-default"
+						ca:data-dismiss="modal" label="${labels.app.button.cancel}" />
+				</div>
+			</x:div>
+		</n:div>
+	</div>
+</zk>

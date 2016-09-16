@@ -1,6 +1,8 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +63,8 @@ public class ActionRegistryService extends DynamicIndexService {
         return registries;
     }
 
-    public List<ActionRegistry> findRegistriesByText(int from, int size, String caseId, String textValue) {
+    public List<ActionRegistry> findRegistriesBy(int from, int size, String caseId, String textValue, String action,
+            String user) {
 
         RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
                 elasticSearchCaseConfigurator);
@@ -72,9 +75,17 @@ public class ActionRegistryService extends DynamicIndexService {
         mapping.setIndex(this.getQueryIndex());
 
         log.info("Retriving registries from case: " + caseId + " - text:" + textValue);
-        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
-                caseId);
+        Map<String, String> searchValues = new HashMap<>();
+        searchValues.put("idCase", caseId);
 
+        if (textValue != null)
+            searchValues.put("comment", textValue);
+        if (action != null)
+            searchValues.put("action", action);
+        if (user != null)
+            searchValues.put("user", user);
+
+        SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", searchValues);
         List<ActionRegistry> registries = response.getSources();
 
         repository.closeClient();

@@ -16,6 +16,7 @@ import com.qsocialnow.common.model.cases.Coordinates;
 import com.qsocialnow.common.model.cases.Event;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
+import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
 
 @Component("openCaseAction")
 public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
@@ -26,10 +27,11 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
     private static final Logger log = LoggerFactory.getLogger(OpenCaseAction.class);
 
     @Override
-    public Case execute(InPutBeanDocument inputElement, List<String> parameters) {
+    public Case execute(InPutBeanDocument inputElement, List<String> parameters, ExecutionMessageRequest request) {
         log.info("Creating case...");
         Case newCase = new Case();
         newCase.setOpen(true);
+        newCase.setTriggerId(request.getDetectionCriteria().getTriggerId());
         Date openDate = new Date();
         newCase.setOpenDate(openDate);
         newCase.setTitle(inputElement.getTitulo());

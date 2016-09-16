@@ -1,7 +1,9 @@
 package com.qsocialnow.elasticsearch.repositories;
 
 import java.util.List;
+import java.util.Map;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
@@ -34,8 +36,13 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping);
 
+    public <E> SearchResponse<E> findByAlias(String id, Mapping<T, E> mapping);
+
     public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, int from, int size, String sortField,
             String serchField, String searchValue);
+
+    public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
+            Map<String, String> fieldValues);
 
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, Mapping<T, E> mapping);
 
@@ -45,5 +52,10 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> searchChildMappingWithFilters(int from, int size, String sortField,
             QueryBuilder filters, ChildMapping<T, E> mapping);
+
+    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
+            BoolQueryBuilder filters, Mapping<T, E> mapping);
+
+    public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping);
 
 }

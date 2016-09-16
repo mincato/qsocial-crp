@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.Case;
 
-@Component("closeCaseAction")
-public class CloseCaseAction implements Action {
+@Component("resolveCaseAction")
+public class ResolveCaseAction implements Action {
 
     @Override
     public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         caseObject.setCloseDate(new Date());
         caseObject.setOpen(false);
+        caseObject.setResolution((String) parameters.get(ActionParameter.RESOLUTION));
         return true;
     }
 

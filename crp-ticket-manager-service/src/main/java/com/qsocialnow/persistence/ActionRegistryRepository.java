@@ -23,9 +23,8 @@ public class ActionRegistryRepository {
     private ActionRegistryService registryService;
 
     public void create(String caseId, ActionRegistry actionRegistry) {
-        // TODO guardarlo en Elastic
+        registryService.indexRegistry(caseId, actionRegistry);
         log.info("Saving action registry: " + new GsonBuilder().create().toJson(actionRegistry));
-
     }
 
     public List<RegistryListView> findAll(String caseId, PageRequest pageRequest) {
@@ -41,8 +40,12 @@ public class ActionRegistryRepository {
                     registryListView.setId(registry.getId());
                     registryListView.setUser(registry.getUserName());
                     registryListView.setAction(registry.getAction());
-                    if (registry.getEvent() != null)
-                        registryListView.setDescription(registry.getEvent().getDescription());
+                    /*
+                     * if (registry.getEvent() != null)
+                     * registryListView.setDescription
+                     * (registry.getEvent().getDescription());
+                     */
+                    registryListView.setDescription(registry.getComment());
                     registryListView.setDate(registry.getDate());
                     registriesView.add(registryListView);
                 }
@@ -53,19 +56,24 @@ public class ActionRegistryRepository {
         return registriesView;
     }
 
-    public List<RegistryListView> findAllByText(String caseId, String textValue, PageRequest pageRequest) {
+    public List<RegistryListView> findAllBy(String caseId, String textValue, String action, String user,
+            PageRequest pageRequest) {
         List<RegistryListView> registriesView = new ArrayList<>();
         try {
-            List<ActionRegistry> registries = registryService.findRegistriesByText(pageRequest.getOffset(),
-                    pageRequest.getLimit(), caseId, textValue);
+            List<ActionRegistry> registries = registryService.findRegistriesBy(pageRequest.getOffset(),
+                    pageRequest.getLimit(), caseId, textValue, action, user);
             if (registries != null) {
                 for (ActionRegistry registry : registries) {
                     RegistryListView registryListView = new RegistryListView();
                     registryListView.setId(registry.getId());
                     registryListView.setUser(registry.getUserName());
                     registryListView.setAction(registry.getAction());
-                    if (registry.getEvent() != null)
-                        registryListView.setDescription(registry.getEvent().getDescription());
+                    /*
+                     * if (registry.getEvent() != null)
+                     * registryListView.setDescription
+                     * (registry.getEvent().getDescription());
+                     */
+                    registryListView.setDescription(registry.getComment());
                     registryListView.setDate(registry.getDate());
                     registriesView.add(registryListView);
                 }

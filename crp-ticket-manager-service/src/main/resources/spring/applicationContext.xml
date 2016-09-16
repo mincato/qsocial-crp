@@ -75,6 +75,7 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REOPEN}" value-ref="reopenCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).PENDING_RESPONSE}" value-ref="pendingResponseCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REGISTER_COMMENT}" value-ref="registerCommentCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).RESOLVE}" value-ref="resolveCaseAction"/>
 	</util:map>
 
 </beans>

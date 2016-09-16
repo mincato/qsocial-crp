@@ -55,4 +55,15 @@ public class TriggerRepository {
         return triggers;
     }
 
+    public Trigger findOne(String triggerId) {
+        Trigger trigger = null;
+
+        try {
+            trigger = triggerElasticService.findOne(triggerId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return trigger;
+    }
+
 }
