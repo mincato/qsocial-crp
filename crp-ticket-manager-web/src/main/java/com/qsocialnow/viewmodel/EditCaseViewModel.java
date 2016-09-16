@@ -113,7 +113,7 @@ public class EditCaseViewModel implements Serializable {
 
     }
 
-    @Command
+    @GlobalCommand
     @NotifyChange({ "registries", "moreResults" })
     public void search() {
         this.findRegistriesBy();

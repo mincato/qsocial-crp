@@ -34,7 +34,7 @@ public class ActionRegistryService extends DynamicIndexService {
 
         ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
         mapping.setIndex(this.getIndex(repository));
-
+        log.info("Indexing new registry from case: " + idCase);
         // index document
         ActionRegistryType documentIndexed = mapping.getDocumentType(document);
         documentIndexed.setIdCase(idCase);
@@ -54,8 +54,8 @@ public class ActionRegistryService extends DynamicIndexService {
         mapping.setIndex(this.getQueryIndex());
 
         log.info("Retriving registries from case: " + caseId);
-        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
-                caseId);
+        SearchResponse<ActionRegistry> response = repository
+                .queryByField(mapping, from, size, "date", "idCase", caseId);
 
         List<ActionRegistry> registries = response.getSources();
 
@@ -73,8 +73,6 @@ public class ActionRegistryService extends DynamicIndexService {
 
         ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
-
-        log.info("Retriving registries from case: " + caseId + " - text:" + textValue);
         Map<String, String> searchValues = new HashMap<>();
         searchValues.put("idCase", caseId);
 
