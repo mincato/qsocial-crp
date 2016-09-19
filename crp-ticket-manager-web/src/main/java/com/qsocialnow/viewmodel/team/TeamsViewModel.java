@@ -8,15 +8,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.TeamService;
@@ -98,6 +103,7 @@ public class TeamsViewModel implements Serializable {
             return null;
         }
         Map<String, String> filters = new HashMap<String, String>();
+        filters.put("name", this.keyword);
         return filters;
     }
 
@@ -108,6 +114,26 @@ public class TeamsViewModel implements Serializable {
 
     public boolean isFilterActive() {
         return filterActive;
+    }
+
+    @Command
+    public void openEdit(@BindingParam("teamId") String teamId) {
+        Map<String, Object> arg = new HashMap<String, Object>();
+        arg.put("team", teamId);
+        Executions.createComponents("/pages/team/edit-team.zul", null, arg);
+    }
+
+    @GlobalCommand
+    @NotifyChange("teams")
+    public void changeTeam(@BindingParam("teamChanged") Team teamChanged) {
+        if (teamChanged != null) {
+            Optional<TeamListView> teamOptional = teams.stream()
+                    .filter(team -> team.getId().equals(teamChanged.getId())).findFirst();
+            if (teamOptional.isPresent()) {
+                TeamListView teamListView = teamOptional.get();
+                teamListView.setName(teamChanged.getName());
+            }
+        }
     }
 
 }

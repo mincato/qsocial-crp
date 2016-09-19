@@ -137,10 +137,10 @@ public class UserResolverServiceImpl implements UserResolverService {
         }
     }
 
-	@Override
-	public List<UserResolverListView> findAll(Map<String, String> filters) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<UserResolverListView> findAll(Map<String, String> filters) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }
