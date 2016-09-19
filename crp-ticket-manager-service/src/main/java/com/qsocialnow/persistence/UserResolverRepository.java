@@ -66,4 +66,16 @@ public class UserResolverRepository {
         return userResolver;
     }
 
+    public UserResolver delete(String userResolverId) {
+        try {
+            userResolverElasticService.deleteUserResolver(userResolverId);
+            UserResolver userResolver = new UserResolver();
+            userResolver.setId(userResolverId);
+            return userResolver;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
 }

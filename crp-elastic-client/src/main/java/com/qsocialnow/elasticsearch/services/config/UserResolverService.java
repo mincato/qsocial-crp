@@ -69,4 +69,16 @@ public class UserResolverService {
         this.configurator = configurator;
     }
 
+    public void deleteUserResolver(String userResolverId) {
+        RepositoryFactory<UserResolverType> esfactory = new RepositoryFactory<UserResolverType>(configurator);
+
+        Repository<UserResolverType> repository = esfactory.initManager();
+        repository.initClient();
+
+        UserResolverMapping mapping = UserResolverMapping.getInstance();
+
+        repository.removeMapping(userResolverId, mapping);
+        repository.closeClient();
+    }
+
 }
