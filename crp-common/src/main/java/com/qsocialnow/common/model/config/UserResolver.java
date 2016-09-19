@@ -2,7 +2,9 @@ package com.qsocialnow.common.model.config;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-public class UserResolver extends User {
+public class UserResolver {
+
+    private String id;
 
     private Long source;
 
@@ -12,6 +14,14 @@ public class UserResolver extends User {
     private SourceCredentials credentials;
 
     private Boolean active;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public Long getSource() {
         return source;

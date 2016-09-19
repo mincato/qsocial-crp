@@ -441,4 +441,89 @@ router.put('/domains/:id', function (req, res) {
 
 });
 
+router.get('/userResolver', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var userResolverService = javaContext.getBeanSync("userResolverService");
+	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
+	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+	  
+	  userResolverService.findAll(pageNumber, pageSize, asyncResponse);
+});
+
+router.post('/userResolver', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+	}
+
+	prettyJSON(req.body);
+
+	var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	var clazz = java.findClassSync('com.qsocialnow.common.model.config.UserResolver');
+	var userResolver = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+
+	var userResolverService = javaContext.getBeanSync("userResolverService");
+	userResolverService.createUserResolver(userResolver, asyncResponse);
+
+});
+
+router.get('/userResolver/:id', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	    	try {
+	    		res.set('Content-Type','application/json');
+	    		res.send(gson.toJsonSync(response));
+	    	} catch(ex) {
+	    		res.status(500).json(ex.cause.getMessageSync());
+	    	}
+	    } else {
+	    	res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+	}
+
+	var userResolverId = req.params.id;
+
+	var userResolverService = javaContext.getBeanSync("userResolverService");
+	userResolverService.findOne(userResolverId, asyncResponse);
+
+});
+
+
+
 module.exports = router;

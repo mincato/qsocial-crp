@@ -13,7 +13,6 @@ import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.search.MatchQuery;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -470,10 +469,21 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @Override
+    public <E> SearchResponse<E> search(Integer from, Integer size, String sortField, Mapping<T, E> mapping) {
+        return searchWithFilters(from, size, null, null, mapping);
+    }
+
+    @Override
     public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
             BoolQueryBuilder filters, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC).query(filters);
+        searchSourceBuilder.from(from).size(size);
+        if (sortField != null) {
+            searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
+        if (filters != null) {
+            searchSourceBuilder.query(filters);
+        }
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 

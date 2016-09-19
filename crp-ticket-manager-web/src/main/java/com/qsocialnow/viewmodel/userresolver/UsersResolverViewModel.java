@@ -34,7 +34,7 @@ public class UsersResolverViewModel implements Serializable {
     private int pageSize = PAGE_SIZE_DEFAULT;
     private int activePage = ACTIVE_PAGE_DEFAULT;
 
-    @WireVariable("mockUserResolverService")
+    @WireVariable
     private UserResolverService userResolverService;
 
     private boolean moreResults;
