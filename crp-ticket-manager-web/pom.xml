@@ -13,6 +13,7 @@
 	<description>The Ticket Manager Webapp Project</description>
 
 	<properties>
+		<build.number>localhost</build.number>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -130,6 +131,7 @@
 	</dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
+		
 		<plugins>
 			<!-- Run with Jetty -->
 			<plugin>
@@ -160,6 +162,17 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>${maven.war.plugin.version}</version>
 				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+						<manifestEntries>
+							<Application-Title>${project.name}</Application-Title>
+							<Application-Version>${project.version}</Application-Version>
+							<Application-Build>${build.number}</Application-Build>
+						</manifestEntries>
+					</archive>				
 					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
 					<warName>${project.build.finalName}</warName>
 				</configuration>
