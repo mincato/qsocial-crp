@@ -1,5 +1,6 @@
 package com.qsocialnow.services;
 
+import java.util.List;
 import java.util.Map;
 
 import com.qsocialnow.common.model.config.UserResolver;
@@ -15,6 +16,8 @@ public interface UserResolverService {
     UserResolver update(UserResolver currentUserResolver);
 
     PageResponse<UserResolverListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
+
+    List<UserResolverListView> findAll(Map<String, String> filters);
 
     void delete(String id);
 
