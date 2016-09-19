@@ -81,4 +81,17 @@ public class UserResolverService {
         repository.closeClient();
     }
 
+    public String updateUserResolver(UserResolver userResolver) {
+        RepositoryFactory<UserResolverType> esfactory = new RepositoryFactory<UserResolverType>(configurator);
+
+        Repository<UserResolverType> repository = esfactory.initManager();
+        repository.initClient();
+
+        UserResolverMapping mapping = UserResolverMapping.getInstance();
+        UserResolverType documentIndexed = mapping.getDocumentType(userResolver);
+        String response = repository.updateIndexMapping(userResolver.getId(), mapping, documentIndexed);
+        repository.closeClient();
+        return response;
+    }
+
 }

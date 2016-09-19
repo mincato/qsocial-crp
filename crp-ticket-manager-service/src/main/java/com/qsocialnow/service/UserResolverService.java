@@ -46,6 +46,18 @@ public class UserResolverService {
         return userResolver;
     }
 
+    public UserResolver update(String userResolverId, UserResolver userResolver) {
+        UserResolver userResolverSaved = null;
+        try {
+            userResolver.setId(userResolverId);
+            userResolverSaved = userResolverRepository.update(userResolver);
+        } catch (Exception e) {
+            log.error("There was an error updating user resolver: " + userResolver.getIdentifier(), e);
+            throw new RuntimeException(e.getMessage());
+        }
+        return userResolverSaved;
+    }
+
     public UserResolver delete(String userResolverId) {
         try {
             return userResolverRepository.delete(userResolverId);

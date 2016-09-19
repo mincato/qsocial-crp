@@ -78,4 +78,15 @@ public class UserResolverRepository {
         return null;
     }
 
+    public UserResolver update(UserResolver userResolver) {
+        try {
+            String id = userResolverElasticService.updateUserResolver(userResolver);
+            userResolver.setId(id);
+            return userResolver;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
 }
