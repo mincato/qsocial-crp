@@ -26,6 +26,8 @@ import com.qsocialnow.services.ActionRegistryService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class EditCaseViewModel implements Serializable {
 
+    private static final String ALL_VALUES = "ALL_VALUES";
+
     private static final long serialVersionUID = 2259179419421396093L;
 
     @WireVariable
@@ -58,6 +60,8 @@ public class EditCaseViewModel implements Serializable {
 
     private List<ActionType> actionOptions = new ArrayList<>();
 
+    private List<String> actionFilterOptions = new ArrayList<>();
+
     private ActionType selectedAction;
 
     @Init
@@ -65,6 +69,11 @@ public class EditCaseViewModel implements Serializable {
         this.caseId = caseSelected;
         findCase(this.caseId);
         findRegistriesByCase(this.caseId);
+        actionFilterOptions.add(0, ALL_VALUES);
+        for (int i = 0; i < ActionType.values().length; i++) {
+            actionFilterOptions.add(ActionType.values()[i].toString());
+        }
+        this.action = ALL_VALUES;
         actionOptions = Arrays.asList(ActionType.values());
     }
 
@@ -113,10 +122,16 @@ public class EditCaseViewModel implements Serializable {
 
     }
 
-    @GlobalCommand
+    @Command
     @NotifyChange({ "registries", "moreResults" })
     public void search() {
         this.findRegistriesBy();
+    }
+
+    @GlobalCommand
+    @NotifyChange({ "registries", "moreResults" })
+    public void refreshRegistries() {
+        findRegistriesByCase(this.caseId);
     }
 
     @GlobalCommand
@@ -130,23 +145,29 @@ public class EditCaseViewModel implements Serializable {
         PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistries(activePage, pageSize,
                 caseSelected);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.registries.clear();
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;
         } else {
             this.moreResults = false;
+            this.activePage = 0;
         }
         return pageResponse;
     }
 
     private PageResponse<RegistryListView> findRegistriesBy() {
+        String actionValue = ALL_VALUES.equals(this.action) ? null : this.action;
+
         PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistriesBy(activePage, pageSize,
-                this.caseId, this.keyword, this.action, this.user, this.fromDate, this.toDate);
+                this.caseId, this.keyword, actionValue, this.user, this.fromDate, this.toDate);
+
         this.registries.clear();
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;
         } else {
             this.moreResults = false;
+            this.activePage = 0;
         }
         return pageResponse;
     }
@@ -189,5 +210,9 @@ public class EditCaseViewModel implements Serializable {
 
     public void setToDate(Date toDate) {
         this.toDate = toDate;
+    }
+
+    public List<String> getActionFilterOptions() {
+        return actionFilterOptions;
     }
 }

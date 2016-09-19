@@ -482,10 +482,21 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @Override
+    public <E> SearchResponse<E> search(Integer from, Integer size, String sortField, Mapping<T, E> mapping) {
+        return searchWithFilters(from, size, null, null, mapping);
+    }
+
+    @Override
     public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
             BoolQueryBuilder filters, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC).query(filters);
+        searchSourceBuilder.from(from).size(size);
+        if (sortField != null) {
+            searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
+        if (filters != null) {
+            searchSourceBuilder.query(filters);
+        }
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 
@@ -532,6 +543,22 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             throw new RuntimeException(result.getErrorMessage());
         }
         return response;
+    }
+
+    @Override
+    public <E> void removeMapping(String id, Mapping<T, E> mapping) {
+        Delete delete = new Delete.Builder(id).index(mapping.getIndex()).type(mapping.getType()).build();
+        try {
+            DocumentResult response = client.execute(delete);
+            if (!response.isSucceeded()) {
+                log.error("There was an error removing mapping: " + response.getErrorMessage());
+                throw new RuntimeException(response.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

@@ -30,7 +30,7 @@ public class DeleteUserResolverViewModel implements Serializable {
 
     private static final long serialVersionUID = 1021330524834494381L;
 
-    @WireVariable("mockUserResolverService")
+    @WireVariable
     private UserResolverService userResolverService;
 
     private UserResolverView currentUserResolver;
