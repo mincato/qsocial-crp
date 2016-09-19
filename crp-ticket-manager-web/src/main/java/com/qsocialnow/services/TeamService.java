@@ -16,6 +16,4 @@ public interface TeamService {
 
     PageResponse<TeamListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
 
-    void delete(String id);
-
 }

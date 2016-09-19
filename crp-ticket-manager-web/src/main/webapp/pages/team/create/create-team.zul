@@ -32,9 +32,7 @@
 							</x:span>
 						</x:div>
 					</x:div>
-					<n:br />
 					<include src="/pages/team/edit-users.zul"/>
-					<n:br />
 					<include src="/pages/team/edit-users-resolver.zul"/>
 					<n:br />
 					<div class="form-group text-center">
