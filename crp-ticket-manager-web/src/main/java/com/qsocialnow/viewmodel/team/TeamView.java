@@ -2,16 +2,18 @@ package com.qsocialnow.viewmodel.team;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.qsocialnow.common.model.config.Team;
-import com.qsocialnow.common.model.config.UserResolverListView;
 
 public class TeamView {
 
+    @Valid
     private Team team;
 
     private List<TeamUserView> users;
 
-    private List<UserResolverListView> usersResolver;
+    private List<TeamUserResolverView> usersResolver;
 
     public Team getTeam() {
         return team;
@@ -29,11 +31,11 @@ public class TeamView {
         this.users = users;
     }
 
-    public List<UserResolverListView> getUsersResolver() {
+    public List<TeamUserResolverView> getUsersResolver() {
         return usersResolver;
     }
 
-    public void setUsersResolver(List<UserResolverListView> usersResolver) {
+    public void setUsersResolver(List<TeamUserResolverView> usersResolver) {
         this.usersResolver = usersResolver;
     }
 

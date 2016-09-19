@@ -8,6 +8,8 @@ public class TeamUserView {
 
     private Boolean coordinator = Boolean.FALSE;
 
+    private Boolean editingStatus = Boolean.FALSE;
+
     public UserListView getUser() {
         return user;
     }
@@ -22,6 +24,14 @@ public class TeamUserView {
 
     public void setCoordinator(Boolean coordinator) {
         this.coordinator = coordinator;
+    }
+
+    public Boolean getEditingStatus() {
+        return editingStatus;
+    }
+
+    public void setEditingStatus(Boolean editingStatus) {
+        this.editingStatus = editingStatus;
     }
 
 }

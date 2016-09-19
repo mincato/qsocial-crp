@@ -2,11 +2,14 @@
     {
       "id": "1",
       "name": "Juan",
-      "lastName":"Perez"
+      "lastName":"Perez",
+      "username": "jperez"
+      
     },
     {
       "id": "2",
       "name": "Jose",
-      "lastName":"Gonzalez"
+      "lastName":"Gonzalez",
+      "username": "jgonzalez"
     }
 ]

@@ -2,10 +2,13 @@ package com.qsocialnow.common.model.config;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class Team {
 
     private String id;
 
+    @NotBlank(message = "{field.empty}")
     private String name;
 
     private List<User> users;
