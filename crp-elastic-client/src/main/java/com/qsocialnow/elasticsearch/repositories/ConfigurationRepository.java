@@ -126,8 +126,6 @@ public class ConfigurationRepository {
         UserResolver userResolver = new UserResolver();
         userResolver.setActive(true);
         userResolver.setId("user1");
-        userResolver.setName("John");
-        userResolver.setLastName("Goodman");
         userResolver.setSource(1l);
 
         team.setUserResolver(userResolver);

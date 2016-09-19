@@ -6,7 +6,9 @@ public class SourceCredentials {
 
     private SourceIdentifier identifier;
 
-    private String value;
+    private String token;
+
+    private String secretToken;
 
     public String getId() {
         return id;
@@ -24,11 +26,19 @@ public class SourceCredentials {
         this.identifier = identifier;
     }
 
-    public String getValue() {
-        return value;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public String getToken() {
+        return token;
+    }
+
+    public void setSecretToken(String secretToken) {
+        this.secretToken = secretToken;
+    }
+
+    public String getSecretToken() {
+        return secretToken;
     }
 }

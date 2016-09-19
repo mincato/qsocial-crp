@@ -14,17 +14,17 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<x:form class="form-horizontal"
-					form="@id('fx') @load(vm.currentUserResolver) @save(vm.currentUserResolver, before='save') ">
+					form="@id('fx') @load(vm.currentUserResolver) @save(vm.currentUserResolver, before={'save', 'authorize'})">
 					<x:div
 						sclass="@load(empty vmsgs[source] ? 'form-group' : 'form-group has-error')">
 						<n:label class="control-label col-sm-2">
 							${labels.userresolver.source.label}
 						</n:label>
 						<x:div class="col-sm-10">
-							<radiogroup id="source"  selectedItem="@bind(fx.source) @validator('beanValidator')"/>
+							<radiogroup id="source" selectedItem="@bind(fx.source) @validator('beanValidator')"/>
 							<x:div children="@load(vm.mediaTypes)">
 								<template name="children">
-									<radio radiogroup="source" value="@load(each)"
+									<radio radiogroup="source" value="@load(each)" disabled="@load(fx.userResolver.credentials ne null)"
 										zclass="icon-input media" sclass="@load(each.icon)" />
 								</template>
 							</x:div>
@@ -35,20 +35,14 @@
 						</x:div>
 					</x:div>
 					<x:div
-						sclass="@load(empty vmsgs[identifier] ? 'form-group' : 'form-group has-error')">
+						sclass="form-group">
 						<n:label class="control-label col-sm-2">
 							${labels.userresolver.identifier.label}
 						</n:label>
 						<x:div class="col-sm-10">
-							<textbox type="text" class="form-control"
-								id="identifier"
-								name="normal_input"
-								value="@bind(fx.userResolver.identifier) @validator('beanValidator')">
-							</textbox>
-							<x:span
-								sclass="@load(empty vmsgs[identifier] ? 'hidden' : 'help-block')">
-								<label value="@load(vmsgs[identifier])" />
-							</x:span>
+							<label class="form-control"
+								value="@bind(fx.userResolver.identifier)">
+							</label>
 						</x:div>
 					</x:div>
 					<x:div class="form-group">
@@ -59,13 +53,19 @@
 							<checkbox checked="@bind(fx.userResolver.active)" />
 						</x:div>
 					</x:div>
-					<div class="form-group" visible="@load(not empty fx.source)">
+					<div sclass="@load(vm.authorized eq null || vm.authorized ? 'form-group' : 'form-group has-error')" visible="@load(not empty fx.source and fx.userResolver.credentials eq null)">
 						<div zclass="col-sm-offset-2 col-sm-10">
 					      <div zclass="col-sm-4 col-md-4 col-lg-3 " style="padding:0 0 !important;">
-							<a zclass="btn btn-block btn-social" sclass="@load(c:cat('btn-',fx.source.icon))">
+							<a zclass="btn btn-block btn-social" onClick="@command('authorize', media=fx.source, username=fx.userResolver.identifier)" sclass="@load(c:cat('btn-',fx.source.icon))">
 	    						<span zclass="fa" sclass="@load(c:cat('fa-',fx.source.icon))"></span><label value="@load(c:cat(c:cat(labels.userresolver.conect.action, ' '),fx.source.name))" />
 	  						</a>
   						</div>
+						</div>
+						<div zclass="col-sm-offset-2 col-sm-10">
+  						<x:span
+							sclass="@load(vm.authorized eq null || vm.authorized ? 'hidden' : 'help-block')" style="padding:0 0 !important;">
+							<label value="${labels.userresolver.authorization.validation}" />
+						</x:span>
 						</div>
 					</div>
 					<n:br/>

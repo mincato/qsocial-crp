@@ -482,10 +482,21 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @Override
+    public <E> SearchResponse<E> search(Integer from, Integer size, String sortField, Mapping<T, E> mapping) {
+        return searchWithFilters(from, size, null, null, mapping);
+    }
+
+    @Override
     public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
             BoolQueryBuilder filters, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC).query(filters);
+        searchSourceBuilder.from(from).size(size);
+        if (sortField != null) {
+            searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
+        if (filters != null) {
+            searchSourceBuilder.query(filters);
+        }
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 
