@@ -34,7 +34,7 @@ public class ActionRegistryService extends DynamicIndexService {
 
         ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
         mapping.setIndex(this.getIndex(repository));
-
+        log.info("Indexing new registry from case: " + idCase);
         // index document
         ActionRegistryType documentIndexed = mapping.getDocumentType(document);
         documentIndexed.setIdCase(idCase);
@@ -54,8 +54,8 @@ public class ActionRegistryService extends DynamicIndexService {
         mapping.setIndex(this.getQueryIndex());
 
         log.info("Retriving registries from case: " + caseId);
-        SearchResponse<ActionRegistry> response = repository.queryByField(mapping, from, size, "action", "idCase",
-                caseId);
+        SearchResponse<ActionRegistry> response = repository
+                .queryByField(mapping, from, size, "date", "idCase", caseId);
 
         List<ActionRegistry> registries = response.getSources();
 
@@ -64,7 +64,7 @@ public class ActionRegistryService extends DynamicIndexService {
     }
 
     public List<ActionRegistry> findRegistriesBy(int from, int size, String caseId, String textValue, String action,
-            String user) {
+            String user, String fromDate, String toDate) {
 
         RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
                 elasticSearchCaseConfigurator);
@@ -73,8 +73,6 @@ public class ActionRegistryService extends DynamicIndexService {
 
         ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
-
-        log.info("Retriving registries from case: " + caseId + " - text:" + textValue);
         Map<String, String> searchValues = new HashMap<>();
         searchValues.put("idCase", caseId);
 
@@ -85,7 +83,8 @@ public class ActionRegistryService extends DynamicIndexService {
         if (user != null)
             searchValues.put("user", user);
 
-        SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", searchValues);
+        SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", searchValues,
+                "date", fromDate, toDate);
         List<ActionRegistry> registries = response.getSources();
 
         repository.closeClient();

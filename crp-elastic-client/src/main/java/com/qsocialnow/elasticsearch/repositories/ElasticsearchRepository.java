@@ -13,6 +13,7 @@ import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -292,7 +293,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            Map<String, String> searchValues) {
+            Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC);
 
@@ -300,7 +301,19 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         for (String searchField : searchValues.keySet()) {
             boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
         }
+
+        if (rangeField != null) {
+            RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeField);
+            if (fromValue != null)
+                range.gte(fromValue);
+            if (toValue != null)
+                range.lte(toValue);
+
+            boolQueryBuilder.filter(range);
+        }
         searchSourceBuilder.query(boolQueryBuilder);
+
+        log.info("Query: " + searchSourceBuilder.toString());
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();

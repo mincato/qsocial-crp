@@ -57,11 +57,11 @@ public class ActionRegistryRepository {
     }
 
     public List<RegistryListView> findAllBy(String caseId, String textValue, String action, String user,
-            PageRequest pageRequest) {
+            String fromDate, String toDate, PageRequest pageRequest) {
         List<RegistryListView> registriesView = new ArrayList<>();
         try {
             List<ActionRegistry> registries = registryService.findRegistriesBy(pageRequest.getOffset(),
-                    pageRequest.getLimit(), caseId, textValue, action, user);
+                    pageRequest.getLimit(), caseId, textValue, action, user, fromDate, toDate);
             if (registries != null) {
                 for (ActionRegistry registry : registries) {
                     RegistryListView registryListView = new RegistryListView();

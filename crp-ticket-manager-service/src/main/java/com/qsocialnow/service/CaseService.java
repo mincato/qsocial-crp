@@ -68,15 +68,7 @@ public class CaseService {
                         log.error("There was an error trying to update the case");
                         throw new RuntimeException("There was an error trying to update the case");
                     }
-                    ActionRegistry actionRegistry = new ActionRegistry();
-                    actionRegistry.setType(actionRequest.getActionType());
-                    actionRegistry.setDate(new Date());
-                    if (actionRequest.getParameters() != null) {
-                        Object comment = actionRequest.getParameters().get(ActionParameter.COMMENT);
-                        if (comment != null) {
-                            actionRegistry.setComment((String) comment);
-                        }
-                    }
+                    ActionRegistry actionRegistry = createActionRegistry(actionRequest);
                     actionRegistryRepository.create(caseId, actionRegistry);
                 } else {
                     log.warn("The action does not exist");
@@ -115,6 +107,20 @@ public class CaseService {
 
     public void setRepository(CaseRepository repository) {
         this.repository = repository;
+    }
+
+    private ActionRegistry createActionRegistry(ActionRequest actionRequest) {
+        ActionRegistry actionRegistry = new ActionRegistry();
+        actionRegistry.setType(actionRequest.getActionType());
+        actionRegistry.setDate(new Date());
+        actionRegistry.setAction(actionRequest.getActionType().name());
+        if (actionRequest.getParameters() != null) {
+            Object comment = actionRequest.getParameters().get(ActionParameter.COMMENT);
+            if (comment != null) {
+                actionRegistry.setComment((String) comment);
+            }
+        }
+        return actionRegistry;
     }
 
 }

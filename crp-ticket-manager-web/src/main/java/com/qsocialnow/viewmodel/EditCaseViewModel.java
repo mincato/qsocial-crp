@@ -3,6 +3,7 @@ package com.qsocialnow.viewmodel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import org.zkoss.bind.annotation.BindingParam;
@@ -49,7 +50,9 @@ public class EditCaseViewModel implements Serializable {
 
     private String user;
 
-    private String date;
+    private Date fromDate;
+
+    private Date toDate;
 
     private List<RegistryListView> registries = new ArrayList<>();
 
@@ -110,7 +113,7 @@ public class EditCaseViewModel implements Serializable {
 
     }
 
-    @Command
+    @GlobalCommand
     @NotifyChange({ "registries", "moreResults" })
     public void search() {
         this.findRegistriesBy();
@@ -137,7 +140,7 @@ public class EditCaseViewModel implements Serializable {
 
     private PageResponse<RegistryListView> findRegistriesBy() {
         PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistriesBy(activePage, pageSize,
-                this.caseId, this.keyword, this.action, this.user, this.date);
+                this.caseId, this.keyword, this.action, this.user, this.fromDate, this.toDate);
         this.registries.clear();
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
@@ -172,12 +175,19 @@ public class EditCaseViewModel implements Serializable {
         this.user = user;
     }
 
-    public String getDate() {
-        return date;
+    public Date getFromDate() {
+        return fromDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
     }
 
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
 }

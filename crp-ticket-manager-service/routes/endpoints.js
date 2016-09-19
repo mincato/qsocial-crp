@@ -159,11 +159,13 @@ router.get('/cases/:id/registries', function (req, res) {
 	  var text = req.query.text ? req.query.text : null;
 	  var action = req.query.action ? req.query.action : null;
 	  var user = req.query.user ? req.query.user : null;
+	  var fromDate = req.query.fromDate ? req.query.fromDate : null;
+	  var toDate = req.query.toDate ? req.query.toDate : null;
 	  
-	  if(text === null && action === null && user === null) {
+	  if(text === null && action === null && user === null && fromDate === null && toDate === null) {
 		  actionRegistryService.findAll(caseId,pageNumber, pageSize,asyncResponse);
 	  }else{
-		  actionRegistryService.findAllBy(caseId,text,action,user,pageNumber, pageSize,asyncResponse);
+		  actionRegistryService.findAllBy(caseId,text,action,user,fromDate,toDate,pageNumber, pageSize,asyncResponse);
 	  }
 });
 
