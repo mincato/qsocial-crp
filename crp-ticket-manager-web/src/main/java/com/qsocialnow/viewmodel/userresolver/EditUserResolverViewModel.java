@@ -1,9 +1,7 @@
 package com.qsocialnow.viewmodel.userresolver;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
@@ -33,12 +31,10 @@ public class EditUserResolverViewModel implements Serializable {
 
     private static final long serialVersionUID = 1021330524834494381L;
 
-    @WireVariable("userResolverService")
+    @WireVariable
     private UserResolverService userResolverService;
 
     private UserResolverView currentUserResolver;
-
-    private List<Media> mediaTypes;
 
     private boolean saved;
 
@@ -59,7 +55,6 @@ public class EditUserResolverViewModel implements Serializable {
         currentUserResolver = new UserResolverView();
         currentUserResolver.setUserResolver(userResolverService.findOne(userResolverId));
         currentUserResolver.setSource(Media.getByValue(currentUserResolver.getUserResolver().getSource()));
-        initMedias();
     }
 
     @Command
@@ -81,18 +76,6 @@ public class EditUserResolverViewModel implements Serializable {
             args.put("userResolverChanged", currentUserResolver.getUserResolver());
             BindUtils.postGlobalCommand(null, null, "changeUserResolver", args);
         }
-    }
-
-    private void initMedias() {
-        mediaTypes = Arrays.asList(Media.values());
-    }
-
-    public List<Media> getMediaTypes() {
-        return mediaTypes;
-    }
-
-    public void setMediaTypes(List<Media> mediaTypes) {
-        this.mediaTypes = mediaTypes;
     }
 
 }
