@@ -122,7 +122,7 @@ public class UserResolverServiceImpl implements UserResolverService {
     public void delete(String userResolverId) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl)).path(userResolverId);
+                    serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl)).path("/" + userResolverId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");

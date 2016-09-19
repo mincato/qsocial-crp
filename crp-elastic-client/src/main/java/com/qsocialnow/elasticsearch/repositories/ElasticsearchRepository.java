@@ -545,4 +545,20 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @Override
+    public <E> void removeMapping(String id, Mapping<T, E> mapping) {
+        Delete delete = new Delete.Builder(id).index(mapping.getIndex()).type(mapping.getType()).build();
+        try {
+            DocumentResult response = client.execute(delete);
+            if (!response.isSucceeded()) {
+                log.error("There was an error removing mapping: " + response.getErrorMessage());
+                throw new RuntimeException(response.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
