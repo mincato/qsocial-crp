@@ -6,9 +6,12 @@ public class TwitterConfig {
 
     private final String OAuthConsumerSecret;
 
-    public TwitterConfig(final String OAuthConsumerKey, final String OAuthConsumerSecret) {
+    private final String callbackUrl;
+
+    public TwitterConfig(final String OAuthConsumerKey, final String OAuthConsumerSecret, final String callbackUrl) {
         this.OAuthConsumerKey = OAuthConsumerKey;
         this.OAuthConsumerSecret = OAuthConsumerSecret;
+        this.callbackUrl = callbackUrl;
     }
 
     public String getOAuthConsumerKey() {
@@ -17,6 +20,10 @@ public class TwitterConfig {
 
     public String getOAuthConsumerSecret() {
         return OAuthConsumerSecret;
+    }
+
+    public String getCallbackUrl() {
+        return callbackUrl;
     }
 
 }

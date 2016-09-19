@@ -70,6 +70,7 @@ public class CreateUserResolverViewModel implements Serializable {
             currentUserResolver = new UserResolverView();
             currentUserResolver.setUserResolver(new UserResolver());
             currentUserResolver.getUserResolver().setActive(Boolean.FALSE);
+            authorized = null;
         } else {
             currentUserResolver = (UserResolverView) sessionUserResolver;
             Executions.getCurrent().getSession().removeAttribute("currentUserResolver");
@@ -97,7 +98,7 @@ public class CreateUserResolverViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "currentUserResolver" })
+    @NotifyChange({ "currentUserResolver", "authorized" })
     public void clear() {
         initUserResolver();
     }
