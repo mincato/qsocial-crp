@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -135,5 +136,11 @@ public class UserResolverServiceImpl implements UserResolverService {
             throw new RuntimeException(e);
         }
     }
+
+	@Override
+	public List<UserResolverListView> findAll(Map<String, String> filters) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
