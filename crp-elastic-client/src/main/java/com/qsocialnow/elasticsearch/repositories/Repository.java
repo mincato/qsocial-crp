@@ -60,4 +60,6 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> search(Integer from, Integer size, String sortField, Mapping<T, E> mapping);
 
+    public <E> void removeMapping(String id, Mapping<T, E> mapping);
+
 }

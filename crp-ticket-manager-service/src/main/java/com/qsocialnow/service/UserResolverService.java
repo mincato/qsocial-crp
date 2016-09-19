@@ -5,7 +5,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.UserResolver;
@@ -45,6 +44,27 @@ public class UserResolverService {
     public UserResolver findOne(String userResolverId) {
         UserResolver userResolver = userResolverRepository.findOne(userResolverId);
         return userResolver;
+    }
+
+    public UserResolver update(String userResolverId, UserResolver userResolver) {
+        UserResolver userResolverSaved = null;
+        try {
+            userResolver.setId(userResolverId);
+            userResolverSaved = userResolverRepository.update(userResolver);
+        } catch (Exception e) {
+            log.error("There was an error updating user resolver: " + userResolver.getIdentifier(), e);
+            throw new RuntimeException(e.getMessage());
+        }
+        return userResolverSaved;
+    }
+
+    public UserResolver delete(String userResolverId) {
+        try {
+            return userResolverRepository.delete(userResolverId);
+        } catch (Exception e) {
+            log.error("There was an error deleting user resolver: " + userResolverId, e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 }

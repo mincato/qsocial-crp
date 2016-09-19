@@ -33,6 +33,8 @@ public class TwitterOauthService implements OauthService {
 
     private RequestToken requestToken;
 
+    private TwitterConfig twitterConfig;
+
     public TwitterOauthService(CuratorFramework zookeeperClient, String twitterConfigZnodePath) {
         this.zookeeperClient = zookeeperClient;
         this.twitterConfigZnodePath = twitterConfigZnodePath;
@@ -43,15 +45,14 @@ public class TwitterOauthService implements OauthService {
     public String getAuthorizationUrl() {
         try {
             if (twitterFactory == null) {
-                TwitterConfig twitterConfig = TwitterConfigFactory.create(zookeeperClient, twitterConfigZnodePath);
+                twitterConfig = TwitterConfigFactory.create(zookeeperClient, twitterConfigZnodePath);
                 ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
                 configurationBuilder.setOAuthConsumerKey(twitterConfig.getOAuthConsumerKey());
                 configurationBuilder.setOAuthConsumerSecret(twitterConfig.getOAuthConsumerSecret());
                 twitterFactory = new TwitterFactory(configurationBuilder.build());
             }
             twitter = twitterFactory.getInstance();
-            requestToken = twitter
-                    .getOAuthRequestToken("http://localhost:8080/crp-ticket-manager-web/pages/user-resolver/create/index.zul");
+            requestToken = twitter.getOAuthRequestToken(twitterConfig.getCallbackUrl());
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(requestToken.getAuthorizationURL())
                     .queryParam("force_login", "true").queryParam("screen_name", "diego");
             return builder.toUriString();
