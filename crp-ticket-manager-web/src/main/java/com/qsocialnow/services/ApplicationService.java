@@ -4,6 +4,6 @@ import com.qsocialnow.model.ApplicationVersion;
 
 public interface ApplicationService {
 
-	ApplicationVersion getVersion();
+    ApplicationVersion getVersion();
 
 }

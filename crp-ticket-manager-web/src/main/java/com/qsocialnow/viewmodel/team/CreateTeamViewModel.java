@@ -3,6 +3,7 @@ package com.qsocialnow.viewmodel.team;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -15,7 +16,9 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
+import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.config.UserResolverListView;
 import com.qsocialnow.services.TeamService;
@@ -27,13 +30,13 @@ public class CreateTeamViewModel implements Serializable {
 
     private static final long serialVersionUID = 3526406425520096040L;
 
-    @WireVariable("mockTeamService")
+    @WireVariable
     private TeamService teamService;
 
     @WireVariable("mockUserService")
     private UserService userService;
 
-    @WireVariable("mockUserResolverService")
+    @WireVariable
     private UserResolverService userResolverService;
 
     private TeamView currentTeam;
@@ -77,8 +80,22 @@ public class CreateTeamViewModel implements Serializable {
     public void save() {
         Team team = new Team();
         team.setName(currentTeam.getTeam().getName());
-        team = teamService.update(team);
-        Clients.showNotification(Labels.getLabel("team.edit.notification.success", new String[] { team.getName() }));
+        team.setUserResolvers(currentTeam.getUsersResolver().stream().map(userResolver -> {
+            BaseUserResolver teamUserResolver = new BaseUserResolver();
+            teamUserResolver.setId(userResolver.getUser().getId());
+            teamUserResolver.setIdentifier(userResolver.getUser().getIdentifier());
+            teamUserResolver.setSource(userResolver.getUser().getSource());
+            return teamUserResolver;
+        }).collect(Collectors.toList()));
+        team.setUsers(currentTeam.getUsers().stream().map(userView -> {
+            User user = new User();
+            user.setCoordinator(userView.getCoordinator());
+            user.setUsername(userView.getUser().getUsername());
+            user.setId(userView.getUser().getId());
+            return user;
+        }).collect(Collectors.toList()));
+        team = teamService.create(team);
+        Clients.showNotification(Labels.getLabel("team.create.notification.success", new String[] { team.getName() }));
         initTeam();
         initUsers();
         initUsersResolver();

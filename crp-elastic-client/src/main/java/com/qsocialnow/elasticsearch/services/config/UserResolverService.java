@@ -2,6 +2,9 @@ package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.List;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.UserResolverMapping;
@@ -36,14 +39,20 @@ public class UserResolverService {
         return response;
     }
 
-    public List<UserResolver> getUserResolvers(Integer offset, Integer limit) {
+    public List<UserResolver> getUserResolvers(Integer offset, Integer limit, String identifier) {
         RepositoryFactory<UserResolverType> esfactory = new RepositoryFactory<UserResolverType>(configurator);
         Repository<UserResolverType> repository = esfactory.initManager();
         repository.initClient();
 
+        BoolQueryBuilder filters = null;
+        if (identifier != null) {
+            filters = QueryBuilders.boolQuery();
+            filters = filters.must(QueryBuilders.matchQuery("identifier", identifier));
+        }
+
         UserResolverMapping mapping = UserResolverMapping.getInstance();
 
-        SearchResponse<UserResolver> response = repository.search(offset, limit, "identifier", mapping);
+        SearchResponse<UserResolver> response = repository.searchWithFilters(offset, limit, null, filters, mapping);
         List<UserResolver> userResolvers = response.getSources();
 
         repository.closeClient();

@@ -25,6 +25,9 @@ public class UserResolverService {
         UserResolver userResolverSaved = null;
         try {
             userResolverSaved = userResolverRepository.save(userResolver);
+            if (userResolverSaved.getId() == null) {
+                throw new Exception("There was an error creating user resolver: " + userResolverSaved.getIdentifier());
+            }
         } catch (Exception e) {
             log.error("There was an error creating user resolver: " + userResolver.getIdentifier(), e);
             throw new RuntimeException(e.getMessage());
@@ -32,13 +35,18 @@ public class UserResolverService {
         return userResolverSaved;
     }
 
-    public PageResponse<UserResolverListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<UserResolverListView> userResolvers = userResolverRepository
-                .findAll(new PageRequest(pageNumber, pageSize));
+    public PageResponse<UserResolverListView> findAll(Integer pageNumber, Integer pageSize, String identifier) {
+        List<UserResolverListView> userResolvers = userResolverRepository.findAll(
+                new PageRequest(pageNumber, pageSize), identifier);
 
         PageResponse<UserResolverListView> page = new PageResponse<UserResolverListView>(userResolvers, pageNumber,
                 pageSize);
         return page;
+    }
+
+    public List<UserResolverListView> findAll() {
+        List<UserResolverListView> userResolvers = userResolverRepository.findAll(null, null);
+        return userResolvers;
     }
 
     public UserResolver findOne(String userResolverId) {

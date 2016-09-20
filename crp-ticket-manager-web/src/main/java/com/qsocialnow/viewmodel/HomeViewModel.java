@@ -13,24 +13,24 @@ import com.qsocialnow.services.ApplicationService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class HomeViewModel implements Serializable {
 
-	private static final long serialVersionUID = 3419130654069105310L;
+    private static final long serialVersionUID = 3419130654069105310L;
 
-	@WireVariable
-	private ApplicationService applicationService;
+    @WireVariable
+    private ApplicationService applicationService;
 
-	private ApplicationVersion applicationVersion;
+    private ApplicationVersion applicationVersion;
 
-	@Init
-	public void init() {
-		applicationVersion = applicationService.getVersion();
-	}
+    @Init
+    public void init() {
+        applicationVersion = applicationService.getVersion();
+    }
 
-	public ApplicationVersion getApplicationVersion() {
-		return applicationVersion;
-	}
+    public ApplicationVersion getApplicationVersion() {
+        return applicationVersion;
+    }
 
-	public void setApplicationVersion(ApplicationVersion applicationVersion) {
-		this.applicationVersion = applicationVersion;
-	}
+    public void setApplicationVersion(ApplicationVersion applicationVersion) {
+        this.applicationVersion = applicationVersion;
+    }
 
 }

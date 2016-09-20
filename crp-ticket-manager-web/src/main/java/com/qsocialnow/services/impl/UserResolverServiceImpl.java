@@ -97,7 +97,7 @@ public class UserResolverServiceImpl implements UserResolverService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl))
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl)).path("/list")
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             if (filters != null) {
@@ -139,8 +139,31 @@ public class UserResolverServiceImpl implements UserResolverService {
 
     @Override
     public List<UserResolverListView> findAll(Map<String, String> filters) {
-        // TODO Auto-generated method stub
-        return null;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico",
+                    userResolverServiceUrl));
+
+            if (filters != null) {
+                for (Map.Entry<String, String> filter : filters.entrySet()) {
+                    builder.queryParam(filter.getKey(), filter.getValue());
+                }
+            }
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<UserResolverListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<UserResolverListView>>() {
+                    });
+
+            List<UserResolverListView> userResolvers = response.getBody();
+            return userResolvers;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call user resolver service", e);
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

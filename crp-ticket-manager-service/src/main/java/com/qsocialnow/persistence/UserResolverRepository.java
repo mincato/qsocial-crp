@@ -33,12 +33,14 @@ public class UserResolverRepository {
         return null;
     }
 
-    public List<UserResolverListView> findAll(PageRequest pageRequest) {
+    public List<UserResolverListView> findAll(PageRequest pageRequest, String identifier) {
         List<UserResolverListView> userResolvers = new ArrayList<>();
 
         try {
-            List<UserResolver> userResolversRepo = userResolverElasticService.getUserResolvers(pageRequest.getOffset(),
-                    pageRequest.getLimit());
+            Integer offset = pageRequest != null ? pageRequest.getOffset() : null;
+            Integer limit = pageRequest != null ? pageRequest.getLimit() : null;
+            List<UserResolver> userResolversRepo = userResolverElasticService.getUserResolvers(offset, limit,
+                    identifier);
 
             for (UserResolver userResolverRepo : userResolversRepo) {
                 UserResolverListView userResolverListView = new UserResolverListView();
