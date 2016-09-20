@@ -76,8 +76,12 @@ public class CaseTicketService extends DynamicIndexService {
 
         CaseMapping mapping = CaseMapping.getInstance();
 
-        String indexName = this.getIndex(repository);
+        String indexName = this.getQueryIndex();
         mapping.setIndex(indexName);
+
+        // searching to retrieve index value
+        SearchResponse<Case> indexResponse = repository.findByAlias(document.getId(), mapping);
+        mapping.setIndex(indexResponse.getIndex());
 
         // index document
         CaseType documentIndexed = mapping.getDocumentType(document);
