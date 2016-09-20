@@ -499,7 +499,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size);
         if (sortField != null) {
-            searchSourceBuilder.sort(sortField, SortOrder.ASC);
+            searchSourceBuilder.sort(sortField, SortOrder.DESC);
         }
         if (filters != null) {
             searchSourceBuilder.query(filters);

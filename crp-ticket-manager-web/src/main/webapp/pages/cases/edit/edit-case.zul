@@ -8,7 +8,7 @@
        <n:div class="col-lg-12">
            <div zclass="pane equal col-md-12 col-xs-12">
                 <n:div class="col-md-2 col-xs-12">
-                    <n:h5>${labels.cases.registry.list.title}</n:h5>
+
                 </n:div>
 	            <n:div class="col-md-2">
 		            <div zclass="input-group input-group-sm">
@@ -54,7 +54,18 @@
 	        </div>
        </n:div>
     </n:div>
-	<div zclass="row">
+
+	<div class="row" visible="@load(empty vm.registries)">
+        <n:div class="col-lg-12">
+            <div zclass="pane equal">
+                <div class="text-center" visible="@load(vm.filterActive)">
+                    ${labels.app.pagination.noResultsFound} 
+                </div>
+            </div>
+        </n:div>
+    </div>
+
+	<div zclass="row" visible="@load(not empty vm.registries)">
     	<n:div class="col-lg-12">
     		<div zclass="pane equal">
 				<div zclass="table-responsive" >

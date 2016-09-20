@@ -52,8 +52,14 @@ public class CaseService {
         return page;
     }
 
-    public PageResponse<RegistryListView> findOne(String caseId, Integer pageNumber, Integer pageSize) {
-        return null;
+    public Case findOne(String caseId) {
+        try {
+            Case caseObject = repository.findOne(caseId);
+            return caseObject;
+        } catch (Exception e) {
+            log.error("There was an error executing action", e);
+            throw e;
+        }
     }
 
     public Case executeAction(String caseId, ActionRequest actionRequest) {

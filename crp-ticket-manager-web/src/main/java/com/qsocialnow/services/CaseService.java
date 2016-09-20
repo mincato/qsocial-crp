@@ -13,7 +13,7 @@ public interface CaseService {
 
     PageResponse<CaseListView> findAll(int pageNumber, int pageSize);
 
-    PageResponse<RegistryListView> findCaseWithRegistries(int activePage, int pageSize, String caseId);
+    Case findById(String caseId);
 
     Case executeAction(String caseId, ActionRequest actionRequest);
 
