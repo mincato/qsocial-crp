@@ -36,7 +36,7 @@
 					<include src="/pages/team/edit-users-resolver.zul"/>
 					<n:br />
 					<div class="form-group text-center">
-						<button onClick="@command('save')" disabled="@load(not vm.enabledAddUser or not vm.enabledAddUserResolver)"
+						<button onClick="@command('save')" disabled="@load(not vm.userListView.enabledAdd or not vm.userResolverListView.enabledAdd)"
 							label="${labels.app.button.save}" zclass="btn btn-success" />
 						<button onClick="@command('clear')"
 							label="${labels.app.button.clear}" zclass="btn btn-default" />
