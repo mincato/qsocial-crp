@@ -68,7 +68,6 @@ public class ReopenActionViewModel implements Serializable {
         args.put("caseUpdated", caseUpdated);
         BindUtils.postGlobalCommand(null, null, "actionExecuted", args);
         BindUtils.postGlobalCommand(null, null, "refreshRegistries", args);
-        BindUtils.postGlobalCommand(null, null, "getAllowedActionsByCase", args);
     }
 
 }

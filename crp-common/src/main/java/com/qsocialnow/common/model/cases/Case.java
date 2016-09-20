@@ -66,6 +66,7 @@ public class Case implements Serializable {
         List<ActionRegistry> registries = new ArrayList<>();
         ActionRegistry registry = new ActionRegistry();
         registry.setAction(ActionType.OPEN_CASE.name());
+        registry.setComment("Id: " + event.getId() + " - " + event.getTitulo());
         registry.setAutomatic(true);
         registry.setDate(openDate);
 

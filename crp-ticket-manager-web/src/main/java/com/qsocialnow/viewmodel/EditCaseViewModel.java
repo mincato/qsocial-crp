@@ -99,8 +99,6 @@ public class EditCaseViewModel implements Serializable {
         this.currentCase = caseService.findById(caseSelected);
     }
 
-    @GlobalCommand
-    @NotifyChange({ "actionOptions" })
     private List<ActionType> getAllowedActionsByCase() {
         if (currentCase != null)
             return currentCase.getAllowedManualActions();
@@ -118,7 +116,7 @@ public class EditCaseViewModel implements Serializable {
     }
 
     @GlobalCommand
-    @NotifyChange({ "registries", "moreResults" })
+    @NotifyChange({ "registries", "moreResults", "actionOptions" })
     public void refreshRegistries() {
         this.registries.clear();
         this.filterActive = false;
@@ -128,6 +126,8 @@ public class EditCaseViewModel implements Serializable {
         this.user = null;
         this.keyword = null;
         this.setDefaultPage();
+        this.findCase(this.caseId);
+        this.actionOptions = getAllowedActionsByCase();
         this.findRegistriesBy();
     }
 
