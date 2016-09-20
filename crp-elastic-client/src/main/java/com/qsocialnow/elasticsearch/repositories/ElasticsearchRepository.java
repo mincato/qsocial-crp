@@ -19,7 +19,10 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.amazonaws.services.config.model.Source;
 import com.google.common.base.Supplier;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
@@ -38,6 +41,7 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
@@ -350,7 +354,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     @Override
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> findByAlias(String id, Mapping<T, E> mapping) {
-        log.info("Elasticsearch get document with id" + id);
+        log.info("Elasticsearch get document with id:" + id);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termsQuery("_id", id));
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
@@ -361,6 +365,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             result = client.execute(search);
             if (result.isSucceeded()) {
                 response.setSource((E) result.getSourceAsObject(mapping.getClassType()));
+                String indexName = result.getJsonObject().getAsJsonObject("hits").getAsJsonArray("hits").get(0)
+                        .getAsJsonObject().get("_index").getAsString();
+                response.setIndex(indexName);
             }
         } catch (IOException e) {
             log.error("Serching documents - Unexpected error: ", e);
