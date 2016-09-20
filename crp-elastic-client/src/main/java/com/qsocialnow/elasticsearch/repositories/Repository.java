@@ -24,6 +24,8 @@ public interface Repository<T> {
 
     public <E> String indexMapping(Mapping<T, E> mapping, T document);
 
+    public <E> String indexMappingAndRefresh(Mapping<T, E> mapping, T document);
+
     public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<IdentityType> documents);
 
     public <E> void removeChildMapping(String id, ChildMapping<T, E> mapping);

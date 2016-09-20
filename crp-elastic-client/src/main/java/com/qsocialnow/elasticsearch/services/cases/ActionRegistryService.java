@@ -38,7 +38,7 @@ public class ActionRegistryService extends DynamicIndexService {
         // index document
         ActionRegistryType documentIndexed = mapping.getDocumentType(document);
         documentIndexed.setIdCase(idCase);
-        String response = repository.indexMapping(mapping, documentIndexed);
+        String response = repository.indexMappingAndRefresh(mapping, documentIndexed);
         repository.closeClient();
         return response;
     }
