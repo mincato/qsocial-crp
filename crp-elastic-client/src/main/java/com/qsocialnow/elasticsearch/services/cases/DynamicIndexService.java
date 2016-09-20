@@ -39,8 +39,7 @@ public class DynamicIndexService {
         LocalDateTime dateTime = LocalDateTime.now();
         int month = dateTime.getMonthValue();
         int year = dateTime.getYear();
-        int hour = dateTime.getHour();
-        indexSufix = year + "_" + month + "_" + hour;
+        indexSufix = year + "_" + month;
         return indexSufix;
     }
 }

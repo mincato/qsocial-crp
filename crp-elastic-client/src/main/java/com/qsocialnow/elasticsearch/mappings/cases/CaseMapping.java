@@ -77,7 +77,6 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
     public Case getDocument(CaseType documentType) {
         Case caseDocument = new Case();
         caseDocument.setId(documentType.getId());
-        // caseType.setActionsRegistry(document.getActionsRegistry());
         caseDocument.setAdminUnits(documentType.getAdminUnits());
         caseDocument.setAsignedValue(documentType.getAsignedValue());
         caseDocument.setCaseCategories(documentType.getCaseCategories());

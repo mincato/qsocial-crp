@@ -62,18 +62,18 @@ public class CaseServiceImpl implements CaseService {
     }
 
     @Override
-    public Case findCase(String caseId) {
+    public Case findById(String caseId) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("diego", caseServiceUrl)).path("/" + caseId);
+                    serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId);
 
-            RestTemplate restTemplate = new RestTemplate();
-            Case response = restTemplate.getForObject(builder.toUriString(), Case.class);
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            Case caseSelected = restTemplate.getForObject(builder.toUriString(), Case.class);
 
-            return response;
+            return caseSelected;
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);
             throw new RuntimeException(e);
@@ -92,7 +92,6 @@ public class CaseServiceImpl implements CaseService {
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Case caseUpdated = restTemplate.postForObject(builder.toUriString(), actionRequest, Case.class);
-
             return caseUpdated;
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);

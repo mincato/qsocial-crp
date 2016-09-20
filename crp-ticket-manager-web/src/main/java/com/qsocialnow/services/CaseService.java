@@ -12,10 +12,10 @@ public interface CaseService {
 
     PageResponse<CaseListView> findAll(int pageNumber, int pageSize);
 
+    Case findById(String caseId);
+
     Case executeAction(String caseId, ActionRequest actionRequest);
 
     List<Resolution> getAvailableResolutions(String caseId);
-
-    Case findCase(String caseId);
 
 }

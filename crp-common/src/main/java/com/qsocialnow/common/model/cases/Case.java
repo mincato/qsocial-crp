@@ -1,8 +1,13 @@
 package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.event.InPutBeanDocument;
 
 public class Case implements Serializable {
 
@@ -49,6 +54,61 @@ public class Case implements Serializable {
     private String sourceUser;
 
     private Long lastPostId;
+
+    public Case() {
+
+    }
+
+    public static Case getNewCaseFromEvent(InPutBeanDocument event) {
+        Case newCase = new Case();
+        newCase.setOpen(true);
+
+        Date openDate = new Date();
+        newCase.setOpenDate(openDate);
+        newCase.setTitle(event.getTitulo());
+
+        newCase.setCaseCategories(Arrays.asList(event.getCategorias()));
+        newCase.setPendingResponse(true);
+
+        // creating first registry
+        List<ActionRegistry> registries = new ArrayList<>();
+        ActionRegistry registry = new ActionRegistry();
+        registry.setAction(ActionType.OPEN_CASE.name());
+        registry.setAutomatic(true);
+        registry.setDate(openDate);
+
+        Event originEvent = new Event();
+        originEvent.setId(event.getId());
+        originEvent.setDescription(event.getName());
+        registry.setEvent(originEvent);
+
+        registries.add(registry);
+        newCase.setActionsRegistry(registries);
+
+        return newCase;
+    }
+
+    public List<ActionType> getAllowedManualActions() {
+        List<ActionType> actionsAllowed = new ArrayList<>();
+
+        if (this.getOpen()) {
+            actionsAllowed.add(ActionType.REPLY);
+            // actionsAllowed.add(ActionType.TAG_SUBJECT);
+            // actionsAllowed.add(ActionType.TAG_CASE);
+            actionsAllowed.add(ActionType.CLOSE);
+            actionsAllowed.add(ActionType.REGISTER_COMMENT);
+            actionsAllowed.add(ActionType.MODIFY);
+            if (!this.getPendingResponse())
+                actionsAllowed.add(ActionType.PENDING_RESPONSE);
+
+            actionsAllowed.add(ActionType.SEND_MESSAGE);
+            actionsAllowed.add(ActionType.ASSIGN);
+            actionsAllowed.add(ActionType.RESOLVE);
+        } else {
+            actionsAllowed.add(ActionType.REOPEN);
+        }
+        return actionsAllowed;
+    }
 
     public String getId() {
         return id;
