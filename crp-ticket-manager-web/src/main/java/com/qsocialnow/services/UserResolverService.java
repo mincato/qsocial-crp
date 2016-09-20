@@ -17,6 +17,8 @@ public interface UserResolverService {
 
     PageResponse<UserResolverListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
 
+    List<UserResolverListView> findAll(Map<String, String> filters);
+
     void delete(String id);
 
     List<UserResolver> findByTeam(String teamId);

@@ -4,9 +4,9 @@ public class User {
 
     private String id;
 
-    private String name;
+    private boolean coordinator;
 
-    private String lastName;
+    private String username;
 
     public String getId() {
         return id;
@@ -16,19 +16,19 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getLastName() {
-        return lastName;
+    public boolean isCoordinator() {
+        return coordinator;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setCoordinator(boolean coordinator) {
+        this.coordinator = coordinator;
     }
 }

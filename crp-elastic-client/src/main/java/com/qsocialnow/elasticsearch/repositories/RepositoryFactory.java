@@ -17,18 +17,7 @@ public class RepositoryFactory<T> {
 
     public Repository<T> initManager() {
         log.info("Creating manager to handle ES service:");
-
-        Repository<T> manager = null;
-
-        switch (this.configurator.getEnvironment()) {
-            case "dev":
-                manager = new ElasticsearchRepository<T>(this.configurator);
-                break;
-
-            default:
-                break;
-        }
-
+        Repository<T> manager = new ElasticsearchRepository<T>(this.configurator);
         return manager;
     }
 

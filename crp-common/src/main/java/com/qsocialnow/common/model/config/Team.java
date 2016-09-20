@@ -2,15 +2,18 @@ package com.qsocialnow.common.model.config;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class Team {
 
     private String id;
 
+    @NotBlank(message = "{field.empty}")
     private String name;
 
     private List<User> users;
 
-    private List<String> userResolvers;
+    private List<BaseUserResolver> userResolvers;
 
     public String getId() {
         return id;
@@ -36,11 +39,12 @@ public class Team {
         this.users = users;
     }
 
-    public List<String> getUserResolvers() {
+    public List<BaseUserResolver> getUserResolvers() {
         return userResolvers;
     }
 
-    public void setUserResolvers(List<String> userResolvers) {
+    public void setUserResolvers(List<BaseUserResolver> userResolvers) {
         this.userResolvers = userResolvers;
     }
+
 }

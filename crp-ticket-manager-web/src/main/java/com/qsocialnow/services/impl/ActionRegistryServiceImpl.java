@@ -1,5 +1,7 @@
 package com.qsocialnow.services.impl;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public PageResponse<RegistryListView> findCaseWithRegistries(int pageNumber, int pageSize, String caseId) {
+    public PageResponse<RegistryListView> findRegistries(int pageNumber, int pageSize, String caseId) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -40,6 +42,49 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
                     .path("/registries").queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<PageResponse> response = restTemplate
+                    .getForEntity(builder.toUriString(), PageResponse.class);
+
+            PageResponse<RegistryListView> registries = response.getBody();
+            return registries;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call registry service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    public PageResponse<RegistryListView> findRegistriesBy(int pageNumber, int pageSize, String caseId, String keyword,
+            String action, String user, Date fromDate, Date toDate) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            // DateFormat df = new SimpleDateFormat("MMMM dd yyyy HH:mm:ss",
+            // Locale.ENGLISH);
+            // String fromDateFormat = (fromDate!=null)?
+            // df.format(fromDate):null;
+            // String toDateFormat = (toDate!=null)?df.format(toDate):null;
+            log.info("From: " + fromDate + " to: " + toDate);
+            String fromDateFormat = null;
+            String toDateFormat = null;
+
+            if (fromDate != null) {
+                fromDateFormat = String.valueOf(fromDate.getTime());
+            }
+
+            if (toDate != null) {
+                toDateFormat = String.valueOf(toDate.getTime());
+            }
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl)).path("/" + caseId)
+                    .path("/registries").queryParam("text", keyword).queryParam("action", action)
+                    .queryParam("user", user).queryParam("fromDate", fromDateFormat).queryParam("toDate", toDateFormat)
+                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate

@@ -106,14 +106,14 @@ public class TriggersViewModel implements Serializable {
     @Command
     @NotifyChange({ "triggers", "moreResults", "filterActive" })
     public void search() {
-        this.filterActive = !StringUtils.isEmpty(this.keyword);
+        this.filterActive = !StringUtils.isBlank(this.keyword);
         this.setDefaultPage();
         this.triggers.clear();
         this.findTriggers(this.domain);
     }
 
     private Map<String, String> getFilters() {
-        if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
+        if (StringUtils.isBlank(this.keyword) || !filterActive) {
             return null;
         }
         Map<String, String> filters = new HashMap<String, String>();

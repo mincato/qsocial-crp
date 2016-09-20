@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,8 @@ import com.qsocialnow.services.CaseService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class EditCaseViewModel implements Serializable {
 
+    private static final String ALL_VALUES = "ALL_VALUES";
+
     private static final long serialVersionUID = 2259179419421396093L;
 
     @WireVariable
@@ -46,9 +49,21 @@ public class EditCaseViewModel implements Serializable {
 
     private boolean moreResults;
 
+    private String keyword;
+
+    private String action;
+
+    private String user;
+
+    private Date fromDate;
+
+    private Date toDate;
+
     private List<RegistryListView> registries = new ArrayList<>();
 
     private List<ActionType> actionOptions = new ArrayList<>();
+
+    private List<String> actionFilterOptions = new ArrayList<>();
 
     private ActionType selectedAction;
 
@@ -57,6 +72,11 @@ public class EditCaseViewModel implements Serializable {
         this.caseId = caseSelected;
         findCase(this.caseId);
         findRegistriesByCase(this.caseId);
+        actionFilterOptions.add(0, ALL_VALUES);
+        for (int i = 0; i < ActionType.values().length; i++) {
+            actionFilterOptions.add(ActionType.values()[i].toString());
+        }
+        this.action = ALL_VALUES;
         actionOptions = Arrays.asList(ActionType.values());
     }
 
@@ -113,6 +133,18 @@ public class EditCaseViewModel implements Serializable {
         BindUtils.postGlobalCommand(null, null, "show", args);
     }
 
+    @Command
+    @NotifyChange({ "registries", "moreResults" })
+    public void search() {
+        this.findRegistriesBy();
+    }
+
+    @GlobalCommand
+    @NotifyChange({ "registries", "moreResults" })
+    public void refreshRegistries() {
+        findRegistriesByCase(this.caseId);
+    }
+
     @GlobalCommand
     @NotifyChange({ "currentCase", "selectedAction" })
     public void actionExecuted(@BindingParam("caseUpdated") Case caseUpdated) {
@@ -121,15 +153,77 @@ public class EditCaseViewModel implements Serializable {
     }
 
     private PageResponse<RegistryListView> findRegistriesByCase(String caseSelected) {
-        PageResponse<RegistryListView> pageResponse = actionRegistryService.findCaseWithRegistries(activePage,
-                pageSize, caseSelected);
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistries(activePage, pageSize,
+                caseSelected);
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.registries.clear();
+            this.registries.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+            this.activePage = 0;
+        }
+        return pageResponse;
+    }
+
+    private PageResponse<RegistryListView> findRegistriesBy() {
+        String actionValue = ALL_VALUES.equals(this.action) ? null : this.action;
+
+        PageResponse<RegistryListView> pageResponse = actionRegistryService.findRegistriesBy(activePage, pageSize,
+                this.caseId, this.keyword, actionValue, this.user, this.fromDate, this.toDate);
+
+        this.registries.clear();
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.registries.addAll(pageResponse.getItems());
             this.moreResults = true;
         } else {
             this.moreResults = false;
+            this.activePage = 0;
         }
         return pageResponse;
     }
 
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
+    }
+
+    public List<String> getActionFilterOptions() {
+        return actionFilterOptions;
+    }
 }

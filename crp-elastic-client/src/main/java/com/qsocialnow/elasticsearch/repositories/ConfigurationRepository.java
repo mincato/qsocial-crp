@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Filter;
@@ -19,7 +20,6 @@ import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.User;
-import com.qsocialnow.common.model.config.UserResolver;
 
 public class ConfigurationRepository {
 
@@ -124,23 +124,18 @@ public class ConfigurationRepository {
         team.setId(id + " - team");
         team.setName("Team to support segment " + id);
 
-        UserResolver userResolver = new UserResolver();
-        userResolver.setActive(true);
+        BaseUserResolver userResolver = new BaseUserResolver();
         userResolver.setId("user1");
-        userResolver.setName("John");
-        userResolver.setLastName("Goodman");
         userResolver.setSource(1l);
 
-        team.setUserResolvers(Arrays.asList(userResolver.getId()));
+        team.setUserResolvers(Arrays.asList(userResolver));
 
         User user1 = new User();
         user1.setId("user 1");
-        user1.setName("Bruce");
-        user1.setLastName("Wayne");
 
         List<User> users = new ArrayList<>();
         users.add(user1);
-        team.setUsers(users);
+        team.setUsers(Arrays.asList(user1));
 
         return team;
     }

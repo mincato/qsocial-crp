@@ -4,7 +4,6 @@ import org.json.simple.JSONObject;
 
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
-import com.qsocialnow.elasticsearch.mappings.types.config.TriggerType;
 import com.qsocialnow.elasticsearch.mappings.types.config.UserResolverType;
 
 public class UserResolverMapping implements Mapping<UserResolverType, UserResolver> {
@@ -42,7 +41,7 @@ public class UserResolverMapping implements Mapping<UserResolverType, UserResolv
 
     @Override
     public Class<?> getClassType() {
-        return TriggerType.class;
+        return UserResolverType.class;
     }
 
     @Override

@@ -8,10 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
-import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
@@ -40,29 +38,6 @@ public class CaseRepository {
             log.error("Unexpected error", e);
         }
         return cases;
-    }
-
-    public List<RegistryListView> findCaseWithRegistries(PageRequest pageRequest, String caseId) {
-        List<RegistryListView> registriesView = new ArrayList<>();
-
-        try {
-
-            List<ActionRegistry> regitries = caseElasticService.findCaseWithRegistries(pageRequest.getOffset(),
-                    pageRequest.getLimit(), caseId);
-            for (ActionRegistry registry : regitries) {
-                RegistryListView registryListView = new RegistryListView();
-                registryListView.setId(registry.getId());
-                registryListView.setUser(registry.getUserName());
-                registryListView.setAction(registry.getAction());
-                if (registry.getEvent() != null)
-                    registryListView.setDescription(registry.getEvent().getDescription());
-                registryListView.setDate(registry.getDate());
-                registriesView.add(registryListView);
-            }
-        } catch (Exception e) {
-            log.error("Unexpected error", e);
-        }
-        return registriesView;
     }
 
     public Long count() {

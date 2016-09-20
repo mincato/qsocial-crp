@@ -1,33 +1,10 @@
 package com.qsocialnow.common.model.config;
 
-import org.hibernate.validator.constraints.NotBlank;
-
-public class UserResolver extends User {
-
-    private Long source;
-
-    @NotBlank(message = "{field.empty}")
-    private String identifier;
+public class UserResolver extends BaseUserResolver {
 
     private SourceCredentials credentials;
 
     private Boolean active;
-
-    public Long getSource() {
-        return source;
-    }
-
-    public void setSource(Long source) {
-        this.source = source;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
 
     public SourceCredentials getCredentials() {
         return credentials;

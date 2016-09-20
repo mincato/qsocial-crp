@@ -1,6 +1,7 @@
 package com.qsocialnow.elasticsearch.repositories;
 
 import java.util.List;
+import java.util.Map;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -19,6 +20,8 @@ public interface Repository<T> {
 
     public boolean validateIndex(String index);
 
+    public boolean updateIndexAlias(String index, String alias);
+
     public <E> String indexMapping(Mapping<T, E> mapping, T document);
 
     public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<IdentityType> documents);
@@ -33,14 +36,15 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping);
 
-    public <E> SearchResponse<E> query(Mapping<T, E> mapping, String searchValue);
+    public <E> SearchResponse<E> findByAlias(String id, Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, int from, int size, String sortField,
             String serchField, String searchValue);
 
-    public <E> SearchResponse<E> search(int from, int size, String sortField, Mapping<T, E> mapping);
+    public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
+            Map<String, String> fieldValues, String rangeField, String fromValue, String toValue);
 
-    public <E> SearchResponse<E> search(int from, int size, String sortField, String name, Mapping<T, E> mapping);
+    public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping);
 
@@ -53,5 +57,9 @@ public interface Repository<T> {
             BoolQueryBuilder filters, Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping);
+
+    public <E> SearchResponse<E> search(Integer from, Integer size, String sortField, Mapping<T, E> mapping);
+
+    public <E> void removeMapping(String id, Mapping<T, E> mapping);
 
 }

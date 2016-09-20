@@ -34,7 +34,7 @@ public class UsersResolverViewModel implements Serializable {
     private int pageSize = PAGE_SIZE_DEFAULT;
     private int activePage = ACTIVE_PAGE_DEFAULT;
 
-    @WireVariable("mockUserResolverService")
+    @WireVariable
     private UserResolverService userResolverService;
 
     private boolean moreResults;
@@ -93,7 +93,7 @@ public class UsersResolverViewModel implements Serializable {
     @Command
     @NotifyChange({ "usersResolver", "moreResults", "filterActive" })
     public void search() {
-        this.filterActive = !StringUtils.isEmpty(this.keyword);
+        this.filterActive = !StringUtils.isBlank(this.keyword);
         this.setDefaultPage();
         this.usersResolver.clear();
         this.findUsersResolver();
@@ -142,10 +142,11 @@ public class UsersResolverViewModel implements Serializable {
     }
 
     private Map<String, String> getFilters() {
-        if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
+        if (StringUtils.isBlank(this.keyword) || !this.filterActive) {
             return null;
         }
         Map<String, String> filters = new HashMap<String, String>();
+        filters.put("identifier", this.keyword);
         return filters;
     }
 

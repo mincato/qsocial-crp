@@ -20,7 +20,7 @@
        <constructor-arg ref="configurationProvider" />
     </bean>
    
-   <bean id="registryService" class="com.qsocialnow.elasticsearch.services.cases.RegistryService">
+   <bean id="registryService" class="com.qsocialnow.elasticsearch.services.cases.ActionRegistryService">
         <constructor-arg ref="configurationProvider" />
     </bean>
    

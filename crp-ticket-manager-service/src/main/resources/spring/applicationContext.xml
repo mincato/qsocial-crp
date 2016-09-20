@@ -33,7 +33,7 @@
  		<constructor-arg ref="zookeeperClient"></constructor-arg>
  		<constructor-arg value="${app.elastic.config.configurator.path}"></constructor-arg>
 	</bean>
-
+	
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 		<property name="configurator" ref="elasticDomainConfig"></property>
 		<property name="triggerService" ref="triggerElasticService"></property>
@@ -41,6 +41,10 @@
 	</bean>
 
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseTicketService">
+         <constructor-arg ref="configurationProvider" />
+    </bean>
+    
+    <bean id="registryService" class="com.qsocialnow.elasticsearch.services.cases.ActionRegistryService">
          <constructor-arg ref="configurationProvider" />
     </bean>
     
@@ -56,6 +60,15 @@
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
+	
+	<bean id="userResolverElasticService" class="com.qsocialnow.elasticsearch.services.config.UserResolverService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
+	</bean>
+	
+	<bean id="teamElasticService" class="com.qsocialnow.elasticsearch.services.config.TeamService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
+	</bean>
+	
 	
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">
 	</bean>
@@ -79,7 +92,4 @@
     	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}" value-ref="facebookSourceStrategy"/>
     	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWIITER}" value-ref="twitterSourceStrategy"/>
 	</util:map>
-	
-	
-
 </beans>
