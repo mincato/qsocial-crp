@@ -19,10 +19,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.amazonaws.services.config.model.Source;
 import com.google.common.base.Supplier;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
@@ -41,7 +38,6 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
-import io.searchbox.core.Update;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
@@ -168,6 +164,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             DocumentResult response = client.execute(index);
             if (response.isSucceeded()) {
                 idValue = response.getId();
+            } else {
+                log.error("There was an error indexing mapping: " + response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
@@ -490,14 +488,19 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     @Override
     public <E> SearchResponse<E> search(Integer from, Integer size, String sortField, Mapping<T, E> mapping) {
-        return searchWithFilters(from, size, null, null, mapping);
+        return searchWithFilters(from, size, sortField, null, mapping);
     }
 
     @Override
     public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
             BoolQueryBuilder filters, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size);
+        if (from != null) {
+            searchSourceBuilder.from(from);
+        }
+        if (size != null) {
+            searchSourceBuilder.size(size);
+        }
         if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
         }

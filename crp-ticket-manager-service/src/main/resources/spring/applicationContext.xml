@@ -65,6 +65,11 @@
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	
+	<bean id="teamElasticService" class="com.qsocialnow.elasticsearch.services.config.TeamService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
+	</bean>
+	
+	
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">
 	</bean>
 

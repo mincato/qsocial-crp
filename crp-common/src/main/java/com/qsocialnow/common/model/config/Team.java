@@ -13,7 +13,7 @@ public class Team {
 
     private List<User> users;
 
-    private List<UserResolver> usersResolver;
+    private List<BaseUserResolver> userResolvers;
 
     public String getId() {
         return id;
@@ -39,12 +39,12 @@ public class Team {
         this.users = users;
     }
 
-    public List<UserResolver> getUsersResolver() {
-        return usersResolver;
+    public List<BaseUserResolver> getUserResolvers() {
+        return userResolvers;
     }
 
-    public void setUsersResolver(List<UserResolver> usersResolver) {
-        this.usersResolver = usersResolver;
+    public void setUserResolvers(List<BaseUserResolver> userResolvers) {
+        this.userResolvers = userResolvers;
     }
 
 }

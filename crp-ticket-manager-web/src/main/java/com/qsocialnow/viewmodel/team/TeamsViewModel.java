@@ -34,7 +34,7 @@ public class TeamsViewModel implements Serializable {
     private int pageSize = PAGE_SIZE_DEFAULT;
     private int activePage = ACTIVE_PAGE_DEFAULT;
 
-    @WireVariable("mockTeamService")
+    @WireVariable
     private TeamService teamService;
 
     private boolean moreResults;

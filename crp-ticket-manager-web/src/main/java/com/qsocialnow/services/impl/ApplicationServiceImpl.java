@@ -12,15 +12,15 @@ import com.qsocialnow.services.ApplicationService;
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class ApplicationServiceImpl implements ApplicationService {
 
-	@Value("${Application-Version}")
-	private String applicationVersion;
-	
-	@Value("${Application-Build}")
-	private String applicationBuild;
+    @Value("${Application-Version}")
+    private String applicationVersion;
 
-	@Override
-	public ApplicationVersion getVersion() {
-		return new ApplicationVersion(applicationVersion, applicationBuild);
-	}
+    @Value("${Application-Build}")
+    private String applicationBuild;
+
+    @Override
+    public ApplicationVersion getVersion() {
+        return new ApplicationVersion(applicationVersion, applicationBuild);
+    }
 
 }
