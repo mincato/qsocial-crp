@@ -68,7 +68,6 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
             // String fromDateFormat = (fromDate!=null)?
             // df.format(fromDate):null;
             // String toDateFormat = (toDate!=null)?df.format(toDate):null;
-            log.info("From: " + fromDate + " to: " + toDate);
             String fromDateFormat = null;
             String toDateFormat = null;
 

@@ -118,9 +118,7 @@ public class EditCaseViewModel implements Serializable {
         this.findRegistriesBy();
     }
 
-    @GlobalCommand
-    @NotifyChange({ "registries", "moreResults", "actionOptions" })
-    public void refreshRegistries() {
+    private void refreshRegistries() {
         this.registries.clear();
         this.filterActive = false;
         this.action = null;
@@ -135,10 +133,11 @@ public class EditCaseViewModel implements Serializable {
     }
 
     @GlobalCommand
-    @NotifyChange({ "currentCase", "selectedAction" })
+    @NotifyChange({ "currentCase", "selectedAction", "registries", "moreResults", "actionOptions" })
     public void actionExecuted(@BindingParam("caseUpdated") Case caseUpdated) {
         this.currentCase = caseUpdated;
         this.selectedAction = null;
+        this.refreshRegistries();
     }
 
     @Command

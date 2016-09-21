@@ -67,7 +67,6 @@ public class CloseActionViewModel implements Serializable {
         HashMap<String, Object> args = new HashMap<>();
         args.put("caseUpdated", caseUpdated);
         BindUtils.postGlobalCommand(null, null, "actionExecuted", args);
-        BindUtils.postGlobalCommand(null, null, "refreshRegistries", args);
     }
 
 }
