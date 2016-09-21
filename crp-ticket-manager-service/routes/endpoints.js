@@ -719,4 +719,35 @@ router.get('/teams/:id', function (req, res) {
 	  teamService.findOne(teamId, asyncResponse);
 });
 
+router.put('/teams/:id', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+	}
+
+	prettyJSON(req.body);
+
+	var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	var clazz = java.findClassSync('com.qsocialnow.common.model.config.Team');
+	var team = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+	var teamId = req.params.id;
+
+	var teamService = javaContext.getBeanSync("teamService");
+	teamService.update(teamId, team, asyncResponse);
+
+});
+
 module.exports = router;

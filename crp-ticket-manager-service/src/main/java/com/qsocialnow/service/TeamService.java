@@ -52,4 +52,16 @@ public class TeamService {
         return team;
     }
 
+    public Team update(String teamId, Team team) {
+        Team teamSaved = null;
+        try {
+            team.setId(teamId);
+            teamSaved = teamRepository.update(team);
+        } catch (Exception e) {
+            log.error("There was an error updating team: " + team.getName(), e);
+            throw new RuntimeException(e.getMessage());
+        }
+        return teamSaved;
+    }
+
 }
