@@ -5,16 +5,41 @@
 	<n:div class="row">
 	   <n:div class="col-lg-12">
 	       <div zclass="pane equal col-md-12 col-xs-12">
-				<n:div class="col-md-6 col-xs-12">
+				<n:div class="col-md-3 col-xs-12">
     				<n:h5>${labels.trigger.list.title} / ${vm.currentDomain.domain.name} </n:h5>
 				</n:div>
-				<n:div class="col-md-offset-1 col-md-3 col-xs-8">
+				<n:div class="col-md-1">
+		            <div zclass="input-group input-group-sm">
+			            <selectbox sclass="form-control" model="@load(vm.statusOptions)"
+			                selectedItem="@bind(vm.status)">
+			                <template name="model">
+			                    <label value="${c:l(c:cat('trigger.status.',each))}" />
+			                </template>
+			            </selectbox>
+			         </div>
+	            </n:div>
+	            <n:div class="col-md-2">
+                    <div zclass="input-group input-group-sm">
+                          <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.fromDate)" placeholder="${labels.trigger.list.filter.fromDate}" />
+                    </div>
+                </n:div>
+                
+                <n:div class="col-md-2">
+                    <div zclass="input-group input-group-sm">
+                       <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.toDate)" placeholder="${labels.trigger.list.filter.toDate}" />
+                    </div>
+                </n:div>
+				<n:div class="col-md-1">
 					<div zclass="input-group input-group-sm">
-						  <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" />
-							<span zclass="input-group-btn">
-							    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
-							</span>
+						  <textbox zclass="form-control" value="@bind(vm.keyword)" placeholder="${labels.trigger.list.filter.name}"/>
 			    	</div>
+                </n:div>
+                <n:div class="col-md-1">
+	               <div zclass="input-group input-group-sm">
+                      <span zclass="input-group-btn">
+                          <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+                      </span>
+                   </div>
                 </n:div>
                 <n:div class="col-md-2 col-xs-4">
                 	<n:div class="link-button">
@@ -48,6 +73,8 @@
 					    <th>${labels.trigger.list.column.name}</th>
 					    <th>${labels.trigger.list.column.description}</th>
 					    <th>${labels.trigger.list.column.status}</th>
+					    <th>${labels.trigger.list.column.startDate}</th>
+					    <th>${labels.trigger.list.column.endDate}</th>
 					    <th>${labels.trigger.list.column.action}</th>
 					</tr>
 			    </thead>
@@ -58,6 +85,8 @@
                    		<td class="list-text-column">${each.name}</td>
                    		<td>${each.description}</td>
                    		<td>${c:l(c:cat('trigger.status.',each.status))}</td>
+                   		<td><label value="@load(each.fromDate) @converter('formatedDate',format='MM/dd/yyyy')"/></td>
+                   		<td><label value="@load(each.toDate) @converter('formatedDate',format='MM/dd/yyyy')"/></td>
                    		<td>
                    			<ul class="list-inline">
   								<li><a class="list-action"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="${labels.trigger.view.action}"></i></a></li>

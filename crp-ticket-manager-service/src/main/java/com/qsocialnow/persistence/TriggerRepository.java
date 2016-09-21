@@ -8,8 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
+import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.config.TriggerService;
 
@@ -33,12 +35,12 @@ public class TriggerRepository {
         return null;
     }
 
-    public List<TriggerListView> findAll(String domainId, PageRequest pageRequest, String name) {
+    public List<TriggerListView> findAll(String domainId, PageRequest pageRequest, TriggerListRequest triggerListRequest) {
         List<TriggerListView> triggers = new ArrayList<>();
 
         try {
             List<Trigger> triggersRepo = triggerElasticService.getTriggers(domainId, pageRequest.getOffset(),
-                    pageRequest.getLimit(), name);
+                    pageRequest.getLimit(), triggerListRequest);
 
             for (Trigger triggerRepo : triggersRepo) {
                 TriggerListView triggerListView = new TriggerListView();
@@ -46,7 +48,8 @@ public class TriggerRepository {
                 triggerListView.setName(triggerRepo.getName());
                 triggerListView.setDescription(triggerRepo.getDescription());
                 triggerListView.setStatus(triggerRepo.getStatus());
-
+                triggerListView.setFromDate(triggerRepo.getInit());
+                triggerListView.setToDate(triggerRepo.getEnd());
                 triggers.add(triggerListView);
             }
         } catch (Exception e) {
