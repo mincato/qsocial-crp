@@ -317,8 +317,11 @@ router.get('/domains/:id/trigger', function (req, res) {
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
 	  var name = req.query.name ? req.query.name : null;
+	  var status = req.query.status ? req.query.status : null;
+	  var fromDate = req.query.fromDate ? req.query.fromDate : null;
+	  var toDate = req.query.toDate ? req.query.toDate : null;
 	  
-	  triggerService.findAll(domainId, pageNumber, pageSize, name, asyncResponse);
+	  triggerService.findAll(domainId, pageNumber, pageSize, name, status, fromDate, toDate, asyncResponse);
 });
 
 router.put('/domains/:id/resolutions', function (req, res) {
