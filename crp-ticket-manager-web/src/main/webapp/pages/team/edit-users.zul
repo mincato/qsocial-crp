@@ -9,7 +9,7 @@
 		<n:div class="col-sm-10">
 			<div zclass="link-button pull-right">
 				<a onClick="@command('addUser', fx = fx)"
-					disabled="@load(not vm.enabledAddUser)">
+					disabled="@load(not vm.userListView.enabledAdd)">
 					<i class="fa fa-plus-circle fa-2x"></i>
 					${labels.team.add.user}
 				</a>
@@ -62,7 +62,7 @@
 						class="list-group-item col-xs-11 col-sm-11">
 						<n:div class="col-xs-12 col-sm-6">
 							<listbox mold="select" sclass="form-control"
-								model="@load(vm.users)" multiple="false" checkmark="true"
+								model="@load(vm.userListView.filteredList)" multiple="false" checkmark="true"
 								selectedItem="@bind(each.user)">
 								<template name="model">
 									<listitem>

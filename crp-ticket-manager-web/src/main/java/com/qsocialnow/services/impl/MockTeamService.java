@@ -40,12 +40,7 @@ public class MockTeamService implements TeamService {
         }.getType();
 
         List<Team> list = gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream), listType);
-        for (Team user : list) {
-            if (teamId.equals(user.getId())) {
-                return user;
-            }
-        }
-        return null;
+        return list.get(0);
     }
 
     @Override

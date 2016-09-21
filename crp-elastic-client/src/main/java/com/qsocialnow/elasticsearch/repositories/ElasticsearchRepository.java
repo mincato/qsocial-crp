@@ -174,6 +174,25 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return idValue;
     }
 
+    @Override
+    public <E> String indexMappingAndRefresh(Mapping<T, E> mapping, T document) {
+        Index index = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).refresh(true)
+                .build();
+        String idValue = null;
+        try {
+            DocumentResult response = client.execute(index);
+            if (response.isSucceeded()) {
+                idValue = response.getId();
+            } else {
+                log.error("There was an error indexing mapping: " + response.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+
+        }
+        return idValue;
+    }
+
     public <E> IndexResponse<E> bulkOperation(Mapping<T, E> mapping, List<IdentityType> documents) {
 
         List<Index> modelList = new ArrayList<Index>();
@@ -268,7 +287,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     @Override
     public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document) {
 
-        Index update = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id).build();
+        Index update = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id)
+                .refresh(true).build();
         String idValue = null;
         try {
             DocumentResult response = client.execute(update);

@@ -6,7 +6,7 @@ public class TeamUserResolverView {
 
     private UserResolverListView user;
 
-    private Boolean editingStatus = Boolean.FALSE;
+    private boolean editingStatus = false;
 
     public UserResolverListView getUser() {
         return user;
@@ -16,11 +16,11 @@ public class TeamUserResolverView {
         this.user = user;
     }
 
-    public Boolean getEditingStatus() {
+    public boolean isEditingStatus() {
         return editingStatus;
     }
 
-    public void setEditingStatus(Boolean editingStatus) {
+    public void setEditingStatus(boolean editingStatus) {
         this.editingStatus = editingStatus;
     }
 

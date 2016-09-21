@@ -2,11 +2,8 @@ package com.qsocialnow.viewmodel.team;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
-import org.zkoss.bind.BindUtils;
-import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -26,7 +23,7 @@ import com.qsocialnow.services.UserResolverService;
 import com.qsocialnow.services.UserService;
 
 @VariableResolver(DelegatingVariableResolver.class)
-public class CreateTeamViewModel implements Serializable {
+public class CreateTeamViewModel extends EditableTeamViewModel implements Serializable {
 
     private static final long serialVersionUID = 3526406425520096040L;
 
@@ -41,14 +38,6 @@ public class CreateTeamViewModel implements Serializable {
 
     private TeamView currentTeam;
 
-    private List<UserListView> users;
-
-    private List<UserResolverListView> usersResolver;
-
-    private Boolean enabledAddUser = Boolean.TRUE;
-
-    private Boolean enabledAddUserResolver = Boolean.TRUE;
-
     @Init
     public void init() {
         initTeam();
@@ -57,22 +46,24 @@ public class CreateTeamViewModel implements Serializable {
     }
 
     private void initUsers() {
-        this.enabledAddUser = Boolean.TRUE;
-        this.users = new ArrayList<UserListView>();
-        this.users.addAll(userService.findAll(null));
+        setUserListView(new TeamListView<UserListView>());
+        getUserListView().setList(userService.findAll(null));
+        getUserListView().setFilteredList(new ArrayList<UserListView>());
+        getUserListView().getFilteredList().addAll(getUserListView().getList());
     }
 
     private void initUsersResolver() {
-        this.enabledAddUserResolver = Boolean.TRUE;
-        this.usersResolver = new ArrayList<UserResolverListView>();
-        this.usersResolver.addAll(userResolverService.findAll(null));
+        setUserResolverListView(new TeamListView<UserResolverListView>());
+        getUserResolverListView().setList(userResolverService.findAll(null));
+        getUserResolverListView().setFilteredList(new ArrayList<UserResolverListView>());
+        getUserResolverListView().getFilteredList().addAll(getUserResolverListView().getList());
     }
 
     private void initTeam() {
-        this.currentTeam = new TeamView();
-        this.currentTeam.setTeam(new Team());
-        this.currentTeam.setUsers(new ArrayList<TeamUserView>());
-        this.currentTeam.setUsersResolver(new ArrayList<TeamUserResolverView>());
+        currentTeam = new TeamView();
+        currentTeam.setTeam(new Team());
+        currentTeam.setUsers(new ArrayList<TeamUserView>());
+        currentTeam.setUsersResolver(new ArrayList<TeamUserResolverView>());
     }
 
     @Command
@@ -89,7 +80,7 @@ public class CreateTeamViewModel implements Serializable {
         }).collect(Collectors.toList()));
         team.setUsers(currentTeam.getUsers().stream().map(userView -> {
             User user = new User();
-            user.setCoordinator(userView.getCoordinator());
+            user.setCoordinator(userView.isCoordinator());
             user.setUsername(userView.getUser().getUsername());
             user.setId(userView.getUser().getId());
             return user;
@@ -102,83 +93,11 @@ public class CreateTeamViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "currentTeam", "enabledAddUser", "enabledAddUserResolver" })
+    @NotifyChange({ "currentTeam", "userListView", "userResolverListView" })
     public void clear() {
         initTeam();
         initUsers();
         initUsersResolver();
-    }
-
-    @Command
-    @NotifyChange({ "enabledAddUser" })
-    public void addUser(@BindingParam("fx") TeamView team) {
-        TeamUserView user = new TeamUserView();
-        user.setEditingStatus(Boolean.TRUE);
-        team.getUsers().add(user);
-        this.enabledAddUser = Boolean.FALSE;
-        BindUtils.postNotifyChange(null, null, team, "users");
-    }
-
-    @Command
-    @NotifyChange({ "enabledAddUser", "users" })
-    public void deleteUser(@BindingParam("index") int idx, @BindingParam("fx") TeamView team) {
-        TeamUserView deletedUser = team.getUsers().remove(idx);
-        if (deletedUser.getUser() != null) {
-            this.users.add(deletedUser.getUser());
-        }
-        this.enabledAddUser = Boolean.TRUE;
-        for (TeamUserView user : team.getUsers()) {
-            if (user.getEditingStatus()) {
-                this.enabledAddUser = Boolean.FALSE;
-            }
-        }
-        BindUtils.postNotifyChange(null, null, team, "users");
-    }
-
-    @Command
-    @NotifyChange({ "enabledAddUser", "users" })
-    public void confirmUser(@BindingParam("index") int idx, @BindingParam("fx") TeamView team) {
-        TeamUserView user = team.getUsers().get(idx);
-        this.users.remove(user.getUser());
-        user.setEditingStatus(Boolean.FALSE);
-        this.enabledAddUser = Boolean.TRUE;
-        BindUtils.postNotifyChange(null, null, team, "users");
-    }
-
-    @Command
-    @NotifyChange({ "enabledAddUserResolver" })
-    public void addUserResolver(@BindingParam("fx") TeamView team) {
-        TeamUserResolverView user = new TeamUserResolverView();
-        user.setEditingStatus(Boolean.TRUE);
-        team.getUsersResolver().add(user);
-        this.enabledAddUserResolver = Boolean.FALSE;
-        BindUtils.postNotifyChange(null, null, team, "usersResolver");
-    }
-
-    @Command
-    @NotifyChange({ "enabledAddUserResolver", "usersResolver" })
-    public void deleteUserResolver(@BindingParam("index") int idx, @BindingParam("fx") TeamView team) {
-        TeamUserResolverView deletedUserResolver = team.getUsersResolver().remove(idx);
-        if (deletedUserResolver.getUser() != null) {
-            this.usersResolver.add(deletedUserResolver.getUser());
-        }
-        this.enabledAddUserResolver = Boolean.TRUE;
-        for (TeamUserResolverView user : team.getUsersResolver()) {
-            if (user.getEditingStatus()) {
-                this.enabledAddUserResolver = Boolean.FALSE;
-            }
-        }
-        BindUtils.postNotifyChange(null, null, team, "usersResolver");
-    }
-
-    @Command
-    @NotifyChange({ "enabledAddUserResolver", "usersResolver" })
-    public void confirmUserResolver(@BindingParam("index") int idx, @BindingParam("fx") TeamView team) {
-        TeamUserResolverView user = team.getUsersResolver().get(idx);
-        this.usersResolver.remove(user.getUser());
-        user.setEditingStatus(Boolean.FALSE);
-        this.enabledAddUserResolver = Boolean.TRUE;
-        BindUtils.postNotifyChange(null, null, team, "usersResolver");
     }
 
     public TeamView getCurrentTeam() {
@@ -187,38 +106,6 @@ public class CreateTeamViewModel implements Serializable {
 
     public void setCurrentTeam(TeamView currentTeam) {
         this.currentTeam = currentTeam;
-    }
-
-    public List<UserResolverListView> getUsersResolver() {
-        return usersResolver;
-    }
-
-    public void setUsersResolver(List<UserResolverListView> usersResolver) {
-        this.usersResolver = usersResolver;
-    }
-
-    public Boolean getEnabledAddUser() {
-        return enabledAddUser;
-    }
-
-    public void setEnabledAddUser(Boolean enabledAddUser) {
-        this.enabledAddUser = enabledAddUser;
-    }
-
-    public Boolean getEnabledAddUserResolver() {
-        return enabledAddUserResolver;
-    }
-
-    public void setEnabledAddUserResolver(Boolean enabledAddUserResolver) {
-        this.enabledAddUserResolver = enabledAddUserResolver;
-    }
-
-    public List<UserListView> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<UserListView> users) {
-        this.users = users;
     }
 
 }

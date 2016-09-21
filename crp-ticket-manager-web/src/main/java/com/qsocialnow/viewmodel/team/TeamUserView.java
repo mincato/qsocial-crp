@@ -6,9 +6,9 @@ public class TeamUserView {
 
     private UserListView user;
 
-    private Boolean coordinator = Boolean.FALSE;
+    private boolean coordinator = false;
 
-    private Boolean editingStatus = Boolean.FALSE;
+    private boolean editingStatus = false;
 
     public UserListView getUser() {
         return user;
@@ -18,19 +18,19 @@ public class TeamUserView {
         this.user = user;
     }
 
-    public Boolean getCoordinator() {
+    public boolean isCoordinator() {
         return coordinator;
     }
 
-    public void setCoordinator(Boolean coordinator) {
+    public void setCoordinator(boolean coordinator) {
         this.coordinator = coordinator;
     }
 
-    public Boolean getEditingStatus() {
+    public boolean isEditingStatus() {
         return editingStatus;
     }
 
-    public void setEditingStatus(Boolean editingStatus) {
+    public void setEditingStatus(boolean editingStatus) {
         this.editingStatus = editingStatus;
     }
 
