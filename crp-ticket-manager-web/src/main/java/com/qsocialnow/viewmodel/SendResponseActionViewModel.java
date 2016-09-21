@@ -20,10 +20,11 @@ import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.config.UserResolver;
+import com.qsocialnow.common.model.config.BaseUserResolver;
+import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.model.SendResponseActionView;
 import com.qsocialnow.services.CaseService;
-import com.qsocialnow.services.UserResolverService;
+import com.qsocialnow.services.TeamService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class SendResponseActionViewModel implements Serializable {
@@ -33,12 +34,12 @@ public class SendResponseActionViewModel implements Serializable {
     @WireVariable
     private CaseService caseService;
 
-    @WireVariable("mockUserResolverService")
-    private UserResolverService userResolverService;
+    @WireVariable
+    private TeamService teamService;
 
     private String caseId;
 
-    private List<UserResolver> userResolverOptions;
+    private List<BaseUserResolver> userResolverOptions;
 
     private SendResponseActionView sendResponseAction;
 
@@ -50,11 +51,11 @@ public class SendResponseActionViewModel implements Serializable {
         this.caseId = caseId;
     }
 
-    public List<UserResolver> getUserResolverOptions() {
+    public List<BaseUserResolver> getUserResolverOptions() {
         return userResolverOptions;
     }
 
-    public void setUserResolverOptions(List<UserResolver> userResolverOptions) {
+    public void setUserResolverOptions(List<BaseUserResolver> userResolverOptions) {
         this.userResolverOptions = userResolverOptions;
     }
 
@@ -71,16 +72,23 @@ public class SendResponseActionViewModel implements Serializable {
     }
 
     @GlobalCommand
-    @NotifyChange({ "sendResponseAction", "chooseUserResolver" })
+    @NotifyChange({ "sendResponseAction", "chooseUserResolver", "userResolverOptions" })
     public void show(@BindingParam("currentCase") Case currentCase, @BindingParam("action") ActionType action) {
         if (ActionType.REPLY.equals(action)) {
             this.sendResponseAction = new SendResponseActionView();
-            chooseUserResolver = currentCase.getUserResolverId() == null;
+            chooseUserResolver = currentCase.getUserResolver() == null;
             if (chooseUserResolver && userResolverOptions == null) {
-                this.userResolverOptions = userResolverService.findByTeam(currentCase.getTeamId());
+                initUserResolvers(currentCase);
                 this.sendResponseAction.setSelectedUserResolver(userResolverOptions.get(0));
+            } else {
+                this.sendResponseAction.setSelectedUserResolver(currentCase.getUserResolver());
             }
         }
+    }
+
+    private void initUserResolvers(Case currentCase) {
+        Team team = teamService.findOne(currentCase.getTeamId());
+        this.userResolverOptions = team.getUserResolvers();
     }
 
     @Command

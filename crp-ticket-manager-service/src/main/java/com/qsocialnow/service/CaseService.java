@@ -95,7 +95,7 @@ public class CaseService {
         log.info("Retrieving resolution from case:" + caseId);
         Case caseObject = repository.findOne(caseId);
         if (caseObject != null) {
-        	log.info("Case:" + caseObject.getId());
+            log.info("Case:" + caseObject.getId());
             String triggerId = caseObject.getTriggerId();
             if (triggerId != null) {
                 Trigger trigger = triggerRepository.findOne(triggerId);

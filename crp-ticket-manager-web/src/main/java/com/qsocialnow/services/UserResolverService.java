@@ -21,6 +21,4 @@ public interface UserResolverService {
 
     void delete(String id);
 
-    List<UserResolver> findByTeam(String teamId);
-
 }

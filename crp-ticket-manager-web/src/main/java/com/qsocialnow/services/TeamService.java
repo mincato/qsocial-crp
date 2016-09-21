@@ -1,5 +1,6 @@
 package com.qsocialnow.services;
 
+import java.util.List;
 import java.util.Map;
 
 import com.qsocialnow.common.model.config.Team;
@@ -15,5 +16,7 @@ public interface TeamService {
     Team update(Team currentTeam);
 
     PageResponse<TeamListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
+
+    List<TeamListView> findAll();
 
 }

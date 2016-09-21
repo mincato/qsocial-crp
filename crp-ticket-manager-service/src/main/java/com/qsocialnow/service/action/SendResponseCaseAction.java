@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.persistence.UserResolverRepository;
 import com.qsocialnow.service.strategies.SourceStrategy;
@@ -25,12 +26,17 @@ public class SendResponseCaseAction implements Action {
     @Override
     public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         String text = (String) parameters.get(ActionParameter.TEXT);
-        if (caseObject.getUserResolverId() == null) {
-            caseObject.setUserResolverId((String) parameters.get(ActionParameter.USER_RESOLVER));
+        String userResolverId;
+        if (caseObject.getUserResolver() == null) {
+            userResolverId = (String) parameters.get(ActionParameter.USER_RESOLVER);
+        } else {
+            userResolverId = caseObject.getUserResolver().getId();
         }
-        UserResolver userResolver = userResolverRepository.findOne(caseObject.getUserResolverId());
-        sources.get(userResolver.getSource()).sendResponse(caseObject, userResolver, text);
+        UserResolver userResolver = userResolverRepository.findOne(userResolverId);
+        String postId = sources.get(userResolver.getSource()).sendResponse(caseObject, userResolver, text);
         caseObject.setPendingResponse(false);
+        caseObject.setLastPostId(postId);
+        caseObject.setUserResolver(new BaseUserResolver(userResolver));
         parameters.put(ActionParameter.COMMENT, text);
         return true;
     }

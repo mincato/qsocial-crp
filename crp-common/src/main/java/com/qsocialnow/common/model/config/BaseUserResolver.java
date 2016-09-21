@@ -11,6 +11,15 @@ public class BaseUserResolver {
     @NotBlank(message = "{field.empty}")
     private String identifier;
 
+    public BaseUserResolver() {
+    }
+
+    public BaseUserResolver(BaseUserResolver userResolver) {
+        this.setId(userResolver.getId());
+        this.setSource(userResolver.getSource());
+        this.setIdentifier(userResolver.getIdentifier());
+    }
+
     public String getId() {
         return id;
     }

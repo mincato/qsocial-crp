@@ -87,9 +87,4 @@ public class MockUserResolverService implements UserResolverService {
         // TODO Auto-generated method stub
     }
 
-    @Override
-    public List<UserResolver> findByTeam(String teamId) {
-        return new ArrayList<>();
-    }
-
 }

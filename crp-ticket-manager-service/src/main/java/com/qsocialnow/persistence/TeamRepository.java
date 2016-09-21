@@ -54,4 +54,15 @@ public class TeamRepository {
         return teams;
     }
 
+    public Team findOne(String teamId) {
+        Team team = null;
+
+        try {
+            team = teamElasticService.findOne(teamId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return team;
+    }
+
 }

@@ -70,6 +70,10 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setTriggerEvent(document.getTriggerEvent());
         caseType.setUnitValue(document.getUnitValue());
         caseType.setTriggerId(document.getTriggerId());
+        caseType.setLastPostId(document.getLastPostId());
+        caseType.setSourceUser(document.getSourceUser());
+        caseType.setTeamId(document.getTeamId());
+        caseType.setUserResolver(document.getUserResolver());
         return caseType;
     }
 
@@ -92,6 +96,10 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setTriggerEvent(documentType.getTriggerEvent());
         caseDocument.setUnitValue(documentType.getUnitValue());
         caseDocument.setTriggerId(documentType.getTriggerId());
+        caseDocument.setLastPostId(documentType.getLastPostId());
+        caseDocument.setSourceUser(documentType.getSourceUser());
+        caseDocument.setTeamId(documentType.getTeamId());
+        caseDocument.setUserResolver(documentType.getUserResolver());
         return caseDocument;
     }
 

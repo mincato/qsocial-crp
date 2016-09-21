@@ -4,21 +4,21 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.qsocialnow.common.model.config.UserResolver;
+import com.qsocialnow.common.model.config.BaseUserResolver;
 
 public class SendResponseActionView {
 
     @NotNull(message = "{userResolver.null}")
-    private UserResolver selectedUserResolver;
+    private BaseUserResolver selectedUserResolver;
 
     @NotBlank(message = "{field.empty}")
     private String text;
 
-    public UserResolver getSelectedUserResolver() {
+    public BaseUserResolver getSelectedUserResolver() {
         return selectedUserResolver;
     }
 
-    public void setSelectedUserResolver(UserResolver selectedUserResolver) {
+    public void setSelectedUserResolver(BaseUserResolver selectedUserResolver) {
         this.selectedUserResolver = selectedUserResolver;
     }
 

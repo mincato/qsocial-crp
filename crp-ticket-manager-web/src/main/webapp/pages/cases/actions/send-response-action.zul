@@ -12,7 +12,7 @@
 				<label value="@load(vmsgs[responseText])" />
 			</x:span>	
 		</x:div>
-		<x:div sclass="@load(empty vmsgs[userResolvers] ? 'form-group' : 'form-group has-error')" visible="@load(sendResponseVm.chooseUserResolver)">
+		<div sclass="@load(empty vmsgs[userResolvers] ? 'form-group' : 'form-group has-error')" visible="@load(sendResponseActionVm.chooseUserResolver)">
 			<n:label class="control-label">${labels.cases.actions.response.userResolver}:</n:label>
 			<selectbox sclass="form-control" id="userResolvers" model="@load(sendResponseActionVm.userResolverOptions)"
 				selectedItem="@bind(fxSendResponseAction.selectedUserResolver) @validator('beanValidator')">
@@ -23,7 +23,11 @@
 			<x:span sclass="@load(empty vmsgs[userResolvers] ? 'hidden' : 'help-block')">
 				<label value="@load(vmsgs[userResolvers])" />
 			</x:span>
-		</x:div>
+		</div>
+		<div sclass="form-group" visible="@load(not sendResponseActionVm.chooseUserResolver)">
+			<n:label class="control-label">${labels.cases.actions.response.userResolver}:</n:label>
+			<label class="form-control" value="@bind(fxSendResponseAction.selectedUserResolver.identifier)"></label>
+		</div>
 		<div class="form-group text-center">
 	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
 		</div>

@@ -5,7 +5,7 @@
 			<n:label class="control-label">${labels.cases.actions.title}:</n:label>
 			<selectbox sclass="form-control" model="@load(vm.actionOptions)"
 				selectedItem="@bind(vm.selectedAction)"
-				onSelect="@command('onSelectAction', action=each)">
+				onSelect="@command('onSelectAction')">
 			    <template name="model">
 					<label value="${c:l(c:cat('cases.actions.',each))}" />
 				</template>
