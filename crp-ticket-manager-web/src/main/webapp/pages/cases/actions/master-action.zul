@@ -5,7 +5,7 @@
 			<n:label class="control-label">${labels.cases.actions.title}:</n:label>
 			<selectbox sclass="form-control" model="@load(vm.actionOptions)"
 				selectedItem="@bind(vm.selectedAction)"
-				onSelect="@global-command('show')">
+				onSelect="@command('onSelectAction')">
 			    <template name="model">
 					<label value="${c:l(c:cat('cases.actions.',each))}" />
 				</template>
@@ -26,5 +26,8 @@
 	</div>
 	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'RESOLVE')">
 		<include src="/pages/cases/actions/resolve-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'REPLY')">
+		<include src="/pages/cases/actions/send-response-action.zul"/>
 	</div>
 </div>

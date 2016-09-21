@@ -34,6 +34,11 @@
  		<constructor-arg value="${app.elastic.config.configurator.path}"></constructor-arg>
 	</bean>
 	
+	<bean id="twitterConfig" class="com.qsocialnow.config.TwitterConfigFactory" factory-method="findConfig">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${app.twitter.app.configurator.path}"></constructor-arg>
+	</bean>
+	
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 		<property name="configurator" ref="elasticDomainConfig"></property>
 		<property name="triggerService" ref="triggerElasticService"></property>
@@ -85,6 +90,10 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).PENDING_RESPONSE}" value-ref="pendingResponseCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REGISTER_COMMENT}" value-ref="registerCommentCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).RESOLVE}" value-ref="resolveCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
 	</util:map>
 	
+	<util:map id="sources">
+    	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}" value-ref="twitterSourceStrategy"/>
+	</util:map>
 </beans>

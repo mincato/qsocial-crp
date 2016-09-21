@@ -2,6 +2,6 @@ package com.qsocialnow.common.model.cases;
 
 public enum ActionParameter {
 
-    COMMENT, RESOLUTION
+    COMMENT, RESOLUTION, TEXT, USER_RESOLVER
 
 }

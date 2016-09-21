@@ -3,8 +3,11 @@ package com.qsocialnow.viewmodel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
@@ -136,6 +139,14 @@ public class EditCaseViewModel implements Serializable {
     public void actionExecuted(@BindingParam("caseUpdated") Case caseUpdated) {
         this.currentCase = caseUpdated;
         this.selectedAction = null;
+    }
+
+    @Command
+    public void onSelectAction() {
+        Map<String, Object> args = new HashMap<>();
+        args.put("currentCase", currentCase);
+        args.put("action", selectedAction);
+        BindUtils.postGlobalCommand(null, null, "show", args);
     }
 
     private PageResponse<RegistryListView> findRegistriesBy() {

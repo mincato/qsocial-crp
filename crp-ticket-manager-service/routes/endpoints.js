@@ -66,8 +66,6 @@ router.get('/cases/:id', function (req, res) {
 
 	  var caseId = req.params.id;
 	  var caseService = javaContext.getBeanSync("caseService");
-	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
-	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
 	  caseService.findOne(caseId,asyncResponse);
 	  
 	});
@@ -665,6 +663,57 @@ router.get('/teams/list', function (req, res) {
 	  var name = req.query.name ? req.query.name : null;
 	  
 	  teamService.findAll(pageNumber, pageSize, name, asyncResponse);
+});
+
+router.get('/teams', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var teamService = javaContext.getBeanSync("teamService");
+	  
+	  teamService.findAll(asyncResponse);
+});
+
+router.get('/teams/:id', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var teamService = javaContext.getBeanSync("teamService");
+	  var teamId = req.params.id;
+	  
+	  teamService.findOne(teamId, asyncResponse);
 });
 
 module.exports = router;

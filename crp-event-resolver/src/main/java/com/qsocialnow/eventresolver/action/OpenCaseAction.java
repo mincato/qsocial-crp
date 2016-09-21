@@ -23,10 +23,10 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
 
     @Override
     public Case execute(InPutBeanDocument inputElement, List<String> parameters, ExecutionMessageRequest request) {
-
         log.info("Executing action: " + ActionType.OPEN_CASE.name());
         Case newCase = Case.getNewCaseFromEvent(inputElement);
-        newCase.setTriggerId(request.getDetectionCriteria().getTriggerId());
+        newCase.setTriggerId(request.getTrigger().getId());
+        newCase.setTeamId(request.getSegment().getTeam());
         try {
             caseElasticService.indexCaseByBulkProcess(newCase);
 

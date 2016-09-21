@@ -42,4 +42,14 @@ public class TeamService {
         return page;
     }
 
+    public List<TeamListView> findAll() {
+        List<TeamListView> teams = teamRepository.findAll(null, null);
+        return teams;
+    }
+
+    public Team findOne(String teamId) {
+        Team team = teamRepository.findOne(teamId);
+        return team;
+    }
+
 }

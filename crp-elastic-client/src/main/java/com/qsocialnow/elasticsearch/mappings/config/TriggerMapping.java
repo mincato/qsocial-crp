@@ -3,18 +3,16 @@ package com.qsocialnow.elasticsearch.mappings.config;
 import org.json.simple.JSONObject;
 
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.elasticsearch.mappings.ChildMapping;
+import com.qsocialnow.elasticsearch.mappings.Mapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.TriggerType;
 
-public class TriggerMapping implements ChildMapping<TriggerType, Trigger> {
+public class TriggerMapping implements Mapping<TriggerType, Trigger> {
 
     private static final String INDEX_NAME = "configuration";
 
     private static final String TYPE = "trigger";
 
     private static TriggerMapping instance;
-
-    private String idParent;
 
     private TriggerMapping() {
     }
@@ -58,21 +56,6 @@ public class TriggerMapping implements ChildMapping<TriggerType, Trigger> {
         triggerType.setSegments(document.getSegments());
         triggerType.setStatus(document.getStatus());
         return triggerType;
-    }
-
-    @Override
-    public String getIdParent() {
-        return idParent;
-    }
-
-    @Override
-    public void setIdParent(String idParent) {
-        this.idParent = idParent;
-    }
-
-    @Override
-    public String getParentType() {
-        return DomainMapping.TYPE;
     }
 
     @Override

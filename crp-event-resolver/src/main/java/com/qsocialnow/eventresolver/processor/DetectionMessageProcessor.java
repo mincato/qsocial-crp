@@ -16,7 +16,8 @@ public class DetectionMessageProcessor {
     @Autowired
     private DetectionCriteriaResolver detectionCriteriaResolver;
 
-    public DetectionCriteria detect(InPutBeanDocument message, Domain domain) {
+    public ExecutionMessageRequest detect(InPutBeanDocument message, Domain domain) {
+        ExecutionMessageRequest executionMessageRequest = null;
         DetectionCriteria detectionCriteria = null;
 
         // validate response detected
@@ -24,28 +25,37 @@ public class DetectionMessageProcessor {
             detectionCriteria = new DetectionCriteria();
             detectionCriteria.setExecuteMergeAction(true);
             detectionCriteria.setFindCaseByDomain(true);
-            return detectionCriteria;
+            return new ExecutionMessageRequest(message, domain, detectionCriteria, null, null);
         }
 
         boolean found = false;
+        Trigger triggerDetected = null;
+        Segment segmentDetected = null;
         if (domain != null && domain.getTriggers() != null) {
             NormalizedInputBeanDocument normalizedMessage = new NormalizedInputBeanDocument(message);
             for (int i = 0; !found && i < domain.getTriggers().size(); i++) {
                 Trigger trigger = domain.getTriggers().get(i);
                 if (trigger.getSegments() != null) {
                     for (int j = 0; !found && j < trigger.getSegments().size(); j++) {
-                        Segment segments = trigger.getSegments().get(j);
+                        Segment segment = trigger.getSegments().get(j);
                         detectionCriteria = detectionCriteriaResolver.resolve(normalizedMessage,
-                                segments.getDetectionCriterias());
+                                segment.getDetectionCriterias());
                         found = detectionCriteria != null;
+                        if (found) {
+                            segmentDetected = segment;
+                        }
                     }
                 }
                 if (found) {
-                    detectionCriteria.setTriggerId(trigger.getId());
+                    triggerDetected = trigger;
                 }
             }
         }
-        return detectionCriteria;
+        if (found) {
+            executionMessageRequest = new ExecutionMessageRequest(message, domain, detectionCriteria, triggerDetected,
+                    segmentDetected);
+        }
+        return executionMessageRequest;
     }
 
     public void setDetectionCriteriaResolver(DetectionCriteriaResolver detectionCriteriaResolver) {

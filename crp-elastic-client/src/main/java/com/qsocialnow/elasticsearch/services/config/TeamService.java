@@ -59,6 +59,21 @@ public class TeamService {
         return teams;
     }
 
+    public Team findOne(String teamId) {
+        RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
+        Repository<TeamType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TeamMapping mapping = TeamMapping.getInstance();
+
+        SearchResponse<Team> response = repository.find(teamId, mapping);
+
+        Team team = response.getSource();
+
+        repository.closeClient();
+        return team;
+    }
+
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
     }

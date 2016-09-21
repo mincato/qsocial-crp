@@ -98,19 +98,19 @@ public class ConfigurationRepository {
         segment1.setId(id + "-segment 1");
         segment1.setDescription(id + " segment 1- description");
         segment1.setDetectionCriterias(getDetectionCriteriaBySegmentId(segment1.getId()));
-        segment1.setTeam(getTeamBySegmentId(segment1.getId()));
+        segment1.setTeam(getTeamBySegmentId(segment1.getId()).getId());
 
         Segment segment2 = new Segment();
         segment2.setId(id + "-segment 2");
         segment2.setDescription(id + " segment 2- description");
         segment2.setDetectionCriterias(getDetectionCriteriaBySegmentId(segment2.getId()));
-        segment2.setTeam(getTeamBySegmentId(segment2.getId()));
+        segment2.setTeam(getTeamBySegmentId(segment2.getId()).getId());
 
         Segment segment3 = new Segment();
         segment3.setId(id + "-segment 3");
         segment3.setDescription(id + " segment 3- description");
         segment3.setDetectionCriterias(getDetectionCriteriaBySegmentId(segment3.getId()));
-        segment3.setTeam(getTeamBySegmentId(segment3.getId()));
+        segment3.setTeam(getTeamBySegmentId(segment3.getId()).getId());
 
         segmentsFromTrigger.add(segment1);
         segmentsFromTrigger.add(segment2);

@@ -12,7 +12,7 @@ public class Segment {
     @NotBlank(message = "{field.empty}")
     private String description;
 
-    private Team team;
+    private String team;
 
     private List<DetectionCriteria> detectionCriterias;
 
@@ -36,11 +36,11 @@ public class Segment {
         this.description = description;
     }
 
-    public Team getTeam() {
+    public String getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(String team) {
         this.team = team;
     }
 

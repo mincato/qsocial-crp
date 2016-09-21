@@ -109,7 +109,4 @@ public class DomainRepository {
         return domains;
     }
 
-    public Long count() {
-        return 50L;
-    }
 }

@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -108,8 +109,30 @@ public class TeamServiceImpl implements TeamService {
                     HttpMethod.GET, null, new ParameterizedTypeReference<PageResponse<TeamListView>>() {
                     });
 
-            PageResponse<TeamListView> userResolvers = response.getBody();
-            return userResolvers;
+            PageResponse<TeamListView> teams = response.getBody();
+            return teams;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call team service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<TeamListView> findAll() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico",
+                    teamServiceUrl));
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<TeamListView>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null, new ParameterizedTypeReference<List<TeamListView>>() {
+                    });
+
+            List<TeamListView> teams = response.getBody();
+            return teams;
         } catch (Exception e) {
             log.error("There was an error while trying to call team service", e);
             throw new RuntimeException(e);

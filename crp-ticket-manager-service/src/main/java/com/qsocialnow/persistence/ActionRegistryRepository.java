@@ -84,7 +84,4 @@ public class ActionRegistryRepository {
         return registriesView;
     }
 
-    public Long count() {
-        return 50L;
-    }
 }

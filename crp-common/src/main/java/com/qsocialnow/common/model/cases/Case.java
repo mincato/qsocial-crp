@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
 
 public class Case implements Serializable {
@@ -47,6 +48,14 @@ public class Case implements Serializable {
 
     private List<ActionRegistry> actionsRegistry;
 
+    private String teamId;
+
+    private BaseUserResolver userResolver;
+
+    private String sourceUser;
+
+    private String lastPostId;
+
     public Case() {
 
     }
@@ -61,6 +70,8 @@ public class Case implements Serializable {
 
         newCase.setCaseCategories(Arrays.asList(event.getCategorias()));
         newCase.setPendingResponse(true);
+        newCase.setSourceUser(event.getUsuarioCreacion());
+        newCase.setLastPostId(event.getId());
 
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
@@ -237,6 +248,38 @@ public class Case implements Serializable {
 
     public String getTriggerId() {
         return triggerId;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
+    }
+
+    public BaseUserResolver getUserResolver() {
+        return userResolver;
+    }
+
+    public void setUserResolver(BaseUserResolver userResolver) {
+        this.userResolver = userResolver;
+    }
+
+    public String getSourceUser() {
+        return sourceUser;
+    }
+
+    public void setSourceUser(String sourceUser) {
+        this.sourceUser = sourceUser;
+    }
+
+    public String getLastPostId() {
+        return lastPostId;
+    }
+
+    public void setLastPostId(String lastPostId) {
+        this.lastPostId = lastPostId;
     }
 
 }

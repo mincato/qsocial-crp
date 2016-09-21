@@ -5,7 +5,6 @@ import java.util.List;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
-import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.pagination.PageResponse;
 

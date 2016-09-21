@@ -18,11 +18,22 @@
 					    <n:label class="control-label col-sm-1">${labels.trigger.name}</n:label>
 					    <n:div class="col-sm-11">
 			    			<textbox type="text" class="form-control" id="name" 
-				    			value="@bind(fxSegment.description) @validator('beanValidator')"></textbox>
+				    			value="@bind(fxSegment.segment.description) @validator('beanValidator')"></textbox>
 					    	<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
 			    				<label value="@load(vmsgs[name])" />
 			    			</x:span>
 				    	</n:div>
+					</x:div>
+					<x:div sclass="@load(empty vmsgs[team] ? 'form-group' : 'form-group has-error')">
+						<n:label class="control-label col-sm-1">${labels.trigger.team}:</n:label>
+						<n:div class="col-sm-11">
+							<selectbox sclass="form-control" model="@load(segmentVm.teamOptions)" id="team"
+								selectedItem="@bind(fxSegment.team)">
+				    			<template name="model">
+									<label value="${each.name}" />
+								</template>
+							</selectbox>
+						</n:div>
 					</x:div>
 				</x:form>
 			</div>
@@ -34,7 +45,7 @@
 				<n:h6>
 					${labels.trigger.detectionCriterias}
 				</n:h6>
-				<x:ol class="list-group order" children="@bind(segmentVm.currentSegment.detectionCriterias)">
+				<x:ol class="list-group order" children="@bind(segmentVm.currentSegment.segment.detectionCriterias)">
 					<template name="children">
 						<li class="list-group-item">
 							${each.name}
