@@ -45,6 +45,7 @@ public class EditCaseViewModel implements Serializable {
     private static final int ACTIVE_PAGE_DEFAULT = 0;
 
     private int pageSize = PAGE_SIZE_DEFAULT;
+    
     private int activePage = ACTIVE_PAGE_DEFAULT;
 
     private boolean filterActive;

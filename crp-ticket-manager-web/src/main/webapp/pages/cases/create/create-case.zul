@@ -23,14 +23,33 @@
 						</x:div>
 						
 						<x:div sclass="@load(empty vmsgs[description] ? 'form-group' : 'form-group has-error')">
-	                       <n:label class="control-label col-sm-3">${labels.cases.details.description}</n:label>
+	                        <n:label class="control-label col-sm-3">${labels.cases.details.description}</n:label>
 	                        <textbox rows="5" type="text" id="description"
 	                               class="form-control" value="@bind(newCase.newCase.description)"></textbox>
 	                        <x:span sclass="@load(empty vmsgs[description] ? 'hidden' : 'help-block')">
                                 <label value="@load(vmsgs[description])" />
                             </x:span>       
                         </x:div>
-                        
+                        <div class="form-group" visible="@load(vm.domains ne null)">
+                            <n:label class="control-label col-sm-3">${labels.cases.details.domains}</n:label>
+                            <selectbox sclass="form-control" model="@load(vm.domains)"
+				                selectedItem="@bind(vm.selectedDomain)"
+				                onSelect="@command('onSelectDomain')">
+				                <template name="model">
+				                    <label  value="${each.name}"/>
+				                </template>
+				            </selectbox>
+                        </div>
+                        <div class="form-group" visible="@load(vm.triggers ne null)">
+                            <n:label class="control-label col-sm-3">${labels.cases.details.triggers}</n:label>
+                            <selectbox sclass="form-control" model="@load(vm.triggers)"
+                                selectedItem="@bind(vm.selectedTrigger)"
+                                onSelect="@command('onSelectTrigger')">
+                                <template name="model">
+                                    <label  value="${each.name}"/>
+                                </template>
+                            </selectbox>
+                        </div>
                         <div class="form-group text-center">
                             <button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
                             <button onClick="@command('clear')" label="${labels.app.button.clear}" zclass="btn btn-default"/>
