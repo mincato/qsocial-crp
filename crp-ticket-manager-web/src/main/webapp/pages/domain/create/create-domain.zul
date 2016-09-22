@@ -12,7 +12,7 @@
 		<div class="row">
 			<n:div class="col-lg-12">
 				<div zclass="pane equal">
-					<x:form form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')  @validator('com.qsocialnow.validators.ResolutionListValidator')">
+					<x:form form="@id('domain') @load(vm.currentDomain) @save(vm.currentDomain, before='save')  @validator('com.qsocialnow.validators.DomainFormValidator')">
 						<x:div sclass="@load(empty vmsgs[name] ? 'form-group' : 'form-group has-error')">
 						    <n:label class="control-label">${labels.domain.name}:</n:label>
 				    		<textbox type="text" class="form-control" id="name" 

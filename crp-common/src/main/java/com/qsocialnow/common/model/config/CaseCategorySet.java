@@ -2,7 +2,7 @@ package com.qsocialnow.common.model.config;
 
 import java.util.List;
 
-public class BaseCaseCategory {
+public class CaseCategorySet {
 
     private String id;
 

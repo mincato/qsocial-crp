@@ -11,7 +11,7 @@ import org.zkoss.util.resource.Labels;
 import com.qsocialnow.viewmodel.team.TeamView;
 
 @Component
-public class TeamValidator extends AbstractValidator {
+public class TeamFormValidator extends AbstractValidator {
 
     private static final String USERS_FIELD_ID = "users";
 

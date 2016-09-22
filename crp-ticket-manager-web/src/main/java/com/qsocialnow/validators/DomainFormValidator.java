@@ -14,7 +14,7 @@ import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.model.DomainView;
 
 @Component
-public class ResolutionListValidator extends AbstractValidator {
+public class DomainFormValidator extends AbstractValidator {
 
     private static final String DESCRIPTION_FIELD_ID_PATTERN = "description_{0}";
 

@@ -1,0 +1,30 @@
+[
+    {
+      "id": 1,
+      "description": "conjunto de estados",
+      "categories": [
+	     {
+	       "id": "1",
+	       "description": "cerrado"
+	     },
+	     {
+	       "id": "2",
+	       "description": "en progreso"
+	     }
+	   ]
+    },
+    {
+      "id": 2,
+      "description": "conjunto por dificultad",
+      "categories": [
+	     {
+	       "id": "1",
+	       "description": "facil"
+	     },
+	     {
+	       "id": "2",
+	       "description": "dificil"
+	     }
+	   ]
+    }
+]
