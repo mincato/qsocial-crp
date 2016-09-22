@@ -1,0 +1,16 @@
+[
+    {
+      "id": 1,
+      "description": "conjunto de tipos de usuario",
+      "categories": [
+	     {
+	       "id": "1",
+	       "description": "amistoso"
+	     },
+	     {
+	       "id": "2",
+	       "description": "problematico"
+	     }
+	   ]
+    }
+]
