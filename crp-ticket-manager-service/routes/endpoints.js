@@ -349,8 +349,11 @@ router.get('/domains/:id/trigger', function (req, res) {
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
 	  var name = req.query.name ? req.query.name : null;
+	  var status = req.query.status ? req.query.status : null;
+	  var fromDate = req.query.fromDate ? req.query.fromDate : null;
+	  var toDate = req.query.toDate ? req.query.toDate : null;
 	  
-	  triggerService.findAll(domainId, pageNumber, pageSize, name, asyncResponse);
+	  triggerService.findAll(domainId, pageNumber, pageSize, name, status, fromDate, toDate, asyncResponse);
 });
 
 router.put('/domains/:id/resolutions', function (req, res) {
@@ -746,6 +749,37 @@ router.get('/teams/:id', function (req, res) {
 	  var teamId = req.params.id;
 	  
 	  teamService.findOne(teamId, asyncResponse);
+});
+
+router.put('/teams/:id', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+	}
+
+	prettyJSON(req.body);
+
+	var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	var clazz = java.findClassSync('com.qsocialnow.common.model.config.Team');
+	var team = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+	var teamId = req.params.id;
+
+	var teamService = javaContext.getBeanSync("teamService");
+	teamService.update(teamId, team, asyncResponse);
+
 });
 
 module.exports = router;

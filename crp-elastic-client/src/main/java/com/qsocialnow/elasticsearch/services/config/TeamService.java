@@ -78,4 +78,17 @@ public class TeamService {
         this.configurator = configurator;
     }
 
+    public String updateTeam(Team team) {
+        RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
+
+        Repository<TeamType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TeamMapping mapping = TeamMapping.getInstance();
+        TeamType documentIndexed = mapping.getDocumentType(team);
+        String response = repository.updateIndexMapping(team.getId(), mapping, documentIndexed);
+        repository.closeClient();
+        return response;
+    }
+
 }

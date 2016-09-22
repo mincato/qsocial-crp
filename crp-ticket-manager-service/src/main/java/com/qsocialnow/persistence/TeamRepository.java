@@ -65,4 +65,15 @@ public class TeamRepository {
         return team;
     }
 
+    public Team update(Team team) {
+        try {
+            String id = teamElasticService.updateTeam(team);
+            team.setId(id);
+            return team;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
 }

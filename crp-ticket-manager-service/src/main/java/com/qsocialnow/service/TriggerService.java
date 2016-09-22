@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.persistence.TriggerRepository;
 
@@ -58,9 +60,12 @@ public class TriggerService {
         return triggerSaved;
     }
 
-    public PageResponse<TriggerListView> findAll(String domainId, Integer pageNumber, Integer pageSize, String name) {
+    public PageResponse<TriggerListView> findAll(String domainId, Integer pageNumber, Integer pageSize, String name,
+            String status, String fromDate, String toDate) {
+        Status filterStatus = status != null ? Status.valueOf(status) : null;
+        TriggerListRequest triggerListRequest = new TriggerListRequest(name, filterStatus, fromDate, toDate);
         List<TriggerListView> triggers = triggerRepository.findAll(domainId, new PageRequest(pageNumber, pageSize),
-                name);
+                triggerListRequest);
 
         PageResponse<TriggerListView> page = new PageResponse<TriggerListView>(triggers, pageNumber, pageSize);
         return page;

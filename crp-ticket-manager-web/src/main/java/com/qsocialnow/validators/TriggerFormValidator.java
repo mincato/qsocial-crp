@@ -11,7 +11,7 @@ import org.zkoss.util.resource.Labels;
 import com.qsocialnow.common.model.config.Trigger;
 
 @Component
-public class CreateTriggerFormValidator extends AbstractValidator {
+public class TriggerFormValidator extends AbstractValidator {
 
     private static final String SEGMENTS_FIELD_ID = "segments";
 

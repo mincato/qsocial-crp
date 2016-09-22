@@ -2,13 +2,13 @@ package com.qsocialnow.common.model.config;
 
 import java.util.List;
 
-public class BaseCaseCategory {
+public class SubjectCategorySet {
 
     private String id;
 
     private String description;
 
-    private List<CaseCategory> categories;
+    private List<SubjectCategory> categories;
 
     public String getId() {
         return id;
@@ -26,11 +26,11 @@ public class BaseCaseCategory {
         this.description = description;
     }
 
-    public List<CaseCategory> getCategories() {
+    public List<SubjectCategory> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<CaseCategory> categories) {
+    public void setCategories(List<SubjectCategory> categories) {
         this.categories = categories;
     }
 }

@@ -1,0 +1,74 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('com.qsocialnow.viewmodel.subjectcategoryset.SubjectCategorySetsViewModel')" 
+    border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
+	<n:div class="row">
+	   <n:div class="col-lg-12">
+	       <div zclass="pane equal col-md-12 col-xs-12">
+				<n:div class="col-md-6 col-xs-12">
+    				<n:h5>${labels.subjectcategoryset.list.title}</n:h5>
+				</n:div>
+				<n:div class="col-md-offset-1 col-md-3 col-xs-8">
+					<div zclass="input-group input-group-sm">
+						  <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" />
+							<span zclass="input-group-btn">
+							    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+							</span>
+			    	</div>
+                </n:div>
+                <n:div class="col-md-2 col-xs-4">
+                	<n:div class="link-button">
+					<a href="/pages/subject-category-set/create/index.zul">${labels.subjectcategoryset.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
+	    			</n:div>
+	    		</n:div>
+	       </div>
+	   </n:div>
+    </n:div>
+    
+	<div class="row" visible="@load(empty vm.subjectCategorySets)">
+		<n:div class="col-lg-12">
+    		<div zclass="pane equal">
+    			<div class="text-center" visible="@load(not vm.filterActive)">
+					${labels.subjectcategoryset.list.unfilled} <a href="/pages/subject-category-set/create/index.zul">${labels.subjectcategoryset.create.subjectcategoryset.action}</a>
+				</div>
+				<div class="text-center" visible="@load(vm.filterActive)">
+					${labels.app.pagination.noResultsFound} 
+				</div>
+			</div>
+		</n:div>
+	</div>
+	
+    <div class="row" visible="@load(not empty vm.subjectCategorySets)">
+    	<n:div class="col-lg-12">
+    	<div zclass="pane equal">
+		  <div zclass="table-responsive" >
+			<table class="table table-striped table-hover">
+			    <thead>
+					<tr>
+					    <th>${labels.subjectcategoryset.list.column.description}</th>
+					    <th>${labels.subjectcategoryset.list.column.action}</th>
+					</tr>
+			    </thead>
+			    <tbody children="@bind(vm.subjectCategorySets)">
+			    	<template name="children">
+					<tr>
+						<td class="list-text-column">${each.description}</td>
+						<td>
+                       		<ul class="list-inline">
+  								<li><a class="list-action"><i onClick="@command('openEdit', subjectcategoryset=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.subjectcategoryset.edit.action}"></i></a></li>
+  							</ul>
+			           	</td>
+               		</tr>
+               		</template>
+				</tbody>
+			</table>
+		  </div>
+			<div class="text-center" zclass="@bind(vm.moreResults?'more-results':'hidden')">
+				<a style="text-decoration:none" onClick="@command('moreResults')"  >
+				 	${labels.app.pagination.moreResults}
+				</a>
+			</div>
+		</div>
+	  </n:div>
+	</div>
+</x:div>

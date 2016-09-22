@@ -106,6 +106,45 @@
 											</li>
 										</ul>
 									</li>
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-tags fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.casecategorysets}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a
+													href="/pages/case-category-set/list/index.zul">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+										</ul>
+									</li>
+									
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-tags fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.subjectcategorysets}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a
+													href="/pages/subject-category-set/list/index.zul">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+										</ul>
+									</li>
 
 									<li>
 										<n:a href="#">
@@ -122,12 +161,6 @@
 												<a
 													href="/pages/domain/list/index.zul">
 													${labels.sidebar.menu.list}
-												</a>
-											</li>
-											<li>
-												<a
-													href="/pages/domain/create/index.zul">
-													${labels.sidebar.menu.create}
 												</a>
 											</li>
 										</ul>

@@ -1,0 +1,64 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<n:br />
+	<n:hr />
+	<x:div
+		sclass="@load(empty vmsgs['categories'] ? 'form-group' : 'form-group has-error')">
+		<n:label class="control-label col-sm-2">
+			${labels.subjectcategoryset.categories.label}
+		</n:label>
+		<n:div class="col-sm-10">
+			<div zclass="link-button pull-right">
+				<a onClick="@command('addCategory', fx = fx)">
+					<i class="fa fa-plus-circle fa-2x"></i>
+					${labels.subjectcategoryset.add.category}
+				</a>
+			</div>
+		</n:div>
+	</x:div>
+	<x:div zclass="form-group"
+		visible="@load(empty fx.categories and empty vmsgs['categories'])">
+		<span class="col-sm-offset-2 col-sm-6">
+			${labels.subjectcategoryset.categories.list.unfilled}
+		</span>
+	</x:div>
+	<x:div sclass="form-group has-error"
+		visible="@load(empty fx.categories and not empty vmsgs['categories'])">
+		<span class="col-sm-offset-2 col-sm-6 help-block">
+			<label value="@bind(vmsgs['categories'])" />
+		</span>
+	</x:div>
+	<div class="form-group" visible="@load(not empty fx.categories)">
+		<n:div class="col-sm-offset-2 ">
+			<x:ol id="categories" class="list-group order"
+				children="@bind(fx.categories)  @template('editable')">
+				<template name="editable">
+					<n:div
+						class="list-group-item col-xs-12 col-sm-11">
+						<x:div
+							sclass="@load(empty vmsgs['description_'.concat(forEachStatus.index)] ? 'col-xs-8 col-sm-9' : 'col-xs-8 col-sm-9 has-error')">
+							<textbox type="text" class="form-control"
+								name="normal_input"
+								value="@bind(each.description) @validator('beanValidator')">
+							</textbox>
+							<x:span
+								sclass="@load(vmsgs['description_'.concat(forEachStatus.index)] ? 'hidden' : 'help-block')">
+								<label
+									value="@bind(vmsgs['description_'.concat(forEachStatus.index)])" />
+							</x:span>
+						</x:div>
+						<n:div class="col-xs-4 col-sm-3">
+							<n:div class="pull-right">
+								<a zclass="btn-list-action"
+									onClick="@command('deleteCategory', index = forEachStatus.index, fx = fx)">
+									<i
+										class="glyphicon glyphicon-erase fa-2x">
+									</i>
+								</a>
+							</n:div>
+						</n:div>
+					</n:div>
+				</template>
+			</x:ol>
+		</n:div>
+	</div>
+</zk>

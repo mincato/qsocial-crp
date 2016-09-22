@@ -39,7 +39,7 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
 
     private static final long serialVersionUID = -1885863621412866685L;
 
-    @WireVariable("mockTeamService")
+    @WireVariable
     private TeamService teamService;
 
     @WireVariable("mockUserService")
