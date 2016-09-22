@@ -11,6 +11,8 @@ public class CaseListView implements Serializable {
 
     private String title;
 
+    private String description;
+
     private Date openDate;
 
     private boolean pendingResponse;
@@ -37,6 +39,14 @@ public class CaseListView implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public boolean isPendingResponse() {

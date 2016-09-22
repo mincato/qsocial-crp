@@ -61,6 +61,23 @@ public class CaseService {
         }
     }
 
+    public Case save(Case newCase) {
+        try {
+            Case caseObject = newCase;
+            if (newCase.getId() == null) {
+                caseObject = repository.save(newCase);
+                if (newCase.getActionsRegistry() != null && newCase.getActionsRegistry().size() > 0)
+                    actionRegistryRepository.create(caseObject.getId(), newCase.getActionsRegistry().get(0));
+            } else {
+                repository.update(newCase);
+            }
+            return caseObject;
+        } catch (Exception e) {
+            log.error("There was an error executing action", e);
+            throw e;
+        }
+    }
+
     public Case executeAction(String caseId, ActionRequest actionRequest) {
         try {
             Case caseObject = repository.findOne(caseId);
