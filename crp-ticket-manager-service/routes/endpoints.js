@@ -44,6 +44,38 @@ router.get('/cases', function (req, res) {
 
 });
 
+router.post('/cases', function (req, res) {
+
+	  function asyncResponse(err,responseCases) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(responseCases !== null) {
+	      try {
+	        res.set('Content-Type','application/json');
+	        res.send(gson.toJsonSync(responseCases));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  prettyJSON(req.body);
+
+	  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.Case');
+	  var newCase = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+
+	  var caseService = javaContext.getBeanSync("caseService");
+	  caseService.save(newCase, asyncResponse);
+
+	});
+
+
 router.get('/cases/:id', function (req, res) {
 
 	  function asyncResponse(err,responseDomain) {

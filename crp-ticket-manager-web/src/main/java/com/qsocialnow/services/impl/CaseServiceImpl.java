@@ -123,4 +123,17 @@ public class CaseServiceImpl implements CaseService {
 
     }
 
+    @Override
+    public Case create(Case newCase) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            Case createdCase = restTemplate.postForObject(serviceUrlResolver.resolveUrl("centaurico", caseServiceUrl),
+                    newCase, Case.class);
+            return createdCase;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call case service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }

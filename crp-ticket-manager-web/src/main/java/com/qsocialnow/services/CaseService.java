@@ -18,4 +18,6 @@ public interface CaseService {
 
     List<Resolution> getAvailableResolutions(String caseId);
 
+    Case create(Case newCase);
+
 }

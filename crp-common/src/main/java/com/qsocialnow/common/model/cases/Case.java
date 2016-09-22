@@ -92,6 +92,27 @@ public class Case implements Serializable {
         return newCase;
     }
 
+    public static Case getNewCase() {
+        Case newCase = new Case();
+        newCase.setOpen(true);
+
+        Date openDate = new Date();
+        newCase.setOpenDate(openDate);
+        newCase.setPendingResponse(true);
+
+        // creating first registry
+        List<ActionRegistry> registries = new ArrayList<>();
+        ActionRegistry registry = new ActionRegistry();
+        registry.setAction(ActionType.OPEN_CASE.name());
+        registry.setComment(null);
+        registry.setAutomatic(true);
+        registry.setDate(openDate);
+
+        registries.add(registry);
+        newCase.setActionsRegistry(registries);
+        return newCase;
+    }
+
     public List<ActionType> getAllowedManualActions() {
         List<ActionType> actionsAllowed = new ArrayList<>();
 

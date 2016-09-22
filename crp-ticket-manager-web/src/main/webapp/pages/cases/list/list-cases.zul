@@ -1,11 +1,24 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CasesViewModel')" 
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
 		<n:div class="col-lg-12">
-			<div zclass="pane equal">
+		  <div zclass="pane equal col-md-12 col-xs-12">	
+			<n:div class="col-md-6 col-xs-12">
 				<n:h5>${labels.cases.list.title}</n:h5>
-			</div>
+			</n:div>
+			<n:div class="col-md-offset-1 col-md-3 col-xs-8">
+                 <div zclass="input-group input-group-sm">
+                          
+                 </div>
+            </n:div>
+			<n:div class="col-md-2 col-xs-4">
+                    <n:div class="link-button">
+                    <a href="/pages/cases/create/index.zul">${labels.cases.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
+                    </n:div>
+            </n:div>
+          </div>  
 		</n:div>
     </n:div>
 	<div class="row">
@@ -28,10 +41,7 @@
 									<td>${each.id}</td>
                    					<td class="list-text-column">${each.title}</td>
                        				<td>${each.description}</td>
-                       				<td>
-                       				   <checkbox
-                                          checked="@bind(each.pendingResponse)" disabled="true"/>
-                       				</td>
+                				    <td>${c:l(c:cat('cases.pendingResponse.',each.pendingResponse))}</td>   
                        				<td>
                        					<ul class="list-inline">
   											<li><a class="list-action"><i class="fa fa-search"></i></a></li>

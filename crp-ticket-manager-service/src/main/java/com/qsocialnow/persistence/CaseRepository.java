@@ -31,6 +31,7 @@ public class CaseRepository {
                 CaseListView caseListView = new CaseListView();
                 caseListView.setId(caseRepo.getId());
                 caseListView.setTitle(caseRepo.getTitle());
+                caseListView.setDescription(caseRepo.getDescription());
                 caseListView.setOpenDate(caseRepo.getOpenDate());
                 caseListView.setPendingResponse(caseRepo.getPendingResponse());
                 cases.add(caseListView);
@@ -49,9 +50,16 @@ public class CaseRepository {
         return caseElasticService.findCaseById(caseId);
     }
 
-    public void save(Case caseObject) {
-        caseElasticService.indexCase(caseObject);
+    public Case save(Case caseObject) {
 
+        try {
+            String id = caseElasticService.indexCase(caseObject);
+            caseObject.setId(id);
+            return caseObject;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
     }
 
     public boolean update(Case caseObject) {
