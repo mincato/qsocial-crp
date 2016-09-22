@@ -118,6 +118,12 @@ public class EditCaseViewModel implements Serializable {
         this.findRegistriesBy();
     }
 
+    @Command
+    @NotifyChange({ "currentCase" })
+    public void save() {
+
+    }
+
     private void refreshRegistries() {
         this.registries.clear();
         this.filterActive = false;

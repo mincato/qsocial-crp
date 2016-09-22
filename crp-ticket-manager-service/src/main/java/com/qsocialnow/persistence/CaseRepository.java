@@ -32,6 +32,7 @@ public class CaseRepository {
                 caseListView.setId(caseRepo.getId());
                 caseListView.setTitle(caseRepo.getTitle());
                 caseListView.setOpenDate(caseRepo.getOpenDate());
+                caseListView.setPendingResponse(caseRepo.getPendingResponse());
                 cases.add(caseListView);
             }
         } catch (Exception e) {

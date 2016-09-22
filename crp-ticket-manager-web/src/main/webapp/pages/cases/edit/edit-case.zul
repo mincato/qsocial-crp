@@ -1,6 +1,79 @@
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditCaseViewModel')" 
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
+	<n:div class="row">
+        <n:div>
+            <div zclass="pane equal">
+                <n:h5>${labels.cases.list.column.title} / ${vm.currentCase.title} </n:h5>
+            </div>
+        </n:div>
+    </n:div>
+
+    <div zclass="panel-group">
+        <div zclass="pane equal">
+            <x:form class="form-horizontal">
+                <n:div class="row">
+                    <x:div sclass="form-group col-sm-6">
+                        <n:label class="control-label col-sm-3">
+                            ${labels.cases.details.title}
+                        </n:label>
+                        <n:div class="col-sm-9">
+                            <textbox type="text" sclass="form-control" disabled="true"
+                                id="name"
+                                value="@bind(vm.currentCase.title)">
+                            </textbox>
+                        </n:div>
+                    </x:div>
+                    
+                    <x:div sclass="form-group col-sm-6">
+                        <n:label class="control-label col-sm-3">
+                            ${labels.cases.details.opendate}
+                        </n:label>
+                        <n:div class="col-sm-9">
+                            ${vm.currentCase.openDate}
+                        </n:div>
+                    </x:div>
+                </n:div>
+                <n:div class="row">
+                    <n:div class="form-group col-sm-6 hidden-xs">
+                        <n:label class="control-label col-sm-3">
+                            ${labels.cases.details.description}
+                        </n:label>
+                        <n:div class="col-sm-9">
+                            <textbox rows="5" type="text" disabled="true"
+                                class="form-control" value="@bind(vm.currentCase.description)">
+                            </textbox>
+                        </n:div>
+                    </n:div>
+                    <x:div sclass="form-group col-sm-6">
+                        <n:label class="control-label col-sm-3">
+                            ${labels.cases.details.closedate}
+                        </n:label>
+                        <n:div class="col-sm-9">
+                            ${vm.currentCase.closeDate}
+                        </n:div>
+                    </x:div>
+                    <x:div sclass="form-group col-sm-6">
+                            <n:label class="control-label col-sm-3">${labels.cases.details.category}</n:label>
+                            <n:div class="col-sm-6">
+                                <?xel-method prefix="x" name="join" class="org.apache.commons.lang3.StringUtils" signature="java.lang.String join(java.lang.Iterable,char)"?>
+                                <label value="@load(x:join(vm.currentCase.caseCategories,','))"/>
+                            </n:div>
+                     </x:div>
+                </n:div>
+                <n:div class="row">
+                     <x:div class="form-group col-sm-6">
+                          <n:label class="control-label col-sm-3">${labels.cases.details.pendingResponse}</n:label>
+                          <x:div class="col-sm-9">
+                              <checkbox
+                                  checked="@bind(vm.currentCase.pendingResponse)" disabled="true"/>
+                          </x:div>
+                     </x:div>
+                 </n:div>
+            </x:form>
+        </div>
+    </div>
+    <n:br/>
 	<div zclass="row">
 		<include zclass="col-lg-12" src="/pages/cases/actions/master-action.zul"/>
 	</div>
