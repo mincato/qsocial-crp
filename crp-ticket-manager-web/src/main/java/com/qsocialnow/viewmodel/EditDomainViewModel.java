@@ -88,7 +88,7 @@ public class EditDomainViewModel implements Serializable {
         initThematics();
         initResolutions();
         Clients.showNotification(Labels.getLabel("domain.edit.notification.success", new String[] { currentDomain
-                .getDomain().getId() }));
+                .getDomain().getName() }));
         saved = true;
     }
 

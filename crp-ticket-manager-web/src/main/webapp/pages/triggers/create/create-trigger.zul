@@ -2,7 +2,7 @@
 <div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('triggerVm') @init('com.qsocialnow.viewmodel.CreateTriggerViewModel')"
 		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
-		form="@id('fxTrigger') @load(triggerVm.currentTrigger) @save(triggerVm.currentTrigger, before={'save'} ) @validator('com.qsocialnow.validators.CreateTriggerFormValidator')">
+		form="@id('fxTrigger') @load(triggerVm.currentTrigger) @save(triggerVm.currentTrigger, before={'save'} ) @validator('com.qsocialnow.validators.TriggerFormValidator')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
