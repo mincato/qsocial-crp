@@ -80,6 +80,8 @@ public class TriggerService {
         Trigger triggerSaved = null;
         try {
             trigger.setId(triggerId);
+            mockActions(trigger);
+            mockResoultions(trigger, domainId);
             triggerSaved = triggerRepository.update(domainId, trigger);
         } catch (Exception e) {
             log.error("There was an error updating trigger: " + trigger.getDescription(), e);
