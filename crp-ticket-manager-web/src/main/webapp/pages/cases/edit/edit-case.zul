@@ -57,7 +57,7 @@
                     <x:div sclass="form-group col-sm-6">
                           <n:label class="control-label col-sm-3">${labels.cases.details.open}</n:label>
                           <x:div class="col-sm-9">
-                              <n:label class="control-label col-sm-1">${c:l(c:cat('cases.open.',vm.currentCase.pendingResponse))}</n:label>
+                              <label class="control-label col-sm-1" value="@load(c:l(c:cat('cases.open.',vm.currentCase.open)))"></label>
                           </x:div>  
                      </x:div>
                 </n:div>
@@ -65,7 +65,7 @@
                      <x:div class="form-group col-sm-6">
                           <n:label class="control-label col-sm-3">${labels.cases.details.pendingResponse}</n:label>
                           <x:div class="col-sm-2">
-                              <label value="${c:l(c:cat('cases.pendingResponse.',vm.currentCase.pendingResponse))}"/>
+                              <label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.pendingResponse)))"/>
                           </x:div>
                      </x:div>
                  </n:div>
