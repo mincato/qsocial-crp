@@ -15,6 +15,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.model.CaseView;
@@ -29,21 +30,21 @@ public class CreateCaseViewModel implements Serializable {
 
     @WireVariable
     private CaseService caseService;
-    
+
     @WireVariable
     private DomainService domainService;
-    
+
     @WireVariable
     private TriggerService triggerService;
 
     private CaseView currentCase;
-    
+
     private DomainListView selectedDomain;
-    
+
     private TriggerListView selectedTrigger;
-    
+
     private List<DomainListView> domains = new ArrayList<DomainListView>();
-    
+
     private List<TriggerListView> triggers;
 
     public CaseView getCurrentCase() {
@@ -57,33 +58,37 @@ public class CreateCaseViewModel implements Serializable {
     }
 
     private void initDomain() {
-		PageResponse<DomainListView> pageResponse = domainService.findAll(0,100);
+        PageResponse<DomainListView> pageResponse = domainService.findAll(0, -1);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.domains.addAll(pageResponse.getItems());
         }
-	}
+    }
 
-	private void initCase() {
+    private void initCase() {
         currentCase = new CaseView();
         currentCase.setNewCase(Case.getNewCase());
     }
-	
-	@Command
-    @NotifyChange("triggers")
-	public void onSelectDomain(){
-		PageResponse<TriggerListView> pageResponse = triggerService.findAll(this.selectedDomain.getId(), 0, 100, null);
-		if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
-			this.triggers = new ArrayList<TriggerListView>();
-			this.triggers.addAll(pageResponse.getItems());
-        }
-	}
-	
-	@Command
-	public void onSelectTrigger(){
-		
-	}
 
-	@Command
+    @Command
+    @NotifyChange("triggers")
+    public void onSelectDomain() {
+        PageResponse<TriggerListView> pageResponse = triggerService.findAll(this.selectedDomain.getId(), 0, -1, null);
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.triggers = new ArrayList<TriggerListView>();
+            this.triggers.addAll(pageResponse.getItems());
+        }
+    }
+
+    @Command
+    public void onSelectTrigger() {
+        this.currentCase.getNewCase().setTriggerId(this.selectedTrigger.getId());
+        if (this.selectedTrigger.getSegments() != null && this.selectedTrigger.getSegments().size() > 0) {
+            this.currentCase.getNewCase().setTeamId(this.selectedTrigger.getSegments().get(0).getTeam());
+        }
+
+    }
+
+    @Command
     @NotifyChange("currentCase")
     public void save() {
         Case newCase = currentCase.getNewCase();
@@ -99,27 +104,27 @@ public class CreateCaseViewModel implements Serializable {
         initCase();
     }
 
-	public List<DomainListView> getDomains() {
-		return domains;
-	}
+    public List<DomainListView> getDomains() {
+        return domains;
+    }
 
-	public List<TriggerListView> getTriggers() {
-		return triggers;
-	}
+    public List<TriggerListView> getTriggers() {
+        return triggers;
+    }
 
-	public DomainListView getSelectedDomain() {
-		return selectedDomain;
-	}
+    public DomainListView getSelectedDomain() {
+        return selectedDomain;
+    }
 
-	public void setSelectedDomain(DomainListView selectedDomain) {
-		this.selectedDomain = selectedDomain;
-	}
+    public void setSelectedDomain(DomainListView selectedDomain) {
+        this.selectedDomain = selectedDomain;
+    }
 
-	public TriggerListView getSelectedTrigger() {
-		return selectedTrigger;
-	}
+    public TriggerListView getSelectedTrigger() {
+        return selectedTrigger;
+    }
 
-	public void setSelectedTrigger(TriggerListView selectedTrigger) {
-		this.selectedTrigger = selectedTrigger;
-	}	
+    public void setSelectedTrigger(TriggerListView selectedTrigger) {
+        this.selectedTrigger = selectedTrigger;
+    }
 }

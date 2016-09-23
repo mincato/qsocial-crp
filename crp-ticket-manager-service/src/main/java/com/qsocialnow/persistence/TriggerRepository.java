@@ -50,6 +50,7 @@ public class TriggerRepository {
                 triggerListView.setStatus(triggerRepo.getStatus());
                 triggerListView.setFromDate(triggerRepo.getInit());
                 triggerListView.setToDate(triggerRepo.getEnd());
+                triggerListView.setSegments(triggerRepo.getSegments());
                 triggers.add(triggerListView);
             }
         } catch (Exception e) {
