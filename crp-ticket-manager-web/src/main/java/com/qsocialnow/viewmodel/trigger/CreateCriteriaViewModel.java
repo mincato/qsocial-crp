@@ -1,8 +1,9 @@
-package com.qsocialnow.viewmodel;
+package com.qsocialnow.viewmodel.trigger;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,16 +12,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.ContextParam;
-import org.zkoss.bind.annotation.ContextType;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.ToClientCommand;
-import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
@@ -56,8 +57,8 @@ import com.qsocialnow.services.CategoryService;
 import com.qsocialnow.services.ThematicService;
 
 @VariableResolver(DelegatingVariableResolver.class)
-@NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.saved")
-@ToClientCommand("modal$closeEvent")
+@NotifyCommand(value = "filter$updateEvent", onChange = "_vm_.filters")
+@ToClientCommand("filter$updateEvent")
 public class CreateCriteriaViewModel implements Serializable {
 
     private static final long serialVersionUID = -4119198423406156946L;
@@ -78,8 +79,6 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private FilterView filterView;
 
-    private boolean saved;
-
     private Set<WordFilterType> wordFilterTypeOptions;
 
     private ListModelList<Thematic> thematicsOptions = new ListModelList<>();
@@ -90,7 +89,9 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private List<CategoryGroup> categoryGroupOptions = new ArrayList<>();
 
-    private CategoryFilterView filterCategory;
+    private boolean editing;
+
+    private boolean filters;
 
     public DetectionCriteria getCurrentCriteria() {
         return currentCriteria;
@@ -118,6 +119,10 @@ public class CreateCriteriaViewModel implements Serializable {
 
     public List<Thematic> getThematicsOptions() {
         return thematicsOptions;
+    }
+
+    public boolean isFilters() {
+        return filters;
     }
 
     public List<CategoryGroup> getCategoryGroupOptions() {
@@ -148,16 +153,7 @@ public class CreateCriteriaViewModel implements Serializable {
         return subSerieOptions;
     }
 
-    public CategoryFilterView getFilterCategory() {
-        return filterCategory;
-    }
-
-    public boolean isSaved() {
-        return saved;
-    }
-
     @Command
-    @NotifyChange("saved")
     public void save() {
         Filter filter = new Filter();
         addMediaFilter(filter);
@@ -169,66 +165,112 @@ public class CreateCriteriaViewModel implements Serializable {
         addSerieFilters(filter);
         addCategoriesFilters(filter);
         currentCriteria.setFilter(filter);
-        saved = true;
-    }
-
-    @Command
-    public void close(@ContextParam(ContextType.VIEW) Component comp) {
-        comp.detach();
-        if (saved) {
-            Map<String, Object> args = new HashMap<String, Object>();
+        if (editing) {
+            BindUtils.postGlobalCommand(null, null, "updateCriteria", new HashMap<>());
+        } else {
+            Map<String, Object> args = new HashMap<>();
             args.put("detectionCriteria", currentCriteria);
             BindUtils.postGlobalCommand(null, null, "addCriteria", args);
         }
     }
 
+    @Command
+    public void cancel() {
+        BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
+    }
+
     @Init
-    public void init(@BindingParam("currentDomain") Domain currentDomain) {
+    public void init() {
         currentCriteria = new DetectionCriteria();
-        filterCategory = null;
         filterView = new FilterView();
         wordFilterTypeOptions = Arrays.stream(WordFilterType.values()).collect(Collectors.toSet());
-        System.out.println("criteria domain: " + currentDomain);
-        initThematics(currentDomain);
-        initMedias();
-        initConnotations();
-        initLanguages();
+        initMedias(null);
+        initConnotations(null);
+        initLanguages(null);
 
+    }
+
+    @GlobalCommand
+    @NotifyChange({ "currentCriteria", "filters", "filter", "connotations", "mediaTypes", "languages", "serieOptions",
+            "subSerieOptions", "categoryGroupOptions" })
+    public void initCriteria(@BindingParam("currentDomain") Domain currentDomain) {
+        currentCriteria = new DetectionCriteria();
+        filterView = new FilterView();
+        serieOptions.clear();
+        subSerieOptions.clear();
+        categoryGroupOptions.clear();
+        initThematics(currentDomain);
+        initMedias(null);
+        initConnotations(null);
+        initLanguages(null);
+        editing = false;
+        filters = true;
+
+    }
+
+    @GlobalCommand
+    @NotifyChange({ "currentCriteria", "filters", "filter", "connotations", "mediaTypes", "languages", "serieOptions",
+            "subSerieOptions", "categoryGroupOptions" })
+    public void editCriteria(@BindingParam("currentDomain") Domain currentDomain,
+            @BindingParam("detectionCriteria") DetectionCriteria detectionCriteria) {
+        currentCriteria = detectionCriteria;
+        filterView = new FilterView();
+        initThematics(currentDomain);
+        initMedias(detectionCriteria);
+        initConnotations(detectionCriteria);
+        initLanguages(detectionCriteria);
+        createFilter(detectionCriteria);
+        editing = true;
+        filters = true;
     }
 
     private void initThematics(Domain domain) {
-        List<Thematic> allThematics = thematicService.findAll();
-        Stream<Thematic> thematics = allThematics.stream().filter(
-                thematic -> (domain.getThematics().contains(thematic.getId())));
-        thematicsOptions.addAll(thematics.collect(Collectors.toList()));
+        if (thematicsOptions.isEmpty()) {
+            List<Thematic> allThematics = thematicService.findAll();
+            Stream<Thematic> thematics = allThematics.stream().filter(
+                    thematic -> (domain.getThematics().contains(thematic.getId())));
+            thematicsOptions.addAll(thematics.collect(Collectors.toList()));
+        }
     }
 
-    private void initConnotations() {
+    private void initConnotations(DetectionCriteria detectionCriteria) {
+        boolean containsFilter = detectionCriteria != null && detectionCriteria.getFilter() != null
+                && detectionCriteria.getFilter().getConnotationFilter() != null;
         connotations = new ArrayList<>();
         for (Connotation connotation : Connotation.values()) {
             ConnotationView connotationView = new ConnotationView();
             connotationView.setConnotation(connotation);
-            connotationView.setChecked(false);
+            connotationView.setChecked(containsFilter
+                    && ArrayUtils.contains(detectionCriteria.getFilter().getConnotationFilter().getOptions(),
+                            connotation.getValue()));
             connotations.add(connotationView);
         }
     }
 
-    private void initMedias() {
+    private void initMedias(DetectionCriteria detectionCriteria) {
+        boolean containsFilter = detectionCriteria != null && detectionCriteria.getFilter() != null
+                && detectionCriteria.getFilter().getMediaFilter() != null;
         mediaTypes = new ArrayList<>();
         for (Media media : Media.values()) {
             MediaView mediaView = new MediaView();
             mediaView.setMedia(media);
-            mediaView.setChecked(false);
+            mediaView.setChecked(containsFilter
+                    && ArrayUtils.contains(detectionCriteria.getFilter().getMediaFilter().getOptions(),
+                            media.getValue()));
             mediaTypes.add(mediaView);
         }
     }
 
-    private void initLanguages() {
+    private void initLanguages(DetectionCriteria detectionCriteria) {
+        boolean containsFilter = detectionCriteria != null && detectionCriteria.getFilter() != null
+                && detectionCriteria.getFilter().getLanguageFilter() != null;
         languages = new ArrayList<>();
         for (Language language : Language.values()) {
             LanguageView languageView = new LanguageView();
             languageView.setLanguage(language);
-            languageView.setChecked(false);
+            languageView.setChecked(containsFilter
+                    && ArrayUtils.contains(detectionCriteria.getFilter().getLanguageFilter().getOptions(),
+                            language.getValue()));
             languages.add(languageView);
         }
     }
@@ -281,17 +323,92 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "filter", "filterCategory" })
+    @NotifyChange({ "filter" })
     public void selectGroupCategory(@BindingParam("filter") CategoryFilterView filterCategory) {
         filterCategory.getCategoryOptions().clear();
         filterCategory.setCategories(null);
-        this.filterCategory = filterCategory;
+        Map<String, Object> args = new HashMap<>();
+        args.put("filterCategory", filterCategory);
+        Executions.createComponents("/pages/triggers/create/choose-categories.zul", null, args);
     }
 
-    @Command
-    @NotifyChange({ "filterCategory", "filter" })
+    @GlobalCommand
+    @NotifyChange({ "filter" })
     public void closeCategories() {
-        this.filterCategory = null;
+    }
+
+    private void createFilter(DetectionCriteria detectionCriteria) {
+        fillDateRangeFilter(filterView, detectionCriteria.getFilter().getPeriodFilter());
+        fillFollowersFilter(filterView, detectionCriteria.getFilter().getFollowersFilter());
+        fillWordFilters(filterView, detectionCriteria.getFilter().getWordFilters());
+        fillSerieFilters(filterView, detectionCriteria.getFilter().getSerieFilter());
+        fillCategoriesFilters(filterView, detectionCriteria.getFilter().getCategoryFilter());
+    }
+
+    private void fillCategoriesFilters(FilterView filterView, List<CategoryFilter> categoriesFilter) {
+        if (CollectionUtils.isNotEmpty(categoriesFilter)) {
+            List<CategoryFilterView> filterCategories = categoriesFilter
+                    .stream()
+                    .map(categoryFilter -> {
+                        List<CategoryGroup> categoryGroupOptions = getCategoryGroupOptions();
+                        CategoryFilterView categoryFilterView = new CategoryFilterView(categoryGroupOptions);
+                        categoryFilterView.setCategoryGroup(categoryGroupOptions
+                                .stream()
+                                .filter(categoryGroup -> categoryGroup.getId()
+                                        .equals(categoryFilter.getCategoryGroup())).findFirst().get());
+                        if (ArrayUtils.isNotEmpty(categoryFilter.getCategories())) {
+                            List<Category> categories = Arrays.stream(categoryFilter.getCategories()).map(category -> {
+                                return categoryFilterView.getCategoryOptions().stream().filter(categoryOption -> {
+                                    return categoryOption.getId().equals(category);
+                                }).findFirst().get();
+                            }).collect(Collectors.toList());
+                            categoryFilterView.setCategories(categories);
+                        }
+                        return categoryFilterView;
+                    }).collect(Collectors.toList());
+            filterView.setFilterCategories(filterCategories);
+        }
+    }
+
+    private void fillSerieFilters(FilterView filterView, SerieFilter serieFilter) {
+        if (serieFilter != null) {
+            if (serieFilter.getThematicId() != null) {
+                filterView.setThematic(thematicsOptions.stream()
+                        .filter(thematic -> thematic.getId().equals(serieFilter.getThematicId())).findFirst().get());
+            }
+            if (serieFilter.getSerieId() != null) {
+                filterView.setSerie(getSerieOptions().stream()
+                        .filter(serie -> serie.getId().equals(serieFilter.getSerieId())).findFirst().get());
+            }
+            if (serieFilter.getSubSerieId() != null) {
+                filterView.setSubSerie(getSubSerieOptions().stream()
+                        .filter(serie -> serie.getId().equals(serieFilter.getSubSerieId())).findFirst().get());
+            }
+        }
+    }
+
+    private void fillWordFilters(FilterView filterView, List<WordFilter> wordFilters) {
+        if (CollectionUtils.isNotEmpty(wordFilters)) {
+            filterView.setFilterWords(wordFilters);
+        }
+    }
+
+    private void fillFollowersFilter(FilterView filterView, FollowersFilter followersFilter) {
+        if (followersFilter != null) {
+            filterView.setFollowersGreaterThan(followersFilter.getMinFollowers());
+            filterView.setFollowersLessThan(followersFilter.getMaxFollowers());
+        }
+    }
+
+    private void fillDateRangeFilter(FilterView filterView, PeriodFilter periodFilter) {
+        if (periodFilter != null) {
+            if (periodFilter.getStartDateTime() != null) {
+                filterView.setStartDateTime(new Date(periodFilter.getStartDateTime()));
+            }
+            if (periodFilter.getEndDateTime() != null) {
+                filterView.setEndDateTime(new Date(periodFilter.getEndDateTime()));
+            }
+        }
     }
 
     private void addMediaFilter(Filter filter) {

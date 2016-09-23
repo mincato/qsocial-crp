@@ -1,18 +1,12 @@
-package com.qsocialnow.viewmodel;
+package com.qsocialnow.viewmodel.trigger;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.zkoss.bind.BindUtils;
-import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
-
-import com.qsocialnow.common.model.config.Domain;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateTriggerAdminViewModel implements Serializable {
@@ -23,6 +17,8 @@ public class CreateTriggerAdminViewModel implements Serializable {
 
     private boolean createSegment = false;
 
+    private boolean createCriteria = false;
+
     public boolean isCreateTrigger() {
         return createTrigger;
     }
@@ -31,28 +27,39 @@ public class CreateTriggerAdminViewModel implements Serializable {
         return createSegment;
     }
 
+    public boolean isCreateCriteria() {
+        return createCriteria;
+    }
+
     @Init
     public void init() {
         createTrigger = true;
         createSegment = false;
+        createCriteria = false;
     }
 
     @GlobalCommand
-    @NotifyChange({ "createTrigger", "createSegment" })
+    @NotifyChange({ "createTrigger", "createSegment", "createCriteria" })
     public void goToTrigger() {
         createTrigger = true;
         createSegment = false;
+        createCriteria = false;
     }
 
     @GlobalCommand
-    @NotifyChange({ "createTrigger", "createSegment" })
-    public void goToSegment(@BindingParam("currentDomain") Domain currentDomain) {
+    @NotifyChange({ "createTrigger", "createSegment", "createCriteria" })
+    public void goToSegment() {
         createTrigger = false;
         createSegment = true;
-        Map<String, Object> args = new HashMap<>();
-        args.put("currentDomain", currentDomain);
-        System.out.println("amdin domain: " + currentDomain);
-        BindUtils.postGlobalCommand(null, null, "initSegment", args);
+        createCriteria = false;
+    }
+
+    @GlobalCommand
+    @NotifyChange({ "createTrigger", "createSegment", "createCriteria" })
+    public void goToCriteria() {
+        createTrigger = false;
+        createSegment = false;
+        createCriteria = true;
     }
 
 }

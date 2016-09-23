@@ -9,8 +9,6 @@ import com.qsocialnow.common.model.config.WordFilter;
 
 public class FilterView {
 
-    private Connotation connotation;
-
     private Date startDateTime;
 
     private Date endDateTime;
@@ -34,14 +32,6 @@ public class FilterView {
     public FilterView() {
         filterWords = new ArrayList<>();
         filterCategories = new ArrayList<>();
-    }
-
-    public Connotation getConnotation() {
-        return connotation;
-    }
-
-    public void setConnotation(Connotation connotation) {
-        this.connotation = connotation;
     }
 
     public Date getStartDateTime() {

@@ -1,4 +1,4 @@
-package com.qsocialnow.viewmodel;
+package com.qsocialnow.viewmodel.trigger;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -64,12 +64,30 @@ public class CreateTriggerViewModel implements Serializable {
         this.fxTrigger = null;
     }
 
+    @GlobalCommand
+    public void updateSegment() {
+        BindUtils.postGlobalCommand(null, null, "goToTrigger", new HashMap<>());
+        BindUtils.postNotifyChange(null, null, this.fxTrigger, "segments");
+        this.fxTrigger = null;
+    }
+
     @Command
     public void createSegment(@BindingParam("fxTrigger") Trigger fxTrigger) {
         this.fxTrigger = fxTrigger;
+        BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain.getDomain());
-        BindUtils.postGlobalCommand(null, null, "goToSegment", args);
+        BindUtils.postGlobalCommand(null, null, "initSegment", args);
+    }
+
+    @Command
+    public void editSegment(@BindingParam("fxTrigger") Trigger fxTrigger, @BindingParam("segment") Segment segment) {
+        this.fxTrigger = fxTrigger;
+        BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
+        Map<String, Object> args = new HashMap<>();
+        args.put("currentDomain", currentDomain.getDomain());
+        args.put("segment", segment);
+        BindUtils.postGlobalCommand(null, null, "editSegment", args);
     }
 
     @Command
