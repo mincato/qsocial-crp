@@ -41,7 +41,7 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
         registry.setDate(inputElement.getFechaCreacion());
         registry.setUserName(inputElement.getUsuarioCreacion());
         Event event = new Event();
-        event.setId(inputElement.getId());        
+        event.setId(inputElement.getId());
         event.setDescription(inputElement.getTexto());
         event.setTopic(inputElement.getName());
         registry.setEvent(event);
