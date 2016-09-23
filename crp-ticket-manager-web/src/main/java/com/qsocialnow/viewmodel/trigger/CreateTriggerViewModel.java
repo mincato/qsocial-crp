@@ -48,6 +48,8 @@ public class CreateTriggerViewModel implements Serializable {
 
     private List<Status> statusOptions;
 
+    private boolean editing;
+
     public Trigger getCurrentTrigger() {
         return currentTrigger;
     }
@@ -97,22 +99,33 @@ public class CreateTriggerViewModel implements Serializable {
     }
 
     @Init
-    public void init(@QueryParam("domain") String domain) {
+    public void init(@QueryParam("domain") String domain, @QueryParam("trigger") String triggerId) {
         this.domain = domain;
         this.currentDomain = new DomainView();
         this.currentDomain.setDomain(domainService.findOne(this.domain));
-        this.currentTrigger = new Trigger();
-        this.currentTrigger.setSegments(new ArrayList<>());
+        if (triggerId != null) {
+            editing = true;
+            this.currentTrigger = triggerService.findOne(domain, triggerId);
+        } else {
+            editing = false;
+            this.currentTrigger = new Trigger();
+            this.currentTrigger.setSegments(new ArrayList<>());
+        }
         this.statusOptions = Arrays.asList(Status.values());
     }
 
     @Command
     @NotifyChange("currentTrigger")
     public void save() {
-        triggerService.create(domain, currentTrigger);
-        Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
-        currentTrigger = new Trigger();
-        currentTrigger.setSegments(new ArrayList<>());
+        if (editing) {
+            this.currentTrigger = triggerService.update(this.currentDomain.getDomain().getId(), currentTrigger);
+            Clients.showNotification(Labels.getLabel("trigger.edit.notification.success"));
+        } else {
+            triggerService.create(domain, currentTrigger);
+            Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
+            currentTrigger = new Trigger();
+            currentTrigger.setSegments(new ArrayList<>());
+        }
     }
 
     public DomainView getCurrentDomain() {

@@ -66,7 +66,7 @@ public class DomainService {
         DomainMapping mapping = DomainMapping.getInstance();
         DomainType document = mapping.getDocumentType(domain);
 
-        String response = repository.updateIndexMapping(domain.getId(), mapping, document);
+        String response = repository.updateMapping(domain.getId(), mapping, document);
         repository.closeClient();
 
         resolutionService.updateResolutions(domain.getId(), domain.getResolutions());

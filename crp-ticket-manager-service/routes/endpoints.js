@@ -312,6 +312,8 @@ router.put('/domains/:id/trigger', function (req, res) {
 
   }
 
+  prettyJSON(req.body);
+  
   var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
   var clazz = java.findClassSync('com.qsocialnow.common.model.config.Trigger');
   
@@ -355,6 +357,69 @@ router.get('/domains/:id/trigger', function (req, res) {
 	  
 	  triggerService.findAll(domainId, pageNumber, pageSize, name, status, fromDate, toDate, asyncResponse);
 });
+
+router.get('/domains/:id/trigger/:triggerId', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  var triggerId = req.params.triggerId;
+	  
+	  triggerService.findOne(domainId, triggerId, asyncResponse);
+});
+
+router.put('/domains/:id/trigger/:triggerId', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type','application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  
+	  prettyJSON(req.body);
+
+	  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	  var clazz = java.findClassSync('com.qsocialnow.common.model.config.Trigger');
+	  
+	  var trigger = gson.fromJsonSync(JSON.stringify(req.body), clazz);  
+	  
+	  var domainId = req.params.id;
+	  var triggerId = req.params.triggerId;
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  triggerService.update(domainId, triggerId, trigger, asyncResponse);
+
+});
+
 
 router.put('/domains/:id/resolutions', function (req, res) {
 

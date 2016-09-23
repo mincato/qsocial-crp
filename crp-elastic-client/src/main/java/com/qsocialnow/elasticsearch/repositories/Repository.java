@@ -34,7 +34,7 @@ public interface Repository<T> {
 
     public <E> String updateChildMapping(String id, ChildMapping<T, E> mapping, T document);
 
-    public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document);
+    public <E> String updateMapping(String id, Mapping<T, E> mapping, T document);
 
     public <E> SearchResponse<E> find(String id, Mapping<T, E> mapping);
 

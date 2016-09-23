@@ -107,4 +107,20 @@ public class TriggerService {
         this.configurator = configurator;
     }
 
+    public String updateTrigger(String domainId, Trigger trigger) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TriggerMapping mapping = TriggerMapping.getInstance();
+
+        // index document
+        TriggerType documentIndexed = mapping.getDocumentType(trigger);
+        documentIndexed.setDomainId(domainId);
+        String response = repository.updateMapping(trigger.getId(), mapping, documentIndexed);
+        repository.closeClient();
+        return response;
+    }
+
 }

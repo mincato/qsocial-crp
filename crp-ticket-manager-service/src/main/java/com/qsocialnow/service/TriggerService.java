@@ -71,6 +71,23 @@ public class TriggerService {
         return page;
     }
 
+    public Trigger findOne(String domainId, String triggerId) {
+        Trigger trigger = triggerRepository.findOne(triggerId);
+        return trigger;
+    }
+
+    public Trigger update(String domainId, String triggerId, Trigger trigger) {
+        Trigger triggerSaved = null;
+        try {
+            trigger.setId(triggerId);
+            triggerSaved = triggerRepository.update(domainId, trigger);
+        } catch (Exception e) {
+            log.error("There was an error updating trigger: " + trigger.getDescription(), e);
+            throw new RuntimeException(e.getMessage());
+        }
+        return triggerSaved;
+    }
+
     private void mockActions(Trigger trigger) {
         trigger.getSegments().stream().forEach(segment -> {
             segment.getDetectionCriterias().stream().forEach(detectionCriteria -> {

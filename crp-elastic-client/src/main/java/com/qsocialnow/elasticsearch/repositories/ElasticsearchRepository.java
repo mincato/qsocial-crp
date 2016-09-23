@@ -285,7 +285,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @Override
-    public <E> String updateIndexMapping(String id, Mapping<T, E> mapping, T document) {
+    public <E> String updateMapping(String id, Mapping<T, E> mapping, T document) {
 
         Index update = new Index.Builder(document).index(mapping.getIndex()).type(mapping.getType()).id(id)
                 .refresh(true).build();

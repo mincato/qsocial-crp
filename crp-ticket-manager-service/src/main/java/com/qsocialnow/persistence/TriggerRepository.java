@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.request.TriggerListRequest;
@@ -68,6 +67,17 @@ public class TriggerRepository {
             log.error("Unexpected error", e);
         }
         return trigger;
+    }
+
+    public Trigger update(String domainId, Trigger trigger) {
+        try {
+            String id = triggerElasticService.updateTrigger(domainId, trigger);
+            trigger.setId(id);
+            return trigger;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
     }
 
 }
