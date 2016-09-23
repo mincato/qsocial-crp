@@ -54,13 +54,6 @@
                             ${vm.currentCase.closeDate}
                         </n:div>
                     </x:div>
-                    <x:div sclass="form-group col-sm-6">
-                            <n:label class="control-label col-sm-3">${labels.cases.details.category}</n:label>
-                            <n:div class="col-sm-6">
-                                <?xel-method prefix="x" name="join" class="org.apache.commons.lang3.StringUtils" signature="java.lang.String join(java.lang.Iterable,char)"?>
-                                <label value="@load(x:join(vm.currentCase.caseCategories,','))"/>
-                            </n:div>
-                     </x:div>
                 </n:div>
                 <n:div class="row">
                      <x:div class="form-group col-sm-6">
