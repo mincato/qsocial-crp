@@ -85,7 +85,7 @@ public class CreateCaseViewModel implements Serializable {
         if (this.selectedTrigger.getSegments() != null && this.selectedTrigger.getSegments().size() > 0) {
             this.currentCase.getNewCase().setTeamId(this.selectedTrigger.getSegments().get(0).getTeam());
         }
-        currentCase.getNewCase().setSourceUser("usuarioenojado");
+        currentCase.getNewCase().setSourceUser("usurioenojado");
     }
 
     @Command
