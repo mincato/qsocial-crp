@@ -5,10 +5,15 @@ function (wgt, dataValue) {
     	//updateEvent
 	    self.after('$updateEvent', function (ev) {
 			if (ev) {
+				var languageSelectAll = $('.language_select_all > input')[0].checked = false;
+				var mediaSelectAll = $('.media_select_all > input')[0].checked = false;
+				var connotationSelectAll = $('.connotation_select_all > input')[0].checked = false;
     			$('.language_select_all > input').change(function(){  //"select all" change 
 				    var status = this.checked; // "select all" checked status
 					$('.language > input').each(function(){ //iterate all listed checkbox items
-						this.checked = status; //change ".checkbox" checked status
+						if (this.checked !== status) {
+							this.click();
+						}
 					});
 				});
 				
@@ -28,7 +33,9 @@ function (wgt, dataValue) {
 				$('.media_select_all > input').change(function(){  //"select all" change 
 				    var status = this.checked; // "select all" checked status
 					$('.media > input').each(function(){ //iterate all listed checkbox items
-						this.checked = status; //change ".checkbox" checked status
+						if (this.checked !== status) {
+							this.click();
+						}
 					});
 				});
 				
@@ -48,7 +55,9 @@ function (wgt, dataValue) {
 				$('.connotation_select_all > input').change(function(){  //"select all" change 
 				    var status = this.checked; // "select all" checked status
 					$('.connotation > input').each(function(){ //iterate all listed checkbox items
-						this.checked = status; //change ".checkbox" checked status
+						if (this.checked !== status) {
+							this.click();
+						}
 					});
 				});
 				

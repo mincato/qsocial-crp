@@ -13,10 +13,7 @@ public class CategoryFilterView {
 
     private List<Category> categoryOptions = new ArrayList<>();
 
-    private final List<CategoryGroup> categoryGroups;
-
-    public CategoryFilterView(List<CategoryGroup> categoryGroups) {
-        this.categoryGroups = categoryGroups;
+    public CategoryFilterView() {
     }
 
     public CategoryGroup getCategoryGroup() {
@@ -36,11 +33,6 @@ public class CategoryFilterView {
     }
 
     public List<Category> getCategoryOptions() {
-        if (categoryGroup != null && categoryOptions.isEmpty()) {
-            categoryOptions.addAll(categoryGroups.stream()
-                    .filter(categoryGroup -> this.categoryGroup.getId().equals(categoryGroup.getId())).findFirst()
-                    .get().getCategorias());
-        }
         return categoryOptions;
     }
 
