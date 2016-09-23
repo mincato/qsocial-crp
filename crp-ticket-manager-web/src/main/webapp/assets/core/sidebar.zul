@@ -26,7 +26,7 @@
 							<n:nav class="main-nav">
 								<ul id="sidebar-nav"
 									class="sidebar-nav">
-									<li>
+									<!-- <li>
 										<n:a href="#"
 											class="menu-first-level">
 											<i
@@ -49,7 +49,7 @@
 												</a>
 											</li>
 										</ul>
-									</li>
+									</li> -->
 									<li>
 										<n:a href="#">
 											<i
