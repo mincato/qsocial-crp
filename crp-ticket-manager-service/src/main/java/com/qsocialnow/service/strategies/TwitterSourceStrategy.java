@@ -36,8 +36,12 @@ public class TwitterSourceStrategy implements SourceStrategy {
         Twitter twitter = twitterFactory.getInstance(accessToken);
         text = "@" + caseObject.getSourceUser() + " " + text;
         try {
-            Status status = twitter.updateStatus(new StatusUpdate(text).inReplyToStatusId(Long.parseLong(caseObject
-                    .getLastPostId())));
+
+            StatusUpdate statusUpdate = new StatusUpdate(text);
+            if (caseObject.getLastPostId() != null) {
+                statusUpdate.inReplyToStatusId(Long.parseLong(caseObject.getLastPostId()));
+            }
+            Status status = twitter.updateStatus(statusUpdate);
             return String.valueOf(status.getId());
         } catch (TwitterException e) {
             log.error("There was an error trying to send response via twitter", e);

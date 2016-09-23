@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.request.TriggerListRequest;

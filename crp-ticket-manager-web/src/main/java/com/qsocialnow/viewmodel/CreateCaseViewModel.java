@@ -14,8 +14,8 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.Customer;
 import com.qsocialnow.common.model.config.DomainListView;
-import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.model.CaseView;
@@ -85,7 +85,7 @@ public class CreateCaseViewModel implements Serializable {
         if (this.selectedTrigger.getSegments() != null && this.selectedTrigger.getSegments().size() > 0) {
             this.currentCase.getNewCase().setTeamId(this.selectedTrigger.getSegments().get(0).getTeam());
         }
-
+        currentCase.getNewCase().setSourceUser("usuarioenojado");
     }
 
     @Command

@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
@@ -26,8 +28,10 @@ public class Case implements Serializable {
 
     private Date closeDate;
 
+    @NotBlank(message = "{field.empty}")
     private String title;
 
+    @NotBlank(message = "{field.empty}")
     private String description;
 
     private Event triggerEvent;
@@ -127,7 +131,7 @@ public class Case implements Serializable {
                 actionsAllowed.add(ActionType.PENDING_RESPONSE);
 
             actionsAllowed.add(ActionType.SEND_MESSAGE);
-            actionsAllowed.add(ActionType.ASSIGN);
+            // actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
         } else {
             actionsAllowed.add(ActionType.REOPEN);
