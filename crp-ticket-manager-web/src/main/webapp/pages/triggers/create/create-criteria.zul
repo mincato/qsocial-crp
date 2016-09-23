@@ -1,7 +1,6 @@
 <div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute" ca:data-filter=""
 	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.trigger.CreateCriteriaViewModel', currentDomain=arg.currentDomain)"
-		validationMessages="@id('vmsgs')"
-		 form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
+		validationMessages="@id('vmsgs')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
@@ -9,7 +8,7 @@
 			</div>
 		</n:div>
 	</n:div>	
-	<div class="row">
+	<div class="row" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
 			<n:div class="col-lg-12">
 				<div zclass="pane equal">
 					<n:form class="form-horizontal pane">
@@ -41,7 +40,7 @@
 			    </div>
 		    </n:div>
   	</div>
-  	<div class="row">
+  	<div class="row" form="@id('fxFilter') @load(vm.filter) @save(vm.filter, before='save')">
   		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 		    	<n:form class="form-horizontal pane">								
@@ -78,13 +77,13 @@
 					<n:div class="form-group">
 						<n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
 						<n:div class="col-sm-10">
-							<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(vm.filter.startDateTime)" />
+							<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(fxFilter.startDateTime)" />
 						</n:div>
     				</n:div>
     				<n:div class="form-group">
 						<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
 						<n:div class="col-sm-10">
-							<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(vm.filter.endDateTime)" />
+							<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(fxFilter.endDateTime)" />
 						</n:div>
     				</n:div>
 			    </n:form>
@@ -111,12 +110,12 @@
 						<n:div class="form-group">
 							<n:label class="control-label">${labels.trigger.criteria.followers.greater}</n:label>
     						<textbox type="text" ca:data-only-number="" class="form-control" 
-	    						value="@bind(vm.filter.followersGreaterThan)"></textbox>
+	    						value="@bind(fxFilter.followersGreaterThan)"></textbox>
 						</n:div>
 						<n:div class="form-group">
 	    					<n:label class="control-label">${labels.trigger.criteria.followers.less}</n:label>
     						<textbox type="text" ca:data-only-number="" sclass="form-control"
-	    						value="@bind(vm.filter.followersLessThan)"></textbox>
+	    						value="@bind(fxFilter.followersLessThan)"></textbox>
     					</n:div>
 			    	</n:form>
 			    </n:div>
@@ -129,7 +128,7 @@
 						</n:label>
 						<n:div class="col-sm-10">
 							<div zclass="link-button pull-right">
-								<a onClick="@command('addFilterWord')">
+								<a onClick="@command('addFilterWord', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 									${labels.trigger.criteria.add}
 								</a>
@@ -138,7 +137,7 @@
 					</x:div>
 					<div class="form-group">
 						<n:div class="col-sm-offset-2 ">
-							<x:ol class="list-group order" children="@bind(vm.filter.filterWords)">
+							<x:ol class="list-group order" children="@bind(fxFilter.filterWords)">
 								<template name="children" var="filterWord">
 									<n:div class="list-group-item col-xs-11 col-sm-11">
 										<n:div class="col-xs-12 col-sm-6">
@@ -160,7 +159,7 @@
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
 												<a zclass="btn-list-action"
-													onClick="@command('removeFilterWord', filter = filterWord)">
+													onClick="@command('removeFilterWord', fxFilter=fxFilter, filter = filterWord)">
 													<i
 														class="glyphicon glyphicon-erase fa-2x">
 													</i>
@@ -181,8 +180,8 @@
 						<n:div class="form-group">
 							<n:label class="control-label">${labels.trigger.criteria.thematics.thematic}</n:label>
 	    					<selectbox sclass="form-control" model="@load(vm.thematicsOptions)"
-	    						onSelect="@command('selectThematic')"
-	    						selectedItem="@bind(vm.filter.thematic)">
+	    						onSelect="@command('selectThematic', fxFilter=fxFilter)"
+	    						selectedItem="@bind(fxFilter.thematic)">
 								<template name="model">
 									<label value="@load(each.nombre)" />
 								</template>
@@ -191,8 +190,8 @@
     					<x:div class="form-group" visible="@load(vm.serieOptions ne null and not empty vm.serieOptions)">
 							<n:label class="control-label">${labels.trigger.criteria.thematics.serie}</n:label>
 	    					<selectbox sclass="form-control"  model="@load(vm.serieOptions)"
-	    						onSelect="@command('selectSerie')"
-	    						selectedItem="@bind(vm.filter.serie)">
+	    						onSelect="@command('selectSerie', fxFilter=fxFilter)"
+	    						selectedItem="@bind(fxFilter.serie)">
 								<template name="model">
 									<label value="@load(each.nombre)" />
 								</template>
@@ -201,7 +200,7 @@
     					<x:div class="form-group" visible="@load(vm.subSerieOptions ne null and not empty vm.subSerieOptions)">
 							<n:label class="control-label">${labels.trigger.criteria.thematics.subSerie}</n:label>
 	    					<selectbox sclass="form-control" model="@load(vm.subSerieOptions)"
-	    						selectedItem="@bind(vm.filter.subSerie)">
+	    						selectedItem="@bind(fxFilter.subSerie)">
 								<template name="model">
 									<label value="@load(each.nombre)" />
 								</template>
@@ -218,7 +217,7 @@
 						</n:label>
 						<n:div class="col-sm-10">
 							<div zclass="link-button pull-right">
-								<a onClick="@command('addFilterCategory')">
+								<a onClick="@command('addFilterCategory', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 									${labels.trigger.criteria.add}
 								</a>
@@ -226,8 +225,8 @@
 						</n:div>
 					</x:div>
 					<div class="form-group">
-						<n:div class="col-sm-offset-2 ">
-							<x:ol class="list-group order" children="@bind(vm.filter.filterCategories)">
+						<n:div class="col-sm-offset-2">
+							<x:ol class="list-group order" children="@bind(fxFilter.filterCategories)">
 								<template name="children" var="filterCategory">
 									<n:div class="list-group-item col-xs-11 col-sm-11">
 										<n:div class="col-xs-12 col-sm-6">
@@ -258,7 +257,7 @@
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
 												<a zclass="btn-list-action"
-													onClick="@command('removeFilterCategory', filter = filterCategory)">
+													onClick="@command('removeFilterCategory', fxFilter=fxFilter, filter = filterCategory)">
 													<i
 														class="glyphicon glyphicon-erase fa-2x">
 													</i>

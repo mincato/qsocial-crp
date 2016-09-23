@@ -126,31 +126,26 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     public List<CategoryGroup> getCategoryGroupOptions() {
-        if (filterView.getSerie() != null && categoryGroupOptions.isEmpty()) {
-            CategoryGroupBySerieIdInput categoryGroupBySerieIdInput = new CategoryGroupBySerieIdInput();
-            categoryGroupBySerieIdInput.setId(filterView.getSerie().getId());
-            categoryGroupBySerieIdInput.setThematicId(filterView.getThematic().getId());
-            categoryGroupOptions.addAll(categoryService.findBySerieId(categoryGroupBySerieIdInput));
-        }
         return categoryGroupOptions;
     }
 
     public ListModelList<Series> getSerieOptions() {
-        if (filterView.getThematic() != null && serieOptions.isEmpty()) {
-            serieOptions.addAll(thematicsOptions.stream()
-                    .filter(thematic -> filterView.getThematic().getId().equals(thematic.getId())).findFirst().get()
-                    .getSeries());
-        }
         return serieOptions;
     }
 
     public List<SubSeries> getSubSerieOptions() {
-        if (filterView.getSerie() != null && subSerieOptions.isEmpty()) {
-            subSerieOptions.addAll(serieOptions.stream()
-                    .filter(serie -> filterView.getSerie().getId().equals(serie.getId())).findFirst().get()
-                    .getSubSeries());
-        }
         return subSerieOptions;
+    }
+
+    @Init
+    public void init() {
+        currentCriteria = new DetectionCriteria();
+        filterView = new FilterView();
+        wordFilterTypeOptions = Arrays.stream(WordFilterType.values()).collect(Collectors.toSet());
+        initMedias(null);
+        initConnotations(null);
+        initLanguages(null);
+
     }
 
     @Command
@@ -177,17 +172,6 @@ public class CreateCriteriaViewModel implements Serializable {
     @Command
     public void cancel() {
         BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
-    }
-
-    @Init
-    public void init() {
-        currentCriteria = new DetectionCriteria();
-        filterView = new FilterView();
-        wordFilterTypeOptions = Arrays.stream(WordFilterType.values()).collect(Collectors.toSet());
-        initMedias(null);
-        initConnotations(null);
-        initLanguages(null);
-
     }
 
     @GlobalCommand
@@ -276,64 +260,83 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange("filter")
-    public void addFilterWord() {
-        this.filterView.getFilterWords().add(new WordFilter());
+    public void addFilterWord(@BindingParam("fxFilter") FilterView fxFilter) {
+        fxFilter.getFilterWords().add(new WordFilter());
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterWords");
     }
 
     @Command
-    @NotifyChange("filter")
-    public void removeFilterWord(@BindingParam("filter") WordFilter filter) {
-        this.filterView.getFilterWords().remove(filter);
+    public void removeFilterWord(@BindingParam("fxFilter") FilterView fxFilter,
+            @BindingParam("filter") WordFilter filter) {
+        fxFilter.getFilterWords().remove(filter);
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterWords");
     }
 
     @Command
-    @NotifyChange("filter")
-    public void addFilterCategory() {
-        this.filterView.getFilterCategories().add(new CategoryFilterView(new ArrayList<>(categoryGroupOptions)));
+    public void addFilterCategory(@BindingParam("fxFilter") FilterView fxFilter) {
+        fxFilter.getFilterCategories().add(new CategoryFilterView());
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
     }
 
     @Command
-    @NotifyChange("filter")
-    public void removeFilterCategory(@BindingParam("filter") CategoryFilterView filter) {
-        this.filterView.getFilterCategories().remove(filter);
+    public void removeFilterCategory(@BindingParam("fxFilter") FilterView fxFilter,
+            @BindingParam("filter") CategoryFilterView filter) {
+        fxFilter.getFilterCategories().remove(filter);
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
     }
 
     @Command
-    @NotifyChange("filter")
     public void removeCategory(@BindingParam("filter") CategoryFilterView filter,
             @BindingParam("category") Category category) {
         filter.getCategories().remove(category);
+        BindUtils.postNotifyChange(null, null, filter, "categories");
     }
 
     @Command
-    @NotifyChange({ "serieOptions", "filter", "categoryGroupOptions", "subSerieOptions" })
-    public void selectThematic() {
+    @NotifyChange({ "serieOptions", "categoryGroupOptions", "subSerieOptions" })
+    public void selectThematic(@BindingParam("fxFilter") FilterView fxFilter) {
         serieOptions.clear();
-        filterView.setSerie(null);
-        selectSerie();
+        if (fxFilter.getThematic() != null && serieOptions.isEmpty()) {
+            serieOptions.addAll(fxFilter.getThematic().getSeries());
+        }
+        fxFilter.setSerie(null);
+        selectSerie(fxFilter);
+        BindUtils.postNotifyChange(null, null, fxFilter, "serie");
     }
 
     @Command
-    @NotifyChange({ "subSerieOptions", "categoryGroupOptions", "filter" })
-    public void selectSerie() {
+    @NotifyChange({ "subSerieOptions", "categoryGroupOptions" })
+    public void selectSerie(@BindingParam("fxFilter") FilterView fxFilter) {
         subSerieOptions.clear();
-        filterView.setSubSerie(null);
+        if (fxFilter.getSerie() != null && subSerieOptions.isEmpty()) {
+            subSerieOptions.addAll(fxFilter.getSerie().getSubSeries());
+        }
+        fxFilter.setSubSerie(null);
         categoryGroupOptions.clear();
+        if (fxFilter.getSerie() != null && categoryGroupOptions.isEmpty()) {
+            CategoryGroupBySerieIdInput categoryGroupBySerieIdInput = new CategoryGroupBySerieIdInput();
+            categoryGroupBySerieIdInput.setId(fxFilter.getSerie().getId());
+            categoryGroupBySerieIdInput.setThematicId(fxFilter.getThematic().getId());
+            categoryGroupOptions.addAll(categoryService.findBySerieId(categoryGroupBySerieIdInput));
+        }
+        fxFilter.getFilterCategories().clear();
+        BindUtils.postNotifyChange(null, null, fxFilter, "subSerie");
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
     }
 
     @Command
-    @NotifyChange({ "filter" })
     public void selectGroupCategory(@BindingParam("filter") CategoryFilterView filterCategory) {
         filterCategory.getCategoryOptions().clear();
         filterCategory.setCategories(null);
+        if (filterCategory.getCategoryGroup() != null && filterCategory.getCategoryOptions().isEmpty()) {
+            filterCategory.getCategoryOptions().addAll(filterCategory.getCategoryGroup().getCategorias());
+        }
         Map<String, Object> args = new HashMap<>();
         args.put("filterCategory", filterCategory);
         Executions.createComponents("/pages/triggers/create/choose-categories.zul", null, args);
     }
 
     @GlobalCommand
-    @NotifyChange({ "filter" })
     public void closeCategories() {
     }
 
@@ -351,11 +354,13 @@ public class CreateCriteriaViewModel implements Serializable {
                     .stream()
                     .map(categoryFilter -> {
                         List<CategoryGroup> categoryGroupOptions = getCategoryGroupOptions();
-                        CategoryFilterView categoryFilterView = new CategoryFilterView(categoryGroupOptions);
+                        CategoryFilterView categoryFilterView = new CategoryFilterView();
                         categoryFilterView.setCategoryGroup(categoryGroupOptions
                                 .stream()
                                 .filter(categoryGroup -> categoryGroup.getId()
                                         .equals(categoryFilter.getCategoryGroup())).findFirst().get());
+                        categoryFilterView.getCategoryOptions().addAll(
+                                categoryFilterView.getCategoryGroup().getCategorias());
                         if (ArrayUtils.isNotEmpty(categoryFilter.getCategories())) {
                             List<Category> categories = Arrays.stream(categoryFilter.getCategories()).map(category -> {
                                 return categoryFilterView.getCategoryOptions().stream().filter(categoryOption -> {
@@ -375,10 +380,22 @@ public class CreateCriteriaViewModel implements Serializable {
             if (serieFilter.getThematicId() != null) {
                 filterView.setThematic(thematicsOptions.stream()
                         .filter(thematic -> thematic.getId().equals(serieFilter.getThematicId())).findFirst().get());
+                if (filterView.getThematic() != null && serieOptions.isEmpty()) {
+                    serieOptions.addAll(filterView.getThematic().getSeries());
+                }
             }
             if (serieFilter.getSerieId() != null) {
                 filterView.setSerie(getSerieOptions().stream()
                         .filter(serie -> serie.getId().equals(serieFilter.getSerieId())).findFirst().get());
+                if (filterView.getSerie() != null && subSerieOptions.isEmpty()) {
+                    subSerieOptions.addAll(filterView.getSerie().getSubSeries());
+                }
+                if (filterView.getSerie() != null && categoryGroupOptions.isEmpty()) {
+                    CategoryGroupBySerieIdInput categoryGroupBySerieIdInput = new CategoryGroupBySerieIdInput();
+                    categoryGroupBySerieIdInput.setId(filterView.getSerie().getId());
+                    categoryGroupBySerieIdInput.setThematicId(filterView.getThematic().getId());
+                    categoryGroupOptions.addAll(categoryService.findBySerieId(categoryGroupBySerieIdInput));
+                }
             }
             if (serieFilter.getSubSerieId() != null) {
                 filterView.setSubSerie(getSubSerieOptions().stream()
