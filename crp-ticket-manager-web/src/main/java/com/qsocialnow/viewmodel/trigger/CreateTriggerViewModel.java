@@ -1,4 +1,4 @@
-package com.qsocialnow.viewmodel;
+package com.qsocialnow.viewmodel.trigger;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,6 +48,8 @@ public class CreateTriggerViewModel implements Serializable {
 
     private List<Status> statusOptions;
 
+    private boolean editing;
+
     public Trigger getCurrentTrigger() {
         return currentTrigger;
     }
@@ -64,12 +66,30 @@ public class CreateTriggerViewModel implements Serializable {
         this.fxTrigger = null;
     }
 
+    @GlobalCommand
+    public void updateSegment() {
+        BindUtils.postGlobalCommand(null, null, "goToTrigger", new HashMap<>());
+        BindUtils.postNotifyChange(null, null, this.fxTrigger, "segments");
+        this.fxTrigger = null;
+    }
+
     @Command
     public void createSegment(@BindingParam("fxTrigger") Trigger fxTrigger) {
         this.fxTrigger = fxTrigger;
+        BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain.getDomain());
-        BindUtils.postGlobalCommand(null, null, "goToSegment", args);
+        BindUtils.postGlobalCommand(null, null, "initSegment", args);
+    }
+
+    @Command
+    public void editSegment(@BindingParam("fxTrigger") Trigger fxTrigger, @BindingParam("segment") Segment segment) {
+        this.fxTrigger = fxTrigger;
+        BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
+        Map<String, Object> args = new HashMap<>();
+        args.put("currentDomain", currentDomain.getDomain());
+        args.put("segment", segment);
+        BindUtils.postGlobalCommand(null, null, "editSegment", args);
     }
 
     @Command
@@ -79,22 +99,33 @@ public class CreateTriggerViewModel implements Serializable {
     }
 
     @Init
-    public void init(@QueryParam("domain") String domain) {
+    public void init(@QueryParam("domain") String domain, @QueryParam("trigger") String triggerId) {
         this.domain = domain;
         this.currentDomain = new DomainView();
         this.currentDomain.setDomain(domainService.findOne(this.domain));
-        this.currentTrigger = new Trigger();
-        this.currentTrigger.setSegments(new ArrayList<>());
+        if (triggerId != null) {
+            editing = true;
+            this.currentTrigger = triggerService.findOne(domain, triggerId);
+        } else {
+            editing = false;
+            this.currentTrigger = new Trigger();
+            this.currentTrigger.setSegments(new ArrayList<>());
+        }
         this.statusOptions = Arrays.asList(Status.values());
     }
 
     @Command
     @NotifyChange("currentTrigger")
     public void save() {
-        triggerService.create(domain, currentTrigger);
-        Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
-        currentTrigger = new Trigger();
-        currentTrigger.setSegments(new ArrayList<>());
+        if (editing) {
+            this.currentTrigger = triggerService.update(this.currentDomain.getDomain().getId(), currentTrigger);
+            Clients.showNotification(Labels.getLabel("trigger.edit.notification.success"));
+        } else {
+            triggerService.create(domain, currentTrigger);
+            Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
+            currentTrigger = new Trigger();
+            currentTrigger.setSegments(new ArrayList<>());
+        }
     }
 
     public DomainView getCurrentDomain() {

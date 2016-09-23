@@ -98,7 +98,7 @@ public class UserResolverService {
 
         UserResolverMapping mapping = UserResolverMapping.getInstance();
         UserResolverType documentIndexed = mapping.getDocumentType(userResolver);
-        String response = repository.updateIndexMapping(userResolver.getId(), mapping, documentIndexed);
+        String response = repository.updateMapping(userResolver.getId(), mapping, documentIndexed);
         repository.closeClient();
         return response;
     }

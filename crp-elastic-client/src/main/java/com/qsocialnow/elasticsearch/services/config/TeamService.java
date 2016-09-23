@@ -86,7 +86,7 @@ public class TeamService {
 
         TeamMapping mapping = TeamMapping.getInstance();
         TeamType documentIndexed = mapping.getDocumentType(team);
-        String response = repository.updateIndexMapping(team.getId(), mapping, documentIndexed);
+        String response = repository.updateMapping(team.getId(), mapping, documentIndexed);
         repository.closeClient();
         return response;
     }

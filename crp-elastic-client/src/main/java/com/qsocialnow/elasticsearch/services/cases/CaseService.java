@@ -118,7 +118,7 @@ public class CaseService extends DynamicIndexService {
         }
         // index document
         CaseType documentIndexed = mapping.getDocumentType(document);
-        String response = repository.updateIndexMapping(document.getId(), mapping, documentIndexed);
+        String response = repository.updateMapping(document.getId(), mapping, documentIndexed);
         repository.closeClient();
         return response;
     }

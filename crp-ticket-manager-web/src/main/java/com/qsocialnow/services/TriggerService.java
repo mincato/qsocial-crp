@@ -11,4 +11,8 @@ public interface TriggerService {
     Trigger create(String domainId, Trigger trigger);
 
     PageResponse<TriggerListView> findAll(String domainId, int pageNumber, int pageSize, Map<String, String> filters);
+
+    Trigger findOne(String domainId, String triggerId);
+
+    Trigger update(String domainId, Trigger trigger);
 }

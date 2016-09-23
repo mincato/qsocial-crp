@@ -1,4 +1,4 @@
-package com.qsocialnow.viewmodel;
+package com.qsocialnow.viewmodel.trigger;
 
 import java.io.Serializable;
 import java.util.ArrayList;
