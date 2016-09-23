@@ -31,7 +31,7 @@
                             ${labels.cases.details.opendate}
                         </n:label>
                         <n:div class="col-sm-9">
-                            ${vm.currentCase.openDate}
+                            <label value="@load(vm.currentCase.openDate)" />
                         </n:div>
                     </x:div>
                 </n:div>
@@ -51,7 +51,7 @@
                             ${labels.cases.details.closedate}
                         </n:label>
                         <n:div class="col-sm-9">
-                            ${vm.currentCase.closeDate}
+                            <label value="@load(vm.currentCase.closeDate)" />
                         </n:div>
                     </x:div>
                     <x:div sclass="form-group col-sm-6">
