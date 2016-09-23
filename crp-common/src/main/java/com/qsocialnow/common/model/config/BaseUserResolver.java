@@ -1,8 +1,12 @@
 package com.qsocialnow.common.model.config;
 
+import java.io.Serializable;
+
 import org.hibernate.validator.constraints.NotBlank;
 
-public class BaseUserResolver {
+public class BaseUserResolver implements Serializable {
+
+    private static final long serialVersionUID = 4883096238885894479L;
 
     private String id;
 

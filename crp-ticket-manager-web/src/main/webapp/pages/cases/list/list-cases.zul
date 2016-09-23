@@ -32,6 +32,7 @@
 					    		<th>${labels.cases.list.column.title}</th>
 					    		<th>${labels.cases.list.column.description}</th>
 					    		<th>${labels.cases.list.column.pendingResponse}</th>
+					    		<th>${labels.cases.list.column.open}</th>
 					    		<th>${labels.cases.list.column.action}</th>
 							</tr>
 			    		</thead>
@@ -42,6 +43,7 @@
                    					<td class="list-text-column">${each.title}</td>
                        				<td>${each.description}</td>
                 				    <td>${c:l(c:cat('cases.pendingResponse.',each.pendingResponse))}</td>   
+                       				<td>${c:l(c:cat('cases.open.',each.open))}</td>
                        				<td>
                        					<ul class="list-inline">
   											<li><a class="list-action" href="/pages/cases/edit/index.zul?case=${each.id}"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="${labels.cases.list.edit.action}"></i></a></li>
