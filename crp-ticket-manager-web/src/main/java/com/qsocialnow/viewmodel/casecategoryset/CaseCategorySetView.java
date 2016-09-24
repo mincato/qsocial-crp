@@ -1,5 +1,6 @@
 package com.qsocialnow.viewmodel.casecategoryset;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,10 +25,13 @@ public class CaseCategorySetView {
         super();
         this.id = caseCategorySet.getId();
         this.description = caseCategorySet.getDescription();
-        this.setCategories(caseCategorySet.getCategories().stream().map(category -> {
-            return new CaseCategoryView(category);
-        }).collect(Collectors.toList()));
-
+        if (caseCategorySet.getCategories() != null && caseCategorySet.getCategories().size() > 0) {
+            this.setCategories(caseCategorySet.getCategories().stream().map(category -> {
+                return new CaseCategoryView(category);
+            }).collect(Collectors.toList()));
+        } else {
+            caseCategorySet.setCategories(new ArrayList<>());
+        }
     }
 
     public String getId() {
