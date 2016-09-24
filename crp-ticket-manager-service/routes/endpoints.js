@@ -847,4 +847,120 @@ router.put('/teams/:id', function (req, res) {
 
 });
 
+router.get('/caseCategorySets', function (req, res) {
+
+	    function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  
+	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
+	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+	  var name = req.query.name ? req.query.name : null;
+	    
+	  var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+	  caseCategorySetService.findAll(pageNumber, pageSize, name,asyncResponse);
+});
+
+router.get('/caseCategorySets/:id', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  
+	  var caseCategorySetId = req.params.id;	
+	  var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+	  caseCategorySetService.findOne(caseCategorySetId, asyncResponse);
+});
+
+
+router.put('/caseCategorySets/:id', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+	}
+
+	prettyJSON(req.body);
+
+	var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	var clazz = java.findClassSync('com.qsocialnow.common.model.config.CaseCategorySet');
+	var caseCategorySet = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+	
+	var caseCategorySetId = req.params.id;	
+	var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+	caseCategorySetService.update(caseCategorySetId, caseCategorySet,asyncResponse);
+});
+
+router.post('/caseCategorySets', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+	}
+
+	prettyJSON(req.body);
+
+	var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	var clazz = java.findClassSync('com.qsocialnow.common.model.config.CaseCategorySet');
+	var caseCategorySet = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+
+	var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");
+	caseCategorySetService.createCaseCategorySet(caseCategorySet, asyncResponse);
+
+});
+
+
+
 module.exports = router;

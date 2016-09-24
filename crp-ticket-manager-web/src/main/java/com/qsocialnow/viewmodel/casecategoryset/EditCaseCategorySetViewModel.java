@@ -1,7 +1,9 @@
 package com.qsocialnow.viewmodel.casecategoryset;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -32,7 +34,7 @@ public class EditCaseCategorySetViewModel implements Serializable {
 
     private static final long serialVersionUID = -39541127130255335L;
 
-    @WireVariable("mockCaseCategorySetService")
+    @WireVariable
     private CaseCategorySetService caseCategorySetService;
 
     private String caseCategorySetId;
@@ -73,6 +75,10 @@ public class EditCaseCategorySetViewModel implements Serializable {
 
     @Command
     public void addCategory(@BindingParam("fx") CaseCategorySetView caseCategorySet) {
+        if (caseCategorySet.getCategories() == null) {
+            List<CaseCategoryView> categories = new ArrayList<>();
+            caseCategorySet.setCategories(categories);
+        }
         caseCategorySet.getCategories().add(new CaseCategoryView());
         BindUtils.postNotifyChange(null, null, caseCategorySet, "categories");
     }

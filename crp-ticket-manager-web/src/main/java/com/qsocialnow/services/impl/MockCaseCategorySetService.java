@@ -24,9 +24,8 @@ import com.qsocialnow.services.CaseCategorySetService;
 
 @Service("mockCaseCategorySetService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MockCaseCategorySetService implements CaseCategorySetService {
+public class MockCaseCategorySetService {
 
-    @Override
     public PageResponse<CaseCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/casecategorysets.json");
@@ -41,12 +40,10 @@ public class MockCaseCategorySetService implements CaseCategorySetService {
         return new PageResponse<CaseCategorySetListView>(list, ACTIVE_PAGE_DEFAULT, PAGE_SIZE_DEFAULT);
     }
 
-    @Override
     public CaseCategorySet create(CaseCategorySet currentCaseCategorySet) {
         return currentCaseCategorySet;
     }
 
-    @Override
     public CaseCategorySet findOne(String caseCategorySetId) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/casecategorysets.json");
@@ -65,7 +62,6 @@ public class MockCaseCategorySetService implements CaseCategorySetService {
         return null;
     }
 
-    @Override
     public CaseCategorySet update(CaseCategorySet currentCaseCategorySet) {
         return currentCaseCategorySet;
     }

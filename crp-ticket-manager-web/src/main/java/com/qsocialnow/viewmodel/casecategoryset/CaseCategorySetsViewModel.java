@@ -30,7 +30,7 @@ public class CaseCategorySetsViewModel implements Serializable {
 
     private static final long serialVersionUID = -1023991338162415995L;
 
-    @WireVariable("mockCaseCategorySetService")
+    @WireVariable
     private CaseCategorySetService caseCategorySetService;
 
     private boolean moreResults;
