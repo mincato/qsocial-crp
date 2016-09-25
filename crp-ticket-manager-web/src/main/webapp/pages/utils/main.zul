@@ -4,5 +4,6 @@
 		<label value="Home" sclass="head1"/>
 		<label value="Version: ${vm.applicationVersion.version}" sclass="head1"/>
 		<label value="Build: ${vm.applicationVersion.build}" sclass="head1"/>
+		<label value="Branch: ${vm.applicationVersion.branch}" sclass="head1"/>
 	</vbox>
 </x:div>

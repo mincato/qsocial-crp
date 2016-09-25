@@ -14,6 +14,8 @@
 
 	<properties>
 		<build.number>localhost</build.number>
+		<build.branch>localhost</build.branch>
+		
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.plugin.version>3.3</maven.compiler.plugin.version>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -171,6 +173,7 @@
 							<Application-Title>${project.name}</Application-Title>
 							<Application-Version>${project.version}</Application-Version>
 							<Application-Build>${build.number}</Application-Build>
+							<Application-Branch>${build.branch}</Application-Branch>							
 						</manifestEntries>
 					</archive>				
 					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
