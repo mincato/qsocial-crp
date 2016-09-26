@@ -28,6 +28,7 @@ import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.config.UserResolverListView;
+import com.qsocialnow.model.ListView;
 import com.qsocialnow.services.TeamService;
 import com.qsocialnow.services.UserResolverService;
 import com.qsocialnow.services.UserService;
@@ -63,7 +64,7 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
     }
 
     private void initUsers(List<TeamUserView> currentUsers) {
-        setUserListView(new TeamListView<UserListView>());
+        setUserListView(new ListView<UserListView>());
         getUserListView().setList(userService.findAll(null));
         getUserListView().setFilteredList(new ArrayList<UserListView>());
         getUserListView().getFilteredList().addAll(getUserListView().getList().stream().filter(user -> {
@@ -77,7 +78,7 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
     }
 
     private void initUsersResolver(List<TeamUserResolverView> currentUsersResolver) {
-        setUserResolverListView(new TeamListView<UserResolverListView>());
+        setUserResolverListView(new ListView<UserResolverListView>());
         getUserResolverListView().setList(userResolverService.findAll(null));
         getUserResolverListView().setFilteredList(new ArrayList<UserResolverListView>());
         getUserResolverListView().getFilteredList().addAll(

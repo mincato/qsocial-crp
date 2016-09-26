@@ -1,8 +1,8 @@
-package com.qsocialnow.viewmodel.team;
+package com.qsocialnow.model;
 
 import java.util.List;
 
-public class TeamListView<T> {
+public class ListView<T> {
 
     private List<T> list;
 

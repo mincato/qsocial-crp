@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -14,19 +15,25 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.QueryParam;
+import org.zkoss.bind.annotation.ToServerCommand;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.model.DomainView;
+import com.qsocialnow.model.ListView;
+import com.qsocialnow.model.TriggerResolutionView;
+import com.qsocialnow.model.TriggerView;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.TriggerService;
 
+@ToServerCommand("collapsetoggleResolutions")
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateTriggerViewModel implements Serializable {
 
@@ -38,7 +45,7 @@ public class CreateTriggerViewModel implements Serializable {
     @WireVariable
     private DomainService domainService;
 
-    private Trigger currentTrigger;
+    private TriggerView currentTrigger;
 
     private Trigger fxTrigger;
 
@@ -50,12 +57,30 @@ public class CreateTriggerViewModel implements Serializable {
 
     private boolean editing;
 
-    public Trigger getCurrentTrigger() {
+    private boolean editingResolutions;
+
+    private ListView<Resolution> resolutionListView;
+
+    public TriggerView getCurrentTrigger() {
         return currentTrigger;
     }
 
     public List<Status> getStatusOptions() {
         return statusOptions;
+    }
+
+    public ListView<Resolution> getResolutionListView() {
+        return resolutionListView;
+    }
+
+    public boolean isEditingResolutions() {
+        return editingResolutions;
+    }
+
+    @Command("collapsetoggleResolutions")
+    @NotifyChange("editingResolutions")
+    public void toggleResolutions(@BindingParam("toggle") Boolean toggle) {
+        this.editingResolutions = toggle;
     }
 
     @GlobalCommand
@@ -98,18 +123,85 @@ public class CreateTriggerViewModel implements Serializable {
         BindUtils.postNotifyChange(null, null, fxTrigger, "segments");
     }
 
+    @Command
+    @NotifyChange({ "resolutionListView" })
+    public void addResolution(@BindingParam("fxTrigger") TriggerView trigger) {
+        TriggerResolutionView resolution = new TriggerResolutionView();
+        resolution.setEditingStatus(Boolean.TRUE);
+        trigger.getResolutions().add(resolution);
+        resolutionListView.setEnabledAdd(false);
+        BindUtils.postNotifyChange(null, null, trigger, "resolutions");
+    }
+
+    @Command
+    @NotifyChange({ "resolutionListView" })
+    public void confirmResolution(@BindingParam("resolution") TriggerResolutionView resolution,
+            @BindingParam("fxTrigger") TriggerView trigger) {
+        resolution.setEditingStatus(Boolean.FALSE);
+        deleteResolutionFilteredList(resolutionListView, resolution.getResolution());
+        resolutionListView.setEnabledAdd(true);
+        BindUtils.postNotifyChange(null, null, trigger, "resolutions");
+
+    }
+
+    @Command
+    @NotifyChange({ "resolutionListView" })
+    public void removeResolution(@BindingParam("index") int idx, @BindingParam("fxTrigger") TriggerView trigger) {
+        TriggerResolutionView deletedResolution = trigger.getResolutions().remove(idx);
+        if (!deletedResolution.isEditingStatus()) {
+            addResolutionFilteredList(resolutionListView, deletedResolution.getResolution());
+        }
+        resolutionListView.setEnabledAdd(true);
+        for (TriggerResolutionView resolution : trigger.getResolutions()) {
+            if (resolution.isEditingStatus()) {
+                resolutionListView.setEnabledAdd(false);
+            }
+        }
+        BindUtils.postNotifyChange(null, null, trigger, "resolutions");
+
+    }
+
+    private void addResolutionFilteredList(ListView<Resolution> resolutionListView, Resolution resolution) {
+        if (resolution == null) {
+            return;
+        }
+        for (Resolution resolutionList : resolutionListView.getList()) {
+            if (resolutionList.getId().equals(resolution.getId())) {
+                resolutionListView.getFilteredList().add(resolutionList);
+            }
+        }
+    }
+
+    private void deleteResolutionFilteredList(ListView<Resolution> resolutionListView, Resolution resolution) {
+        if (resolution == null) {
+            return;
+        }
+        resolutionListView.getFilteredList().remove(resolution);
+    }
+
     @Init
     public void init(@QueryParam("domain") String domain, @QueryParam("trigger") String triggerId) {
         this.domain = domain;
         this.currentDomain = new DomainView();
         this.currentDomain.setDomain(domainService.findOne(this.domain));
+        this.currentTrigger = new TriggerView();
+        this.resolutionListView = new ListView<>();
+        this.resolutionListView.setList(this.currentDomain.getDomain().getResolutions());
+        this.resolutionListView.setFilteredList(new ArrayList<>(this.resolutionListView.getList()));
         if (triggerId != null) {
             editing = true;
-            this.currentTrigger = triggerService.findOne(domain, triggerId);
+            this.currentTrigger.setTrigger(triggerService.findOne(domain, triggerId));
+            this.currentTrigger.setResolutions(this.currentTrigger.getTrigger().getResolutions().stream()
+                    .map(resolution -> {
+                        TriggerResolutionView triggerResolutionView = new TriggerResolutionView();
+                        triggerResolutionView.setResolution(resolution);
+                        return triggerResolutionView;
+                    }).collect(Collectors.toList()));
         } else {
             editing = false;
-            this.currentTrigger = new Trigger();
-            this.currentTrigger.setSegments(new ArrayList<>());
+            this.currentTrigger.setTrigger(new Trigger());
+            this.currentTrigger.getTrigger().setSegments(new ArrayList<>());
+            this.currentTrigger.setResolutions(new ArrayList<>());
         }
         this.statusOptions = Arrays.asList(Status.values());
     }
@@ -117,14 +209,19 @@ public class CreateTriggerViewModel implements Serializable {
     @Command
     @NotifyChange("currentTrigger")
     public void save() {
+        currentTrigger.getTrigger().setResolutions(
+                currentTrigger.getResolutions().stream().map(TriggerResolutionView::getResolution)
+                        .collect(Collectors.toList()));
         if (editing) {
-            this.currentTrigger = triggerService.update(this.currentDomain.getDomain().getId(), currentTrigger);
+            this.currentTrigger.setTrigger(triggerService.update(this.currentDomain.getDomain().getId(),
+                    currentTrigger.getTrigger()));
             Clients.showNotification(Labels.getLabel("trigger.edit.notification.success"));
         } else {
-            triggerService.create(domain, currentTrigger);
+            triggerService.create(domain, currentTrigger.getTrigger());
             Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
-            currentTrigger = new Trigger();
-            currentTrigger.setSegments(new ArrayList<>());
+            currentTrigger.setTrigger(new Trigger());
+            currentTrigger.getTrigger().setSegments(new ArrayList<>());
+            currentTrigger.getTrigger().setResolutions(new ArrayList<>());
         }
     }
 

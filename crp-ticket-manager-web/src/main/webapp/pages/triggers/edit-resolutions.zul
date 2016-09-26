@@ -1,0 +1,79 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<x:div>
+		<n:div class="col-sm-12">
+			<div zclass="link-button pull-right">
+				<a onClick="@command('addResolution', fxTrigger = fxTrigger)"
+					disabled="@load(not triggerVm.resolutionListView.enabledAdd)">
+					<i class="fa fa-plus-circle fa-2x"></i>
+						${labels.app.button.add}
+				</a>
+			</div>
+		</n:div>
+	</x:div>
+	<n:div class="col-sm-12">
+		<x:ol id="resolutions" class="list-group order" 
+			children="@bind(fxTrigger.resolutions) @template(each.editingStatus ? 'editable' : 'noneditable')">
+			<template name="noneditable">
+				<n:div class="list-group-item col-xs-11 col-sm-11">
+					<n:div class="col-xs-12 col-sm-6">
+						${each.resolution.description}
+					</n:div>
+					<n:div class="col-xs-8 col-sm-3">
+					</n:div>
+					<n:div class="col-xs-4 col-sm-3">
+						<n:div class="pull-right">
+							<a zclass="btn-list-action"
+								onClick="@command('removeResolution', index = forEachStatus.index, fxTrigger = fxTrigger)">
+								<i
+									class="glyphicon glyphicon-erase fa-2x">
+								</i>
+							</a>
+						</n:div>
+					</n:div>
+				</n:div>
+			</template>
+			<template name="editable">
+				<n:div class="list-group-item col-xs-11 col-sm-11">
+					<n:div class="col-xs-12 col-sm-6">
+						<listbox mold="select" sclass="form-control"
+							model="@load(triggerVm.resolutionListView.filteredList)" multiple="false" checkmark="true"
+							selectedItem="@bind(each.resolution)">
+							<template name="model">
+								<listitem>
+									<listcell
+										label="${each.description}" />
+								</listitem>
+							</template>
+						</listbox>
+					</n:div>
+					<n:div class="col-xs-8 col-sm-3">
+					</n:div>
+					<n:div class="col-xs-4 col-sm-3">
+						<n:div class="pull-right">
+							<a
+								sclass="@load(each.resolution eq null ? '' : 'btn-list-action')"
+								disabled="@load(each.resolution eq null)"
+								onClick="@command('confirmResolution', resolution=each, fxTrigger = fxTrigger)">
+								<i class="fa fa-check fa-2x"></i>
+							</a>
+							<a zclass="btn-list-action"
+								onClick="@command('removeResolution', index = forEachStatus.index, fxTrigger = fxTrigger)">
+								<i
+									class="glyphicon glyphicon-erase fa-2x">
+								</i>
+							</a>
+						</n:div>
+					</n:div>
+				</n:div>
+			</template>
+		</x:ol>
+	</n:div>
+	<div visible="@load(empty fxTrigger.resolutions and empty vmsgs['resolutions'])">
+		${labels.trigger.resolutions.unfilled}
+	</div>
+	<div class="form-group has-error" visible="@load(empty fxTrigger.resolutions and not empty vmsgs['resolutions'])" >
+		<n:span class="help-block">
+			<label value="@bind(vmsgs['resolutions'])" />
+		</n:span>
+	</div>
+</zk>
