@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
-import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
@@ -33,9 +32,6 @@ public class TriggerService {
     private TriggerRepository triggerRepository;
 
     @Autowired
-    private DomainService domainService;
-
-    @Autowired
     private CuratorFramework zookeeperClient;
 
     @Value("${app.domains.path}")
@@ -50,7 +46,6 @@ public class TriggerService {
                 });
             });
             mockActions(trigger);
-            mockResoultions(trigger, domainId);
             triggerSaved = triggerRepository.save(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -79,10 +74,15 @@ public class TriggerService {
     public Trigger update(String domainId, String triggerId, Trigger trigger) {
         Trigger triggerSaved = null;
         try {
+            trigger.getSegments().stream().forEach(segment -> {
+                segment.getDetectionCriterias().forEach(detectionCriteria -> {
+                    filterNormalizer.normalizeFilter(detectionCriteria.getFilter());
+                });
+            });
             trigger.setId(triggerId);
             mockActions(trigger);
-            mockResoultions(trigger, domainId);
             triggerSaved = triggerRepository.update(domainId, trigger);
+            zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
             log.error("There was an error updating trigger: " + trigger.getDescription(), e);
             throw new RuntimeException(e.getMessage());
@@ -100,11 +100,6 @@ public class TriggerService {
                 detectionCriteria.setAccionCriterias(actions);
             });
         });
-    }
-
-    private void mockResoultions(Trigger trigger, String domainId) {
-        Domain domain = domainService.findOne(domainId);
-        trigger.setResolutions(domain.getResolutions());
     }
 
 }

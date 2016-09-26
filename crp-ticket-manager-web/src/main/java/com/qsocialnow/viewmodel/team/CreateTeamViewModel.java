@@ -18,6 +18,7 @@ import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.config.UserResolverListView;
+import com.qsocialnow.model.ListView;
 import com.qsocialnow.services.TeamService;
 import com.qsocialnow.services.UserResolverService;
 import com.qsocialnow.services.UserService;
@@ -46,14 +47,14 @@ public class CreateTeamViewModel extends EditableTeamViewModel implements Serial
     }
 
     private void initUsers() {
-        setUserListView(new TeamListView<UserListView>());
+        setUserListView(new ListView<UserListView>());
         getUserListView().setList(userService.findAll(null));
         getUserListView().setFilteredList(new ArrayList<UserListView>());
         getUserListView().getFilteredList().addAll(getUserListView().getList());
     }
 
     private void initUsersResolver() {
-        setUserResolverListView(new TeamListView<UserResolverListView>());
+        setUserResolverListView(new ListView<UserResolverListView>());
         getUserResolverListView().setList(userResolverService.findAll(null));
         getUserResolverListView().setFilteredList(new ArrayList<UserResolverListView>());
         getUserResolverListView().getFilteredList().addAll(getUserResolverListView().getList());

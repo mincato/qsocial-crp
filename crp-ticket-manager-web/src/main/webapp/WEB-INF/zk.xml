@@ -65,6 +65,25 @@
     		</script>
 		</data-handler>
 		<data-handler>
+	    	<name>collapse</name>
+	    	<script>
+	        	function (wgt, dataValue) {
+	        		var collapsible = $(wgt.$n());
+					
+					var self = this;
+        			if (self.command) {
+    					collapsible.on('hidden.bs.collapse', function(id, ev){
+      						self.command(dataValue,{toggle:false});
+						});
+						
+						collapsible.on('shown.bs.collapse', function(id, ev){
+      						self.command(dataValue,{toggle:true});
+						});
+  					}
+	        	}
+	    	</script>
+		</data-handler>
+		<data-handler>
     		<name>filter</name>
     		<script src="/assets/js/filters.js">
     		</script>
