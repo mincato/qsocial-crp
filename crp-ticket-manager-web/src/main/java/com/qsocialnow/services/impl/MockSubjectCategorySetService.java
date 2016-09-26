@@ -20,13 +20,11 @@ import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.services.SubjectCategorySetService;
 
 @Service("mockSubjectCategorySetService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MockSubjectCategorySetService implements SubjectCategorySetService {
+public class MockSubjectCategorySetService {
 
-    @Override
     public PageResponse<SubjectCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/subjectcategorysets.json");
@@ -41,12 +39,10 @@ public class MockSubjectCategorySetService implements SubjectCategorySetService 
         return new PageResponse<SubjectCategorySetListView>(list, ACTIVE_PAGE_DEFAULT, PAGE_SIZE_DEFAULT);
     }
 
-    @Override
     public SubjectCategorySet create(SubjectCategorySet currentSubjectCategorySet) {
         return currentSubjectCategorySet;
     }
 
-    @Override
     public SubjectCategorySet findOne(String subjectCategorySetId) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/subjectcategorysets.json");
@@ -65,9 +61,7 @@ public class MockSubjectCategorySetService implements SubjectCategorySetService 
         return null;
     }
 
-    @Override
     public SubjectCategorySet update(SubjectCategorySet currentSubjectCategorySet) {
         return currentSubjectCategorySet;
     }
-
 }

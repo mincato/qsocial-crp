@@ -77,6 +77,10 @@
     <bean id="caseCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.CaseCategorySetService">
         <property name="configurator" ref="elasticDomainConfig"></property>
     </bean>
+    
+    <bean id="subjectCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.SubjectCategorySetService">
+        <property name="configurator" ref="elasticDomainConfig"></property>
+    </bean>
 
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">
 	</bean>

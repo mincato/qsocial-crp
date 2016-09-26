@@ -24,7 +24,7 @@ public class CreateSubjectCategorySetViewModel implements Serializable {
 
     private static final long serialVersionUID = -2120461168021232109L;
 
-    @WireVariable("mockSubjectCategorySetService")
+    @WireVariable
     private SubjectCategorySetService subjectCategorySetService;
 
     private SubjectCategorySetView currentSubjectCategorySet;

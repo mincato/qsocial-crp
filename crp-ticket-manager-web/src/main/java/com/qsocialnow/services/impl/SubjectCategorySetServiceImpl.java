@@ -18,67 +18,67 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.qsocialnow.common.model.config.CaseCategorySet;
-import com.qsocialnow.common.model.config.CaseCategorySetListView;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
-import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.ServiceUrlResolver;
+import com.qsocialnow.services.SubjectCategorySetService;
 
-@Service("caseCategorySetService")
+@Service("subjectCategorySetService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class CaseCategorySetServiceImpl implements CaseCategorySetService {
+public class SubjectCategorySetServiceImpl implements SubjectCategorySetService {
 
-    private static final Logger log = LoggerFactory.getLogger(CaseCategorySetServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(SubjectCategorySetServiceImpl.class);
 
-    @Value("${caseCategorySet.serviceurl}")
-    private String caseCategorySetServiceUrl;
+    @Value("${subjectCategorySet.serviceurl}")
+    private String subjectCategorySetServiceUrl;
 
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
     @Override
-    public CaseCategorySet create(CaseCategorySet currentCaseCategorySet) {
+    public SubjectCategorySet create(SubjectCategorySet currentSubjectCategorySet) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            CaseCategorySet createdCaseCategorySet = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl), currentCaseCategorySet,
-                    CaseCategorySet.class);
-            return createdCaseCategorySet;
+            SubjectCategorySet createdSubjectCategorySet = restTemplate.postForObject(
+                    serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl),
+                    currentSubjectCategorySet, SubjectCategorySet.class);
+            return createdSubjectCategorySet;
         } catch (Exception e) {
-            log.error("There was an error while trying to call CaseCategorySet service", e);
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public CaseCategorySet findOne(String caseCategorySetId) {
+    public SubjectCategorySet findOne(String subjectCategorySetId) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl)).path(
-                    "/" + caseCategorySetId);
+                    serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl)).path(
+                    "/" + subjectCategorySetId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            CaseCategorySet caseCategorySetSelected = restTemplate.getForObject(builder.toUriString(),
-                    CaseCategorySet.class);
+            SubjectCategorySet subjectCategorySetSelected = restTemplate.getForObject(builder.toUriString(),
+                    SubjectCategorySet.class);
 
-            return caseCategorySetSelected;
+            return subjectCategorySetSelected;
         } catch (Exception e) {
-            log.error("There was an error while trying to call CaseCategorySet service", e);
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public CaseCategorySet update(CaseCategorySet currentCaseCategorySet) {
+    public SubjectCategorySet update(SubjectCategorySet currentSubjectCategorySet) {
 
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl)).path(
-                    "/" + currentCaseCategorySet.getId());
+                    serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl)).path(
+                    "/" + currentSubjectCategorySet.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
@@ -86,19 +86,20 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
             headers.add("Content-Type", "application/json");
             headers.add("Accept", "application/json");
 
-            HttpEntity<CaseCategorySet> requestEntity = new HttpEntity<CaseCategorySet>(currentCaseCategorySet, headers);
+            HttpEntity<SubjectCategorySet> requestEntity = new HttpEntity<SubjectCategorySet>(
+                    currentSubjectCategorySet, headers);
 
-            ResponseEntity<CaseCategorySet> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
-                    requestEntity, CaseCategorySet.class);
+            ResponseEntity<SubjectCategorySet> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
+                    requestEntity, SubjectCategorySet.class);
             return response.getBody();
         } catch (Exception e) {
-            log.error("There was an error while trying to CaseCategorySet team service", e);
+            log.error("There was an error while trying to SubjectCategorySet team service", e);
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public PageResponse<CaseCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters) {
+    public PageResponse<SubjectCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -108,21 +109,21 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
                 description = filters.get("description");
             }
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl))
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl))
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize)
                     .queryParam("name", description);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
-            ResponseEntity<PageResponse<CaseCategorySetListView>> response = restTemplate.exchange(
+            ResponseEntity<PageResponse<SubjectCategorySetListView>> response = restTemplate.exchange(
                     builder.toUriString(), HttpMethod.GET, null,
-                    new ParameterizedTypeReference<PageResponse<CaseCategorySetListView>>() {
+                    new ParameterizedTypeReference<PageResponse<SubjectCategorySetListView>>() {
                     });
 
-            PageResponse<CaseCategorySetListView> caseCategorySets = response.getBody();
-            return caseCategorySets;
+            PageResponse<SubjectCategorySetListView> subjectCategorySets = response.getBody();
+            return subjectCategorySets;
         } catch (Exception e) {
-            log.error("There was an error while trying to call CaseCategorySet service", e);
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
             throw new RuntimeException(e);
         }
     }

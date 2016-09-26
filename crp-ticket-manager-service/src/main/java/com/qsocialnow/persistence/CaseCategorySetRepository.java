@@ -31,10 +31,10 @@ public class CaseCategorySetRepository {
             List<CaseCategorySet> caseCategorySetsRepo = caseCategorySetElasticService.findAll(offset, limit, name);
 
             for (CaseCategorySet caseCategorySet : caseCategorySetsRepo) {
-                CaseCategorySetListView teamListView = new CaseCategorySetListView();
-                teamListView.setId(caseCategorySet.getId());
-                teamListView.setDescription(caseCategorySet.getDescription());
-                caseCategorySets.add(teamListView);
+                CaseCategorySetListView caseCategorySetListView = new CaseCategorySetListView();
+                caseCategorySetListView.setId(caseCategorySet.getId());
+                caseCategorySetListView.setDescription(caseCategorySet.getDescription());
+                caseCategorySets.add(caseCategorySetListView);
             }
         } catch (Exception e) {
             log.error("Unexpected error", e);

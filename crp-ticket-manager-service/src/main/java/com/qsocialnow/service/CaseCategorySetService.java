@@ -53,9 +53,6 @@ public class CaseCategorySetService {
         CaseCategorySet caseCategorySetSaved = null;
         try {
             caseCategorySet.setId(caseCategorySetId);
-
-            log.info("Calling service categorias: " + caseCategorySet.getCategories().size());
-
             caseCategorySetSaved = caseCategorySetRepository.update(caseCategorySet);
         } catch (Exception e) {
             log.error("There was an error updating CaseCategorySet: " + caseCategorySet.getDescription(), e);
