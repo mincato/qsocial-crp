@@ -1,0 +1,33 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div zclass="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<x:form class="form">
+		<n:div class="form-group">
+			<n:label class="control-label">${labels.cases.actions.title}:</n:label>
+			<selectbox sclass="form-control" model="@load(vm.actionOptions)"
+				selectedItem="@bind(vm.selectedAction)"
+				onSelect="@command('onSelectAction')">
+			    <template name="model">
+					<label value="${c:l(c:cat('cases.actions.',each))}" />
+				</template>
+			</selectbox>
+		</n:div>
+	</x:form>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'CLOSE')">
+		<include src="/pages/cases/actions/close-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'REOPEN')">
+		<include src="/pages/cases/actions/reopen-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'PENDING_RESPONSE')">
+		<include src="/pages/cases/actions/pending-response-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'REGISTER_COMMENT')">
+		<include src="/pages/cases/actions/register-comment-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'RESOLVE')">
+		<include src="/pages/cases/actions/resolve-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'REPLY')">
+		<include src="/pages/cases/actions/send-response-action.zul"/>
+	</div>
+</div>

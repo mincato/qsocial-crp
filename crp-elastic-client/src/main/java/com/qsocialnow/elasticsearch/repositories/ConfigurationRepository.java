@@ -3,11 +3,13 @@ package com.qsocialnow.elasticsearch.repositories;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Filter;
@@ -18,7 +20,6 @@ import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.User;
-import com.qsocialnow.common.model.config.UserResolver;
 
 public class ConfigurationRepository {
 
@@ -97,19 +98,19 @@ public class ConfigurationRepository {
         segment1.setId(id + "-segment 1");
         segment1.setDescription(id + " segment 1- description");
         segment1.setDetectionCriterias(getDetectionCriteriaBySegmentId(segment1.getId()));
-        segment1.setTeam(getTeamBySegmentId(segment1.getId()));
+        segment1.setTeam(getTeamBySegmentId(segment1.getId()).getId());
 
         Segment segment2 = new Segment();
         segment2.setId(id + "-segment 2");
         segment2.setDescription(id + " segment 2- description");
         segment2.setDetectionCriterias(getDetectionCriteriaBySegmentId(segment2.getId()));
-        segment2.setTeam(getTeamBySegmentId(segment2.getId()));
+        segment2.setTeam(getTeamBySegmentId(segment2.getId()).getId());
 
         Segment segment3 = new Segment();
         segment3.setId(id + "-segment 3");
         segment3.setDescription(id + " segment 3- description");
         segment3.setDetectionCriterias(getDetectionCriteriaBySegmentId(segment3.getId()));
-        segment3.setTeam(getTeamBySegmentId(segment3.getId()));
+        segment3.setTeam(getTeamBySegmentId(segment3.getId()).getId());
 
         segmentsFromTrigger.add(segment1);
         segmentsFromTrigger.add(segment2);
@@ -123,23 +124,18 @@ public class ConfigurationRepository {
         team.setId(id + " - team");
         team.setName("Team to support segment " + id);
 
-        UserResolver userResolver = new UserResolver();
-        userResolver.setActive(true);
+        BaseUserResolver userResolver = new BaseUserResolver();
         userResolver.setId("user1");
-        userResolver.setName("John");
-        userResolver.setLastName("Goodman");
-        userResolver.setSource("source-1");
+        userResolver.setSource(1l);
 
-        team.setUserResolver(userResolver);
+        team.setUserResolvers(Arrays.asList(userResolver));
 
         User user1 = new User();
         user1.setId("user 1");
-        user1.setName("Bruce");
-        user1.setLastName("Wayne");
 
         List<User> users = new ArrayList<>();
         users.add(user1);
-        team.setUsers(users);
+        team.setUsers(Arrays.asList(user1));
 
         return team;
     }

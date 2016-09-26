@@ -8,6 +8,8 @@ public class SearchResponse<T> {
 
     private String version;
 
+    private String index;
+
     private T source;
 
     private List<T> sources;
@@ -42,5 +44,13 @@ public class SearchResponse<T> {
 
     public void setSources(List<T> sources) {
         this.sources = sources;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
     }
 }

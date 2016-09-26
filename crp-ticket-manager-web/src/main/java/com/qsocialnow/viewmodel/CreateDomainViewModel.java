@@ -70,7 +70,7 @@ public class CreateDomainViewModel implements Serializable {
         newDomain.setResolutions(currentDomain.getResolutions());
         currentDomain.setDomain(domainService.create(newDomain));
         Clients.showNotification(Labels.getLabel("domain.create.notification.success", new String[] { currentDomain
-                .getDomain().getId() }));
+                .getDomain().getName() }));
         initDomain();
     }
 

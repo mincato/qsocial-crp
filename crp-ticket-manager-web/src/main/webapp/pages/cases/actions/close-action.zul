@@ -1,0 +1,15 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('closeActionVm') @init('com.qsocialnow.viewmodel.CloseActionViewModel')">
+	<x:form>
+		<x:div sclass="form-group">
+		    <n:label class="control-label">${labels.cases.actions.comment.optional}:</n:label>
+    		<textbox type="text" class="form-control" 
+    			value="@bind(closeActionVm.comment)"></textbox>
+		</x:div>
+		<div class="form-group text-center">
+	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
+		</div>
+	</x:form>
+</div>

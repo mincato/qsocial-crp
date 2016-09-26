@@ -52,6 +52,7 @@ public class DomainService {
         try {
             domain.setId(domainId);
             domainSaved = domainRepository.update(domain);
+            zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
             log.error("There was an error updating domain: " + domain.getName(), e);
             throw new RuntimeException(e.getMessage());

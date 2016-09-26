@@ -43,27 +43,27 @@ public class ExecutionMessageProcessorTest {
 
     @Test
     public void testExecuteInputNull() {
-        ExecutionMessageRequest request = new ExecutionMessageRequest(null, null, new DetectionCriteria());
+        ExecutionMessageRequest request = new ExecutionMessageRequest(null, null, new DetectionCriteria(), null, null);
         executionMessageProcessor.execute(request);
     }
 
     @Test
     public void testExecuteDetectionCriteriaNull() {
-        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), null, null);
+        ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), null, null, null, null);
         executionMessageProcessor.execute(request);
     }
 
     @Test
     public void testExecuteAutomaticActionCriteriaDomainNull() {
         ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), null,
-                new DetectionCriteria());
+                new DetectionCriteria(), null, null);
         executionMessageProcessor.execute(request);
     }
 
     @Test
     public void testExecuteAutomaticActionCriteriaDomain() {
         ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), new Domain(),
-                new DetectionCriteria());
+                new DetectionCriteria(), null, null);
         executionMessageProcessor.execute(request);
     }
 
@@ -78,10 +78,11 @@ public class ExecutionMessageProcessorTest {
         detectionCriteria.setAccionCriterias(automaticActions);
 
         ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), new Domain(),
-                detectionCriteria);
+                detectionCriteria, null, null);
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class));
+        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class),
+                Mockito.any(ExecutionMessageRequest.class));
     }
 
     @Test
@@ -98,10 +99,11 @@ public class ExecutionMessageProcessorTest {
         detectionCriteria.setAccionCriterias(automaticActions);
 
         ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), new Domain(),
-                detectionCriteria);
+                detectionCriteria, null, null);
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(2)).execute(Mockito.any(), Mockito.anyListOf(String.class));
+        Mockito.verify(action, Mockito.times(2)).execute(Mockito.any(), Mockito.anyListOf(String.class),
+                Mockito.any(ExecutionMessageRequest.class));
     }
 
     @Test
@@ -117,11 +119,12 @@ public class ExecutionMessageProcessorTest {
         automaticActions.add(automaticActionCriteria);
         detectionCriteria.setAccionCriterias(automaticActions);
         ExecutionMessageRequest request = new ExecutionMessageRequest(new InPutBeanDocument(), new Domain(),
-                detectionCriteria);
+                detectionCriteria, null, null);
 
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class));
+        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class),
+                Mockito.any(ExecutionMessageRequest.class));
     }
 
 }

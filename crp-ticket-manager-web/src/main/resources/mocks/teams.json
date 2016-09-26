@@ -1,0 +1,20 @@
+[
+	{
+	   "_id": "AVdIJrz3yKnlKwd1iXK7",
+	   "name": "Equipo prueba",
+	   "users": [
+	     {
+	       "id": "1",
+	       "coordinator": true,
+	       "username": "jperez"
+	     }
+	   ],
+	   "userResolvers": [
+	     {
+	       "id": "AVdJKZk5yKnlKwd1iXLR",
+	       "source": 1087,
+	       "identifier": "centaurico_bot1"
+	     }
+	   ]
+	 }
+]

@@ -54,9 +54,7 @@ public class EventHandlerProcessor implements Runnable {
                 queueProducer = new QueueProducer<Message>(QueueType.EVENTS.type());
                 queueConsumer = new MessageQueueConsumer(QueueType.EVENTS.type(), messageProcessor, queueProducer);
                 queueProducer.addConsumer(queueConsumer);
-
-                queueService.startFailConsumer(queueConsumer);
-                queueService.startFailProducer(queueProducer);
+                queueService.startFailProducerConsumer(queueProducer, queueConsumer);
             }
         }
     }
@@ -71,5 +69,8 @@ public class EventHandlerProcessor implements Runnable {
 
     public void stop() {
         consumer.shutdown();
+        queueProducer.stopProducer();
+        queueConsumer.stopConsumer();
+        queueService.shutdownQueueService();
     }
 }

@@ -1,30 +1,10 @@
 package com.qsocialnow.common.model.config;
 
-public class UserResolver extends User {
-
-    private String source;
-
-    private String identifier;
+public class UserResolver extends BaseUserResolver {
 
     private SourceCredentials credentials;
 
     private Boolean active;
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
 
     public SourceCredentials getCredentials() {
         return credentials;

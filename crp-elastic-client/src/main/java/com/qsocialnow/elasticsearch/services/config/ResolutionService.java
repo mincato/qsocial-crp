@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 
 import com.qsocialnow.common.model.config.Resolution;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
+import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.ResolutionMapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.ResolutionType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
@@ -16,8 +16,10 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class ResolutionService {
 
-    public String indexResolution(Configurator elasticConfig, String domainId, Resolution resolution) {
-        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(elasticConfig);
+    private AWSElasticsearchConfigurationProvider configurator;
+
+    public String indexResolution(String domainId, Resolution resolution) {
+        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
 
         Repository<ResolutionType> repository = esfactory.initManager();
         repository.initClient();
@@ -37,8 +39,8 @@ public class ResolutionService {
         return response;
     }
 
-    public String updateResolution(Configurator elasticConfig, String domainId, Resolution resolution) {
-        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(elasticConfig);
+    public String updateResolution(String domainId, Resolution resolution) {
+        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
 
         Repository<ResolutionType> repository = esfactory.initManager();
         repository.initClient();
@@ -59,8 +61,8 @@ public class ResolutionService {
         return response;
     }
 
-    public void deleteResolution(Configurator elasticConfig, String domainId, String resolutionId) {
-        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(elasticConfig);
+    public void deleteResolution(String domainId, String resolutionId) {
+        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
 
         Repository<ResolutionType> repository = esfactory.initManager();
         repository.initClient();
@@ -76,8 +78,8 @@ public class ResolutionService {
         repository.removeChildMapping(resolutionId, mapping);
     }
 
-    public List<Resolution> getResolutions(Configurator elasticConfig, String domainId) {
-        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(elasticConfig);
+    public List<Resolution> getResolutions(String domainId) {
+        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
 
         Repository<ResolutionType> repository = esfactory.initManager();
         repository.initClient();
@@ -99,7 +101,7 @@ public class ResolutionService {
         return resolutions;
     }
 
-    public void indexResolutions(Configurator configurator, String domainId, List<Resolution> resolutions) {
+    public void indexResolutions(String domainId, List<Resolution> resolutions) {
         RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
 
         Repository<ResolutionType> repository = esfactory.initManager();
@@ -114,7 +116,7 @@ public class ResolutionService {
 
     }
 
-    public void updateResolutions(Configurator configurator, String domainId, List<Resolution> newResolutions) {
+    public void updateResolutions(String domainId, List<Resolution> newResolutions) {
         RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
 
         Repository<ResolutionType> repository = esfactory.initManager();
@@ -137,6 +139,10 @@ public class ResolutionService {
         }
         repository.closeClient();
 
+    }
+
+    public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
+        this.configurator = configurator;
     }
 
 }

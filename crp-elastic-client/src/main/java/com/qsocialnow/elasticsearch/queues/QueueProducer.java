@@ -33,6 +33,8 @@ public class QueueProducer<T> extends Thread {
 
     private boolean stop = false;
 
+    private Object lock = new Object();
+
     private final String type;
 
     public QueueProducer(String type) {
@@ -95,11 +97,21 @@ public class QueueProducer<T> extends Thread {
     public void run() {
         try {
             while (!this.stop) {
-
+                synchronized (lock) {
+                    lock.wait();
+                    notifyConsumers();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void stopProducer() {
+        synchronized (lock) {
+            lock.notify();
+        }
+        this.stop = true;
     }
 
     private byte[] getItemSerialized(T document) {

@@ -2,11 +2,12 @@ package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.List;
 
-import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
+import com.qsocialnow.common.model.request.TriggerListRequest;
+import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.TriggerMapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.TriggerType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
@@ -15,14 +16,15 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class TriggerService {
 
-    public String indexTrigger(Configurator elasticConfig, String domainId, Trigger trigger) {
-        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(elasticConfig);
+    private AWSElasticsearchConfigurationProvider configurator;
+
+    public String indexTrigger(String domainId, Trigger trigger) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
 
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
         TriggerMapping mapping = TriggerMapping.getInstance();
-        mapping.setIdParent(domainId);
 
         // validete index name
         boolean isCreated = repository.validateIndex(mapping.getIndex());
@@ -33,49 +35,92 @@ public class TriggerService {
 
         // index document
         TriggerType documentIndexed = mapping.getDocumentType(trigger);
-        String response = repository.indexChildMapping(mapping, documentIndexed);
+        documentIndexed.setDomainId(domainId);
+        String response = repository.indexMapping(mapping, documentIndexed);
         repository.closeClient();
         return response;
     }
 
-    public List<Trigger> getTriggers(Configurator configurator, String domainId, Integer offset, Integer limit,
-            String name) {
+    public List<Trigger> getTriggers(String domainId, Integer offset, Integer limit,
+            TriggerListRequest triggerListRequest) {
         RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
         TriggerMapping mapping = TriggerMapping.getInstance();
-        mapping.setIdParent(domainId);
-        SearchResponse<Trigger> response;
-        if (name != null) {
-            System.out.println("aca " + name);
-            QueryBuilder filter = QueryBuilders.matchQuery("name", name);
-            response = repository.searchChildMappingWithFilters(offset, limit, "name", filter, mapping);
-        } else {
-            response = repository.searchChildMapping(offset, limit, "name", mapping);
-        }
 
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        if (triggerListRequest.getName() != null) {
+            filters = filters.must(QueryBuilders.matchQuery("name", triggerListRequest.getName()));
+        }
+        if (triggerListRequest.getStatus() != null) {
+            filters = filters.must(QueryBuilders.matchQuery("status", triggerListRequest.getStatus()));
+        }
+        if (triggerListRequest.getFromDate() != null) {
+            filters = filters.filter(QueryBuilders.rangeQuery("init").lte(triggerListRequest.getFromDate()));
+        }
+        if (triggerListRequest.getToDate() != null) {
+            filters = filters.filter(QueryBuilders.rangeQuery("end").gte(triggerListRequest.getToDate()));
+        }
+        SearchResponse<Trigger> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
         List<Trigger> triggers = response.getSources();
 
         repository.closeClient();
         return triggers;
     }
 
-    public List<Trigger> getTriggers(Configurator configurator, String domainId) {
+    public List<Trigger> getTriggers(String domainId) {
         RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
         TriggerMapping mapping = TriggerMapping.getInstance();
-        mapping.setIdParent(domainId);
 
-        SearchResponse<Trigger> response = repository.searchChildMapping(mapping);
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        SearchResponse<Trigger> response = repository.searchWithFilters(filters, mapping);
 
         List<Trigger> triggers = response.getSources();
 
         repository.closeClient();
         return triggers;
 
+    }
+
+    public Trigger findOne(String triggerId) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TriggerMapping mapping = TriggerMapping.getInstance();
+
+        SearchResponse<Trigger> response = repository.find(triggerId, mapping);
+
+        Trigger triggers = response.getSource();
+
+        repository.closeClient();
+        return triggers;
+    }
+
+    public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
+        this.configurator = configurator;
+    }
+
+    public String updateTrigger(String domainId, Trigger trigger) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TriggerMapping mapping = TriggerMapping.getInstance();
+
+        // index document
+        TriggerType documentIndexed = mapping.getDocumentType(trigger);
+        documentIndexed.setDomainId(domainId);
+        String response = repository.updateMapping(trigger.getId(), mapping, documentIndexed);
+        repository.closeClient();
+        return response;
     }
 
 }

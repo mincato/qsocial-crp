@@ -91,4 +91,45 @@ public class TriggerServiceImpl implements TriggerService {
         }
     }
 
+    @Override
+    public Trigger findOne(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId);
+
+            Trigger trigger = restTemplate.getForObject(builder.toUriString(), Trigger.class);
+            return trigger;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Trigger update(String domainId, Trigger trigger) {
+        try {
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + trigger.getId());
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            headers.add("Accept", "application/json");
+
+            HttpEntity<Trigger> requestEntity = new HttpEntity<Trigger>(trigger, headers);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<Trigger> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
+                    requestEntity, Trigger.class);
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }

@@ -33,21 +33,21 @@ public class DetectionMessageProcessorTest {
 
     @Test
     public void testDetectNull() {
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, null);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, null);
 
         Assert.assertNull(detectionCriteria);
     }
 
     @Test
     public void testDetectDomainNull() {
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(new InPutBeanDocument(), null);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(new InPutBeanDocument(), null);
 
         Assert.assertNull(detectionCriteria);
     }
 
     @Test
     public void testDetectTriggersNull() {
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, new Domain());
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, new Domain());
 
         Assert.assertNull(detectionCriteria);
     }
@@ -58,7 +58,7 @@ public class DetectionMessageProcessorTest {
         ArrayList<Trigger> triggers = new ArrayList<>();
         triggers.add(new Trigger());
         domain.setTriggers(triggers);
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, domain);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, domain);
 
         Assert.assertNull(detectionCriteria);
     }
@@ -70,7 +70,7 @@ public class DetectionMessageProcessorTest {
                 detectionCriteriaResolver.resolve(Mockito.any(NormalizedInputBeanDocument.class),
                         Mockito.anyListOf(DetectionCriteria.class))).thenReturn(new DetectionCriteria());
 
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, domain);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, domain);
 
         Assert.assertNotNull(detectionCriteria);
         Mockito.verify(detectionCriteriaResolver, Mockito.times(1)).resolve(
@@ -88,7 +88,7 @@ public class DetectionMessageProcessorTest {
                 detectionCriteriaResolver.resolve(Mockito.any(NormalizedInputBeanDocument.class),
                         Mockito.anyListOf(DetectionCriteria.class))).thenReturn(new DetectionCriteria());
 
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, domain);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, domain);
 
         Assert.assertNotNull(detectionCriteria);
         Mockito.verify(detectionCriteriaResolver, Mockito.times(1)).resolve(
@@ -104,7 +104,7 @@ public class DetectionMessageProcessorTest {
                 detectionCriteriaResolver.resolve(Mockito.any(NormalizedInputBeanDocument.class),
                         Mockito.anyListOf(DetectionCriteria.class))).thenReturn(new DetectionCriteria());
 
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, domain);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, domain);
 
         Assert.assertNotNull(detectionCriteria);
         Mockito.verify(detectionCriteriaResolver, Mockito.times(1)).resolve(
@@ -122,7 +122,7 @@ public class DetectionMessageProcessorTest {
                 detectionCriteriaResolver.resolve(Mockito.any(NormalizedInputBeanDocument.class),
                         Mockito.anyListOf(DetectionCriteria.class))).thenReturn(new DetectionCriteria());
 
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, domain);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, domain);
 
         Assert.assertNotNull(detectionCriteria);
         Mockito.verify(detectionCriteriaResolver, Mockito.times(1)).resolve(
@@ -139,7 +139,7 @@ public class DetectionMessageProcessorTest {
                 detectionCriteriaResolver.resolve(Mockito.any(NormalizedInputBeanDocument.class),
                         Mockito.anyListOf(DetectionCriteria.class))).thenReturn(null);
 
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, domain);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, domain);
 
         Assert.assertNull(detectionCriteria);
         Mockito.verify(detectionCriteriaResolver, Mockito.times(2)).resolve(
@@ -154,7 +154,7 @@ public class DetectionMessageProcessorTest {
                 detectionCriteriaResolver.resolve(Mockito.any(NormalizedInputBeanDocument.class),
                         Mockito.anyListOf(DetectionCriteria.class))).thenReturn(null);
 
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, domain);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, domain);
 
         Assert.assertNull(detectionCriteria);
         Mockito.verify(detectionCriteriaResolver, Mockito.times(2)).resolve(
@@ -169,7 +169,7 @@ public class DetectionMessageProcessorTest {
                 detectionCriteriaResolver.resolve(Mockito.any(NormalizedInputBeanDocument.class),
                         Mockito.anyListOf(DetectionCriteria.class))).thenReturn(null);
 
-        DetectionCriteria detectionCriteria = detectionMessageProcessor.detect(null, domain);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(null, domain);
 
         Assert.assertNull(detectionCriteria);
         Mockito.verify(detectionCriteriaResolver, Mockito.times(4)).resolve(

@@ -26,7 +26,7 @@
 							<n:nav class="main-nav">
 								<ul id="sidebar-nav"
 									class="sidebar-nav">
-									<li>
+									<!-- <li>
 										<n:a href="#"
 											class="menu-first-level">
 											<i
@@ -49,6 +49,25 @@
 												</a>
 											</li>
 										</ul>
+									</li> -->
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-comments-o fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.usersresolver}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a
+													href="/pages/user-resolver/list/index.zul">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+										</ul>
 									</li>
 
 									<li>
@@ -63,7 +82,8 @@
 										</n:a>
 										<ul>
 											<li>
-												<a href="#">Equipo 1</a>
+												<a href="/pages/team/list/index.zul">
+													${labels.sidebar.menu.list}</a>
 											</li>
 										</ul>
 									</li>
@@ -80,7 +100,46 @@
 										<ul>
 											<li>
 												<a
-													href="/pages/cases/index.zul">
+													href="/pages/cases/list/index.zul">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-tags fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.casecategorysets}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a
+													href="/pages/case-category-set/list/index.zul">
+													${labels.sidebar.menu.list}
+												</a>
+											</li>
+										</ul>
+									</li>
+									
+									<li>
+										<n:a href="#">
+											<i
+												class="fa fa-tags fa-fw fa-lg">
+											</i>
+											${labels.sidebar.menu.subjectcategorysets}
+											<span
+												class="fa chevron-down-left">
+											</span>
+										</n:a>
+										<ul>
+											<li>
+												<a
+													href="/pages/subject-category-set/list/index.zul">
 													${labels.sidebar.menu.list}
 												</a>
 											</li>
@@ -102,12 +161,6 @@
 												<a
 													href="/pages/domain/list/index.zul">
 													${labels.sidebar.menu.list}
-												</a>
-											</li>
-											<li>
-												<a
-													href="/pages/domain/create/index.zul">
-													${labels.sidebar.menu.create}
 												</a>
 											</li>
 										</ul>

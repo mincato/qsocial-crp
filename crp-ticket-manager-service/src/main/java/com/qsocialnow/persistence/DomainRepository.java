@@ -3,18 +3,15 @@ package com.qsocialnow.persistence;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.apache.curator.framework.CuratorFramework;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.google.gson.GsonBuilder;
+
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.pagination.PageRequest;
-import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.services.config.DomainService;
 
 @Service
@@ -25,20 +22,9 @@ public class DomainRepository {
     @Autowired
     private DomainService domainElasticService;
 
-    @Value("${app.elastic.config.configurator.path}")
-    private String elasticConfiguratorZnodePath;
-
-    @Autowired
-    @Qualifier("zookeeperClient")
-    private CuratorFramework zookeeperClient;
-
     public Domain save(Domain newDomain) {
         try {
-            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
-            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
-                    Configurator.class);
-
-            String id = domainElasticService.indexDomain(configurator, newDomain);
+            String id = domainElasticService.indexDomain(newDomain);
             newDomain.setId(id);
 
             return newDomain;
@@ -50,11 +36,7 @@ public class DomainRepository {
 
     public Domain update(Domain domain) {
         try {
-            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
-            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
-                    Configurator.class);
-
-            String id = domainElasticService.updateDomain(configurator, domain);
+            String id = domainElasticService.updateDomain(domain);
             domain.setId(id);
             return domain;
         } catch (Exception e) {
@@ -65,11 +47,7 @@ public class DomainRepository {
 
     public Domain findOne(String domainId) {
         try {
-            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
-            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
-                    Configurator.class);
-
-            Domain domain = domainElasticService.findDomainWithResolutions(configurator, domainId);
+            Domain domain = domainElasticService.findDomainWithResolutions(domainId);
 
             return domain;
         } catch (Exception e) {
@@ -82,12 +60,7 @@ public class DomainRepository {
         List<DomainListView> domains = new ArrayList<>();
 
         try {
-            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
-            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
-                    Configurator.class);
-
-            List<Domain> domainsRepo = domainElasticService.getDomains(configurator, pageRequest.getOffset(),
-                    pageRequest.getLimit());
+            List<Domain> domainsRepo = domainElasticService.getDomains(pageRequest.getOffset(), pageRequest.getLimit());
 
             for (Domain domainRepo : domainsRepo) {
                 DomainListView domainListView = new DomainListView();
@@ -113,11 +86,7 @@ public class DomainRepository {
         List<DomainListView> domains = new ArrayList<>();
 
         try {
-            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
-            Configurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
-                    Configurator.class);
-
-            List<Domain> domainsRepo = domainElasticService.getDomainsByName(configurator, pageRequest.getOffset(),
+            List<Domain> domainsRepo = domainElasticService.getDomainsByName(pageRequest.getOffset(),
                     pageRequest.getLimit(), name);
 
             for (Domain domainRepo : domainsRepo) {
@@ -140,7 +109,4 @@ public class DomainRepository {
         return domains;
     }
 
-    public Long count() {
-        return 50L;
-    }
 }

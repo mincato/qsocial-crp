@@ -3,18 +3,15 @@ package com.qsocialnow.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.pagination.PageRequest;
-import com.qsocialnow.elasticsearch.services.cases.CaseService;
+import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
 @Service
 public class CaseRepository {
@@ -22,27 +19,22 @@ public class CaseRepository {
     private Logger log = LoggerFactory.getLogger(CaseRepository.class);
 
     @Autowired
-    private CaseService caseElasticService;
-
-    @Value("${app.elastic.cases.configurator.path}")
-    private String elasticConfiguratorZnodePath;
-
-    @Autowired
-    @Qualifier("zookeeperClient")
-    private CuratorFramework zookeeperClient;
+    private CaseTicketService caseElasticService;
 
     public List<CaseListView> findAll(PageRequest pageRequest) {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
-            byte[] configuratorBytes = zookeeperClient.getData().forPath(elasticConfiguratorZnodePath);
             List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit());
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();
                 caseListView.setId(caseRepo.getId());
                 caseListView.setTitle(caseRepo.getTitle());
+                caseListView.setDescription(caseRepo.getDescription());
                 caseListView.setOpenDate(caseRepo.getOpenDate());
+                caseListView.setPendingResponse(caseRepo.getPendingResponse());
+                caseListView.setOpen(caseRepo.getOpen());
                 cases.add(caseListView);
             }
         } catch (Exception e) {
@@ -53,6 +45,27 @@ public class CaseRepository {
 
     public Long count() {
         return 50L;
+    }
+
+    public Case findOne(String caseId) {
+        return caseElasticService.findCaseById(caseId);
+    }
+
+    public Case save(Case caseObject) {
+
+        try {
+            String id = caseElasticService.indexCase(caseObject);
+            caseObject.setId(id);
+            return caseObject;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
+    public boolean update(Case caseObject) {
+        String id = caseElasticService.update(caseObject);
+        return id != null;
     }
 
 }

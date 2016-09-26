@@ -11,10 +11,11 @@ import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
+import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
 public class ProducerTask extends TimerTask {
 
-    private CaseService caseService;
+    private CaseTicketService caseService;
 
     private static final AtomicInteger itemCount = new AtomicInteger(0);
 
@@ -24,7 +25,7 @@ public class ProducerTask extends TimerTask {
     private AWSElasticsearchConfigurationProvider caseConfig = new CaseConfigurator();
 
     public ProducerTask() {
-        this.caseService = new CaseService(configuration, caseConfig);
+        this.caseService = new CaseTicketService(caseConfig);
     }
 
     @Override
@@ -53,7 +54,8 @@ public class ProducerTask extends TimerTask {
         registries.add(registry);
 
         caseDocument.setActionsRegistry(registries);
-        caseService.findCaseById("AVcUobF7yccmhBtJ002a");
+
+        caseService.findCaseById("AVcur5GW8M02MOG2A4op");
 
         // caseService.indexCaseByBulkProcess(caseDocument);
     }

@@ -1,5 +1,6 @@
 package com.qsocialnow.responsedetector.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -133,7 +134,16 @@ public class TwitterDetectorService extends SourceDetectorService {
     }
 
     public void stop() {
-        this.twitterStreamClient.stop();
+        if (twitterStreamClient != null) {
+            this.twitterStreamClient.stop();
+        }
+        try {
+            if (pathChildrenCache != null) {
+                pathChildrenCache.close();
+            }
+        } catch (IOException e) {
+            log.error("Unexpected error. Cause", e);
+        }
     }
 
     @Override
@@ -155,7 +165,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             Long[] subSeries = { 9L };
             event.setSubSeriesId(subSeries);
 
-            event.setId("non");
+            event.setId(String.valueOf(status.getId()));
             event.setIdOriginal("odio");
             event.setTipoDeMedio("morbi");
             event.setConnotacion((short) 36);
@@ -180,7 +190,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             event.setVersionTemas(new Date());
             event.setReproduccionesCount(Long.valueOf(status.getRetweetCount()));
             event.setLikeCount(0L);
-            event.setTitulo("Response detected from twitter source");
+            event.setTitulo(status.getText());
             event.setTexto(status.getText());
             event.setNormalizeMessage(status.getText());
             event.setUrlNoticia("");

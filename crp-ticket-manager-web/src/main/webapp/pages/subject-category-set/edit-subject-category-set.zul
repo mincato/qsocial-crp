@@ -1,0 +1,59 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<div sclass="modal fade" ca:data-modal=""
+		ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.subjectcategoryset.EditSubjectCategorySetViewModel', subjectcategoryset=arg.subjectcategoryset)"
+		validationMessages="@id('vmsgs')">
+		<n:div class="modal-dialog">
+			<x:div class="modal-content"
+				form="@id('fx') @load(vm.currentSubjectCategorySet) @save(vm.currentSubjectCategorySet, before='save') @validator('com.qsocialnow.validators.SubjectCategorySetFormValidator')">
+				<n:div class="modal-header">
+					<n:button type="button" class="close"
+						data-dismiss="modal" aria-label="Close">
+						<n:span aria-hidden="true">&#x00D7;</n:span>
+					</n:button>
+					<n:h4 class="modal-title">
+						${labels.subjectcategoryset.edit.title}
+					</n:h4>
+				</n:div>
+				<n:div class="modal-body">
+					<div class="row">
+						<n:div class="col-lg-12">
+							<div zclass="pane equal">
+								<x:form class="form-horizontal">
+									<x:div
+										sclass="@load(empty vmsgs[description] ? 'form-group' : 'form-group has-error')">
+										<n:label
+											class="control-label col-sm-2">
+											${labels.subjectcategoryset.description.label}
+										</n:label>
+										<x:div class="col-sm-10">
+											<textbox type="text"
+												class="form-control" id="description" name="normal_input"
+												value="@bind(fx.description) @validator('beanValidator')">
+											</textbox>
+											<x:span
+												sclass="@load(empty vmsgs[description] ? 'hidden' : 'help-block')">
+												<label
+													value="@load(vmsgs[description])" />
+											</x:span>
+										</x:div>
+									</x:div>
+									<n:br />
+									<include
+										src="/pages/subject-category-set/edit-categories.zul" />
+								</x:form>
+							</div>
+						</n:div>
+					</div>
+				</n:div>
+				<div class="modal-footer">
+					<button onClick="@command('save')"
+						label="${labels.app.button.save}" zclass="btn btn-primary" />
+					<button zclass="btn" sclass="btn-default"
+						ca:data-dismiss="modal" label="${labels.app.button.cancel}" />
+				</div>
+			</x:div>
+		</n:div>
+	</div>
+</zk>

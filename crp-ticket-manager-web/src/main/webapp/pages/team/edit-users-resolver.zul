@@ -1,0 +1,92 @@
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<n:br />
+	<n:hr />
+	<x:div
+		sclass="@load(empty vmsgs['usersresolver'] ? 'form-group' : 'form-group has-error')">
+		<n:label class="control-label col-sm-2">
+			${labels.team.usersresolver.label}
+		</n:label>
+		<n:div class="col-sm-10">
+			<div zclass="link-button pull-right">
+				<a onClick="@command('addUserResolver', fx = fx)"
+					disabled="@load(not vm.userResolverListView.enabledAdd)">
+					<i class="fa fa-plus-circle fa-2x"></i>
+					${labels.team.add.userresolver}
+				</a>
+			</div>
+		</n:div>
+	</x:div>
+	<x:div zclass="form-group"
+		visible="@load(empty fx.usersResolver and empty vmsgs['usersresolver'])">
+		<span class="col-sm-offset-2 col-sm-6">
+			${labels.team.userresolver.list.unfilled}
+		</span>
+	</x:div>
+	<x:div sclass="form-group has-error"
+		visible="@load(empty fx.usersResolver and not empty vmsgs['usersresolver'])">
+		<span class="col-sm-offset-2 col-sm-6 help-block">
+			<label value="@bind(vmsgs['usersresolver'])" />
+		</span>
+	</x:div>
+	<div class="form-group"
+		visible="@load(not empty fx.usersResolver)">
+		<n:div class="col-sm-offset-2 ">
+			<x:ol id="usersresolver" class="list-group order"
+				children="@bind(fx.usersResolver)  @template(each.editingStatus ? 'editable' : 'noneditable')">
+				<template name="noneditable">
+					<n:div
+						class="list-group-item col-xs-12 col-sm-11">
+						<n:div class="col-xs-8 col-sm-7">
+							${each.user.identifier}
+						</n:div>
+						<n:div
+							class="col-xs-4 col-sm-offset-3 col-sm-2">
+							<n:div class="pull-right">
+								<a zclass="btn-list-action"
+									onClick="@command('deleteUserResolver', index = forEachStatus.index, fx = fx)">
+									<i
+										class="glyphicon glyphicon-erase fa-2x">
+									</i>
+								</a>
+							</n:div>
+						</n:div>
+					</n:div>
+				</template>
+				<template name="editable">
+					<n:div
+						class="list-group-item col-xs-12 col-sm-11">
+						<n:div class="col-xs-8 col-sm-9">
+							<listbox mold="select" sclass="form-control"
+								model="@load(vm.userResolverListView.filteredList)" multiple="false"
+								checkmark="true" selectedItem="@bind(each.user)">
+								<template name="model">
+									<listitem>
+										<listcell
+											label="${each.identifier}" />
+									</listitem>
+								</template>
+							</listbox>
+						</n:div>
+						<n:div class="col-xs-4 col-sm-3">
+							<n:div class="pull-right">
+								<a
+									sclass="@load(each.user eq null ? '' : 'btn-list-action')"
+									disabled="@load(each.user eq null)"
+									onClick="@command('confirmUserResolver', index = forEachStatus.index, fx = fx)">
+									<i class="fa fa-check fa-2x"></i>
+								</a>
+								<a zclass="btn-list-action"
+									onClick="@command('deleteUserResolver', index = forEachStatus.index, fx = fx)">
+									<i
+										class="glyphicon glyphicon-erase fa-2x">
+									</i>
+								</a>
+							</n:div>
+						</n:div>
+					</n:div>
+				</template>
+			</x:ol>
+		</n:div>
+	</div>
+	<n:br />
+</zk>
