@@ -29,6 +29,8 @@ public class Trigger {
 
     private List<Resolution> resolutions;
 
+    private List<CaseCategorySet> caseCategoriesSet;
+
     @NotNull(message = "{field.empty}")
     private Status status;
 
@@ -108,6 +110,14 @@ public class Trigger {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<CaseCategorySet> getCaseCategoriesSet() {
+        return caseCategoriesSet;
+    }
+
+    public void setCaseCategoriesSet(List<CaseCategorySet> caseCategoriesSet) {
+        this.caseCategoriesSet = caseCategoriesSet;
     }
 
 }

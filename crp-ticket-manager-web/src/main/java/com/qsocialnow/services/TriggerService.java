@@ -2,6 +2,7 @@ package com.qsocialnow.services;
 
 import java.util.Map;
 
+import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -15,4 +16,6 @@ public interface TriggerService {
     Trigger findOne(String domainId, String triggerId);
 
     Trigger update(String domainId, Trigger trigger);
+
+    Segment findSegment(String domainId, String triggerId, String segmentId);
 }

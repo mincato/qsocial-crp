@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.persistence.CaseCategorySetRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 
 @Service
@@ -30,6 +32,9 @@ public class TriggerService {
 
     @Autowired
     private TriggerRepository triggerRepository;
+
+    @Autowired
+    private CaseCategorySetRepository caseCategorySetRepository;
 
     @Autowired
     private CuratorFramework zookeeperClient;
@@ -46,6 +51,7 @@ public class TriggerService {
                 });
             });
             mockActions(trigger);
+            mockCaseCategories(trigger);
             triggerSaved = triggerRepository.save(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -67,8 +73,13 @@ public class TriggerService {
     }
 
     public Trigger findOne(String domainId, String triggerId) {
-        Trigger trigger = triggerRepository.findOne(triggerId);
+        Trigger trigger = triggerRepository.findWithSegments(triggerId);
         return trigger;
+    }
+
+    public Segment findSegment(String domainId, String triggerId, String segmentId) {
+        Segment segment = triggerRepository.findSegment(segmentId);
+        return segment;
     }
 
     public Trigger update(String domainId, String triggerId, Trigger trigger) {
@@ -81,6 +92,7 @@ public class TriggerService {
             });
             trigger.setId(triggerId);
             mockActions(trigger);
+            mockCaseCategories(trigger);
             triggerSaved = triggerRepository.update(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -100,6 +112,10 @@ public class TriggerService {
                 detectionCriteria.setAccionCriterias(actions);
             });
         });
+    }
+
+    private void mockCaseCategories(Trigger trigger) {
+        trigger.setCaseCategoriesSet(caseCategorySetRepository.findAll());
     }
 
 }

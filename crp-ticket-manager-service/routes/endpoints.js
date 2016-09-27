@@ -385,6 +385,34 @@ router.get('/domains/:id/trigger/:triggerId', function (req, res) {
 	  triggerService.findOne(domainId, triggerId, asyncResponse);
 });
 
+router.get('/domains/:id/trigger/:triggerId/segment/:segmentId', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  var triggerId = req.params.triggerId;
+	  var segmentId = req.params.segmentId;
+	  
+	  triggerService.findSegment(domainId, triggerId, segmentId, asyncResponse);
+});
+
 router.put('/domains/:id/trigger/:triggerId', function (req, res) {
 
 	  function asyncResponse(err,response) {
@@ -898,6 +926,31 @@ router.get('/caseCategorySets/:id', function (req, res) {
 	  var caseCategorySetId = req.params.id;	
 	  var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
 	  caseCategorySetService.findOne(caseCategorySetId, asyncResponse);
+});
+
+router.get('/caseCategorySets/:id/categories', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  
+	  var caseCategorySetId = req.params.id;	
+	  var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+	  caseCategorySetService.findCategories(caseCategorySetId, asyncResponse);
 });
 
 

@@ -22,6 +22,7 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
+import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.model.SendResponseActionView;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.TeamService;
@@ -73,21 +74,23 @@ public class SendResponseActionViewModel implements Serializable {
 
     @GlobalCommand
     @NotifyChange({ "sendResponseAction", "chooseUserResolver", "userResolverOptions" })
-    public void show(@BindingParam("currentCase") Case currentCase, @BindingParam("action") ActionType action) {
+    public void show(@BindingParam("currentCase") EditCaseView currentCase, @BindingParam("action") ActionType action) {
         if (ActionType.REPLY.equals(action)) {
             this.sendResponseAction = new SendResponseActionView();
-            chooseUserResolver = currentCase.getUserResolver() == null;
-            if (chooseUserResolver && userResolverOptions == null) {
+            if (userResolverOptions == null) {
                 initUserResolvers(currentCase);
+            }
+            chooseUserResolver = currentCase.getCaseObject().getUserResolver() == null;
+            if (chooseUserResolver) {
                 this.sendResponseAction.setSelectedUserResolver(userResolverOptions.get(0));
             } else {
-                this.sendResponseAction.setSelectedUserResolver(currentCase.getUserResolver());
+                this.sendResponseAction.setSelectedUserResolver(currentCase.getCaseObject().getUserResolver());
             }
         }
     }
 
-    private void initUserResolvers(Case currentCase) {
-        Team team = teamService.findOne(currentCase.getTeamId());
+    private void initUserResolvers(EditCaseView currentCase) {
+        Team team = teamService.findOne(currentCase.getSegment().getTeam());
         this.userResolverOptions = team.getUserResolvers();
     }
 

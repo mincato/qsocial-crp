@@ -132,6 +132,23 @@ public class CaseCategorySetService {
         return caseCategorySet;
     }
 
+    public List<CaseCategory> findCategories(String caseCategorySetId) {
+        RepositoryFactory<CaseCategoryType> esCaseCategoryfactory = new RepositoryFactory<CaseCategoryType>(
+                configurator);
+
+        Repository<CaseCategoryType> repositoryCaseCategory = esCaseCategoryfactory.initManager();
+        repositoryCaseCategory.initClient();
+        CaseCategoryMapping caseCategoryMapping = CaseCategoryMapping.getInstance();
+
+        SearchResponse<CaseCategory> responseCaseCategories = repositoryCaseCategory.queryByField(caseCategoryMapping,
+                0, -1, "description", "idCaseCategorySet", caseCategorySetId);
+
+        List<CaseCategory> categories = responseCaseCategories.getSources();
+
+        repositoryCaseCategory.closeClient();
+        return categories;
+    }
+
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
     }
