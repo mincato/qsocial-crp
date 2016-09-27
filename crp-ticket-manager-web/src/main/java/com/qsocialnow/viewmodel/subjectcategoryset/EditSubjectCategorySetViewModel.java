@@ -22,7 +22,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Div;
 
 import com.qsocialnow.common.model.config.SubjectCategory;
-import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.config.Subject;
 import com.qsocialnow.services.SubjectCategorySetService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -48,14 +48,14 @@ public class EditSubjectCategorySetViewModel implements Serializable {
     }
 
     private void initSubjectCategorySet(String subjectCategorySetId) {
-        SubjectCategorySet subjectCategorySet = subjectCategorySetService.findOne(subjectCategorySetId);
+        Subject subjectCategorySet = subjectCategorySetService.findOne(subjectCategorySetId);
         currentSubjectCategorySet = new SubjectCategorySetView(subjectCategorySet);
     }
 
     @Command
     @NotifyChange({ "currentSubjectCategorySet", "saved" })
     public void save() {
-        SubjectCategorySet subjectCategorySet = new SubjectCategorySet();
+        Subject subjectCategorySet = new Subject();
         subjectCategorySet.setId(currentSubjectCategorySet.getId());
         subjectCategorySet.setDescription(currentSubjectCategorySet.getDescription());
         subjectCategorySet.setCategories(currentSubjectCategorySet.getCategories().stream().map(categoryView -> {

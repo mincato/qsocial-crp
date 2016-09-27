@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.config.Subject;
 
 public class SubjectCategorySetView {
 
@@ -20,7 +20,7 @@ public class SubjectCategorySetView {
         super();
     }
 
-    public SubjectCategorySetView(SubjectCategorySet subjectCategorySet) {
+    public SubjectCategorySetView(Subject subjectCategorySet) {
         super();
         this.id = subjectCategorySet.getId();
         this.description = subjectCategorySet.getDescription();

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.SubjectCategory;
-import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.config.Subject;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.config.SubjectCategorySetService;
@@ -28,10 +28,10 @@ public class SubjectCategorySetRepository {
         try {
             Integer offset = pageRequest != null ? pageRequest.getOffset() : null;
             Integer limit = pageRequest != null ? pageRequest.getLimit() : null;
-            List<SubjectCategorySet> subjectCategorySetsRepo = subjectCategorySetElasticService.findAll(offset, limit,
+            List<Subject> subjectCategorySetsRepo = subjectCategorySetElasticService.findAll(offset, limit,
                     name);
 
-            for (SubjectCategorySet subjectCategorySet : subjectCategorySetsRepo) {
+            for (Subject subjectCategorySet : subjectCategorySetsRepo) {
                 SubjectCategorySetListView subjectCategorySetListView = new SubjectCategorySetListView();
                 subjectCategorySetListView.setId(subjectCategorySet.getId());
                 subjectCategorySetListView.setDescription(subjectCategorySet.getDescription());
@@ -43,12 +43,12 @@ public class SubjectCategorySetRepository {
         return subjectCategorySets;
     }
 
-    public SubjectCategorySet save(SubjectCategorySet subjectCategorySet) {
+    public Subject save(Subject subjectCategorySet) {
         try {
 
             List<SubjectCategory> subjectCategories = subjectCategorySet.getCategories();
 
-            SubjectCategorySet newSubjectCategorySet = new SubjectCategorySet();
+            Subject newSubjectCategorySet = new Subject();
             newSubjectCategorySet.setDescription(subjectCategorySet.getDescription());
             newSubjectCategorySet = subjectCategorySetElasticService.indexSubjectCategorySet(newSubjectCategorySet,
                     subjectCategories);
@@ -60,8 +60,8 @@ public class SubjectCategorySetRepository {
         return null;
     }
 
-    public SubjectCategorySet findOne(String subjectCategorySetId) {
-        SubjectCategorySet subjectCategorySet = null;
+    public Subject findOne(String subjectCategorySetId) {
+        Subject subjectCategorySet = null;
 
         try {
             subjectCategorySet = subjectCategorySetElasticService.findOne(subjectCategorySetId);
@@ -71,7 +71,7 @@ public class SubjectCategorySetRepository {
         return subjectCategorySet;
     }
 
-    public SubjectCategorySet update(SubjectCategorySet subjectCategorySet) {
+    public Subject update(Subject subjectCategorySet) {
         try {
             String id = subjectCategorySetElasticService.updateSubjectCategorySet(subjectCategorySet);
             subjectCategorySet.setId(id);

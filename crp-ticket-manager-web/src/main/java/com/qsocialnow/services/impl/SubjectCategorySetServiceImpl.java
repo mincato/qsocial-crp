@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.config.Subject;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
@@ -38,12 +38,12 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
     private ServiceUrlResolver serviceUrlResolver;
 
     @Override
-    public SubjectCategorySet create(SubjectCategorySet currentSubjectCategorySet) {
+    public Subject create(Subject currentSubjectCategorySet) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            SubjectCategorySet createdSubjectCategorySet = restTemplate.postForObject(
+            Subject createdSubjectCategorySet = restTemplate.postForObject(
                     serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl),
-                    currentSubjectCategorySet, SubjectCategorySet.class);
+                    currentSubjectCategorySet, Subject.class);
             return createdSubjectCategorySet;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
@@ -52,7 +52,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
     }
 
     @Override
-    public SubjectCategorySet findOne(String subjectCategorySetId) {
+    public Subject findOne(String subjectCategorySetId) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -62,8 +62,8 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
                     "/" + subjectCategorySetId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            SubjectCategorySet subjectCategorySetSelected = restTemplate.getForObject(builder.toUriString(),
-                    SubjectCategorySet.class);
+            Subject subjectCategorySetSelected = restTemplate.getForObject(builder.toUriString(),
+                    Subject.class);
 
             return subjectCategorySetSelected;
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
     }
 
     @Override
-    public SubjectCategorySet update(SubjectCategorySet currentSubjectCategorySet) {
+    public Subject update(Subject currentSubjectCategorySet) {
 
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
@@ -86,11 +86,11 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
             headers.add("Content-Type", "application/json");
             headers.add("Accept", "application/json");
 
-            HttpEntity<SubjectCategorySet> requestEntity = new HttpEntity<SubjectCategorySet>(
+            HttpEntity<Subject> requestEntity = new HttpEntity<Subject>(
                     currentSubjectCategorySet, headers);
 
-            ResponseEntity<SubjectCategorySet> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
-                    requestEntity, SubjectCategorySet.class);
+            ResponseEntity<Subject> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
+                    requestEntity, Subject.class);
             return response.getBody();
         } catch (Exception e) {
             log.error("There was an error while trying to SubjectCategorySet team service", e);

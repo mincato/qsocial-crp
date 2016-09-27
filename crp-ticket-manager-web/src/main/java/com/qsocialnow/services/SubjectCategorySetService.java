@@ -2,17 +2,17 @@ package com.qsocialnow.services;
 
 import java.util.Map;
 
-import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.config.Subject;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 
 public interface SubjectCategorySetService {
 
-    SubjectCategorySet create(SubjectCategorySet currentSubjectCategorySet);
+    Subject create(Subject currentSubjectCategorySet);
 
-    SubjectCategorySet findOne(String subjectCategorySetId);
+    Subject findOne(String subjectCategorySetId);
 
-    SubjectCategorySet update(SubjectCategorySet currentSubjectCategorySet);
+    Subject update(Subject currentSubjectCategorySet);
 
     PageResponse<SubjectCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
 

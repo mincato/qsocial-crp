@@ -16,7 +16,7 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.SubjectCategory;
-import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.config.Subject;
 import com.qsocialnow.services.SubjectCategorySetService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -42,7 +42,7 @@ public class CreateSubjectCategorySetViewModel implements Serializable {
     @Command
     @NotifyChange({ "currentSubjectCategorySet" })
     public void save() {
-        SubjectCategorySet newSubjectCategorySet = new SubjectCategorySet();
+        Subject newSubjectCategorySet = new Subject();
         newSubjectCategorySet.setDescription(currentSubjectCategorySet.getDescription());
         newSubjectCategorySet.setCategories(currentSubjectCategorySet.getCategories().stream().map(category -> {
             SubjectCategory newCategory = new SubjectCategory();
