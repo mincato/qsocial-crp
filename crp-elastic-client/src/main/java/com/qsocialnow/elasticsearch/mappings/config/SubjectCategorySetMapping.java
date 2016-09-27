@@ -2,11 +2,11 @@ package com.qsocialnow.elasticsearch.mappings.config;
 
 import org.json.simple.JSONObject;
 
-import com.qsocialnow.common.model.config.Subject;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.SubjectCategorySetType;
 
-public class SubjectCategorySetMapping implements Mapping<SubjectCategorySetType, Subject> {
+public class SubjectCategorySetMapping implements Mapping<SubjectCategorySetType, SubjectCategorySet> {
 
     private static final String INDEX_NAME = "configuration";
 
@@ -45,7 +45,7 @@ public class SubjectCategorySetMapping implements Mapping<SubjectCategorySetType
     }
 
     @Override
-    public SubjectCategorySetType getDocumentType(Subject document) {
+    public SubjectCategorySetType getDocumentType(SubjectCategorySet document) {
         SubjectCategorySetType subjectCategorySetType = new SubjectCategorySetType();
         subjectCategorySetType.setId(document.getId());
         subjectCategorySetType.setDescription(document.getDescription());
@@ -53,8 +53,8 @@ public class SubjectCategorySetMapping implements Mapping<SubjectCategorySetType
     }
 
     @Override
-    public Subject getDocument(SubjectCategorySetType documentType) {
-        Subject subjectCategorySet = new Subject();
+    public SubjectCategorySet getDocument(SubjectCategorySetType documentType) {
+        SubjectCategorySet subjectCategorySet = new SubjectCategorySet();
         subjectCategorySet.setId(documentType.getId());
         subjectCategorySet.setDescription(documentType.getDescription());
         return subjectCategorySet;

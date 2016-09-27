@@ -22,11 +22,9 @@ public class SubjectService {
     private SubjectRepository subjectRepository;
 
     public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String name) {
-        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(
-                pageNumber, pageSize));
+        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize));
 
-        PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(
-                subjects, pageNumber, pageSize);
+        PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageNumber, pageSize);
         return page;
     }
 
@@ -36,12 +34,11 @@ public class SubjectService {
     }
 
     public Subject createSubject(Subject subject) {
-    	Subject subjectSaved = null;
+        Subject subjectSaved = null;
         try {
             subjectSaved = subjectRepository.save(subject);
             if (subjectSaved.getId() == null) {
-                throw new Exception("There was an error creating Subject: "
-                        + subject.getName());
+                throw new Exception("There was an error creating Subject: " + subject.getName());
             }
         } catch (Exception e) {
             log.error("There was an error creating Subject: " + subject.getName(), e);
@@ -53,10 +50,9 @@ public class SubjectService {
     public Subject update(Subject subject) {
         Subject subjectSaved = null;
         try {
-        	if(subjectRepository.update(subject))
-        		return subject;
-        	
-        	
+            if (subjectRepository.update(subject))
+                return subject;
+
         } catch (Exception e) {
             log.error("There was an error updating Subject: " + subject.getName(), e);
             throw new RuntimeException(e.getMessage());

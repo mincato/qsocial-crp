@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
-import com.qsocialnow.common.model.config.Subject;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 
@@ -39,21 +39,21 @@ public class MockSubjectCategorySetService {
         return new PageResponse<SubjectCategorySetListView>(list, ACTIVE_PAGE_DEFAULT, PAGE_SIZE_DEFAULT);
     }
 
-    public Subject create(Subject currentSubjectCategorySet) {
+    public SubjectCategorySet create(SubjectCategorySet currentSubjectCategorySet) {
         return currentSubjectCategorySet;
     }
 
-    public Subject findOne(String subjectCategorySetId) {
+    public SubjectCategorySet findOne(String subjectCategorySetId) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/subjectcategorysets.json");
 
         @SuppressWarnings("serial")
-        Type listType = new TypeToken<ArrayList<Subject>>() {
+        Type listType = new TypeToken<ArrayList<SubjectCategorySet>>() {
         }.getType();
 
-        List<Subject> list = gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream),
+        List<SubjectCategorySet> list = gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream),
                 listType);
-        Optional<Subject> subjectCategorySetOptional = list.stream()
+        Optional<SubjectCategorySet> subjectCategorySetOptional = list.stream()
                 .filter(subjectCategorySet -> subjectCategorySet.getId().equals(subjectCategorySetId)).findFirst();
         if (subjectCategorySetOptional.isPresent()) {
             return subjectCategorySetOptional.get();
@@ -61,7 +61,7 @@ public class MockSubjectCategorySetService {
         return null;
     }
 
-    public Subject update(Subject currentSubjectCategorySet) {
+    public SubjectCategorySet update(SubjectCategorySet currentSubjectCategorySet) {
         return currentSubjectCategorySet;
     }
 }

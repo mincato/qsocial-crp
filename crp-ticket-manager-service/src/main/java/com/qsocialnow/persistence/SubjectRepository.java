@@ -13,7 +13,6 @@ import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.SubjectService;
 
-
 @Service
 public class SubjectRepository {
 
@@ -26,13 +25,16 @@ public class SubjectRepository {
         List<SubjectListView> subjects = new ArrayList<>();
 
         try {
-            List<Subject> subjectsRepo = subjectElasticService.findSubjects(pageRequest.getOffset(), pageRequest.getLimit());
-            for (Subject subjectRepo : subjectsRepo) {
-                SubjectListView subjectListView = new SubjectListView();
-                subjectListView.setId(subjectRepo.getId());
-                subjectListView.setName(subjectRepo.getName());
-                subjectListView.setLastName(subjectRepo.getLastName());
-                subjects.add(subjectListView);
+            List<Subject> subjectsRepo = subjectElasticService.findSubjects(pageRequest.getOffset(),
+                    pageRequest.getLimit());
+            if (subjectsRepo != null) {
+                for (Subject subjectRepo : subjectsRepo) {
+                    SubjectListView subjectListView = new SubjectListView();
+                    subjectListView.setId(subjectRepo.getId());
+                    subjectListView.setName(subjectRepo.getName());
+                    subjectListView.setLastName(subjectRepo.getLastName());
+                    subjects.add(subjectListView);
+                }
             }
         } catch (Exception e) {
             log.error("Unexpected error", e);
@@ -52,6 +54,7 @@ public class SubjectRepository {
         try {
             String id = subjectElasticService.indexSubject(subjectObject);
             subjectObject.setId(id);
+            log.info("Subject:", subjectObject.getName());
             return subjectObject;
         } catch (Exception e) {
             log.error("Unexpected error", e);

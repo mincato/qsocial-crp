@@ -2,7 +2,7 @@ package com.qsocialnow.common.model.config;
 
 import java.util.List;
 
-public class Subject {
+public class SubjectCategorySet {
 
     private String id;
 

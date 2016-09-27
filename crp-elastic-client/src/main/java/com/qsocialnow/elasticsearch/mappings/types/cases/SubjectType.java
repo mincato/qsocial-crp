@@ -1,11 +1,10 @@
-package com.qsocialnow.elasticsearch.mappings.types.config;
+package com.qsocialnow.elasticsearch.mappings.types.cases;
 
 import com.qsocialnow.common.model.cases.Subject;
-import com.qsocialnow.elasticsearch.mappings.types.cases.IdentityType;
 
 import io.searchbox.annotations.JestId;
 
-public class SubjectType extends Subject implements IdentityType{
+public class SubjectType extends Subject implements IdentityType {
 
     private static final long serialVersionUID = 1L;
 

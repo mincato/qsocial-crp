@@ -5,13 +5,13 @@ import org.json.simple.JSONObject;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.elasticsearch.mappings.DynamicMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
+import com.qsocialnow.elasticsearch.mappings.types.cases.SubjectType;
 import com.qsocialnow.elasticsearch.mappings.types.config.SubjectCategoryType;
-import com.qsocialnow.elasticsearch.mappings.types.config.SubjectType;
 
-public class SubjectMapping implements DynamicMapping,Mapping<SubjectType, Subject> {
+public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subject> {
 
     private static final String TYPE = "subject";
-    
+
     private String indexName;
 
     private static SubjectMapping instance;
@@ -24,12 +24,12 @@ public class SubjectMapping implements DynamicMapping,Mapping<SubjectType, Subje
             instance = new SubjectMapping();
         return instance;
     }
-    
+
     @Override
-	public void setIndex(String index) {
-    	this.indexName = index;
-	}
-    
+    public void setIndex(String index) {
+        this.indexName = index;
+    }
+
     @Override
     public String getIndex() {
         return indexName;
@@ -48,7 +48,7 @@ public class SubjectMapping implements DynamicMapping,Mapping<SubjectType, Subje
 
     @Override
     public Class<?> getClassType() {
-        return SubjectCategoryType.class;
+        return SubjectType.class;
     }
 
     @Override
@@ -59,7 +59,6 @@ public class SubjectMapping implements DynamicMapping,Mapping<SubjectType, Subje
         subjectType.setAge(document.getAge());
         subjectType.setContactInfo(document.getContactInfo());
         subjectType.setLastAccion(document.getLastAccion());
-        
         subjectType.setLastName(document.getLastName());
         subjectType.setName(document.getName());
         subjectType.setSignedDate(document.getSignedDate());
@@ -74,11 +73,11 @@ public class SubjectMapping implements DynamicMapping,Mapping<SubjectType, Subje
         Subject subject = new Subject();
         subject.setId(documentType.getId());
         subject.setAddress(documentType.getAddress());
-        
+
         subject.setAge(documentType.getAge());
         subject.setContactInfo(documentType.getContactInfo());
         subject.setLastAccion(documentType.getLastAccion());
-        
+
         subject.setLastName(documentType.getLastName());
         subject.setName(documentType.getName());
         subject.setSignedDate(documentType.getSignedDate());

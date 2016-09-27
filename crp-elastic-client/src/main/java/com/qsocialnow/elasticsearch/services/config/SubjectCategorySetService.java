@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.config.SubjectCategory;
-import com.qsocialnow.common.model.config.Subject;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.SubjectCategoryMapping;
 import com.qsocialnow.elasticsearch.mappings.config.SubjectCategorySetMapping;
@@ -25,7 +25,7 @@ public class SubjectCategorySetService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
-    public Subject indexSubjectCategorySet(Subject subjectCategorySet,
+    public SubjectCategorySet indexSubjectCategorySet(SubjectCategorySet subjectCategorySet,
             List<SubjectCategory> subjectCategories) {
         RepositoryFactory<SubjectCategorySetType> esfactory = new RepositoryFactory<SubjectCategorySetType>(
                 configurator);
@@ -86,7 +86,7 @@ public class SubjectCategorySetService {
         return indexedSubjectCategories;
     }
 
-    public List<Subject> findAll(Integer offset, Integer limit, String name) {
+    public List<SubjectCategorySet> findAll(Integer offset, Integer limit, String name) {
 
         RepositoryFactory<SubjectCategorySetType> esfactory = new RepositoryFactory<SubjectCategorySetType>(
                 configurator);
@@ -100,15 +100,15 @@ public class SubjectCategorySetService {
             filters = filters.must(QueryBuilders.matchQuery("description", name));
         }
 
-        SearchResponse<Subject> response = repository.searchWithFilters(offset, limit, "description",
+        SearchResponse<SubjectCategorySet> response = repository.searchWithFilters(offset, limit, "description",
                 filters, mapping);
-        List<Subject> subjectCategorySets = response.getSources();
+        List<SubjectCategorySet> subjectCategorySets = response.getSources();
 
         repository.closeClient();
         return subjectCategorySets;
     }
 
-    public Subject findOne(String subjectCategorySetId) {
+    public SubjectCategorySet findOne(String subjectCategorySetId) {
         RepositoryFactory<SubjectCategorySetType> esfactory = new RepositoryFactory<SubjectCategorySetType>(
                 configurator);
         Repository<SubjectCategorySetType> repository = esfactory.initManager();
@@ -116,9 +116,9 @@ public class SubjectCategorySetService {
 
         SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance();
 
-        SearchResponse<Subject> response = repository.find(subjectCategorySetId, mapping);
+        SearchResponse<SubjectCategorySet> response = repository.find(subjectCategorySetId, mapping);
 
-        Subject subjectCategorySet = response.getSource();
+        SubjectCategorySet subjectCategorySet = response.getSource();
         repository.closeClient();
 
         RepositoryFactory<SubjectCategoryType> esSubjectCategoryfactory = new RepositoryFactory<SubjectCategoryType>(
@@ -142,7 +142,7 @@ public class SubjectCategorySetService {
         this.configurator = configurator;
     }
 
-    public String updateSubjectCategorySet(Subject subjectCategorySet) {
+    public String updateSubjectCategorySet(SubjectCategorySet subjectCategorySet) {
 
         List<SubjectCategory> toUpdateCategories = subjectCategorySet.getCategories();
 

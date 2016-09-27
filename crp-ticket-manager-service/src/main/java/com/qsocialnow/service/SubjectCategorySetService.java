@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.qsocialnow.common.model.config.Subject;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.pagination.PageRequest;
@@ -30,13 +30,13 @@ public class SubjectCategorySetService {
         return page;
     }
 
-    public Subject findOne(String subjectCategorySetId) {
-        Subject subjectCategorySet = subjectCategorySetRepository.findOne(subjectCategorySetId);
+    public SubjectCategorySet findOne(String subjectCategorySetId) {
+        SubjectCategorySet subjectCategorySet = subjectCategorySetRepository.findOne(subjectCategorySetId);
         return subjectCategorySet;
     }
 
-    public Subject createSubjectCategorySet(Subject subjectCategorySet) {
-        Subject subjectCategorySetSaved = null;
+    public SubjectCategorySet createSubjectCategorySet(SubjectCategorySet subjectCategorySet) {
+        SubjectCategorySet subjectCategorySetSaved = null;
         try {
             subjectCategorySetSaved = subjectCategorySetRepository.save(subjectCategorySet);
             if (subjectCategorySetSaved.getId() == null) {
@@ -50,8 +50,8 @@ public class SubjectCategorySetService {
         return subjectCategorySetSaved;
     }
 
-    public Subject update(String subjectCategorySetId, Subject subjectCategorySet) {
-        Subject subjectCategorySetSaved = null;
+    public SubjectCategorySet update(String subjectCategorySetId, SubjectCategorySet subjectCategorySet) {
+        SubjectCategorySet subjectCategorySetSaved = null;
         try {
             subjectCategorySet.setId(subjectCategorySetId);
             subjectCategorySetSaved = subjectCategorySetRepository.update(subjectCategorySet);
