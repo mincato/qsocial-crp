@@ -3,7 +3,7 @@ package com.qsocialnow.common.model.cases;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Customer implements Serializable {
+public class Subject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,9 +23,9 @@ public class Customer implements Serializable {
 
     private String sourceId;
 
-    private String customerGroup;
+    private String subjectCategorySet;
 
-    private String customerCategory;
+    private String subjectCategory;
 
     private ContactInfo contactInfo;
 
@@ -101,19 +101,19 @@ public class Customer implements Serializable {
         this.sourceId = sourceId;
     }
 
-    public String getCustomerGroup() {
-        return customerGroup;
+    public String getSubjectCategorySet() {
+        return subjectCategorySet;
     }
 
-    public void setCustomerGroup(String customerGroup) {
-        this.customerGroup = customerGroup;
+    public void setSubjectCategorySet(String subjectCategorySet) {
+        this.subjectCategorySet = subjectCategorySet;
     }
 
-    public String getCustomerCategory() {
-        return customerCategory;
+    public String getSubjectCategory() {
+        return subjectCategory;
     }
 
-    public void setCustomerCategory(String customerCategory) {
-        this.customerCategory = customerCategory;
+    public void setSubjectCategory(String subjectCategory) {
+        this.subjectCategory = subjectCategory;
     }
 }

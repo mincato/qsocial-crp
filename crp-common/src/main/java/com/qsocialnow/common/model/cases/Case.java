@@ -50,7 +50,7 @@ public class Case implements Serializable {
 
     private String unitValue;
 
-    private Customer customer;
+    private Subject customer;
 
     private Set<String> caseCategories;
 
@@ -198,11 +198,11 @@ public class Case implements Serializable {
         this.description = description;
     }
 
-    public Customer getCustomer() {
+    public Subject getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(Subject customer) {
         this.customer = customer;
     }
 
