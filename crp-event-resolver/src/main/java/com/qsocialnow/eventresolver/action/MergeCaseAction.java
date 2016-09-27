@@ -47,7 +47,7 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
         registry.setEvent(event);
         registries.add(registry);
         outputElement.setActionsRegistry(registries);
-        outputElement.setPendingResponse(false);
+        outputElement.setPendingResponse(true);
 
         try {
             caseElasticService.indexCaseByBulkProcess(outputElement);
