@@ -22,8 +22,10 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.ActionRegistryService;
 import com.qsocialnow.services.CaseService;
+import com.qsocialnow.services.TriggerService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class EditCaseViewModel implements Serializable {
@@ -36,9 +38,12 @@ public class EditCaseViewModel implements Serializable {
     private CaseService caseService;
 
     @WireVariable
+    private TriggerService triggerService;
+
+    @WireVariable
     private ActionRegistryService actionRegistryService;
 
-    private Case currentCase;
+    private EditCaseView currentCase;
 
     private static final int PAGE_SIZE_DEFAULT = 15;
 
@@ -75,6 +80,7 @@ public class EditCaseViewModel implements Serializable {
     @Init
     public void init(@QueryParam("case") String caseSelected) {
         this.caseId = caseSelected;
+        this.currentCase = new EditCaseView();
 
         this.actionFilterOptions.add(0, ALL_VALUES);
         for (int i = 0; i < ActionType.values().length; i++) {
@@ -100,12 +106,16 @@ public class EditCaseViewModel implements Serializable {
     }
 
     private void findCase(String caseSelected) {
-        this.currentCase = caseService.findById(caseSelected);
+        this.currentCase.setCaseObject(caseService.findById(caseSelected));
+        this.currentCase.setSegment(triggerService.findSegment(this.currentCase.getCaseObject().getDomainId(),
+                this.currentCase.getCaseObject().getTriggerId(), this.currentCase.getCaseObject().getSegmentId()));
+        this.currentCase.setTrigger(triggerService.findOne(this.currentCase.getCaseObject().getDomainId(),
+                this.currentCase.getCaseObject().getTriggerId()));
     }
 
     private List<ActionType> getAllowedActionsByCase() {
-        if (currentCase != null)
-            return currentCase.getAllowedManualActions();
+        if (currentCase.getCaseObject() != null)
+            return currentCase.getCaseObject().getAllowedManualActions();
         else
             return new ArrayList<ActionType>();
     }
@@ -142,7 +152,7 @@ public class EditCaseViewModel implements Serializable {
     @GlobalCommand
     @NotifyChange({ "currentCase", "selectedAction", "registries", "moreResults", "actionOptions" })
     public void actionExecuted(@BindingParam("caseUpdated") Case caseUpdated) {
-        this.currentCase = caseUpdated;
+        this.currentCase.setCaseObject(caseUpdated);
         this.selectedAction = null;
         this.refreshRegistries();
     }
@@ -214,7 +224,7 @@ public class EditCaseViewModel implements Serializable {
         this.selectedAction = selectedAction;
     }
 
-    public Case getCurrentCase() {
+    public EditCaseView getCurrentCase() {
         return currentCase;
     }
 

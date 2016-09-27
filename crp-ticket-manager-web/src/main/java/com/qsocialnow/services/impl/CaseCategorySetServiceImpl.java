@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.CaseCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -121,6 +123,28 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
 
             PageResponse<CaseCategorySetListView> caseCategorySets = response.getBody();
             return caseCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CaseCategory> findCategories(String caseCategorySetId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl))
+                    .path("/" + caseCategorySetId).path("/categories");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<CaseCategory>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null, new ParameterizedTypeReference<List<CaseCategory>>() {
+                    });
+
+            return response.getBody();
         } catch (Exception e) {
             log.error("There was an error while trying to call CaseCategorySet service", e);
             throw new RuntimeException(e);

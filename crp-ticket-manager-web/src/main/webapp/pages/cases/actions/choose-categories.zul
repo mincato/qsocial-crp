@@ -1,0 +1,36 @@
+<div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute" sclass="modal fade" ca:data-modal=""
+	ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('categoryVm') @init('com.qsocialnow.viewmodel.ChooseCaseCategoriesViewModel', caseCategorySet=arg.caseCategorySet)">
+	<n:div class="modal-dialog">
+		<div class="modal-content">
+			<n:div class="modal-header">
+				<n:h4 class="modal-title">${labels.trigger.criteria.category.select}</n:h4>
+			</n:div>
+			<n:div class="modal-body">
+				<div class="row">
+					<n:div>
+						<div zclass="pane equal">
+						    <n:form class="form-inline text-center">								
+								<n:div class="form-group">
+	    							<listbox mold="select" sclass="form-control" model="@load(categoryVm.caseCategorySet.categorySet.categories)"
+				 						multiple="true"
+										checkmark="true"
+										selectedItems="@bind(categoryVm.caseCategorySet.categories)">
+										<template name="model">
+											<listitem>
+												<listcell label="${each.description}" />
+											</listitem>
+										</template>
+									</listbox>
+		    					</n:div>
+					    	</n:form>
+						</div>
+					</n:div>
+				</div>
+			</n:div>
+			<n:div class="modal-footer">
+				<button ca:data-dismiss="modal" label="${labels.app.button.save}" zclass="btn btn-primary" />
+			</n:div>
+		</div>
+	</n:div>
+</div>

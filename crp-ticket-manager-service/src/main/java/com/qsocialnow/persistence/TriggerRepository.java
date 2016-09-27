@@ -8,10 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.elasticsearch.services.config.SegmentService;
 import com.qsocialnow.elasticsearch.services.config.TriggerService;
 
 @Service
@@ -21,6 +23,9 @@ public class TriggerRepository {
 
     @Autowired
     private TriggerService triggerElasticService;
+
+    @Autowired
+    private SegmentService segmentElasticService;
 
     public Trigger save(String domainId, Trigger newTrigger) {
         try {
@@ -69,6 +74,17 @@ public class TriggerRepository {
         return trigger;
     }
 
+    public Trigger findWithSegments(String triggerId) {
+        Trigger trigger = null;
+
+        try {
+            trigger = triggerElasticService.findTriggerWithSegments(triggerId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return trigger;
+    }
+
     public Trigger update(String domainId, Trigger trigger) {
         try {
             String id = triggerElasticService.updateTrigger(domainId, trigger);
@@ -78,6 +94,17 @@ public class TriggerRepository {
             log.error("Unexpected error", e);
         }
         return null;
+    }
+
+    public Segment findSegment(String segmentId) {
+        Segment segment = null;
+
+        try {
+            segment = segmentElasticService.getSegment(segmentId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return segment;
     }
 
 }

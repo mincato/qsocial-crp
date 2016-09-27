@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -126,6 +127,23 @@ public class TriggerServiceImpl implements TriggerService {
             ResponseEntity<Trigger> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
                     requestEntity, Trigger.class);
             return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Segment findSegment(String domainId, String triggerId, String segmentId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/segment/" + segmentId);
+
+            Segment segment = restTemplate.getForObject(builder.toUriString(), Segment.class);
+            return segment;
         } catch (Exception e) {
             log.error("There was an error while trying to call trigger service", e);
             throw new RuntimeException(e);

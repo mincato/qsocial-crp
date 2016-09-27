@@ -2,9 +2,9 @@ package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -18,7 +18,11 @@ public class Case implements Serializable {
 
     private String id;
 
+    private String domainId;
+
     private String triggerId;
+
+    private String segmentId;
 
     private Boolean open;
 
@@ -48,11 +52,11 @@ public class Case implements Serializable {
 
     private Customer customer;
 
-    private List<Long> caseCategories;
+    private Set<String> caseCategories;
+
+    private Set<String> caseCategoriesSet;
 
     private List<ActionRegistry> actionsRegistry;
-
-    private String teamId;
 
     private BaseUserResolver userResolver;
 
@@ -72,7 +76,6 @@ public class Case implements Serializable {
         newCase.setOpenDate(openDate);
         newCase.setTitle(event.getTitulo());
 
-        newCase.setCaseCategories(Arrays.asList(event.getCategorias()));
         newCase.setPendingResponse(true);
         newCase.setSourceUser(event.getUsuarioCreacion());
         newCase.setLastPostId(event.getId());
@@ -123,7 +126,7 @@ public class Case implements Serializable {
         if (this.getOpen()) {
             actionsAllowed.add(ActionType.REPLY);
             // actionsAllowed.add(ActionType.TAG_SUBJECT);
-            // actionsAllowed.add(ActionType.TAG_CASE);
+            actionsAllowed.add(ActionType.TAG_CASE);
             actionsAllowed.add(ActionType.CLOSE);
             actionsAllowed.add(ActionType.REGISTER_COMMENT);
             actionsAllowed.add(ActionType.MODIFY);
@@ -251,11 +254,11 @@ public class Case implements Serializable {
         this.unitValue = unitValue;
     }
 
-    public List<Long> getCaseCategories() {
+    public Set<String> getCaseCategories() {
         return caseCategories;
     }
 
-    public void setCaseCategories(List<Long> caseCategories) {
+    public void setCaseCategories(Set<String> caseCategories) {
         this.caseCategories = caseCategories;
     }
 
@@ -273,14 +276,6 @@ public class Case implements Serializable {
 
     public String getTriggerId() {
         return triggerId;
-    }
-
-    public String getTeamId() {
-        return teamId;
-    }
-
-    public void setTeamId(String teamId) {
-        this.teamId = teamId;
     }
 
     public BaseUserResolver getUserResolver() {
@@ -305,6 +300,30 @@ public class Case implements Serializable {
 
     public void setLastPostId(String lastPostId) {
         this.lastPostId = lastPostId;
+    }
+
+    public String getSegmentId() {
+        return segmentId;
+    }
+
+    public void setSegmentId(String segmentId) {
+        this.segmentId = segmentId;
+    }
+
+    public String getDomainId() {
+        return domainId;
+    }
+
+    public void setDomainId(String domainId) {
+        this.domainId = domainId;
+    }
+
+    public Set<String> getCaseCategoriesSet() {
+        return caseCategoriesSet;
+    }
+
+    public void setCaseCategoriesSet(Set<String> caseCategoriesSet) {
+        this.caseCategoriesSet = caseCategoriesSet;
     }
 
 }

@@ -64,6 +64,11 @@
 	
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
 		<property name="configurator" ref="elasticDomainConfig"></property>
+		<property name="segmentService" ref="segmentElasticService"></property>
+	</bean>
+	
+	<bean id="segmentElasticService" class="com.qsocialnow.elasticsearch.services.config.SegmentService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	
 	<bean id="userResolverElasticService" class="com.qsocialnow.elasticsearch.services.config.UserResolverService">
@@ -98,6 +103,7 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REGISTER_COMMENT}" value-ref="registerCommentCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).RESOLVE}" value-ref="resolveCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_CASE}" value-ref="tagCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">
