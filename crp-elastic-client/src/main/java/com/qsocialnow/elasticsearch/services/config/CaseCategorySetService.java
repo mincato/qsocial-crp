@@ -198,8 +198,26 @@ public class CaseCategorySetService {
             repositoryCaseCategory
                     .updateMapping(caseCategory.getId(), mappingCaseCategory, documentCaseCategoryIndexed);
         }
-        repositoryCaseCategory.initClient();
+        repositoryCaseCategory.closeClient();
         return response;
+    }
+
+    public List<CaseCategorySet> findByIds(List<String> ids) {
+        RepositoryFactory<CaseCategorySetType> esfactory = new RepositoryFactory<CaseCategorySetType>(configurator);
+        Repository<CaseCategorySetType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance();
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
+
+        SearchResponse<CaseCategorySet> response = repository.searchWithFilters(filters, mapping);
+
+        List<CaseCategorySet> caseCategorySets = response.getSources();
+
+        repository.closeClient();
+        return caseCategorySets;
     }
 
 }

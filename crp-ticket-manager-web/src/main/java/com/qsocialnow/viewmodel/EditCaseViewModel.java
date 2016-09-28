@@ -6,7 +6,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -21,9 +25,12 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.config.CaseCategory;
+import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.ActionRegistryService;
+import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.TriggerService;
 
@@ -42,6 +49,9 @@ public class EditCaseViewModel implements Serializable {
 
     @WireVariable
     private ActionRegistryService actionRegistryService;
+
+    @WireVariable
+    private CaseCategorySetService caseCategorySetService;
 
     private EditCaseView currentCase;
 
@@ -89,7 +99,47 @@ public class EditCaseViewModel implements Serializable {
         this.action = ALL_VALUES;
         findCase(this.caseId);
         findRegistriesBy();
+        initCaseCategories();
         this.actionOptions = getAllowedActionsByCase();
+    }
+
+    private void initCaseCategories() {
+        if (currentCase.getTriggerCategories() == null) {
+            currentCase.setTriggerCategories(triggerService.findCategories(currentCase.getCaseObject().getDomainId(),
+                    currentCase.getCaseObject().getTriggerId()));
+        }
+        initCaseCategoriesSet();
+        initCategories();
+
+    }
+
+    private void initCaseCategoriesSet() {
+        List<CaseCategorySet> categoriesSet;
+        Set<String> caseCategoriesSet = currentCase.getCaseObject().getCaseCategoriesSet();
+        if (CollectionUtils.isNotEmpty(caseCategoriesSet)) {
+            categoriesSet = currentCase.getTriggerCategories().stream()
+                    .filter(caseCategorySet -> caseCategoriesSet.contains(caseCategorySet.getId()))
+                    .collect(Collectors.toList());
+
+        } else {
+            categoriesSet = new ArrayList<>();
+        }
+        currentCase.setCaseCategoriesSet(categoriesSet);
+
+    }
+
+    private void initCategories() {
+        List<CaseCategory> categories;
+        Set<String> caseCategories = currentCase.getCaseObject().getCaseCategories();
+        if (CollectionUtils.isNotEmpty(caseCategories)) {
+            Stream<CaseCategory> caseCategoriesStream = currentCase.getTriggerCategories().stream()
+                    .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
+            categories = caseCategoriesStream.filter(caseCategory -> caseCategories.contains(caseCategory.getId()))
+                    .collect(Collectors.toList());
+        } else {
+            categories = new ArrayList<>();
+        }
+        currentCase.setCaseCategories(categories);
     }
 
     @Command
@@ -154,6 +204,7 @@ public class EditCaseViewModel implements Serializable {
         this.currentCase.setCaseObject(caseUpdated);
         this.selectedAction = null;
         this.refreshRegistries();
+        this.initCaseCategories();
     }
 
     @Command

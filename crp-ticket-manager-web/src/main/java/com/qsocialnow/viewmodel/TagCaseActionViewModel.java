@@ -75,10 +75,7 @@ public class TagCaseActionViewModel implements Serializable {
             tagCaseAction = new TagCaseActionView();
             tagCaseAction.setCategorySets(new ArrayList<>());
             if (categorySetListView.getList() == null) {
-                categorySetListView.setList(currentCase.getTrigger().getCaseCategoriesSet().stream()
-                        .map(caseCategorySetId -> {
-                            return caseCategorySetService.findOne(caseCategorySetId);
-                        }).collect(Collectors.toList()));
+                categorySetListView.setList(currentCase.getTriggerCategories());
             }
             categorySetListView.setFilteredList(new ArrayList<>(categorySetListView.getList()));
             categorySetListView.setEnabledAdd(true);

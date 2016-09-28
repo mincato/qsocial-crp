@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
@@ -144,6 +146,25 @@ public class TriggerServiceImpl implements TriggerService {
 
             Segment segment = restTemplate.getForObject(builder.toUriString(), Segment.class);
             return segment;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CaseCategorySet> findCategories(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/caseCategories");
+
+            ResponseEntity<List<CaseCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<CaseCategorySet>>() {
+                    });
+            return response.getBody();
         } catch (Exception e) {
             log.error("There was an error while trying to call trigger service", e);
             throw new RuntimeException(e);

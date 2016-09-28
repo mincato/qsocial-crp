@@ -268,17 +268,17 @@ public class CreateTriggerViewModel implements Serializable {
                 triggerResolutionView.setResolution(resolution);
                 return triggerResolutionView;
             }).collect(Collectors.toList()));
-            currentTrigger.setCaseCategorySets(currentTrigger.getTrigger().getCaseCategoriesSet().stream()
+            currentTrigger.setCaseCategorySets(currentTrigger.getTrigger().getCaseCategoriesSetIds().stream()
                     .map(caseCategorySet -> {
                         TriggerCaseCategorySetView triggerCaseCategorySetView = new TriggerCaseCategorySetView();
                         triggerCaseCategorySetView.setCaseCategorySet(caseCategorySetService.findOne(caseCategorySet));
                         return triggerCaseCategorySetView;
                     }).collect(Collectors.toList()));
-            if (currentTrigger.getTrigger().getSubjectCategoriesSet() != null) {
+            if (currentTrigger.getTrigger().getSubjectCategoriesSetIds() != null) {
                 currentTrigger
                         .setSubjectCategorySets(currentTrigger
                                 .getTrigger()
-                                .getSubjectCategoriesSet()
+                                .getSubjectCategoriesSetIds()
                                 .stream()
                                 .map(subjectCategorySet -> {
                                     TriggerSubjectCategorySetView triggerSubjectCategorySetView = new TriggerSubjectCategorySetView();
@@ -320,10 +320,10 @@ public class CreateTriggerViewModel implements Serializable {
         currentTrigger.getTrigger().setResolutions(
                 currentTrigger.getResolutions().stream().map(TriggerResolutionView::getResolution)
                         .collect(Collectors.toList()));
-        currentTrigger.getTrigger().setCaseCategoriesSet(currentTrigger.getCaseCategorySets().stream().map(view -> {
+        currentTrigger.getTrigger().setCaseCategoriesSetIds(currentTrigger.getCaseCategorySets().stream().map(view -> {
             return view.getCaseCategorySet().getId();
         }).collect(Collectors.toList()));
-        currentTrigger.getTrigger().setSubjectCategoriesSet(
+        currentTrigger.getTrigger().setSubjectCategoriesSetIds(
                 currentTrigger.getSubjectCategorySets().stream().map(view -> {
                     return view.getSubjectCategorySet().getId();
                 }).collect(Collectors.toList()));
@@ -337,8 +337,8 @@ public class CreateTriggerViewModel implements Serializable {
             currentTrigger.setTrigger(new Trigger());
             currentTrigger.getTrigger().setSegments(new ArrayList<>());
             currentTrigger.getTrigger().setResolutions(new ArrayList<>());
-            currentTrigger.getTrigger().setCaseCategoriesSet(new ArrayList<>());
-            currentTrigger.getTrigger().setSubjectCategoriesSet(new ArrayList<>());
+            currentTrigger.getTrigger().setCaseCategoriesSetIds(new ArrayList<>());
+            currentTrigger.getTrigger().setSubjectCategoriesSetIds(new ArrayList<>());
             initCaseCategorySetListView(null);
             initSubjectCategorySetListView(null);
         }
