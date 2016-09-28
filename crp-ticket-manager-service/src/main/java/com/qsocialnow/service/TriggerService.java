@@ -2,6 +2,7 @@ package com.qsocialnow.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
@@ -115,7 +117,10 @@ public class TriggerService {
     }
 
     private void mockCaseCategories(Trigger trigger) {
-        trigger.setCaseCategoriesSet(caseCategorySetRepository.findAll());
+        List<CaseCategorySet> list = caseCategorySetRepository.findAll();
+        trigger.setCaseCategoriesSet(list.stream().map(set -> {
+            return set.getId();
+        }).collect(Collectors.toList()));
     }
 
 }

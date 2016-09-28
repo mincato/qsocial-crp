@@ -48,7 +48,6 @@ trigger.view.action=Ver Accionamiento
 trigger.edit.action=Editar Accionamiento
 trigger.segments.unfilled=No hay segmentos definidos
 trigger.resolutions.unfilled=No hay resoluciones definidas
-trigger.casecategorysets.unfilled=No hay conjuntos de categorías de casos definidos
 trigger.criterias.unfilled=No hay criterios de detección definidos
 trigger.list.unfilled=No hay accionamientos definidos. Puede crear un 
 trigger.segments.least.one.validation=Por favor agregue al menos un segmento

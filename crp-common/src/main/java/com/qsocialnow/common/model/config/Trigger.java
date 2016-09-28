@@ -29,7 +29,7 @@ public class Trigger {
 
     private List<Resolution> resolutions;
 
-    private List<CaseCategorySet> caseCategoriesSet;
+    private List<String> caseCategoriesSet;
 
     @NotNull(message = "{field.empty}")
     private Status status;
@@ -38,6 +38,7 @@ public class Trigger {
         this.segments = new ArrayList<>();
         this.customerGroups = new ArrayList<>();
         this.resolutions = new ArrayList<>();
+        this.caseCategoriesSet = new ArrayList<>();
     }
 
     public String getId() {
@@ -112,11 +113,11 @@ public class Trigger {
         this.status = status;
     }
 
-    public List<CaseCategorySet> getCaseCategoriesSet() {
+    public List<String> getCaseCategoriesSet() {
         return caseCategoriesSet;
     }
 
-    public void setCaseCategoriesSet(List<CaseCategorySet> caseCategoriesSet) {
+    public void setCaseCategoriesSet(List<String> caseCategoriesSet) {
         this.caseCategoriesSet = caseCategoriesSet;
     }
 

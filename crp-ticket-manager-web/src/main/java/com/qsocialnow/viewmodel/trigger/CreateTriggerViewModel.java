@@ -22,7 +22,6 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
-import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Segment;
@@ -30,8 +29,10 @@ import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.model.DomainView;
 import com.qsocialnow.model.ListView;
+import com.qsocialnow.model.TriggerCaseCategorySetView;
 import com.qsocialnow.model.TriggerResolutionView;
 import com.qsocialnow.model.TriggerView;
+import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.TriggerService;
 
@@ -46,6 +47,9 @@ public class CreateTriggerViewModel implements Serializable {
 
     @WireVariable
     private DomainService domainService;
+
+    @WireVariable
+    private CaseCategorySetService caseCategorySetService;
 
     private TriggerView currentTrigger;
 
@@ -62,6 +66,10 @@ public class CreateTriggerViewModel implements Serializable {
     private boolean editingResolutions;
 
     private ListView<Resolution> resolutionListView;
+
+    private ListView<CaseCategorySet> caseCategorySetListView;
+
+    private boolean editingCaseCategorySets;
 
     public TriggerView getCurrentTrigger() {
         return currentTrigger;
@@ -188,7 +196,23 @@ public class CreateTriggerViewModel implements Serializable {
         currentDomain.setDomain(domainService.findOne(this.domain));
         initTrigger(domain, triggerId);
         initResolutionListView(currentTrigger.getResolutions(), currentDomain.getDomain().getResolutions());
+        initCaseCategorySetListView(currentTrigger.getCaseCategorySets());
         statusOptions = Arrays.asList(Status.values());
+    }
+
+    private void initCaseCategorySetListView(List<TriggerCaseCategorySetView> triggerCaseCategorySets) {
+        caseCategorySetListView = new ListView<CaseCategorySet>();
+        caseCategorySetListView.setList(caseCategorySetService.findAll());
+        caseCategorySetListView.setFilteredList(new ArrayList<CaseCategorySet>());
+        caseCategorySetListView.getFilteredList().addAll(
+                caseCategorySetListView.getList().stream().filter(caseCategorySet -> {
+                    boolean found = false;
+                    for (TriggerCaseCategorySetView triggerCaseCategorySetView : triggerCaseCategorySets) {
+                        if (triggerCaseCategorySetView.getCaseCategorySet().getId().equals(caseCategorySet.getId()))
+                            found = true;
+                    }
+                    return !found;
+                }).collect(Collectors.toList()));
     }
 
     private void initTrigger(String domain, String triggerId) {
@@ -201,11 +225,18 @@ public class CreateTriggerViewModel implements Serializable {
                 triggerResolutionView.setResolution(resolution);
                 return triggerResolutionView;
             }).collect(Collectors.toList()));
+            currentTrigger.setCaseCategorySets(currentTrigger.getTrigger().getCaseCategoriesSet().stream()
+                    .map(caseCategorySet -> {
+                        TriggerCaseCategorySetView triggerCaseCategorySetView = new TriggerCaseCategorySetView();
+                        triggerCaseCategorySetView.setCaseCategorySet(caseCategorySetService.findOne(caseCategorySet));
+                        return triggerCaseCategorySetView;
+                    }).collect(Collectors.toList()));
         } else {
             editing = false;
             currentTrigger.setTrigger(new Trigger());
             currentTrigger.getTrigger().setSegments(new ArrayList<>());
             currentTrigger.setResolutions(new ArrayList<>());
+            currentTrigger.setCaseCategorySets(new ArrayList<>());
         }
     }
 
@@ -230,6 +261,9 @@ public class CreateTriggerViewModel implements Serializable {
         currentTrigger.getTrigger().setResolutions(
                 currentTrigger.getResolutions().stream().map(TriggerResolutionView::getResolution)
                         .collect(Collectors.toList()));
+        currentTrigger.getTrigger().setCaseCategoriesSet(currentTrigger.getCaseCategorySets().stream().map(view -> {
+            return view.getCaseCategorySet().getId();
+        }).collect(Collectors.toList()));
         if (editing) {
             this.currentTrigger.setTrigger(triggerService.update(this.currentDomain.getDomain().getId(),
                     currentTrigger.getTrigger()));
@@ -247,8 +281,69 @@ public class CreateTriggerViewModel implements Serializable {
         return currentDomain;
     }
 
-    public ListView<Resolution> getCaseCategoryListView() {
-        return resolutionListView;
+    public ListView<CaseCategorySet> getCaseCategorySetListView() {
+        return caseCategorySetListView;
     }
 
+    public boolean isEditingCaseCategorySets() {
+        return editingCaseCategorySets;
+    }
+
+    @Command
+    @NotifyChange({ "caseCategorySetListView" })
+    public void addCaseCategorySet(@BindingParam("fxTrigger") TriggerView trigger) {
+        TriggerCaseCategorySetView caseCategory = new TriggerCaseCategorySetView();
+        caseCategory.setEditingStatus(Boolean.TRUE);
+        trigger.getCaseCategorySets().add(caseCategory);
+        caseCategorySetListView.setEnabledAdd(false);
+        BindUtils.postNotifyChange(null, null, trigger, "caseCategorySets");
+    }
+
+    @Command
+    @NotifyChange({ "caseCategorySetListView" })
+    public void confirmCaseCategorySet(@BindingParam("caseCategorySet") TriggerCaseCategorySetView caseCategorySet,
+            @BindingParam("fxTrigger") TriggerView trigger) {
+        caseCategorySet.setEditingStatus(Boolean.FALSE);
+        deleteCaseCategorySetFilteredList(caseCategorySetListView, caseCategorySet.getCaseCategorySet());
+        caseCategorySetListView.setEnabledAdd(true);
+        BindUtils.postNotifyChange(null, null, trigger, "caseCategorySets");
+
+    }
+
+    @Command
+    @NotifyChange({ "caseCategorySetListView" })
+    public void removeCaseCategorySet(@BindingParam("index") int idx, @BindingParam("fxTrigger") TriggerView trigger) {
+        TriggerCaseCategorySetView deletedCaseCategorySet = trigger.getCaseCategorySets().remove(idx);
+        if (!deletedCaseCategorySet.isEditingStatus()) {
+            addCaseCategorySetFilteredList(caseCategorySetListView, deletedCaseCategorySet.getCaseCategorySet());
+        }
+        caseCategorySetListView.setEnabledAdd(true);
+        for (TriggerCaseCategorySetView caseCategorySet : trigger.getCaseCategorySets()) {
+            if (caseCategorySet.isEditingStatus()) {
+                caseCategorySetListView.setEnabledAdd(false);
+            }
+        }
+        BindUtils.postNotifyChange(null, null, trigger, "caseCategorySets");
+
+    }
+
+    private void addCaseCategorySetFilteredList(ListView<CaseCategorySet> caseCategorySetListView,
+            CaseCategorySet caseCategorySet) {
+        if (caseCategorySet == null) {
+            return;
+        }
+        for (CaseCategorySet caseCategorySetList : caseCategorySetListView.getList()) {
+            if (caseCategorySetList.getId().equals(caseCategorySet.getId())) {
+                caseCategorySetListView.getFilteredList().add(caseCategorySetList);
+            }
+        }
+    }
+
+    private void deleteCaseCategorySetFilteredList(ListView<CaseCategorySet> caseCategorySetListView,
+            CaseCategorySet caseCategorySet) {
+        if (caseCategorySet == null) {
+            return;
+        }
+        caseCategorySetListView.getFilteredList().remove(caseCategorySet);
+    }
 }
