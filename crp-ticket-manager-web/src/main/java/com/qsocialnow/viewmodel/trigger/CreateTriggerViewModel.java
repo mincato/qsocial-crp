@@ -39,7 +39,8 @@ import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.SubjectCategorySetService;
 import com.qsocialnow.services.TriggerService;
 
-@ToServerCommand("collapsetoggleResolutions")
+@ToServerCommand({ "collapsetoggleResolutions", "collapsetoggleSegments", "collapsetoggleCaseCategorySets",
+        "collapsetoggleSubjectCategorySets" })
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateTriggerViewModel implements Serializable {
 
@@ -69,17 +70,13 @@ public class CreateTriggerViewModel implements Serializable {
 
     private boolean editing;
 
-    private boolean editingResolutions;
-
     private ListView<Resolution> resolutionListView;
 
     private ListView<CaseCategorySet> caseCategorySetListView;
 
-    private boolean editingCaseCategorySets;
-
     private ListView<SubjectCategorySet> subjectCategorySetListView;
 
-    private boolean editingSubjectCategorySets;
+    private TriggerCollapseToggleLists collapseToggleLists;
 
     public TriggerView getCurrentTrigger() {
         return currentTrigger;
@@ -93,14 +90,28 @@ public class CreateTriggerViewModel implements Serializable {
         return resolutionListView;
     }
 
-    public boolean isEditingResolutions() {
-        return editingResolutions;
+    @Command("collapsetoggleResolutions")
+    @NotifyChange("collapseToggleLists")
+    public void toggleResolutions(@BindingParam("toggle") Boolean toggle) {
+        collapseToggleLists.setEditingResolutions(toggle);
     }
 
-    @Command("collapsetoggleResolutions")
-    @NotifyChange("editingResolutions")
-    public void toggleResolutions(@BindingParam("toggle") Boolean toggle) {
-        this.editingResolutions = toggle;
+    @Command("collapsetoggleSegments")
+    @NotifyChange("collapseToggleLists")
+    public void toggleSegments(@BindingParam("toggle") Boolean toggle) {
+        collapseToggleLists.setEditingSegments(toggle);
+    }
+
+    @Command("collapsetoggleCaseCategorySets")
+    @NotifyChange("collapseToggleLists")
+    public void toggleCaseCategorySets(@BindingParam("toggle") Boolean toggle) {
+        collapseToggleLists.setEditingCaseCategorySets(toggle);
+    }
+
+    @Command("collapsetoggleSubjectCategorySets")
+    @NotifyChange("collapseToggleLists")
+    public void toggleSubjectCategorySets(@BindingParam("toggle") Boolean toggle) {
+        collapseToggleLists.setEditingSubjectCategorySets(toggle);
     }
 
     @GlobalCommand
@@ -209,6 +220,7 @@ public class CreateTriggerViewModel implements Serializable {
         initCaseCategorySetListView(currentTrigger.getCaseCategorySets());
         initSubjectCategorySetListView(currentTrigger.getSubjectCategorySets());
         statusOptions = Arrays.asList(Status.values());
+        collapseToggleLists = new TriggerCollapseToggleLists();
     }
 
     private void initCaseCategorySetListView(List<TriggerCaseCategorySetView> triggerCaseCategorySets) {
@@ -341,6 +353,7 @@ public class CreateTriggerViewModel implements Serializable {
             currentTrigger.getTrigger().setSubjectCategoriesSetIds(new ArrayList<>());
             initCaseCategorySetListView(null);
             initSubjectCategorySetListView(null);
+            collapseToggleLists = new TriggerCollapseToggleLists();
         }
     }
 
@@ -350,10 +363,6 @@ public class CreateTriggerViewModel implements Serializable {
 
     public ListView<CaseCategorySet> getCaseCategorySetListView() {
         return caseCategorySetListView;
-    }
-
-    public boolean isEditingCaseCategorySets() {
-        return editingCaseCategorySets;
     }
 
     @Command
@@ -477,4 +486,13 @@ public class CreateTriggerViewModel implements Serializable {
         }
         subjectCategorySetListView.getFilteredList().remove(subjectCategorySet);
     }
+
+    public TriggerCollapseToggleLists getCollapseToggleLists() {
+        return collapseToggleLists;
+    }
+
+    public void setCollapseToggleLists(TriggerCollapseToggleLists collapseToggleLists) {
+        this.collapseToggleLists = collapseToggleLists;
+    }
+
 }

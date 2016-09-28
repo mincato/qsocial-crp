@@ -109,17 +109,17 @@
 		<x:div class="panel">
 			<x:div class="panel-heading">
 				<n:h4 class="panel-title">
-  						<n:a data-toggle="collapse" href="#customerCategoriesTab">
+  						<n:a data-toggle="collapse" href=".subjectCategorySetsTab">
         					${labels.trigger.customerCategories}
         					<i class="more-less fa fa-angle-down pull-right"></i>
     					</n:a>
       			</n:h4>
     		</x:div>
-    		<x:div id="customerCategoriesTab" class="pane equal panel-collapse collapse">
+    		<div zclass="subjectCategorySetsTab"  ca:data-collapse="toggleSubjectCategorySets"  sclass="@load((triggerVm.collapseToggleLists.editingSubjectCategorySets or not empty vmsgs['casecategorysets']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
       			<x:div class="panel-body">
       				<include src="/pages/triggers/edit-subject-category-sets.zul"/>	
       			</x:div>
-    		</x:div>
+    		</div>
 		</x:div>
 	</x:div>
 	<n:br/>
@@ -127,17 +127,17 @@
 		<x:div class="panel">
 			<x:div class="panel-heading">
 				<n:h4 class="panel-title">
-  					<n:a data-toggle="collapse" href="#caseCategoriesTab">
+  					<n:a data-toggle="collapse" href=".caseCategorySetsTab">
         					${labels.trigger.caseCategories}
         					<i class="more-less fa fa-angle-down pull-right"></i>
 					</n:a>
       			</n:h4>
     		</x:div>
-    		<x:div id="caseCategoriesTab" class="pane equal panel-collapse collapse">
+    		<div zclass="caseCategorySetsTab"  ca:data-collapse="toggleCaseCategorySets"  sclass="@load((triggerVm.collapseToggleLists.editingCaseCategorySets or not empty vmsgs['casecategorysets']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
       			<x:div class="panel-body">
       				<include src="/pages/triggers/edit-case-category-sets.zul"/>
       			</x:div>
-    		</x:div>
+    		</div>
 		</x:div>
 	</x:div>
 	<n:br/>
@@ -151,7 +151,7 @@
 					</n:a>
       			</n:h4>
     		</x:div>
-    		<div zclass="resolutionsTab" sclass="@load((triggerVm.editingResolutions or not empty vmsgs['resolutions']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
+    		<div zclass="resolutionsTab" ca:data-collapse="toggleResolutions"  sclass="@load((triggerVm.collapseToggleLists.editingResolutions or not empty vmsgs['resolutions']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
       			<x:div class="panel-body">
       				<include src="/pages/triggers/edit-resolutions.zul"/>
       			</x:div>
@@ -163,13 +163,13 @@
 		<x:div class="panel">
 			<x:div class="panel-heading">
 				<n:h4 class="panel-title">
-					<n:a data-toggle="collapse" href="#segmentsTab">
+					<n:a data-toggle="collapse" href=".segmentsTab">
         					${labels.trigger.segments.title}
         					<i class="more-less fa fa-angle-down pull-right"></i>
 					</n:a>
       			</n:h4>
     		</x:div>
-    		<x:div id="segmentsTab" sclass="@load(empty vmsgs['segments'] ? 'pane equal panel-collapse collapse' : 'pane equal panel-collapse collapse in')">
+    		<div zclass="segmentsTab"  ca:data-collapse="toggleSegments"  sclass="@load((triggerVm.collapseToggleLists.editingSegments or not empty vmsgs['segments']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
       			<x:div class="panel-body">
       				<x:div>
 						<n:div class="col-sm-12">
@@ -218,7 +218,7 @@
 						</n:span>
 					</div>
       			</x:div>
-    		</x:div>
+    		</div>
 		</x:div>
 	</x:div>
     <n:br/>		
