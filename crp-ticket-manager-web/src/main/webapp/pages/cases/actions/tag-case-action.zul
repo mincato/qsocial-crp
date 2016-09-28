@@ -3,7 +3,7 @@
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('tagCaseActionVm') @init('com.qsocialnow.viewmodel.TagCaseActionViewModel')"
 		validationMessages="@id('vmsgs')">
-	<x:form form="@id('fxTagCaseAction') @load(tagCaseActionVm.tagCaseAction) @save(tagCaseActionVm.tagCaseAction, before='execute') @validator('com.qsocialnow.validators.TagCaseActionFormValidator')">
+	<x:form form="@id('fxTagCaseAction') @load(tagCaseActionVm.tagCaseAction) @save(tagCaseActionVm.tagCaseAction, before='execute')">
 		<n:div class="col-sm-12">
 			<div zclass="link-button pull-right">
 				<a onClick="@command('addCategorySet', fxTagCaseAction = fxTagCaseAction)"
@@ -24,7 +24,7 @@
 								${each.categorySet.description}
 							</n:div>
 							<n:div class="col-xs-2 col-sm-3">
-								<div class="form-group" children="@load(each.categories)">
+								<div class="form-group col-sm-10" children="@load(each.categories)">
 									<template name="children" var="category">
 										<span>
 											<label value="${category.description}"/>
@@ -34,9 +34,19 @@
 										</span>
 									</template>
 		    					</div>
+		    					<n:div class="link-button col-sm-2">
+									<a onClick="@command('editCategories', index = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)">
+										<i class="fa fa-plus-circle fa-2x"></i>
+									</a>
+								</n:div>
 							</n:div>
 							<n:div class="col-xs-4 col-sm-3">
 								<n:div class="pull-right">
+									<a
+										sclass="btn-list-action"
+										onClick="@command('editCategorySet', index = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)">
+										<i class="glyphicon glyphicon-pencil fa-2x"></i>
+									</a>
 									<a zclass="btn-list-action"
 										onClick="@command('deleteCategorySet', index = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)">
 										<i
@@ -63,8 +73,8 @@
 									</template>
 								</listbox>
 							</n:div>
-							<n:div class="col-xs-8 col-sm-3">
-								<div class="form-group" children="@load(each.categories)">
+							<n:div class="col-xs-2 col-sm-3">
+								<div class="form-group col-sm-10" children="@load(each.categories)">
 									<template name="children" var="category">
 										<span>
 											<label value="${category.description}"/>
@@ -74,6 +84,11 @@
 										</span>
 									</template>
 		    					</div>
+		    					<n:div class="link-button col-sm-2">
+									<a onClick="@command('editCategories', index = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)">
+										<i class="fa fa-plus-circle fa-2x"></i>
+									</a>
+								</n:div>
 							</n:div>
 							<n:div class="col-xs-4 col-sm-3">
 								<n:div class="pull-right">
@@ -105,7 +120,7 @@
 			</n:span>
 		</div>
 		<div class="form-group text-center">
-	    	<button onClick="@command('execute')" disabled="@load(not tagCaseActionVm.categorySetListView.enabledAdd)" label="${labels.app.button.execute}" zclass="btn btn-success" />
+	    	<button onClick="@command('execute')" disabled="@load(not tagCaseActionVm.categorySetListView.enabledAdd and not empty tagCaseActionVm.categorySetListView.filteredList)" label="${labels.app.button.execute}" zclass="btn btn-success" />
 		</div>
 	</x:form>
 </div>
