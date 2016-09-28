@@ -1,7 +1,9 @@
 package com.qsocialnow.services;
 
+import java.util.List;
 import java.util.Map;
 
+import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
@@ -18,4 +20,6 @@ public interface TriggerService {
     Trigger update(String domainId, Trigger trigger);
 
     Segment findSegment(String domainId, String triggerId, String segmentId);
+
+    List<CaseCategorySet> findCategories(String domainId, String triggerId);
 }

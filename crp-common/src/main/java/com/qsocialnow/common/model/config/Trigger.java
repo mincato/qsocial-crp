@@ -29,7 +29,7 @@ public class Trigger {
 
     private List<Resolution> resolutions;
 
-    private List<CaseCategorySet> caseCategoriesSet;
+    private List<String> caseCategoriesSetIds;
 
     @NotNull(message = "{field.empty}")
     private Status status;
@@ -112,12 +112,12 @@ public class Trigger {
         this.status = status;
     }
 
-    public List<CaseCategorySet> getCaseCategoriesSet() {
-        return caseCategoriesSet;
+    public List<String> getCaseCategoriesSetIds() {
+        return caseCategoriesSetIds;
     }
 
-    public void setCaseCategoriesSet(List<CaseCategorySet> caseCategoriesSet) {
-        this.caseCategoriesSet = caseCategoriesSet;
+    public void setCaseCategoriesSetIds(List<String> caseCategoriesSetIds) {
+        this.caseCategoriesSetIds = caseCategoriesSetIds;
     }
 
 }
