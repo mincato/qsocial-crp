@@ -21,7 +21,6 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUserResolver;
-import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.model.SendResponseActionView;
 import com.qsocialnow.services.CaseService;
@@ -93,7 +92,9 @@ public class SendResponseActionViewModel implements Serializable {
     private void initUserResolvers(EditCaseView currentCase) {
         Map<String, Object> filters = new HashMap<>();
         filters.put("status", true);
-        filters.put("source", FilterConstants.MEDIA_TWITTER);
+        if (currentCase.getCaseObject().getSource() != null) {
+            filters.put("source", currentCase.getCaseObject().getSource());
+        }
         List<BaseUserResolver> userResolvers = teamService.findUserResolvers(currentCase.getSegment().getTeam(),
                 filters);
         currentCase.setUserResolverOptions(userResolvers);
