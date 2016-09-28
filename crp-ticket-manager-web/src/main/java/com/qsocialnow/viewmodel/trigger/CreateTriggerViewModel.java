@@ -22,6 +22,8 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.CaseCategory;
+import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
@@ -182,28 +184,44 @@ public class CreateTriggerViewModel implements Serializable {
     @Init
     public void init(@QueryParam("domain") String domain, @QueryParam("trigger") String triggerId) {
         this.domain = domain;
-        this.currentDomain = new DomainView();
-        this.currentDomain.setDomain(domainService.findOne(this.domain));
-        this.currentTrigger = new TriggerView();
-        this.resolutionListView = new ListView<>();
-        this.resolutionListView.setList(this.currentDomain.getDomain().getResolutions());
-        this.resolutionListView.setFilteredList(new ArrayList<>(this.resolutionListView.getList()));
+        currentDomain = new DomainView();
+        currentDomain.setDomain(domainService.findOne(this.domain));
+        initTrigger(domain, triggerId);
+        initResolutionListView(currentTrigger.getResolutions(), currentDomain.getDomain().getResolutions());
+        statusOptions = Arrays.asList(Status.values());
+    }
+
+    private void initTrigger(String domain, String triggerId) {
+        currentTrigger = new TriggerView();
         if (triggerId != null) {
             editing = true;
-            this.currentTrigger.setTrigger(triggerService.findOne(domain, triggerId));
-            this.currentTrigger.setResolutions(this.currentTrigger.getTrigger().getResolutions().stream()
-                    .map(resolution -> {
-                        TriggerResolutionView triggerResolutionView = new TriggerResolutionView();
-                        triggerResolutionView.setResolution(resolution);
-                        return triggerResolutionView;
-                    }).collect(Collectors.toList()));
+            currentTrigger.setTrigger(triggerService.findOne(domain, triggerId));
+            currentTrigger.setResolutions(currentTrigger.getTrigger().getResolutions().stream().map(resolution -> {
+                TriggerResolutionView triggerResolutionView = new TriggerResolutionView();
+                triggerResolutionView.setResolution(resolution);
+                return triggerResolutionView;
+            }).collect(Collectors.toList()));
         } else {
             editing = false;
-            this.currentTrigger.setTrigger(new Trigger());
-            this.currentTrigger.getTrigger().setSegments(new ArrayList<>());
-            this.currentTrigger.setResolutions(new ArrayList<>());
+            currentTrigger.setTrigger(new Trigger());
+            currentTrigger.getTrigger().setSegments(new ArrayList<>());
+            currentTrigger.setResolutions(new ArrayList<>());
         }
-        this.statusOptions = Arrays.asList(Status.values());
+    }
+
+    private void initResolutionListView(List<TriggerResolutionView> triggerResolutions,
+            List<Resolution> domainResolutions) {
+        resolutionListView = new ListView<Resolution>();
+        resolutionListView.setList(domainResolutions);
+        resolutionListView.setFilteredList(new ArrayList<Resolution>());
+        resolutionListView.getFilteredList().addAll(resolutionListView.getList().stream().filter(resolution -> {
+            boolean found = false;
+            for (TriggerResolutionView triggerResolutionView : triggerResolutions) {
+                if (triggerResolutionView.getResolution().getId().equals(resolution.getId()))
+                    found = true;
+            }
+            return !found;
+        }).collect(Collectors.toList()));
     }
 
     @Command
@@ -227,6 +245,10 @@ public class CreateTriggerViewModel implements Serializable {
 
     public DomainView getCurrentDomain() {
         return currentDomain;
+    }
+
+    public ListView<Resolution> getCaseCategoryListView() {
+        return resolutionListView;
     }
 
 }

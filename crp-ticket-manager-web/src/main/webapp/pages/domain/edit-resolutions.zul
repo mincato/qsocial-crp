@@ -13,7 +13,7 @@
 			</x:div>
 			<n:div class="col-md-3 col-sm-4 col-xs-6 pull-right">
 				<n:div class="link-button">
-					<a onClick="@command('addResolution', domain = domain)">
+					<a onClick="@command('addResolution', domain = domain)" disabled="@load(not vm.resolutionListView.enabledAdd)">
 						${labels.domain.add.resolution}
 						<i class="fa fa-plus-circle fa-2x"></i>
 					</a>
