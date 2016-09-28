@@ -54,7 +54,7 @@ public class TriggerMapping implements Mapping<TriggerType, Trigger> {
         triggerType.setName(document.getName());
         triggerType.setResolutions(document.getResolutions());
         triggerType.setStatus(document.getStatus());
-        triggerType.setCaseCategoriesSet(document.getCaseCategoriesSet());
+        triggerType.setCaseCategoriesSetIds(document.getCaseCategoriesSetIds());
         return triggerType;
     }
 
@@ -69,7 +69,7 @@ public class TriggerMapping implements Mapping<TriggerType, Trigger> {
         trigger.setName(documentType.getName());
         trigger.setResolutions(documentType.getResolutions());
         trigger.setStatus(documentType.getStatus());
-        trigger.setCaseCategoriesSet(documentType.getCaseCategoriesSet());
+        trigger.setCaseCategoriesSetIds(documentType.getCaseCategoriesSetIds());
         return trigger;
     }
 
