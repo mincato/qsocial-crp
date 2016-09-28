@@ -29,6 +29,7 @@ import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.model.ListView;
 import com.qsocialnow.model.TagCaseActionView;
 import com.qsocialnow.model.TagCaseCategorySetView;
+import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -38,6 +39,9 @@ public class TagCaseActionViewModel implements Serializable {
 
     @WireVariable
     private CaseService caseService;
+
+    @WireVariable
+    private CaseCategorySetService caseCategorySetService;
 
     private String caseId;
 
@@ -71,7 +75,10 @@ public class TagCaseActionViewModel implements Serializable {
             tagCaseAction = new TagCaseActionView();
             tagCaseAction.setCategorySets(new ArrayList<>());
             if (categorySetListView.getList() == null) {
-                categorySetListView.setList(currentCase.getTrigger().getCaseCategoriesSet());
+                categorySetListView.setList(currentCase.getTrigger().getCaseCategoriesSet().stream()
+                        .map(caseCategorySetId -> {
+                            return caseCategorySetService.findOne(caseCategorySetId);
+                        }).collect(Collectors.toList()));
             }
             categorySetListView.setFilteredList(new ArrayList<>(categorySetListView.getList()));
             categorySetListView.setEnabledAdd(true);

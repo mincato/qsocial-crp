@@ -117,13 +117,7 @@
     		</x:div>
     		<x:div id="customerCategoriesTab" class="pane equal panel-collapse collapse">
       			<x:div class="panel-body">
-      				<n:ol class="list-group order">
-    					<li class="list-group-item">Categoria 1</li>
-    					<li class="list-group-item">Categoria 2</li>
-    					<li class="list-group-item">Categoria 3</li>
-    					<li class="list-group-item">Categoria 4</li>
-    					<li class="list-group-item">Categoria 5</li>
-					</n:ol>	
+      				<include src="/pages/triggers/edit-subject-category-sets.zul"/>	
       			</x:div>
     		</x:div>
 		</x:div>
@@ -157,7 +151,7 @@
 					</n:a>
       			</n:h4>
     		</x:div>
-    		<div zclass="resolutionsTab" ca:data-collapse="toggleResolutions" sclass="@load((triggerVm.editingResolutions or not empty vmsgs['resolutions']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
+    		<div zclass="resolutionsTab" sclass="@load((triggerVm.editingResolutions or not empty vmsgs['resolutions']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
       			<x:div class="panel-body">
       				<include src="/pages/triggers/edit-resolutions.zul"/>
       			</x:div>
@@ -232,7 +226,7 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<div class="form-group text-center">
-			    	<button onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd)"
+			    	<button onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
 			    		label="${labels.app.button.save}" zclass="btn btn-success" />
 				</div>
 			</div>

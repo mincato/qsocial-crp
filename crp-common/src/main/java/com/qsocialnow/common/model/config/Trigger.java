@@ -31,6 +31,8 @@ public class Trigger {
 
     private List<String> caseCategoriesSet;
 
+    private List<String> subjectCategoriesSet;
+
     @NotNull(message = "{field.empty}")
     private Status status;
 
@@ -119,6 +121,14 @@ public class Trigger {
 
     public void setCaseCategoriesSet(List<String> caseCategoriesSet) {
         this.caseCategoriesSet = caseCategoriesSet;
+    }
+
+    public List<String> getSubjectCategoriesSet() {
+        return subjectCategoriesSet;
+    }
+
+    public void setSubjectCategoriesSet(List<String> subjectCategoriesSet) {
+        this.subjectCategoriesSet = subjectCategoriesSet;
     }
 
 }
