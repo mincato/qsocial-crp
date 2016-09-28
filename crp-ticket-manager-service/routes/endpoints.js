@@ -107,7 +107,7 @@ router.post('/cases/:id/action', function (req, res) {
 	function asyncResponse(err,responseCase) {
 		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
-		if(err)  { res.status(500).json(err.getMessageSync()); return; }
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
 		if(responseCase !== null) {
 			try {
@@ -140,7 +140,7 @@ router.get('/cases/:id/availableResolutions', function (req, res) {
 	function asyncResponse(err,responseResolutions) {
 		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
-		if(err)  { res.status(500).json(err.getMessageSync()); return; }
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
 		if(responseResolutions !== null) {
 			try {
@@ -842,6 +842,34 @@ router.get('/teams/:id', function (req, res) {
 	  var teamId = req.params.id;
 	  
 	  teamService.findOne(teamId, asyncResponse);
+});
+
+router.get('/teams/:id/userResolvers', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var teamService = javaContext.getBeanSync("teamService");
+	  var teamId = req.params.id;
+	  var status = req.query.status ? req.query.status === 'true' : null;
+	  var source = req.query.source ? req.query.source : null;
+	  
+	  teamService.findUserResolvers(teamId, status, source, asyncResponse);
 });
 
 router.put('/teams/:id', function (req, res) {

@@ -64,6 +64,8 @@ public class Case implements Serializable {
 
     private String lastPostId;
 
+    private Long source;
+
     public Case() {
 
     }
@@ -79,6 +81,7 @@ public class Case implements Serializable {
         newCase.setPendingResponse(true);
         newCase.setSourceUser(event.getUsuarioCreacion());
         newCase.setLastPostId(event.getId());
+        newCase.setSource(event.getMedioId());
 
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
@@ -134,7 +137,7 @@ public class Case implements Serializable {
                 actionsAllowed.add(ActionType.PENDING_RESPONSE);
 
             actionsAllowed.add(ActionType.SEND_MESSAGE);
-            // actionsAllowed.add(ActionType.ASSIGN);
+            actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
         } else {
             actionsAllowed.add(ActionType.REOPEN);
@@ -324,6 +327,14 @@ public class Case implements Serializable {
 
     public void setCaseCategoriesSet(Set<String> caseCategoriesSet) {
         this.caseCategoriesSet = caseCategoriesSet;
+    }
+
+    public Long getSource() {
+        return source;
+    }
+
+    public void setSource(Long source) {
+        this.source = source;
     }
 
 }

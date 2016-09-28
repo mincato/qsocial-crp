@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -65,6 +66,12 @@ public class MockTeamService implements TeamService {
 
     @Override
     public List<TeamListView> findAll() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<BaseUserResolver> findUserResolvers(String teamId, Map<String, Object> filters) {
         // TODO Auto-generated method stub
         return null;
     }
