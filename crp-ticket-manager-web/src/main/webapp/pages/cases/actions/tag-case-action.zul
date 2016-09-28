@@ -35,7 +35,7 @@
 									</template>
 		    					</div>
 		    					<n:div class="link-button col-sm-2">
-									<a onClick="@command('editCategories', index = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)">
+									<a visible="@load(each.categorySet ne null)" onClick="@command('editCategories', index = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)">
 										<i class="fa fa-plus-circle fa-2x"></i>
 									</a>
 								</n:div>
@@ -85,7 +85,7 @@
 									</template>
 		    					</div>
 		    					<n:div class="link-button col-sm-2">
-									<a onClick="@command('editCategories', index = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)">
+									<a visible="@load(each.categorySet ne null)" onClick="@command('editCategories', index = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)">
 										<i class="fa fa-plus-circle fa-2x"></i>
 									</a>
 								</n:div>
