@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -133,6 +134,31 @@ public class TeamServiceImpl implements TeamService {
 
             List<TeamListView> teams = response.getBody();
             return teams;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call team service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<BaseUserResolver> findUserResolvers(String teamId, Map<String, Object> filters) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", teamServiceUrl)).path("/" + teamId)
+                    .path("/userResolvers");
+
+            if (filters != null) {
+                for (Map.Entry<String, Object> filter : filters.entrySet()) {
+                    builder.queryParam(filter.getKey(), filter.getValue());
+                }
+            }
+
+            ResponseEntity<List<BaseUserResolver>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<BaseUserResolver>>() {
+                    });
+            return response.getBody();
         } catch (Exception e) {
             log.error("There was an error while trying to call team service", e);
             throw new RuntimeException(e);

@@ -10,7 +10,7 @@ public class TriggerMapping implements Mapping<TriggerType, Trigger> {
 
     private static final String INDEX_NAME = "configuration";
 
-    private static final String TYPE = "trigger";
+    public static final String TYPE = "trigger";
 
     private static TriggerMapping instance;
 
@@ -53,8 +53,8 @@ public class TriggerMapping implements Mapping<TriggerType, Trigger> {
         triggerType.setInit(document.getInit());
         triggerType.setName(document.getName());
         triggerType.setResolutions(document.getResolutions());
-        triggerType.setSegments(document.getSegments());
         triggerType.setStatus(document.getStatus());
+        triggerType.setCaseCategoriesSet(document.getCaseCategoriesSet());
         return triggerType;
     }
 
@@ -68,8 +68,8 @@ public class TriggerMapping implements Mapping<TriggerType, Trigger> {
         trigger.setInit(documentType.getInit());
         trigger.setName(documentType.getName());
         trigger.setResolutions(documentType.getResolutions());
-        trigger.setSegments(documentType.getSegments());
         trigger.setStatus(documentType.getStatus());
+        trigger.setCaseCategoriesSet(documentType.getCaseCategoriesSet());
         return trigger;
     }
 

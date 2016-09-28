@@ -82,7 +82,7 @@ public class CreateCaseViewModel implements Serializable {
     public void onSelectTrigger() {
         this.currentCase.getNewCase().setTriggerId(this.selectedTrigger.getId());
         if (this.selectedTrigger.getSegments() != null && this.selectedTrigger.getSegments().size() > 0) {
-            this.currentCase.getNewCase().setTeamId(this.selectedTrigger.getSegments().get(0).getTeam());
+            this.currentCase.getNewCase().setTriggerId(this.selectedTrigger.getSegments().get(0).getId());
         }
         currentCase.getNewCase().setSourceUser("usurioenojado");
     }

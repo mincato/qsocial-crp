@@ -5,7 +5,7 @@
 	<n:div class="row">
         <n:div>
             <div zclass="pane equal">
-                <n:h5>${labels.cases.list.column.title} / ${vm.currentCase.title} </n:h5>
+                <n:h5>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h5>
             </div>
         </n:div>
     </n:div>
@@ -21,7 +21,7 @@
                         <n:div class="col-sm-9">
                             <textbox type="text" sclass="form-control" disabled="true"
                                 id="name"
-                                value="@bind(vm.currentCase.title)">
+                                value="@bind(vm.currentCase.caseObject.title)">
                             </textbox>
                         </n:div>
                     </x:div>
@@ -31,7 +31,7 @@
                             ${labels.cases.details.opendate}
                         </n:label>
                         <n:div class="col-sm-9">
-                            <label value="@load(vm.currentCase.openDate)" />
+                            <label value="@load(vm.currentCase.caseObject.openDate)" />
                         </n:div>
                     </x:div>
                 </n:div>
@@ -42,7 +42,7 @@
                         </n:label>
                         <n:div class="col-sm-9">
                             <textbox rows="5" type="text" disabled="true"
-                                class="form-control" value="@bind(vm.currentCase.description)">
+                                class="form-control" value="@bind(vm.currentCase.caseObject.description)">
                             </textbox>
                         </n:div>
                     </n:div>
@@ -51,13 +51,19 @@
                             ${labels.cases.details.closedate}
                         </n:label>
                         <n:div class="col-sm-9">
-                            <label value="@load(vm.currentCase.closeDate)" />
+                            <label value="@load(vm.currentCase.caseObject.closeDate)" />
                         </n:div>
                     </x:div>
                     <x:div sclass="form-group col-sm-6">
                           <n:label class="control-label col-sm-3">${labels.cases.details.open}</n:label>
                           <x:div class="col-sm-9">
-                              <label class="control-label col-sm-1" value="@load(c:l(c:cat('cases.open.',vm.currentCase.open)))"></label>
+                              <label class="control-label col-sm-1" value="@load(c:l(c:cat('cases.open.',vm.currentCase.caseObject.open)))"></label>
+                          </x:div>  
+                     </x:div>
+                     <x:div sclass="form-group col-sm-6">
+                          <n:label class="control-label col-sm-3">${labels.cases.details.assignee}</n:label>
+                          <x:div class="col-sm-9">
+                              <label visible="@load(not empty vm.currentCase.caseObject.userResolver)" class="control-label col-sm-1" value="@load(vm.currentCase.caseObject.userResolver.identifier)"></label>
                           </x:div>  
                      </x:div>
                 </n:div>
@@ -65,7 +71,7 @@
                      <x:div class="form-group col-sm-6">
                           <n:label class="control-label col-sm-3">${labels.cases.details.pendingResponse}</n:label>
                           <x:div class="col-sm-2">
-                              <label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.pendingResponse)))"/>
+                              <label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.caseObject.pendingResponse)))"/>
                           </x:div>
                      </x:div>
                  </n:div>

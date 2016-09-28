@@ -57,6 +57,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setIdCase(document.getId());
         caseType.setAdminUnits(document.getAdminUnits());
         caseType.setAsignedValue(document.getAsignedValue());
+        caseType.setCaseCategoriesSet(document.getCaseCategoriesSet());
         caseType.setCaseCategories(document.getCaseCategories());
         caseType.setCloseDate(document.getCloseDate());
         caseType.setCoordinates(document.getCoordinates());
@@ -72,8 +73,10 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setTriggerId(document.getTriggerId());
         caseType.setLastPostId(document.getLastPostId());
         caseType.setSourceUser(document.getSourceUser());
-        caseType.setTeamId(document.getTeamId());
+        caseType.setSegmentId(document.getSegmentId());
         caseType.setUserResolver(document.getUserResolver());
+        caseType.setDomainId(document.getDomainId());
+        caseType.setSource(document.getSource());
         return caseType;
     }
 
@@ -83,6 +86,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setId(documentType.getId());
         caseDocument.setAdminUnits(documentType.getAdminUnits());
         caseDocument.setAsignedValue(documentType.getAsignedValue());
+        caseDocument.setCaseCategoriesSet(documentType.getCaseCategoriesSet());
         caseDocument.setCaseCategories(documentType.getCaseCategories());
         caseDocument.setCloseDate(documentType.getCloseDate());
         caseDocument.setCoordinates(documentType.getCoordinates());
@@ -98,8 +102,10 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setTriggerId(documentType.getTriggerId());
         caseDocument.setLastPostId(documentType.getLastPostId());
         caseDocument.setSourceUser(documentType.getSourceUser());
-        caseDocument.setTeamId(documentType.getTeamId());
+        caseDocument.setSegmentId(documentType.getSegmentId());
+        caseDocument.setDomainId(documentType.getDomainId());
         caseDocument.setUserResolver(documentType.getUserResolver());
+        caseDocument.setSource(documentType.getSource());
         return caseDocument;
     }
 
