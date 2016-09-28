@@ -144,7 +144,6 @@ public class EditCaseViewModel implements Serializable {
         this.user = null;
         this.keyword = null;
         this.setDefaultPage();
-        this.findCase(this.caseId);
         this.actionOptions = getAllowedActionsByCase();
         this.findRegistriesBy();
     }

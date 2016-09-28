@@ -60,6 +60,12 @@
                               <label class="control-label col-sm-1" value="@load(c:l(c:cat('cases.open.',vm.currentCase.caseObject.open)))"></label>
                           </x:div>  
                      </x:div>
+                     <x:div sclass="form-group col-sm-6">
+                          <n:label class="control-label col-sm-3">${labels.cases.details.assignee}</n:label>
+                          <x:div class="col-sm-9">
+                              <label visible="@load(not empty vm.currentCase.caseObject.userResolver)" class="control-label col-sm-1" value="@load(vm.currentCase.caseObject.userResolver.identifier)"></label>
+                          </x:div>  
+                     </x:div>
                 </n:div>
                 <n:div class="row">
                      <x:div class="form-group col-sm-6">

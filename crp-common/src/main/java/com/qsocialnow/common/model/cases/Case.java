@@ -134,7 +134,7 @@ public class Case implements Serializable {
                 actionsAllowed.add(ActionType.PENDING_RESPONSE);
 
             actionsAllowed.add(ActionType.SEND_MESSAGE);
-            // actionsAllowed.add(ActionType.ASSIGN);
+            actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
         } else {
             actionsAllowed.add(ActionType.REOPEN);

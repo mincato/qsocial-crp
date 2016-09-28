@@ -2,12 +2,14 @@ package com.qsocialnow.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.config.UserResolverListView;
 import com.qsocialnow.common.pagination.PageRequest;
@@ -89,6 +91,12 @@ public class UserResolverRepository {
             log.error("Unexpected error", e);
         }
         return null;
+    }
+
+    public List<UserResolver> findUserResolvers(List<BaseUserResolver> userResolvers, Boolean status, Long source) {
+        List<String> ids = userResolvers.stream().map(BaseUserResolver::getId).collect(Collectors.toList());
+        List<UserResolver> userResolversRepo = userResolverElasticService.findByIds(ids, status, source);
+        return userResolversRepo;
     }
 
 }
