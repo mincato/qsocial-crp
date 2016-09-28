@@ -108,68 +108,68 @@
 	<x:div class="panel-group">
 		<x:div class="panel">
 			<x:div class="panel-heading">
-				<n:h4 class="panel-title">
-  						<n:a data-toggle="collapse" href=".subjectCategorySetsTab">
+				<x:h4 sclass="@load(empty vmsgs['subjectcategorysets'] ? 'panel-title' : 'panel-title has-error')">
+  						<n:a data-toggle="collapse" href="#customerCategoriesTab" class='help-block'>
         					${labels.trigger.customerCategories}
         					<i class="more-less fa fa-angle-down pull-right"></i>
     					</n:a>
-      			</n:h4>
+      			</x:h4>
     		</x:div>
-    		<div zclass="subjectCategorySetsTab"  ca:data-collapse="toggleSubjectCategorySets"  sclass="@load((triggerVm.collapseToggleLists.editingSubjectCategorySets or not empty vmsgs['casecategorysets']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
+    		<n:div id="customerCategoriesTab" class="pane equal panel-collapse collapse">
       			<x:div class="panel-body">
       				<include src="/pages/triggers/edit-subject-category-sets.zul"/>	
       			</x:div>
-    		</div>
+    		</n:div>
 		</x:div>
 	</x:div>
 	<n:br/>
 	<x:div class="panel-group">
 		<x:div class="panel">
 			<x:div class="panel-heading">
-				<n:h4 class="panel-title">
-  					<n:a data-toggle="collapse" href=".caseCategorySetsTab">
+				<x:h4 sclass="@load(empty vmsgs['casecategorysets'] ? 'panel-title' : 'panel-title has-error')">
+  					<n:a data-toggle="collapse" href="#caseCategoriesTab" class='help-block'>
         					${labels.trigger.caseCategories}
         					<i class="more-less fa fa-angle-down pull-right"></i>
 					</n:a>
-      			</n:h4>
+      			</x:h4>
     		</x:div>
-    		<div zclass="caseCategorySetsTab"  ca:data-collapse="toggleCaseCategorySets"  sclass="@load((triggerVm.collapseToggleLists.editingCaseCategorySets or not empty vmsgs['casecategorysets']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
+    		<n:div id="caseCategoriesTab" class="pane equal panel-collapse collapse">
       			<x:div class="panel-body">
       				<include src="/pages/triggers/edit-case-category-sets.zul"/>
       			</x:div>
-    		</div>
+    		</n:div>
 		</x:div>
 	</x:div>
 	<n:br/>
 	<x:div class="panel-group">
 		<x:div class="panel">
 			<x:div class="panel-heading">
-				<n:h4 class="panel-title">
-  					<n:a data-toggle="collapse" href=".resolutionsTab">
+				<x:h4 sclass="@load(empty vmsgs['resolutions'] ? 'panel-title' : 'panel-title has-error')">
+  					<n:a data-toggle="collapse" href="#resolutionsTab" class='help-block'>
 	    					${labels.trigger.resolutions.title}
 	    					<i class="more-less fa fa-angle-down pull-right"></i>
 					</n:a>
-      			</n:h4>
+      			</x:h4>
     		</x:div>
-    		<div zclass="resolutionsTab" ca:data-collapse="toggleResolutions"  sclass="@load((triggerVm.collapseToggleLists.editingResolutions or not empty vmsgs['resolutions']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
+    		<n:div id="resolutionsTab"  class="pane equal panel-collapse collapse">
       			<x:div class="panel-body">
       				<include src="/pages/triggers/edit-resolutions.zul"/>
       			</x:div>
-    		</div>
+    		</n:div>
 		</x:div>
 	</x:div>
 	<n:br/>
 	<x:div class="panel-group">
 		<x:div class="panel">
 			<x:div class="panel-heading">
-				<n:h4 class="panel-title">
-					<n:a data-toggle="collapse" href=".segmentsTab">
+				<x:h4 sclass="@load(empty vmsgs['segments'] ? 'panel-title' : 'panel-title has-error')">
+					<n:a data-toggle="collapse" href="#segmentsTab" class='help-block'>
         					${labels.trigger.segments.title}
         					<i class="more-less fa fa-angle-down pull-right"></i>
 					</n:a>
-      			</n:h4>
+      			</x:h4>
     		</x:div>
-    		<div zclass="segmentsTab"  ca:data-collapse="toggleSegments"  sclass="@load((triggerVm.collapseToggleLists.editingSegments or not empty vmsgs['segments']) ? 'pane equal panel-collapse collapse in' : 'pane equal panel-collapse collapse')">
+    		<n:div id="segmentsTab" class="pane equal panel-collapse collapse">
       			<x:div class="panel-body">
       				<x:div>
 						<n:div class="col-sm-12">
@@ -218,7 +218,7 @@
 						</n:span>
 					</div>
       			</x:div>
-    		</div>
+    		</n:div>
 		</x:div>
 	</x:div>
     <n:br/>		
