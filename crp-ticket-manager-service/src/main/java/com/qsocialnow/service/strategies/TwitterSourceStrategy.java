@@ -49,4 +49,25 @@ public class TwitterSourceStrategy implements SourceStrategy {
         }
     }
 
+    @Override
+    public String sendMessage(Case caseObject, UserResolver userResolver, String text) {
+        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+        configurationBuilder.setOAuthConsumerKey(twitterConfig.getOAuthConsumerKey());
+        configurationBuilder.setOAuthConsumerSecret(twitterConfig.getOAuthConsumerSecret());
+        TwitterFactory twitterFactory = new TwitterFactory(configurationBuilder.build());
+        AccessToken accessToken = new AccessToken(userResolver.getCredentials().getToken(), userResolver
+                .getCredentials().getSecretToken());
+        Twitter twitter = twitterFactory.getInstance(accessToken);
+        text = "@" + caseObject.getSourceUser() + " " + text;
+        try {
+
+            StatusUpdate statusUpdate = new StatusUpdate(text);
+            Status status = twitter.updateStatus(statusUpdate);
+            return String.valueOf(status.getId());
+        } catch (TwitterException e) {
+            log.error("There was an error trying to send response via twitter", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }
