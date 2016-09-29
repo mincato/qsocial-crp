@@ -1,11 +1,13 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -89,11 +91,15 @@ public class TagCaseActionViewModel implements Serializable {
                         tagCaseCategorySet.setEditingStatus(false);
                         return tagCaseCategorySet;
                     }).collect(Collectors.toList()));
-            categorySetListView.setFilteredList(categorySetListView
-                    .getList()
-                    .stream()
-                    .filter(categorySet -> !currentCase.getCaseObject().getCaseCategoriesSet()
-                            .contains(categorySet.getId())).collect(Collectors.toList()));
+            if (CollectionUtils.isNotEmpty(currentCase.getCaseObject().getCaseCategoriesSet())) {
+                categorySetListView.setFilteredList(categorySetListView
+                        .getList()
+                        .stream()
+                        .filter(categorySet -> !currentCase.getCaseObject().getCaseCategoriesSet()
+                                .contains(categorySet.getId())).collect(Collectors.toList()));
+            } else {
+                categorySetListView.setFilteredList(new ArrayList<>(categorySetListView.getList()));
+            }
             categorySetListView.setEnabledAdd(!categorySetListView.getFilteredList().isEmpty());
         }
     }
@@ -190,6 +196,8 @@ public class TagCaseActionViewModel implements Serializable {
         TagCaseCategorySetView caseCategorySet = fxTagCaseAction.getCategorySets().get(idx);
         if (caseCategorySet.getCategories() != null) {
             caseCategorySet.getCategories().clear();
+        } else {
+            caseCategorySet.setCategories(new ArrayList<>());
         }
         Map<String, Object> args = new HashMap<>();
         args.put("caseCategorySet", caseCategorySet);
