@@ -101,4 +101,9 @@ public class CaseCategorySetRepository {
         }
         return caseCategories;
     }
+
+    public List<CaseCategorySet> findCategoriesSets(List<String> caseCategoriesSetIds) {
+        List<CaseCategorySet> userResolversRepo = caseCategorySetElasticService.findByIds(caseCategoriesSetIds);
+        return userResolversRepo;
+    }
 }

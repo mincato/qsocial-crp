@@ -3,6 +3,7 @@ package com.qsocialnow.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
@@ -51,7 +53,6 @@ public class TriggerService {
                 });
             });
             mockActions(trigger);
-            mockCaseCategories(trigger);
             triggerSaved = triggerRepository.save(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -92,7 +93,6 @@ public class TriggerService {
             });
             trigger.setId(triggerId);
             mockActions(trigger);
-            mockCaseCategories(trigger);
             triggerSaved = triggerRepository.update(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -100,6 +100,23 @@ public class TriggerService {
             throw new RuntimeException(e.getMessage());
         }
         return triggerSaved;
+    }
+
+    public List<CaseCategorySet> findCaseCategories(String domainId, String triggerId) {
+        List<CaseCategorySet> caseCategoriesSet = new ArrayList<>();
+        try {
+            Trigger trigger = triggerRepository.findOne(triggerId);
+            if (CollectionUtils.isNotEmpty(trigger.getCaseCategoriesSetIds())) {
+                caseCategoriesSet = caseCategorySetRepository.findCategoriesSets(trigger.getCaseCategoriesSetIds());
+                caseCategoriesSet.stream().forEach(caseCategorySet -> {
+                    caseCategorySet.setCategories(caseCategorySetRepository.findCategories(caseCategorySet.getId()));
+                });
+            }
+        } catch (Exception e) {
+            log.error("There was an error getting case categories");
+            throw new RuntimeException(e.getMessage());
+        }
+        return caseCategoriesSet;
     }
 
     private void mockActions(Trigger trigger) {
@@ -112,10 +129,6 @@ public class TriggerService {
                 detectionCriteria.setAccionCriterias(actions);
             });
         });
-    }
-
-    private void mockCaseCategories(Trigger trigger) {
-        trigger.setCaseCategoriesSet(caseCategorySetRepository.findAll());
     }
 
 }

@@ -109,6 +109,7 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_CASE}" value-ref="tagCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).ASSIGN}" value-ref="assignCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).SEND_MESSAGE}" value-ref="sendMessageCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">

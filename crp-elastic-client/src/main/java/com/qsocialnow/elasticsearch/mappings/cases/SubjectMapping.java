@@ -6,7 +6,6 @@ import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.elasticsearch.mappings.DynamicMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.SubjectType;
-import com.qsocialnow.elasticsearch.mappings.types.config.SubjectCategoryType;
 
 public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subject> {
 
@@ -58,11 +57,14 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
         subjectType.setAddress(document.getAddress());
         subjectType.setAge(document.getAge());
         subjectType.setContactInfo(document.getContactInfo());
-        subjectType.setLastAccion(document.getLastAccion());
+        subjectType.setLastAccionDate(document.getLastAccionDate());
         subjectType.setLastName(document.getLastName());
         subjectType.setName(document.getName());
         subjectType.setSignedDate(document.getSignedDate());
         subjectType.setSourceId(document.getSourceId());
+        subjectType.setIdentifier(document.getIdentifier());
+        subjectType.setSource(document.getSource());
+        subjectType.setProfileImage(document.getProfileImage());
         subjectType.setSubjectCategory(document.getSubjectCategory());
         subjectType.setSubjectCategorySet(document.getSubjectCategorySet());
         return subjectType;
@@ -76,12 +78,15 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
 
         subject.setAge(documentType.getAge());
         subject.setContactInfo(documentType.getContactInfo());
-        subject.setLastAccion(documentType.getLastAccion());
+        subject.setLastAccionDate(documentType.getLastAccionDate());
 
         subject.setLastName(documentType.getLastName());
         subject.setName(documentType.getName());
         subject.setSignedDate(documentType.getSignedDate());
         subject.setSourceId(documentType.getSourceId());
+        subject.setIdentifier(documentType.getIdentifier());
+        subject.setSource(documentType.getSource());
+        subject.setProfileImage(documentType.getProfileImage());
         subject.setSubjectCategory(documentType.getSubjectCategory());
         subject.setSubjectCategorySet(documentType.getSubjectCategorySet());
         return subject;

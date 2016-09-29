@@ -62,4 +62,8 @@ public class SubjectCategorySetService {
         return subjectCategorySetSaved;
     }
 
+    public List<SubjectCategorySet> findAll() {
+        return subjectCategorySetRepository.findAll();
+    }
+
 }

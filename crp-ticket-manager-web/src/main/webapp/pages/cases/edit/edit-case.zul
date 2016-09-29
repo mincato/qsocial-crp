@@ -69,6 +69,28 @@
                 </n:div>
                 <n:div class="row">
                      <x:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.setcategories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.caseCategoriesSet)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+    					</div>
+                     </x:div>
+                     <n:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.categories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.caseCategories)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+    					</div>
+					</n:div>
+                 </n:div>
+                 <n:div class="row">
+                     <x:div class="form-group col-sm-6">
                           <n:label class="control-label col-sm-3">${labels.cases.details.pendingResponse}</n:label>
                           <x:div class="col-sm-2">
                               <label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.caseObject.pendingResponse)))"/>

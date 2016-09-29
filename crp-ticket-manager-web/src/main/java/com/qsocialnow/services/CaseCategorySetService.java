@@ -18,6 +18,8 @@ public interface CaseCategorySetService {
 
     PageResponse<CaseCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
 
+    List<CaseCategorySet> findAll();
+
     List<CaseCategory> findCategories(String id);
 
 }
