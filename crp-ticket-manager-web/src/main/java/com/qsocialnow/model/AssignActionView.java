@@ -2,19 +2,18 @@ package com.qsocialnow.model;
 
 import javax.validation.constraints.NotNull;
 
-import com.qsocialnow.common.model.config.BaseUserResolver;
+import com.qsocialnow.common.model.config.User;
 
 public class AssignActionView {
 
-    @NotNull(message = "{userResolver.null}")
-    private BaseUserResolver selectedUserResolver;
+    @NotNull(message = "{user.null}")
+    private User selectedUser;
 
-    public BaseUserResolver getSelectedUserResolver() {
-        return selectedUserResolver;
+    public User getSelectedUser() {
+        return selectedUser;
     }
 
-    public void setSelectedUserResolver(BaseUserResolver selectedUserResolver) {
-        this.selectedUserResolver = selectedUserResolver;
+    public void setSelectedUser(User selectedUser) {
+        this.selectedUser = selectedUser;
     }
-
 }

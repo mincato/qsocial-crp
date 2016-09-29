@@ -899,6 +899,33 @@ router.get('/teams/:id/userResolvers', function (req, res) {
 	  teamService.findUserResolvers(teamId, status, source, asyncResponse);
 });
 
+router.get('/teams/:id/users', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var teamService = javaContext.getBeanSync("teamService");
+	  var teamId = req.params.id;
+	  
+	  teamService.findUsers(teamId, asyncResponse);
+});
+
+
 router.put('/teams/:id', function (req, res) {
 
 	function asyncResponse(err,response) {

@@ -63,7 +63,7 @@
                      <x:div sclass="form-group col-sm-6">
                           <n:label class="control-label col-sm-3">${labels.cases.details.assignee}</n:label>
                           <x:div class="col-sm-9">
-                              <label visible="@load(not empty vm.currentCase.caseObject.userResolver)" class="control-label col-sm-1" value="@load(vm.currentCase.caseObject.userResolver.identifier)"></label>
+                              <label visible="@load(not empty vm.currentCase.caseObject.assignee)" class="control-label col-sm-1" value="@load(vm.currentCase.caseObject.assignee.username)"></label>
                           </x:div>  
                      </x:div>
                 </n:div>

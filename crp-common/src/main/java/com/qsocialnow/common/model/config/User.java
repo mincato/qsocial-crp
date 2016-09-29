@@ -1,28 +1,10 @@
 package com.qsocialnow.common.model.config;
 
-public class User {
+public class User extends BaseUser {
 
-    private String id;
+    private static final long serialVersionUID = -5434119218155239394L;
 
     private boolean coordinator;
-
-    private String username;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public boolean isCoordinator() {
         return coordinator;

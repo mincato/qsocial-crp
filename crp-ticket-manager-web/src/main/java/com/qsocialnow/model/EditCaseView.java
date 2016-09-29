@@ -8,6 +8,7 @@ import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.common.model.config.User;
 
 public class EditCaseView {
 
@@ -18,6 +19,8 @@ public class EditCaseView {
     private Trigger trigger;
 
     private List<BaseUserResolver> userResolverOptions;
+
+    private List<User> userOptions;
 
     private List<CaseCategory> caseCategories;
 
@@ -79,5 +82,13 @@ public class EditCaseView {
 
     public void setCaseCategoriesSet(List<CaseCategorySet> caseCategoriesSet) {
         this.caseCategoriesSet = caseCategoriesSet;
+    }
+
+    public List<User> getUserOptions() {
+        return userOptions;
+    }
+
+    public void setUserOptions(List<User> userOptions) {
+        this.userOptions = userOptions;
     }
 }

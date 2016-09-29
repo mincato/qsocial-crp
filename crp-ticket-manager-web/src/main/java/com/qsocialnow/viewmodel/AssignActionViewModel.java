@@ -22,7 +22,7 @@ import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.config.BaseUserResolver;
+import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.model.AssignActionView;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.CaseService;
@@ -41,9 +41,11 @@ public class AssignActionViewModel implements Serializable {
 
     private String caseId;
 
-    private List<BaseUserResolver> userResolverOptions;
+    private List<User> userOptions;
 
     private AssignActionView assignAction;
+
+    private EditCaseView currentCase;
 
     @Init
     public void init(@QueryParam("case") String caseId) {
@@ -51,12 +53,12 @@ public class AssignActionViewModel implements Serializable {
         this.caseId = caseId;
     }
 
-    public List<BaseUserResolver> getUserResolverOptions() {
-        return userResolverOptions;
+    public List<User> getUserOptions() {
+        return userOptions;
     }
 
-    public void setUserResolverOptions(List<BaseUserResolver> userResolverOptions) {
-        this.userResolverOptions = userResolverOptions;
+    public void setUserOptions(List<User> userOptions) {
+        this.userOptions = userOptions;
     }
 
     public AssignActionView getAssignAction() {
@@ -68,18 +70,19 @@ public class AssignActionViewModel implements Serializable {
     }
 
     @GlobalCommand
-    @NotifyChange({ "assignAction", "userResolverOptions" })
+    @NotifyChange({ "assignAction", "userOptions" })
     public void show(@BindingParam("currentCase") EditCaseView currentCase, @BindingParam("action") ActionType action) {
         if (ActionType.ASSIGN.equals(action)) {
+            this.currentCase = currentCase;
             this.assignAction = new AssignActionView();
-            if (currentCase.getUserResolverOptions() == null) {
-                initUserResolvers(currentCase);
+            if (currentCase.getUserOptions() == null) {
+                initUsers(currentCase);
             }
-            this.userResolverOptions = new ArrayList<>(currentCase.getUserResolverOptions());
-            if (currentCase.getCaseObject().getUserResolver() != null) {
-                for (Iterator<BaseUserResolver> iterator = userResolverOptions.iterator(); iterator.hasNext();) {
-                    BaseUserResolver baseUserResolver = (BaseUserResolver) iterator.next();
-                    if (baseUserResolver.getId().equals(currentCase.getCaseObject().getUserResolver().getId())) {
+            this.userOptions = new ArrayList<>(currentCase.getUserOptions());
+            if (currentCase.getCaseObject().getAssignee() != null) {
+                for (Iterator<User> iterator = userOptions.iterator(); iterator.hasNext();) {
+                    User user = iterator.next();
+                    if (user.getId().equals(currentCase.getCaseObject().getAssignee().getId())) {
                         iterator.remove();
                         break;
                     }
@@ -89,15 +92,9 @@ public class AssignActionViewModel implements Serializable {
         }
     }
 
-    private void initUserResolvers(EditCaseView currentCase) {
-        Map<String, Object> filters = new HashMap<>();
-        filters.put("status", true);
-        if (currentCase.getCaseObject().getSource() != null) {
-            filters.put("source", currentCase.getCaseObject().getSource());
-        }
-        List<BaseUserResolver> userResolvers = teamService.findUserResolvers(currentCase.getSegment().getTeam(),
-                filters);
-        currentCase.setUserResolverOptions(userResolvers);
+    private void initUsers(EditCaseView currentCase) {
+        List<User> users = teamService.findUsers(currentCase.getSegment().getTeam());
+        currentCase.setUserOptions(users);
     }
 
     @Command
@@ -105,7 +102,8 @@ public class AssignActionViewModel implements Serializable {
         ActionRequest actionRequest = new ActionRequest();
         actionRequest.setActionType(ActionType.ASSIGN);
         Map<ActionParameter, Object> parameters = new HashMap<>();
-        parameters.put(ActionParameter.USER_RESOLVER, assignAction.getSelectedUserResolver().getId());
+        parameters.put(ActionParameter.USER, assignAction.getSelectedUser().getId());
+        parameters.put(ActionParameter.TEAM, currentCase.getSegment().getTeam());
         actionRequest.setParameters(parameters);
         Case caseUpdated = caseService.executeAction(caseId, actionRequest);
 

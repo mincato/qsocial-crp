@@ -6,6 +6,7 @@ import java.util.Map;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
+import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageResponse;
 
 public interface TeamService {
@@ -21,5 +22,7 @@ public interface TeamService {
     List<TeamListView> findAll();
 
     List<BaseUserResolver> findUserResolvers(String teamId, Map<String, Object> filters);
+
+    List<User> findUsers(String teamId);
 
 }
