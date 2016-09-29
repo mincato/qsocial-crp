@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
+import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.pagination.PageRequest;
@@ -81,6 +82,18 @@ public class TeamService {
             throw new RuntimeException(e.getMessage());
         }
         return userResolvers;
+    }
+
+    public List<User> findUsers(String teamId) {
+        List<User> users = new ArrayList<>();
+        try {
+            Team team = teamRepository.findOne(teamId);
+            users = team.getUsers();
+        } catch (Exception e) {
+            log.error("There was an error getting user resolvers");
+            throw new RuntimeException(e.getMessage());
+        }
+        return users;
     }
 
 }

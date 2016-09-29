@@ -9,6 +9,7 @@ import java.util.Set;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
 
@@ -65,6 +66,8 @@ public class Case implements Serializable {
     private String lastPostId;
 
     private Long source;
+
+    private BaseUser assignee;
 
     public Case() {
 
@@ -335,6 +338,14 @@ public class Case implements Serializable {
 
     public void setSource(Long source) {
         this.source = source;
+    }
+
+    public BaseUser getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(BaseUser assignee) {
+        this.assignee = assignee;
     }
 
 }

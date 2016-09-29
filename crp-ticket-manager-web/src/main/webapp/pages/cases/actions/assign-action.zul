@@ -4,16 +4,16 @@
 		viewModel="@id('assignActionVm') @init('com.qsocialnow.viewmodel.AssignActionViewModel')"
 		validationMessages="@id('vmsgs')">
 	<x:form form="@id('fxAssignAction') @load(assignActionVm.assignAction) @save(assignActionVm.assignAction, before='execute')">
-		<div sclass="@load(empty vmsgs[userResolvers] ? 'form-group' : 'form-group has-error')">
-			<n:label class="control-label">${labels.cases.actions.response.userResolver}:</n:label>
-			<selectbox sclass="form-control" id="userResolvers" model="@load(assignActionVm.userResolverOptions)"
-				selectedItem="@bind(fxAssignAction.selectedUserResolver) @validator('beanValidator')">
+		<div sclass="@load(empty vmsgs[user] ? 'form-group' : 'form-group has-error')">
+			<n:label class="control-label">${labels.cases.actions.assign.user}:</n:label>
+			<selectbox sclass="form-control" id="user" model="@load(assignActionVm.userOptions)"
+				selectedItem="@bind(fxAssignAction.selectedUser) @validator('beanValidator')">
 			    <template name="model">
-					<label value="${each.identifier}" />
+					<label value="${each.username}" />
 				</template>
 			</selectbox>
-			<x:span sclass="@load(empty vmsgs[userResolvers] ? 'hidden' : 'help-block')">
-				<label value="@load(vmsgs[userResolvers])" />
+			<x:span sclass="@load(empty vmsgs[user] ? 'hidden' : 'help-block')">
+				<label value="@load(vmsgs[user])" />
 			</x:span>
 		</div>
 		<div class="form-group text-center">

@@ -19,6 +19,7 @@ import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
+import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.TeamService;
 
@@ -72,6 +73,12 @@ public class MockTeamService implements TeamService {
 
     @Override
     public List<BaseUserResolver> findUserResolvers(String teamId, Map<String, Object> filters) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<User> findUsers(String teamId) {
         // TODO Auto-generated method stub
         return null;
     }

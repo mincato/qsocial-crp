@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
+import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
@@ -157,6 +158,25 @@ public class TeamServiceImpl implements TeamService {
 
             ResponseEntity<List<BaseUserResolver>> response = restTemplate.exchange(builder.toUriString(),
                     HttpMethod.GET, null, new ParameterizedTypeReference<List<BaseUserResolver>>() {
+                    });
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call team service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<User> findUsers(String teamId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", teamServiceUrl)).path("/" + teamId)
+                    .path("/users");
+
+            ResponseEntity<List<User>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    new ParameterizedTypeReference<List<User>>() {
                     });
             return response.getBody();
         } catch (Exception e) {
