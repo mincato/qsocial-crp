@@ -958,6 +958,31 @@ router.get('/caseCategorySets', function (req, res) {
 	  caseCategorySetService.findAll(pageNumber, pageSize, name,asyncResponse);
 });
 
+router.get('/caseCategorySets/all', function (req, res) {
+
+    function asyncResponse(err,response) {
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(response !== null) {
+      try {
+        res.set('Content-Type', 'application/json');
+        res.send(gson.toJsonSync(response));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+  
+  var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+  caseCategorySetService.findAll(asyncResponse);
+});
+
+
 router.get('/caseCategorySets/:id', function (req, res) {
 
 	  function asyncResponse(err,response) {
@@ -1096,6 +1121,27 @@ router.get('/subjectCategorySets', function (req, res) {
   subjectCategorySetService.findAll(pageNumber, pageSize, name,asyncResponse);
 });
 
+router.get('/subjectCategorySets/all', function (req, res) {
+    function asyncResponse(err,response) {
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(response !== null) {
+      try {
+        res.set('Content-Type', 'application/json');
+        res.send(gson.toJsonSync(response));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+  var subjectCategorySetService = javaContext.getBeanSync("subjectCategorySetService");
+  subjectCategorySetService.findAll(asyncResponse);
+});
 
 router.get('/subjectCategorySets/:id', function (req, res) {
 

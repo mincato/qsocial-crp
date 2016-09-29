@@ -130,6 +130,30 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
     }
 
     @Override
+    public List<CaseCategorySet> findAll() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<CaseCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<CaseCategorySet>>() {
+                    });
+
+            List<CaseCategorySet> caseCategorySets = response.getBody();
+            return caseCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<CaseCategory> findCategories(String caseCategorySetId) {
         try {
             HttpHeaders headers = new HttpHeaders();

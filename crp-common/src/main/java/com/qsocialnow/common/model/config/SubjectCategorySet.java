@@ -2,6 +2,8 @@ package com.qsocialnow.common.model.config;
 
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 public class SubjectCategorySet {
 
     private String id;
@@ -32,5 +34,20 @@ public class SubjectCategorySet {
 
     public void setCategories(List<SubjectCategory> categories) {
         this.categories = categories;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        SubjectCategorySet set = (SubjectCategorySet) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(id, set.id).isEquals();
     }
 }

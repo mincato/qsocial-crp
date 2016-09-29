@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -121,6 +122,30 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
                     });
 
             PageResponse<SubjectCategorySetListView> subjectCategorySets = response.getBody();
+            return subjectCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SubjectCategorySet> findAll() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<SubjectCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategorySet>>() {
+                    });
+
+            List<SubjectCategorySet> subjectCategorySets = response.getBody();
             return subjectCategorySets;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);

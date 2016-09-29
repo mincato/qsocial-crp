@@ -54,7 +54,6 @@ public class TriggerService {
                 });
             });
             mockActions(trigger);
-            mockCaseCategories(trigger);
             triggerSaved = triggerRepository.save(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -95,7 +94,6 @@ public class TriggerService {
             });
             trigger.setId(triggerId);
             mockActions(trigger);
-            mockCaseCategories(trigger);
             triggerSaved = triggerRepository.update(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -132,11 +130,6 @@ public class TriggerService {
                 detectionCriteria.setAccionCriterias(actions);
             });
         });
-    }
-
-    private void mockCaseCategories(Trigger trigger) {
-        trigger.setCaseCategoriesSetIds(caseCategorySetRepository.findAll().stream().map(CaseCategorySet::getId)
-                .collect(Collectors.toList()));
     }
 
 }

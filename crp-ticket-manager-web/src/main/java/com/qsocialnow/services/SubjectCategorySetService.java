@@ -1,5 +1,6 @@
 package com.qsocialnow.services;
 
+import java.util.List;
 import java.util.Map;
 
 import com.qsocialnow.common.model.config.SubjectCategorySet;
@@ -15,5 +16,7 @@ public interface SubjectCategorySetService {
     SubjectCategorySet update(SubjectCategorySet currentSubjectCategorySet);
 
     PageResponse<SubjectCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
+
+    List<SubjectCategorySet> findAll();
 
 }

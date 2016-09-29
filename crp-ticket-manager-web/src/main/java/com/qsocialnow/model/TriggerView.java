@@ -13,6 +13,10 @@ public class TriggerView {
 
     private List<TriggerResolutionView> resolutions;
 
+    private List<TriggerCaseCategorySetView> caseCategorySets;
+
+    private List<TriggerSubjectCategorySetView> subjectCategorySets;
+
     public Trigger getTrigger() {
         return trigger;
     }
@@ -27,6 +31,22 @@ public class TriggerView {
 
     public void setResolutions(List<TriggerResolutionView> resolutions) {
         this.resolutions = resolutions;
+    }
+
+    public List<TriggerCaseCategorySetView> getCaseCategorySets() {
+        return caseCategorySets;
+    }
+
+    public void setCaseCategorySets(List<TriggerCaseCategorySetView> caseCategorySets) {
+        this.caseCategorySets = caseCategorySets;
+    }
+
+    public List<TriggerSubjectCategorySetView> getSubjectCategorySets() {
+        return subjectCategorySets;
+    }
+
+    public void setSubjectCategorySets(List<TriggerSubjectCategorySetView> subjectCategorySets) {
+        this.subjectCategorySets = subjectCategorySets;
     }
 
 }

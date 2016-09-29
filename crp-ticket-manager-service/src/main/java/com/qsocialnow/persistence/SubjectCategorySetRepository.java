@@ -81,4 +81,16 @@ public class SubjectCategorySetRepository {
         }
         return null;
     }
+
+    public List<SubjectCategorySet> findAll() {
+        List<SubjectCategorySet> subjectCategorySets = new ArrayList<>();
+
+        try {
+            subjectCategorySets = subjectCategorySetElasticService.findAll(null, null, null);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategorySets;
+    }
+
 }
