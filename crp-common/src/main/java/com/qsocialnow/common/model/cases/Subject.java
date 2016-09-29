@@ -9,6 +9,17 @@ public class Subject implements Serializable {
 
     private String id;
 
+    // identifier aka usuarioOriginal
+    private String identifier;
+
+    // sourceId aka idUsuarioOriginal
+    private String sourceId;
+
+    // source aka medioId
+    private String source;
+
+    private String profileImage;
+
     private String name;
 
     private String lastName;
@@ -17,11 +28,9 @@ public class Subject implements Serializable {
 
     private Date signedDate;
 
-    private Date lastAccion;
+    private Date lastAccionDate;
 
     private Integer age;
-
-    private String sourceId;
 
     private String subjectCategorySet;
 
@@ -35,6 +44,28 @@ public class Subject implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        if (identifier != null) {
+            String[] identifierTokens = identifier.split("\\s+");
+            if (identifierTokens.length > 0)
+                this.identifier = identifierTokens[0];
+            else
+                this.identifier = identifier;
+        }
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public String getName() {
@@ -69,12 +100,12 @@ public class Subject implements Serializable {
         this.signedDate = signedDate;
     }
 
-    public Date getLastAccion() {
-        return lastAccion;
+    public Date getLastAccionDate() {
+        return lastAccionDate;
     }
 
-    public void setLastAccion(Date lastAccion) {
-        this.lastAccion = lastAccion;
+    public void setLastAccionDate(Date lastAccionDate) {
+        this.lastAccionDate = lastAccionDate;
     }
 
     public Integer getAge() {
@@ -99,6 +130,14 @@ public class Subject implements Serializable {
 
     public void setSourceId(String sourceId) {
         this.sourceId = sourceId;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getSubjectCategorySet() {
