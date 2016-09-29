@@ -35,7 +35,7 @@ public class SubjectCategorySet {
     public void setCategories(List<SubjectCategory> categories) {
         this.categories = categories;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

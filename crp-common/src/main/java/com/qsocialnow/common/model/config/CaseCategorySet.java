@@ -35,7 +35,7 @@ public class CaseCategorySet {
     public void setCategories(List<CaseCategory> categories) {
         this.categories = categories;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

@@ -45,6 +45,8 @@ public class SendResponseActionViewModel implements Serializable {
 
     private boolean chooseUserResolver;
 
+    private ActionType action;
+
     @Init
     public void init(@QueryParam("case") String caseId) {
         sendResponseAction = new SendResponseActionView();
@@ -74,9 +76,11 @@ public class SendResponseActionViewModel implements Serializable {
     @GlobalCommand
     @NotifyChange({ "sendResponseAction", "chooseUserResolver", "userResolverOptions" })
     public void show(@BindingParam("currentCase") EditCaseView currentCase, @BindingParam("action") ActionType action) {
-        if (ActionType.REPLY.equals(action)) {
+        if (ActionType.REPLY.equals(action) || ActionType.SEND_MESSAGE.equals(action)) {
+            this.action = action;
             this.sendResponseAction = new SendResponseActionView();
-            chooseUserResolver = currentCase.getCaseObject().getUserResolver() == null;
+            chooseUserResolver = ActionType.SEND_MESSAGE.equals(action)
+                    || currentCase.getCaseObject().getUserResolver() == null;
             if (currentCase.getUserResolverOptions() == null && chooseUserResolver) {
                 initUserResolvers(currentCase);
             }
@@ -86,6 +90,8 @@ public class SendResponseActionViewModel implements Serializable {
             } else {
                 this.sendResponseAction.setSelectedUserResolver(currentCase.getCaseObject().getUserResolver());
             }
+        } else {
+            action = null;
         }
     }
 
@@ -103,7 +109,7 @@ public class SendResponseActionViewModel implements Serializable {
     @Command
     public void execute() {
         ActionRequest actionRequest = new ActionRequest();
-        actionRequest.setActionType(ActionType.REPLY);
+        actionRequest.setActionType(action);
         Map<ActionParameter, Object> parameters = new HashMap<>();
         parameters.put(ActionParameter.TEXT, sendResponseAction.getText());
         if (chooseUserResolver) {
