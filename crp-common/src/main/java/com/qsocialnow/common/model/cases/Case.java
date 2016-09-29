@@ -50,7 +50,7 @@ public class Case implements Serializable {
 
     private String unitValue;
 
-    private Customer customer;
+    private Subject subject;
 
     private Set<String> caseCategories;
 
@@ -63,6 +63,8 @@ public class Case implements Serializable {
     private String sourceUser;
 
     private String lastPostId;
+
+    private Long source;
 
     public Case() {
 
@@ -79,6 +81,7 @@ public class Case implements Serializable {
         newCase.setPendingResponse(true);
         newCase.setSourceUser(event.getUsuarioCreacion());
         newCase.setLastPostId(event.getId());
+        newCase.setSource(event.getMedioId());
 
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
@@ -134,7 +137,7 @@ public class Case implements Serializable {
                 actionsAllowed.add(ActionType.PENDING_RESPONSE);
 
             actionsAllowed.add(ActionType.SEND_MESSAGE);
-            // actionsAllowed.add(ActionType.ASSIGN);
+            actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
         } else {
             actionsAllowed.add(ActionType.REOPEN);
@@ -196,14 +199,6 @@ public class Case implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public Event getTriggerEvent() {
@@ -278,6 +273,14 @@ public class Case implements Serializable {
         return triggerId;
     }
 
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
     public BaseUserResolver getUserResolver() {
         return userResolver;
     }
@@ -324,6 +327,14 @@ public class Case implements Serializable {
 
     public void setCaseCategoriesSet(Set<String> caseCategoriesSet) {
         this.caseCategoriesSet = caseCategoriesSet;
+    }
+
+    public Long getSource() {
+        return source;
+    }
+
+    public void setSource(Long source) {
+        this.source = source;
     }
 
 }

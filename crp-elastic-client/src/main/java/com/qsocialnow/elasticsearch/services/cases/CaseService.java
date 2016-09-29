@@ -100,29 +100,6 @@ public class CaseService extends DynamicIndexService {
         return response;
     }
 
-    public String update(Case document) {
-        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
-        Repository<CaseType> repository = esfactory.initManager();
-        repository.initClient();
-
-        CaseMapping mapping = CaseMapping.getInstance();
-
-        String indexName = this.getIndex(repository);
-        mapping.setIndex(indexName);
-
-        // validete index name
-        boolean isCreated = repository.validateIndex(indexName);
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
-        // index document
-        CaseType documentIndexed = mapping.getDocumentType(document);
-        String response = repository.updateMapping(document.getId(), mapping, documentIndexed);
-        repository.closeClient();
-        return response;
-    }
-
     public void indexCaseByBulkProcess(Case document) {
         boolean isSucceeded = addItemInQueue(document);
         if (!isSucceeded) {

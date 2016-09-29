@@ -15,15 +15,9 @@ public class TagCaseAction implements Action {
     @Override
     public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         List<String> caseCategoriesSet = (List<String>) parameters.get(ActionParameter.CATEGORIES_SET);
-        if (caseObject.getCaseCategoriesSet() == null) {
-            caseObject.setCaseCategoriesSet(new HashSet<>());
-        }
-        caseObject.getCaseCategoriesSet().addAll(caseCategoriesSet);
+        caseObject.setCaseCategoriesSet(new HashSet<>(caseCategoriesSet));
         List<String> caseCategories = (List<String>) parameters.get(ActionParameter.CATEGORIES);
-        if (caseObject.getCaseCategories() == null) {
-            caseObject.setCaseCategories(new HashSet<>());
-        }
-        caseObject.getCaseCategories().addAll(caseCategories);
+        caseObject.setCaseCategories(new HashSet<>(caseCategories));
         return true;
     }
 

@@ -7,4 +7,6 @@ public interface SourceStrategy {
 
     String sendResponse(Case caseObject, UserResolver userResolver, String text);
 
+    String sendMessage(Case caseObject, UserResolver userResolver, String text);
+
 }

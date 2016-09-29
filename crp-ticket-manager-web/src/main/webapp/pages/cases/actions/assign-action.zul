@@ -1,0 +1,23 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('assignActionVm') @init('com.qsocialnow.viewmodel.AssignActionViewModel')"
+		validationMessages="@id('vmsgs')">
+	<x:form form="@id('fxAssignAction') @load(assignActionVm.assignAction) @save(assignActionVm.assignAction, before='execute')">
+		<div sclass="@load(empty vmsgs[userResolvers] ? 'form-group' : 'form-group has-error')">
+			<n:label class="control-label">${labels.cases.actions.response.userResolver}:</n:label>
+			<selectbox sclass="form-control" id="userResolvers" model="@load(assignActionVm.userResolverOptions)"
+				selectedItem="@bind(fxAssignAction.selectedUserResolver) @validator('beanValidator')">
+			    <template name="model">
+					<label value="${each.identifier}" />
+				</template>
+			</selectbox>
+			<x:span sclass="@load(empty vmsgs[userResolvers] ? 'hidden' : 'help-block')">
+				<label value="@load(vmsgs[userResolvers])" />
+			</x:span>
+		</div>
+		<div class="form-group text-center">
+	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
+		</div>
+	</x:form>
+</div>

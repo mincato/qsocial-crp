@@ -1,7 +1,6 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +28,7 @@ import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.model.ListView;
 import com.qsocialnow.model.TagCaseActionView;
 import com.qsocialnow.model.TagCaseCategorySetView;
+import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -38,6 +38,9 @@ public class TagCaseActionViewModel implements Serializable {
 
     @WireVariable
     private CaseService caseService;
+
+    @WireVariable
+    private CaseCategorySetService caseCategorySetService;
 
     private String caseId;
 
@@ -65,16 +68,33 @@ public class TagCaseActionViewModel implements Serializable {
     }
 
     @GlobalCommand
-    @NotifyChange({ "tagCaseAction" })
+    @NotifyChange({ "tagCaseAction", "categorySetListView" })
     public void show(@BindingParam("currentCase") EditCaseView currentCase, @BindingParam("action") ActionType action) {
         if (ActionType.TAG_CASE.equals(action)) {
             tagCaseAction = new TagCaseActionView();
-            tagCaseAction.setCategorySets(new ArrayList<>());
             if (categorySetListView.getList() == null) {
-                categorySetListView.setList(currentCase.getTrigger().getCaseCategoriesSet());
+                categorySetListView.setList(currentCase.getTriggerCategories());
             }
-            categorySetListView.setFilteredList(new ArrayList<>(categorySetListView.getList()));
-            categorySetListView.setEnabledAdd(true);
+            tagCaseAction.setCategorySets(currentCase
+                    .getCaseCategoriesSet()
+                    .stream()
+                    .map(caseCategorySet -> {
+                        TagCaseCategorySetView tagCaseCategorySet = new TagCaseCategorySetView();
+                        tagCaseCategorySet.setCategorySet(caseCategorySet);
+                        tagCaseCategorySet.setCategories(caseCategorySet
+                                .getCategories()
+                                .stream()
+                                .filter(category -> currentCase.getCaseObject().getCaseCategories()
+                                        .contains(category.getId())).collect(Collectors.toList()));
+                        tagCaseCategorySet.setEditingStatus(false);
+                        return tagCaseCategorySet;
+                    }).collect(Collectors.toList()));
+            categorySetListView.setFilteredList(categorySetListView
+                    .getList()
+                    .stream()
+                    .filter(categorySet -> !currentCase.getCaseObject().getCaseCategoriesSet()
+                            .contains(categorySet.getId())).collect(Collectors.toList()));
+            categorySetListView.setEnabledAdd(!categorySetListView.getFilteredList().isEmpty());
         }
     }
 
@@ -125,12 +145,23 @@ public class TagCaseActionViewModel implements Serializable {
 
     @Command
     @NotifyChange({ "categorySetListView" })
+    public void editCategorySet(@BindingParam("index") int idx,
+            @BindingParam("fxTagCaseAction") TagCaseActionView fxTagCaseAction) {
+        TagCaseCategorySetView caseCategorySet = fxTagCaseAction.getCategorySets().get(idx);
+        caseCategorySet.setEditingStatus(Boolean.TRUE);
+        addCaseCategorySetFilteredList(categorySetListView, caseCategorySet.getCategorySet());
+        categorySetListView.setEnabledAdd(false);
+        BindUtils.postNotifyChange(null, null, fxTagCaseAction, "categorySets");
+    }
+
+    @Command
+    @NotifyChange({ "categorySetListView" })
     public void confirmCategorySet(@BindingParam("index") int idx,
             @BindingParam("fxTagCaseAction") TagCaseActionView fxTagCaseAction) {
         TagCaseCategorySetView caseCategorySet = fxTagCaseAction.getCategorySets().get(idx);
         caseCategorySet.setEditingStatus(Boolean.FALSE);
         deleteCaseCategorySetFilteredList(categorySetListView, caseCategorySet.getCategorySet());
-        categorySetListView.setEnabledAdd(true);
+        categorySetListView.setEnabledAdd(!categorySetListView.getFilteredList().isEmpty());
         BindUtils.postNotifyChange(null, null, fxTagCaseAction, "categorySets");
 
     }
@@ -155,6 +186,18 @@ public class TagCaseActionViewModel implements Serializable {
 
     @Command
     public void selectCategorySet(@BindingParam("index") int idx,
+            @BindingParam("fxTagCaseAction") TagCaseActionView fxTagCaseAction) {
+        TagCaseCategorySetView caseCategorySet = fxTagCaseAction.getCategorySets().get(idx);
+        if (caseCategorySet.getCategories() != null) {
+            caseCategorySet.getCategories().clear();
+        }
+        Map<String, Object> args = new HashMap<>();
+        args.put("caseCategorySet", caseCategorySet);
+        Executions.createComponents("/pages/cases/actions/choose-categories.zul", null, args);
+    }
+
+    @Command
+    public void editCategories(@BindingParam("index") int idx,
             @BindingParam("fxTagCaseAction") TagCaseActionView fxTagCaseAction) {
         TagCaseCategorySetView caseCategorySet = fxTagCaseAction.getCategorySets().get(idx);
         Map<String, Object> args = new HashMap<>();

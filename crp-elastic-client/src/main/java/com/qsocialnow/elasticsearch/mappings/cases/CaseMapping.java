@@ -61,7 +61,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setCaseCategories(document.getCaseCategories());
         caseType.setCloseDate(document.getCloseDate());
         caseType.setCoordinates(document.getCoordinates());
-        caseType.setCustomer(document.getCustomer());
+        caseType.setSubject(document.getSubject());
         caseType.setDescription(document.getDescription());
         caseType.setOpen(document.getOpen());
         caseType.setOpenDate(document.getOpenDate());
@@ -76,6 +76,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setSegmentId(document.getSegmentId());
         caseType.setUserResolver(document.getUserResolver());
         caseType.setDomainId(document.getDomainId());
+        caseType.setSource(document.getSource());
         return caseType;
     }
 
@@ -89,7 +90,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setCaseCategories(documentType.getCaseCategories());
         caseDocument.setCloseDate(documentType.getCloseDate());
         caseDocument.setCoordinates(documentType.getCoordinates());
-        caseDocument.setCustomer(documentType.getCustomer());
+        caseDocument.setSubject(documentType.getSubject());
         caseDocument.setDescription(documentType.getDescription());
         caseDocument.setOpen(documentType.getOpen());
         caseDocument.setOpenDate(documentType.getOpenDate());
@@ -104,6 +105,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setSegmentId(documentType.getSegmentId());
         caseDocument.setDomainId(documentType.getDomainId());
         caseDocument.setUserResolver(documentType.getUserResolver());
+        caseDocument.setSource(documentType.getSource());
         return caseDocument;
     }
 
