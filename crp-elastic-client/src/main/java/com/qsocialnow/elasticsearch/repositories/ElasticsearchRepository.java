@@ -305,8 +305,14 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, int from, int size, String sortField,
             String searchField, String searchValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC)
-                .query(QueryBuilders.matchQuery(searchField, searchValue));
+
+        if (size > 0)
+            searchSourceBuilder.from(from).size(size);
+
+        if (sortField != null)
+            searchSourceBuilder.sort(sortField, SortOrder.ASC);
+
+        searchSourceBuilder.query(QueryBuilders.matchQuery(searchField, searchValue));
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();

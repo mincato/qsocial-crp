@@ -2,6 +2,9 @@ package com.qsocialnow.elasticsearch.services.cases;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.SubjectMapping;
@@ -11,6 +14,8 @@ import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class SubjectService extends DynamicIndexService {
+
+    private static final Logger log = LoggerFactory.getLogger(SubjectService.class);
 
     private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
@@ -51,6 +56,27 @@ public class SubjectService extends DynamicIndexService {
 
         repository.closeClient();
         return subjects;
+    }
+
+    public Subject findSubjectsByOriginUser(String sourceId) {
+        Subject subject = null;
+        RepositoryFactory<SubjectType> esfactory = new RepositoryFactory<SubjectType>(elasticSearchCaseConfigurator);
+        Repository<SubjectType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SubjectMapping mapping = SubjectMapping.getInstance();
+        mapping.setIndex(this.getQueryIndex());
+
+        SearchResponse<Subject> response = repository.queryByField(mapping, 0, 0, null, "sourceId", sourceId);
+        List<Subject> subjects = response.getSources();
+
+        if (subjects != null && subjects.size() > 0) {
+            log.info("Retrieving subject : " + sourceId);
+            subject = subjects.get(0);
+        }
+
+        repository.closeClient();
+        return subject;
     }
 
     public Subject findSubjectById(String subjectId) {
