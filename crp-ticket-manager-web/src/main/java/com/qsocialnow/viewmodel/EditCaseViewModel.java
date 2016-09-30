@@ -1,5 +1,6 @@
 package com.qsocialnow.viewmodel;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,6 +22,7 @@ import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
+import org.zkoss.zul.Filedownload;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.RegistryListView;
@@ -32,7 +34,9 @@ import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.ActionRegistryService;
 import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
+import com.qsocialnow.services.FileService;
 import com.qsocialnow.services.TriggerService;
+import com.qsocialnow.util.DeleteOnCloseInputStream;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class EditCaseViewModel implements Serializable {
@@ -52,6 +56,9 @@ public class EditCaseViewModel implements Serializable {
 
     @WireVariable
     private CaseCategorySetService caseCategorySetService;
+
+    @WireVariable
+    private FileService fileService;
 
     private EditCaseView currentCase;
 
@@ -213,6 +220,12 @@ public class EditCaseViewModel implements Serializable {
         args.put("currentCase", currentCase);
         args.put("action", selectedAction);
         BindUtils.postGlobalCommand(null, null, "show", args);
+    }
+
+    @Command
+    public void downloadAttachment(@BindingParam("attachment") String attachment) throws Exception {
+        File file = fileService.download(attachment, currentCase.getCaseObject());
+        Filedownload.save(new DeleteOnCloseInputStream(file), null, attachment);
     }
 
     private PageResponse<RegistryListView> findRegistriesBy() {

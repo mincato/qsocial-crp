@@ -96,10 +96,24 @@
                               <label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.caseObject.pendingResponse)))"/>
                           </x:div>
                      </x:div>
-                 </n:div>
-            </x:form>
-        </div>
-    </div>
+                     <x:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.attachments}</n:label>
+						<x:div class="col-sm-3">
+							<div children="@load(vm.currentCase.caseObject.attachments)">
+								<template name="children">
+									<a onClick="@command('downloadAttachment', attachment=each)">
+										<span>
+											<label class="label label-primary" value="${each}"/>
+										</span>
+									</a>
+								</template>
+							</div>
+						</x:div>
+					</x:div>
+				</n:div>
+			</x:form>
+		</div>
+	</div>
     <n:br/>
 	<div zclass="row">
 		<include zclass="col-lg-12" src="/pages/cases/actions/master-action.zul"/>

@@ -69,6 +69,8 @@ public class Case implements Serializable {
 
     private BaseUser assignee;
 
+    private Set<String> attachments;
+
     public Case() {
 
     }
@@ -142,6 +144,7 @@ public class Case implements Serializable {
             actionsAllowed.add(ActionType.SEND_MESSAGE);
             actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
+            actionsAllowed.add(ActionType.ATTACH_FILE);
         } else {
             actionsAllowed.add(ActionType.REOPEN);
         }
@@ -346,6 +349,14 @@ public class Case implements Serializable {
 
     public void setAssignee(BaseUser assignee) {
         this.assignee = assignee;
+    }
+
+    public Set<String> getAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(Set<String> attachments) {
+        this.attachments = attachments;
     }
 
 }

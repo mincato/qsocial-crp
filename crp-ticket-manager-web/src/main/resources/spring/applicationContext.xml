@@ -9,7 +9,7 @@
  
  	<context:component-scan base-package="com.qsocialnow" />
  	
- 	<context:property-placeholder location="${extPropDir:classpath:}application.properties, /META-INF/MANIFEST.MF" ignore-unresolvable="true"/>
+ 	<context:property-placeholder location="${extPropDir:classpath:}application.properties, classpath:config.properties, /META-INF/MANIFEST.MF" ignore-unresolvable="true"/>
  	
  	<bean id="zookeeperClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
  		<constructor-arg value="${app.zookeeper.host}"></constructor-arg>
@@ -19,6 +19,11 @@
 				<constructor-arg  value="3"></constructor-arg>
 			</bean>
  		</constructor-arg>
+	</bean>
+	
+	<bean id="amazonS3Config" class="com.qsocialnow.config.AmazonS3ConfigFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${app.amazonS3.app.configurator.path}"></constructor-arg>
 	</bean>
 	
 </beans>
