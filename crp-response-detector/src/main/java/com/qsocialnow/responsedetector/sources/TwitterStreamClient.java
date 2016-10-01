@@ -39,7 +39,11 @@ public class TwitterStreamClient {
     public void addTrackFilter(String track) {
         mentionToTrackList.add(track);
         tweetFilterQuery = new FilterQuery();
-        tweetFilterQuery.track((String[])mentionToTrackList.toArray()); // OR on keywords
+
+        String[] mentions = new String[mentionToTrackList.size()];
+        mentions = mentionToTrackList.toArray(mentions);
+
+        tweetFilterQuery.track(mentions); // OR on keywords
         //init stream to filter user mentions/replies
         twitterStream.filter(tweetFilterQuery);
     }

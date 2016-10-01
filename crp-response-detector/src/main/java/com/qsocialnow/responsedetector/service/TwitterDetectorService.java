@@ -24,7 +24,6 @@ import com.qsocialnow.responsedetector.config.TwitterConfigurator;
 import com.qsocialnow.responsedetector.factories.TwitterConfiguratorFactory;
 import com.qsocialnow.responsedetector.model.TwitterMessageEvent;
 import com.qsocialnow.responsedetector.sources.TwitterClient;
-import com.qsocialnow.responsedetector.sources.TwitterStatusListener;
 import com.qsocialnow.responsedetector.sources.TwitterStreamClient;
 
 import twitter4j.Status;
@@ -87,12 +86,12 @@ public class TwitterDetectorService extends SourceDetectorService {
                     	
                     	byte[] messageBytes = event.getData().getData();
                         
-                    	if(messageBytes!=null){
+                    	/*if(messageBytes!=null){
 	                    	TwitterMessageEvent twitterMessageEvent = new GsonBuilder().create().fromJson(
 	                                new String(messageBytes), TwitterMessageEvent.class);
 	
 	                    	addTwitterMessage(twitterMessageEvent);
-                        }
+                        }*/
                         break;
                     }
                     case INITIALIZED: {
