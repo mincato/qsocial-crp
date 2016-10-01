@@ -90,7 +90,7 @@ public class SubjectService extends DynamicIndexService {
         mapping.setIndex(indexName);
 
         // index document
-        SearchResponse<Subject> searchResponse = repository.find(subjectId, mapping);
+        SearchResponse<Subject> searchResponse = repository.findByAlias(subjectId, mapping);
         Subject response = searchResponse.getSource();
 
         repository.closeClient();

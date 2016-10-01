@@ -58,12 +58,12 @@ public class TwitterDetectorService extends SourceDetectorService {
     public void run() {
 
         try {
-            configurator = twitterConfiguratorFactory.getConfigurator(appConfig.getTwitterAppConfiguratorZnodePath());
+            
+        	configurator = twitterConfiguratorFactory.getConfigurator(appConfig.getTwitterAppConfiguratorZnodePath());
             twitterStreamClient = new TwitterStreamClient(configurator);
             twitterStreamClient.initClient();
-            twitterStreamClient.start();
 
-            pathChildrenCache = new PathChildrenCache(zookeeperClient, appConfig.getTwitterMessagesPath(), true);
+            pathChildrenCache = new PathChildrenCache(zookeeperClient, appConfig.getTwitterUsersZnodePath(), true);
             addListener();
             pathChildrenCache.start(StartMode.POST_INITIALIZED_EVENT);
 
@@ -79,11 +79,20 @@ public class TwitterDetectorService extends SourceDetectorService {
             public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
                 switch (event.getType()) {
                     case CHILD_ADDED: {
-                        log.info("Message added: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
-                        byte[] messageBytes = event.getData().getData();
-                        TwitterMessageEvent twitterMessageEvent = new GsonBuilder().create().fromJson(
-                                new String(messageBytes), TwitterMessageEvent.class);
-                        createMessageHandlerProcessor(twitterMessageEvent);
+
+                    	String userResolverToFilter = ZKPaths.getNodeFromPath(event.getData().getPath());
+                    	log.info("User Resolver - Message added: " + userResolverToFilter);
+                    	
+                    	addUserResolverTrack(userResolverToFilter);
+                    	
+                    	byte[] messageBytes = event.getData().getData();
+                        
+                    	if(messageBytes!=null){
+	                    	TwitterMessageEvent twitterMessageEvent = new GsonBuilder().create().fromJson(
+	                                new String(messageBytes), TwitterMessageEvent.class);
+	
+	                    	addTwitterMessage(twitterMessageEvent);
+                        }
                         break;
                     }
                     case INITIALIZED: {
@@ -104,7 +113,7 @@ public class TwitterDetectorService extends SourceDetectorService {
                         byte[] messageBytes = event.getData().getData();
                         TwitterMessageEvent twitterMessageEvent = new GsonBuilder().create().fromJson(
                                 new String(messageBytes), TwitterMessageEvent.class);
-                        createMessageHandlerProcessor(twitterMessageEvent);
+                        addTwitterMessage(twitterMessageEvent);
                         break;
                     }
                     default:
@@ -115,18 +124,31 @@ public class TwitterDetectorService extends SourceDetectorService {
         pathChildrenCache.getListenable().addListener(listener);
     }
 
-    private void createMessageHandlerProcessor(TwitterMessageEvent message) {
+    private void addUserResolverTrack(String  userResolverToFilter) {
         try {
             if (startListening) {
-                log.info("Adding message:" + message.getMessageId() + "from Case:" + message.getCaseId());
-                twitterStreamClient.addListeners(new TwitterStatusListener(this, twitterStreamClient, message));
+                log.info("Adding UserResolver:" + userResolverToFilter);
+                twitterStreamClient.addTrackFilter(userResolverToFilter);
             }
         } catch (Exception e) {
-            log.error("There was an error creating the message handler processor for tweet: " + message.getMessageId(),
-                    e);
+            log.error("There was an error adding new User Resolver to track :" + userResolverToFilter,e);
         }
     }
 
+    private void addTwitterMessage(TwitterMessageEvent twitterMessageEvent) {
+        try {
+            if (startListening) {
+                log.info("Adding message:" + twitterMessageEvent.getMessageId() + "from Case:" + twitterMessageEvent.getCaseId());
+                //twitterStreamClient.addListeners(new TwitterStatusListener(this, twitterStreamClient, message));
+
+            }
+        } catch (Exception e) {
+            log.error("There was an error creating the message handler processor for tweet: " + twitterMessageEvent.getMessageId(),
+                    e);
+        }
+    }
+    
+    
     private void checkMessageResponses(TwitterMessageEvent message) {
         TwitterClient twitterClient = new TwitterClient(this);
         twitterClient.initTwitterClient(configurator);
@@ -149,7 +171,7 @@ public class TwitterDetectorService extends SourceDetectorService {
     @Override
     public void removeSourceConversation(String converstation) {
         try {
-            zookeeperClient.delete().forPath(appConfig.getTwitterMessagesPath() + "/" + converstation);
+            //zookeeperClient.delete().forPath(appConfig.getTwitterMessagesPath() + "/" + converstation);
         } catch (Exception e) {
             log.error("Unable to remove message conversation:: " + converstation, e);
         }

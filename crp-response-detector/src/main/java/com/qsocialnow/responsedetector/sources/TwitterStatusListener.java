@@ -38,7 +38,7 @@ public class TwitterStatusListener implements StatusListener {
         log.info("receiving message from " + status.getUser().getScreenName());
         if (String.valueOf(status.getInReplyToStatusId()).equals(this.messageEvent.getReplyMessageId())) {
 
-            twitterClient.removeListeners(this);
+            //twitterClient.removeListeners(this);
             log.info("Reply detected : " + status.getId() + " Text: " + status.getText());
             sourceService.processEvent(this.messageEvent, status);
             this.sourceService.removeSourceConversation(this.messageEvent.getMessageId());
