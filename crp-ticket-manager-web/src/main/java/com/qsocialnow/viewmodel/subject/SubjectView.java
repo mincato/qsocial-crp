@@ -9,14 +9,12 @@ public class SubjectView {
     @Valid
     private Subject subject;
 
-	public Subject getSubject() {
-		return subject;
-	}
+    public Subject getSubject() {
+        return subject;
+    }
 
-	public void setSubject(Subject subject) {
-		this.subject = subject;
-	}
-    
-    
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
 
 }

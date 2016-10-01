@@ -28,10 +28,9 @@ import com.qsocialnow.services.SubjectService;
 @ToClientCommand("modal$closeEvent")
 public class EditSubjectViewModel implements Serializable {
 
-    
-  private static final long serialVersionUID = -8513141217044818510L;
+    private static final long serialVersionUID = -8513141217044818510L;
 
-	@WireVariable
+    @WireVariable
     private SubjectService subjectService;
 
     private String subjectId;
@@ -58,14 +57,15 @@ public class EditSubjectViewModel implements Serializable {
         Subject subject = new Subject();
         subject.setId(currentSubject.getSubject().getId());
         subject.setName(currentSubject.getSubject().getName());
+        subject.setLastName(currentSubject.getSubject().getLastName());
+        subject.setAge(currentSubject.getSubject().getAge());
+        subject.setAddress(currentSubject.getSubject().getAddress());
         subject = subjectService.update(subject);
         Clients.showNotification(Labels.getLabel("subject.edit.notification.success",
                 new String[] { subject.getName() }));
 
         saved = true;
     }
-
-   
 
     public boolean isSaved() {
         return saved;
