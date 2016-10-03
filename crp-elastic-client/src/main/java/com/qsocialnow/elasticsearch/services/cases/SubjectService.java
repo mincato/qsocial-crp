@@ -2,10 +2,13 @@ package com.qsocialnow.elasticsearch.services.cases;
 
 import java.util.List;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.cases.Subject;
+import com.qsocialnow.common.model.request.SubjectListRequest;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.SubjectMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.SubjectType;
@@ -41,16 +44,24 @@ public class SubjectService extends DynamicIndexService {
         return response;
     }
 
-    public List<Subject> findSubjects(int from, int size) {
+    public List<Subject> findSubjects(int from, int size, SubjectListRequest subjectListRequest) {
 
         RepositoryFactory<SubjectType> esfactory = new RepositoryFactory<SubjectType>(elasticSearchCaseConfigurator);
         Repository<SubjectType> repository = esfactory.initManager();
         repository.initClient();
 
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        if (subjectListRequest.getIdentifier() != null) {
+            filters = filters.must(QueryBuilders.matchQuery("identifier", subjectListRequest.getIdentifier()));
+        }
+        if (subjectListRequest.getSource() != null) {
+            filters = filters.must(QueryBuilders.matchQuery("source", subjectListRequest.getSource()));
+        }
+
         SubjectMapping mapping = SubjectMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
 
-        SearchResponse<Subject> response = repository.queryMatchAll(from, size, "name", mapping);
+        SearchResponse<Subject> response = repository.searchWithFilters(from, size, "identifier", filters, mapping);
 
         List<Subject> subjects = response.getSources();
 

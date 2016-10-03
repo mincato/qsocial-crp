@@ -1,0 +1,63 @@
+<div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute" sclass="modal fade" ca:data-modal=""
+	ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
+	apply="org.zkoss.bind.BindComposer" viewModel="@id('subjectVm') @init('com.qsocialnow.viewmodel.ChooseSubjectViewModel', source=arg.source)">
+	<n:div class="modal-dialog">
+		<div class="modal-content">
+			<n:div class="modal-header">
+				<n:h4 class="modal-title">${labels.cases.actions.changeSubject.select.title}</n:h4>
+			</n:div>
+			<n:div class="modal-body">
+				<n:div class="row">
+				   <n:div class="col-lg-12">
+				       <div zclass="pane equal col-md-12 col-xs-12">
+							<n:div class="col-md-offset-1 col-md-3 col-xs-8">
+								<div zclass="input-group input-group-sm">
+									  <textbox zclass="form-control" value="@bind(subjectVm.keyword)" onOK="@command('search')" />
+										<span zclass="input-group-btn">
+										    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+										</span>
+						    	</div>
+			                </n:div>
+				       </div>
+				   </n:div>
+			    </n:div>
+				<div class="row">
+					<n:div>
+						<div zclass="pane equal">
+			    		  	<div zclass="table-responsive" >
+								<table class="table table-striped table-hover">
+								    <thead>
+										<tr>
+										    <th>${labels.domain.list.column.name}</th>
+										    <th>${labels.domain.list.column.action}</th>
+										</tr>
+								    </thead>
+								    <tbody children="@bind(subjectVm.subjects)">
+								    	<template name="children">
+										<tr>
+					                   		<td class="list-text-column">${each.identifier}</td>
+					                       	<td>
+					                       		<ul class="list-inline">
+					  								<li><a class="list-action"><i onClick="@command('selectSubject', subject=each)" class="fa fa-check" data-toggle="tooltip" data-placement="top" title="${labels.cases.actions.changeSubject.select.action}"></i></a></li>
+												</ul>
+								           	</td>
+					               		</tr>
+					               		</template>
+									</tbody>
+								</table>
+							</div>
+							<div class="text-center" zclass="@bind(vm.moreResults?'more-results':'hidden')">
+								<a style="text-decoration:none" onClick="@command('moreResults')"  >
+								 	${labels.app.pagination.moreResults}
+								</a>
+							</div>
+						</div>
+					</n:div>
+				</div>
+			</n:div>
+			<n:div class="modal-footer">
+				<button ca:data-dismiss="modal" label="${labels.app.button.close}" zclass="btn btn-primary" />
+			</n:div>
+		</div>
+	</n:div>
+</div>
