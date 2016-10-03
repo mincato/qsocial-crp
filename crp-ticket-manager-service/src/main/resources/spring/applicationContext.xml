@@ -111,6 +111,7 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).ASSIGN}" value-ref="assignCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).SEND_MESSAGE}" value-ref="sendMessageCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).ATTACH_FILE}" value-ref="attachFileCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_SUBJECT}" value-ref="changeSubjectCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">

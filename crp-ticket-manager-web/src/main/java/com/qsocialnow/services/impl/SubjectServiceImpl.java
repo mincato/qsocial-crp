@@ -99,13 +99,14 @@ public class SubjectServiceImpl implements SubjectService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            String name = null;
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl("centaurico", subjectServiceUrl)).queryParam("pageNumber", pageNumber);
+
             if (filters != null) {
-                name = filters.get("name");
+                for (Map.Entry<String, String> filter : filters.entrySet()) {
+                    builder.queryParam(filter.getKey(), filter.getValue());
+                }
             }
-            UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", subjectServiceUrl))
-                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize).queryParam("name", name);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 

@@ -29,6 +29,7 @@ import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.ActionRegistryService;
@@ -168,6 +169,7 @@ public class EditCaseViewModel implements Serializable {
                 this.currentCase.getCaseObject().getTriggerId(), this.currentCase.getCaseObject().getSegmentId()));
         this.currentCase.setTrigger(triggerService.findOne(this.currentCase.getCaseObject().getDomainId(),
                 this.currentCase.getCaseObject().getTriggerId()));
+        this.currentCase.setSource(Media.getByValue(currentCase.getCaseObject().getSource()));
     }
 
     private List<ActionType> getAllowedActionsByCase() {

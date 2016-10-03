@@ -3,9 +3,11 @@ package com.qsocialnow.model;
 import java.util.List;
 
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.User;
@@ -27,6 +29,10 @@ public class EditCaseView {
     private List<CaseCategorySet> caseCategoriesSet;
 
     private List<CaseCategorySet> triggerCategories;
+
+    private List<Subject> subjectOptions;
+
+    private Media source;
 
     public void setCaseObject(Case caseObject) {
         this.caseObject = caseObject;
@@ -90,5 +96,21 @@ public class EditCaseView {
 
     public void setUserOptions(List<User> userOptions) {
         this.userOptions = userOptions;
+    }
+
+    public List<Subject> getSubjectOptions() {
+        return subjectOptions;
+    }
+
+    public void setSubjectOptions(List<Subject> subjectOptions) {
+        this.subjectOptions = subjectOptions;
+    }
+
+    public Media getSource() {
+        return source;
+    }
+
+    public void setSource(Media source) {
+        this.source = source;
     }
 }

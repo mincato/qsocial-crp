@@ -145,6 +145,7 @@ public class Case implements Serializable {
             actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
             actionsAllowed.add(ActionType.ATTACH_FILE);
+            actionsAllowed.add(ActionType.CHANGE_SUBJECT);
         } else {
             actionsAllowed.add(ActionType.REOPEN);
         }
