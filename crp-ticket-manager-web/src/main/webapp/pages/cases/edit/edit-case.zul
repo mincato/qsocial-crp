@@ -125,6 +125,28 @@
                       	</x:div> 
 					</x:div>
 				</n:div>
+				<n:div class="row">
+	                 <x:div class="form-group col-sm-6">
+	                 	<n:label class="control-label col-sm-3">${labels.cases.details.setsubjectcategories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.subjectCategoriesSet)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+						</div>
+	                 </x:div>
+	                 <n:div class="form-group col-sm-6">
+	                 	<n:label class="control-label col-sm-3">${labels.cases.details.subjectcategories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.subjectCategories)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+						</div>
+					</n:div>
+	             </n:div>
 			</x:form>
 		</div>
 	</div>

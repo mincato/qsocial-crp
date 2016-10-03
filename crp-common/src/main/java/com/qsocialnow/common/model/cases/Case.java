@@ -133,7 +133,7 @@ public class Case implements Serializable {
 
         if (this.getOpen()) {
             actionsAllowed.add(ActionType.REPLY);
-            // actionsAllowed.add(ActionType.TAG_SUBJECT);
+            actionsAllowed.add(ActionType.TAG_SUBJECT);
             actionsAllowed.add(ActionType.TAG_CASE);
             actionsAllowed.add(ActionType.CLOSE);
             actionsAllowed.add(ActionType.REGISTER_COMMENT);

@@ -16,12 +16,14 @@ import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.persistence.CaseCategorySetRepository;
+import com.qsocialnow.persistence.SubjectCategorySetRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 
 @Service
@@ -37,6 +39,9 @@ public class TriggerService {
 
     @Autowired
     private CaseCategorySetRepository caseCategorySetRepository;
+
+    @Autowired
+    private SubjectCategorySetRepository subjectCategorySetRepository;
 
     @Autowired
     private CuratorFramework zookeeperClient;
@@ -113,10 +118,30 @@ public class TriggerService {
                 });
             }
         } catch (Exception e) {
-            log.error("There was an error getting case categories");
+            log.error("There was an error getting subject categories");
             throw new RuntimeException(e.getMessage());
         }
         return caseCategoriesSet;
+    }
+
+    public List<SubjectCategorySet> findSubjectCategories(String domainId, String triggerId) {
+        List<SubjectCategorySet> subjectCategoriesSet = new ArrayList<>();
+        try {
+            Trigger trigger = triggerRepository.findOne(triggerId);
+            if (CollectionUtils.isNotEmpty(trigger.getSubjectCategoriesSetIds())) {
+                subjectCategoriesSet = subjectCategorySetRepository.findCategoriesSets(trigger
+                        .getSubjectCategoriesSetIds());
+                subjectCategoriesSet.stream().forEach(
+                        subjectCategorySet -> {
+                            subjectCategorySet.setCategories(subjectCategorySetRepository
+                                    .findCategories(subjectCategorySet.getId()));
+                        });
+            }
+        } catch (Exception e) {
+            log.error("There was an error getting subject categories");
+            throw new RuntimeException(e.getMessage());
+        }
+        return subjectCategoriesSet;
     }
 
     private void mockActions(Trigger trigger) {
