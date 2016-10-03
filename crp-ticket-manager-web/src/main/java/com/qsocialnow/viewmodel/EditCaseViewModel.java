@@ -30,6 +30,8 @@ import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Media;
+import com.qsocialnow.common.model.config.SubjectCategory;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.ActionRegistryService;
@@ -108,6 +110,7 @@ public class EditCaseViewModel implements Serializable {
         findCase(this.caseId);
         findRegistriesBy();
         initCaseCategories();
+        initCategoriesForSubject();
         this.actionOptions = getAllowedActionsByCase();
     }
 
@@ -148,6 +151,46 @@ public class EditCaseViewModel implements Serializable {
             categories = new ArrayList<>();
         }
         currentCase.setCaseCategories(categories);
+    }
+
+    private void initCategoriesForSubject() {
+        if (currentCase.getTriggerSubjectCategories() == null) {
+            currentCase.setTriggerSubjectCategories(triggerService.findSubjectCategories(currentCase.getCaseObject()
+                    .getDomainId(), currentCase.getCaseObject().getTriggerId()));
+        }
+        initSubjectCategoriesSet();
+        initSubjectCategories();
+
+    }
+
+    private void initSubjectCategoriesSet() {
+        List<SubjectCategorySet> categoriesSet;
+        Set<String> subjectCategoriesSet = currentCase.getCaseObject().getSubject().getSubjectCategorySet();
+        if (CollectionUtils.isNotEmpty(subjectCategoriesSet)) {
+            categoriesSet = currentCase.getTriggerSubjectCategories().stream()
+                    .filter(subjectCategorySet -> subjectCategoriesSet.contains(subjectCategorySet.getId()))
+                    .collect(Collectors.toList());
+
+        } else {
+            categoriesSet = new ArrayList<>();
+        }
+        currentCase.setSubjectCategoriesSet(categoriesSet);
+
+    }
+
+    private void initSubjectCategories() {
+        List<SubjectCategory> categories;
+        Set<String> subjectCategories = currentCase.getCaseObject().getSubject().getSubjectCategory();
+        if (CollectionUtils.isNotEmpty(subjectCategories)) {
+            Stream<SubjectCategory> subjectCategoriesStream = currentCase.getTriggerSubjectCategories().stream()
+                    .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
+            categories = subjectCategoriesStream.filter(
+                    subjectCategory -> subjectCategories.contains(subjectCategory.getId()))
+                    .collect(Collectors.toList());
+        } else {
+            categories = new ArrayList<>();
+        }
+        currentCase.setSubjectCategories(categories);
     }
 
     @Command
@@ -214,6 +257,7 @@ public class EditCaseViewModel implements Serializable {
         this.selectedAction = null;
         this.refreshRegistries();
         this.initCaseCategories();
+        this.initSubjectCategories();
     }
 
     @Command

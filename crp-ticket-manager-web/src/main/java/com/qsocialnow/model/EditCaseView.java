@@ -9,6 +9,8 @@ import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.SubjectCategory;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.User;
 
@@ -28,7 +30,13 @@ public class EditCaseView {
 
     private List<CaseCategorySet> caseCategoriesSet;
 
+    private List<SubjectCategory> subjectCategories;
+
+    private List<SubjectCategorySet> subjectCategoriesSet;
+
     private List<CaseCategorySet> triggerCategories;
+
+    private List<SubjectCategorySet> triggerSubjectCategories;
 
     private List<Subject> subjectOptions;
 
@@ -113,4 +121,29 @@ public class EditCaseView {
     public void setSource(Media source) {
         this.source = source;
     }
+
+    public List<SubjectCategorySet> getTriggerSubjectCategories() {
+        return triggerSubjectCategories;
+    }
+
+    public void setTriggerSubjectCategories(List<SubjectCategorySet> triggerSubjectCategories) {
+        this.triggerSubjectCategories = triggerSubjectCategories;
+    }
+
+    public List<SubjectCategory> getSubjectCategories() {
+        return subjectCategories;
+    }
+
+    public void setSubjectCategories(List<SubjectCategory> subjectCategories) {
+        this.subjectCategories = subjectCategories;
+    }
+
+    public List<SubjectCategorySet> getSubjectCategoriesSet() {
+        return subjectCategoriesSet;
+    }
+
+    public void setSubjectCategoriesSet(List<SubjectCategorySet> subjectCategoriesSet) {
+        this.subjectCategoriesSet = subjectCategoriesSet;
+    }
+
 }

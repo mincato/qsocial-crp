@@ -138,6 +138,42 @@ public class SubjectCategorySetService {
         return subjectCategorySet;
     }
 
+    public List<SubjectCategory> findCategories(String subjectCategorySetId) {
+        RepositoryFactory<SubjectCategoryType> esSubjectCategoryfactory = new RepositoryFactory<SubjectCategoryType>(
+                configurator);
+
+        Repository<SubjectCategoryType> repositorySubjectCategory = esSubjectCategoryfactory.initManager();
+        repositorySubjectCategory.initClient();
+        SubjectCategoryMapping subjectCategoryMapping = SubjectCategoryMapping.getInstance();
+
+        SearchResponse<SubjectCategory> responseSubjectCategories = repositorySubjectCategory.queryByField(
+                subjectCategoryMapping, 0, -1, "description", "idSubjectCategorySet", subjectCategorySetId);
+
+        List<SubjectCategory> categories = responseSubjectCategories.getSources();
+
+        repositorySubjectCategory.closeClient();
+        return categories;
+    }
+
+    public List<SubjectCategorySet> findByIds(List<String> ids) {
+        RepositoryFactory<SubjectCategorySetType> esfactory = new RepositoryFactory<SubjectCategorySetType>(
+                configurator);
+        Repository<SubjectCategorySetType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance();
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
+
+        SearchResponse<SubjectCategorySet> response = repository.searchWithFilters(filters, mapping);
+
+        List<SubjectCategorySet> subjectCategorySets = response.getSources();
+
+        repository.closeClient();
+        return subjectCategorySets;
+    }
+
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
     }
