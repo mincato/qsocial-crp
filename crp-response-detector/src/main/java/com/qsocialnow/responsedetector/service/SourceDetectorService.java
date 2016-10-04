@@ -1,15 +1,13 @@
 package com.qsocialnow.responsedetector.service;
 
-import com.qsocialnow.responsedetector.model.TwitterMessageEvent;
-
-import twitter4j.Status;
-
 public abstract class SourceDetectorService implements Runnable {
 
     public abstract void stop();
 
-    public abstract void removeSourceConversation(String converstationPath);
+    public abstract void removeSourceConversation(String userResolver, String messageId);
 
-    public abstract void processEvent(TwitterMessageEvent messageEvent, Status status);
+    public abstract void processEvent(Boolean isResponseFromMessage, String userResolver, String[] userMentions,
+            String sourceMessageId, String messageText, String inReplyToMessageId, String userId, String userName,
+            String userProfileImage);
 
 }

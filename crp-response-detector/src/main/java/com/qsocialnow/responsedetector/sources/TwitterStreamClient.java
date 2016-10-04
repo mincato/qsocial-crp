@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
+import com.qsocialnow.responsedetector.service.SourceDetectorService;
 
 import twitter4j.FilterQuery;
 import twitter4j.TwitterStream;
@@ -17,7 +18,7 @@ public class TwitterStreamClient {
     private FilterQuery tweetFilterQuery;
 
     private ConfigurationBuilder configurationBuilder;
-    
+
     private List<String> mentionToTrackList;
 
     public TwitterStreamClient(TwitterConfigurator twitterConfigurator) {
@@ -26,14 +27,14 @@ public class TwitterStreamClient {
                 .setOAuthConsumerSecret(twitterConfigurator.getOAuthConsumerSecret())
                 .setOAuthAccessToken(twitterConfigurator.getOAuthAccessToken())
                 .setOAuthAccessTokenSecret(twitterConfigurator.getOAuthAccessTokenSecret());
-        
+
         mentionToTrackList = new ArrayList<>();
         configurationBuilder.setUserStreamRepliesAllEnabled(true);
     }
 
-    public void initClient() {
+    public void initClient(SourceDetectorService sourceDetectorService) {
         this.twitterStream = new TwitterStreamFactory(configurationBuilder.build()).getInstance();
-        this.twitterStream.addListener(new ResponseDetectorStreamListener());
+        this.twitterStream.addListener(new ResponseDetectorStreamListener(sourceDetectorService));
     }
 
     public void addTrackFilter(String track) {
@@ -44,7 +45,7 @@ public class TwitterStreamClient {
         mentions = mentionToTrackList.toArray(mentions);
 
         tweetFilterQuery.track(mentions); // OR on keywords
-        //init stream to filter user mentions/replies
+        // init stream to filter user mentions/replies
         twitterStream.filter(tweetFilterQuery);
     }
 

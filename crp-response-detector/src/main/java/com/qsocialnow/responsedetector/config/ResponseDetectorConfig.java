@@ -15,13 +15,12 @@ public class ResponseDetectorConfig {
     @Value("${app.elastic.cases.configurator.path}")
     private String elasticCasesConfiguratorZnodePath;
 
-	@Value("${app.twitter.app.configurator.path}")
+    @Value("${app.twitter.app.configurator.path}")
     private String twitterAppConfiguratorZnodePath;
 
     @Value("${app.twitter.users.path}")
     private String twitterUsersZnodePath;
 
-    
     public String getZookeeperHost() {
         return zookeeperHost;
     }
@@ -34,12 +33,12 @@ public class ResponseDetectorConfig {
         return elasticCasesConfiguratorZnodePath;
     }
 
-	public String getTwitterAppConfiguratorZnodePath() {
+    public String getTwitterAppConfiguratorZnodePath() {
         return twitterAppConfiguratorZnodePath;
-    }    
-	
+    }
+
     public String getTwitterUsersZnodePath() {
-    	return twitterUsersZnodePath;
+        return twitterUsersZnodePath;
     }
 
 }
