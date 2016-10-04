@@ -1,9 +1,14 @@
 package com.qsocialnow.viewmodel.subject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -20,7 +25,12 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Div;
 
+import com.qsocialnow.common.model.cases.ContactInfo;
 import com.qsocialnow.common.model.cases.Subject;
+import com.qsocialnow.common.model.config.Media;
+import com.qsocialnow.common.model.config.SubjectCategory;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.services.SubjectCategorySetService;
 import com.qsocialnow.services.SubjectService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -32,6 +42,9 @@ public class EditSubjectViewModel implements Serializable {
 
     @WireVariable
     private SubjectService subjectService;
+
+    @WireVariable
+    private SubjectCategorySetService subjectCategorySetService;
 
     private String subjectId;
 
@@ -49,18 +62,47 @@ public class EditSubjectViewModel implements Serializable {
         Subject subject = subjectService.findOne(subjectId);
         currentSubject = new SubjectView();
         currentSubject.setSubject(subject);
+        currentSubject.setSource(Media.getByValue(currentSubject.getSubject().getSource()));
+        currentSubject.setCategories(new ArrayList<SubjectCategoryView>());
+        if (currentSubject.getSubject().getContactInfo() == null) {
+            currentSubject.getSubject().setContactInfo(new ContactInfo());
+        }
+        if (!CollectionUtils.isEmpty(currentSubject.getSubject().getSubjectCategorySet())) {
+            initCategories(currentSubject.getCategories(), currentSubject.getSubject().getSubjectCategorySet(),
+                    currentSubject.getSubject().getSubjectCategory());
+
+        }
+
+    }
+
+    private void initCategories(List<SubjectCategoryView> categoriesView, Set<String> setIds, Set<String> categoryIds) {
+    	
+        for (String categorySetId : setIds) {
+            SubjectCategorySet categorySet = subjectCategorySetService.findOne(categorySetId);
+            List<SubjectCategory> categories = new ArrayList<SubjectCategory>();
+            categories.addAll(categorySet.getCategories().stream().filter(category -> {
+                boolean found = false;
+                for (String categoryId : categoryIds) {
+                    if (category.getId().equals(categoryId))
+                        found = true;
+                }
+                return found;
+            }).collect(Collectors.toList()));
+            
+            
+            for (SubjectCategory category : categories) {
+                SubjectCategoryView categoryView = new SubjectCategoryView();
+                categoryView.setSet(categorySet);
+                categoryView.setCategory(category);
+                categoriesView.add(categoryView);
+            }
+        }
     }
 
     @Command
     @NotifyChange({ "currentSubject", "saved" })
     public void save() {
-        Subject subject = new Subject();
-        subject.setId(currentSubject.getSubject().getId());
-        subject.setName(currentSubject.getSubject().getName());
-        subject.setLastName(currentSubject.getSubject().getLastName());
-        subject.setAge(currentSubject.getSubject().getAge());
-        subject.setAddress(currentSubject.getSubject().getAddress());
-        subject = subjectService.update(subject);
+        Subject subject = subjectService.update(currentSubject.getSubject());
         Clients.showNotification(Labels.getLabel("subject.edit.notification.success",
                 new String[] { subject.getName() }));
 

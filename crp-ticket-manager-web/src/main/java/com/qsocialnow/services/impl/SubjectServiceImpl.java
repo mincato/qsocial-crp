@@ -100,7 +100,8 @@ public class SubjectServiceImpl implements SubjectService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", subjectServiceUrl)).queryParam("pageNumber", pageNumber);
+                    serviceUrlResolver.resolveUrl("centaurico", subjectServiceUrl))
+                    .queryParam("pageNumber", pageNumber);
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {

@@ -1,3 +1,4 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
     viewModel="@id('vm') @init('com.qsocialnow.viewmodel.subject.SubjectsViewModel')" 
     border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
@@ -25,6 +26,8 @@
 			<table class="table table-striped table-hover">
 			    <thead>
 					<tr>
+						<th></th>
+						<th>${labels.subject.list.column.identifier}</th>
 					    <th>${labels.subject.list.column.name}</th>
 						<th>${labels.subject.list.column.lastname}</th>
 					    <th>${labels.subject.list.column.action}</th>
@@ -33,8 +36,10 @@
 			    <tbody children="@bind(vm.subjects)">
 			    	<template name="children">
 					<tr>
-						<td class="list-text-column">${each.name}</td>
-                       	<td class="list-text-column">${each.lastName}</td>
+						<td><span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.media.icon))"><i sclass="@load('fa fa-'.concat(each.media.icon))" /></span></td>
+						<td class="list-text-column">${each.identifier}</td>
+						<td>${each.name}</td>
+                       	<td>${each.lastName}</td>
                        	<td>
                        		<ul class="list-inline">
   								<li><a class="list-action"><i onClick="@command('openEdit', subjectId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.subject.edit.action}"></i></a></li>

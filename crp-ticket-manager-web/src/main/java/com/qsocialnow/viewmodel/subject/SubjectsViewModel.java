@@ -103,7 +103,7 @@ public class SubjectsViewModel implements Serializable {
             return null;
         }
         Map<String, String> filters = new HashMap<String, String>();
-        filters.put("name", this.keyword);
+        filters.put("identifier", this.keyword);
         return filters;
     }
 

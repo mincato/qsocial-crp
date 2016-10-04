@@ -1,4 +1,5 @@
 <?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
+<?link href="/vendor/bootstrap/bootstrap-social.css" rel="stylesheet"?>
 <?link href="/assets/css/style.css" rel="stylesheet"?>
 <?link href="/assets/css/ui.css" rel="stylesheet"?>
 <?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
