@@ -18,8 +18,8 @@ public class ResponseDetectorConfig {
     @Value("${app.twitter.app.configurator.path}")
     private String twitterAppConfiguratorZnodePath;
 
-    @Value("${app.event.twitter.messages}")
-    private String twitterMessagesPath;
+    @Value("${app.twitter.users.path}")
+    private String twitterUsersZnodePath;
 
     public String getZookeeperHost() {
         return zookeeperHost;
@@ -37,8 +37,8 @@ public class ResponseDetectorConfig {
         return twitterAppConfiguratorZnodePath;
     }
 
-    public String getTwitterMessagesPath() {
-        return twitterMessagesPath;
+    public String getTwitterUsersZnodePath() {
+        return twitterUsersZnodePath;
     }
 
 }
