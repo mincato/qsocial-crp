@@ -412,6 +412,33 @@ router.get('/domains/:id/trigger/:triggerId/caseCategories', function (req, res)
 	  triggerService.findCaseCategories(domainId, triggerId, asyncResponse);
 });
 
+router.get('/domains/:id/trigger/:triggerId/subjectCategories', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  var triggerId = req.params.triggerId;
+	  
+	  triggerService.findSubjectCategories(domainId, triggerId, asyncResponse);
+});
+
 router.get('/domains/:id/trigger/:triggerId/segment/:segmentId', function (req, res) {
 
 	  function asyncResponse(err,response) {
@@ -1279,10 +1306,11 @@ router.get('/subjects', function (req, res) {
   
   var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
   var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-  var name = req.query.name ? req.query.name : null;
+  var identifier = req.query.identifier ? req.query.identifier : null;
+  var source = req.query.source ? req.query.source : null;
     
   var subjectService = javaContext.getBeanSync("subjectService");	  
-  subjectService.findAll(pageNumber, pageSize, name,asyncResponse);
+  subjectService.findAll(pageNumber, pageSize, identifier, source, asyncResponse);
 });
 
 router.get('/subjects/:id', function (req, res) {

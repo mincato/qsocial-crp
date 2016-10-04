@@ -78,6 +78,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setDomainId(document.getDomainId());
         caseType.setSource(document.getSource());
         caseType.setAssignee(document.getAssignee());
+        caseType.setAttachments(document.getAttachments());
         return caseType;
     }
 
@@ -108,6 +109,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setUserResolver(documentType.getUserResolver());
         caseDocument.setSource(documentType.getSource());
         caseDocument.setAssignee(documentType.getAssignee());
+        caseDocument.setAttachments(documentType.getAttachments());
         return caseDocument;
     }
 

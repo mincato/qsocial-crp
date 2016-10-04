@@ -96,10 +96,60 @@
                               <label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.caseObject.pendingResponse)))"/>
                           </x:div>
                      </x:div>
-                 </n:div>
-            </x:form>
-        </div>
-    </div>
+                     <x:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.attachments}</n:label>
+						<x:div class="col-sm-3">
+							<div children="@load(vm.currentCase.caseObject.attachments)">
+								<template name="children">
+									<a onClick="@command('downloadAttachment', attachment=each)">
+										<span>
+											<label class="label label-primary" value="${each}"/>
+										</span>
+									</a>
+								</template>
+							</div>
+						</x:div>
+					</x:div>
+				</n:div>
+				<n:div class="row">
+                     <x:div class="form-group col-sm-6">
+						<n:label class="control-label col-sm-3">${labels.cases.details.source}</n:label>
+                        <x:div class="col-sm-2">
+							<span zclass="btn-social-icon btn" sclass="@load(c:cat('btn-',vm.currentCase.source.icon))"><i sclass="@load('fa fa-'.concat(vm.currentCase.source.icon))" /></span>
+						</x:div>
+                     </x:div>
+                     <x:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.subject}</n:label>
+						<x:div class="col-sm-3">
+                          <label visible="@load(not empty vm.currentCase.caseObject.subject)" class="control-label col-sm-1" value="@load(vm.currentCase.caseObject.subject.identifier)"></label>
+                      	</x:div> 
+					</x:div>
+				</n:div>
+				<n:div class="row">
+	                 <x:div class="form-group col-sm-6">
+	                 	<n:label class="control-label col-sm-3">${labels.cases.details.setsubjectcategories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.subjectCategoriesSet)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+						</div>
+	                 </x:div>
+	                 <n:div class="form-group col-sm-6">
+	                 	<n:label class="control-label col-sm-3">${labels.cases.details.subjectcategories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.subjectCategories)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+						</div>
+					</n:div>
+	             </n:div>
+			</x:form>
+		</div>
+	</div>
     <n:br/>
 	<div zclass="row">
 		<include zclass="col-lg-12" src="/pages/cases/actions/master-action.zul"/>

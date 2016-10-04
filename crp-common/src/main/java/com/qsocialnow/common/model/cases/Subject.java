@@ -2,6 +2,7 @@ package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
 public class Subject implements Serializable {
 
@@ -32,9 +33,9 @@ public class Subject implements Serializable {
 
     private Integer age;
 
-    private String subjectCategorySet;
+    private Set<String> subjectCategorySet;
 
-    private String subjectCategory;
+    private Set<String> subjectCategory;
 
     private ContactInfo contactInfo;
 
@@ -140,19 +141,19 @@ public class Subject implements Serializable {
         this.source = source;
     }
 
-    public String getSubjectCategorySet() {
+    public Set<String> getSubjectCategorySet() {
         return subjectCategorySet;
     }
 
-    public void setSubjectCategorySet(String subjectCategorySet) {
+    public void setSubjectCategorySet(Set<String> subjectCategorySet) {
         this.subjectCategorySet = subjectCategorySet;
     }
 
-    public String getSubjectCategory() {
+    public Set<String> getSubjectCategory() {
         return subjectCategory;
     }
 
-    public void setSubjectCategory(String subjectCategory) {
+    public void setSubjectCategory(Set<String> subjectCategory) {
         this.subjectCategory = subjectCategory;
     }
 }

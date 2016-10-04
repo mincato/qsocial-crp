@@ -388,7 +388,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         try {
             result = client.execute(search);
             if (result.isSucceeded()) {
-                response.setSource((E) result.getSourceAsObject(mapping.getClassType()));
+                response.setSource(mapping.getDocument((T) result.getSourceAsObject(mapping.getClassType())));
                 String indexName = result.getJsonObject().getAsJsonObject("hits").getAsJsonArray("hits").get(0)
                         .getAsJsonObject().get("_index").getAsString();
                 response.setIndex(indexName);

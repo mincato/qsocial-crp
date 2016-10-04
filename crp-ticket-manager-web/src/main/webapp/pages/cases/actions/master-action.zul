@@ -36,4 +36,13 @@
 	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'ASSIGN')">
 		<include src="/pages/cases/actions/assign-action.zul"/>
 	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'ATTACH_FILE')">
+		<include src="/pages/cases/actions/attach-file-action.zul"/>
+	</div>
+		<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'CHANGE_SUBJECT')">
+		<include src="/pages/cases/actions/change-subject-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'TAG_SUBJECT')">
+		<include src="/pages/cases/actions/tag-subject-action.zul"/>
+	</div>
 </div>

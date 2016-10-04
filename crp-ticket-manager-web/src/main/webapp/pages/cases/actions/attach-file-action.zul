@@ -1,0 +1,27 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('attachFileActionVm') @init('com.qsocialnow.viewmodel.AttachFileActionViewModel')"
+		validationMessages="@id('vmsgs')">
+	<x:form form="@id('fxAttachFileAction') @load(attachFileActionVm.attachFileAction) @save(attachFileActionVm.attachFileAction, before='execute')">
+		<div sclass="@load(empty vmsgs['files'] ? 'form-group' : 'form-group has-error')">
+			<div children="@load(fxAttachFileAction.files)">
+				<template name="children">
+					<span>
+						<label class="label label-primary" value="${each}"/>
+						<span>
+							<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeFile', file = each, fxAttachFileAction = fxAttachFileAction)"/>
+						</span>
+					</span>
+				</template>
+			</div>
+			<x:span sclass="@load(empty vmsgs['files'] ? 'hidden' : 'help-block')">
+				<label value="@load(vmsgs['files'])" />
+			</x:span>
+		</div>
+		<div class="form-group text-center">
+			<button zclass="btn btn-default" label="${labels.cases.actions.attach.browse}" upload="true,maxsize=-1,multiple=true,native" onUpload="@command('upload', files=event.medias, fxAttachFileAction = fxAttachFileAction)" />
+	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
+		</div>
+	</x:form>
+</div>

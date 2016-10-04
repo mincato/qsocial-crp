@@ -17,7 +17,7 @@
 
 	<import resource="cache.xml" />
 
-	<context:property-placeholder location="${extPropDir:classpath:}application.properties" ignore-unresolvable="true"/>
+	<context:property-placeholder location="${extPropDir:classpath:}application.properties, classpath:config.properties" ignore-unresolvable="true"/>
 	
 	<bean id="zookeeperClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
  		<constructor-arg value="${app.zookeeper.host}"></constructor-arg>
@@ -110,6 +110,9 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_CASE}" value-ref="tagCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).ASSIGN}" value-ref="assignCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).SEND_MESSAGE}" value-ref="sendMessageCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).ATTACH_FILE}" value-ref="attachFileCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_SUBJECT}" value-ref="changeSubjectCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_SUBJECT}" value-ref="tagSubjectCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">

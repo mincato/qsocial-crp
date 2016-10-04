@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;
@@ -50,7 +52,7 @@ public class TwitterDetectorService extends SourceDetectorService {
 
     private boolean startListening = false;
 
-    private HashMap<String, List<TwitterMessageEvent>> conversations;
+    private HashMap<String, HashSet<TwitterMessageEvent>> conversations;
 
     @Override
     public void run() {
@@ -60,7 +62,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             configurator = twitterConfiguratorFactory.getConfigurator(appConfig.getTwitterAppConfiguratorZnodePath());
             twitterStreamClient = new TwitterStreamClient(configurator);
             twitterStreamClient.initClient(this);
-            conversations = new HashMap<String, List<TwitterMessageEvent>>();
+            conversations = new HashMap<String, HashSet<TwitterMessageEvent>>();
             pathChildrenCache = new PathChildrenCache(zookeeperClient, appConfig.getTwitterUsersZnodePath(), true);
             addListener();
             pathChildrenCache.start(StartMode.POST_INITIALIZED_EVENT);
@@ -83,10 +85,10 @@ public class TwitterDetectorService extends SourceDetectorService {
                             String userResolverNode = ZKPaths.getNodeFromPath(event.getData().getPath());
                             byte[] messageBytes = event.getData().getData();
                             if (messageBytes != null) {
-                                TwitterMessageEvent twitterMessageEvent = new GsonBuilder().create().fromJson(
-                                        new String(messageBytes), TwitterMessageEvent.class);
-                                if (twitterMessageEvent != null) {
-                                    addTwitterMessage(userResolverNode, twitterMessageEvent);
+                                TwitterMessageEvent[] twitterMessageEvents = new GsonBuilder().create().fromJson(
+                                        new String(messageBytes), TwitterMessageEvent[].class);
+                                if (twitterMessageEvents != null) {
+                                    addTwitterMessage(userResolverNode, twitterMessageEvents);
                                 }
                             }
                         }
@@ -95,23 +97,24 @@ public class TwitterDetectorService extends SourceDetectorService {
                     case INITIALIZED: {
                         log.info("PathChildrenCache starting to init");
                         List<ChildData> initialData = event.getInitialData();
-                        for (ChildData childData : initialData) {
 
+                        List<String> userResolversFilters = new ArrayList<String>();
+                        for (ChildData childData : initialData) {
                             String userResolverToFilter = ZKPaths.getNodeFromPath(childData.getPath());
                             log.info("User Resolver - Message added at Init process: " + userResolverToFilter);
                             conversations.put(userResolverToFilter, null);
-                            twitterStreamClient.addTrackFilter(userResolverToFilter);
-
+                            userResolversFilters.add(userResolverToFilter);
+                            
                             if (childData.getData() != null) {
                                 byte[] messageBytes = childData.getData();
-                                TwitterMessageEvent twitterMessageEvent = new GsonBuilder().create().fromJson(
-                                        new String(messageBytes), TwitterMessageEvent.class);
-                                if (twitterMessageEvent != null) {
-                                    checkMessageResponses(userResolverToFilter, twitterMessageEvent);
-                                    log.info("initial node-message: " + twitterMessageEvent.getMessageId());
+                                TwitterMessageEvent[] twitterMessageEvents = new GsonBuilder().create().fromJson(
+                                        new String(messageBytes), TwitterMessageEvent[].class);
+                                if (twitterMessageEvents != null) {
+                                    checkMessageResponses(userResolverToFilter, twitterMessageEvents);
                                 }
                             }
                         }
+                        twitterStreamClient.addTrackFilters(userResolversFilters);
                         startListening = true;
                         break;
                     }
@@ -120,10 +123,10 @@ public class TwitterDetectorService extends SourceDetectorService {
 
                         log.info("Node-Message updated: " + userResolverNode);
                         byte[] messageBytes = event.getData().getData();
-                        TwitterMessageEvent twitterMessageEvent = new GsonBuilder().create().fromJson(
-                                new String(messageBytes), TwitterMessageEvent.class);
+                        TwitterMessageEvent[] twitterMessageEvents = new GsonBuilder().create().fromJson(
+                                new String(messageBytes), TwitterMessageEvent[].class);
 
-                        addTwitterMessage(userResolverNode, twitterMessageEvent);
+                        addTwitterMessage(userResolverNode, twitterMessageEvents);
                         break;
                     }
                     default:
@@ -146,30 +149,36 @@ public class TwitterDetectorService extends SourceDetectorService {
         }
     }
 
-    private void addTwitterMessage(String userResolver, TwitterMessageEvent twitterMessageEvent) {
+    private void addTwitterMessage(String userResolver, TwitterMessageEvent[] twitterMessageEvents) {
         try {
             if (startListening) {
-                log.info("Adding message conversation from :" + userResolver + " from Case:"
-                        + twitterMessageEvent.getCaseId());
-                List<TwitterMessageEvent> conversationsByUserResolver = conversations.get(userResolver);
-                if (conversationsByUserResolver == null) {
-                    conversationsByUserResolver = new ArrayList<TwitterMessageEvent>();
-                    log.info("Init conversation list from user :" + userResolver);
+                for (int i = 0; i < twitterMessageEvents.length; i++) {
+                    TwitterMessageEvent twitterMessageEvent = twitterMessageEvents[i];
+
+                    HashSet<TwitterMessageEvent> conversationsByUserResolver = conversations.get(userResolver);
+                    if (conversationsByUserResolver == null) {
+                        conversationsByUserResolver = new HashSet<TwitterMessageEvent>();
+                        log.info("Init conversation list from user :" + userResolver);
+                    }
+                    if (!conversationsByUserResolver.contains(twitterMessageEvent)) {
+                        log.info("Adding message conversation from :" + userResolver + " from Case:"
+                                + twitterMessageEvent.getCaseId());
+                        conversationsByUserResolver.add(twitterMessageEvent);
+                    }
+                    conversations.put(userResolver, conversationsByUserResolver);
                 }
-                conversationsByUserResolver.add(twitterMessageEvent);
-                conversations.put(userResolver, conversationsByUserResolver);
             }
         } catch (Exception e) {
-            log.error(
-                    "There was an error creating the message handler processor for tweet: "
-                            + twitterMessageEvent.getMessageId(), e);
+            log.error("There was an error adding converstaions from userResolver: " + userResolver, e);
         }
     }
 
-    private void checkMessageResponses(String userResolver, TwitterMessageEvent message) {
+    private void checkMessageResponses(String userResolver, TwitterMessageEvent[] messages) {
         TwitterClient twitterClient = new TwitterClient(this);
         twitterClient.initTwitterClient(configurator);
-        twitterClient.checkAnyMention(userResolver, message);
+        for (int i = 0; i < messages.length; i++) {
+            twitterClient.checkAnyMention(userResolver, messages[i]);
+        }
     }
 
     public void stop() {
@@ -225,24 +234,30 @@ public class TwitterDetectorService extends SourceDetectorService {
             }
 
             if (isResponseFromMessage) {
-                List<TwitterMessageEvent> conversationsByUserResolver = conversations.get(userResolver);
-                for (TwitterMessageEvent twitterMessageEvent : conversationsByUserResolver) {
-                    if (twitterMessageEvent.getReplyMessageId().equals(inReplyToMessageId)) {
-                        // is response from existing conversation
-                        event.setIdPadre(twitterMessageEvent.getEventId());
-                        event.setOriginIdCase(twitterMessageEvent.getCaseId());
-                        break;
-                    }
+                Set<TwitterMessageEvent> conversationsByUserResolver = conversations.get(userResolver);
+                if(conversationsByUserResolver!=null){
+	                for (TwitterMessageEvent twitterMessageEvent : conversationsByUserResolver) {
+	                    if (twitterMessageEvent.getReplyMessageId().equals(inReplyToMessageId)) {
+	                        // is response from existing conversation
+	                        event.setIdPadre(twitterMessageEvent.getEventId());
+	                        event.setOriginIdCase(twitterMessageEvent.getCaseId());
+	                        conversationsByUserResolver.remove(twitterMessageEvent);
+	                        break;
+	                    }
+	                }
                 }
             } else {
-                List<TwitterMessageEvent> conversationsByUserResolver = conversations.get(mainUserResolver);
-                for (TwitterMessageEvent twitterMessageEvent : conversationsByUserResolver) {
-                    if (twitterMessageEvent.getUserId().equals(userId)) {
-                        // is response from existing user
-                        event.setIdPadre(twitterMessageEvent.getEventId());
-                        event.setOriginIdCase(twitterMessageEvent.getCaseId());
-                        break;
-                    }
+                Set<TwitterMessageEvent> conversationsByUserResolver = conversations.get(mainUserResolver);
+                if(conversationsByUserResolver!=null){
+	                for (TwitterMessageEvent twitterMessageEvent : conversationsByUserResolver) {
+	                    if (twitterMessageEvent.getUserId().equals(userId)) {
+	                        // is response from existing user
+	                        event.setIdPadre(twitterMessageEvent.getEventId());
+	                        event.setOriginIdCase(twitterMessageEvent.getCaseId());
+	                        conversationsByUserResolver.remove(twitterMessageEvent);
+	                        break;
+	                    }
+	                }
                 }
             }
             event.setUsuarioOriginal(userName);

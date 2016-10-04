@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -163,6 +164,25 @@ public class TriggerServiceImpl implements TriggerService {
 
             ResponseEntity<List<CaseCategorySet>> response = restTemplate.exchange(builder.toUriString(),
                     HttpMethod.GET, null, new ParameterizedTypeReference<List<CaseCategorySet>>() {
+                    });
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SubjectCategorySet> findSubjectCategories(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/subjectCategories");
+
+            ResponseEntity<List<SubjectCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategorySet>>() {
                     });
             return response.getBody();
         } catch (Exception e) {

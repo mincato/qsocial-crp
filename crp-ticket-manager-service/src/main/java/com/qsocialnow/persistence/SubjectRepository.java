@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.cases.SubjectListView;
+import com.qsocialnow.common.model.request.SubjectListRequest;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.SubjectService;
 
@@ -21,18 +22,19 @@ public class SubjectRepository {
     @Autowired
     private SubjectService subjectElasticService;
 
-    public List<SubjectListView> findAll(PageRequest pageRequest) {
+    public List<SubjectListView> findAll(PageRequest pageRequest, SubjectListRequest subjectListRequest) {
         List<SubjectListView> subjects = new ArrayList<>();
 
         try {
             List<Subject> subjectsRepo = subjectElasticService.findSubjects(pageRequest.getOffset(),
-                    pageRequest.getLimit());
+                    pageRequest.getLimit(), subjectListRequest);
             if (subjectsRepo != null) {
                 for (Subject subjectRepo : subjectsRepo) {
                     SubjectListView subjectListView = new SubjectListView();
                     subjectListView.setId(subjectRepo.getId());
                     subjectListView.setName(subjectRepo.getName());
                     subjectListView.setLastName(subjectRepo.getLastName());
+                    subjectListView.setIdentifier(subjectRepo.getIdentifier());
                     subjects.add(subjectListView);
                 }
             }
