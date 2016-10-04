@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.common.model.request.SubjectListRequest;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.persistence.SubjectRepository;
 
@@ -21,8 +22,9 @@ public class SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String name) {
-        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize));
+    public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String identifier, String source) {
+        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize),
+                new SubjectListRequest(identifier, source));
 
         PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageNumber, pageSize);
         return page;

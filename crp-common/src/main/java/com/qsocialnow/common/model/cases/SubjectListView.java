@@ -13,6 +13,8 @@ public class SubjectListView implements Serializable {
 
     private String lastName;
 
+    private String identifier;
+
     private String address;
 
     private Date signedDate;
@@ -115,5 +117,13 @@ public class SubjectListView implements Serializable {
 
     public void setSubjectCategory(String subjectCategory) {
         this.subjectCategory = subjectCategory;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }
