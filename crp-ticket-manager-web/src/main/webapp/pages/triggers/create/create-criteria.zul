@@ -36,6 +36,19 @@
 								<datebox sclass="input-group" format="short" value="@bind(fxCriteria.validateTo)" />
 							</n:div>
 	    				</n:div>
+	    				<n:div class="form-group">
+							<n:label class="control-label col-sm-2">${labels.trigger.criteria.alwaysOpenCase}</n:label>
+							<n:div class="col-sm-10">
+								<checkbox checked="@bind(fxCriteria.alwaysOpenCase)" />
+							</n:div>
+						</n:div>
+						<x:div class="form-group" visible="@load(not fxCriteria.alwaysOpenCase)">
+							<n:label class="control-label col-sm-2">${labels.trigger.criteria.findCaseOnlyCurrentDomain}</n:label>
+							<n:div class="col-sm-10">
+								<checkbox checked="@bind(fxCriteria.findCaseOnlyCurrentDomain)" />
+							</n:div>
+			             </x:div>
+	    				
 				    </n:form>
 			    </div>
 		    </n:div>

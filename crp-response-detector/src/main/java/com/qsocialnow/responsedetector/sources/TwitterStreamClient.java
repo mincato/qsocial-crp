@@ -48,7 +48,7 @@ public class TwitterStreamClient {
         // init stream to filter user mentions/replies
         twitterStream.filter(tweetFilterQuery);
     }
-    
+
     public void addTrackFilters(List<String> tracks) {
         mentionToTrackList.addAll(tracks);
         tweetFilterQuery = new FilterQuery();
