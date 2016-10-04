@@ -2,6 +2,9 @@ package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
+
+import com.qsocialnow.common.model.config.Media;
 
 public class SubjectListView implements Serializable {
 
@@ -25,9 +28,11 @@ public class SubjectListView implements Serializable {
 
     private String sourceId;
 
-    private String subjectCategorySet;
+    private Long source;
 
-    private String subjectCategory;
+    private Set<String> subjectCategorySet;
+
+    private Set<String> subjectCategory;
 
     private ContactInfo contactInfo;
 
@@ -53,6 +58,14 @@ public class SubjectListView implements Serializable {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public String getAddress() {
@@ -87,14 +100,6 @@ public class SubjectListView implements Serializable {
         this.age = age;
     }
 
-    public ContactInfo getContactInfo() {
-        return contactInfo;
-    }
-
-    public void setContactInfo(ContactInfo contactInfo) {
-        this.contactInfo = contactInfo;
-    }
-
     public String getSourceId() {
         return sourceId;
     }
@@ -103,27 +108,39 @@ public class SubjectListView implements Serializable {
         this.sourceId = sourceId;
     }
 
-    public String getSubjectCategorySet() {
+    public Long getSource() {
+        return source;
+    }
+
+    public void setSource(Long source) {
+        this.source = source;
+    }
+
+    public Set<String> getSubjectCategorySet() {
         return subjectCategorySet;
     }
 
-    public void setSubjectCategorySet(String subjectCategorySet) {
+    public void setSubjectCategorySet(Set<String> subjectCategorySet) {
         this.subjectCategorySet = subjectCategorySet;
     }
 
-    public String getSubjectCategory() {
+    public Set<String> getSubjectCategory() {
         return subjectCategory;
     }
 
-    public void setSubjectCategory(String subjectCategory) {
+    public void setSubjectCategory(Set<String> subjectCategory) {
         this.subjectCategory = subjectCategory;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public ContactInfo getContactInfo() {
+        return contactInfo;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setContactInfo(ContactInfo contactInfo) {
+        this.contactInfo = contactInfo;
+    }
+
+    public Media getMedia() {
+        return Media.getByValue(this.source);
     }
 }

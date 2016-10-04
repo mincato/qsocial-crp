@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import javax.validation.Valid;
+
 public class Subject implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -17,7 +19,7 @@ public class Subject implements Serializable {
     private String sourceId;
 
     // source aka medioId
-    private String source;
+    private Long source;
 
     private String profileImage;
 
@@ -37,6 +39,7 @@ public class Subject implements Serializable {
 
     private Set<String> subjectCategory;
 
+    @Valid
     private ContactInfo contactInfo;
 
     public String getId() {
@@ -133,11 +136,11 @@ public class Subject implements Serializable {
         this.sourceId = sourceId;
     }
 
-    public String getSource() {
+    public Long getSource() {
         return source;
     }
 
-    public void setSource(String source) {
+    public void setSource(Long source) {
         this.source = source;
     }
 

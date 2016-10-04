@@ -47,7 +47,7 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
                 subject.setIdentifier(inputElement.getUsuarioOriginal());
                 subject.setSourceId(sourceId);
 
-                subject.setSource(String.valueOf(inputElement.getMedioId()));
+                subject.setSource(inputElement.getMedioId());
 
                 String idSubject = subjectService.indexSubject(subject);
                 subject.setId(idSubject);
