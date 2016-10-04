@@ -17,7 +17,7 @@ public class MessageResponseDetectorFilterImpl implements MessageFilter {
         if (message != null && message.isResponseDetected()) {
             return true;
         }
-        
+
         return shouldProcess;
     }
 

@@ -14,7 +14,7 @@ import com.qsocialnow.eventresolver.service.DomainService;
 import com.qsocialnow.kafka.model.Message;
 
 @Service
-public class MessageResponseDetectorProcessorImpl implements MessageProcessor{
+public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageResponseDetectorProcessorImpl.class);
 
@@ -31,29 +31,30 @@ public class MessageResponseDetectorProcessorImpl implements MessageProcessor{
     @Qualifier("messageResponseDetectorFilter")
     private MessageFilter messageFilter;
 
-	public void process(Message message) throws Exception {
-		// reintentar ES
-		InPutBeanDocument inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
-				.fromJson(message.getMessage(), InPutBeanDocument.class);
+    public void process(Message message) throws Exception {
+        // reintentar ES
+        InPutBeanDocument inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
+                .fromJson(message.getMessage(), InPutBeanDocument.class);
 
-		String domainId = message.getGroup();
-		LOGGER.info(String.format("Processing message from Response Detector using domain %s: %s", domainId, inputBeanDocument));
+        String domainId = message.getGroup();
+        LOGGER.info(String.format("Processing message from Response Detector using domain %s: %s", domainId,
+                inputBeanDocument));
 
-		if (messageFilter.shouldProcess(inputBeanDocument, null)) {
-			ExecutionMessageRequest executionMessageRequest = detectionMessageProcessor.detect(inputBeanDocument, null);
-			if (executionMessageRequest != null) {
-				executionMessageProcessor.execute(executionMessageRequest);
-			} else {
-				LOGGER.info(String.format("Message from Response Detect were not detected to execute an action: %s",
-						inputBeanDocument));
-			}
-		} else {
-			LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
-		}
-	}
+        if (messageFilter.shouldProcess(inputBeanDocument, null)) {
+            ExecutionMessageRequest executionMessageRequest = detectionMessageProcessor.detect(inputBeanDocument, null);
+            if (executionMessageRequest != null) {
+                executionMessageProcessor.execute(executionMessageRequest);
+            } else {
+                LOGGER.info(String.format("Message from Response Detect were not detected to execute an action: %s",
+                        inputBeanDocument));
+            }
+        } else {
+            LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
+        }
+    }
 
     public void setDomainElasticService(DomainService domainElasticService) {
-        
+
     }
 
     public void setDetectionMessageProcessor(DetectionMessageProcessor detectionMessageProcessor) {

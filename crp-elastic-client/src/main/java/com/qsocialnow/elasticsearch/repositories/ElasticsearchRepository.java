@@ -277,8 +277,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             if (!response.isSucceeded()) {
                 log.error("There was an error removing mapping: " + response.getErrorMessage());
                 throw new RuntimeException(response.getErrorMessage());
-            }
-            else {
+            } else {
                 throw new RuntimeException(response.getErrorMessage());
             }
         } catch (IOException e) {
@@ -297,8 +296,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             DocumentResult response = client.execute(update);
             if (response.isSucceeded()) {
                 idValue = response.getId();
-            }
-            else {
+            } else {
                 throw new RuntimeException(response.getErrorMessage());
             }
         } catch (IOException e) {
@@ -374,8 +372,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             if (result.isSucceeded()) {
                 T source = (T) result.getSourceAsObject(mapping.getClassType());
                 response.setSource(mapping.getDocument(source));
-            }
-            else {
+            } else {
                 throw new RuntimeException(result.getErrorMessage());
             }
         } catch (IOException e) {
@@ -401,8 +398,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 String indexName = result.getJsonObject().getAsJsonObject("hits").getAsJsonArray("hits").get(0)
                         .getAsJsonObject().get("_index").getAsString();
                 response.setIndex(indexName);
-            }
-            else {
+            } else {
                 throw new RuntimeException(result.getErrorMessage());
             }
         } catch (IOException e) {
@@ -421,8 +417,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
                 response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                         .collect(Collectors.toList()));
-            }
-            else {
+            } else {
                 throw new RuntimeException(result.getErrorMessage());
             }
         } catch (IOException e) {

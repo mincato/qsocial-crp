@@ -16,7 +16,7 @@ import com.qsocialnow.eventresolver.service.DomainService;
 import com.qsocialnow.kafka.model.Message;
 
 @Service
-public class MessageProcessorImpl implements MessageProcessor{
+public class MessageProcessorImpl implements MessageProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageProcessorImpl.class);
 

@@ -37,7 +37,7 @@ public class App implements Runnable {
 
     private static final String RESPONSE_DETECTOR_CONSUMER_NAME = "RESPONSE_DETECTOR_CONSUMER";
 
-	private static final Logger log = LoggerFactory.getLogger(App.class);
+    private static final Logger log = LoggerFactory.getLogger(App.class);
 
     @Autowired
     private CuratorFramework zookeeperClient;
@@ -50,7 +50,7 @@ public class App implements Runnable {
 
     @Autowired
     private MessageProcessorImpl messageProcessor;
-    
+
     @Autowired
     private MessageResponseDetectorProcessorImpl messageResponseDetectorProcessor;
 
@@ -91,7 +91,7 @@ public class App implements Runnable {
     @Override
     public void run() {
         try {
-        	pathChildrenCache = new PathChildrenCache(zookeeperClient, appConfig.getDomainsPath(), true);
+            pathChildrenCache = new PathChildrenCache(zookeeperClient, appConfig.getDomainsPath(), true);
             addListener();
             eventHandlerExecutor = Executors.newCachedThreadPool();
             eventHandlerProcessors = new HashMap<>();
@@ -143,19 +143,20 @@ public class App implements Runnable {
         }
 
     }
-    
+
     private void createEventHandlerResponseDetectorProcessor() {
-    	try {
+        try {
             QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
                     queueConfig);
 
-            EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig, RESPONSE_DETECTOR_CONSUMER_NAME),
-                    messageResponseDetectorProcessor, queueService);
+            EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig,
+                    RESPONSE_DETECTOR_CONSUMER_NAME), messageResponseDetectorProcessor, queueService);
 
             eventHandlerProcessors.put(RESPONSE_DETECTOR_CONSUMER_NAME, eventHandlerProcessor);
             eventHandlerExecutor.execute(eventHandlerProcessor);
         } catch (Exception e) {
-            log.error("There was an error creating the event handler processor for domain: " + RESPONSE_DETECTOR_CONSUMER_NAME, e);
+            log.error("There was an error creating the event handler processor for domain: "
+                    + RESPONSE_DETECTOR_CONSUMER_NAME, e);
         }
     }
 
