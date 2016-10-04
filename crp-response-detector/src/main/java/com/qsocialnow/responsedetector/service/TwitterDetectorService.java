@@ -198,9 +198,7 @@ public class TwitterDetectorService extends SourceDetectorService {
     @Override
     public void removeSourceConversation(String userResolver, String converstation) {
         try {
-            // zookeeperClient.delete().forPath(appConfig.getTwitterMessagesPath()
-            // + "/" + converstation);
-
+            //zookeeperClient.setData().forPath(appConfig.getTwitterMessagesPath() + "/" + converstation);
         } catch (Exception e) {
             log.error("Unable to remove message conversation:: " + converstation, e);
         }
@@ -213,9 +211,7 @@ public class TwitterDetectorService extends SourceDetectorService {
 
         try {
             InPutBeanDocument event = new InPutBeanDocument();
-
             String mainUserResolver = null;
-
             event.setId(sourceMessageId);
             event.setFecha(new Date());
             // event.setTipoDeMedio("morbi");
