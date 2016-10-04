@@ -257,7 +257,7 @@ public class EditCaseViewModel implements Serializable {
         this.selectedAction = null;
         this.refreshRegistries();
         this.initCaseCategories();
-        this.initSubjectCategories();
+        this.initCategoriesForSubject();
     }
 
     @Command

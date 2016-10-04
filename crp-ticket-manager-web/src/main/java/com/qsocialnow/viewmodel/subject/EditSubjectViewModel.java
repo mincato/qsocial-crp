@@ -76,20 +76,12 @@ public class EditSubjectViewModel implements Serializable {
     }
 
     private void initCategories(List<SubjectCategoryView> categoriesView, Set<String> setIds, Set<String> categoryIds) {
-    	
+
         for (String categorySetId : setIds) {
             SubjectCategorySet categorySet = subjectCategorySetService.findOne(categorySetId);
             List<SubjectCategory> categories = new ArrayList<SubjectCategory>();
-            categories.addAll(categorySet.getCategories().stream().filter(category -> {
-                boolean found = false;
-                for (String categoryId : categoryIds) {
-                    if (category.getId().equals(categoryId))
-                        found = true;
-                }
-                return found;
-            }).collect(Collectors.toList()));
-            
-            
+            categories.addAll(categorySet.getCategories().stream()
+                    .filter(category -> categoryIds.contains(category.getId())).collect(Collectors.toList()));
             for (SubjectCategory category : categories) {
                 SubjectCategoryView categoryView = new SubjectCategoryView();
                 categoryView.setSet(categorySet);
