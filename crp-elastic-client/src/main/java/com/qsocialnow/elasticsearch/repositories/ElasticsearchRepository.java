@@ -278,6 +278,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 log.error("There was an error removing mapping: " + response.getErrorMessage());
                 throw new RuntimeException(response.getErrorMessage());
             }
+            else {
+                throw new RuntimeException(response.getErrorMessage());
+            }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
             throw new RuntimeException(e);
@@ -294,6 +297,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             DocumentResult response = client.execute(update);
             if (response.isSucceeded()) {
                 idValue = response.getId();
+            }
+            else {
+                throw new RuntimeException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
@@ -369,6 +375,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 T source = (T) result.getSourceAsObject(mapping.getClassType());
                 response.setSource(mapping.getDocument(source));
             }
+            else {
+                throw new RuntimeException(result.getErrorMessage());
+            }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
         }
@@ -393,6 +402,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                         .getAsJsonObject().get("_index").getAsString();
                 response.setIndex(indexName);
             }
+            else {
+                throw new RuntimeException(result.getErrorMessage());
+            }
         } catch (IOException e) {
             log.error("Serching documents - Unexpected error: ", e);
         }
@@ -409,6 +421,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
                 response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                         .collect(Collectors.toList()));
+            }
+            else {
+                throw new RuntimeException(result.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Serching documents - Unexpected error: ", e);

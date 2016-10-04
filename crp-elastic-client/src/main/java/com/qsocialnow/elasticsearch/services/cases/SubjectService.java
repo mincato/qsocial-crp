@@ -124,6 +124,7 @@ public class SubjectService extends DynamicIndexService {
 
         // index document
         SubjectType documentIndexed = mapping.getDocumentType(document);
+        log.info("Updating subject from index: "+indexResponse.getIndex()+" id: "+document.getId());
         String response = repository.updateMapping(document.getId(), mapping, documentIndexed);
         repository.closeClient();
         return response;

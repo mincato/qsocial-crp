@@ -49,17 +49,17 @@ public class SubjectService {
         return subjectSaved;
     }
 
-    public Subject update(Subject subject) {
-        Subject subjectSaved = null;
+    public Subject update(String subjectId,Subject subject) {
         try {
-            if (subjectRepository.update(subject))
+        	log.info("Updating subject : " + subjectId);
+        	if (subjectRepository.update(subject))
                 return subject;
 
         } catch (Exception e) {
             log.error("There was an error updating Subject: " + subject.getName(), e);
             throw new RuntimeException(e.getMessage());
         }
-        return subjectSaved;
+        return null;
     }
 
 }
