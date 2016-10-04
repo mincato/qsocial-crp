@@ -34,6 +34,7 @@ public class ExecutionMessageProcessor {
             InPutBeanDocument input = request.getInput();
             DetectionCriteria detectionCriteria = request.getDetectionCriteria();
             if (detectionCriteria != null) {
+
                 if (detectionCriteria.isExecuteMergeAction()) {
                     Case originCase = null;
                     if (detectionCriteria.isFindCaseByDomain()) {
@@ -47,6 +48,7 @@ public class ExecutionMessageProcessor {
                     } else {
                         log.info("Trying to merge case finding by triggers from Domain: " + request.getDomain().getId());
                         originCase = caseService.findCaseByTriggers(request.getDomain().getTriggers());
+
                     }
                     Action action = actions.get(ActionType.MERGE_CASE);
                     action.execute(input, originCase, null);

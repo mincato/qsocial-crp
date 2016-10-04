@@ -1,6 +1,5 @@
 package com.qsocialnow.eventresolver.filters;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -8,15 +7,15 @@ import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.event.InPutBeanDocument;
 
 @Service
-@Qualifier("messageFilter")
-public class MessageFilterImpl implements MessageFilter {
+@Qualifier("messageResponseDetectorFilter")
+public class MessageResponseDetectorFilterImpl implements MessageFilter {
 
     @Override
     public boolean shouldProcess(InPutBeanDocument message, Domain domain) {
         boolean shouldProcess = false;
 
-        if (domain != null && CollectionUtils.isNotEmpty(domain.getThematics())) {
-            shouldProcess = domain.getThematics().stream().anyMatch(thematic -> thematic.equals(message.getTokenId()));
+        if (message != null && message.isResponseDetected()) {
+            return true;
         }
 
         return shouldProcess;

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.eventresolver.config.CacheConfig;
-import com.qsocialnow.eventresolver.processor.MessageProcessor;
+import com.qsocialnow.eventresolver.processor.MessageProcessorImpl;
 
 @Component
 public class DomainService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MessageProcessor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageProcessorImpl.class);
 
     @Autowired
     private com.qsocialnow.elasticsearch.services.config.DomainService domainElasticService;
