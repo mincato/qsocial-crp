@@ -30,7 +30,7 @@
                         <n:label class="control-label col-sm-3">
                             ${labels.cases.details.opendate}
                         </n:label>
-                        <n:div class="col-sm-9">
+                        <n:div class="col-sm-9 form-control-static">
                             <label value="@load(vm.currentCase.caseObject.openDate)" />
                         </n:div>
                     </x:div>
@@ -50,7 +50,7 @@
                         <n:label class="control-label col-sm-3">
                             ${labels.cases.details.closedate}
                         </n:label>
-                        <n:div class="col-sm-9">
+                        <n:div class="col-sm-9 form-control-static">
                             <label value="@load(vm.currentCase.caseObject.closeDate)" />
                         </n:div>
                     </x:div>

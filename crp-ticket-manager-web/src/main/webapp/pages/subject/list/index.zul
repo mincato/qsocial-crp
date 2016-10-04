@@ -1,0 +1,46 @@
+<?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
+<?link href="/vendor/bootstrap/bootstrap-social.css" rel="stylesheet"?>
+<?link href="/assets/css/style.css" rel="stylesheet"?>
+<?link href="/assets/css/ui.css" rel="stylesheet"?>
+<?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
+<?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
+<?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
+<zk xmlns:n="native">
+	<n:div class="wrapper">
+
+		<!-- HEADER -->
+		<n:header id="header" class="header affix" role="banner">
+			<include src="/assets/core/header.zul" />
+			<!-- Header elements are fetched via ajax. Go to assets/core/header.html to edit. -->
+		</n:header>
+		<!-- HEADER -->
+		<n:div id="content">
+			<!-- SIDEBAR -->
+			<n:aside id="sidebar" class="sidebar affix"
+				role="complementary">
+				<include src="/assets/core/sidebar.zul" />
+			</n:aside><!-- sidebar -->
+			<!-- SIDEBAR -->
+
+			<!-- MAIN -->
+			<n:div class="main">
+				<!-- CONTENT -->
+				<n:div id="content">
+					<include src="list-subjects.zul" />
+				</n:div><!-- content -->
+				<!-- CONTENT -->
+				<!-- FOOTER -->
+				<n:footer id="footer">
+					<include src="/assets/core/footer.html" />
+				</n:footer>
+				<!-- FOOTER -->
+			</n:div><!-- main -->
+			<!-- MAIN  -->
+
+		</n:div><!-- wrapper -->
+		</n:div>
+
+		<!-- REQUIRED SCRIPTS -->
+		<?script src="/vendor/js/required.min.js" type="text/javascript" ?>
+		<?script src="/assets/js/quarca.js" type="text/javascript" ?>
+</zk>
