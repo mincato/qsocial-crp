@@ -88,6 +88,7 @@ public class TagSubjectActionViewModel implements Serializable {
                                 .stream()
                                 .filter(category -> currentCase.getCaseObject().getSubject().getSubjectCategory()
                                         .contains(category.getId())).collect(Collectors.toList()));
+
                         tagSubjectCategorySet.setEditingStatus(false);
                         return tagSubjectCategorySet;
                     }).collect(Collectors.toList()));
@@ -209,8 +210,8 @@ public class TagSubjectActionViewModel implements Serializable {
             @BindingParam("fxTagSubjectAction") TagSubjectActionView fxTagSubjectAction) {
         TagSubjectCategorySetView subjectCategorySet = fxTagSubjectAction.getCategorySets().get(idx);
         Map<String, Object> args = new HashMap<>();
-        args.put("SubjectCategorySet", subjectCategorySet);
-        Executions.createComponents("/pages/cases/actions/choose-categories.zul", null, args);
+        args.put("subjectCategorySet", subjectCategorySet);
+        Executions.createComponents("/pages/cases/actions/choose-subject-categories.zul", null, args);
     }
 
     @Command
