@@ -24,6 +24,7 @@
 	</bean>
  	
 	<util:map id="actions">
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_CASE}" value-ref="tagCaseAction"/>
 	</util:map>
 	
 	<util:map id="matchers">

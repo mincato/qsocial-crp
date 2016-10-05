@@ -20,6 +20,7 @@ import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.TeamListView;
 import com.qsocialnow.model.SegmentView;
+import com.qsocialnow.model.TriggerView;
 import com.qsocialnow.services.TeamService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -40,6 +41,8 @@ public class CreateSegmentViewModel implements Serializable {
 
     private boolean editing;
 
+    private TriggerView trigger;
+
     public SegmentView getCurrentSegment() {
         return currentSegment;
     }
@@ -57,22 +60,26 @@ public class CreateSegmentViewModel implements Serializable {
 
     @GlobalCommand
     @NotifyChange({ "currentSegment" })
-    public void initSegment(@BindingParam("currentDomain") Domain currentDomain) {
+    public void initSegment(@BindingParam("currentDomain") Domain currentDomain,
+            @BindingParam("trigger") TriggerView trigger) {
         this.currentSegment.setSegment(new Segment());
         this.currentSegment.setTeam(null);
         this.currentDomain = currentDomain;
         editing = false;
+        this.trigger = trigger;
     }
 
     @GlobalCommand
     @NotifyChange({ "currentSegment" })
     public void editSegment(@BindingParam("currentDomain") Domain currentDomain,
-            @BindingParam("segment") Segment segment) {
+            @BindingParam("trigger") TriggerView trigger, @BindingParam("segment") Segment segment) {
         this.currentSegment.setSegment(segment);
         this.currentSegment.setTeam(teamOptions.stream().filter(team -> team.getId().equals(segment.getTeam()))
                 .findFirst().get());
         this.currentDomain = currentDomain;
         editing = true;
+        System.out.println("trigger: " + trigger);
+        this.trigger = trigger;
     }
 
     @Command
@@ -94,6 +101,7 @@ public class CreateSegmentViewModel implements Serializable {
         this.fxSegment = fxSegment;
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain);
+        args.put("trigger", trigger);
         BindUtils.postGlobalCommand(null, null, "goToCriteria", new HashMap<>());
         BindUtils.postGlobalCommand(null, null, "initCriteria", args);
     }
@@ -105,6 +113,7 @@ public class CreateSegmentViewModel implements Serializable {
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain);
         args.put("detectionCriteria", detectionCriteria);
+        args.put("trigger", trigger);
         BindUtils.postGlobalCommand(null, null, "goToCriteria", new HashMap<>());
         BindUtils.postGlobalCommand(null, null, "editCriteria", args);
     }
