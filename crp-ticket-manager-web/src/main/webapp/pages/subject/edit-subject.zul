@@ -20,8 +20,9 @@
 					<div class="row">
 						<n:div class="col-lg-12">
 							<div zclass="pane equal">
-
 								<x:form class="form-horizontal">
+
+
 									<n:div
 										class="col-sm-12 no-padding">
 										<n:div
@@ -55,15 +56,13 @@
 										</n:div>
 										<n:div
 											class="col-sm-6  no-padding">
-											<img
+											<image
 												src="@load(fx.subject.profileImage)"
-												class="img-responsive img-rounded center-block"
-												alt="@load(fx.subject.identifier)" />
+												class="img-responsive img-rounded center-block" />
 										</n:div>
 
 
 									</n:div>
-
 									<n:div class="form-group">
 										<n:label
 											class="control-label col-sm-2">
@@ -76,7 +75,7 @@
 										</div>
 										<div zclass="col-sm-10"
 											visible="@load(not empty fx.categories)">
-											<x:ol 
+											<x:ol
 												class="list-group order" children="@bind(fx.categories)">
 												<template
 													name="children">
@@ -180,8 +179,8 @@
 											${labels.subject.age.label}
 										</n:label>
 										<x:div class="col-sm-10">
-											<intbox 
-												class="form-control" id="age" name="normal_input" maxlength="3"
+											<intbox class="form-control"
+												id="age" name="normal_input" maxlength="3"
 												value="@bind(fx.subject.age) @validator('beanValidator')">
 											</intbox>
 											<x:span
@@ -209,7 +208,6 @@
 											</x:span>
 										</x:div>
 									</x:div>
-
 
 								</x:form>
 							</div>
