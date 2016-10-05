@@ -39,12 +39,8 @@ public class MergeCaseAction {
         Message message = new Message();
         message.setFromResponseDetector(event.isResponseDetected());
         message.setId(event.getId());
-        List<Message> messages = outputElement.getMessages();
-        if (messages == null) {
-            messages = new ArrayList<>();
-            outputElement.setMessages(messages);
-        }
-        messages.add(message);
+        outputElement.addMessage(message);
+        outputElement.setLastPostId(event.getId());
         outputElement.setActionsRegistry(registries);
         outputElement.setPendingResponse(true);
 

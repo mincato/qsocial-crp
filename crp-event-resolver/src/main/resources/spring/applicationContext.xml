@@ -24,8 +24,6 @@
 	</bean>
  	
 	<util:map id="actions">
-    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).OPEN_CASE}" value-ref="openCaseAction"/>
-    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).MERGE_CASE}" value-ref="mergeCaseAction"/>
 	</util:map>
 	
 	<util:map id="matchers">

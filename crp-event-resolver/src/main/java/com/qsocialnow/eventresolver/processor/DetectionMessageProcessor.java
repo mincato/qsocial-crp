@@ -23,8 +23,6 @@ public class DetectionMessageProcessor {
         // validate response detected
         if (message != null && message.isResponseDetected()) {
             detectionCriteria = new DetectionCriteria();
-            detectionCriteria.setExecuteMergeAction(true);
-            detectionCriteria.setFindCaseByDomain(true);
             return new ExecutionMessageRequest(message, domain, detectionCriteria, null, null);
         }
 

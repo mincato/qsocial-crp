@@ -35,7 +35,7 @@ public class ExecutionMessageProcessor {
                 Case caseObject = upsertCaseStrategy.upsert(request);
 
                 if (caseObject != null) {
-                    Object currentInput = request.getInput();
+                    Object currentInput = caseObject;
                     if (detectionCriteria.getActionCriterias() != null) {
                         for (AutomaticActionCriteria automaticActionCriteria : detectionCriteria.getActionCriterias()) {
                             Action action = actions.get(automaticActionCriteria.getActionType());

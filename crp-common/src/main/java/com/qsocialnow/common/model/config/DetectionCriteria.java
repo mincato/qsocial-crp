@@ -20,10 +20,6 @@ public class DetectionCriteria {
 
     private Filter filter;
 
-    private boolean executeMergeAction;
-
-    private boolean findCaseByDomain;
-
     private boolean alwaysOpenCase;
 
     private boolean findCaseOnAllDomains;
@@ -84,22 +80,6 @@ public class DetectionCriteria {
 
     public void setActionCriterias(List<AutomaticActionCriteria> actionCriterias) {
         this.actionCriterias = actionCriterias;
-    }
-
-    public boolean isExecuteMergeAction() {
-        return executeMergeAction;
-    }
-
-    public void setExecuteMergeAction(boolean executeMergeAction) {
-        this.executeMergeAction = executeMergeAction;
-    }
-
-    public boolean isFindCaseByDomain() {
-        return findCaseByDomain;
-    }
-
-    public void setFindCaseByDomain(boolean findCaseByDomain) {
-        this.findCaseByDomain = findCaseByDomain;
     }
 
     public boolean isAlwaysOpenCase() {

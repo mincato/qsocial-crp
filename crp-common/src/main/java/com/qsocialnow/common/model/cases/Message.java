@@ -10,6 +10,14 @@ public class Message implements Serializable {
 
     private boolean fromResponseDetector;
 
+    public Message() {
+    }
+
+    public Message(String id, boolean fromResponseDetector) {
+        this.id = id;
+        this.fromResponseDetector = fromResponseDetector;
+    }
+
     public String getId() {
         return id;
     }
