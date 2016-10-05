@@ -1,0 +1,61 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
+    viewModel="@id('vm') @init('com.qsocialnow.viewmodel.subject.SubjectsViewModel')" 
+    border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
+	<n:div class="row">
+	   <n:div class="col-lg-12">
+	       <div zclass="pane equal col-md-12 col-xs-12">
+				<n:div class="col-md-6 col-xs-12">
+    				<n:h5>${labels.subject.list.title}</n:h5>
+				</n:div>
+				<n:div class="col-md-offset-1 col-md-3 col-xs-8">
+					<div zclass="input-group input-group-sm">
+						  <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" />
+							<span zclass="input-group-btn">
+							    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+							</span>
+			    	</div>
+                </n:div>
+	       </div>
+	   </n:div>
+    </n:div>
+    <div class="row">
+    	<n:div class="col-lg-12">
+    	<div zclass="pane equal">
+		  <div zclass="table-responsive" >
+			<table class="table table-striped table-hover">
+			    <thead>
+					<tr>
+						<th></th>
+						<th>${labels.subject.list.column.identifier}</th>
+					    <th>${labels.subject.list.column.name}</th>
+						<th>${labels.subject.list.column.lastname}</th>
+					    <th>${labels.subject.list.column.action}</th>
+					</tr>
+			    </thead>
+			    <tbody children="@bind(vm.subjects)">
+			    	<template name="children">
+					<tr>
+						<td><span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.media.icon))"><i sclass="@load('fa fa-'.concat(each.media.icon))" /></span></td>
+						<td class="list-text-column">${each.identifier}</td>
+						<td>${each.name}</td>
+                       	<td>${each.lastName}</td>
+                       	<td>
+                       		<ul class="list-inline">
+  								<li><a class="list-action"><i onClick="@command('openEdit', subjectId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.subject.edit.action}"></i></a></li>
+							</ul>
+			           	</td>
+               		</tr>
+               		</template>
+				</tbody>
+			</table>
+		  </div>
+			<div class="text-center" zclass="@bind(vm.moreResults?'more-results':'hidden')">
+				<a style="text-decoration:none" onClick="@command('moreResults')"  >
+				 	${labels.app.pagination.moreResults}
+				</a>
+			</div>
+		</div>
+	  </n:div>
+	</div>
+</x:div>

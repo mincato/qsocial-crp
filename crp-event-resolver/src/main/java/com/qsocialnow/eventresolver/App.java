@@ -27,12 +27,15 @@ import com.qsocialnow.elasticsearch.queues.QueueType;
 import com.qsocialnow.eventresolver.config.CacheConfig;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.processor.EventHandlerProcessor;
-import com.qsocialnow.eventresolver.processor.MessageProcessor;
+import com.qsocialnow.eventresolver.processor.MessageProcessorImpl;
+import com.qsocialnow.eventresolver.processor.MessageResponseDetectorProcessorImpl;
 import com.qsocialnow.kafka.config.KafkaConsumerConfig;
 import com.qsocialnow.kafka.consumer.Consumer;
 
 @Component
 public class App implements Runnable {
+
+    private static final String RESPONSE_DETECTOR_CONSUMER_NAME = "RESPONSE_DETECTOR_CONSUMER";
 
     private static final Logger log = LoggerFactory.getLogger(App.class);
 
@@ -46,7 +49,10 @@ public class App implements Runnable {
     private KafkaConsumerConfig kafkaConfig;
 
     @Autowired
-    private MessageProcessor messageProcessor;
+    private MessageProcessorImpl messageProcessor;
+
+    @Autowired
+    private MessageResponseDetectorProcessorImpl messageResponseDetectorProcessor;
 
     @Autowired
     private QueueConfigurator queueConfig;
@@ -87,10 +93,12 @@ public class App implements Runnable {
         try {
             pathChildrenCache = new PathChildrenCache(zookeeperClient, appConfig.getDomainsPath(), true);
             addListener();
-            pathChildrenCache.start(StartMode.POST_INITIALIZED_EVENT);
-
             eventHandlerExecutor = Executors.newCachedThreadPool();
             eventHandlerProcessors = new HashMap<>();
+            createEventHandlerResponseDetectorProcessor();
+
+            pathChildrenCache.start(StartMode.POST_INITIALIZED_EVENT);
+
         } catch (Exception e) {
             log.error("There was an unexpected error", e);
             System.exit(1);
@@ -134,6 +142,22 @@ public class App implements Runnable {
             log.error("There was an error creating the event handler processor for domain: " + domain, e);
         }
 
+    }
+
+    private void createEventHandlerResponseDetectorProcessor() {
+        try {
+            QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
+                    queueConfig);
+
+            EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig,
+                    RESPONSE_DETECTOR_CONSUMER_NAME), messageResponseDetectorProcessor, queueService);
+
+            eventHandlerProcessors.put(RESPONSE_DETECTOR_CONSUMER_NAME, eventHandlerProcessor);
+            eventHandlerExecutor.execute(eventHandlerProcessor);
+        } catch (Exception e) {
+            log.error("There was an error creating the event handler processor for domain: "
+                    + RESPONSE_DETECTOR_CONSUMER_NAME, e);
+        }
     }
 
     private void addListener() {

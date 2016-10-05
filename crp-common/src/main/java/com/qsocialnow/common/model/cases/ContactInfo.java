@@ -2,6 +2,8 @@ package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
 
+import org.hibernate.validator.constraints.Email;
+
 public class ContactInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -10,6 +12,7 @@ public class ContactInfo implements Serializable {
 
     private String mobile;
 
+    @Email(message = "{invalid.email}")
     private String email;
 
     public String getPhone() {

@@ -35,6 +35,7 @@ public class SubjectRepository {
                     subjectListView.setName(subjectRepo.getName());
                     subjectListView.setLastName(subjectRepo.getLastName());
                     subjectListView.setIdentifier(subjectRepo.getIdentifier());
+                    subjectListView.setSource(subjectRepo.getSource());
                     subjects.add(subjectListView);
                 }
             }

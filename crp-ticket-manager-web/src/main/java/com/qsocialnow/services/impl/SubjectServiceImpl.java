@@ -83,12 +83,12 @@ public class SubjectServiceImpl implements SubjectService {
             headers.add("Accept", "application/json");
 
             HttpEntity<Subject> requestEntity = new HttpEntity<Subject>(currentSubject, headers);
-
             ResponseEntity<Subject> response = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT,
                     requestEntity, Subject.class);
+
             return response.getBody();
         } catch (Exception e) {
-            log.error("There was an error while trying to Subject team service", e);
+            log.error("There was an error while trying to request Subject service", e);
             throw new RuntimeException(e);
         }
     }

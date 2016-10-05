@@ -88,6 +88,7 @@ public class TagSubjectActionViewModel implements Serializable {
                                 .stream()
                                 .filter(category -> currentCase.getCaseObject().getSubject().getSubjectCategory()
                                         .contains(category.getId())).collect(Collectors.toList()));
+
                         tagSubjectCategorySet.setEditingStatus(false);
                         return tagSubjectCategorySet;
                     }).collect(Collectors.toList()));

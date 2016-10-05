@@ -49,9 +49,9 @@ public class SubjectService {
         return subjectSaved;
     }
 
-    public Subject update(Subject subject) {
-        Subject subjectSaved = null;
+    public Subject update(String subjectId, Subject subject) {
         try {
+            log.info("Updating subject : " + subjectId);
             if (subjectRepository.update(subject))
                 return subject;
 
@@ -59,7 +59,7 @@ public class SubjectService {
             log.error("There was an error updating Subject: " + subject.getName(), e);
             throw new RuntimeException(e.getMessage());
         }
-        return subjectSaved;
+        return null;
     }
 
 }

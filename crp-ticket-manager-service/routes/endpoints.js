@@ -1366,7 +1366,8 @@ var subject = gson.fromJsonSync(JSON.stringify(req.body), clazz);
 
 var subjectId = req.params.id;	
 var subjectService = javaContext.getBeanSync("subjectService");	  
-subjectService.update(subjectId, subject,asyncResponse);
+subjectService.update(subjectId,subject,asyncResponse);
+
 });
 
 router.post('/subjects', function (req, res) {
