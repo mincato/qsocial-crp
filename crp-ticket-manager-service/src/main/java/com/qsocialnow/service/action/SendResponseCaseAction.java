@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.Message;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.persistence.UserResolverRepository;
@@ -37,6 +38,7 @@ public class SendResponseCaseAction implements Action {
         caseObject.setPendingResponse(false);
         caseObject.setLastPostId(postId);
         caseObject.setUserResolver(new BaseUserResolver(userResolver));
+        caseObject.addMessage(new Message(postId, false));
         parameters.put(ActionParameter.COMMENT, text);
         return true;
     }

@@ -38,6 +38,7 @@ public class DefaultUpsertCaseStrategy implements UpsertCaseStrategy {
 
     @Override
     public Case upsert(ExecutionMessageRequest request) {
+        log.info("Processing upsert for analytic module event");
         Case caseObject = null;
         Event input = request.getInput();
         DetectionCriteria detectionCriteria = request.getDetectionCriteria();

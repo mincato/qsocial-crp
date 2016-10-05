@@ -382,4 +382,12 @@ public class Case implements Serializable {
         this.lastModifiedTimestamp = lastModifiedTimestamp;
     }
 
+    public void addMessage(Message message) {
+        if (messages == null) {
+            messages = new ArrayList<>();
+        }
+        messages.add(message);
+
+    }
+
 }
