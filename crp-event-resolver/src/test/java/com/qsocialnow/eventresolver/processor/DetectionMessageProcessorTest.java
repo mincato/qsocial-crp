@@ -14,7 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.mocks.MockDomainBuilder;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
@@ -40,7 +40,7 @@ public class DetectionMessageProcessorTest {
 
     @Test
     public void testDetectDomainNull() {
-        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(new InPutBeanDocument(), null);
+        ExecutionMessageRequest detectionCriteria = detectionMessageProcessor.detect(new Event(), null);
 
         Assert.assertNull(detectionCriteria);
     }

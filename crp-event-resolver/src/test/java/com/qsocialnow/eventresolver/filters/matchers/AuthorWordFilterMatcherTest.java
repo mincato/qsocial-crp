@@ -7,7 +7,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class AuthorWordFilterMatcherTest {
@@ -22,7 +22,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
 
@@ -31,7 +31,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueUsuarioCreacion() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioCreacion("messi");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -41,7 +41,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueUsuarioReproduccion() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioReproduccion("ronaldo");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -51,7 +51,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueUsuarioCreacionWithUrl() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioCreacion("messi http://twitter.com/messi");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -61,7 +61,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueUsuarioReproduccionWithUrl() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioReproduccion("ronaldo https://twitter.com/ronaldo");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -71,7 +71,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueUsuarioCreacionFalseUsuarioReproduccionTrue() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioCreacion("tevez");
         input.setUsuarioReproduccion("ronaldo");
 
@@ -82,7 +82,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseUsuarioCreacion() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioCreacion("tevez");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -92,7 +92,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseUsuarioCreacionWithUrl() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioCreacion("tevez http://twitter.com/messi");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -102,7 +102,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseUsuarioReproduccion() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioReproduccion("roman");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -112,7 +112,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseUsuarioReproduccionWithUrl() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioReproduccion("roman http://twitter.com/ronaldo");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -122,7 +122,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseUsuarioCreacionUsuarioReproduccion() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioCreacion("tevez");
         input.setUsuarioReproduccion("roman");
 
@@ -133,7 +133,7 @@ public class AuthorWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseUsuarioCreacionUsuarioReproduccionWithUrl() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setUsuarioCreacion("tevez http://twitter.com/messi");
         input.setUsuarioReproduccion("roman http://twitter.com/ronaldo");
 

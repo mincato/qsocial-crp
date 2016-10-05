@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 
 @Service
 @Qualifier("messageResponseDetectorFilter")
 public class MessageResponseDetectorFilterImpl implements MessageFilter {
 
     @Override
-    public boolean shouldProcess(InPutBeanDocument message, Domain domain) {
+    public boolean shouldProcess(Event message, Domain domain) {
         boolean shouldProcess = false;
 
         if (message != null && message.isResponseDetected()) {

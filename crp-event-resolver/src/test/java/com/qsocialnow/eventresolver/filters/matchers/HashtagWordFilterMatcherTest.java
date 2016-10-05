@@ -7,7 +7,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class HashtagWordFilterMatcherTest {
@@ -22,7 +22,7 @@ public class HashtagWordFilterMatcherTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         filterTexts.addAll(Arrays.asList("#messi", "#ronaldo"));
 
@@ -31,7 +31,7 @@ public class HashtagWordFilterMatcherTest {
 
     @Test
     public void testMatchTrue() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setHashTags(new String[] { "#messi", "#ronaldo", "#tevez" });
 
         filterTexts.addAll(Arrays.asList("#messi"));
@@ -41,7 +41,7 @@ public class HashtagWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setHashTags(new String[] { "#messi", "#ronaldo", "#tevez" });
 
         filterTexts.addAll(Arrays.asList("#messi", "#ronaldo"));
@@ -51,7 +51,7 @@ public class HashtagWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueUpperCase() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setHashTags(new String[] { "#MesSi", "#Ronaldo", "#Tevez" });
 
         filterTexts.addAll(Arrays.asList("#messi"));
@@ -61,7 +61,7 @@ public class HashtagWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueMultipleValuesUpperCase() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setHashTags(new String[] { "#MesSi", "#RONALDO", "#Tevez" });
 
         filterTexts.addAll(Arrays.asList("#messi", "#ronaldo"));
@@ -71,7 +71,7 @@ public class HashtagWordFilterMatcherTest {
 
     @Test
     public void testMatchFalse() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setHashTags(new String[] { "#messi", "#ronaldo", "#tevez" });
 
         filterTexts.addAll(Arrays.asList("#roman"));
@@ -81,7 +81,7 @@ public class HashtagWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setHashTags(new String[] { "#messi", "#ronaldo", "#tevez" });
 
         filterTexts.addAll(Arrays.asList("#messi", "#roman"));

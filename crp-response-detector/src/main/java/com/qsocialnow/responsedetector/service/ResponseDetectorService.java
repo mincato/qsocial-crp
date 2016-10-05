@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.responsedetector.strategies.ResponseDetectorStrategy;
 
 public class ResponseDetectorService implements Runnable {
@@ -20,7 +20,7 @@ public class ResponseDetectorService implements Runnable {
     public void run() {
         while (!stop) {
             try {
-                List<InPutBeanDocument> events = responseDetectorStrategy.findEvents();
+                List<Event> events = responseDetectorStrategy.findEvents();
                 eventProcessor.process(events);
                 Thread.sleep(600000);
             } catch (Exception e) {

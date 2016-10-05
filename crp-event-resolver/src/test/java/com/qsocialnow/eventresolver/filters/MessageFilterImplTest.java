@@ -7,7 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 
 public class MessageFilterImplTest {
 
@@ -35,7 +35,7 @@ public class MessageFilterImplTest {
         Domain domain = new Domain();
         domain.setThematics(Arrays.asList(1L, 2L));
 
-        InPutBeanDocument message = new InPutBeanDocument();
+        Event message = new Event();
         message.setTokenId(1L);
 
         Assert.assertTrue(messageFilter.shouldProcess(message, domain));
@@ -46,7 +46,7 @@ public class MessageFilterImplTest {
         Domain domain = new Domain();
         domain.setThematics(Arrays.asList(1L, 2L));
 
-        InPutBeanDocument message = new InPutBeanDocument();
+        Event message = new Event();
         message.setTokenId(3L);
 
         Assert.assertFalse(messageFilter.shouldProcess(message, domain));

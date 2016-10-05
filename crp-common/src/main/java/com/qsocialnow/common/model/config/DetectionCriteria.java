@@ -24,6 +24,10 @@ public class DetectionCriteria {
 
     private boolean findCaseByDomain;
 
+    private boolean alwaysOpenCase;
+
+    private boolean findCaseOnAllDomains;
+
     private List<AutomaticActionCriteria> actionCriterias;
 
     public String getId() {
@@ -78,7 +82,7 @@ public class DetectionCriteria {
         return actionCriterias;
     }
 
-    public void setAccionCriterias(List<AutomaticActionCriteria> actionCriterias) {
+    public void setActionCriterias(List<AutomaticActionCriteria> actionCriterias) {
         this.actionCriterias = actionCriterias;
     }
 
@@ -98,4 +102,19 @@ public class DetectionCriteria {
         this.findCaseByDomain = findCaseByDomain;
     }
 
+    public boolean isAlwaysOpenCase() {
+        return alwaysOpenCase;
+    }
+
+    public void setAlwaysOpenCase(boolean alwaysOpenCase) {
+        this.alwaysOpenCase = alwaysOpenCase;
+    }
+
+    public boolean isFindCaseOnAllDomains() {
+        return findCaseOnAllDomains;
+    }
+
+    public void setFindCaseOnAllDomains(boolean findCaseOnAllDomains) {
+        this.findCaseOnAllDomains = findCaseOnAllDomains;
+    }
 }

@@ -79,6 +79,8 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setSource(document.getSource());
         caseType.setAssignee(document.getAssignee());
         caseType.setAttachments(document.getAttachments());
+        caseType.setLastModifiedTimestamp(document.getLastModifiedTimestamp());
+        caseType.setMessages(document.getMessages());
         return caseType;
     }
 
@@ -110,6 +112,8 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setSource(documentType.getSource());
         caseDocument.setAssignee(documentType.getAssignee());
         caseDocument.setAttachments(documentType.getAttachments());
+        caseDocument.setLastModifiedTimestamp(documentType.getLastModifiedTimestamp());
+        caseDocument.setMessages(documentType.getMessages());
         return caseDocument;
     }
 

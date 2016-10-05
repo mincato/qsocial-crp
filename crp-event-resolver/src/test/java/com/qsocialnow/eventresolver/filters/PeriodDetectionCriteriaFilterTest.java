@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.model.config.PeriodFilter;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
@@ -78,7 +78,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchInputNull() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         PeriodFilter periodFilter = new PeriodFilter();
 
@@ -94,7 +94,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueBetweenRange() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -111,7 +111,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueBetweenRangeHours() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -127,7 +127,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueBetweenRangeEquals() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -143,7 +143,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueFromDate() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -157,7 +157,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueFromDateHours() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setFechaCreacion(sdf.parse(date));
 
@@ -174,7 +174,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueFromDateEquals() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -190,7 +190,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueUntilDate() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -206,7 +206,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueUntilDateHours() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -222,7 +222,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueUntilDateEquals() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -238,7 +238,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseBetweenRange() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -254,7 +254,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseBetweenRangeHours() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -270,7 +270,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseFromDate() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -285,7 +285,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseFromDateHours() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -300,7 +300,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseUntilDate() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 
@@ -315,7 +315,7 @@ public class PeriodDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseUntilDateHours() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         String date = "10/08/2016-15:00";
         input.setTimestamp(sdf.parse(date).getTime());
 

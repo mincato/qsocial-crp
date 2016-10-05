@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.qsocialnow.common.model.cases.Event;
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.elasticsearch.services.cases.CaseService;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
 public class ProducerTask extends TimerTask {
@@ -36,18 +35,15 @@ public class ProducerTask extends TimerTask {
         caseDocument.setTitle("Testing case:" + itemCount.get());
         caseDocument.setDescription("Case: " + itemCount.get());
         caseDocument.setOpen(true);
-        caseDocument.setOpenDate(new Date());
+        caseDocument.setOpenDate(new Date().getTime());
 
         ActionRegistry registry = new ActionRegistry();
         registry.setAction("Registry case :" + itemCount.getAndIncrement());
         registry.setAutomatic(true);
         registry.setComment("Registry Comment");
-        registry.setDate(new Date());
+        registry.setDate(new Date().getTime());
         registry.setType(ActionType.OPEN_CASE);
         Event event = new Event();
-        event.setDescription("Description registry");
-        event.setId("evento ID");
-        event.setTopic("Topico de Evento");
         registry.setEvent(event);
 
         List<ActionRegistry> registries = new ArrayList<>();

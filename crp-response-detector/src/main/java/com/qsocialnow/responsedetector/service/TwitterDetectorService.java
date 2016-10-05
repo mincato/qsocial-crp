@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.GsonBuilder;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.responsedetector.config.ResponseDetectorConfig;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
 import com.qsocialnow.responsedetector.factories.TwitterConfiguratorFactory;
@@ -211,7 +211,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             String userProfileImage) {
 
         try {
-            InPutBeanDocument event = new InPutBeanDocument();
+            Event event = new Event();
             String mainUserResolver = null;
             event.setId(sourceMessageId);
             event.setFecha(new Date());
