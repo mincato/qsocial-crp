@@ -197,9 +197,6 @@ public class ConfigurationRepository {
         AutomaticActionCriteria actionCriteria = new AutomaticActionCriteria();
         actionCriteria.setActionType(ActionType.OPEN_CASE);
         actionCriteria.setId(id + "-actioncriteria 1");
-        List<String> parameters1 = new ArrayList<>();
-        parameters1.add("value 1");
-        actionCriteria.setParameters(parameters1);
 
         AutomaticActionCriteria actionCriteria2 = new AutomaticActionCriteria();
         actionCriteria2.setActionType(ActionType.TAG_CASE);
@@ -207,7 +204,6 @@ public class ConfigurationRepository {
 
         List<String> parameters2 = new ArrayList<>();
         parameters2.add("value 2");
-        actionCriteria2.setParameters(parameters2);
 
         AutomaticActionCriteria actionCriteria3 = new AutomaticActionCriteria();
         actionCriteria3.setActionType(ActionType.ASSIGN);
@@ -215,7 +211,6 @@ public class ConfigurationRepository {
 
         List<String> parameters3 = new ArrayList<>();
         parameters3.add("value 3");
-        actionCriteria3.setParameters(parameters3);
 
         automaticActionsCriteria.add(actionCriteria);
         automaticActionsCriteria.add(actionCriteria2);

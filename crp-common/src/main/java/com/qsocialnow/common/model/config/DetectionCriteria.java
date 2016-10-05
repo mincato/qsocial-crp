@@ -1,5 +1,6 @@
 package com.qsocialnow.common.model.config;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,10 @@ public class DetectionCriteria {
     private boolean findCaseOnAllDomains;
 
     private List<AutomaticActionCriteria> actionCriterias;
+
+    public DetectionCriteria() {
+        actionCriterias = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -97,4 +102,5 @@ public class DetectionCriteria {
     public void setFindCaseOnAllDomains(boolean findCaseOnAllDomains) {
         this.findCaseOnAllDomains = findCaseOnAllDomains;
     }
+
 }
