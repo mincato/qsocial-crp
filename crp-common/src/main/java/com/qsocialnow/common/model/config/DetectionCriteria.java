@@ -26,7 +26,7 @@ public class DetectionCriteria {
 
     private boolean alwaysOpenCase;
 
-    private boolean findCaseOnlyCurrentDomain;
+    private boolean findCaseOnAllDomains;
 
     private List<AutomaticActionCriteria> actionCriterias;
 
@@ -82,7 +82,7 @@ public class DetectionCriteria {
         return actionCriterias;
     }
 
-    public void setAccionCriterias(List<AutomaticActionCriteria> actionCriterias) {
+    public void setActionCriterias(List<AutomaticActionCriteria> actionCriterias) {
         this.actionCriterias = actionCriterias;
     }
 
@@ -110,12 +110,11 @@ public class DetectionCriteria {
         this.alwaysOpenCase = alwaysOpenCase;
     }
 
-    public boolean isFindCaseOnlyCurrentDomain() {
-        return findCaseOnlyCurrentDomain;
+    public boolean isFindCaseOnAllDomains() {
+        return findCaseOnAllDomains;
     }
 
-    public void setFindCaseOnlyCurrentDomain(boolean findCaseOnlyCurrentDomain) {
-        this.findCaseOnlyCurrentDomain = findCaseOnlyCurrentDomain;
+    public void setFindCaseOnAllDomains(boolean findCaseOnAllDomains) {
+        this.findCaseOnAllDomains = findCaseOnAllDomains;
     }
-
 }

@@ -1,35 +1,30 @@
 package com.qsocialnow.eventresolver.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
-import com.qsocialnow.common.model.cases.Event;
+import com.qsocialnow.common.model.cases.Message;
 import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.elasticsearch.services.cases.CaseService;
-import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
 
 @Component("mergeCaseAction")
-public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
+public class MergeCaseAction {
 
     @Autowired
     private CaseService caseElasticService;
 
     private static final Logger log = LoggerFactory.getLogger(MergeCaseAction.class);
 
-    @Override
-    public Case execute(InPutBeanDocument inputElement, List<String> parameters, ExecutionMessageRequest request) {
-        return null;
-    }
-
-    @Override
-    public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
+    public Case mergeCase(Event event, Case outputElement) {
         log.info("Starting to merge case: " + outputElement.getId());
 
         // Adding a registry
@@ -37,27 +32,33 @@ public class MergeCaseAction implements Action<InPutBeanDocument, Case> {
         ActionRegistry registry = new ActionRegistry();
         registry.setAction(ActionType.MERGE_CASE.name());
         registry.setAutomatic(true);
-        registry.setComment("Id: " + inputElement.getId() + " - " + inputElement.getTitulo());
-        registry.setDate(inputElement.getFechaCreacion());
-        registry.setUserName(inputElement.getUsuarioCreacion());
-        Event event = new Event();
-        event.setId(inputElement.getId());
-        event.setDescription(inputElement.getTexto());
-        event.setTopic(inputElement.getName());
+        registry.setComment("Id: " + event.getId() + " - " + event.getTitulo());
+        registry.setDate(new Date().getTime());
         registry.setEvent(event);
         registries.add(registry);
+        Message message = new Message();
+        message.setFromResponseDetector(event.isResponseDetected());
+        message.setId(event.getId());
+        List<Message> messages = outputElement.getMessages();
+        if (messages == null) {
+            messages = new ArrayList<>();
+            outputElement.setMessages(messages);
+        }
+        messages.add(message);
         outputElement.setActionsRegistry(registries);
         outputElement.setPendingResponse(true);
 
-        try {
-            caseElasticService.indexCaseByBulkProcess(outputElement);
-
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        caseElasticService.indexCaseByBulkProcess(outputElement);
 
         return outputElement;
+    }
+
+    public void updateRegistry(Case caseObject, ActionRegistry actionRegistry, Event event) {
+        actionRegistry.setEvent(event);
+        List<ActionRegistry> registries = new ArrayList<>();
+        registries.add(actionRegistry);
+        caseObject.setActionsRegistry(registries);
+        caseElasticService.indexCaseByBulkProcess(caseObject);
     }
 
 }

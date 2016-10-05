@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.exception.InvalidDomainException;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
@@ -36,8 +36,8 @@ public class MessageProcessor {
 
     public void process(Message message) throws Exception {
         // reintentar ES
-        InPutBeanDocument inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
-                .fromJson(message.getMessage(), InPutBeanDocument.class);
+        Event inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
+                .fromJson(message.getMessage(), Event.class);
         String domainId = message.getGroup();
         LOGGER.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
         LOGGER.info(String.format("Searching for domain: %s", domainId));

@@ -43,9 +43,9 @@
 							</n:div>
 						</n:div>
 						<x:div class="form-group" visible="@load(not fxCriteria.alwaysOpenCase)">
-							<n:label class="control-label col-sm-2">${labels.trigger.criteria.findCaseOnlyCurrentDomain}</n:label>
+							<n:label class="control-label col-sm-2">${labels.trigger.criteria.findCaseOnAllDomains}</n:label>
 							<n:div class="col-sm-10">
-								<checkbox checked="@bind(fxCriteria.findCaseOnlyCurrentDomain)" />
+								<checkbox checked="@bind(fxCriteria.findCaseOnAllDomains)" />
 							</n:div>
 			             </x:div>
 	    				

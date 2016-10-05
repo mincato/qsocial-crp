@@ -1,5 +1,6 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -63,6 +64,7 @@ public class CaseTicketService extends DynamicIndexService {
         mapping.setIndex(indexName);
 
         // index document
+        document.setLastModifiedTimestamp(new Date().getTime());
         CaseType documentIndexed = mapping.getDocumentType(document);
         String response = repository.indexMapping(mapping, documentIndexed);
         repository.closeClient();
@@ -84,6 +86,7 @@ public class CaseTicketService extends DynamicIndexService {
         mapping.setIndex(indexResponse.getIndex());
 
         // index document
+        document.setLastModifiedTimestamp(new Date().getTime());
         CaseType documentIndexed = mapping.getDocumentType(document);
         String response = repository.updateMapping(document.getId(), mapping, documentIndexed);
         repository.closeClient();

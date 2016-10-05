@@ -166,7 +166,7 @@ public class ConfigurationRepository {
         criteria1.setFilter(filter);
         criteria1.setValidateFrom(initDate);
         criteria1.setValidateTo(endDate);
-        criteria1.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria1.getId()));
+        criteria1.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria1.getId()));
 
         DetectionCriteria criteria2 = new DetectionCriteria();
         criteria2.setSequenceOrder(2);
@@ -174,7 +174,7 @@ public class ConfigurationRepository {
         criteria2.setFilter(filter);
         criteria2.setValidateFrom(initDate);
         criteria2.setValidateTo(endDate);
-        criteria2.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria2.getId()));
+        criteria2.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria2.getId()));
 
         DetectionCriteria criteria3 = new DetectionCriteria();
         criteria3.setSequenceOrder(3);
@@ -182,7 +182,7 @@ public class ConfigurationRepository {
         criteria3.setFilter(filter);
         criteria3.setValidateFrom(initDate);
         criteria3.setValidateTo(endDate);
-        criteria3.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria3.getId()));
+        criteria3.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria3.getId()));
 
         detectionCriteriasFromSegment.add(criteria1);
         detectionCriteriasFromSegment.add(criteria2);

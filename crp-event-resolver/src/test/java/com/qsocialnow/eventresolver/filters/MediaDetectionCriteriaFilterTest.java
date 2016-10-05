@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.model.config.MediaFilter;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class MediaDetectionCriteriaFilterTest {
@@ -51,7 +51,7 @@ public class MediaDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         MediaFilter mediaFilter = new MediaFilter();
         mediaFilter.setOptions(new Long[] { 1l });
@@ -62,7 +62,7 @@ public class MediaDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrue() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setMedioId(1L);
 
         MediaFilter mediaFilter = new MediaFilter();
@@ -74,7 +74,7 @@ public class MediaDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setMedioId(1L);
 
         MediaFilter mediaFilter = new MediaFilter();
@@ -87,7 +87,7 @@ public class MediaDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalse() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setMedioId(1L);
 
         MediaFilter mediaFilter = new MediaFilter();
@@ -99,7 +99,7 @@ public class MediaDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setMedioId(1L);
 
         MediaFilter mediaFilter = new MediaFilter();

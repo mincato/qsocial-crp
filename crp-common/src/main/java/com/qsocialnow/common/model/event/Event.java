@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.google.gson.GsonBuilder;
 
-public class InPutBeanDocument implements Serializable {
+public class Event implements Serializable {
 
     /**
 		 * 
@@ -108,7 +108,7 @@ public class InPutBeanDocument implements Serializable {
 
     private String originalLocation;
 
-    private InPutBeanDocumentLocation location;
+    private EventLocation location;
 
     private GeoSocialEventLocationMethod locationMethod;
 
@@ -158,7 +158,7 @@ public class InPutBeanDocument implements Serializable {
 
     private String originIdCase;
 
-    public InPutBeanDocument() {
+    public Event() {
 
     }
 
@@ -490,11 +490,11 @@ public class InPutBeanDocument implements Serializable {
         this.name = name;
     }
 
-    public void setLocation(InPutBeanDocumentLocation location) {
+    public void setLocation(EventLocation location) {
         this.location = location;
     }
 
-    public InPutBeanDocumentLocation getLocation() {
+    public EventLocation getLocation() {
         return location;
     }
 

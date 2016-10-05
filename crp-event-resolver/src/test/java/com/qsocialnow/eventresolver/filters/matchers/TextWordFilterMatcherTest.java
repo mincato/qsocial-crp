@@ -7,7 +7,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 import com.qsocialnow.eventresolver.normalizer.TextNormalizer;
 
@@ -24,7 +24,7 @@ public class TextWordFilterMatcherTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
 
@@ -33,7 +33,7 @@ public class TextWordFilterMatcherTest {
 
     @Test
     public void testMatchTrue() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTexto("el genio de messi le gano a ronaldo gracias a tevez");
 
         filterTexts.addAll(Arrays.asList("messi"));
@@ -43,7 +43,7 @@ public class TextWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTexto("el genio de messi le gano a ronaldo gracias a tevez");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo"));
@@ -53,7 +53,7 @@ public class TextWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueUpperCase() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTexto("El Genio de MESSI le ganó a Ronaldo gracias a Tevez");
 
         filterTexts.addAll(Arrays.asList("messi"));
@@ -63,7 +63,7 @@ public class TextWordFilterMatcherTest {
 
     @Test
     public void testMatchTrueMultipleValuesUpperCase() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTexto("El Genio de MESSI le ganó a Ronaldo gracias a Tevez");
 
         filterTexts.addAll(Arrays.asList("messi", "gano", "ronaldo"));
@@ -73,7 +73,7 @@ public class TextWordFilterMatcherTest {
 
     @Test
     public void testMatchFalse() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTexto("el genio de messi le gano a ronaldo gracias a tevez");
 
         filterTexts.addAll(Arrays.asList("roman"));
@@ -83,7 +83,7 @@ public class TextWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTexto("el genio de messi le gano a ronaldo gracias a tevez");
 
         filterTexts.addAll(Arrays.asList("messi", "roman"));
@@ -93,7 +93,7 @@ public class TextWordFilterMatcherTest {
 
     @Test
     public void testMatchFalseMultipleValuesWithStopWord() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTexto("el genio de messi le gano a ronaldo gracias a tevez");
 
         filterTexts.addAll(Arrays.asList("messi", "ronaldo", "el"));

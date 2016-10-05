@@ -4,11 +4,11 @@ import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 
 public class ExecutionMessageRequest {
 
-    private final InPutBeanDocument input;
+    private final Event input;
 
     private final DetectionCriteria detectionCriteria;
 
@@ -18,8 +18,8 @@ public class ExecutionMessageRequest {
 
     private final Segment segment;
 
-    public ExecutionMessageRequest(final InPutBeanDocument input, final Domain domain,
-            final DetectionCriteria detectionCriteria, final Trigger trigger, final Segment segment) {
+    public ExecutionMessageRequest(final Event input, final Domain domain, final DetectionCriteria detectionCriteria,
+            final Trigger trigger, final Segment segment) {
         this.input = input;
         this.domain = domain;
         this.detectionCriteria = detectionCriteria;
@@ -27,7 +27,7 @@ public class ExecutionMessageRequest {
         this.segment = segment;
     }
 
-    public InPutBeanDocument getInput() {
+    public Event getInput() {
         return input;
     }
 

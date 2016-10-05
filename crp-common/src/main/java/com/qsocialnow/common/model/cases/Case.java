@@ -2,6 +2,7 @@ package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -11,7 +12,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 
 public class Case implements Serializable {
 
@@ -29,9 +30,11 @@ public class Case implements Serializable {
 
     private Boolean pendingResponse;
 
-    private Date openDate;
+    private Long openDate;
 
-    private Date closeDate;
+    private Long closeDate;
+
+    private Long lastModifiedTimestamp;
 
     @NotBlank(message = "{field.empty}")
     private String title;
@@ -71,15 +74,17 @@ public class Case implements Serializable {
 
     private Set<String> attachments;
 
+    private List<Message> messages;
+
     public Case() {
 
     }
 
-    public static Case getNewCaseFromEvent(InPutBeanDocument event) {
+    public static Case getNewCaseFromEvent(Event event) {
         Case newCase = new Case();
         newCase.setOpen(true);
 
-        Date openDate = new Date();
+        Long openDate = new Date().getTime();
         newCase.setOpenDate(openDate);
         newCase.setTitle(event.getTitulo());
 
@@ -87,6 +92,10 @@ public class Case implements Serializable {
         newCase.setSourceUser(event.getUsuarioCreacion());
         newCase.setLastPostId(event.getId());
         newCase.setSource(event.getMedioId());
+        Message message = new Message();
+        message.setId(event.getId());
+        message.setFromResponseDetector(event.isResponseDetected());
+        newCase.setMessages(Arrays.asList(message));
 
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
@@ -96,10 +105,7 @@ public class Case implements Serializable {
         registry.setAutomatic(true);
         registry.setDate(openDate);
 
-        Event originEvent = new Event();
-        originEvent.setId(event.getId());
-        originEvent.setDescription(event.getName());
-        registry.setEvent(originEvent);
+        registry.setEvent(event);
 
         registries.add(registry);
         newCase.setActionsRegistry(registries);
@@ -111,7 +117,7 @@ public class Case implements Serializable {
         Case newCase = new Case();
         newCase.setOpen(true);
 
-        Date openDate = new Date();
+        Long openDate = new Date().getTime();
         newCase.setOpenDate(openDate);
         newCase.setPendingResponse(true);
 
@@ -176,19 +182,19 @@ public class Case implements Serializable {
         this.pendingResponse = pendingResponse;
     }
 
-    public Date getOpenDate() {
+    public Long getOpenDate() {
         return openDate;
     }
 
-    public void setOpenDate(Date openDate) {
+    public void setOpenDate(Long openDate) {
         this.openDate = openDate;
     }
 
-    public Date getCloseDate() {
+    public Long getCloseDate() {
         return closeDate;
     }
 
-    public void setCloseDate(Date closeDate) {
+    public void setCloseDate(Long closeDate) {
         this.closeDate = closeDate;
     }
 
@@ -358,6 +364,22 @@ public class Case implements Serializable {
 
     public void setAttachments(Set<String> attachments) {
         this.attachments = attachments;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public Long getLastModifiedTimestamp() {
+        return lastModifiedTimestamp;
+    }
+
+    public void setLastModifiedTimestamp(Long lastModifiedTimestamp) {
+        this.lastModifiedTimestamp = lastModifiedTimestamp;
     }
 
 }

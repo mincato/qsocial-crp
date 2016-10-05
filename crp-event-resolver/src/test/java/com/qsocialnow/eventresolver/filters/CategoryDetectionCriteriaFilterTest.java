@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.qsocialnow.common.model.config.CategoryFilter;
 import com.qsocialnow.common.model.config.Filter;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class CategoryDetectionCriteriaFilterTest {
@@ -53,7 +53,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         CategoryFilter categoryFilter = new CategoryFilter();
         categoryFilter.setCategoryGroup(1l);
@@ -64,7 +64,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueOnlyCategoryGroup() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
@@ -77,7 +77,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueCategoryGroupAndCategorias() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
@@ -91,7 +91,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueCategoryGroupAndCategoriasMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
@@ -105,7 +105,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueMultipleFiltersCategoryGroupAndCategoriasMultipleValuesSecondTrue() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
@@ -122,7 +122,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueMultipleFiltersCategoryGroupAndCategoriasMultipleValuesFirstTrue() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
@@ -139,7 +139,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseOnlyCategoryGroup() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
@@ -152,7 +152,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseCategoryGroupAndCategorias() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
@@ -166,7 +166,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseCategoryGroupAndCategoriasMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
@@ -180,7 +180,7 @@ public class CategoryDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseMultipleFiltersCategoryGroupAndCategoriasMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConjuntos(new Long[] { 1l });
         input.setCategorias(new Long[] { 2l, 3l });
 
