@@ -102,6 +102,7 @@ public class CreateSegmentViewModel implements Serializable {
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain);
         args.put("trigger", trigger);
+        args.put("segment", fxSegment);
         BindUtils.postGlobalCommand(null, null, "goToCriteria", new HashMap<>());
         BindUtils.postGlobalCommand(null, null, "initCriteria", args);
     }
@@ -114,6 +115,7 @@ public class CreateSegmentViewModel implements Serializable {
         args.put("currentDomain", currentDomain);
         args.put("detectionCriteria", detectionCriteria);
         args.put("trigger", trigger);
+        args.put("segment", fxSegment);
         BindUtils.postGlobalCommand(null, null, "goToCriteria", new HashMap<>());
         BindUtils.postGlobalCommand(null, null, "editCriteria", args);
     }

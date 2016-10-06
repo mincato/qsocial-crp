@@ -28,6 +28,9 @@
 				<div visible="@load(actionVm.selectedAction ne null and actionVm.selectedAction eq 'TAG_CASE')">
 					<include src="/pages/triggers/actions/tag-case-action.zul"/>
 				</div>
+				<div visible="@load(actionVm.selectedAction ne null and actionVm.selectedAction eq 'REPLY')">
+					<include src="/pages/triggers/actions/send-response-action.zul"/>
+				</div>
 			</div>
 		</n:div>
 	</div>

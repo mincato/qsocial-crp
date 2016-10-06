@@ -17,6 +17,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.model.SegmentView;
 import com.qsocialnow.model.TriggerView;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -30,14 +31,17 @@ public class CreateActionViewModel implements Serializable {
 
     private TriggerView trigger;
 
+    private SegmentView segment;
+
     @Init
     public void init() {
         this.actionOptions = new ArrayList<>(ActionType.automaticActions);
     }
 
     @GlobalCommand
-    public void initAction(@BindingParam("trigger") TriggerView trigger) {
+    public void initAction(@BindingParam("trigger") TriggerView trigger, @BindingParam("segment") SegmentView segment) {
         this.trigger = trigger;
+        this.segment = segment;
     }
 
     @Command
@@ -45,6 +49,7 @@ public class CreateActionViewModel implements Serializable {
         Map<String, Object> args = new HashMap<>();
         args.put("action", selectedAction);
         args.put("trigger", trigger);
+        args.put("segment", segment);
         BindUtils.postGlobalCommand(null, null, "show", args);
     }
 
@@ -58,7 +63,9 @@ public class CreateActionViewModel implements Serializable {
     }
 
     @GlobalCommand
+    @NotifyChange("selectedAction")
     public void cancel() {
+        selectedAction = null;
         BindUtils.postGlobalCommand(null, null, "goToCriteria", new HashMap<>());
     }
 

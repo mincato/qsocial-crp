@@ -51,6 +51,7 @@ import com.qsocialnow.model.FilterView;
 import com.qsocialnow.model.Language;
 import com.qsocialnow.model.LanguageView;
 import com.qsocialnow.model.MediaView;
+import com.qsocialnow.model.SegmentView;
 import com.qsocialnow.model.Series;
 import com.qsocialnow.model.SubSeries;
 import com.qsocialnow.model.Thematic;
@@ -98,6 +99,8 @@ public class CreateCriteriaViewModel implements Serializable {
     private DetectionCriteria fxCriteria;
 
     private TriggerView trigger;
+
+    private SegmentView segment;
 
     public DetectionCriteria getCurrentCriteria() {
         return currentCriteria;
@@ -185,7 +188,7 @@ public class CreateCriteriaViewModel implements Serializable {
     @NotifyChange({ "currentCriteria", "filters", "filter", "connotations", "mediaTypes", "languages", "serieOptions",
             "subSerieOptions", "categoryGroupOptions" })
     public void initCriteria(@BindingParam("currentDomain") Domain currentDomain,
-            @BindingParam("trigger") TriggerView trigger) {
+            @BindingParam("trigger") TriggerView trigger, @BindingParam("segment") SegmentView segment) {
         currentCriteria = new DetectionCriteria();
         currentCriteria.setActionCriterias(new ArrayList<>());
         filterView = new FilterView();
@@ -199,6 +202,7 @@ public class CreateCriteriaViewModel implements Serializable {
         editing = false;
         filters = true;
         this.trigger = trigger;
+        this.segment = segment;
 
     }
 
@@ -206,7 +210,7 @@ public class CreateCriteriaViewModel implements Serializable {
     @NotifyChange({ "currentCriteria", "filters", "filter", "connotations", "mediaTypes", "languages", "serieOptions",
             "subSerieOptions", "categoryGroupOptions" })
     public void editCriteria(@BindingParam("currentDomain") Domain currentDomain,
-            @BindingParam("trigger") TriggerView trigger,
+            @BindingParam("trigger") TriggerView trigger, @BindingParam("segment") SegmentView segment,
             @BindingParam("detectionCriteria") DetectionCriteria detectionCriteria) {
         currentCriteria = detectionCriteria;
         if (currentCriteria.getActionCriterias() == null) {
@@ -221,6 +225,7 @@ public class CreateCriteriaViewModel implements Serializable {
         editing = true;
         filters = true;
         this.trigger = trigger;
+        this.segment = segment;
     }
 
     private void initThematics(Domain domain) {
@@ -361,6 +366,7 @@ public class CreateCriteriaViewModel implements Serializable {
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", null);
         args.put("trigger", trigger);
+        args.put("segment", segment);
         BindUtils.postGlobalCommand(null, null, "goToAction", new HashMap<>());
         BindUtils.postGlobalCommand(null, null, "initAction", args);
     }
