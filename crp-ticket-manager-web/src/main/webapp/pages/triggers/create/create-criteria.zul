@@ -59,7 +59,7 @@
 			    </div>
 		    </n:div>
   	</div>
-  	<div class="row" form="@id('fxFilter') @load(vm.filter) @save(vm.filter, before='save')">
+  	<div class="row" form="@id('fxFilter') @load(vm.filter) @save(vm.filter, before='save')  @validator('com.qsocialnow.validators.CriteriaFilterFormValidator')">
   		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 		    	<n:form class="form-horizontal pane">								
@@ -161,11 +161,12 @@
 					</x:div>
 					<div class="form-group">
 						<n:div class="col-sm-offset-2 ">
-							<x:ol class="list-group order" children="@bind(fxFilter.filterWords)">
+							<x:ol class="list-group order" children="@bind(fxFilter.filterWords) ">
 								<template name="children" var="filterWord">
 									<n:div class="list-group-item col-xs-11 col-sm-11">
-										<n:div class="col-xs-12 col-sm-6">
-											<listbox mold="select" sclass="form-control"
+										<x:div 
+							sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+											<listbox id="filterword_type_${filterWordStatus.index}" mold="select" sclass="form-control"
 												model="@load(vm.wordFilterTypeOptions)" multiple="false" checkmark="true"
 												selectedItem="@bind(filterWord.type)">
 												<template name="model">
@@ -175,11 +176,22 @@
 													</listitem>
 												</template>
 											</listbox>
-										</n:div>
-										<n:div class="col-xs-8 col-sm-3">
-											<textbox type="text" class="form-control" 
+											<x:span
+												sclass="@load(vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
+												<label
+													value="@bind(vmsgs['filterword_type_'.concat(filterWordStatus.index)])" />
+											</x:span>
+										</x:div>
+										<x:div 
+							sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-8 col-sm-3' : 'col-xs-8 col-sm-3 has-error')">
+											<textbox id="filterword_text_${filterWordStatus.index}" type="text" class="form-control" 
 						    					value="@bind(filterWord.inputText)"></textbox>
-										</n:div>
+						    				<x:span
+												sclass="@load(vmsgs['filterword_text_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
+												<label
+													value="@bind(vmsgs['filterword_text_'.concat(filterWordStatus.index)])" />
+											</x:span>	
+										</x:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
 												<a zclass="btn-list-action"
