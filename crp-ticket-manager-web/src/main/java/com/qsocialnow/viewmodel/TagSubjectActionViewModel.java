@@ -125,7 +125,7 @@ public class TagSubjectActionViewModel implements Serializable {
         List<TagSubjectCategorySetView> categorySets = tagSubjectAction.getCategorySets();
         List<String[]> modified = getComparableTuples(tagSubjectAction.getCategorySets());
         List<String[]> removed = tagSubjectAction.getPreviousConfiguration().stream().filter(tuple -> {
-            return modified.stream().anyMatch(pTuple -> Arrays.equals(pTuple, tuple));
+            return !modified.stream().anyMatch(pTuple -> Arrays.equals(pTuple, tuple));
         }).collect(Collectors.toList());
         List<String[]> added = modified
                 .stream()
@@ -133,8 +133,31 @@ public class TagSubjectActionViewModel implements Serializable {
                     return !tagSubjectAction.getPreviousConfiguration().stream()
                             .anyMatch(pTuple -> Arrays.equals(pTuple, tuple));
                 }).collect(Collectors.toList());
-        parameters.put(ActionParameter.CATEGORIES_ADDED, added);
-        parameters.put(ActionParameter.CATEGORIES_REMOVED, removed);
+        List<List<String>> addedList = new ArrayList<List<String>>();
+        for (String[] tuple : added) {
+            List<String> list = new ArrayList<String>();
+            list.add(tuple[0]);
+            list.add(tuple[1]);
+            addedList.add(list);
+        }
+
+        List<List<String>> removedList = new ArrayList<List<String>>();
+        for (String[] tuple : removed) {
+            List<String> list = new ArrayList<String>();
+            list.add(tuple[0]);
+            list.add(tuple[1]);
+            removedList.add(list);
+        }
+
+        String[] categoriesSet = categorySets.stream().map(categorySet -> categorySet.getCategorySet().getId())
+                .toArray(size -> new String[size]);
+        String[] categories = categorySets.stream().map(categorySet -> categorySet.getCategories())
+                .flatMap(l -> l.stream()).map(SubjectCategory::getId).toArray(size -> new String[size]);
+        parameters.put(ActionParameter.CATEGORIES_SET, categoriesSet);
+        parameters.put(ActionParameter.CATEGORIES, categories);
+
+        parameters.put(ActionParameter.CATEGORIES_ADDED, addedList);
+        parameters.put(ActionParameter.CATEGORIES_REMOVED, removedList);
         parameters.put(ActionParameter.COMMENT, buildComment(categorySets));
         actionRequest.setParameters(parameters);
         Case caseUpdated = caseService.executeAction(caseId, actionRequest);
