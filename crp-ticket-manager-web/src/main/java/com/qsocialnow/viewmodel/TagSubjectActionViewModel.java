@@ -2,6 +2,7 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -101,8 +102,19 @@ public class TagSubjectActionViewModel implements Serializable {
             } else {
                 categorySetListView.setFilteredList(new ArrayList<>(categorySetListView.getList()));
             }
+            tagSubjectAction.setPreviousConfiguration(getComparableTuples(tagSubjectAction.getCategorySets()));
             categorySetListView.setEnabledAdd(!categorySetListView.getFilteredList().isEmpty());
         }
+    }
+
+    private List<String[]> getComparableTuples(List<TagSubjectCategorySetView> list) {
+        List<String[]> tuples = new ArrayList<String[]>();
+        for (TagSubjectCategorySetView tagSubjectCategorySetView : list) {
+            for (SubjectCategory category : tagSubjectCategorySetView.getCategories()) {
+                tuples.add(new String[] { tagSubjectCategorySetView.getCategorySet().getId(), category.getId() });
+            }
+        }
+        return tuples;
     }
 
     @Command
@@ -111,12 +123,18 @@ public class TagSubjectActionViewModel implements Serializable {
         actionRequest.setActionType(ActionType.TAG_SUBJECT);
         Map<ActionParameter, Object> parameters = new HashMap<>();
         List<TagSubjectCategorySetView> categorySets = tagSubjectAction.getCategorySets();
-        String[] categoriesSet = categorySets.stream().map(categorySet -> categorySet.getCategorySet().getId())
-                .toArray(size -> new String[size]);
-        String[] categories = categorySets.stream().map(categorySet -> categorySet.getCategories())
-                .flatMap(l -> l.stream()).map(SubjectCategory::getId).toArray(size -> new String[size]);
-        parameters.put(ActionParameter.CATEGORIES_SET, categoriesSet);
-        parameters.put(ActionParameter.CATEGORIES, categories);
+        List<String[]> modified = getComparableTuples(tagSubjectAction.getCategorySets());
+        List<String[]> removed = tagSubjectAction.getPreviousConfiguration().stream().filter(tuple -> {
+            return modified.stream().anyMatch(pTuple -> Arrays.equals(pTuple, tuple));
+        }).collect(Collectors.toList());
+        List<String[]> added = modified
+                .stream()
+                .filter(tuple -> {
+                    return !tagSubjectAction.getPreviousConfiguration().stream()
+                            .anyMatch(pTuple -> Arrays.equals(pTuple, tuple));
+                }).collect(Collectors.toList());
+        parameters.put(ActionParameter.CATEGORIES_ADDED, added);
+        parameters.put(ActionParameter.CATEGORIES_REMOVED, removed);
         parameters.put(ActionParameter.COMMENT, buildComment(categorySets));
         actionRequest.setParameters(parameters);
         Case caseUpdated = caseService.executeAction(caseId, actionRequest);

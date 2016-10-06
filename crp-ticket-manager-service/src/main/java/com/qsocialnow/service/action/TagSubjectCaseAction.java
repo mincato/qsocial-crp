@@ -18,23 +18,25 @@ public class TagSubjectCaseAction implements Action {
     @Autowired
     private SubjectRepository subjectRepository;
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
-        List<String> subjectCategoriesSet = (List<String>) parameters.get(ActionParameter.CATEGORIES_SET);
-        caseObject.getSubject().setSubjectCategorySet(new HashSet<>(subjectCategoriesSet));
-        List<String> subjectCategories = (List<String>) parameters.get(ActionParameter.CATEGORIES);
-        caseObject.getSubject().setSubjectCategory(new HashSet<>(subjectCategories));
-
+        List<String[]> added = (List<String[]>) parameters.get(ActionParameter.CATEGORIES_ADDED);
+        List<String[]> removed = (List<String[]>) parameters.get(ActionParameter.CATEGORIES_REMOVED);
         Subject subject = subjectRepository.findOne(caseObject.getSubject().getId());
-
         if (subject.getSubjectCategorySet() == null) {
             subject.setSubjectCategorySet(new HashSet<>());
         }
-        subject.getSubjectCategorySet().addAll(subjectCategoriesSet);
         if (subject.getSubjectCategory() == null) {
             subject.setSubjectCategory(new HashSet<>());
         }
-        subject.getSubjectCategory().addAll(subjectCategories);
+        for (String[] tuple : added) {
+            subject.getSubjectCategorySet().add(tuple[0]);
+            subject.getSubjectCategory().add(tuple[1]);
+        }
+        for (String[] tuple : removed) {
+            subject.getSubjectCategory().remove(tuple[1]);
+        }
 
         subjectRepository.update(subject);
         return true;
