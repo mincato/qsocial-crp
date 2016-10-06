@@ -238,16 +238,6 @@ public class CaseService extends DynamicIndexService {
         return isQueueCreatedOK;
     }
 
-    public Case findCaseByEventId(String id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Case findCaseByTriggers(List<Trigger> triggers) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
     public List<Case> findOpenCasesForSubject(String idSubject) {
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();

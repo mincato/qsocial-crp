@@ -15,6 +15,7 @@
    	<import resource="elastic.xml" />
    	<import resource="bigqueue.xml" />
    	<import resource="cache.xml" />
+   	<import resource="twitter.xml" />
  
  	<context:component-scan base-package="com.qsocialnow" />
  	
@@ -25,6 +26,7 @@
  	
 	<util:map id="actions">
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_CASE}" value-ref="tagCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
 	</util:map>
 	
 	<util:map id="matchers">
@@ -33,5 +35,13 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.WordFilterType).HASHTAG}" value-ref="hashtagWordFilterMatcher"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.WordFilterType).MENTION}" value-ref="mentionWordFilterMatcher"/>
 	</util:map>
+	
+	<util:map id="sources">
+    	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}" value-ref="twitterSourceStrategy"/>
+	</util:map>
+	
+	<bean id="twitterSourceStrategy" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
+        <property name="twitterConfig" ref="twitterConfig"></property>
+    </bean>
 	
 </beans>
