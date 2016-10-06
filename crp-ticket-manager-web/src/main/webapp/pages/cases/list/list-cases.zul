@@ -31,6 +31,7 @@
 					    		<th>${labels.cases.list.column.id}</th>
 					    		<th>${labels.cases.list.column.title}</th>
 					    		<th>${labels.cases.list.column.description}</th>
+					    		<th>${labels.cases.list.column.subject}</th>
 					    		<th>${labels.cases.list.column.pendingResponse}</th>
 					    		<th>${labels.cases.list.column.open}</th>
 					    		<th>${labels.cases.list.column.action}</th>
@@ -42,6 +43,7 @@
 									<td>${each.id}</td>
                    					<td class="list-text-column">${each.title}</td>
                        				<td>${each.description}</td>
+                       				<td>${each.subject}</td>
                 				    <td>${c:l(c:cat('cases.pendingResponse.',each.pendingResponse))}</td>   
                        				<td>${c:l(c:cat('cases.open.',each.open))}</td>
                        				<td>
