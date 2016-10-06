@@ -29,7 +29,7 @@
                      <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
                        <datebox  id="todate" sclass="input-group" format="MM/dd/yyyy" value="@load(vm.toDate) 
                         @save(vm.toDate, before='search')
-                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate)" placeholder="${labels.trigger.list.filter.toDate}" />
+                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.trigger.list.filter.toDate}" />
                     </x:div>
                 </n:div>
 				<n:div class="col-md-1">

@@ -30,12 +30,18 @@
 							</n:div>
 	    				</n:div>
 				    		
-	    				<n:div class="form-group">
+	    				<x:div sclass="@load(empty vmsgs[validto] ? 'form-group' : 'form-group has-error')">
 							<n:label class="control-label col-sm-2">${labels.trigger.criteria.validTo}</n:label>
 							<n:div class="col-sm-10">
-								<datebox sclass="input-group" format="short" value="@bind(fxCriteria.validateTo)" />
+								<datebox id="validto" sclass="input-group" format="short" value="@load(fxCriteria.validateTo) 
+									@save(fxCriteria.validateTo, before='save')
+                        			@validator('com.qsocialnow.validators.ToDateValidator', 
+                        				fromDate = fxCriteria.validateFrom, label = 'trigger.criteria.validateto.validation', id='validto')" />
+                        	<x:span sclass="@load(empty vmsgs[validto] ? 'hidden' : 'help-block')">
+		    						<label value="@load(vmsgs[validto])" />
+							</x:span> 
 							</n:div>
-	    				</n:div>
+	    				</x:div>
 	    				<n:div class="form-group">
 							<n:label class="control-label col-sm-2">${labels.trigger.criteria.alwaysOpenCase}</n:label>
 							<n:div class="col-sm-10">
@@ -93,12 +99,17 @@
 							<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(fxFilter.startDateTime)" />
 						</n:div>
     				</n:div>
-    				<n:div class="form-group">
+    				<x:div sclass="@load(empty vmsgs[enddate] ? 'form-group' : 'form-group has-error')">
 						<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
 						<n:div class="col-sm-10">
-							<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(fxFilter.endDateTime)" />
+							<datebox id="enddate" sclass="input-group" format="dd/MM/yyyy HH:mm" value="@load(fxFilter.endDateTime) 
+							@save(fxFilter.endDateTime, before='save')
+                        	@validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate')" />
+                        	<x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
+		    						<label value="@load(vmsgs[enddate])" />
+							</x:span>
 						</n:div>
-    				</n:div>
+    				</x:div>
 			    </n:form>
 			    <n:br />
 			    <n:hr />

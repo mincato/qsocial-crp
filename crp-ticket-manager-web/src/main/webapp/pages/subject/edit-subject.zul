@@ -75,23 +75,27 @@
 										</div>
 										<div zclass="col-sm-10"
 											visible="@load(not empty fx.categories)">
-											<x:ol
+											<div
 												class="list-group order" children="@bind(fx.categories)">
 												<template
 													name="children">
 													<n:div
-														class="list-group-item col-xs-12 col-sm-11">
+														class="col-xs-12 col-sm-11">
 														<n:div
 															class="col-sm-6">
-															${each.set.description}
+															<span>
+																<label sclass="label label-info" value="${each.set.description}"/>
+															</span>
 														</n:div>
 														<n:div
 															class="col-sm-6">
-															${each.category.description}
+															<span>
+																<label sclass="label label-info" value="${each.category.description}"/>
+															</span>
 														</n:div>
 													</n:div>
 												</template>
-											</x:ol>
+											</div>
 										</div>
 									</n:div>
 									<x:div
