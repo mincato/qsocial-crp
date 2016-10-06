@@ -12,8 +12,8 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Message;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.UserResolver;
+import com.qsocialnow.common.services.strategies.SourceStrategy;
 import com.qsocialnow.persistence.UserResolverRepository;
-import com.qsocialnow.service.strategies.SourceStrategy;
 
 @Component("sendResponseCaseAction")
 public class SendResponseCaseAction implements Action {

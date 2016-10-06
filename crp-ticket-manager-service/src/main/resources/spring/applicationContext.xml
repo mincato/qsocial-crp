@@ -118,4 +118,8 @@
 	<util:map id="sources">
     	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}" value-ref="twitterSourceStrategy"/>
 	</util:map>
+	
+	<bean id="twitterSourceStrategy" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
+        <property name="twitterConfig" ref="twitterConfig"></property>
+    </bean>
 </beans>
