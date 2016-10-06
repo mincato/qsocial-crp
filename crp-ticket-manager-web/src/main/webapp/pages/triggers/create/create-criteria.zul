@@ -133,14 +133,18 @@
 		    		<n:form class="form-inline text-center">								
 						<n:div class="form-group">
 							<n:label class="control-label">${labels.trigger.criteria.followers.greater}</n:label>
-    						<textbox type="text" ca:data-only-number="" class="form-control" 
-	    						value="@bind(fxFilter.followersGreaterThan)"></textbox>
+    						<longbox class="form-control" 
+	    						value="@bind(fxFilter.followersGreaterThan)"></longbox>
 						</n:div>
-						<n:div class="form-group">
+						<x:div sclass="@load(empty vmsgs[followerslessthan] ? 'form-group' : 'form-group has-error')">
 	    					<n:label class="control-label">${labels.trigger.criteria.followers.less}</n:label>
-    						<textbox type="text" ca:data-only-number="" sclass="form-control"
-	    						value="@bind(fxFilter.followersLessThan)"></textbox>
-    					</n:div>
+    						<longbox id="followerslessthan" sclass="form-control"
+	    						value="@load(fxFilter.followersLessThan)  @save(fxFilter.followersLessThan, before='save')
+                        		@validator('com.qsocialnow.validators.LongGreaterThanValidator', greater = fxFilter.followersGreaterThan, id = 'followerslessthan')"></longbox>
+                        	<x:span sclass="@load(empty vmsgs[followerslessthan] ? 'hidden' : 'help-block')">
+		    						<label value="@load(vmsgs[followerslessthan])" />
+							</x:span>	
+    					</x:div>
 			    	</n:form>
 			    </n:div>
 			    <n:br />
