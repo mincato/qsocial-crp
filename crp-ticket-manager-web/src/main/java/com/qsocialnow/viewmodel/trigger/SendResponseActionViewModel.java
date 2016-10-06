@@ -54,7 +54,7 @@ public class SendResponseActionViewModel implements Serializable {
     @GlobalCommand
     @NotifyChange({ "sendResponseAction" })
     public void show(@BindingParam("segment") SegmentView segment, @BindingParam("action") ActionType action) {
-        if (ActionType.REPLY.equals(action)) {
+        if (ActionType.REPLY.equals(action) && segment.getTeam() != null) {
             this.sendResponseAction = new SendResponseAutomaticActionView();
             Map<String, Object> filters = new HashMap<>();
             filters.put("status", true);
