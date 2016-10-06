@@ -158,7 +158,7 @@
 							<div zclass="link-button pull-right">
 								<a onClick="@command('addFilterWord', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
-									${labels.trigger.criteria.add}
+									${labels.trigger.criteria.add.filter}
 								</a>
 							</div>
 						</n:div>
@@ -259,7 +259,7 @@
 							<div zclass="link-button pull-right">
 								<a onClick="@command('addFilterCategory', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
-									${labels.trigger.criteria.add}
+									${labels.trigger.criteria.add.category}
 								</a>
 							</div>
 						</n:div>
@@ -269,8 +269,8 @@
 							<x:ol class="list-group order" children="@bind(fxFilter.filterCategories)">
 								<template name="children" var="filterCategory">
 									<n:div class="list-group-item col-xs-11 col-sm-11">
-										<n:div class="col-xs-12 col-sm-6">
-											<listbox mold="select" sclass="form-control"
+										<x:div sclass="@load(empty vmsgs['filtercategory_'.concat(filterCategoryStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+											<listbox id="filtercategory_${filterCategoryStatus.index}" mold="select" sclass="form-control"
 												model="@load(vm.categoryGroupOptions)" multiple="false" checkmark="true"
 												selectedItem="@bind(filterCategory.categoryGroup)"
 												onSelect="@command('selectGroupCategory', filter=filterCategory)">
@@ -281,7 +281,12 @@
 													</listitem>
 												</template>
 											</listbox>
-										</n:div>
+											<x:span
+												sclass="@load(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)] ? 'hidden' : 'help-block')">
+												<label
+													value="@bind(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)])" />
+											</x:span>
+										</x:div>
 										<n:div class="col-xs-8 col-sm-3">
 											<div class="form-group" children="@load(filterCategory.categories)">
 												<template name="children">
