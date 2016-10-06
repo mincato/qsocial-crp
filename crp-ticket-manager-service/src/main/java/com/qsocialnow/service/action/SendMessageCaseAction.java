@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.UserResolver;
+import com.qsocialnow.common.services.strategies.SourceStrategy;
 import com.qsocialnow.persistence.UserResolverRepository;
-import com.qsocialnow.service.strategies.SourceStrategy;
 
 @Component("sendMessageCaseAction")
 public class SendMessageCaseAction implements Action {
