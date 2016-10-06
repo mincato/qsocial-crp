@@ -47,7 +47,7 @@ public class QueueProducer<T> extends Thread {
             byte[] item = this.getItemSerialized(document);
             bigQueue.enqueue(item);
             producingItemCount.incrementAndGet();
-            log.info("Adding item " + producingItemCount.get() + " type: " + this.type + " into the queue");
+            log.debug("Adding item " + producingItemCount.get() + " type: " + this.type + " into the queue");
             if (producingItemCount.get() >= getTotalItemCounts()) {
                 this.notifyConsumers();
                 producingItemCount.set(0);
