@@ -11,15 +11,11 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.event.Event;
-import com.qsocialnow.elasticsearch.services.cases.CaseService;
 import com.qsocialnow.elasticsearch.services.cases.SubjectService;
 import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
 
 @Component("openCaseAction")
 public class OpenCaseAction {
-
-    @Autowired
-    private CaseService caseElasticService;
 
     @Autowired
     private SubjectService subjectService;
@@ -56,8 +52,6 @@ public class OpenCaseAction {
             newCase.setSegmentId(request.getSegment().getId());
             newCase.setSubject(subject);
             newCase.setTriggerEvent(inputElement);
-
-            caseElasticService.indexCaseByBulkProcess(newCase);
 
         } catch (Exception e) {
             log.error("There was an error executing action", e);

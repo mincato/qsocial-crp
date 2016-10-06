@@ -1,6 +1,6 @@
 <div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute" ca:data-filter=""
 	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.trigger.CreateCriteriaViewModel', currentDomain=arg.currentDomain)"
-		validationMessages="@id('vmsgs')">
+		validationMessages="@id('vmsgs')" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
@@ -8,7 +8,7 @@
 			</div>
 		</n:div>
 	</n:div>	
-	<div class="row" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
+	<div class="row">
 			<n:div class="col-lg-12">
 				<div zclass="pane equal">
 					<n:form class="form-horizontal pane">
@@ -283,6 +283,57 @@
 						</n:div>
 					</div>
 			    </x:form>
+			</div>
+		</n:div>
+	</div>
+	<div class="row">
+  		<n:div class="col-lg-12">
+			<div zclass="pane equal">
+			    <n:form class="form-horizontal">
+					<x:div class="form-group">
+						<n:h6 class="col-sm-2">
+							${labels.trigger.automaticActions}
+						</n:h6>
+						<n:div class="col-sm-10">
+							<div zclass="link-button pull-right">
+								<a onClick="@command('createNewAction', fxCriteria = fxCriteria)">
+									<i class="fa fa-plus-circle fa-2x"></i>
+										${labels.app.button.add}
+								</a>
+							</div>
+						</n:div>
+					</x:div>
+				
+					<div class="form-group" visible="@load(not empty fxCriteria.actionCriterias)">
+						<n:div class="col-sm-offset-2 ">
+							<x:ol class="list-group order"
+								children="@bind(fxCriteria.actionCriterias)">
+								<template name="children">
+									<n:div class="list-group-item col-xs-11 col-sm-11">
+										<n:div class="col-xs-12 col-sm-6">
+											${c:l(c:cat('cases.actions.',each.actionType))}
+										</n:div>
+										<n:div class="col-xs-8 col-sm-3">
+										</n:div>
+										<n:div class="col-xs-4 col-sm-3">
+											<n:div class="pull-right">
+												<a zclass="btn-list-action"
+													onClick="@command('removeAction', fxCriteria = fxCriteria, action=each)">
+													<i
+														class="glyphicon glyphicon-erase fa-2x">
+													</i>
+												</a>
+											</n:div>
+										</n:div>
+									</n:div>
+								</template>
+							</x:ol>
+						</n:div>
+					</div>
+					<div visible="@load(empty fxCriteria.actionCriterias)">
+						${labels.trigger.action.unfilled}
+					</div>
+				</n:form>
 			</div>
 		</n:div>
 	</div>

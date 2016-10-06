@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.DetectionCriteria;
@@ -23,7 +24,7 @@ import com.qsocialnow.eventresolver.action.Action;
 public class ExecutionMessageProcessorTest {
 
     @Mock
-    private Action<Object, Object> action;
+    private Action action;
 
     private ExecutionMessageProcessor executionMessageProcessor;
 
@@ -84,8 +85,8 @@ public class ExecutionMessageProcessorTest {
                 null, null);
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class),
-                Mockito.any(ExecutionMessageRequest.class));
+        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(),
+                Mockito.anyMapOf(ActionParameter.class, Object.class), Mockito.any(ExecutionMessageRequest.class));
     }
 
     @Test
@@ -105,8 +106,8 @@ public class ExecutionMessageProcessorTest {
                 null, null);
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(2)).execute(Mockito.any(), Mockito.anyListOf(String.class),
-                Mockito.any(ExecutionMessageRequest.class));
+        Mockito.verify(action, Mockito.times(2)).execute(Mockito.any(),
+                Mockito.anyMapOf(ActionParameter.class, Object.class), Mockito.any(ExecutionMessageRequest.class));
     }
 
     @Test
@@ -126,8 +127,8 @@ public class ExecutionMessageProcessorTest {
 
         executionMessageProcessor.execute(request);
 
-        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(), Mockito.anyListOf(String.class),
-                Mockito.any(ExecutionMessageRequest.class));
+        Mockito.verify(action, Mockito.times(1)).execute(Mockito.any(),
+                Mockito.anyMapOf(ActionParameter.class, Object.class), Mockito.any(ExecutionMessageRequest.class));
     }
 
 }

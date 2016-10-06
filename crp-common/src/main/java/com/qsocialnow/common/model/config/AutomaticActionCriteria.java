@@ -1,13 +1,14 @@
 package com.qsocialnow.common.model.config;
 
-import java.util.List;
+import java.util.Map;
+
+import com.qsocialnow.common.model.cases.ActionParameter;
 
 public class AutomaticActionCriteria {
 
     private String id;
 
-    // TODO review parameters type
-    private List<String> parameters;
+    private Map<ActionParameter, Object> parameters;
 
     private Integer sequenceOrder;
 
@@ -21,11 +22,11 @@ public class AutomaticActionCriteria {
         this.id = id;
     }
 
-    public List<String> getParameters() {
+    public Map<ActionParameter, Object> getParameters() {
         return parameters;
     }
 
-    public void setParameters(List<String> parameters) {
+    public void setParameters(Map<ActionParameter, Object> parameters) {
         this.parameters = parameters;
     }
 

@@ -174,7 +174,7 @@
       				<x:div>
 						<n:div class="col-sm-12">
 							<div zclass="link-button pull-right">
-								<a onClick="@command('createSegment', fxTrigger = fxTrigger.trigger)">
+								<a onClick="@command('createSegment', fxTrigger = fxTrigger)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 										${labels.app.button.add}
 								</a>
@@ -194,7 +194,7 @@
 										<n:div class="pull-right">
 											<a
 												sclass="btn-list-action"
-												onClick="@command('editSegment', segment=each, fxTrigger = fxTrigger.trigger)">
+												onClick="@command('editSegment', segment=each, fxTrigger = fxTrigger)">
 												<i class="glyphicon glyphicon-pencil fa-2x"></i>
 											</a>
 											<a zclass="btn-list-action"
