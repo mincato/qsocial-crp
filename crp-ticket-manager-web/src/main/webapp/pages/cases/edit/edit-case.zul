@@ -1,7 +1,8 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditCaseViewModel')" 
-	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
+	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml"
+	validationMessages="@id('vmsgs')">
 	<n:div class="row">
         <n:div>
             <div zclass="pane equal">
@@ -181,11 +182,12 @@
                           <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.fromDate)" placeholder="${labels.cases.registry.filter.fromdate}" />
                     </div>
                 </n:div>
-                
                 <n:div class="col-md-2">
-                    <div zclass="input-group input-group-sm">
-                       <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.toDate)" placeholder="${labels.cases.registry.filter.todate}" />
-                    </div>
+                   <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
+                       <datebox id="todate" sclass="input-group" format="MM/dd/yyyy" value="@load(vm.toDate) 
+                        @save(vm.toDate, before='search')
+                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.registry.filter.todate}" />
+                    </x:div>
                 </n:div>
                 
                 

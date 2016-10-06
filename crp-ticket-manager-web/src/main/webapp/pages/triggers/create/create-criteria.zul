@@ -30,12 +30,18 @@
 							</n:div>
 	    				</n:div>
 				    		
-	    				<n:div class="form-group">
+	    				<x:div sclass="@load(empty vmsgs[validto] ? 'form-group' : 'form-group has-error')">
 							<n:label class="control-label col-sm-2">${labels.trigger.criteria.validTo}</n:label>
 							<n:div class="col-sm-10">
-								<datebox sclass="input-group" format="short" value="@bind(fxCriteria.validateTo)" />
+								<datebox id="validto" sclass="input-group" format="short" value="@load(fxCriteria.validateTo) 
+									@save(fxCriteria.validateTo, before='save')
+                        			@validator('com.qsocialnow.validators.ToDateValidator', 
+                        				fromDate = fxCriteria.validateFrom, label = 'trigger.criteria.validateto.validation', id='validto')" />
+                        	<x:span sclass="@load(empty vmsgs[validto] ? 'hidden' : 'help-block')">
+		    						<label value="@load(vmsgs[validto])" />
+							</x:span> 
 							</n:div>
-	    				</n:div>
+	    				</x:div>
 	    				<n:div class="form-group">
 							<n:label class="control-label col-sm-2">${labels.trigger.criteria.alwaysOpenCase}</n:label>
 							<n:div class="col-sm-10">
@@ -53,7 +59,7 @@
 			    </div>
 		    </n:div>
   	</div>
-  	<div class="row" form="@id('fxFilter') @load(vm.filter) @save(vm.filter, before='save')">
+  	<div class="row" form="@id('fxFilter') @load(vm.filter) @save(vm.filter, before='save')  @validator('com.qsocialnow.validators.CriteriaFilterFormValidator')">
   		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 		    	<n:form class="form-horizontal pane">								
@@ -93,12 +99,17 @@
 							<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(fxFilter.startDateTime)" />
 						</n:div>
     				</n:div>
-    				<n:div class="form-group">
+    				<x:div sclass="@load(empty vmsgs[enddate] ? 'form-group' : 'form-group has-error')">
 						<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
 						<n:div class="col-sm-10">
-							<datebox sclass="input-group" format="dd/MM/yyyy HH:mm" value="@bind(fxFilter.endDateTime)" />
+							<datebox id="enddate" sclass="input-group" format="dd/MM/yyyy HH:mm" value="@load(fxFilter.endDateTime) 
+							@save(fxFilter.endDateTime, before='save')
+                        	@validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate')" />
+                        	<x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
+		    						<label value="@load(vmsgs[enddate])" />
+							</x:span>
 						</n:div>
-    				</n:div>
+    				</x:div>
 			    </n:form>
 			    <n:br />
 			    <n:hr />
@@ -122,14 +133,18 @@
 		    		<n:form class="form-inline text-center">								
 						<n:div class="form-group">
 							<n:label class="control-label">${labels.trigger.criteria.followers.greater}</n:label>
-    						<textbox type="text" ca:data-only-number="" class="form-control" 
-	    						value="@bind(fxFilter.followersGreaterThan)"></textbox>
+    						<longbox class="form-control" 
+	    						value="@bind(fxFilter.followersGreaterThan)"></longbox>
 						</n:div>
-						<n:div class="form-group">
+						<x:div sclass="@load(empty vmsgs[followerslessthan] ? 'form-group' : 'form-group has-error')">
 	    					<n:label class="control-label">${labels.trigger.criteria.followers.less}</n:label>
-    						<textbox type="text" ca:data-only-number="" sclass="form-control"
-	    						value="@bind(fxFilter.followersLessThan)"></textbox>
-    					</n:div>
+    						<longbox id="followerslessthan" sclass="form-control"
+	    						value="@load(fxFilter.followersLessThan)  @save(fxFilter.followersLessThan, before='save')
+                        		@validator('com.qsocialnow.validators.LongGreaterThanValidator', greater = fxFilter.followersGreaterThan, id = 'followerslessthan')"></longbox>
+                        	<x:span sclass="@load(empty vmsgs[followerslessthan] ? 'hidden' : 'help-block')">
+		    						<label value="@load(vmsgs[followerslessthan])" />
+							</x:span>	
+    					</x:div>
 			    	</n:form>
 			    </n:div>
 			    <n:br />
@@ -143,18 +158,19 @@
 							<div zclass="link-button pull-right">
 								<a onClick="@command('addFilterWord', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
-									${labels.trigger.criteria.add}
+									${labels.trigger.criteria.add.filter}
 								</a>
 							</div>
 						</n:div>
 					</x:div>
 					<div class="form-group">
 						<n:div class="col-sm-offset-2 ">
-							<x:ol class="list-group order" children="@bind(fxFilter.filterWords)">
+							<x:ol class="list-group order" children="@bind(fxFilter.filterWords) ">
 								<template name="children" var="filterWord">
 									<n:div class="list-group-item col-xs-11 col-sm-11">
-										<n:div class="col-xs-12 col-sm-6">
-											<listbox mold="select" sclass="form-control"
+										<x:div 
+							sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+											<listbox id="filterword_type_${filterWordStatus.index}" mold="select" sclass="form-control"
 												model="@load(vm.wordFilterTypeOptions)" multiple="false" checkmark="true"
 												selectedItem="@bind(filterWord.type)">
 												<template name="model">
@@ -164,11 +180,22 @@
 													</listitem>
 												</template>
 											</listbox>
-										</n:div>
-										<n:div class="col-xs-8 col-sm-3">
-											<textbox type="text" class="form-control" 
+											<x:span
+												sclass="@load(vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
+												<label
+													value="@bind(vmsgs['filterword_type_'.concat(filterWordStatus.index)])" />
+											</x:span>
+										</x:div>
+										<x:div 
+							sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-8 col-sm-3' : 'col-xs-8 col-sm-3 has-error')">
+											<textbox id="filterword_text_${filterWordStatus.index}" type="text" class="form-control" 
 						    					value="@bind(filterWord.inputText)"></textbox>
-										</n:div>
+						    				<x:span
+												sclass="@load(vmsgs['filterword_text_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
+												<label
+													value="@bind(vmsgs['filterword_text_'.concat(filterWordStatus.index)])" />
+											</x:span>	
+										</x:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
 												<a zclass="btn-list-action"
@@ -232,7 +259,7 @@
 							<div zclass="link-button pull-right">
 								<a onClick="@command('addFilterCategory', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
-									${labels.trigger.criteria.add}
+									${labels.trigger.criteria.add.category}
 								</a>
 							</div>
 						</n:div>
@@ -242,8 +269,8 @@
 							<x:ol class="list-group order" children="@bind(fxFilter.filterCategories)">
 								<template name="children" var="filterCategory">
 									<n:div class="list-group-item col-xs-11 col-sm-11">
-										<n:div class="col-xs-12 col-sm-6">
-											<listbox mold="select" sclass="form-control"
+										<x:div sclass="@load(empty vmsgs['filtercategory_'.concat(filterCategoryStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+											<listbox id="filtercategory_${filterCategoryStatus.index}" mold="select" sclass="form-control"
 												model="@load(vm.categoryGroupOptions)" multiple="false" checkmark="true"
 												selectedItem="@bind(filterCategory.categoryGroup)"
 												onSelect="@command('selectGroupCategory', filter=filterCategory)">
@@ -254,7 +281,12 @@
 													</listitem>
 												</template>
 											</listbox>
-										</n:div>
+											<x:span
+												sclass="@load(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)] ? 'hidden' : 'help-block')">
+												<label
+													value="@bind(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)])" />
+											</x:span>
+										</x:div>
 										<n:div class="col-xs-8 col-sm-3">
 											<div class="form-group" children="@load(filterCategory.categories)">
 												<template name="children">
