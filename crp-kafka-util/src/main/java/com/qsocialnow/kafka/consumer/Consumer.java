@@ -53,7 +53,7 @@ public class Consumer {
             try {
                 MessageAndMetadata<byte[], byte[]> currentMessage = streamIterator.next();
                 Message message = new Message();
-                message.setMessage(new String(currentMessage.message(), "UTF-16"));
+                message.setMessage(new String(currentMessage.message(), kafkaConfig.getMessageCharset()));
                 message.setGroup(group);
                 return message;
             } catch (UnsupportedEncodingException e) {

@@ -9,6 +9,7 @@ public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfi
     private static final String DEFAULT_ZOOKEEPER_SYNC_TIMES_MS = "200";
     private static final String DEFAULT_AUTO_COMMIT_INTERVAL_MS = "1000";
     private static final String DEFAULT_TOPIC = "prc.domain1";
+    private static final String DEFAULT_MESSAGE_CHARSET = "UTF-16";
 
     private String zookeeperConnect = DEFAULT_ZOOKEEPER_CONNECT;
 
@@ -19,6 +20,8 @@ public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfi
     private String autoCommitIntervalMs = DEFAULT_AUTO_COMMIT_INTERVAL_MS;
 
     private String topic = DEFAULT_TOPIC;
+
+    private String messageCharset = DEFAULT_MESSAGE_CHARSET;
 
     public String getZookeeperConnect() {
         return zookeeperConnect;
@@ -60,6 +63,14 @@ public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfi
         this.topic = topic;
     }
 
+    public String getMessageCharset() {
+        return messageCharset;
+    }
+
+    public void setMessageCharset(String messageCharset) {
+        this.messageCharset = messageCharset;
+    }
+
     public static String getDefaultZookeeperConnect() {
         return DEFAULT_ZOOKEEPER_CONNECT;
     }
@@ -87,6 +98,7 @@ public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfi
         this.zookeeperConnect = newConfig.zookeeperConnect;
         this.zookeeperSessionTimeoutMs = newConfig.zookeeperSessionTimeoutMs;
         this.zookeeperSyncTimeMs = newConfig.zookeeperSyncTimeMs;
+        this.messageCharset = newConfig.messageCharset;
     }
 
 }
