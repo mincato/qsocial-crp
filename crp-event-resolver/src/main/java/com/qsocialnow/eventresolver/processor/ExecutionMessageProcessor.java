@@ -44,15 +44,21 @@ public class ExecutionMessageProcessor {
                 if (caseObject != null) {
                     if (CollectionUtils.isNotEmpty(detectionCriteria.getActionCriterias())) {
                         for (AutomaticActionCriteria automaticActionCriteria : detectionCriteria.getActionCriterias()) {
-                            Action action = actions.get(automaticActionCriteria.getActionType());
-                            if (action != null) {
-                                log.info(String.format("Executing action: %s", automaticActionCriteria.getActionType()));
-                                caseObject = action.execute(caseObject, automaticActionCriteria.getParameters(),
-                                        request);
-                                ActionRegistry actionRegistry = createActionRegistry(automaticActionCriteria);
-                                caseObject.getActionsRegistry().add(actionRegistry);
-                            } else {
-                                log.warn(String.format("There is no implementation action for: %s",
+                            try {
+                                Action action = actions.get(automaticActionCriteria.getActionType());
+                                if (action != null) {
+                                    log.info(String.format("Executing action: %s",
+                                            automaticActionCriteria.getActionType()));
+                                    caseObject = action.execute(caseObject, automaticActionCriteria.getParameters(),
+                                            request);
+                                    ActionRegistry actionRegistry = createActionRegistry(automaticActionCriteria);
+                                    caseObject.getActionsRegistry().add(actionRegistry);
+                                } else {
+                                    log.warn(String.format("There is no implementation action for: %s",
+                                            automaticActionCriteria.getActionType()));
+                                }
+                            } catch (Exception e) {
+                                log.error(String.format("There was an error executing action: %s",
                                         automaticActionCriteria.getActionType()));
                             }
                         }
