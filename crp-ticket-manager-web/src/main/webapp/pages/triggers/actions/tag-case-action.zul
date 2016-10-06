@@ -3,19 +3,21 @@
 		apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('tagCaseActionVm') @init('com.qsocialnow.viewmodel.trigger.TagCaseActionViewModel')"
 		validationMessages="@id('vmsgs')">
-	<x:form form="@id('fxTagCaseAction') @load(tagCaseActionVm.tagCaseAction) @save(tagCaseActionVm.tagCaseAction, before='save') @validator('com.qsocialnow.validators.CreateTagCaseActionFormValidator')">
-		<include src="/pages/actions/tag-case-action-body.zul"/>
-		<div visible="@load(empty tagCaseActionVm.categorySetListView.list)">
-			${labels.trigger.action.tagCase.emptyOptions}
-		</div>
-		<div class="form-group has-error" visible="@load(not empty vmsgs['categories'])" >
-			<n:span class="help-block">
-				<label value="@bind(vmsgs['categories'])" />
-			</n:span>
-		</div>
-		<div class="form-group text-center">
-	    	<button onClick="@command('save')" disabled="@load(not tagCaseActionVm.categorySetListView.enabledAdd and not empty tagCaseActionVm.categorySetListView.filteredList)" label="${labels.app.button.save}" zclass="btn btn-success" />
-	    	<button onClick="@global-command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
-		</div>
-	</x:form>
+	<div visible="@load(not empty tagCaseActionVm.categorySetListView.list)">
+		<x:form form="@id('fxTagCaseAction') @load(tagCaseActionVm.tagCaseAction) @save(tagCaseActionVm.tagCaseAction, before='save') @validator('com.qsocialnow.validators.CreateTagCaseActionFormValidator')">
+			<include src="/pages/actions/tag-case-action-body.zul"/>
+			<div class="form-group has-error" visible="@load(not empty vmsgs['categories'])" >
+				<n:span class="help-block">
+					<label value="@bind(vmsgs['categories'])" />
+				</n:span>
+			</div>
+		</x:form>
+	</div>
+	<div visible="@load(empty tagCaseActionVm.categorySetListView.list)">
+		${labels.trigger.action.tagCase.emptyOptions}
+	</div>
+	<div class="form-group text-center">
+    	<button onClick="@command('save')" visible="@load(not empty tagCaseActionVm.categorySetListView.list)" disabled="@load(not tagCaseActionVm.categorySetListView.enabledAdd and not empty tagCaseActionVm.categorySetListView.filteredList)" label="${labels.app.button.save}" zclass="btn btn-success" />
+    	<button onClick="@global-command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
+	</div>
 </div>
