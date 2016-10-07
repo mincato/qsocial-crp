@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.base.Strings;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.responsedetector.config.FacebookConfigurator;
 import com.qsocialnow.responsedetector.config.ResponseDetectorConfig;
 import com.qsocialnow.responsedetector.factories.FacebookConfiguratorFactory;
@@ -52,6 +53,8 @@ public class FacebookDetectorService extends SourceDetectorService {
     private FacebookFeedConsumer facebookFeedConsumer;
 
     private HashMap<String, FacebookFeedEvent> conversations;
+    
+    private HashMap<String, String> nodePaths;
 
     @Override
     public void run() {
@@ -65,6 +68,7 @@ public class FacebookDetectorService extends SourceDetectorService {
             facebookFeedConsumer = new FacebookFeedConsumer(facebookClient);
 
             conversations = new HashMap<String, FacebookFeedEvent>();
+            nodePaths = new HashMap<String,String>();
             treeCache = new TreeCache(zookeeperClient, appConfig.getFacebookUsersZnodePath());
 
             addListener();
@@ -85,7 +89,9 @@ public class FacebookDetectorService extends SourceDetectorService {
                 switch (event.getType()) {
                     case NODE_ADDED: {
                         String nodeAdded = ZKPaths.getNodeFromPath(event.getData().getPath());
-                        log.info("Adding node:" + nodeAdded);
+                        String nodePath = event.getData().getPath();
+                        
+                        log.info("Adding node:" + nodeAdded+" from path: "+event.getData().getPath());
                         if (event.getData().getData() != null) {
                             String nodeValue = new String(event.getData().getData());
                             log.info("Adding node value:-" + nodeValue + "-");
@@ -98,7 +104,7 @@ public class FacebookDetectorService extends SourceDetectorService {
                                     FacebookFeedEvent facebookFeedEvent = new GsonBuilder().create().fromJson(
                                             new String(messageBytes), FacebookFeedEvent.class);
                                     if (facebookFeedEvent != null) {
-                                        addFacebookFeedEvent(nodeAdded, facebookFeedEvent);
+                                        addFacebookFeedEvent(nodeAdded,nodePath,facebookFeedEvent);
                                     }
                                 } else {
                                     log.info("Not Adding node with empty value ");
@@ -138,11 +144,12 @@ public class FacebookDetectorService extends SourceDetectorService {
         }
     }
 
-    private void addFacebookFeedEvent(String commentId, FacebookFeedEvent facebookFeedEvent) {
+    private void addFacebookFeedEvent(String commentId,String commentPath,FacebookFeedEvent facebookFeedEvent) {
         try {
 
             log.info("Adding message conversation from comment :" + commentId + " from Case:"
                     + facebookFeedEvent.getCaseId());
+            nodePaths.put(commentId, commentPath);
             conversations.put(commentId, facebookFeedEvent);
             facebookClient.addNewConversation(facebookFeedEvent.getCommentId());
         } catch (Exception e) {
@@ -166,8 +173,9 @@ public class FacebookDetectorService extends SourceDetectorService {
     @Override
     public void removeSourceConversation(String userResolver, String converstation) {
         try {
-            // zookeeperClient.delete().forPath(appConfig.getFacebookUsersZnodePath()
-            // + "/centaurico_test/"+converstation);
+        		 String nodePath = nodePaths.get(converstation);
+        		 log.info("Removing node after detect response: "+nodePath);
+                 zookeeperClient.delete().forPath(nodePath);
         } catch (Exception e) {
             log.error("Unable to remove message conversation: " + converstation, e);
         }
@@ -180,64 +188,31 @@ public class FacebookDetectorService extends SourceDetectorService {
 
     @Override
     public void processEvent(Boolean isResponseFromMessage, String userResolver, String[] userMentions,
-            String sourceMessageId, String messageText, String inReplyToMessageId, String userId, String userName,
+            String messageId, String messageText, String commentId, String userId, String userName,
             String userProfileImage) {
 
-        try {
+    	try {
             Event event = new Event();
-            String mainUserResolver = null;
-            event.setId(sourceMessageId);
+            event.setId(messageId);
             event.setFecha(new Date());
             // event.setTipoDeMedio("morbi");
-            event.setName(messageText);
-            event.setTitulo(messageText);
-            event.setTexto(messageText);
+            event.setMedioId(FilterConstants.MEDIA_FACEBOOK);
             event.setNormalizeMessage(messageText);
 
-            if (userMentions != null) {
-                for (int i = 0; i < userMentions.length; i++) {
-                    String userMention = userMentions[i];
-                    if (conversations.containsKey(userMention)) {
-                        mainUserResolver = userMention;
-                        break;
-                    }
-                }
-            }
-
             if (isResponseFromMessage) {
-                FacebookFeedEvent conversationsByUserResolver = conversations.get(userResolver);
-                if (conversationsByUserResolver != null) {
-
-                    /*
-                     * if (twitterMessageEvent.getReplyMessageId().equals(
-                     * inReplyToMessageId)) { // is response from existing
-                     * conversation
-                     * event.setIdPadre(twitterMessageEvent.getEventId());
-                     * event.setOriginIdCase(twitterMessageEvent.getCaseId());
-                     * conversationsByUserResolver.remove(twitterMessageEvent);
-                     * break; }
-                     */
-
+            	log.info("Adding facebookevent information into event");
+                FacebookFeedEvent conversationsByCommentId = conversations.get(commentId);
+                if (conversationsByCommentId != null) {
+                	if (conversationsByCommentId.getCommentId().equals(commentId)) {
+                		event.setIdPadre(conversationsByCommentId.getEventId());
+                		event.setOriginIdCase(conversationsByCommentId.getCaseId());
+                		removeSourceConversation(null, commentId);
+                	}
                 }
-            } else {
-                FacebookFeedEvent conversationsByUserResolver = conversations.get(mainUserResolver);
-                if (conversationsByUserResolver != null) {
-                    /*
-                     * for (FacebookFeedEvent twitterMessageEvent :
-                     * conversationsByUserResolver) { if
-                     * (twitterMessageEvent.getUserId().equals(userId)) { // is
-                     * response from existing user
-                     * event.setIdPadre(twitterMessageEvent.getEventId());
-                     * event.setOriginIdCase(twitterMessageEvent.getCaseId());
-                     * conversationsByUserResolver.remove(twitterMessageEvent);
-                     * break; } }
-                     */
-                }
-            }
+            } 
             event.setUsuarioOriginal(userName);
             event.setIdUsuarioOriginal(userId);
             event.setProfileImage(userProfileImage);
-
             event.setResponseDetected(true);
             event.setFechaCreacion(new Date());
             eventProcessor.process(event);

@@ -54,7 +54,6 @@ public class FacebookClient {
 
     public void removeConversation(String commentId) {
     	messages.remove(commentId);
-    	sourceService.removeSourceConversation(null, commentId);
     }
 
     public void addNewConversation(String commentId) {
