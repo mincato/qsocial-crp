@@ -33,7 +33,7 @@ public class SendResponseCaseAction implements Action {
     @Override
     @SuppressWarnings("unchecked")
     public Case execute(Case caseObject, Map<ActionParameter, Object> parameters, ExecutionMessageRequest request) {
-        if (caseObject.getSource() != null) {
+        if (caseObject.getSource() != null && caseObject.getSubject() != null) {
             String text = (String) parameters.get(ActionParameter.TEXT);
             List<List<String>> userResolvers = (List<List<String>>) parameters.get(ActionParameter.USER_RESOLVERS);
             Optional<String> userResolverIdOptional = userResolvers.stream()
@@ -48,7 +48,7 @@ public class SendResponseCaseAction implements Action {
                 log.warn("There is no user resolver defined to send message for source: " + caseObject.getSource());
             }
         } else {
-            log.warn("The source is not set on the case object");
+            log.warn("The source or subject are not set on the case object");
         }
         return caseObject;
     }
