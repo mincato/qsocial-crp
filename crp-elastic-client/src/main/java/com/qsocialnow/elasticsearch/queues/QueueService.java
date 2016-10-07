@@ -14,17 +14,17 @@ import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 
 public class QueueService {
 
-    private static final int TOTAL_ITEM_COUNTS = 5;
+    private static final int TOTAL_ITEM_COUNTS = 20;
 
-    private static final int TOTAL_FAIL_ITEM_COUNTS = 10;
+    private static final int TOTAL_FAIL_ITEM_COUNTS = 40;
 
-    private static final int TOTAL_MAX_DEAD_ITEM_COUNTS = 30;
+    private static final int TOTAL_MAX_DEAD_ITEM_COUNTS = 120;
 
-    private static final int DELAY = 5;
+    private static final int DELAY = 10;
 
     private static final int FAIL_DELAY = 10;
 
-    private static final int INITIAL_DELAY = 3;
+    private static final int INITIAL_DELAY = 30;
 
     private static final String DEAD_LETTER_QUEUE_DIR = "/deadLetterQueue";
 

@@ -133,12 +133,12 @@
 		    		<n:form class="form-inline text-center">								
 						<n:div class="form-group">
 							<n:label class="control-label">${labels.trigger.criteria.followers.greater}</n:label>
-    						<longbox class="form-control" 
+    						<longbox class="form-control" constraint="no negative"
 	    						value="@bind(fxFilter.followersGreaterThan)"></longbox>
 						</n:div>
 						<x:div sclass="@load(empty vmsgs[followerslessthan] ? 'form-group' : 'form-group has-error')">
 	    					<n:label class="control-label">${labels.trigger.criteria.followers.less}</n:label>
-    						<longbox id="followerslessthan" sclass="form-control"
+    						<longbox id="followerslessthan" sclass="form-control" constraint="no negative"
 	    						value="@load(fxFilter.followersLessThan)  @save(fxFilter.followersLessThan, before='save')
                         		@validator('com.qsocialnow.validators.LongGreaterThanValidator', greater = fxFilter.followersGreaterThan, id = 'followerslessthan')"></longbox>
                         	<x:span sclass="@load(empty vmsgs[followerslessthan] ? 'hidden' : 'help-block')">

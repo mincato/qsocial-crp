@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.request.TriggerListRequest;
@@ -105,6 +106,19 @@ public class TriggerRepository {
             log.error("Unexpected error", e);
         }
         return segment;
+    }
+
+    public List<SegmentListView> findSegments(String triggerId) {
+        List<SegmentListView> segments = new ArrayList<>();
+        List<Segment> segmentsRepo = segmentElasticService.getSegments(triggerId);
+
+        for (Segment segmentRepo : segmentsRepo) {
+            SegmentListView segmentListView = new SegmentListView();
+            segmentListView.setId(segmentRepo.getId());
+            segmentListView.setDescription(segmentRepo.getDescription());
+            segments.add(segmentListView);
+        }
+        return segments;
     }
 
 }

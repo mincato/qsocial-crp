@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
@@ -83,6 +84,15 @@ public class TriggerService {
     public Segment findSegment(String domainId, String triggerId, String segmentId) {
         Segment segment = triggerRepository.findSegment(segmentId);
         return segment;
+    }
+
+    public List<SegmentListView> findSegments(String domainId, String triggerId) {
+        try {
+            return triggerRepository.findSegments(triggerId);
+        } catch (Exception e) {
+            log.error("There was an error finding segments");
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public Trigger update(String domainId, String triggerId, Trigger trigger) {

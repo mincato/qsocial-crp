@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.responsedetector.config.ResponseDetectorConfig;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
 import com.qsocialnow.responsedetector.factories.TwitterConfiguratorFactory;
@@ -215,7 +216,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             String mainUserResolver = null;
             event.setId(sourceMessageId);
             event.setFecha(new Date());
-            // event.setTipoDeMedio("morbi");
+            event.setMedioId(FilterConstants.MEDIA_TWITTER);
             event.setName(messageText);
             event.setTitulo(messageText);
             event.setTexto(messageText);

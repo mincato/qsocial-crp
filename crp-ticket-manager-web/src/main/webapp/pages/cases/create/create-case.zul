@@ -57,6 +57,15 @@
                                 </template>
                             </selectbox>
                         </div>
+                        <div class="form-group" visible="@load(vm.segments ne null)">
+                            <n:label class="control-label col-sm-3">${labels.cases.details.segments}</n:label>
+                            <selectbox sclass="form-control" model="@load(vm.segments)"
+                                selectedItem="@bind(vm.selectedSegment)">
+                                <template name="model">
+                                    <label  value="${each.description}"/>
+                                </template>
+                            </selectbox>
+                        </div>
                         <div class="form-group text-center">
                             <button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
                             <button onClick="@command('clear')" label="${labels.app.button.clear}" zclass="btn btn-default"/>

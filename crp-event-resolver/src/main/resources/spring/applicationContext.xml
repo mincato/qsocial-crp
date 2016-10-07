@@ -26,6 +26,7 @@
  	
 	<util:map id="actions">
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_CASE}" value-ref="tagCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_SUBJECT}" value-ref="tagSubjectCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
 	</util:map>
 	

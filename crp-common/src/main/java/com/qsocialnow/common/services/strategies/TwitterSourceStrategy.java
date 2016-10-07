@@ -40,7 +40,7 @@ public class TwitterSourceStrategy implements SourceStrategy {
         AccessToken accessToken = new AccessToken(userResolver.getCredentials().getToken(), userResolver
                 .getCredentials().getSecretToken());
         Twitter twitter = twitterFactory.getInstance(accessToken);
-        text = "@" + caseObject.getSourceUser() + " " + text;
+        text = "@" + caseObject.getSubject().getIdentifier() + " " + text;
         try {
 
             StatusUpdate statusUpdate = new StatusUpdate(text);

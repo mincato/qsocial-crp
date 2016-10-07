@@ -2,6 +2,8 @@ package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -158,5 +160,20 @@ public class Subject implements Serializable {
 
     public void setSubjectCategory(Set<String> subjectCategory) {
         this.subjectCategory = subjectCategory;
+    }
+
+    public void addSubjectCategoriesSet(List<String> subjectCategoriesSet) {
+        if (this.subjectCategorySet == null) {
+            this.subjectCategorySet = new HashSet<>();
+        }
+        this.subjectCategorySet.addAll(subjectCategoriesSet);
+    }
+
+    public void addSubjectCategories(List<String> subjectCategories) {
+        if (this.subjectCategory == null) {
+            this.subjectCategory = new HashSet<>();
+        }
+        this.subjectCategory.addAll(subjectCategories);
+
     }
 }

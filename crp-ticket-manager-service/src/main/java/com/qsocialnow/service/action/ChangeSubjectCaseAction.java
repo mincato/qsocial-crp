@@ -22,6 +22,7 @@ public class ChangeSubjectCaseAction implements Action {
         Subject subject = subjectRepository.findOne(subjectId);
         Subject oldSubject = caseObject.getSubject();
         caseObject.setSubject(subject);
+        caseObject.setSource(subject.getSource());
         parameters.put(ActionParameter.COMMENT, buildComment(oldSubject, subject));
         return true;
     }
