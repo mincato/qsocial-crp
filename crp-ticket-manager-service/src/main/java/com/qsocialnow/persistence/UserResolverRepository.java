@@ -1,38 +1,75 @@
 package com.qsocialnow.persistence;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.config.UserResolverListView;
 import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.elasticsearch.services.config.UserResolverService;
 
 @Service
 public class UserResolverRepository {
+
+    private static final String NEW_NODE_VALUE = "NEW";
 
     private Logger log = LoggerFactory.getLogger(UserResolverRepository.class);
 
     @Autowired
     private UserResolverService userResolverElasticService;
 
+    @Autowired
+    private CuratorFramework zookeeperClient;
+
+    @Value("${app.twitter.users.path}")
+    private String twitterUsersZnodePath;
+
+    @Value("${app.client}")
+    private String appClient;
+
+    @Value("${app.facebook.users.path}")
+    private String facebookUsersZnodePath;
+
     public UserResolver save(UserResolver newUserResolver) {
         try {
             String id = userResolverElasticService.indexUserResolver(newUserResolver);
             newUserResolver.setId(id);
-
+            createNewUserResolverUserNode(newUserResolver.getIdentifier(), newUserResolver.getSource());
             return newUserResolver;
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
         return null;
+    }
+
+    private void createNewUserResolverUserNode(String identifier, Long sourceId) {
+
+        try {
+            if (FilterConstants.MEDIA_TWITTER.equals(sourceId)) {
+                String clientTwitterUsersZnodePath = MessageFormat.format(twitterUsersZnodePath, appClient);
+                zookeeperClient.create().forPath(clientTwitterUsersZnodePath + "/" + identifier,
+                        NEW_NODE_VALUE.getBytes());
+            }
+
+            if (FilterConstants.MEDIA_FACEBOOK.equals(sourceId)) {
+                String clientFacebookUsersZnodePath = MessageFormat.format(facebookUsersZnodePath, appClient);
+                zookeeperClient.create().forPath(clientFacebookUsersZnodePath + "/" + identifier,
+                        NEW_NODE_VALUE.getBytes());
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error trying to creade user resolver node to be consumed by response", e);
+        }
     }
 
     public List<UserResolverListView> findAll(PageRequest pageRequest, String identifier) {
