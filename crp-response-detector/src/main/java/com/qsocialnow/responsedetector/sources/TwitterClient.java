@@ -75,8 +75,6 @@ public class TwitterClient {
                                     String.valueOf(statusReply.getId()), statusReply.getText(),
                                     messageEvent.getReplyMessageId(), String.valueOf(user.getId()),
                                     user.getScreenName(), user.getProfileImageURL());
-
-                            sourceService.removeSourceConversation(messageEvent.getReplyMessageId());
                             break;
                         }
                     }

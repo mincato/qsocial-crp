@@ -113,7 +113,7 @@ public class TwitterDetectorService extends SourceDetectorService {
                                         if (startListening) {
                                             addTwitterMessage(nodeAdded, nodePath, twitterMessageEvent);
                                         } else {
-                                            checkMessageResponses(nodeAdded, twitterMessageEvent);
+                                            checkMessageResponses(nodeAdded, nodePath, twitterMessageEvent);
                                         }
                                     }
                                 } else {
@@ -201,10 +201,12 @@ public class TwitterDetectorService extends SourceDetectorService {
         }
     }
 
-    private void checkMessageResponses(String replyId, TwitterMessageEvent message) {
+    private void checkMessageResponses(String replyId, String nodePath, TwitterMessageEvent twitterMessageEvent) {
         TwitterClient twitterClient = new TwitterClient(this);
         twitterClient.initTwitterClient(configurator);
-        twitterClient.checkAnyMention(message);
+        nodePaths.put(replyId, nodePath);
+        conversations.put(replyId, twitterMessageEvent);
+        twitterClient.checkAnyMention(twitterMessageEvent);
     }
 
     public void stop() {
@@ -221,13 +223,14 @@ public class TwitterDetectorService extends SourceDetectorService {
     }
 
     @Override
-    public void removeSourceConversation(String converstation) {
+    public void removeSourceConversation(String conversation) {
         try {
-            String nodePath = nodePaths.get(converstation);
+            String nodePath = nodePaths.get(conversation);
             log.info("Removing twitter node after detect response: " + nodePath);
+            conversations.remove(conversation);
             zookeeperClient.delete().forPath(nodePath);
         } catch (Exception e) {
-            log.error("Unable to remove message conversation:: " + converstation, e);
+            log.error("Unable to remove message conversation:: " + conversation, e);
         }
     }
 

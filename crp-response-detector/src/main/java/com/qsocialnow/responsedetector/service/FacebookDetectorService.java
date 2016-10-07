@@ -172,13 +172,14 @@ public class FacebookDetectorService extends SourceDetectorService {
     }
 
     @Override
-    public void removeSourceConversation(String converstation) {
+    public void removeSourceConversation(String conversation) {
         try {
-            String nodePath = nodePaths.get(converstation);
+            String nodePath = nodePaths.get(conversation);
             log.info("Removing node after detect response: " + nodePath);
+            conversations.remove(conversation);
             zookeeperClient.delete().forPath(nodePath);
         } catch (Exception e) {
-            log.error("Unable to remove message conversation: " + converstation, e);
+            log.error("Unable to remove message conversation: " + conversation, e);
         }
     }
 
