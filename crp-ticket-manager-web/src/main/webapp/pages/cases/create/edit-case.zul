@@ -87,8 +87,7 @@
 	            <n:div class="col-md-2">
 		            <div zclass="input-group input-group-sm">
 			            <selectbox sclass="form-control" model="@load(vm.actionFilterOptions)"
-			                selectedItem="@bind(vm.action)"
-			                onSelect="@command('search')">
+			                selectedItem="@bind(vm.action)">
 			                <template name="model">
 			                    <label value="${c:l(c:cat('cases.actions.',each))}" />
 			                </template>
