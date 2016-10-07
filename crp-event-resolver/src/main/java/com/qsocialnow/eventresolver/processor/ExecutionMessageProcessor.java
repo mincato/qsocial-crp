@@ -59,7 +59,7 @@ public class ExecutionMessageProcessor {
                                 }
                             } catch (Exception e) {
                                 log.error(String.format("There was an error executing action: %s",
-                                        automaticActionCriteria.getActionType()));
+                                        automaticActionCriteria.getActionType()), e);
                             }
                         }
                     }

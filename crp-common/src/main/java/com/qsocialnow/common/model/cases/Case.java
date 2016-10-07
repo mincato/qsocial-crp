@@ -2,7 +2,6 @@ package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -92,7 +91,7 @@ public class Case implements Serializable {
         Message message = new Message();
         message.setId(event.getId());
         message.setFromResponseDetector(event.isResponseDetected());
-        newCase.setMessages(Arrays.asList(message));
+        newCase.addMessage(message);
 
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
