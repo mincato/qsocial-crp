@@ -16,7 +16,7 @@ public class FacebookConfiguratorFactory {
     public FacebookConfigurator getConfigurator(String facebookConfiguratorZnodePath) throws Exception {
         byte[] configuratorBytes = zookeeperClient.getData().forPath(facebookConfiguratorZnodePath);
         FacebookConfigurator configurator = new GsonBuilder().create().fromJson(new String(configuratorBytes),
-        		FacebookConfigurator.class);
+                FacebookConfigurator.class);
         return configurator;
     }
 

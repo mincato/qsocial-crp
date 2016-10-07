@@ -17,13 +17,13 @@ public class ResponseDetectorConfig {
 
     @Value("${app.twitter.app.configurator.path}")
     private String twitterAppConfiguratorZnodePath;
-    
+
     @Value("${app.facebook.app.configurator.path}")
     private String facebookAppConfiguratorZnodePath;
 
     @Value("${app.twitter.users.path}")
     private String twitterUsersZnodePath;
-    
+
     @Value("${app.facebook.users.path}")
     private String facebookUsersZnodePath;
 
@@ -47,12 +47,12 @@ public class ResponseDetectorConfig {
         return twitterUsersZnodePath;
     }
 
-	public String getFacebookAppConfiguratorZnodePath() {
-		return facebookAppConfiguratorZnodePath;
-	}
+    public String getFacebookAppConfiguratorZnodePath() {
+        return facebookAppConfiguratorZnodePath;
+    }
 
-	public String getFacebookUsersZnodePath() {
-		return facebookUsersZnodePath;
-	}
+    public String getFacebookUsersZnodePath() {
+        return facebookUsersZnodePath;
+    }
 
 }

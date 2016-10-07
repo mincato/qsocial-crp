@@ -2,99 +2,99 @@ package com.qsocialnow.responsedetector.model;
 
 public class FacebookFeedEvent {
 
-	private final String caseId;
+    private final String caseId;
 
-	private final String eventId;
+    private final String eventId;
 
-	private final String userId;
-	
-	private final String userName;
+    private final String userId;
 
-	private final String messageId;
+    private final String userName;
 
-	private final String commentId;
-	
-	private final String userPageId;
+    private final String messageId;
 
-	public FacebookFeedEvent(final String caseId, final String eventId, final String userId, final String userName,
-			final String replyMessageId, final String messageId, String commentId, final String userPageId) {
-		this.caseId = caseId;
-		this.eventId = eventId;
-		this.userId = userId;
-		this.userName = userName;
-		this.commentId = commentId;
-		this.messageId = messageId;
-		this.userPageId = userPageId;
-	}
+    private final String commentId;
 
-	public String getCaseId() {
-		return caseId;
-	}
+    private final String userPageId;
 
-	public String getEventId() {
-		return eventId;
-	}
+    public FacebookFeedEvent(final String caseId, final String eventId, final String userId, final String userName,
+            final String replyMessageId, final String messageId, String commentId, final String userPageId) {
+        this.caseId = caseId;
+        this.eventId = eventId;
+        this.userId = userId;
+        this.userName = userName;
+        this.commentId = commentId;
+        this.messageId = messageId;
+        this.userPageId = userPageId;
+    }
 
-	public String getUserId() {
-		return userId;
-	}
+    public String getCaseId() {
+        return caseId;
+    }
 
-	public String getMessageId() {
-		return messageId;
-	}
+    public String getEventId() {
+        return eventId;
+    }
 
-	public String getCommentId() {
-		return commentId;
-	}
+    public String getUserId() {
+        return userId;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public String getMessageId() {
+        return messageId;
+    }
 
-	public String getUserPageId() {
-		return userPageId;
-	}
+    public String getCommentId() {
+        return commentId;
+    }
 
-	@Override
-	public int hashCode() {
-		return caseId.hashCode() + eventId.hashCode() + userId.hashCode() + userName.hashCode() + messageId.hashCode()
-				+ commentId.hashCode() + userPageId.hashCode();
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
+    public String getUserPageId() {
+        return userPageId;
+    }
 
-		if (obj == null)
-			return false;
+    @Override
+    public int hashCode() {
+        return caseId.hashCode() + eventId.hashCode() + userId.hashCode() + userName.hashCode() + messageId.hashCode()
+                + commentId.hashCode() + userPageId.hashCode();
+    }
 
-		if (getClass() != obj.getClass())
-			return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
 
-		FacebookFeedEvent other = (FacebookFeedEvent) obj;
+        if (obj == null)
+            return false;
 
-		if (!eventId.equals(other.eventId))
-			return false;
+        if (getClass() != obj.getClass())
+            return false;
 
-		if (!caseId.equals(other.caseId))
-			return false;
+        FacebookFeedEvent other = (FacebookFeedEvent) obj;
 
-		if (!userId.equals(other.userId))
-			return false;
-		
-		if (!userName.equals(other.userName))
-			return false;
+        if (!eventId.equals(other.eventId))
+            return false;
 
-		if (!messageId.equals(other.messageId))
-			return false;
+        if (!caseId.equals(other.caseId))
+            return false;
 
-		if (!commentId.equals(other.commentId))
-			return false;
-		
-		if (!userPageId.equals(other.userPageId))
-			return false;
-		return true;
-	}
+        if (!userId.equals(other.userId))
+            return false;
+
+        if (!userName.equals(other.userName))
+            return false;
+
+        if (!messageId.equals(other.messageId))
+            return false;
+
+        if (!commentId.equals(other.commentId))
+            return false;
+
+        if (!userPageId.equals(other.userPageId))
+            return false;
+        return true;
+    }
 
 }

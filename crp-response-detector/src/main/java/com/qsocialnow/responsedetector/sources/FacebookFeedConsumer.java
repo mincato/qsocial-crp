@@ -1,20 +1,22 @@
 package com.qsocialnow.responsedetector.sources;
 
-public class FacebookFeedConsumer implements Runnable{
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	private final FacebookClient facebookClient;
-	
-	
-	public FacebookFeedConsumer(final FacebookClient facebookClient) {
-		this.facebookClient = facebookClient;
-	}
-	
-	
-	@Override
-	public void run() {
-		
-		
-		
-	}
+public class FacebookFeedConsumer implements Runnable {
+
+    private final FacebookClient facebookClient;
+
+    private static final Logger log = LoggerFactory.getLogger(FacebookFeedConsumer.class);
+
+    public FacebookFeedConsumer(final FacebookClient facebookClient) {
+        this.facebookClient = facebookClient;
+    }
+
+    @Override
+    public void run() {
+        log.info("Starting to pull comments from conversations");
+        facebookClient.readComments();
+    }
 
 }
