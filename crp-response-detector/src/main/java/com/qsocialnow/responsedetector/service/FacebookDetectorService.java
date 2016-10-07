@@ -53,7 +53,7 @@ public class FacebookDetectorService extends SourceDetectorService {
     private FacebookFeedConsumer facebookFeedConsumer;
 
     private HashMap<String, FacebookFeedEvent> conversations;
-    
+
     private HashMap<String, String> nodePaths;
 
     @Override
@@ -68,7 +68,7 @@ public class FacebookDetectorService extends SourceDetectorService {
             facebookFeedConsumer = new FacebookFeedConsumer(facebookClient);
 
             conversations = new HashMap<String, FacebookFeedEvent>();
-            nodePaths = new HashMap<String,String>();
+            nodePaths = new HashMap<String, String>();
             treeCache = new TreeCache(zookeeperClient, appConfig.getFacebookUsersZnodePath());
 
             addListener();
@@ -90,8 +90,8 @@ public class FacebookDetectorService extends SourceDetectorService {
                     case NODE_ADDED: {
                         String nodeAdded = ZKPaths.getNodeFromPath(event.getData().getPath());
                         String nodePath = event.getData().getPath();
-                        
-                        log.info("Adding node:" + nodeAdded+" from path: "+event.getData().getPath());
+
+                        log.info("Adding node:" + nodeAdded + " from path: " + event.getData().getPath());
                         if (event.getData().getData() != null) {
                             String nodeValue = new String(event.getData().getData());
                             log.info("Adding node value:-" + nodeValue + "-");
@@ -104,7 +104,7 @@ public class FacebookDetectorService extends SourceDetectorService {
                                     FacebookFeedEvent facebookFeedEvent = new GsonBuilder().create().fromJson(
                                             new String(messageBytes), FacebookFeedEvent.class);
                                     if (facebookFeedEvent != null) {
-                                        addFacebookFeedEvent(nodeAdded,nodePath,facebookFeedEvent);
+                                        addFacebookFeedEvent(nodeAdded, nodePath, facebookFeedEvent);
                                     }
                                 } else {
                                     log.info("Not Adding node with empty value ");
@@ -144,7 +144,7 @@ public class FacebookDetectorService extends SourceDetectorService {
         }
     }
 
-    private void addFacebookFeedEvent(String commentId,String commentPath,FacebookFeedEvent facebookFeedEvent) {
+    private void addFacebookFeedEvent(String commentId, String commentPath, FacebookFeedEvent facebookFeedEvent) {
         try {
 
             log.info("Adding message conversation from comment :" + commentId + " from Case:"
@@ -173,9 +173,9 @@ public class FacebookDetectorService extends SourceDetectorService {
     @Override
     public void removeSourceConversation(String userResolver, String converstation) {
         try {
-        		 String nodePath = nodePaths.get(converstation);
-        		 log.info("Removing node after detect response: "+nodePath);
-                 zookeeperClient.delete().forPath(nodePath);
+            String nodePath = nodePaths.get(converstation);
+            log.info("Removing node after detect response: " + nodePath);
+            zookeeperClient.delete().forPath(nodePath);
         } catch (Exception e) {
             log.error("Unable to remove message conversation: " + converstation, e);
         }
@@ -191,7 +191,7 @@ public class FacebookDetectorService extends SourceDetectorService {
             String messageId, String messageText, String commentId, String userId, String userName,
             String userProfileImage) {
 
-    	try {
+        try {
             Event event = new Event();
             event.setId(messageId);
             event.setFecha(new Date());
@@ -200,16 +200,16 @@ public class FacebookDetectorService extends SourceDetectorService {
             event.setNormalizeMessage(messageText);
 
             if (isResponseFromMessage) {
-            	log.info("Adding facebookevent information into event");
+                log.info("Adding facebookevent information into event");
                 FacebookFeedEvent conversationsByCommentId = conversations.get(commentId);
                 if (conversationsByCommentId != null) {
-                	if (conversationsByCommentId.getCommentId().equals(commentId)) {
-                		event.setIdPadre(conversationsByCommentId.getEventId());
-                		event.setOriginIdCase(conversationsByCommentId.getCaseId());
-                		removeSourceConversation(null, commentId);
-                	}
+                    if (conversationsByCommentId.getCommentId().equals(commentId)) {
+                        event.setIdPadre(conversationsByCommentId.getEventId());
+                        event.setOriginIdCase(conversationsByCommentId.getCaseId());
+                        removeSourceConversation(null, commentId);
+                    }
                 }
-            } 
+            }
             event.setUsuarioOriginal(userName);
             event.setIdUsuarioOriginal(userId);
             event.setProfileImage(userProfileImage);
