@@ -38,6 +38,10 @@ public class SendResponseActionViewModel implements Serializable {
 
     private SendResponseAutomaticActionView sendResponseAction;
 
+    private Integer textMaxlength = 0;
+
+    private boolean anyTwitterSource = false;
+
     @Init
     public void init(@QueryParam("case") String caseId) {
         sendResponseAction = new SendResponseAutomaticActionView();
@@ -52,10 +56,9 @@ public class SendResponseActionViewModel implements Serializable {
     }
 
     @GlobalCommand
-    @NotifyChange({ "sendResponseAction" })
+    @NotifyChange({ "sendResponseAction", "textMaxlength", "anyTwitterSource" })
     public void show(@BindingParam("segment") SegmentView segment, @BindingParam("action") ActionType action) {
         if (ActionType.REPLY.equals(action) && segment.getTeam() != null) {
-            this.sendResponseAction = new SendResponseAutomaticActionView();
             Map<String, Object> filters = new HashMap<>();
             filters.put("status", true);
             List<BaseUserResolver> userResolvers = teamService.findUserResolvers(segment.getTeam().getId(), filters);
@@ -69,6 +72,11 @@ public class SendResponseActionViewModel implements Serializable {
                 return userResolverBySource;
             }).collect(Collectors.toList());
             this.sendResponseAction.getUserResolvers().addAll(userResolversBySource);
+            if (this.sendResponseAction.getUserResolvers().stream()
+                    .anyMatch(userResolver -> Media.TWITTER.equals(userResolver.getSource()))) {
+                this.textMaxlength = Media.TWITTER.getMaxlength();
+                this.anyTwitterSource = true;
+            }
         }
     }
 
@@ -91,6 +99,22 @@ public class SendResponseActionViewModel implements Serializable {
         HashMap<String, Object> args = new HashMap<>();
         args.put("actionCriteria", actionCriteria);
         BindUtils.postGlobalCommand(null, null, "saveActionCriteria", args);
+    }
+
+    public Integer getTextMaxlength() {
+        return textMaxlength;
+    }
+
+    public void setTextMaxlength(Integer textMaxlength) {
+        this.textMaxlength = textMaxlength;
+    }
+
+    public boolean isAnyTwitterSource() {
+        return anyTwitterSource;
+    }
+
+    public void setAnyTwitterSource(boolean anyTwitterSource) {
+        this.anyTwitterSource = anyTwitterSource;
     }
 
 }
