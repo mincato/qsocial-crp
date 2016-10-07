@@ -1,0 +1,49 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('sendResponseActionVm') @init('com.qsocialnow.viewmodel.trigger.SendResponseActionViewModel')"
+		validationMessages="@id('vmsgs')">
+	<x:form form="@id('fxSendResponseAction') @load(sendResponseActionVm.sendResponseAction) @save(sendResponseActionVm.sendResponseAction, before='save')">
+		<div class="form-group" visible="@load(not empty sendResponseActionVm.sendResponseAction.userResolvers)">
+			<x:div sclass="@load(empty vmsgs[responseText] ? 'form-group' : 'form-group has-error')">
+				<n:label class="control-label">${labels.cases.actions.response.text}:</n:label>
+				<textbox id="responseText" type="text" class="form-control" 
+	    			value="@bind(fxSendResponseAction.text) @validator('beanValidator')"></textbox>
+	    		<x:span sclass="@load(empty vmsgs[responseText] ? 'hidden' : 'help-block')">
+					<label value="@load(vmsgs[responseText])" />
+				</x:span>	
+			</x:div>
+			<div children="@load(fxSendResponseAction.userResolvers)" sclass="form-group">
+				<template name="children">
+					<n:br />
+				    <n:hr />
+					<div sclass="form-group">
+						<n:label
+							class="control-label">
+							${labels.userresolver.source.label}
+						</n:label>
+						<x:div>
+							<span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.source.icon))"><i sclass="@load('fa fa-'.concat(each.source.icon))" /></span>
+						</x:div>
+					</div>
+					<div sclass="form-group">
+						<n:label class="control-label">${labels.cases.actions.response.userResolver}:</n:label>
+						<selectbox sclass="form-control" model="@load(each.userResolverOptions)"
+							selectedItem="@bind(each.selectedUserResolver)">
+						    <template name="model">
+								<label value="${each.identifier}" />
+							</template>
+						</selectbox>
+					</div>
+				</template>
+			</div>
+		</div>
+		<div visible="@load(empty sendResponseActionVm.sendResponseAction.userResolvers)">
+			${labels.trigger.action.sendResponse.emptyUserResolvers}
+		</div>
+		<div class="form-group text-center">
+	    	<button visible="@load(not empty sendResponseActionVm.sendResponseAction.userResolvers)" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
+	    	<button onClick="@global-command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
+		</div>
+	</x:form>
+</div>

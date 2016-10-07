@@ -2,7 +2,7 @@ package com.qsocialnow.common.model.event;
 
 import java.io.Serializable;
 
-public class InPutBeanDocumentLocation implements Serializable {
+public class EventLocation implements Serializable {
 
     /**
 	 * 
@@ -11,7 +11,7 @@ public class InPutBeanDocumentLocation implements Serializable {
     private Double lat;
     private Double lon;
 
-    public InPutBeanDocumentLocation() {
+    public EventLocation() {
     }
 
     public Double getLatitud() {

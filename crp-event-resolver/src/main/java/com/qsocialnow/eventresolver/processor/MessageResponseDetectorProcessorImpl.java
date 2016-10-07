@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.GsonBuilder;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
-import com.qsocialnow.eventresolver.service.DomainService;
 import com.qsocialnow.kafka.model.Message;
 
 @Service
@@ -33,8 +32,8 @@ public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
 
     public void process(Message message) throws Exception {
         // reintentar ES
-        InPutBeanDocument inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
-                .fromJson(message.getMessage(), InPutBeanDocument.class);
+        Event inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
+                .fromJson(message.getMessage(), Event.class);
 
         String domainId = message.getGroup();
         LOGGER.info(String.format("Processing message from Response Detector using domain %s: %s", domainId,
@@ -51,10 +50,6 @@ public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
         } else {
             LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
         }
-    }
-
-    public void setDomainElasticService(DomainService domainElasticService) {
-
     }
 
     public void setDetectionMessageProcessor(DetectionMessageProcessor detectionMessageProcessor) {

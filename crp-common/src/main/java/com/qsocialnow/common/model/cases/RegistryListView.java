@@ -1,7 +1,6 @@
 package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class RegistryListView implements Serializable {
 
@@ -15,7 +14,7 @@ public class RegistryListView implements Serializable {
 
     private String description;
 
-    private Date date;
+    private Long date;
 
     public String getId() {
         return id;
@@ -49,11 +48,11 @@ public class RegistryListView implements Serializable {
         this.description = description;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 

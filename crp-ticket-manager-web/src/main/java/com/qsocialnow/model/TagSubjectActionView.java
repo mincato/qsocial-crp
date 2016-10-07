@@ -10,6 +10,8 @@ public class TagSubjectActionView {
 
     private List<SubjectCategory> categories;
 
+    private List<String[]> previousConfiguration;
+
     public List<TagSubjectCategorySetView> getCategorySets() {
         return categorySets;
     }
@@ -24,6 +26,14 @@ public class TagSubjectActionView {
 
     public void setCategories(List<SubjectCategory> categories) {
         this.categories = categories;
+    }
+
+    public List<String[]> getPreviousConfiguration() {
+        return previousConfiguration;
+    }
+
+    public void setPreviousConfiguration(List<String[]> previousConfiguration) {
+        this.previousConfiguration = previousConfiguration;
     }
 
 }

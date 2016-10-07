@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.model.config.SerieFilter;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class SerieDetectionCriteriaFilterTest {
@@ -43,7 +43,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         SerieFilter serieFilter = new SerieFilter();
         serieFilter.setThematicId(1l);
@@ -54,7 +54,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueOnlyThematic() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTokenId(1l);
         input.setSeriesId(new Long[] { 2l, 3l });
         input.setSubSeriesId(new Long[] { 4l, 5l });
@@ -68,7 +68,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueThematicAndSerie() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTokenId(1l);
         input.setSeriesId(new Long[] { 2l, 3l });
         input.setSubSeriesId(new Long[] { 4l, 5l });
@@ -83,7 +83,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueThematicAndSerieAndSubserie() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTokenId(1l);
         input.setSeriesId(new Long[] { 2l, 3l });
         input.setSubSeriesId(new Long[] { 4l, 5l });
@@ -99,7 +99,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseOnlyThematic() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTokenId(1l);
         input.setSeriesId(new Long[] { 2l, 3l });
         input.setSubSeriesId(new Long[] { 4l, 5l });
@@ -113,7 +113,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseThematicAndSerieWrongThematic() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTokenId(1l);
         input.setSeriesId(new Long[] { 2l, 3l });
         input.setSubSeriesId(new Long[] { 4l, 5l });
@@ -128,7 +128,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseThematicAndSerieWrongSerie() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTokenId(1l);
         input.setSeriesId(new Long[] { 2l, 3l });
         input.setSubSeriesId(new Long[] { 4l, 5l });
@@ -143,7 +143,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseThematicAndSerieAndSubserieWrongSerie() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTokenId(1l);
         input.setSeriesId(new Long[] { 2l, 3l });
         input.setSubSeriesId(new Long[] { 4l, 5l });
@@ -159,7 +159,7 @@ public class SerieDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseThematicAndSerieAndSubserieWrongSubSerie() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setTokenId(1l);
         input.setSeriesId(new Long[] { 2l, 3l });
         input.setSubSeriesId(new Long[] { 4l, 5l });

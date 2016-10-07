@@ -95,8 +95,9 @@ public class EditSubjectViewModel implements Serializable {
     @NotifyChange({ "currentSubject", "saved" })
     public void save() {
         Subject subject = subjectService.update(currentSubject.getSubject());
+        currentSubject.setSubject(subject);
         Clients.showNotification(Labels.getLabel("subject.edit.notification.success",
-                new String[] { subject.getName() }));
+                new String[] { subject.getIdentifier() }));
 
         saved = true;
     }
@@ -118,7 +119,7 @@ public class EditSubjectViewModel implements Serializable {
         comp.detach();
         if (saved) {
             Map<String, Object> args = new HashMap<String, Object>();
-            args.put("subjectChanged", currentSubject);
+            args.put("subjectChanged", currentSubject.getSubject());
             BindUtils.postGlobalCommand(null, null, "changeSubject", args);
         }
     }

@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.ListModelList;
 
+import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.CategoryFilter;
 import com.qsocialnow.common.model.config.ConnotationFilter;
 import com.qsocialnow.common.model.config.DetectionCriteria;
@@ -50,9 +51,11 @@ import com.qsocialnow.model.FilterView;
 import com.qsocialnow.model.Language;
 import com.qsocialnow.model.LanguageView;
 import com.qsocialnow.model.MediaView;
+import com.qsocialnow.model.SegmentView;
 import com.qsocialnow.model.Series;
 import com.qsocialnow.model.SubSeries;
 import com.qsocialnow.model.Thematic;
+import com.qsocialnow.model.TriggerView;
 import com.qsocialnow.services.CategoryService;
 import com.qsocialnow.services.ThematicService;
 
@@ -92,6 +95,12 @@ public class CreateCriteriaViewModel implements Serializable {
     private boolean editing;
 
     private boolean filters;
+
+    private DetectionCriteria fxCriteria;
+
+    private TriggerView trigger;
+
+    private SegmentView segment;
 
     public DetectionCriteria getCurrentCriteria() {
         return currentCriteria;
@@ -140,6 +149,7 @@ public class CreateCriteriaViewModel implements Serializable {
     @Init
     public void init() {
         currentCriteria = new DetectionCriteria();
+        currentCriteria.setActionCriterias(new ArrayList<>());
         filterView = new FilterView();
         wordFilterTypeOptions = Arrays.stream(WordFilterType.values()).collect(Collectors.toSet());
         initMedias(null);
@@ -177,8 +187,10 @@ public class CreateCriteriaViewModel implements Serializable {
     @GlobalCommand
     @NotifyChange({ "currentCriteria", "filters", "filter", "connotations", "mediaTypes", "languages", "serieOptions",
             "subSerieOptions", "categoryGroupOptions" })
-    public void initCriteria(@BindingParam("currentDomain") Domain currentDomain) {
+    public void initCriteria(@BindingParam("currentDomain") Domain currentDomain,
+            @BindingParam("trigger") TriggerView trigger, @BindingParam("segment") SegmentView segment) {
         currentCriteria = new DetectionCriteria();
+        currentCriteria.setActionCriterias(new ArrayList<>());
         filterView = new FilterView();
         serieOptions.clear();
         subSerieOptions.clear();
@@ -189,6 +201,8 @@ public class CreateCriteriaViewModel implements Serializable {
         initLanguages(null);
         editing = false;
         filters = true;
+        this.trigger = trigger;
+        this.segment = segment;
 
     }
 
@@ -196,8 +210,12 @@ public class CreateCriteriaViewModel implements Serializable {
     @NotifyChange({ "currentCriteria", "filters", "filter", "connotations", "mediaTypes", "languages", "serieOptions",
             "subSerieOptions", "categoryGroupOptions" })
     public void editCriteria(@BindingParam("currentDomain") Domain currentDomain,
+            @BindingParam("trigger") TriggerView trigger, @BindingParam("segment") SegmentView segment,
             @BindingParam("detectionCriteria") DetectionCriteria detectionCriteria) {
         currentCriteria = detectionCriteria;
+        if (currentCriteria.getActionCriterias() == null) {
+            currentCriteria.setActionCriterias(new ArrayList<>());
+        }
         filterView = new FilterView();
         initThematics(currentDomain);
         initMedias(detectionCriteria);
@@ -206,6 +224,8 @@ public class CreateCriteriaViewModel implements Serializable {
         createFilter(detectionCriteria);
         editing = true;
         filters = true;
+        this.trigger = trigger;
+        this.segment = segment;
     }
 
     private void initThematics(Domain domain) {
@@ -338,6 +358,32 @@ public class CreateCriteriaViewModel implements Serializable {
 
     @GlobalCommand
     public void closeCategories() {
+    }
+
+    @Command
+    public void createNewAction(@BindingParam("fxCriteria") DetectionCriteria fxCriteria) {
+        this.fxCriteria = fxCriteria;
+        Map<String, Object> args = new HashMap<>();
+        args.put("currentDomain", null);
+        args.put("trigger", trigger);
+        args.put("segment", segment);
+        BindUtils.postGlobalCommand(null, null, "goToAction", new HashMap<>());
+        BindUtils.postGlobalCommand(null, null, "initAction", args);
+    }
+
+    @GlobalCommand
+    public void addActionCriteria(@BindingParam("actionCriteria") AutomaticActionCriteria actionCriteria) {
+        this.fxCriteria.getActionCriterias().add(actionCriteria);
+        BindUtils.postGlobalCommand(null, null, "goToCriteria", new HashMap<>());
+        BindUtils.postNotifyChange(null, null, this.fxCriteria, "actionCriterias");
+        this.fxCriteria = null;
+    }
+
+    @Command
+    public void removeAction(@BindingParam("fxCriteria") DetectionCriteria fxCriteria,
+            @BindingParam("action") AutomaticActionCriteria actionCriteria) {
+        fxCriteria.getActionCriterias().remove(actionCriteria);
+        BindUtils.postNotifyChange(null, null, fxCriteria, "actionCriterias");
     }
 
     private void createFilter(DetectionCriteria detectionCriteria) {

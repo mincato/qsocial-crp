@@ -1,4 +1,4 @@
-package com.qsocialnow.service.strategies;
+package com.qsocialnow.common.services.strategies;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.UserResolver;

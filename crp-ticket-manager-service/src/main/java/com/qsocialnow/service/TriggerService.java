@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
@@ -57,7 +55,6 @@ public class TriggerService {
                     filterNormalizer.normalizeFilter(detectionCriteria.getFilter());
                 });
             });
-            mockActions(trigger);
             triggerSaved = triggerRepository.save(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -97,7 +94,6 @@ public class TriggerService {
                 });
             });
             trigger.setId(triggerId);
-            mockActions(trigger);
             triggerSaved = triggerRepository.update(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -142,18 +138,6 @@ public class TriggerService {
             throw new RuntimeException(e.getMessage());
         }
         return subjectCategoriesSet;
-    }
-
-    private void mockActions(Trigger trigger) {
-        trigger.getSegments().stream().forEach(segment -> {
-            segment.getDetectionCriterias().stream().forEach(detectionCriteria -> {
-                List<AutomaticActionCriteria> actions = new ArrayList<>();
-                AutomaticActionCriteria automaticActionCriteria = new AutomaticActionCriteria();
-                automaticActionCriteria.setActionType(ActionType.OPEN_CASE);
-                actions.add(automaticActionCriteria);
-                detectionCriteria.setAccionCriterias(actions);
-            });
-        });
     }
 
 }

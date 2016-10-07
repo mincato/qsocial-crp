@@ -166,7 +166,7 @@ public class ConfigurationRepository {
         criteria1.setFilter(filter);
         criteria1.setValidateFrom(initDate);
         criteria1.setValidateTo(endDate);
-        criteria1.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria1.getId()));
+        criteria1.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria1.getId()));
 
         DetectionCriteria criteria2 = new DetectionCriteria();
         criteria2.setSequenceOrder(2);
@@ -174,7 +174,7 @@ public class ConfigurationRepository {
         criteria2.setFilter(filter);
         criteria2.setValidateFrom(initDate);
         criteria2.setValidateTo(endDate);
-        criteria2.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria2.getId()));
+        criteria2.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria2.getId()));
 
         DetectionCriteria criteria3 = new DetectionCriteria();
         criteria3.setSequenceOrder(3);
@@ -182,7 +182,7 @@ public class ConfigurationRepository {
         criteria3.setFilter(filter);
         criteria3.setValidateFrom(initDate);
         criteria3.setValidateTo(endDate);
-        criteria3.setAccionCriterias(getActionsCriteriaByDetectionCriteria(criteria3.getId()));
+        criteria3.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria3.getId()));
 
         detectionCriteriasFromSegment.add(criteria1);
         detectionCriteriasFromSegment.add(criteria2);
@@ -197,9 +197,6 @@ public class ConfigurationRepository {
         AutomaticActionCriteria actionCriteria = new AutomaticActionCriteria();
         actionCriteria.setActionType(ActionType.OPEN_CASE);
         actionCriteria.setId(id + "-actioncriteria 1");
-        List<String> parameters1 = new ArrayList<>();
-        parameters1.add("value 1");
-        actionCriteria.setParameters(parameters1);
 
         AutomaticActionCriteria actionCriteria2 = new AutomaticActionCriteria();
         actionCriteria2.setActionType(ActionType.TAG_CASE);
@@ -207,7 +204,6 @@ public class ConfigurationRepository {
 
         List<String> parameters2 = new ArrayList<>();
         parameters2.add("value 2");
-        actionCriteria2.setParameters(parameters2);
 
         AutomaticActionCriteria actionCriteria3 = new AutomaticActionCriteria();
         actionCriteria3.setActionType(ActionType.ASSIGN);
@@ -215,7 +211,6 @@ public class ConfigurationRepository {
 
         List<String> parameters3 = new ArrayList<>();
         parameters3.add("value 3");
-        actionCriteria3.setParameters(parameters3);
 
         automaticActionsCriteria.add(actionCriteria);
         automaticActionsCriteria.add(actionCriteria2);

@@ -1,9 +1,9 @@
 package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.event.Event;
 
 public class ActionRegistry implements Serializable {
 
@@ -21,7 +21,7 @@ public class ActionRegistry implements Serializable {
 
     private String action;
 
-    private Date date;
+    private Long date;
 
     private ActionType type;
 
@@ -73,11 +73,11 @@ public class ActionRegistry implements Serializable {
         this.action = action;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 

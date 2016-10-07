@@ -3,6 +3,7 @@ package com.qsocialnow.eventresolver.processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.qsocialnow.common.exception.RepositoryException;
 import com.qsocialnow.elasticsearch.queues.QueueConsumer;
 import com.qsocialnow.elasticsearch.queues.QueueProducer;
 import com.qsocialnow.elasticsearch.queues.QueueService;
@@ -39,6 +40,8 @@ public class EventHandlerProcessor implements Runnable {
             try {
                 messageProcessor.process(message);
             } catch (InvalidDomainException invalidDomainExecption) {
+                addFailEvent(message);
+            } catch (RepositoryException sourceException) {
                 addFailEvent(message);
             } catch (Exception e) {
                 log.error("Unexpected error: ", e);

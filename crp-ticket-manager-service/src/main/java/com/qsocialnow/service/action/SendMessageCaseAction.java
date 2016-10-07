@@ -9,9 +9,10 @@ import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.Message;
 import com.qsocialnow.common.model.config.UserResolver;
+import com.qsocialnow.common.services.strategies.SourceStrategy;
 import com.qsocialnow.persistence.UserResolverRepository;
-import com.qsocialnow.service.strategies.SourceStrategy;
 
 @Component("sendMessageCaseAction")
 public class SendMessageCaseAction implements Action {
@@ -28,6 +29,7 @@ public class SendMessageCaseAction implements Action {
         String userResolverId = (String) parameters.get(ActionParameter.USER_RESOLVER);
         UserResolver userResolver = userResolverRepository.findOne(userResolverId);
         String postId = sources.get(userResolver.getSource()).sendMessage(caseObject, userResolver, text);
+        caseObject.addMessage(new Message(postId, false));
         parameters.put(ActionParameter.COMMENT, postId + " - " + text);
         return false;
     }

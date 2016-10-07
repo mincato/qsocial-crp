@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Supplier;
+import com.qsocialnow.common.exception.RepositoryException;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
@@ -166,10 +167,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 idValue = response.getId();
             } else {
                 log.error("There was an error indexing mapping: " + response.getErrorMessage());
+                throw new RepositoryException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
-
+            throw new RepositoryException(e);
         }
         return idValue;
     }
@@ -185,10 +187,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 idValue = response.getId();
             } else {
                 log.error("There was an error indexing mapping: " + response.getErrorMessage());
+                throw new RepositoryException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
-
+            throw new RepositoryException(e);
         }
         return idValue;
     }
@@ -239,11 +242,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 idValue = response.getId();
             } else {
                 log.error("There was an error indexing child mapping: " + response.getErrorMessage());
-                throw new RuntimeException(response.getErrorMessage());
+                throw new RepositoryException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
-
+            throw new RepositoryException(e);
         }
         return idValue;
     }
@@ -259,11 +262,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 idValue = response.getId();
             } else {
                 log.error("There was an error indexing child mapping: " + response.getErrorMessage());
-                throw new RuntimeException(response.getErrorMessage());
+                throw new RepositoryException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
-
+            throw new RepositoryException(e);
         }
         return idValue;
     }
@@ -276,13 +279,12 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             DocumentResult response = client.execute(delete);
             if (!response.isSucceeded()) {
                 log.error("There was an error removing mapping: " + response.getErrorMessage());
-                throw new RuntimeException(response.getErrorMessage());
+                throw new RepositoryException(response.getErrorMessage());
             } else {
-                throw new RuntimeException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
-            throw new RuntimeException(e);
+            throw new RepositoryException(e);
         }
     }
 
@@ -297,10 +299,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             if (response.isSucceeded()) {
                 idValue = response.getId();
             } else {
-                throw new RuntimeException(response.getErrorMessage());
+                throw new RepositoryException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
         return idValue;
     }
@@ -373,10 +376,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 T source = (T) result.getSourceAsObject(mapping.getClassType());
                 response.setSource(mapping.getDocument(source));
             } else {
-                throw new RuntimeException(result.getErrorMessage());
+                throw new RepositoryException(result.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
         return response;
     }
@@ -399,10 +403,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                         .getAsJsonObject().get("_index").getAsString();
                 response.setIndex(indexName);
             } else {
-                throw new RuntimeException(result.getErrorMessage());
+                throw new RepositoryException(result.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Serching documents - Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
         return response;
     }
@@ -418,10 +423,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                         .collect(Collectors.toList()));
             } else {
-                throw new RuntimeException(result.getErrorMessage());
+                throw new RepositoryException(result.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Serching documents - Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
         return response;
     }
@@ -446,6 +452,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
 
         if (result.isSucceeded()) {
@@ -453,7 +460,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                     .collect(Collectors.toList()));
         } else {
-            throw new RuntimeException(result.getErrorMessage());
+            throw new RepositoryException(result.getErrorMessage());
         }
         return response;
     }
@@ -482,6 +489,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
 
         if (result.isSucceeded()) {
@@ -489,7 +497,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                     .collect(Collectors.toList()));
         } else {
-            throw new RuntimeException(result.getErrorMessage());
+            throw new RepositoryException(result.getErrorMessage());
         }
         return response;
     }
@@ -510,6 +518,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
 
         if (result.isSucceeded()) {
@@ -517,7 +526,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                     .collect(Collectors.toList()));
         } else {
-            throw new RuntimeException(result.getErrorMessage());
+            throw new RepositoryException(result.getErrorMessage());
         }
         return response;
     }
@@ -553,6 +562,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
 
         if (result.isSucceeded()) {
@@ -560,7 +570,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                     .collect(Collectors.toList()));
         } else {
-            throw new RuntimeException(result.getErrorMessage());
+            throw new RepositoryException(result.getErrorMessage());
         }
         return response;
     }
@@ -579,6 +589,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
         }
 
         if (result.isSucceeded()) {
@@ -586,7 +597,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
                     .collect(Collectors.toList()));
         } else {
-            throw new RuntimeException(result.getErrorMessage());
+            throw new RepositoryException(result.getErrorMessage());
         }
         return response;
     }
@@ -598,11 +609,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             DocumentResult response = client.execute(delete);
             if (!response.isSucceeded()) {
                 log.error("There was an error removing mapping: " + response.getErrorMessage());
-                throw new RuntimeException(response.getErrorMessage());
+                throw new RepositoryException(response.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
-            throw new RuntimeException(e);
+            throw new RepositoryException(e);
         }
 
     }

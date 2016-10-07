@@ -1,5 +1,6 @@
 package com.qsocialnow.common.model.config;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,11 +21,15 @@ public class DetectionCriteria {
 
     private Filter filter;
 
-    private boolean executeMergeAction;
+    private boolean alwaysOpenCase;
 
-    private boolean findCaseByDomain;
+    private boolean findCaseOnAllDomains;
 
     private List<AutomaticActionCriteria> actionCriterias;
+
+    public DetectionCriteria() {
+        actionCriterias = new ArrayList<>();
+    }
 
     public String getId() {
         return id;
@@ -78,24 +83,24 @@ public class DetectionCriteria {
         return actionCriterias;
     }
 
-    public void setAccionCriterias(List<AutomaticActionCriteria> actionCriterias) {
+    public void setActionCriterias(List<AutomaticActionCriteria> actionCriterias) {
         this.actionCriterias = actionCriterias;
     }
 
-    public boolean isExecuteMergeAction() {
-        return executeMergeAction;
+    public boolean isAlwaysOpenCase() {
+        return alwaysOpenCase;
     }
 
-    public void setExecuteMergeAction(boolean executeMergeAction) {
-        this.executeMergeAction = executeMergeAction;
+    public void setAlwaysOpenCase(boolean alwaysOpenCase) {
+        this.alwaysOpenCase = alwaysOpenCase;
     }
 
-    public boolean isFindCaseByDomain() {
-        return findCaseByDomain;
+    public boolean isFindCaseOnAllDomains() {
+        return findCaseOnAllDomains;
     }
 
-    public void setFindCaseByDomain(boolean findCaseByDomain) {
-        this.findCaseByDomain = findCaseByDomain;
+    public void setFindCaseOnAllDomains(boolean findCaseOnAllDomains) {
+        this.findCaseOnAllDomains = findCaseOnAllDomains;
     }
 
 }

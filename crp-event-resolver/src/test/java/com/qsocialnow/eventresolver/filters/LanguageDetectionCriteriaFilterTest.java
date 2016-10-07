@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.model.config.LanguageFilter;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class LanguageDetectionCriteriaFilterTest {
@@ -50,7 +50,7 @@ public class LanguageDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         LanguageFilter languageFilter = new LanguageFilter();
         languageFilter.setOptions(new String[] { "es" });
@@ -61,7 +61,7 @@ public class LanguageDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrue() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setLanguage("es");
 
         LanguageFilter languageFilter = new LanguageFilter();
@@ -73,7 +73,7 @@ public class LanguageDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setLanguage("es");
 
         LanguageFilter languageFilter = new LanguageFilter();
@@ -85,7 +85,7 @@ public class LanguageDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalse() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setLanguage("es");
 
         LanguageFilter languageFilter = new LanguageFilter();
@@ -97,7 +97,7 @@ public class LanguageDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setLanguage("es");
 
         LanguageFilter languageFilter = new LanguageFilter();

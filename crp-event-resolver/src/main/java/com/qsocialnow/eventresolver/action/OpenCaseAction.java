@@ -1,7 +1,6 @@
 package com.qsocialnow.eventresolver.action;
 
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,24 +10,19 @@ import org.springframework.stereotype.Component;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
-import com.qsocialnow.elasticsearch.services.cases.CaseService;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.elasticsearch.services.cases.SubjectService;
 import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
 
 @Component("openCaseAction")
-public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
-
-    @Autowired
-    private CaseService caseElasticService;
+public class OpenCaseAction {
 
     @Autowired
     private SubjectService subjectService;
 
     private static final Logger log = LoggerFactory.getLogger(OpenCaseAction.class);
 
-    @Override
-    public Case execute(InPutBeanDocument inputElement, List<String> parameters, ExecutionMessageRequest request) {
+    public Case openCase(Event inputElement, ExecutionMessageRequest request) {
         log.info("Executing action: " + ActionType.OPEN_CASE.name());
 
         String sourceId = inputElement.getIdUsuarioOriginal();
@@ -57,8 +51,7 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
             newCase.setTriggerId(request.getTrigger().getId());
             newCase.setSegmentId(request.getSegment().getId());
             newCase.setSubject(subject);
-
-            caseElasticService.indexCaseByBulkProcess(newCase);
+            newCase.setTriggerEvent(inputElement);
 
         } catch (Exception e) {
             log.error("There was an error executing action", e);
@@ -70,12 +63,6 @@ public class OpenCaseAction implements Action<InPutBeanDocument, Case> {
         log.info("Retrieving subject: " + idOriginUser);
         Subject subject = subjectService.findSubjectsByOriginUser(idOriginUser);
         return subject;
-    }
-
-    @Override
-    public Case execute(InPutBeanDocument inputElement, Case outputElement, List<String> parameters) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

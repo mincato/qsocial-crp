@@ -101,20 +101,22 @@ public class CreateTriggerViewModel implements Serializable {
     }
 
     @Command
-    public void createSegment(@BindingParam("fxTrigger") Trigger fxTrigger) {
-        this.fxTrigger = fxTrigger;
+    public void createSegment(@BindingParam("fxTrigger") TriggerView fxTrigger) {
+        this.fxTrigger = fxTrigger.getTrigger();
         BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain.getDomain());
+        args.put("trigger", fxTrigger);
         BindUtils.postGlobalCommand(null, null, "initSegment", args);
     }
 
     @Command
-    public void editSegment(@BindingParam("fxTrigger") Trigger fxTrigger, @BindingParam("segment") Segment segment) {
-        this.fxTrigger = fxTrigger;
+    public void editSegment(@BindingParam("fxTrigger") TriggerView fxTrigger, @BindingParam("segment") Segment segment) {
+        this.fxTrigger = fxTrigger.getTrigger();
         BindUtils.postGlobalCommand(null, null, "goToSegment", new HashMap<>());
         Map<String, Object> args = new HashMap<>();
         args.put("currentDomain", currentDomain.getDomain());
+        args.put("trigger", fxTrigger);
         args.put("segment", segment);
         BindUtils.postGlobalCommand(null, null, "editSegment", args);
     }

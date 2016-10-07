@@ -132,6 +132,7 @@ public class SubjectsViewModel implements Serializable {
             if (subjectOptional.isPresent()) {
                 SubjectListView subjectListView = subjectOptional.get();
                 subjectListView.setName(subjectChanged.getName());
+                subjectListView.setLastName(subjectChanged.getLastName());
             }
         }
     }

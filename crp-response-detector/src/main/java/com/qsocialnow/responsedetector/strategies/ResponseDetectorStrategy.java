@@ -2,10 +2,10 @@ package com.qsocialnow.responsedetector.strategies;
 
 import java.util.List;
 
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 
 public interface ResponseDetectorStrategy {
 
-    List<InPutBeanDocument> findEvents();
+    List<Event> findEvents();
 
 }

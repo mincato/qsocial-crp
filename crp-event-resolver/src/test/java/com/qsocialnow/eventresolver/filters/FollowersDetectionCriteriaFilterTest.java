@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.model.config.FollowersFilter;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class FollowersDetectionCriteriaFilterTest {
@@ -62,7 +62,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         FollowersFilter followersFilter = new FollowersFilter();
         followersFilter.setMinFollowers(2l);
@@ -74,7 +74,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueBetweenRange() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -87,7 +87,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseBetweenRangeMaxEquals() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -100,7 +100,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseBetweenRangeMinEquals() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(2l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -113,7 +113,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueGreaterThan() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -125,7 +125,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseGreaterThanEquals() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -137,7 +137,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueLessThan() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -149,7 +149,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseLessThanEquals() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -161,7 +161,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseBetweenRangeLower() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -174,7 +174,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseBetweenRangeHigher() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -187,7 +187,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseGreaterThan() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();
@@ -199,7 +199,7 @@ public class FollowersDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseLessThan() throws Exception {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setFollowersCount(5l);
 
         FollowersFilter followersFilter = new FollowersFilter();

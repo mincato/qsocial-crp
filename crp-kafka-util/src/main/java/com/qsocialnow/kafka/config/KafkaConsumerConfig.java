@@ -1,5 +1,7 @@
 package com.qsocialnow.kafka.config;
 
+import java.nio.charset.StandardCharsets;
+
 import com.qsocialnow.common.config.RefreshableConfig;
 
 public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfig> {
@@ -9,6 +11,7 @@ public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfi
     private static final String DEFAULT_ZOOKEEPER_SYNC_TIMES_MS = "200";
     private static final String DEFAULT_AUTO_COMMIT_INTERVAL_MS = "1000";
     private static final String DEFAULT_TOPIC = "prc.domain1";
+    private static final String DEFAULT_VALUE_SERIALIZER_ENCODING = StandardCharsets.UTF_16.name();
 
     private String zookeeperConnect = DEFAULT_ZOOKEEPER_CONNECT;
 
@@ -19,6 +22,8 @@ public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfi
     private String autoCommitIntervalMs = DEFAULT_AUTO_COMMIT_INTERVAL_MS;
 
     private String topic = DEFAULT_TOPIC;
+
+    private String valueSerializerEncoding = DEFAULT_VALUE_SERIALIZER_ENCODING;
 
     public String getZookeeperConnect() {
         return zookeeperConnect;
@@ -60,6 +65,14 @@ public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfi
         this.topic = topic;
     }
 
+    public String getValueSerializerEncoding() {
+        return valueSerializerEncoding;
+    }
+
+    public void setValueSerializerEncoding(String valueSerializerEncoding) {
+        this.valueSerializerEncoding = valueSerializerEncoding;
+    }
+
     public static String getDefaultZookeeperConnect() {
         return DEFAULT_ZOOKEEPER_CONNECT;
     }
@@ -87,6 +100,7 @@ public class KafkaConsumerConfig implements RefreshableConfig<KafkaConsumerConfi
         this.zookeeperConnect = newConfig.zookeeperConnect;
         this.zookeeperSessionTimeoutMs = newConfig.zookeeperSessionTimeoutMs;
         this.zookeeperSyncTimeMs = newConfig.zookeeperSyncTimeMs;
+        this.valueSerializerEncoding = newConfig.valueSerializerEncoding;
     }
 
 }

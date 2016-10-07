@@ -16,7 +16,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.model.config.WordFilter;
 import com.qsocialnow.common.model.config.WordFilterType;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.filters.matchers.WordFilterMatcher;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
@@ -60,7 +60,7 @@ public class WordDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         WordFilter wordFilter = new WordFilter();
         wordFilter.setType(WordFilterType.AUTHOR);
@@ -72,7 +72,7 @@ public class WordDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueOneFilter() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setActores(new String[] { "actor1" });
 
         WordFilter wordFilter = new WordFilter();
@@ -91,7 +91,7 @@ public class WordDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueTwoFilterFirstFalse() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setActores(new String[] { "actor1" });
 
         WordFilter wordFilter = new WordFilter();
@@ -118,7 +118,7 @@ public class WordDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseOneFilter() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setActores(new String[] { "actor1" });
 
         WordFilter wordFilter = new WordFilter();
@@ -137,7 +137,7 @@ public class WordDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseTwoFilters() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setActores(new String[] { "actor1" });
 
         WordFilter wordFilter = new WordFilter();
