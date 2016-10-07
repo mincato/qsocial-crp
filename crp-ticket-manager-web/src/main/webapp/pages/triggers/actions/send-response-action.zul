@@ -6,9 +6,8 @@
 	<x:form form="@id('fxSendResponseAction') @load(sendResponseActionVm.sendResponseAction) @save(sendResponseActionVm.sendResponseAction, before='save')">
 		<div class="form-group" visible="@load(not empty sendResponseActionVm.sendResponseAction.userResolvers)">
 			<x:div sclass="@load(empty vmsgs[responseText] ? 'form-group' : 'form-group has-error')">
-				<label value="@load(not anyTwitterSource)" />
-				<label zclass="control-label" visible="@load(not anyTwitterSource)">${labels.trigger.actions.response.text}:</label>
-				<label zclass="control-label" visible="@load(anyTwitterSource)">${labels.trigger.actions.response.text labels.trigger.actions.response.twitter.warning}:fdsa</label>
+				<x:label sclass="@load(sendResponseActionVm.anyTwitterSource ? 'hidden': 'control-label')" >${labels.trigger.actions.response.text}:</x:label>
+				<x:label sclass="@load(sendResponseActionVm.anyTwitterSource ? 'control-label' : 'hidden')">${labels.trigger.actions.response.twitter.warning}:</x:label>
 				<textbox id="responseText" type="text" class="form-control" maxlength="@load(sendResponseActionVm.textMaxlength)"
 	    			value="@bind(fxSendResponseAction.text) @validator('beanValidator')"></textbox>
 	    		<x:span sclass="@load(empty vmsgs[responseText] ? 'hidden' : 'help-block')">
