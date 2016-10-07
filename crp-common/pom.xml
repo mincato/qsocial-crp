@@ -27,6 +27,7 @@
 		<gson-version>2.7</gson-version>
 		
 		<twitter4j.version>4.0.4</twitter4j.version>
+		<facebook4j.version>2.4.7</facebook4j.version>
 	</properties>
 
 	<dependencies>
@@ -88,6 +89,20 @@
 	        <artifactId>twitter4j-core</artifactId>
 	        <version>${twitter4j.version}</version>
         </dependency>
+        
+        <!-- Twitter -->
+		<dependency>
+	        <groupId>org.twitter4j</groupId>
+	        <artifactId>twitter4j-core</artifactId>
+	        <version>${twitter4j.version}</version>
+        </dependency>
+        
+        <!-- Facebook -->        
+		<dependency>
+			<groupId>org.facebook4j</groupId>
+			<artifactId>facebook4j-core</artifactId>
+			<version>${facebook4j.version}</version>
+		</dependency>
 
 	</dependencies>
 
