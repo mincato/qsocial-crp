@@ -31,9 +31,9 @@ import com.qsocialnow.model.TriggerView;
 @VariableResolver(DelegatingVariableResolver.class)
 public class TagSubjectActionViewModel implements Serializable {
 
-	private static final long serialVersionUID = 3970631278576411053L;
+    private static final long serialVersionUID = 3970631278576411053L;
 
-	private TagSubjectActionView tagSubjectAction;
+    private TagSubjectActionView tagSubjectAction;
 
     private ListView<SubjectCategorySet> categorySetListView;
 
@@ -48,8 +48,8 @@ public class TagSubjectActionViewModel implements Serializable {
     }
 
     public void setTagSubjectAction(TagSubjectActionView tagSubjectAction) {
-		this.tagSubjectAction = tagSubjectAction;
-	}
+        this.tagSubjectAction = tagSubjectAction;
+    }
 
     public ListView<SubjectCategorySet> getCategorySetListView() {
         return categorySetListView;
