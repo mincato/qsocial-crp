@@ -53,7 +53,7 @@ public class TwitterClient {
         }
     }
 
-    public void checkAnyMention(String userResolverToFilter, TwitterMessageEvent messageEvent) {
+    public void checkAnyMention(TwitterMessageEvent messageEvent) {
         try {
             List<Status> statuses = twitter.getUserTimeline();
             log.info("Starting to read user timeline : " + statuses.size() + " trying to mach responses from message: "
@@ -71,12 +71,10 @@ public class TwitterClient {
                                     + statusReply.getText());
 
                             log.info("Creating event to handle automatic response detection");
-                            sourceService.processEvent(true, userResolverToFilter, null,
+                            sourceService.processEvent(true, statusReply.getInReplyToScreenName(), null,
                                     String.valueOf(statusReply.getId()), statusReply.getText(),
                                     messageEvent.getReplyMessageId(), String.valueOf(user.getId()),
                                     user.getScreenName(), user.getProfileImageURL());
-
-                            sourceService.removeSourceConversation(userResolverToFilter, messageEvent.getMessageId());
                             break;
                         }
                     }

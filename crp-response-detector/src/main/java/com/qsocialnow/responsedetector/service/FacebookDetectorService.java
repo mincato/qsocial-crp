@@ -116,12 +116,13 @@ public class FacebookDetectorService extends SourceDetectorService {
                         break;
                     }
                     case NODE_UPDATED: {
-                        log.info("TreeNode changed: " + ZKPaths.getNodeFromPath(event.getData().getPath())
-                                + ", value: " + new String(event.getData().getData()));
+                        log.info("Facebook conversation TreeNode changed: "
+                                + ZKPaths.getNodeFromPath(event.getData().getPath()) + ", value: "
+                                + new String(event.getData().getData()));
                         break;
                     }
                     case NODE_REMOVED: {
-                        log.info("TreeNode removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        log.info("Facebook conversation removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
                         break;
                     }
                     case INITIALIZED: {
@@ -171,13 +172,14 @@ public class FacebookDetectorService extends SourceDetectorService {
     }
 
     @Override
-    public void removeSourceConversation(String userResolver, String converstation) {
+    public void removeSourceConversation(String conversation) {
         try {
-            String nodePath = nodePaths.get(converstation);
+            String nodePath = nodePaths.get(conversation);
             log.info("Removing node after detect response: " + nodePath);
+            conversations.remove(conversation);
             zookeeperClient.delete().forPath(nodePath);
         } catch (Exception e) {
-            log.error("Unable to remove message conversation: " + converstation, e);
+            log.error("Unable to remove message conversation: " + conversation, e);
         }
     }
 
@@ -195,7 +197,6 @@ public class FacebookDetectorService extends SourceDetectorService {
             Event event = new Event();
             event.setId(messageId);
             event.setFecha(new Date());
-            // event.setTipoDeMedio("morbi");
             event.setMedioId(FilterConstants.MEDIA_FACEBOOK);
             event.setNormalizeMessage(messageText);
 
@@ -206,7 +207,7 @@ public class FacebookDetectorService extends SourceDetectorService {
                     if (conversationsByCommentId.getCommentId().equals(commentId)) {
                         event.setIdPadre(conversationsByCommentId.getEventId());
                         event.setOriginIdCase(conversationsByCommentId.getCaseId());
-                        removeSourceConversation(null, commentId);
+                        removeSourceConversation(commentId);
                     }
                 }
             }
