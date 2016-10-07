@@ -78,7 +78,7 @@
 						<n:div class="col-sm-9">
 							<datebox id="endDate" sclass="input-group"
 								format="short"
-								value="@load(fxTrigger.trigger.end) @save(fxTrigger.trigger.end, before='save')  @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxTrigger.trigger.end, label='trigger.enddate.validation', id = 'endDate', required = true)"  />
+								value="@load(fxTrigger.trigger.end) @save(fxTrigger.trigger.end, before='save')  @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxTrigger.trigger.init, label='trigger.enddate.validation', id = 'endDate', required = true)"  />
 							<x:span
 								sclass="@load(empty vmsgs[endDate] ? 'hidden' : 'help-block')">
 								<label value="@load(vmsgs[endDate])" />
