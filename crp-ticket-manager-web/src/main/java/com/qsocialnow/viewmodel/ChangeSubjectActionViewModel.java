@@ -65,13 +65,16 @@ public class ChangeSubjectActionViewModel implements Serializable {
         if (ActionType.CHANGE_SUBJECT.equals(action)) {
             this.fxChangeSubjectAction = null;
             this.changeSubjectAction = new ChangeSubjectActionView();
-            SubjectListView subjectListView = new SubjectListView();
-            subjectListView.setId(currentCase.getCaseObject().getSubject().getId());
-            subjectListView.setName(currentCase.getCaseObject().getSubject().getName());
-            subjectListView.setLastName(currentCase.getCaseObject().getSubject().getLastName());
-            subjectListView.setIdentifier(currentCase.getCaseObject().getSubject().getIdentifier());
-            this.changeSubjectAction.setSelectedSubject(subjectListView);
-            this.source = currentCase.getCaseObject().getSource().toString();
+            if (currentCase.getCaseObject().getSubject() != null) {
+                SubjectListView subjectListView = new SubjectListView();
+                subjectListView.setId(currentCase.getCaseObject().getSubject().getId());
+                subjectListView.setName(currentCase.getCaseObject().getSubject().getName());
+                subjectListView.setLastName(currentCase.getCaseObject().getSubject().getLastName());
+                subjectListView.setIdentifier(currentCase.getCaseObject().getSubject().getIdentifier());
+                this.changeSubjectAction.setSelectedSubject(subjectListView);
+            }
+            this.source = currentCase.getCaseObject().getSource() != null ? currentCase.getCaseObject().getSource()
+                    .toString() : null;
         }
     }
 

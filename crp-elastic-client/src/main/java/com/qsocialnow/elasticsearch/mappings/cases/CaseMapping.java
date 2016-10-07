@@ -72,7 +72,6 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setUnitValue(document.getUnitValue());
         caseType.setTriggerId(document.getTriggerId());
         caseType.setLastPostId(document.getLastPostId());
-        caseType.setSourceUser(document.getSourceUser());
         caseType.setSegmentId(document.getSegmentId());
         caseType.setUserResolver(document.getUserResolver());
         caseType.setDomainId(document.getDomainId());
@@ -105,7 +104,6 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseDocument.setUnitValue(documentType.getUnitValue());
         caseDocument.setTriggerId(documentType.getTriggerId());
         caseDocument.setLastPostId(documentType.getLastPostId());
-        caseDocument.setSourceUser(documentType.getSourceUser());
         caseDocument.setSegmentId(documentType.getSegmentId());
         caseDocument.setDomainId(documentType.getDomainId());
         caseDocument.setUserResolver(documentType.getUserResolver());

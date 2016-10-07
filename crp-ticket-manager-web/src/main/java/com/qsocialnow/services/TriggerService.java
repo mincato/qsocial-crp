@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
@@ -21,6 +22,8 @@ public interface TriggerService {
     Trigger update(String domainId, Trigger trigger);
 
     Segment findSegment(String domainId, String triggerId, String segmentId);
+
+    List<SegmentListView> findSegments(String domainId, String triggerId);
 
     List<CaseCategorySet> findCategories(String domainId, String triggerId);
 

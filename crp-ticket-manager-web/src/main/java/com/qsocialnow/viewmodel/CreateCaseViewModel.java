@@ -15,6 +15,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.model.CaseView;
@@ -42,9 +43,13 @@ public class CreateCaseViewModel implements Serializable {
 
     private TriggerListView selectedTrigger;
 
+    private SegmentListView selectedSegment;
+
     private List<DomainListView> domains = new ArrayList<DomainListView>();
 
     private List<TriggerListView> triggers;
+
+    private List<SegmentListView> segments;
 
     public CaseView getCurrentCase() {
         return currentCase;
@@ -79,18 +84,18 @@ public class CreateCaseViewModel implements Serializable {
     }
 
     @Command
+    @NotifyChange("segments")
     public void onSelectTrigger() {
-        this.currentCase.getNewCase().setTriggerId(this.selectedTrigger.getId());
-        if (this.selectedTrigger.getSegments() != null && this.selectedTrigger.getSegments().size() > 0) {
-            this.currentCase.getNewCase().setTriggerId(this.selectedTrigger.getSegments().get(0).getId());
-        }
-        currentCase.getNewCase().setSourceUser("usurioenojado");
+        this.segments = triggerService.findSegments(this.selectedDomain.getId(), this.selectedTrigger.getId());
     }
 
     @Command
     @NotifyChange("currentCase")
     public void save() {
         Case newCase = currentCase.getNewCase();
+        newCase.setDomainId(selectedDomain.getId());
+        newCase.setTriggerId(selectedTrigger.getId());
+        newCase.setSegmentId(selectedSegment.getId());
         currentCase.setNewCase(caseService.create(newCase));
         Clients.showNotification(Labels.getLabel("cases.create.notification.success", new String[] { currentCase
                 .getNewCase().getId() }));
@@ -111,6 +116,10 @@ public class CreateCaseViewModel implements Serializable {
         return triggers;
     }
 
+    public List<SegmentListView> getSegments() {
+        return segments;
+    }
+
     public DomainListView getSelectedDomain() {
         return selectedDomain;
     }
@@ -126,4 +135,13 @@ public class CreateCaseViewModel implements Serializable {
     public void setSelectedTrigger(TriggerListView selectedTrigger) {
         this.selectedTrigger = selectedTrigger;
     }
+
+    public void setSelectedSegment(SegmentListView selectedSegment) {
+        this.selectedSegment = selectedSegment;
+    }
+
+    public SegmentListView getSelectedSegment() {
+        return selectedSegment;
+    }
+
 }
