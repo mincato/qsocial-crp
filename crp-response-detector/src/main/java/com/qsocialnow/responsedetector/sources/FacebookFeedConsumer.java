@@ -15,7 +15,6 @@ public class FacebookFeedConsumer implements Runnable {
 
     @Override
     public void run() {
-        log.info("Starting to pull comments from conversations");
         facebookClient.readComments();
     }
 

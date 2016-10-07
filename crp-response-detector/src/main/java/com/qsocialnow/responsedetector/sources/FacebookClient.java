@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.responsedetector.config.FacebookConfigurator;
-import com.qsocialnow.responsedetector.model.FacebookFeedEvent;
 import com.qsocialnow.responsedetector.service.SourceDetectorService;
 
 import facebook4j.BatchRequest;
