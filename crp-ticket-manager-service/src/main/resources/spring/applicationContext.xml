@@ -39,6 +39,11 @@
  		<constructor-arg value="${app.twitter.app.configurator.path}"></constructor-arg>
 	</bean>
 	
+	<bean id="facebookConfig" class="com.qsocialnow.config.FacebookConfigFactory" factory-method="findConfig">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${app.facebook.app.configurator.path}"></constructor-arg>
+	</bean>
+	
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
 		<property name="configurator" ref="elasticDomainConfig"></property>
 		<property name="triggerService" ref="triggerElasticService"></property>
@@ -117,9 +122,14 @@
 	
 	<util:map id="sources">
     	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}" value-ref="twitterSourceStrategy"/>
+    	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}" value-ref="facebookSourceStrategy"/>
 	</util:map>
 	
 	<bean id="twitterSourceStrategy" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
         <property name="twitterConfig" ref="twitterConfig"></property>
+    </bean>
+    
+    <bean id="facebookSourceStrategy" class="com.qsocialnow.common.services.strategies.FacebookSourceStrategy">
+        <property name="facebookConfig" ref="facebookConfig"></property>
     </bean>
 </beans>

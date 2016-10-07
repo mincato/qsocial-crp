@@ -21,6 +21,7 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUserResolver;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.model.SendResponseActionView;
 import com.qsocialnow.services.CaseService;
@@ -46,6 +47,8 @@ public class SendResponseActionViewModel implements Serializable {
     private boolean chooseUserResolver;
 
     private ActionType action;
+
+    private Integer textMaxlength = 0;
 
     @Init
     public void init(@QueryParam("case") String caseId) {
@@ -73,11 +76,17 @@ public class SendResponseActionViewModel implements Serializable {
         return chooseUserResolver;
     }
 
+    private static final Integer ADDITIONAL_LENGTH_TWEET = 2;
+
     @GlobalCommand
-    @NotifyChange({ "sendResponseAction", "chooseUserResolver", "userResolverOptions" })
+    @NotifyChange({ "sendResponseAction", "chooseUserResolver", "userResolverOptions", "textMaxlength" })
     public void show(@BindingParam("currentCase") EditCaseView currentCase, @BindingParam("action") ActionType action) {
         if (ActionType.REPLY.equals(action) || ActionType.SEND_MESSAGE.equals(action)) {
             this.action = action;
+            if (Media.TWITTER.equals(currentCase.getSource())) {
+                this.textMaxlength = Media.TWITTER.getMaxlength() - ADDITIONAL_LENGTH_TWEET
+                        - currentCase.getCaseObject().getSubject().getIdentifier().length();
+            }
             this.sendResponseAction = new SendResponseActionView();
             chooseUserResolver = ActionType.SEND_MESSAGE.equals(action)
                     || currentCase.getCaseObject().getUserResolver() == null;
@@ -121,6 +130,14 @@ public class SendResponseActionViewModel implements Serializable {
         HashMap<String, Object> args = new HashMap<>();
         args.put("caseUpdated", caseUpdated);
         BindUtils.postGlobalCommand(null, null, "actionExecuted", args);
+    }
+
+    public Integer getTextMaxlength() {
+        return textMaxlength;
+    }
+
+    public void setTextMaxlength(Integer textMaxlength) {
+        this.textMaxlength = textMaxlength;
     }
 
 }

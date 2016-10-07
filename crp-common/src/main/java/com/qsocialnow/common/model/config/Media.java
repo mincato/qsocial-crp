@@ -4,13 +4,14 @@ import com.qsocialnow.common.util.FilterConstants;
 
 public enum Media {
 
-    FACEBOOK(FilterConstants.MEDIA_FACEBOOK, "facebook", "Facebook"), TWITTER(FilterConstants.MEDIA_TWITTER, "twitter",
-            "Twitter");
+    FACEBOOK(FilterConstants.MEDIA_FACEBOOK, "facebook", "Facebook", 0), TWITTER(FilterConstants.MEDIA_TWITTER,
+            "twitter", "Twitter", 140);
 
-    private Media(Long value, String icon, String name) {
+    private Media(Long value, String icon, String name, Integer maxlength) {
         this.value = value;
         this.icon = icon;
         this.name = name;
+        this.maxlength = 140;
     }
 
     private Long value;
@@ -18,6 +19,8 @@ public enum Media {
     private String icon;
 
     private String name;
+
+    private Integer maxlength;
 
     public Long getValue() {
         return value;
@@ -29,6 +32,10 @@ public enum Media {
 
     public String getName() {
         return name;
+    }
+
+    public Integer getMaxlength() {
+        return maxlength;
     }
 
     public static Media getByValue(Long value) {

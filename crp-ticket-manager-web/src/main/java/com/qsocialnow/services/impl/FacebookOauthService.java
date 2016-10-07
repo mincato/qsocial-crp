@@ -51,6 +51,7 @@ public class FacebookOauthService implements OauthService {
                 ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
                 configurationBuilder.setOAuthAppId(facebookConfig.getOAuthAppId());
                 configurationBuilder.setOAuthAppSecret(facebookConfig.getOAuthAppSecret());
+                configurationBuilder.setOAuthPermissions(facebookConfig.getOAuthPermissions());
                 userFacebookFactory = new FacebookFactory(configurationBuilder.build());
 
                 configurationBuilder = new ConfigurationBuilder();

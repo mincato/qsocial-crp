@@ -458,4 +458,7 @@ public class CreateTriggerViewModel implements Serializable {
         subjectCategorySetListView.getFilteredList().remove(subjectCategorySet);
     }
 
+    public String getDomain() {
+		return domain;
+	}
 }
