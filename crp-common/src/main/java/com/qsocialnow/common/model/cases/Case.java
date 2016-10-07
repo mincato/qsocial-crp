@@ -64,8 +64,6 @@ public class Case implements Serializable {
 
     private BaseUserResolver userResolver;
 
-    private String sourceUser;
-
     private String lastPostId;
 
     private Long source;
@@ -89,7 +87,6 @@ public class Case implements Serializable {
         newCase.setTitle(event.getTitulo());
 
         newCase.setPendingResponse(true);
-        newCase.setSourceUser(event.getUsuarioCreacion());
         newCase.setLastPostId(event.getId());
         newCase.setSource(event.getMedioId());
         Message message = new Message();
@@ -138,8 +135,6 @@ public class Case implements Serializable {
         List<ActionType> actionsAllowed = new ArrayList<>();
 
         if (this.getOpen()) {
-            actionsAllowed.add(ActionType.REPLY);
-            actionsAllowed.add(ActionType.TAG_SUBJECT);
             actionsAllowed.add(ActionType.TAG_CASE);
             actionsAllowed.add(ActionType.CLOSE);
             actionsAllowed.add(ActionType.REGISTER_COMMENT);
@@ -147,11 +142,15 @@ public class Case implements Serializable {
             if (!this.getPendingResponse())
                 actionsAllowed.add(ActionType.PENDING_RESPONSE);
 
-            actionsAllowed.add(ActionType.SEND_MESSAGE);
+            if (this.getSubject() != null) {
+                actionsAllowed.add(ActionType.REPLY);
+                actionsAllowed.add(ActionType.SEND_MESSAGE);
+                actionsAllowed.add(ActionType.TAG_SUBJECT);
+            }
+            actionsAllowed.add(ActionType.CHANGE_SUBJECT);
             actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
             actionsAllowed.add(ActionType.ATTACH_FILE);
-            actionsAllowed.add(ActionType.CHANGE_SUBJECT);
         } else {
             actionsAllowed.add(ActionType.REOPEN);
         }
@@ -300,14 +299,6 @@ public class Case implements Serializable {
 
     public void setUserResolver(BaseUserResolver userResolver) {
         this.userResolver = userResolver;
-    }
-
-    public String getSourceUser() {
-        return sourceUser;
-    }
-
-    public void setSourceUser(String sourceUser) {
-        this.sourceUser = sourceUser;
     }
 
     public String getLastPostId() {

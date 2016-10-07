@@ -165,12 +165,16 @@ public class EditCaseViewModel implements Serializable {
 
     private void initSubjectCategoriesSet() {
         List<SubjectCategorySet> categoriesSet;
-        Set<String> subjectCategoriesSet = currentCase.getCaseObject().getSubject().getSubjectCategorySet();
-        if (CollectionUtils.isNotEmpty(subjectCategoriesSet)) {
-            categoriesSet = currentCase.getTriggerSubjectCategories().stream()
-                    .filter(subjectCategorySet -> subjectCategoriesSet.contains(subjectCategorySet.getId()))
-                    .collect(Collectors.toList());
+        if (currentCase.getCaseObject().getSubject() != null) {
+            Set<String> subjectCategoriesSet = currentCase.getCaseObject().getSubject().getSubjectCategorySet();
+            if (CollectionUtils.isNotEmpty(subjectCategoriesSet)) {
+                categoriesSet = currentCase.getTriggerSubjectCategories().stream()
+                        .filter(subjectCategorySet -> subjectCategoriesSet.contains(subjectCategorySet.getId()))
+                        .collect(Collectors.toList());
 
+            } else {
+                categoriesSet = new ArrayList<>();
+            }
         } else {
             categoriesSet = new ArrayList<>();
         }
@@ -180,13 +184,17 @@ public class EditCaseViewModel implements Serializable {
 
     private void initSubjectCategories() {
         List<SubjectCategory> categories;
-        Set<String> subjectCategories = currentCase.getCaseObject().getSubject().getSubjectCategory();
-        if (CollectionUtils.isNotEmpty(subjectCategories)) {
-            Stream<SubjectCategory> subjectCategoriesStream = currentCase.getTriggerSubjectCategories().stream()
-                    .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
-            categories = subjectCategoriesStream.filter(
-                    subjectCategory -> subjectCategories.contains(subjectCategory.getId()))
-                    .collect(Collectors.toList());
+        if (currentCase.getCaseObject().getSubject() != null) {
+            Set<String> subjectCategories = currentCase.getCaseObject().getSubject().getSubjectCategory();
+            if (CollectionUtils.isNotEmpty(subjectCategories)) {
+                Stream<SubjectCategory> subjectCategoriesStream = currentCase.getTriggerSubjectCategories().stream()
+                        .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
+                categories = subjectCategoriesStream.filter(
+                        subjectCategory -> subjectCategories.contains(subjectCategory.getId())).collect(
+                        Collectors.toList());
+            } else {
+                categories = new ArrayList<>();
+            }
         } else {
             categories = new ArrayList<>();
         }
@@ -254,6 +262,7 @@ public class EditCaseViewModel implements Serializable {
     @NotifyChange({ "currentCase", "selectedAction", "registries", "moreResults", "actionOptions" })
     public void actionExecuted(@BindingParam("caseUpdated") Case caseUpdated) {
         this.currentCase.setCaseObject(caseUpdated);
+        this.currentCase.setSource(Media.getByValue(currentCase.getCaseObject().getSource()));
         this.selectedAction = null;
         this.refreshRegistries();
         this.initCaseCategories();
