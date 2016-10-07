@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.services.OauthService;
+import com.qsocialnow.services.impl.FacebookOauthService;
 import com.qsocialnow.services.impl.TwitterOauthService;
 
 @Component("oauthServiceFactory")
@@ -23,10 +24,17 @@ public class OauthServiceFactory {
     @Value("${app.twitter.app.configurator.path}")
     private String twitterConfigZnodePath;
 
+    @Value("${app.facebook.app.configurator.path}")
+    private String facebookConfigZnodePath;
+
     public OauthService createService(Long sourceId, String client) {
         if (FilterConstants.MEDIA_TWITTER.equals(sourceId)) {
             String clientTwitterConfigZnodePath = MessageFormat.format(twitterConfigZnodePath, client);
             return new TwitterOauthService(zookeeperClient, clientTwitterConfigZnodePath);
+        }
+        if (FilterConstants.MEDIA_FACEBOOK.equals(sourceId)) {
+            String clientFacebookConfigZnodePath = MessageFormat.format(facebookConfigZnodePath, client);
+            return new FacebookOauthService(zookeeperClient, clientFacebookConfigZnodePath);
         }
         return null;
     }

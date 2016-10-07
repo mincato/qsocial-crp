@@ -63,27 +63,6 @@ public class TwitterOauthService implements OauthService {
     }
 
     @Override
-    public SourceCredentials getCredentials() {
-        try {
-            SourceCredentials sourceCredentials = null;
-            String verifier = Executions.getCurrent().getParameter("oauth_verifier");
-            if (verifier != null) {
-                AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
-                if (accessToken != null) {
-                    sourceCredentials = new SourceCredentials();
-                    sourceCredentials.setToken(accessToken.getToken());
-                    sourceCredentials.setSecretToken(accessToken.getTokenSecret());
-                    sourceCredentials.setIdentifier(SourceIdentifier.TWITTER);
-                }
-            }
-            return sourceCredentials;
-        } catch (Exception e) {
-            log.error("There was an error trying to get credentials for twitter", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public void resolveCredentials(UserResolver userResolver) {
         try {
             SourceCredentials sourceCredentials = null;
