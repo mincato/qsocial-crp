@@ -459,6 +459,6 @@ public class CreateTriggerViewModel implements Serializable {
     }
 
     public String getDomain() {
-		return domain;
-	}
+        return domain;
+    }
 }

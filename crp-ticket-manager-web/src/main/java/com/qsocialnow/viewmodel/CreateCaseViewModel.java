@@ -80,7 +80,8 @@ public class CreateCaseViewModel implements Serializable {
 
     @Command
     @NotifyChange("segments")
-    public void onSelectTrigger(@BindingParam("domain") DomainListView domain, @BindingParam("trigger") TriggerListView trigger) {
+    public void onSelectTrigger(@BindingParam("domain") DomainListView domain,
+            @BindingParam("trigger") TriggerListView trigger) {
         this.segments = triggerService.findSegments(domain.getId(), trigger.getId());
     }
 
@@ -114,7 +115,5 @@ public class CreateCaseViewModel implements Serializable {
     public List<SegmentListView> getSegments() {
         return segments;
     }
-
-    
 
 }

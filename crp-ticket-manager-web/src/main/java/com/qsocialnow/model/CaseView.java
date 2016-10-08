@@ -12,7 +12,7 @@ public class CaseView {
 
     @Valid
     private Case newCase;
-    
+
     @NotNull(message = "{field.empty}")
     private DomainListView selectedDomain;
 
@@ -21,7 +21,6 @@ public class CaseView {
 
     @NotNull(message = "{field.empty}")
     private SegmentListView selectedSegment;
-
 
     public CaseView() {
     }
@@ -34,29 +33,28 @@ public class CaseView {
         this.newCase = newCase;
     }
 
-	public DomainListView getSelectedDomain() {
-		return selectedDomain;
-	}
+    public DomainListView getSelectedDomain() {
+        return selectedDomain;
+    }
 
-	public void setSelectedDomain(DomainListView selectedDomain) {
-		this.selectedDomain = selectedDomain;
-	}
+    public void setSelectedDomain(DomainListView selectedDomain) {
+        this.selectedDomain = selectedDomain;
+    }
 
-	public TriggerListView getSelectedTrigger() {
-		return selectedTrigger;
-	}
+    public TriggerListView getSelectedTrigger() {
+        return selectedTrigger;
+    }
 
-	public void setSelectedTrigger(TriggerListView selectedTrigger) {
-		this.selectedTrigger = selectedTrigger;
-	}
+    public void setSelectedTrigger(TriggerListView selectedTrigger) {
+        this.selectedTrigger = selectedTrigger;
+    }
 
-	public SegmentListView getSelectedSegment() {
-		return selectedSegment;
-	}
+    public SegmentListView getSelectedSegment() {
+        return selectedSegment;
+    }
 
-	public void setSelectedSegment(SegmentListView selectedSegment) {
-		this.selectedSegment = selectedSegment;
-	}
-    
-    
+    public void setSelectedSegment(SegmentListView selectedSegment) {
+        this.selectedSegment = selectedSegment;
+    }
+
 }
