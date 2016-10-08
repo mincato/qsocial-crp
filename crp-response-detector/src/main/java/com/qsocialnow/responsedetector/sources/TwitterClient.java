@@ -6,8 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.qsocialnow.common.model.responsedetector.TwitterMessageEvent;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
-import com.qsocialnow.responsedetector.model.TwitterMessageEvent;
 import com.qsocialnow.responsedetector.service.SourceDetectorService;
 
 import twitter4j.Query;

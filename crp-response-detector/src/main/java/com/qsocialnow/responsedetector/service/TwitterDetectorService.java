@@ -17,11 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.base.Strings;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.model.responsedetector.TwitterMessageEvent;
 import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.responsedetector.config.ResponseDetectorConfig;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
 import com.qsocialnow.responsedetector.factories.TwitterConfiguratorFactory;
-import com.qsocialnow.responsedetector.model.TwitterMessageEvent;
 import com.qsocialnow.responsedetector.sources.TwitterClient;
 import com.qsocialnow.responsedetector.sources.TwitterStreamClient;
 

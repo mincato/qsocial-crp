@@ -1,4 +1,4 @@
-package com.qsocialnow.responsedetector.model;
+package com.qsocialnow.common.model.responsedetector;
 
 public class FacebookFeedEvent {
 

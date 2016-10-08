@@ -18,11 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.base.Strings;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.model.responsedetector.FacebookFeedEvent;
 import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.responsedetector.config.FacebookConfigurator;
 import com.qsocialnow.responsedetector.config.ResponseDetectorConfig;
 import com.qsocialnow.responsedetector.factories.FacebookConfiguratorFactory;
-import com.qsocialnow.responsedetector.model.FacebookFeedEvent;
 import com.qsocialnow.responsedetector.sources.FacebookClient;
 import com.qsocialnow.responsedetector.sources.FacebookFeedConsumer;
 
