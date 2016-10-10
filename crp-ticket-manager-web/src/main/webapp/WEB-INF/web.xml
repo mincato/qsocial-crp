@@ -122,15 +122,15 @@
 	-->
 
 	<filter>
-		<filter-name>tokenFilter</filter-name>
-		<filter-class>com.qsocialnow.security.TokenFilter</filter-class>
+		<filter-name>authorizationFilter</filter-name>
+		<filter-class>com.qsocialnow.security.AuthorizationFilter</filter-class>
 		<init-param>
 			<param-name>urlLogin</param-name>
 			<param-value>http://www.volkno.com.ar/</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
-		<filter-name>tokenFilter</filter-name>
+		<filter-name>authorizationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

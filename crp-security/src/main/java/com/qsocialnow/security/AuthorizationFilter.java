@@ -17,27 +17,29 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-public class TokenFilter implements Filter {
+public class AuthorizationFilter implements Filter {
 
-	private static final Logger LOGGER = Logger.getLogger(TokenFilter.class);
+	private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
 
 	private static final String URL_LOGIN_INIT_PARAMETER = "urlLogin";
-	private static final String TOKEN_PARAMETER = "token";
+	private static final String TOKEN_HEADER_PARAMETER = "Authorization";
 	private static final String TOKEN_SESSION_PARAMETER = "token";
 	private static final String USER_SESSION_PARAMETER = "user";
+	
+	private static final String TOKEN_TYPE = "Bearer";
 
 	private String urlLogin;
 	
 	@Override
 	public void destroy() {
-		LOGGER.info("=== Destroying TokenFiler ===");
+		LOGGER.info("=== Destroying AuthorizationFilter ===");
 	}
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
-		LOGGER.info("=== TokenFilter ===");
+		LOGGER.info("=== AuthorizationFilter ===");
 
 		try {
 			
@@ -48,7 +50,10 @@ public class TokenFilter implements Filter {
 			ZookeeperClient zookeeperClient = new ZookeeperClient(context);
 
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			String token = httpRequest.getParameter(TOKEN_PARAMETER);
+			String token = httpRequest.getHeader(TOKEN_HEADER_PARAMETER);
+			if (StringUtils.isNotBlank(token) && token.startsWith(TOKEN_TYPE)) {
+				token = token.substring(TOKEN_TYPE.length());
+			}
 
 			HttpSession session = httpRequest.getSession(true);
 
@@ -87,7 +92,7 @@ public class TokenFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig config) throws ServletException {
-		LOGGER.info("=== Initializing TokenFiler ===");
+		LOGGER.info("=== Initializing AuthorizationFilter ===");
 
 		urlLogin = config.getInitParameter(URL_LOGIN_INIT_PARAMETER);
 	}
