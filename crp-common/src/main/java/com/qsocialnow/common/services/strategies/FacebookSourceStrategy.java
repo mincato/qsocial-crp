@@ -8,9 +8,11 @@ import com.qsocialnow.common.exception.SourceException;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.UserResolver;
 
+import facebook4j.Comment;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
+import facebook4j.Reading;
 import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
 
@@ -32,7 +34,22 @@ public class FacebookSourceStrategy implements SourceStrategy {
             if (caseObject.getLastPostId() == null) {
                 throw new SourceException("The case does not have a post to reply");
             } else {
-                return facebook.commentPost(caseObject.getLastPostId(), text);
+                String id;
+                if (caseObject.getTriggerEvent() != null
+                        && caseObject.getTriggerEvent().getIdOriginal().equals(caseObject.getLastPostId())) {
+                    id = caseObject.getLastPostId();
+                } else {
+                    Reading reading = new Reading();
+                    reading.addParameter("fields", "parent");
+                    Comment comment = facebook.getComment(caseObject.getLastPostId(), reading);
+                    comment = comment.getParent();
+                    if (comment != null) {
+                        id = comment.getId();
+                    } else {
+                        id = caseObject.getLastPostId();
+                    }
+                }
+                return facebook.commentPost(id, text);
             }
         } catch (FacebookException e) {
             log.error("There was an error trying to send response via facebook", e);
