@@ -15,7 +15,8 @@
         <module>crp-ticket-manager-service</module>
         <module>crp-ticket-manager-web</module>
 		<module>crp-response-detector</module>
-	</modules>
+    <module>crp-security</module>
+  </modules>
 
     <properties>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -49,4 +50,3 @@
 
     <version>0.5.0-SNAPSHOT</version>
 </project>
-
