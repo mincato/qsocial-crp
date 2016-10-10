@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.gson.GsonBuilder;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
@@ -88,8 +89,10 @@ public class TokenHandler {
 
 	private JWTClaimsSet createJWTClaims(UserData userData) {
 
+		String userJson = new GsonBuilder().serializeNulls().create().toJson(userData);
+		
 		JWTClaimsSet claimsSet = new JWTClaimsSet.Builder().subject(subject).expirationTime(calculateExpirationTime())
-				.claim(USER_KEY, JSONObjectConverter.convertToJSON(userData)).issuer(issuer).audience(audience)
+				.claim(USER_KEY, userJson).issuer(issuer).audience(audience)
 				.jwtID(UUID.randomUUID().toString()).build();
 
 		return claimsSet;
@@ -159,12 +162,12 @@ public class TokenHandler {
 	}
 
 	private UserData getUser(JWTClaimsSet claims) {
-		String userJSON = (String) claims.getClaim(USER_KEY);
-		if (StringUtils.isBlank(userJSON)) {
+		String userJson = (String) claims.getClaim(USER_KEY);
+		if (StringUtils.isBlank(userJson)) {
 			throw new UnauthorizedException("USER not found in custom claim's token");
 		}
 		try {
-			return JSONObjectConverter.convertToObject(userJSON, UserData.class);
+			return new GsonBuilder().create().fromJson(userJson, UserData.class);
 		} catch (Exception e) {
 			throw new UnauthorizedException(e);
 		}
