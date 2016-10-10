@@ -42,7 +42,7 @@ public class ExecutionMessageProcessor {
                 Case caseObject = upsertCaseStrategy.upsert(request);
 
                 if (caseObject != null) {
-                    if (CollectionUtils.isNotEmpty(detectionCriteria.getActionCriterias())) {
+                    if (CollectionUtils.isNotEmpty(detectionCriteria.getActionCriterias()) && caseObject.getOpen()) {
                         for (AutomaticActionCriteria automaticActionCriteria : detectionCriteria.getActionCriterias()) {
                             try {
                                 Action action = actions.get(automaticActionCriteria.getActionType());
