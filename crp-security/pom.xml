@@ -28,6 +28,8 @@
 
 		<nimbus-jose-jwt.version>4.11</nimbus-jose-jwt.version>
 		<servlet-api.version>3.0.1</servlet-api.version>
+		<spring.version>4.3.2.RELEASE</spring.version>
+		<curator.version>2.9.1</curator.version>
 	</properties>
 
 
@@ -76,20 +78,39 @@
 			<artifactId>commons-collections4</artifactId>
 			<version>${commons-collection.version}</version>
 		</dependency>
-		
+
 		<!-- For JWT authentication -->
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>${nimbus-jose-jwt.version}</version>
 		</dependency>
-		
+
 		<!-- Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet-api.version}</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		
+		<!-- Curator -->
+		<dependency>
+    		<groupId>org.apache.curator</groupId>
+    		<artifactId>curator-recipes</artifactId>
+    		<version>${curator.version}</version>
+		</dependency>
+		<dependency>
+    		<groupId>org.apache.curator</groupId>
+    		<artifactId>curator-x-discovery</artifactId>
+    		<version>${curator.version}</version>
 		</dependency>
 
 	</dependencies>

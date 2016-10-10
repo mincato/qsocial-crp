@@ -13,13 +13,8 @@ public class TokenHandlerTest {
 
 	@Before
 	public void init() {
-		tokenHandler = new TokenHandler();
-		tokenHandler.setHeaderContentType("text/plain");
-		tokenHandler.setSimetricKey("eeeb0a3e-d96b-4229-9201-d9c0b1a394be");
-		tokenHandler.setExpirationInMinutes(10);
-		tokenHandler.setIssuer("QSocialNow");
-		tokenHandler.setAudience("http://qsocialnow.com");
-		tokenHandler.setSubject("QSocialNow User");
+		TokenHandlerFactory factory = new TokenHandlerStandaloneFactory();
+		tokenHandler = factory.create();
 	}
 
 	@Test
