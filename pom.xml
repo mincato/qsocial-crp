@@ -13,9 +13,9 @@
         <module>crp-elastic-client</module>
         <module>crp-event-resolver</module>
         <module>crp-ticket-manager-service</module>
+        <module>crp-security</module>
         <module>crp-ticket-manager-web</module>
-		<module>crp-response-detector</module>
-    <module>crp-security</module>
+        <module>crp-response-detector</module>
   </modules>
 
     <properties>
