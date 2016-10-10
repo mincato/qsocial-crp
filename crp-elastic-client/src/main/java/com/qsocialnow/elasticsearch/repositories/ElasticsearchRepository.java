@@ -375,8 +375,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             if (result.isSucceeded()) {
                 T source = (T) result.getSourceAsObject(mapping.getClassType());
                 response.setSource(mapping.getDocument(source));
-            } else {
-                throw new RepositoryException(result.getErrorMessage());
             }
         } catch (IOException e) {
             log.error("Unexpected error: ", e);

@@ -47,7 +47,7 @@ public class ResponseDetectorUpsertCaseStrategy implements UpsertCaseStrategy {
                 originCase = mergeAction.mergeCase(input, mergeCase);
             }
         }
-        return null;
+        return originCase;
     }
 
     private Case findCaseToMerge(ExecutionMessageRequest request) {

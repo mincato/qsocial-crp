@@ -192,7 +192,7 @@ public class CaseService extends DynamicIndexService {
 
         CaseMapping mapping = CaseMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
-        SearchResponse<Case> response = repository.find(originIdCase, mapping);
+        SearchResponse<Case> response = repository.findByAlias(originIdCase, mapping);
 
         Case caseDocument = response.getSource();
         log.info("Retrieving from ES Case:" + caseDocument.getId());
