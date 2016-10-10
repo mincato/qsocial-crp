@@ -42,25 +42,24 @@ public class DefaultUpsertCaseStrategy implements UpsertCaseStrategy {
         Case caseObject = null;
         Event input = request.getInput();
         DetectionCriteria detectionCriteria = request.getDetectionCriteria();
-        if (detectionCriteria.isAlwaysOpenCase()) {
-            log.info("opening case since flag always open case is true");
-            caseObject = openAction.openCase(input, request);
-        } else {
-            Case duplicatedCase = findDuplicatedCase(request);
-            if (duplicatedCase != null) {
-                log.info("the event is duplicated");
-                Optional<Message> optionalMessage = duplicatedCase.getMessages().stream()
-                        .filter(message -> message.getId().equals(input.getId())).findFirst();
-                if (optionalMessage.isPresent()) {
-                    Message message = optionalMessage.get();
-                    if (message.isFromResponseDetector()) {
-                        log.info("the event is duplicated. The old event is from response detector.");
-                        updateEventOnRegistry(duplicatedCase, message.getId(), input);
-                        if (duplicatedCase.getOpen()) {
-                            caseObject = duplicatedCase;
-                        }
-                    }
+        Case duplicatedCase = findDuplicatedCase(request);
+        if (duplicatedCase != null) {
+            log.info("the event is duplicated");
+            Optional<Message> optionalMessage = duplicatedCase.getMessages().stream()
+                    .filter(message -> message.getId().equals(input.getId())).findFirst();
+            if (optionalMessage.isPresent()) {
+                Message message = optionalMessage.get();
+                if (message.isFromResponseDetector()) {
+                    log.info("the event is duplicated. The old event is from response detector.");
+                    updateEventOnRegistry(duplicatedCase, message.getId(), input);
+                    message.setFromResponseDetector(false);
+                    caseObject = duplicatedCase;
                 }
+            }
+        } else {
+            if (detectionCriteria.isAlwaysOpenCase()) {
+                log.info("opening case since flag always open case is true");
+                caseObject = openAction.openCase(input, request);
             } else {
                 Case mergeCase = findCaseToMerge(request);
                 if (mergeCase != null) {
