@@ -40,8 +40,10 @@ public class EventHandlerProcessor implements Runnable {
             try {
                 messageProcessor.process(message);
             } catch (InvalidDomainException invalidDomainExecption) {
+            	log.error("There was an error processing event", invalidDomainExecption);
                 addFailEvent(message);
             } catch (RepositoryException sourceException) {
+            	log.error("There was an error processing event", sourceException);
                 addFailEvent(message);
             } catch (Exception e) {
                 log.error("Unexpected error: ", e);
