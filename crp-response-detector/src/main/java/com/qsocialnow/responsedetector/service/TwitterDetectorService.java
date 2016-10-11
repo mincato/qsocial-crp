@@ -272,24 +272,8 @@ public class TwitterDetectorService extends SourceDetectorService {
                     }
 
                 }
-            } else {
-
-                for (Map.Entry<String, TwitterMessageEvent> entry : conversations.entrySet()) {
-                    String inReplyMessageIdNode = entry.getKey();
-                    TwitterMessageEvent twitterMessageEvent = entry.getValue();
-                    log.info("Trying to match existing converstations idReply:" + entry.getKey() + "-from case:"
-                            + twitterMessageEvent.getCaseId());
-                    if (twitterMessageEvent.getUserId().equals(userId)) {
-                        // is response from existing user
-                        log.info("Matching existing converstations from user: " + userId + "-from conversation node:"
-                                + inReplyMessageIdNode);
-                        event.setIdPadre(twitterMessageEvent.getEventId());
-                        event.setOriginIdCase(twitterMessageEvent.getCaseId());
-                        removeSourceConversation(inReplyMessageIdNode);
-                        break;
-                    }
-                }
             }
+
             event.setUsuarioOriginal(userName);
             event.setIdUsuarioOriginal(userId);
             event.setProfileImage(userProfileImage);
