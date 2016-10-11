@@ -1,5 +1,7 @@
 package com.qsocialnow.responsedetector.sources;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +35,7 @@ public class ResponseDetectorStreamListener implements UserStreamListener {
                 + status.isRetweet() + " inReplyToStatusId: " + status.getInReplyToStatusId()
                 + " currentUserRetweetId: " + status.getCurrentUserRetweetId() + " inReplyToScrenName: "
                 + status.getInReplyToScreenName() + " inReplyToUSerId: " + status.getInReplyToUserId()
-                + " quotedStatusId: " + status.getQuotedStatusId());
+                + " quotedStatusId: " + status.getQuotedStatusId() + " rateLimit: " + status.getRateLimitStatus());
 
         String[] userMentions = null;
 
@@ -54,9 +56,10 @@ public class ResponseDetectorStreamListener implements UserStreamListener {
             isRetweet = true;
             userResolver = status.getInReplyToScreenName();
         }
-        sourceService.processEvent(isRetweet, userResolver, userMentions, String.valueOf(status.getId()), status
-                .getText(), String.valueOf(status.getInReplyToStatusId()), String.valueOf(status.getUser().getId()),
-                status.getUser().getName(), status.getUser().getOriginalProfileImageURLHttps());
+        Date created = status.getCreatedAt();
+        sourceService.processEvent(isRetweet, created.getTime(), userResolver, userMentions, String.valueOf(status
+                .getId()), status.getText(), String.valueOf(status.getInReplyToStatusId()), String.valueOf(status
+                .getUser().getId()), status.getUser().getName(), status.getUser().getOriginalProfileImageURLHttps());
     }
 
     @Override

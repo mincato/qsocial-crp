@@ -1,6 +1,7 @@
 package com.qsocialnow.responsedetector.sources;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -90,8 +91,10 @@ public class FacebookClient {
                             log.info("Comment: " + comment.getId() + " from:" + comment.getFrom().getName()
                                     + " parent: " + comment.getParent() + " message:" + comment.getMessage());
 
-                            sourceService.processEvent(true, null, null, comment.getId(), comment.getMessage(),
-                                    commentId, comment.getFrom().getId(), comment.getFrom().getName(), null);
+                            Date createdTime = comment.getCreatedTime();
+                            sourceService.processEvent(true, createdTime.getTime(), null, null, comment.getId(),
+                                    comment.getMessage(), commentId, comment.getFrom().getId(), comment.getFrom()
+                                            .getName(), null);
 
                             removeConversation(commentId);
                         }

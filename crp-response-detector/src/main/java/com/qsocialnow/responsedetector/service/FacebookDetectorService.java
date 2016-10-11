@@ -189,13 +189,14 @@ public class FacebookDetectorService extends SourceDetectorService {
     }
 
     @Override
-    public void processEvent(Boolean isResponseFromMessage, String userResolver, String[] userMentions,
+    public void processEvent(Boolean isResponseFromMessage, Long timestamp, String userResolver, String[] userMentions,
             String messageId, String messageText, String commentId, String userId, String userName,
             String userProfileImage) {
 
         try {
             Event event = new Event();
             event.setId(messageId);
+            event.setTimestamp(timestamp);
             event.setFecha(new Date());
             event.setMedioId(FilterConstants.MEDIA_FACEBOOK);
             event.setTitulo(messageText);
