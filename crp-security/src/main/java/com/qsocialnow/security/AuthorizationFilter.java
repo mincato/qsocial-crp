@@ -27,6 +27,8 @@ public class AuthorizationFilter implements Filter {
 	private static final String USER_SESSION_PARAMETER = "user";
 	
 	private static final String TOKEN_TYPE = "Bearer";
+	
+	private static final String ID_TOKEN_PARAMETER = "tokenid"; 
 
 	private String urlLogin;
 	
@@ -42,7 +44,6 @@ public class AuthorizationFilter implements Filter {
 		LOGGER.info("=== AuthorizationFilter ===");
 
 		try {
-			
 			ServletContext context = request.getServletContext();
 			TokenHandlerFactory factory = createTokenHandlerFactory(context);
 			TokenHandler tokenHandler = factory.create();
@@ -51,6 +52,8 @@ public class AuthorizationFilter implements Filter {
 
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			String token = httpRequest.getHeader(TOKEN_HEADER_PARAMETER);
+			String tokenId = httpRequest.getParameter(ID_TOKEN_PARAMETER);
+			
 			if (StringUtils.isNotBlank(token) && token.startsWith(TOKEN_TYPE)) {
 				token = token.substring(TOKEN_TYPE.length());
 			}

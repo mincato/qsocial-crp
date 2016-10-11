@@ -2,6 +2,7 @@ package co.centauri.web;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,17 +38,20 @@ public class Login extends HttpServlet {
 		user.setUsername(username);
 		user.setOdatech(ODATECH.compareToIgnoreCase(username) == 0);
 		user.setPrcAdmin(ADMIN.compareToIgnoreCase(username) == 0);
-		String url = getCrpTicketManagerWebUrl(req);
+		
 		String token = tokenHandler.createToken(user);
-		resp.setHeader("Authorization", "Bearer ".concat(token));
+		String url = getCrpTicketManagerWebUrl(req);
 		resp.sendRedirect(url);
 	}
 
+	private static final String URL_PATTERN = "{0}://{1}:{2}/{3}?tokenid={4}";
+	
 	public String getCrpTicketManagerWebUrl(HttpServletRequest request) {
 		String scheme = request.getScheme();
 		String serverName = request.getServerName();
 		String serverPort = Integer.valueOf(request.getServerPort()).toString();
 		String contextPath = "crp-ticket-manager-web";
-		return MessageFormat.format("{0}://{1}:{2}/{3}", scheme, serverName, serverPort, contextPath);
+		String uid = UUID.randomUUID().toString();
+		return MessageFormat.format(URL_PATTERN, scheme, serverName, serverPort, contextPath, uid);
 	}
 }
