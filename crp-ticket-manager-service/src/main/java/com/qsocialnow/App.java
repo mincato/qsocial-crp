@@ -2,8 +2,11 @@ package com.qsocialnow;
 
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.env.AbstractEnvironment;
 
 public class App {
+
+    private static final String DEFAULT_ENVIRONMENT = "development";
 
     private final ConfigurableApplicationContext context;
 
@@ -17,6 +20,11 @@ public class App {
     }
 
     private App() {
+        String env = System.getProperty("environment");
+        if (env == null) {
+            env = DEFAULT_ENVIRONMENT;
+        }
+        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, env);
         context = new ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
         context.registerShutdownHook();
     }

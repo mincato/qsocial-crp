@@ -1,4 +1,4 @@
-package com.qsocialnow.model;
+package com.qsocialnow.common.model.config;
 
 public class SubSeries {
 

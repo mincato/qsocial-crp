@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.GsonBuilder;
-import com.qsocialnow.model.CategoryGroup;
+import com.qsocialnow.common.model.config.CategoryGroup;
 import com.qsocialnow.model.CategoryGroupBySerieIdInput;
 import com.qsocialnow.model.CategoryGroupsBySerieIdOuptut;
 import com.qsocialnow.services.CategoryService;

@@ -28,7 +28,9 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.ListModelList;
 
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.Category;
 import com.qsocialnow.common.model.config.CategoryFilter;
+import com.qsocialnow.common.model.config.CategoryGroup;
 import com.qsocialnow.common.model.config.ConnotationFilter;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
@@ -39,11 +41,12 @@ import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.MediaFilter;
 import com.qsocialnow.common.model.config.PeriodFilter;
 import com.qsocialnow.common.model.config.SerieFilter;
+import com.qsocialnow.common.model.config.Series;
+import com.qsocialnow.common.model.config.SubSeries;
+import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.config.WordFilter;
 import com.qsocialnow.common.model.config.WordFilterType;
-import com.qsocialnow.model.Category;
 import com.qsocialnow.model.CategoryFilterView;
-import com.qsocialnow.model.CategoryGroup;
 import com.qsocialnow.model.CategoryGroupBySerieIdInput;
 import com.qsocialnow.model.Connotation;
 import com.qsocialnow.model.ConnotationView;
@@ -52,9 +55,6 @@ import com.qsocialnow.model.Language;
 import com.qsocialnow.model.LanguageView;
 import com.qsocialnow.model.MediaView;
 import com.qsocialnow.model.SegmentView;
-import com.qsocialnow.model.Series;
-import com.qsocialnow.model.SubSeries;
-import com.qsocialnow.model.Thematic;
 import com.qsocialnow.model.TriggerView;
 import com.qsocialnow.services.CategoryService;
 import com.qsocialnow.services.ThematicService;
@@ -66,7 +66,7 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private static final long serialVersionUID = -4119198423406156946L;
 
-    @WireVariable("mockThematicService")
+    @WireVariable
     private ThematicService thematicService;
 
     @WireVariable("mockCategoryService")

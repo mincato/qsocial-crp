@@ -10,16 +10,12 @@
         http://cxf.apache.org/jaxrs
         http://cxf.apache.org/schemas/jaxrs.xsd">
 
-    <beans profile="localhost">
-        <context:property-placeholder location="classpath:localhost.properties, /META-INF/MANIFEST.MF" ignore-unresolvable="true" ignore-resource-not-found="true"/>
-    </beans>
-
-    <beans profile="testing">
-        <context:property-placeholder location="classpath:testing.properties, /META-INF/MANIFEST.MF" ignore-unresolvable="true"/>
+    <beans profile="development">
+        <import resource="applicationContext-development.xml" />
     </beans>
 
     <beans profile="production">
-        <context:property-placeholder location="classpath:production.properties, /META-INF/MANIFEST.MF" ignore-unresolvable="true"/>
+        <import resource="applicationContext-production.xml" />
     </beans>
     
 </beans>
