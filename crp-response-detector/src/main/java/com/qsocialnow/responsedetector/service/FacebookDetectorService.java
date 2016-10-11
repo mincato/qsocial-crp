@@ -198,6 +198,8 @@ public class FacebookDetectorService extends SourceDetectorService {
             event.setId(messageId);
             event.setFecha(new Date());
             event.setMedioId(FilterConstants.MEDIA_FACEBOOK);
+            event.setTitulo(messageText);
+            event.setTexto(messageText);
             event.setNormalizeMessage(messageText);
 
             if (isResponseFromMessage) {
