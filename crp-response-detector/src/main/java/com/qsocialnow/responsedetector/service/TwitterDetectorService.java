@@ -235,7 +235,7 @@ public class TwitterDetectorService extends SourceDetectorService {
     }
 
     @Override
-    public void processEvent(Boolean isResponseFromMessage, String userResolver, String[] userMentions,
+    public void processEvent(Boolean isResponseFromMessage, Long timestamp, String userResolver, String[] userMentions,
             String sourceMessageId, String messageText, String inReplyToMessageId, String userId, String userName,
             String userProfileImage) {
 
@@ -244,6 +244,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             String mainUserResolver = null;
             event.setId(sourceMessageId);
             event.setFecha(new Date());
+            event.setTimestamp(timestamp);
             event.setMedioId(FilterConstants.MEDIA_TWITTER);
             event.setName(messageText);
             event.setTitulo(messageText);
