@@ -132,6 +132,23 @@ public class CaseCategorySetService {
         return caseCategorySet;
     }
 
+    public List<CaseCategory> findCategories(String caseCategorySetId) {
+        RepositoryFactory<CaseCategoryType> esCaseCategoryfactory = new RepositoryFactory<CaseCategoryType>(
+                configurator);
+
+        Repository<CaseCategoryType> repositoryCaseCategory = esCaseCategoryfactory.initManager();
+        repositoryCaseCategory.initClient();
+        CaseCategoryMapping caseCategoryMapping = CaseCategoryMapping.getInstance();
+
+        SearchResponse<CaseCategory> responseCaseCategories = repositoryCaseCategory.queryByField(caseCategoryMapping,
+                0, -1, "description", "idCaseCategorySet", caseCategorySetId);
+
+        List<CaseCategory> categories = responseCaseCategories.getSources();
+
+        repositoryCaseCategory.closeClient();
+        return categories;
+    }
+
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
     }
@@ -181,8 +198,26 @@ public class CaseCategorySetService {
             repositoryCaseCategory
                     .updateMapping(caseCategory.getId(), mappingCaseCategory, documentCaseCategoryIndexed);
         }
-        repositoryCaseCategory.initClient();
+        repositoryCaseCategory.closeClient();
         return response;
+    }
+
+    public List<CaseCategorySet> findByIds(List<String> ids) {
+        RepositoryFactory<CaseCategorySetType> esfactory = new RepositoryFactory<CaseCategorySetType>(configurator);
+        Repository<CaseCategorySetType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance();
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
+
+        SearchResponse<CaseCategorySet> response = repository.searchWithFilters(filters, mapping);
+
+        List<CaseCategorySet> caseCategorySets = response.getSources();
+
+        repository.closeClient();
+        return caseCategorySets;
     }
 
 }

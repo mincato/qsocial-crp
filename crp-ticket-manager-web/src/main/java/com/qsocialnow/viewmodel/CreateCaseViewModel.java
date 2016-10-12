@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -15,6 +16,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.model.CaseView;
@@ -38,13 +40,11 @@ public class CreateCaseViewModel implements Serializable {
 
     private CaseView currentCase;
 
-    private DomainListView selectedDomain;
-
-    private TriggerListView selectedTrigger;
-
     private List<DomainListView> domains = new ArrayList<DomainListView>();
 
     private List<TriggerListView> triggers;
+
+    private List<SegmentListView> segments;
 
     public CaseView getCurrentCase() {
         return currentCase;
@@ -70,8 +70,8 @@ public class CreateCaseViewModel implements Serializable {
 
     @Command
     @NotifyChange("triggers")
-    public void onSelectDomain() {
-        PageResponse<TriggerListView> pageResponse = triggerService.findAll(this.selectedDomain.getId(), 0, -1, null);
+    public void onSelectDomain(@BindingParam("domain") DomainListView domain) {
+        PageResponse<TriggerListView> pageResponse = triggerService.findAll(domain.getId(), 0, -1, null);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.triggers = new ArrayList<TriggerListView>();
             this.triggers.addAll(pageResponse.getItems());
@@ -79,18 +79,19 @@ public class CreateCaseViewModel implements Serializable {
     }
 
     @Command
-    public void onSelectTrigger() {
-        this.currentCase.getNewCase().setTriggerId(this.selectedTrigger.getId());
-        if (this.selectedTrigger.getSegments() != null && this.selectedTrigger.getSegments().size() > 0) {
-            this.currentCase.getNewCase().setTeamId(this.selectedTrigger.getSegments().get(0).getTeam());
-        }
-        currentCase.getNewCase().setSourceUser("usurioenojado");
+    @NotifyChange("segments")
+    public void onSelectTrigger(@BindingParam("domain") DomainListView domain,
+            @BindingParam("trigger") TriggerListView trigger) {
+        this.segments = triggerService.findSegments(domain.getId(), trigger.getId());
     }
 
     @Command
     @NotifyChange("currentCase")
     public void save() {
         Case newCase = currentCase.getNewCase();
+        newCase.setDomainId(currentCase.getSelectedDomain().getId());
+        newCase.setTriggerId(currentCase.getSelectedTrigger().getId());
+        newCase.setSegmentId(currentCase.getSelectedSegment().getId());
         currentCase.setNewCase(caseService.create(newCase));
         Clients.showNotification(Labels.getLabel("cases.create.notification.success", new String[] { currentCase
                 .getNewCase().getId() }));
@@ -111,19 +112,8 @@ public class CreateCaseViewModel implements Serializable {
         return triggers;
     }
 
-    public DomainListView getSelectedDomain() {
-        return selectedDomain;
+    public List<SegmentListView> getSegments() {
+        return segments;
     }
 
-    public void setSelectedDomain(DomainListView selectedDomain) {
-        this.selectedDomain = selectedDomain;
-    }
-
-    public TriggerListView getSelectedTrigger() {
-        return selectedTrigger;
-    }
-
-    public void setSelectedTrigger(TriggerListView selectedTrigger) {
-        this.selectedTrigger = selectedTrigger;
-    }
 }

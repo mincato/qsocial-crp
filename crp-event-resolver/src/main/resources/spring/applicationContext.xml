@@ -15,17 +15,20 @@
    	<import resource="elastic.xml" />
    	<import resource="bigqueue.xml" />
    	<import resource="cache.xml" />
+   	<import resource="twitter.xml" />
+   	<import resource="facebook.xml" />
  
  	<context:component-scan base-package="com.qsocialnow" />
  	
- 	<context:property-placeholder location="${extPropDir:classpath:}application.properties" ignore-unresolvable="true"/>
+ 	<context:property-placeholder location="${extPropDir:classpath:}application.properties, classpath:config.properties" ignore-unresolvable="true"/>
  	
  	<bean id="app" init-method="start" destroy-method="close" class="com.qsocialnow.eventresolver.App">
 	</bean>
  	
 	<util:map id="actions">
-    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).OPEN_CASE}" value-ref="openCaseAction"/>
-    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).MERGE_CASE}" value-ref="mergeCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_CASE}" value-ref="tagCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_SUBJECT}" value-ref="tagSubjectCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
 	</util:map>
 	
 	<util:map id="matchers">
@@ -34,5 +37,18 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.WordFilterType).HASHTAG}" value-ref="hashtagWordFilterMatcher"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.WordFilterType).MENTION}" value-ref="mentionWordFilterMatcher"/>
 	</util:map>
+	
+	<util:map id="sources">
+    	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}" value-ref="twitterSourceStrategy"/>
+    	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}" value-ref="facebookSourceStrategy"/>
+	</util:map>
+	
+	<bean id="twitterSourceStrategy" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
+        <property name="twitterConfig" ref="twitterConfig"></property>
+    </bean>
+    
+    <bean id="facebookSourceStrategy" class="com.qsocialnow.common.services.strategies.FacebookSourceStrategy">
+        <property name="facebookConfig" ref="facebookConfig"></property>
+    </bean>
 	
 </beans>

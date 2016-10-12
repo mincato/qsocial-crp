@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.GsonBuilder;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 
 @Component
 public class MockResponseDetectorStrategy implements ResponseDetectorStrategy {
@@ -18,17 +18,17 @@ public class MockResponseDetectorStrategy implements ResponseDetectorStrategy {
     private static final Logger log = LoggerFactory.getLogger(MockResponseDetectorStrategy.class);
 
     @Override
-    public List<InPutBeanDocument> findEvents() {
+    public List<Event> findEvents() {
         log.info("Running mock response detector strategy...");
-        InPutBeanDocument event1 = null;
-        InPutBeanDocument event2 = null;
+        Event event1 = null;
+        Event event2 = null;
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setDateFormat("MM/dd/yyyy");
         InputStream systemResourceAsStream = ClassLoader.getSystemResourceAsStream("eventos/evento1.json");
-        event1 = gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream), InPutBeanDocument.class);
+        event1 = gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream), Event.class);
 
         systemResourceAsStream = ClassLoader.getSystemResourceAsStream("eventos/evento2.json");
-        event2 = gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream), InPutBeanDocument.class);
+        event2 = gsonBuilder.create().fromJson(new InputStreamReader(systemResourceAsStream), Event.class);
         return Arrays.asList(event1, event2);
     }
 

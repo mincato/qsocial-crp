@@ -7,7 +7,7 @@ import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 @Service
@@ -16,15 +16,13 @@ public class DetectionMessageProcessor {
     @Autowired
     private DetectionCriteriaResolver detectionCriteriaResolver;
 
-    public ExecutionMessageRequest detect(InPutBeanDocument message, Domain domain) {
+    public ExecutionMessageRequest detect(Event message, Domain domain) {
         ExecutionMessageRequest executionMessageRequest = null;
         DetectionCriteria detectionCriteria = null;
 
         // validate response detected
         if (message != null && message.isResponseDetected()) {
             detectionCriteria = new DetectionCriteria();
-            detectionCriteria.setExecuteMergeAction(true);
-            detectionCriteria.setFindCaseByDomain(true);
             return new ExecutionMessageRequest(message, domain, detectionCriteria, null, null);
         }
 

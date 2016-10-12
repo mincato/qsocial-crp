@@ -79,4 +79,31 @@ public class CaseCategorySetRepository {
         }
         return null;
     }
+
+    public List<CaseCategorySet> findAll() {
+        List<CaseCategorySet> caseCategorySets = new ArrayList<>();
+
+        try {
+            caseCategorySets = caseCategorySetElasticService.findAll(null, null, null);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return caseCategorySets;
+    }
+
+    public List<CaseCategory> findCategories(String caseCategorySetId) {
+        List<CaseCategory> caseCategories = new ArrayList<>();
+
+        try {
+            caseCategories = caseCategorySetElasticService.findCategories(caseCategorySetId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return caseCategories;
+    }
+
+    public List<CaseCategorySet> findCategoriesSets(List<String> caseCategoriesSetIds) {
+        List<CaseCategorySet> userResolversRepo = caseCategorySetElasticService.findByIds(caseCategoriesSetIds);
+        return userResolversRepo;
+    }
 }

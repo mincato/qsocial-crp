@@ -1,9 +1,8 @@
 package com.qsocialnow.elasticsearch.mappings.types.cases;
 
-import java.util.Date;
-
-import com.qsocialnow.common.model.cases.Event;
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.event.Event;
+
 import io.searchbox.annotations.JestId;
 
 public class ActionRegistryType implements IdentityType {
@@ -23,7 +22,7 @@ public class ActionRegistryType implements IdentityType {
 
     private String action;
 
-    private Date date;
+    private Long date;
 
     private ActionType type;
 
@@ -83,11 +82,11 @@ public class ActionRegistryType implements IdentityType {
         this.action = action;
     }
 
-    public Date getDate() {
+    public Long getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Long date) {
         this.date = date;
     }
 

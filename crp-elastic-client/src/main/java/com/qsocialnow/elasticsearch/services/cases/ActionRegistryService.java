@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -85,6 +87,28 @@ public class ActionRegistryService extends DynamicIndexService {
 
         SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", searchValues,
                 "date", fromDate, toDate);
+        List<ActionRegistry> registries = response.getSources();
+
+        repository.closeClient();
+        return registries;
+    }
+
+    public List<ActionRegistry> findRegistryByEventId(String caseId, String eventId) {
+        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
+                elasticSearchCaseConfigurator);
+        Repository<ActionRegistryType> repository = esfactory.initManager();
+        repository.initClient();
+
+        ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
+        mapping.setIndex(this.getQueryIndex());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("idCase", caseId));
+        if (eventId != null) {
+            filters = filters.must(QueryBuilders.matchQuery("event.id", eventId));
+        }
+
+        SearchResponse<ActionRegistry> response = repository.searchWithFilters(filters, mapping);
         List<ActionRegistry> registries = response.getSources();
 
         repository.closeClient();

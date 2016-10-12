@@ -74,7 +74,7 @@ public abstract class QueueConsumer<T> extends Thread {
 
     public synchronized void nofityQueueReady() {
         synchronized (lock) {
-            log.info("Consumer type " + this.type + " notified! Starting to read " + bigQueue.size()
+            log.debug("Consumer type " + this.type + " notified! Starting to read " + bigQueue.size()
                     + " elements from queue.");
             lock.notify();
         }
@@ -95,11 +95,11 @@ public abstract class QueueConsumer<T> extends Thread {
                     while (index < getTotalItemCounts()) {
                         if (!bigQueue.isEmpty()) {
                             item = bigQueue.dequeue();
-                            log.info("Consumer type " + this.type + " reading documents from queue.");
+                            log.debug("Consumer type " + this.type + " reading documents from queue.");
                             process(readObjectFromQueue(item));
                             index = consumingItemCount.getAndIncrement();
                         } else {
-                            log.info("Consumer type " + this.type + " queue empty.");
+                            log.debug("Consumer type " + this.type + " queue empty.");
                             break;
                         }
                     }
@@ -108,7 +108,7 @@ public abstract class QueueConsumer<T> extends Thread {
                 } catch (Exception e) {
                     log.error("Error reading information from queue: " + this.type, e);
                 } finally {
-                    log.info("Consumer waiting items...");
+                    log.debug("Consumer waiting items...");
 
                 }
             }
@@ -122,7 +122,7 @@ public abstract class QueueConsumer<T> extends Thread {
 
     private void startMonitor() {
         log.info("Starting monitor to check elements from queue - type:" + this.type);
-        executor.scheduleWithFixedDelay(monitor, getInitialDelay(), getDelay(), TimeUnit.MINUTES);
+        executor.scheduleWithFixedDelay(monitor, getInitialDelay(), getDelay(), TimeUnit.SECONDS);
     }
 
     private void stopMonitor() {

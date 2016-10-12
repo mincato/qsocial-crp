@@ -1,5 +1,6 @@
 package com.qsocialnow.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,9 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
+import com.qsocialnow.common.model.config.User;
+import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.persistence.TeamRepository;
+import com.qsocialnow.persistence.UserResolverRepository;
 
 @Service
 public class TeamService {
@@ -20,6 +24,9 @@ public class TeamService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private UserResolverRepository userResolverRepository;
 
     public Team createTeam(Team team) {
         Team teamSaved = null;
@@ -62,6 +69,31 @@ public class TeamService {
             throw new RuntimeException(e.getMessage());
         }
         return teamSaved;
+    }
+
+    public List<UserResolver> findUserResolvers(String teamId, Boolean status, String sourceInput) {
+        List<UserResolver> userResolvers = new ArrayList<>();
+        try {
+            Team team = teamRepository.findOne(teamId);
+            Long source = sourceInput != null ? Long.parseLong(sourceInput) : null;
+            userResolvers = userResolverRepository.findUserResolvers(team.getUserResolvers(), status, source);
+        } catch (Exception e) {
+            log.error("There was an error getting user resolvers");
+            throw new RuntimeException(e.getMessage());
+        }
+        return userResolvers;
+    }
+
+    public List<User> findUsers(String teamId) {
+        List<User> users = new ArrayList<>();
+        try {
+            Team team = teamRepository.findOne(teamId);
+            users = team.getUsers();
+        } catch (Exception e) {
+            log.error("There was an error getting user resolvers");
+            throw new RuntimeException(e.getMessage());
+        }
+        return users;
     }
 
 }

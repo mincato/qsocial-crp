@@ -18,6 +18,8 @@ public class TriggerService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private SegmentService segmentService;
+
     public String indexTrigger(String domainId, Trigger trigger) {
         RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
 
@@ -38,6 +40,9 @@ public class TriggerService {
         documentIndexed.setDomainId(domainId);
         String response = repository.indexMapping(mapping, documentIndexed);
         repository.closeClient();
+
+        segmentService.indexSegments(response, trigger.getSegments());
+
         return response;
     }
 
@@ -84,6 +89,9 @@ public class TriggerService {
         List<Trigger> triggers = response.getSources();
 
         repository.closeClient();
+        for (Trigger trigger : triggers) {
+            trigger.setSegments(segmentService.getSegments(trigger.getId()));
+        }
         return triggers;
 
     }
@@ -103,6 +111,14 @@ public class TriggerService {
         return triggers;
     }
 
+    public Trigger findTriggerWithSegments(String triggerId) {
+        Trigger trigger = findOne(triggerId);
+        if (trigger != null) {
+            trigger.setSegments(segmentService.getSegments(triggerId));
+        }
+        return trigger;
+    }
+
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
     }
@@ -120,7 +136,14 @@ public class TriggerService {
         documentIndexed.setDomainId(domainId);
         String response = repository.updateMapping(trigger.getId(), mapping, documentIndexed);
         repository.closeClient();
+
+        segmentService.updateSegments(trigger.getId(), trigger.getSegments());
+
         return response;
+    }
+
+    public void setSegmentService(SegmentService segmentService) {
+        this.segmentService = segmentService;
     }
 
 }

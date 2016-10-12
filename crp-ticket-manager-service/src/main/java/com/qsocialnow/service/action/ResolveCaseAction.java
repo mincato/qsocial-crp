@@ -13,7 +13,7 @@ public class ResolveCaseAction implements Action {
 
     @Override
     public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
-        caseObject.setCloseDate(new Date());
+        caseObject.setCloseDate(new Date().getTime());
         caseObject.setOpen(false);
         caseObject.setResolution((String) parameters.get(ActionParameter.RESOLUTION));
         return true;

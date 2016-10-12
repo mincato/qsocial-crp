@@ -21,7 +21,8 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUserResolver;
-import com.qsocialnow.common.model.config.Team;
+import com.qsocialnow.common.model.config.Media;
+import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.model.SendResponseActionView;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.TeamService;
@@ -44,6 +45,10 @@ public class SendResponseActionViewModel implements Serializable {
     private SendResponseActionView sendResponseAction;
 
     private boolean chooseUserResolver;
+
+    private ActionType action;
+
+    private Integer textMaxlength = 0;
 
     @Init
     public void init(@QueryParam("case") String caseId) {
@@ -71,30 +76,49 @@ public class SendResponseActionViewModel implements Serializable {
         return chooseUserResolver;
     }
 
+    private static final Integer ADDITIONAL_LENGTH_TWEET = 2;
+
     @GlobalCommand
-    @NotifyChange({ "sendResponseAction", "chooseUserResolver", "userResolverOptions" })
-    public void show(@BindingParam("currentCase") Case currentCase, @BindingParam("action") ActionType action) {
-        if (ActionType.REPLY.equals(action)) {
+    @NotifyChange({ "sendResponseAction", "chooseUserResolver", "userResolverOptions", "textMaxlength" })
+    public void show(@BindingParam("currentCase") EditCaseView currentCase, @BindingParam("action") ActionType action) {
+        if (ActionType.REPLY.equals(action) || ActionType.SEND_MESSAGE.equals(action)) {
+            this.action = action;
+            if (Media.TWITTER.equals(currentCase.getSource())) {
+                this.textMaxlength = Media.TWITTER.getMaxlength() - ADDITIONAL_LENGTH_TWEET
+                        - currentCase.getCaseObject().getSubject().getIdentifier().length();
+            }
             this.sendResponseAction = new SendResponseActionView();
-            chooseUserResolver = currentCase.getUserResolver() == null;
-            if (chooseUserResolver && userResolverOptions == null) {
+            chooseUserResolver = ActionType.SEND_MESSAGE.equals(action)
+                    || currentCase.getCaseObject().getUserResolver() == null;
+            if (currentCase.getUserResolverOptions() == null && chooseUserResolver) {
                 initUserResolvers(currentCase);
+            }
+            this.userResolverOptions = currentCase.getUserResolverOptions();
+            if (chooseUserResolver) {
                 this.sendResponseAction.setSelectedUserResolver(userResolverOptions.get(0));
             } else {
-                this.sendResponseAction.setSelectedUserResolver(currentCase.getUserResolver());
+                this.sendResponseAction.setSelectedUserResolver(currentCase.getCaseObject().getUserResolver());
             }
+        } else {
+            action = null;
         }
     }
 
-    private void initUserResolvers(Case currentCase) {
-        Team team = teamService.findOne(currentCase.getTeamId());
-        this.userResolverOptions = team.getUserResolvers();
+    private void initUserResolvers(EditCaseView currentCase) {
+        Map<String, Object> filters = new HashMap<>();
+        filters.put("status", true);
+        if (currentCase.getCaseObject().getSource() != null) {
+            filters.put("source", currentCase.getCaseObject().getSource());
+        }
+        List<BaseUserResolver> userResolvers = teamService.findUserResolvers(currentCase.getSegment().getTeam(),
+                filters);
+        currentCase.setUserResolverOptions(userResolvers);
     }
 
     @Command
     public void execute() {
         ActionRequest actionRequest = new ActionRequest();
-        actionRequest.setActionType(ActionType.REPLY);
+        actionRequest.setActionType(action);
         Map<ActionParameter, Object> parameters = new HashMap<>();
         parameters.put(ActionParameter.TEXT, sendResponseAction.getText());
         if (chooseUserResolver) {
@@ -106,6 +130,14 @@ public class SendResponseActionViewModel implements Serializable {
         HashMap<String, Object> args = new HashMap<>();
         args.put("caseUpdated", caseUpdated);
         BindUtils.postGlobalCommand(null, null, "actionExecuted", args);
+    }
+
+    public Integer getTextMaxlength() {
+        return textMaxlength;
+    }
+
+    public void setTextMaxlength(Integer textMaxlength) {
+        this.textMaxlength = textMaxlength;
     }
 
 }

@@ -1,13 +1,13 @@
 package com.qsocialnow.eventresolver.action;
 
-import java.util.List;
+import java.util.Map;
 
+import com.qsocialnow.common.model.cases.ActionParameter;
+import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
 
-public interface Action<Input, Output> {
+public interface Action {
 
-    Output execute(Input inputElement, List<String> parameters, ExecutionMessageRequest request);
-
-    Output execute(Input inputElement, Output outputElement, List<String> parameters);
+    Case execute(Case caseObject, Map<ActionParameter, Object> parameters, ExecutionMessageRequest request);
 
 }

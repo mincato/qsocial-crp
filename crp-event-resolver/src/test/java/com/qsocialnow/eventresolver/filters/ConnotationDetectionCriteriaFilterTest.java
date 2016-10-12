@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.qsocialnow.common.model.config.ConnotationFilter;
 import com.qsocialnow.common.model.config.Filter;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.normalizer.NormalizedInputBeanDocument;
 
 public class ConnotationDetectionCriteriaFilterTest {
@@ -52,7 +52,7 @@ public class ConnotationDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchInputNull() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
 
         ConnotationFilter connotationFilter = new ConnotationFilter();
         connotationFilter.setOptions(new Short[] { 1 });
@@ -63,7 +63,7 @@ public class ConnotationDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrue() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConnotacion((short) 1);
 
         ConnotationFilter connotationFilter = new ConnotationFilter();
@@ -75,7 +75,7 @@ public class ConnotationDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchTrueMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConnotacion((short) 1);
 
         ConnotationFilter connotationFilter = new ConnotationFilter();
@@ -87,7 +87,7 @@ public class ConnotationDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalse() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConnotacion((short) 1);
 
         ConnotationFilter connotationFilter = new ConnotationFilter();
@@ -99,7 +99,7 @@ public class ConnotationDetectionCriteriaFilterTest {
 
     @Test
     public void testMatchFalseMultipleValues() {
-        InPutBeanDocument input = new InPutBeanDocument();
+        Event input = new Event();
         input.setConnotacion((short) 1);
 
         ConnotationFilter connotationFilter = new ConnotationFilter();

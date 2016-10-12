@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.kafka.producer.Producer;
 
 @Component
@@ -20,7 +20,7 @@ public class EventProcessor {
     @Autowired
     private Producer kafkaProducer;
 
-    public void process(List<InPutBeanDocument> events) {
+    public void process(List<Event> events) {
         if (CollectionUtils.isNotEmpty(events)) {
             Gson gson = new GsonBuilder().setDateFormat(EVENT_DATE_FORMAT).create();
             List<String> messages = events.stream().map(event -> gson.toJson(event)).collect(Collectors.toList());
@@ -29,7 +29,7 @@ public class EventProcessor {
 
     }
 
-    public void process(InPutBeanDocument event) {
+    public void process(Event event) {
         Gson gson = new GsonBuilder().setDateFormat(EVENT_DATE_FORMAT).create();
         String message = gson.toJson(event);
         kafkaProducer.send(message);

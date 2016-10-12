@@ -19,12 +19,25 @@
 	   <constructor-arg ref="queueConfigurator" />
        <constructor-arg ref="configurationProvider" />
     </bean>
+    
+    <bean id="subjectService" class="com.qsocialnow.elasticsearch.services.cases.SubjectService">
+        <constructor-arg ref="configurationProvider" />
+    </bean>
    
    <bean id="registryService" class="com.qsocialnow.elasticsearch.services.cases.ActionRegistryService">
         <constructor-arg ref="configurationProvider" />
     </bean>
+    
+    <bean id="userResolverService" class="com.qsocialnow.elasticsearch.services.config.UserResolverService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
+	</bean>
    
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
+		<property name="segmentService" ref="segmentElasticService"></property>
+	</bean>
+	
+	<bean id="segmentElasticService" class="com.qsocialnow.elasticsearch.services.config.SegmentService">
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	

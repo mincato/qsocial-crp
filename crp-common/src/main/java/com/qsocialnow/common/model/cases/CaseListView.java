@@ -1,7 +1,6 @@
 package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class CaseListView implements Serializable {
 
@@ -13,7 +12,9 @@ public class CaseListView implements Serializable {
 
     private String description;
 
-    private Date openDate;
+    private String subject;
+
+    private Long openDate;
 
     private boolean pendingResponse;
 
@@ -27,11 +28,11 @@ public class CaseListView implements Serializable {
         this.id = id;
     }
 
-    public Date getOpenDate() {
+    public Long getOpenDate() {
         return openDate;
     }
 
-    public void setOpenDate(Date openDate) {
+    public void setOpenDate(Long openDate) {
         this.openDate = openDate;
     }
 
@@ -49,6 +50,14 @@ public class CaseListView implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     public boolean isPendingResponse() {

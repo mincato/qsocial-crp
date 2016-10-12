@@ -12,7 +12,7 @@
 		<div class="row">
 			<n:div class="col-lg-12">
 				<div zclass="pane equal">
-					<x:form form="@id('newCase') @load(vm.currentCase) @save(vm.currentCase, before='save')  @validator('com.qsocialnow.validators.CreateCaseFormValidator')">
+					<x:form form="@id('newCase') @load(vm.currentCase) @save(vm.currentCase, before='save')">
 						<x:div sclass="@load(empty vmsgs[title] ? 'form-group' : 'form-group has-error')">
 						    <n:label class="control-label">${labels.cases.details.title}:</n:label>
 				    		<textbox type="text" class="form-control" id="title" 
@@ -31,31 +31,52 @@
                             </x:span>       
                         </x:div>
                         <x:div class="form-group">
-	                        <n:label class="control-label col-sm-2">
+	                        <n:label class="control-label col-sm-12">
 	                            ${labels.cases.details.pendingResponse}
-	                        </n:label>
-                            <checkbox checked="@bind(newCase.newCase.pendingResponse)" />
-	                    </x:div>
-                     
-                        <div class="form-group" visible="@load(vm.domains ne null)">
+	                    			<checkbox checked="@bind(newCase.newCase.pendingResponse)" />
+                            </n:label>
+						</x:div>
+						<div sclass="@load(empty vmsgs[domain] ? 'form-group' : 'form-group has-error')">
                             <n:label class="control-label col-sm-3">${labels.cases.details.domains}</n:label>
-                            <selectbox sclass="form-control" model="@load(vm.domains)"
-				                selectedItem="@bind(vm.selectedDomain)"
-				                onSelect="@command('onSelectDomain')">
+                            <selectbox id="domain" sclass="form-control" model="@load(vm.domains) "
+				                selectedItem="@bind(newCase.selectedDomain) @validator('beanValidator')"
+				                onSelect="@command('onSelectDomain', domain = newCase.selectedDomain)">
 				                <template name="model">
 				                    <label  value="${each.name}"/>
 				                </template>
 				            </selectbox>
+				            <x:span sclass="@load(empty vmsgs[domain] ? 'hidden' : 'help-block')">
+			    				<label value="@load(vmsgs[domain])" />
+			    			</x:span>
                         </div>
-                        <div class="form-group" visible="@load(vm.triggers ne null)">
+                        <div sclass="@load(empty vmsgs[trigger] ? 'form-group' : 'form-group has-error')">
                             <n:label class="control-label col-sm-3">${labels.cases.details.triggers}</n:label>
-                            <selectbox sclass="form-control" model="@load(vm.triggers)"
-                                selectedItem="@bind(vm.selectedTrigger)"
-                                onSelect="@command('onSelectTrigger')">
+                            <selectbox id="trigger" sclass="form-control" 
+								disabled="@load(newCase.selectedDomain eq null or vm.triggers eq null )"
+                             	model="@load(vm.triggers)"
+                                selectedItem="@bind(newCase.selectedTrigger)  @validator('beanValidator')"
+                                onSelect="@command('onSelectTrigger', domain = newCase.selectedDomain,  trigger = newCase.selectedTrigger)">
                                 <template name="model">
                                     <label  value="${each.name}"/>
                                 </template>
                             </selectbox>
+                            <x:span sclass="@load(empty vmsgs[trigger] ? 'hidden' : 'help-block')">
+			    				<label value="@load(vmsgs[trigger])" />
+			    			</x:span>
+                        </div>
+                        <div sclass="@load(empty vmsgs[segment] ? 'form-group' : 'form-group has-error')">
+                            <n:label class="control-label col-sm-3">${labels.cases.details.segments}</n:label>
+                            <selectbox id="segment" sclass="form-control" 
+                            	model="@load(vm.segments)"
+                            	disabled="@load(newCase.selectedTrigger eq null or vm.segments eq null)"	
+                                selectedItem="@bind(newCase.selectedSegment)  @validator('beanValidator')">
+                                <template name="model">
+                                    <label  value="${each.description}"/>
+                                </template>
+                            </selectbox>
+                            <x:span sclass="@load(empty vmsgs[segment] ? 'hidden' : 'help-block')">
+			    				<label value="@load(vmsgs[segment])" />
+			    			</x:span>
                         </div>
                         <div class="form-group text-center">
                             <button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />

@@ -3,6 +3,7 @@ package com.qsocialnow.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,15 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.config.AutomaticActionCriteria;
-import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.CaseCategorySet;
+import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.Status;
+import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.persistence.CaseCategorySetRepository;
+import com.qsocialnow.persistence.SubjectCategorySetRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 
 @Service
@@ -33,7 +37,10 @@ public class TriggerService {
     private TriggerRepository triggerRepository;
 
     @Autowired
-    private DomainService domainService;
+    private CaseCategorySetRepository caseCategorySetRepository;
+
+    @Autowired
+    private SubjectCategorySetRepository subjectCategorySetRepository;
 
     @Autowired
     private CuratorFramework zookeeperClient;
@@ -49,8 +56,6 @@ public class TriggerService {
                     filterNormalizer.normalizeFilter(detectionCriteria.getFilter());
                 });
             });
-            mockActions(trigger);
-            mockResoultions(trigger, domainId);
             triggerSaved = triggerRepository.save(domainId, trigger);
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
@@ -72,17 +77,35 @@ public class TriggerService {
     }
 
     public Trigger findOne(String domainId, String triggerId) {
-        Trigger trigger = triggerRepository.findOne(triggerId);
+        Trigger trigger = triggerRepository.findWithSegments(triggerId);
         return trigger;
+    }
+
+    public Segment findSegment(String domainId, String triggerId, String segmentId) {
+        Segment segment = triggerRepository.findSegment(segmentId);
+        return segment;
+    }
+
+    public List<SegmentListView> findSegments(String domainId, String triggerId) {
+        try {
+            return triggerRepository.findSegments(triggerId);
+        } catch (Exception e) {
+            log.error("There was an error finding segments");
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     public Trigger update(String domainId, String triggerId, Trigger trigger) {
         Trigger triggerSaved = null;
         try {
+            trigger.getSegments().stream().forEach(segment -> {
+                segment.getDetectionCriterias().forEach(detectionCriteria -> {
+                    filterNormalizer.normalizeFilter(detectionCriteria.getFilter());
+                });
+            });
             trigger.setId(triggerId);
-            mockActions(trigger);
-            mockResoultions(trigger, domainId);
             triggerSaved = triggerRepository.update(domainId, trigger);
+            zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
             log.error("There was an error updating trigger: " + trigger.getDescription(), e);
             throw new RuntimeException(e.getMessage());
@@ -90,21 +113,41 @@ public class TriggerService {
         return triggerSaved;
     }
 
-    private void mockActions(Trigger trigger) {
-        trigger.getSegments().stream().forEach(segment -> {
-            segment.getDetectionCriterias().stream().forEach(detectionCriteria -> {
-                List<AutomaticActionCriteria> actions = new ArrayList<>();
-                AutomaticActionCriteria automaticActionCriteria = new AutomaticActionCriteria();
-                automaticActionCriteria.setActionType(ActionType.OPEN_CASE);
-                actions.add(automaticActionCriteria);
-                detectionCriteria.setAccionCriterias(actions);
-            });
-        });
+    public List<CaseCategorySet> findCaseCategories(String domainId, String triggerId) {
+        List<CaseCategorySet> caseCategoriesSet = new ArrayList<>();
+        try {
+            Trigger trigger = triggerRepository.findOne(triggerId);
+            if (CollectionUtils.isNotEmpty(trigger.getCaseCategoriesSetIds())) {
+                caseCategoriesSet = caseCategorySetRepository.findCategoriesSets(trigger.getCaseCategoriesSetIds());
+                caseCategoriesSet.stream().forEach(caseCategorySet -> {
+                    caseCategorySet.setCategories(caseCategorySetRepository.findCategories(caseCategorySet.getId()));
+                });
+            }
+        } catch (Exception e) {
+            log.error("There was an error getting subject categories");
+            throw new RuntimeException(e.getMessage());
+        }
+        return caseCategoriesSet;
     }
 
-    private void mockResoultions(Trigger trigger, String domainId) {
-        Domain domain = domainService.findOne(domainId);
-        trigger.setResolutions(domain.getResolutions());
+    public List<SubjectCategorySet> findSubjectCategories(String domainId, String triggerId) {
+        List<SubjectCategorySet> subjectCategoriesSet = new ArrayList<>();
+        try {
+            Trigger trigger = triggerRepository.findOne(triggerId);
+            if (CollectionUtils.isNotEmpty(trigger.getSubjectCategoriesSetIds())) {
+                subjectCategoriesSet = subjectCategorySetRepository.findCategoriesSets(trigger
+                        .getSubjectCategoriesSetIds());
+                subjectCategoriesSet.stream().forEach(
+                        subjectCategorySet -> {
+                            subjectCategorySet.setCategories(subjectCategorySetRepository
+                                    .findCategories(subjectCategorySet.getId()));
+                        });
+            }
+        } catch (Exception e) {
+            log.error("There was an error getting subject categories");
+            throw new RuntimeException(e.getMessage());
+        }
+        return subjectCategoriesSet;
     }
 
 }

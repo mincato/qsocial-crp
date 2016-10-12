@@ -2,12 +2,12 @@ package com.qsocialnow.eventresolver.normalizer;
 
 import java.util.Set;
 
-import com.qsocialnow.common.model.event.InPutBeanDocument;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.util.StringUtils;
 
 public class NormalizedInputBeanDocument {
 
-    private final InPutBeanDocument inputBeanDocument;
+    private final Event inputBeanDocument;
 
     private Set<String> normalizedHashTags;
 
@@ -15,7 +15,7 @@ public class NormalizedInputBeanDocument {
 
     private Set<String> normalizedTexto;
 
-    public NormalizedInputBeanDocument(InPutBeanDocument inputBeanDocument) {
+    public NormalizedInputBeanDocument(Event inputBeanDocument) {
         this.inputBeanDocument = inputBeanDocument;
     }
 

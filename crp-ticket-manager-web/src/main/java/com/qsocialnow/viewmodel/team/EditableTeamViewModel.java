@@ -9,12 +9,13 @@ import org.zkoss.bind.annotation.NotifyChange;
 
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.config.UserResolverListView;
+import com.qsocialnow.model.ListView;
 
 public class EditableTeamViewModel {
 
-    private TeamListView<UserListView> userListView;
+    private ListView<UserListView> userListView;
 
-    private TeamListView<UserResolverListView> userResolverListView;
+    private ListView<UserResolverListView> userResolverListView;
 
     @Command
     @NotifyChange({ "userListView" })
@@ -43,7 +44,7 @@ public class EditableTeamViewModel {
 
     }
 
-    private void addUserFilteredList(TeamListView<UserListView> teamUserListView, UserListView user) {
+    private void addUserFilteredList(ListView<UserListView> teamUserListView, UserListView user) {
         if (user == null) {
             return;
         }
@@ -55,14 +56,14 @@ public class EditableTeamViewModel {
         Collections.sort(userListView.getFilteredList(), new UserListViewComparator());
     }
 
-    private void deleteUserFilteredList(TeamListView<UserListView> teamUserListView, UserListView user) {
+    private void deleteUserFilteredList(ListView<UserListView> teamUserListView, UserListView user) {
         if (user == null) {
             return;
         }
         teamUserListView.getFilteredList().remove(user);
     }
 
-    private void deleteUserResolverFilteredList(TeamListView<UserResolverListView> teamUserResolverListView,
+    private void deleteUserResolverFilteredList(ListView<UserResolverListView> teamUserResolverListView,
             UserResolverListView user) {
         if (user == null) {
             return;
@@ -108,8 +109,7 @@ public class EditableTeamViewModel {
         BindUtils.postNotifyChange(null, null, team, "usersResolver");
     }
 
-    private void addUserFilteredList(TeamListView<UserResolverListView> teamUserResolverListView,
-            UserResolverListView user) {
+    private void addUserFilteredList(ListView<UserResolverListView> teamUserResolverListView, UserResolverListView user) {
         if (user == null) {
             return;
         }
@@ -132,19 +132,19 @@ public class EditableTeamViewModel {
         BindUtils.postNotifyChange(null, null, team, "usersResolver");
     }
 
-    public TeamListView<UserListView> getUserListView() {
+    public ListView<UserListView> getUserListView() {
         return userListView;
     }
 
-    public void setUserListView(TeamListView<UserListView> userListView) {
+    public void setUserListView(ListView<UserListView> userListView) {
         this.userListView = userListView;
     }
 
-    public TeamListView<UserResolverListView> getUserResolverListView() {
+    public ListView<UserResolverListView> getUserResolverListView() {
         return userResolverListView;
     }
 
-    public void setUserResolverListView(TeamListView<UserResolverListView> userResolverListView) {
+    public void setUserResolverListView(ListView<UserResolverListView> userResolverListView) {
         this.userResolverListView = userResolverListView;
     }
 

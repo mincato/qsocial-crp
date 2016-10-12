@@ -134,7 +134,7 @@ public class CaseService {
     private ActionRegistry createActionRegistry(ActionRequest actionRequest) {
         ActionRegistry actionRegistry = new ActionRegistry();
         actionRegistry.setType(actionRequest.getActionType());
-        actionRegistry.setDate(new Date());
+        actionRegistry.setDate(new Date().getTime());
         actionRegistry.setAction(actionRequest.getActionType().name());
         if (actionRequest.getParameters() != null) {
             Object comment = actionRequest.getParameters().get(ActionParameter.COMMENT);

@@ -103,4 +103,28 @@ public class UserResolverService {
         return response;
     }
 
+    public List<UserResolver> findByIds(List<String> ids, Boolean status, Long source) {
+        RepositoryFactory<UserResolverType> esfactory = new RepositoryFactory<UserResolverType>(configurator);
+        Repository<UserResolverType> repository = esfactory.initManager();
+        repository.initClient();
+
+        UserResolverMapping mapping = UserResolverMapping.getInstance();
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
+        if (status != null) {
+            filters = filters.must(QueryBuilders.matchQuery("active", status));
+        }
+        if (source != null) {
+            filters = filters.must(QueryBuilders.matchQuery("source", source));
+        }
+
+        SearchResponse<UserResolver> response = repository.searchWithFilters(filters, mapping);
+
+        List<UserResolver> userResolvers = response.getSources();
+
+        repository.closeClient();
+        return userResolvers;
+    }
+
 }

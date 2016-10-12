@@ -81,4 +81,31 @@ public class SubjectCategorySetRepository {
         }
         return null;
     }
+
+    public List<SubjectCategorySet> findAll() {
+        List<SubjectCategorySet> subjectCategorySets = new ArrayList<>();
+
+        try {
+            subjectCategorySets = subjectCategorySetElasticService.findAll(null, null, null);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategorySets;
+    }
+
+    public List<SubjectCategory> findCategories(String subjectCategorySetId) {
+        List<SubjectCategory> subjectCategories = new ArrayList<>();
+
+        try {
+            subjectCategories = subjectCategorySetElasticService.findCategories(subjectCategorySetId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategories;
+    }
+
+    public List<SubjectCategorySet> findCategoriesSets(List<String> subjectCategoriesSetIds) {
+        return subjectCategorySetElasticService.findByIds(subjectCategoriesSetIds);
+    }
+
 }

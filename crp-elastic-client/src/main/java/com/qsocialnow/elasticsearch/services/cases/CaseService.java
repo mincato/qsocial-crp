@@ -1,9 +1,12 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,32 +96,10 @@ public class CaseService extends DynamicIndexService {
             repository.createIndex(mapping.getIndex());
         }
         // index document
+        document.setLastModifiedTimestamp(new Date().getTime());
         CaseType documentIndexed = mapping.getDocumentType(document);
         String response = repository.indexMapping(mapping, documentIndexed);
 
-        repository.closeClient();
-        return response;
-    }
-
-    public String update(Case document) {
-        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
-        Repository<CaseType> repository = esfactory.initManager();
-        repository.initClient();
-
-        CaseMapping mapping = CaseMapping.getInstance();
-
-        String indexName = this.getIndex(repository);
-        mapping.setIndex(indexName);
-
-        // validete index name
-        boolean isCreated = repository.validateIndex(indexName);
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
-        // index document
-        CaseType documentIndexed = mapping.getDocumentType(document);
-        String response = repository.updateMapping(document.getId(), mapping, documentIndexed);
         repository.closeClient();
         return response;
     }
@@ -148,6 +129,7 @@ public class CaseService extends DynamicIndexService {
             // index document
             List<IdentityType> documentsTypes = new ArrayList<>();
             for (Case caseDocument : documents) {
+                caseDocument.setLastModifiedTimestamp(new Date().getTime());
                 documentsTypes.add(mapping.getDocumentType(caseDocument));
             }
 
@@ -210,7 +192,7 @@ public class CaseService extends DynamicIndexService {
 
         CaseMapping mapping = CaseMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
-        SearchResponse<Case> response = repository.find(originIdCase, mapping);
+        SearchResponse<Case> response = repository.findByAlias(originIdCase, mapping);
 
         Case caseDocument = response.getSource();
         log.info("Retrieving from ES Case:" + caseDocument.getId());
@@ -256,14 +238,78 @@ public class CaseService extends DynamicIndexService {
         return isQueueCreatedOK;
     }
 
-    public Case findCaseByEventId(String id) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<Case> findOpenCasesForSubject(String idSubject) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+        mapping.setIndex(this.getQueryIndex());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("open", true));
+        if (idSubject != null) {
+            filters = filters.must(QueryBuilders.matchQuery("subject.sourceId", idSubject));
+        }
+
+        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp", filters,
+                mapping);
+
+        List<Case> cases = response.getSources();
+
+        repository.closeClient();
+        return cases;
     }
 
-    public Case findCaseByTriggers(List<Trigger> triggers) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<Case> findOpenCasesForSubjectByDomain(String idSubject, String domainId) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+        mapping.setIndex(this.getQueryIndex());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("open", true));
+        if (idSubject != null) {
+            filters = filters.must(QueryBuilders.matchQuery("subject.sourceId", idSubject));
+        }
+        if (domainId != null) {
+            filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        }
+
+        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp", filters,
+                mapping);
+
+        List<Case> cases = response.getSources();
+
+        repository.closeClient();
+        return cases;
+    }
+
+    public List<Case> findCasesByMessageIdByDomain(String messageId, String domainId) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+        mapping.setIndex(this.getQueryIndex());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        if (messageId != null) {
+            filters = filters.must(QueryBuilders.matchQuery("messages.id", messageId));
+        }
+        if (domainId != null) {
+            filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        }
+
+        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp", filters,
+                mapping);
+
+        List<Case> cases = response.getSources();
+
+        repository.closeClient();
+        return cases;
     }
 
 }

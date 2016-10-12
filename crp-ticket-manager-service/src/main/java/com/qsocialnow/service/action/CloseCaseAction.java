@@ -13,7 +13,7 @@ public class CloseCaseAction implements Action {
 
     @Override
     public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
-        caseObject.setCloseDate(new Date());
+        caseObject.setCloseDate(new Date().getTime());
         caseObject.setOpen(false);
         return true;
     }

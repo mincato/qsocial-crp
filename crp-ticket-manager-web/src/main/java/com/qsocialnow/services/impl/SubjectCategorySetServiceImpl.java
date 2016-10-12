@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.SubjectCategorySetService;
@@ -42,7 +44,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             SubjectCategorySet createdSubjectCategorySet = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl),
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl),
                     currentSubjectCategorySet, SubjectCategorySet.class);
             return createdSubjectCategorySet;
         } catch (Exception e) {
@@ -58,7 +60,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl)).path(
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl)).path(
                     "/" + subjectCategorySetId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -77,7 +79,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
 
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl)).path(
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl)).path(
                     "/" + currentSubjectCategorySet.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -109,7 +111,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
                 description = filters.get("description");
             }
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", subjectCategorySetServiceUrl))
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl))
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize)
                     .queryParam("name", description);
 
@@ -121,6 +123,30 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
                     });
 
             PageResponse<SubjectCategorySetListView> subjectCategorySets = response.getBody();
+            return subjectCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SubjectCategorySet> findAll() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<SubjectCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategorySet>>() {
+                    });
+
+            List<SubjectCategorySet> subjectCategorySets = response.getBody();
             return subjectCategorySets;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);

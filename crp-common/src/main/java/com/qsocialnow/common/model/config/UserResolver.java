@@ -2,6 +2,8 @@ package com.qsocialnow.common.model.config;
 
 public class UserResolver extends BaseUserResolver {
 
+    private static final long serialVersionUID = -4806578437666011569L;
+
     private SourceCredentials credentials;
 
     private Boolean active;

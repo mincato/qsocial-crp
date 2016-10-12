@@ -10,4 +10,7 @@
 	<x:div class="container-fluid" visible="@load(adminVm.createCriteria)">
 		<include src="create-criteria.zul" />
 	</x:div>
+	<x:div class="container-fluid" visible="@load(adminVm.createAction)">
+		<include src="create-action.zul" />
+	</x:div>
 </div>

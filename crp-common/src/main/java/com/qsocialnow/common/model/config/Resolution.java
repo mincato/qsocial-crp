@@ -1,5 +1,6 @@
 package com.qsocialnow.common.model.config;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 public class Resolution {
@@ -24,4 +25,20 @@ public class Resolution {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        Resolution resolution = (Resolution) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(id, resolution.id).isEquals();
+    }
+
 }

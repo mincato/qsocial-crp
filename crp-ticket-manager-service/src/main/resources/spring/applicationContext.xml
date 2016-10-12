@@ -17,7 +17,7 @@
 
 	<import resource="cache.xml" />
 
-	<context:property-placeholder location="${extPropDir:classpath:}application.properties" ignore-unresolvable="true"/>
+	<context:property-placeholder location="${extPropDir:classpath:}application.properties, classpath:config.properties" ignore-unresolvable="true"/>
 	
 	<bean id="zookeeperClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
  		<constructor-arg value="${app.zookeeper.host}"></constructor-arg>
@@ -37,6 +37,11 @@
 	<bean id="twitterConfig" class="com.qsocialnow.config.TwitterConfigFactory" factory-method="findConfig">
  		<constructor-arg ref="zookeeperClient"></constructor-arg>
  		<constructor-arg value="${app.twitter.app.configurator.path}"></constructor-arg>
+	</bean>
+	
+	<bean id="facebookConfig" class="com.qsocialnow.config.FacebookConfigFactory" factory-method="findConfig">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${app.facebook.app.configurator.path}"></constructor-arg>
 	</bean>
 	
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
@@ -64,6 +69,11 @@
 	
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
 		<property name="configurator" ref="elasticDomainConfig"></property>
+		<property name="segmentService" ref="segmentElasticService"></property>
+	</bean>
+	
+	<bean id="segmentElasticService" class="com.qsocialnow.elasticsearch.services.config.SegmentService">
+		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	
 	<bean id="userResolverElasticService" class="com.qsocialnow.elasticsearch.services.config.UserResolverService">
@@ -80,6 +90,10 @@
     
     <bean id="subjectCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.SubjectCategorySetService">
         <property name="configurator" ref="elasticDomainConfig"></property>
+    </bean>
+    
+    <bean id="subjectElasticService" class="com.qsocialnow.elasticsearch.services.cases.SubjectService">
+         <constructor-arg ref="configurationProvider" />
     </bean>
 
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">
@@ -98,9 +112,24 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REGISTER_COMMENT}" value-ref="registerCommentCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).RESOLVE}" value-ref="resolveCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_CASE}" value-ref="tagCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).ASSIGN}" value-ref="assignCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).SEND_MESSAGE}" value-ref="sendMessageCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).ATTACH_FILE}" value-ref="attachFileCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_SUBJECT}" value-ref="changeSubjectCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_SUBJECT}" value-ref="tagSubjectCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">
     	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}" value-ref="twitterSourceStrategy"/>
+    	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}" value-ref="facebookSourceStrategy"/>
 	</util:map>
+	
+	<bean id="twitterSourceStrategy" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
+        <property name="twitterConfig" ref="twitterConfig"></property>
+    </bean>
+    
+    <bean id="facebookSourceStrategy" class="com.qsocialnow.common.services.strategies.FacebookSourceStrategy">
+        <property name="facebookConfig" ref="facebookConfig"></property>
+    </bean>
 </beans>

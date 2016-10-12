@@ -19,6 +19,7 @@
     	<label-location>/WEB-INF/i18n/team.properties</label-location>
     	<label-location>/WEB-INF/i18n/casecategoryset.properties</label-location>
     	<label-location>/WEB-INF/i18n/subjectcategoryset.properties</label-location>
+    	<label-location>/WEB-INF/i18n/subject.properties</label-location>
     	<label-location>/WEB-INF/i18n/sidebar.properties</label-location>
     	<label-location>/WEB-INF/i18n/errors.properties</label-location>
 	</system-config>
@@ -63,6 +64,25 @@
             		});
         		}
     		</script>
+		</data-handler>
+		<data-handler>
+	    	<name>collapse</name>
+	    	<script>
+	        	function (wgt, dataValue) {
+	        		var collapsible = $(wgt.$n());
+					
+					var self = this;
+        			if (self.command) {
+    					collapsible.on('hidden.bs.collapse', function(id, ev){
+      						self.command(dataValue,{toggle:false});
+						});
+						
+						collapsible.on('shown.bs.collapse', function(id, ev){
+      						self.command(dataValue,{toggle:true});
+						});
+  					}
+	        	}
+	    	</script>
 		</data-handler>
 		<data-handler>
     		<name>filter</name>

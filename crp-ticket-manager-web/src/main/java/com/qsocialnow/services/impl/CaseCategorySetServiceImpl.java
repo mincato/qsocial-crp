@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -18,9 +19,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.CaseCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.ServiceUrlResolver;
@@ -42,7 +45,7 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             CaseCategorySet createdCaseCategorySet = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl), currentCaseCategorySet,
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseCategorySetServiceUrl), currentCaseCategorySet,
                     CaseCategorySet.class);
             return createdCaseCategorySet;
         } catch (Exception e) {
@@ -58,7 +61,7 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl)).path(
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseCategorySetServiceUrl)).path(
                     "/" + caseCategorySetId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -77,7 +80,7 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
 
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl)).path(
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseCategorySetServiceUrl)).path(
                     "/" + currentCaseCategorySet.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -108,7 +111,7 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
                 description = filters.get("description");
             }
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", caseCategorySetServiceUrl))
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseCategorySetServiceUrl))
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize)
                     .queryParam("name", description);
 
@@ -121,6 +124,52 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
 
             PageResponse<CaseCategorySetListView> caseCategorySets = response.getBody();
             return caseCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CaseCategorySet> findAll() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseCategorySetServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<CaseCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<CaseCategorySet>>() {
+                    });
+
+            List<CaseCategorySet> caseCategorySets = response.getBody();
+            return caseCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CaseCategory> findCategories(String caseCategorySetId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseCategorySetServiceUrl))
+                    .path("/" + caseCategorySetId).path("/categories");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<CaseCategory>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null, new ParameterizedTypeReference<List<CaseCategory>>() {
+                    });
+
+            return response.getBody();
         } catch (Exception e) {
             log.error("There was an error while trying to call CaseCategorySet service", e);
             throw new RuntimeException(e);

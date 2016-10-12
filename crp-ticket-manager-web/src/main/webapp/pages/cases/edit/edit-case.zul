@@ -1,11 +1,12 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditCaseViewModel')" 
-	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
+	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml"
+	validationMessages="@id('vmsgs')">
 	<n:div class="row">
         <n:div>
             <div zclass="pane equal">
-                <n:h5>${labels.cases.list.column.title} / ${vm.currentCase.title} </n:h5>
+                <n:h5>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h5>
             </div>
         </n:div>
     </n:div>
@@ -21,7 +22,7 @@
                         <n:div class="col-sm-9">
                             <textbox type="text" sclass="form-control" disabled="true"
                                 id="name"
-                                value="@bind(vm.currentCase.title)">
+                                value="@bind(vm.currentCase.caseObject.title)">
                             </textbox>
                         </n:div>
                     </x:div>
@@ -30,8 +31,8 @@
                         <n:label class="control-label col-sm-3">
                             ${labels.cases.details.opendate}
                         </n:label>
-                        <n:div class="col-sm-9">
-                            <label value="@load(vm.currentCase.openDate)" />
+                        <n:div class="col-sm-9 form-control-static">
+                            <label value="@load(vm.currentCase.caseObject.openDate)" />
                         </n:div>
                     </x:div>
                 </n:div>
@@ -42,7 +43,7 @@
                         </n:label>
                         <n:div class="col-sm-9">
                             <textbox rows="5" type="text" disabled="true"
-                                class="form-control" value="@bind(vm.currentCase.description)">
+                                class="form-control" value="@bind(vm.currentCase.caseObject.description)">
                             </textbox>
                         </n:div>
                     </n:div>
@@ -50,28 +51,106 @@
                         <n:label class="control-label col-sm-3">
                             ${labels.cases.details.closedate}
                         </n:label>
-                        <n:div class="col-sm-9">
-                            <label value="@load(vm.currentCase.closeDate)" />
+                        <n:div class="col-sm-9 form-control-static">
+                            <label value="@load(vm.currentCase.caseObject.closeDate)" />
                         </n:div>
                     </x:div>
                     <x:div sclass="form-group col-sm-6">
                           <n:label class="control-label col-sm-3">${labels.cases.details.open}</n:label>
                           <x:div class="col-sm-9">
-                              <label class="control-label col-sm-1" value="@load(c:l(c:cat('cases.open.',vm.currentCase.open)))"></label>
+                              <label class="control-label col-sm-1" value="@load(c:l(c:cat('cases.open.',vm.currentCase.caseObject.open)))"></label>
+                          </x:div>  
+                     </x:div>
+                     <x:div sclass="form-group col-sm-6">
+                          <n:label class="control-label col-sm-3">${labels.cases.details.assignee}</n:label>
+                          <x:div class="col-sm-9">
+                              <label visible="@load(not empty vm.currentCase.caseObject.assignee)" class="control-label col-sm-1" value="@load(vm.currentCase.caseObject.assignee.username)"></label>
                           </x:div>  
                      </x:div>
                 </n:div>
                 <n:div class="row">
                      <x:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.setcategories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.caseCategoriesSet)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+    					</div>
+                     </x:div>
+                     <n:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.categories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.caseCategories)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+    					</div>
+					</n:div>
+                 </n:div>
+                 <n:div class="row">
+                     <x:div class="form-group col-sm-6">
                           <n:label class="control-label col-sm-3">${labels.cases.details.pendingResponse}</n:label>
                           <x:div class="col-sm-2">
-                              <label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.pendingResponse)))"/>
+                              <label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.caseObject.pendingResponse)))"/>
                           </x:div>
                      </x:div>
-                 </n:div>
-            </x:form>
-        </div>
-    </div>
+                     <x:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.attachments}</n:label>
+						<x:div class="col-sm-3">
+							<div children="@load(vm.currentCase.caseObject.attachments)">
+								<template name="children">
+									<a onClick="@command('downloadAttachment', attachment=each)">
+										<span>
+											<label class="label label-primary" value="${each}"/>
+										</span>
+									</a>
+								</template>
+							</div>
+						</x:div>
+					</x:div>
+				</n:div>
+				<n:div class="row">
+                     <x:div class="form-group col-sm-6">
+						<n:label class="control-label col-sm-3">${labels.cases.details.source}</n:label>
+                        <x:div class="col-sm-2">
+							<span zclass="btn-social-icon btn" sclass="@load(c:cat('btn-',vm.currentCase.source.icon))"><i sclass="@load('fa fa-'.concat(vm.currentCase.source.icon))" /></span>
+						</x:div>
+                     </x:div>
+                     <x:div class="form-group col-sm-6">
+                     	<n:label class="control-label col-sm-3">${labels.cases.details.subject}</n:label>
+						<x:div class="col-sm-3">
+                          <label visible="@load(not empty vm.currentCase.caseObject.subject)" class="control-label col-sm-1" value="@load(vm.currentCase.caseObject.subject.identifier)"></label>
+                      	</x:div> 
+					</x:div>
+				</n:div>
+				<n:div class="row">
+	                 <x:div class="form-group col-sm-6">
+	                 	<n:label class="control-label col-sm-3">${labels.cases.details.setsubjectcategories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.subjectCategoriesSet)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+						</div>
+	                 </x:div>
+	                 <n:div class="form-group col-sm-6">
+	                 	<n:label class="control-label col-sm-3">${labels.cases.details.subjectcategories}</n:label>
+						<div class="form-group" children="@load(vm.currentCase.subjectCategories)">
+							<template name="children">
+								<span>
+									<label sclass="label label-info" value="${each.description}"/>
+								</span>
+							</template>
+						</div>
+					</n:div>
+	             </n:div>
+			</x:form>
+		</div>
+	</div>
     <n:br/>
 	<div zclass="row">
 		<include zclass="col-lg-12" src="/pages/cases/actions/master-action.zul"/>
@@ -85,8 +164,7 @@
 	            <n:div class="col-md-2">
 		            <div zclass="input-group input-group-sm">
 			            <selectbox sclass="form-control" model="@load(vm.actionFilterOptions)"
-			                selectedItem="@bind(vm.action)"
-			                onSelect="@command('search')">
+			                selectedItem="@bind(vm.action)">
 			                <template name="model">
 			                    <label value="${c:l(c:cat('cases.actions.',each))}" />
 			                </template>
@@ -103,11 +181,12 @@
                           <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.fromDate)" placeholder="${labels.cases.registry.filter.fromdate}" />
                     </div>
                 </n:div>
-                
                 <n:div class="col-md-2">
-                    <div zclass="input-group input-group-sm">
-                       <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.toDate)" placeholder="${labels.cases.registry.filter.todate}" />
-                    </div>
+                   <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
+                       <datebox id="todate" sclass="input-group" format="MM/dd/yyyy" value="@load(vm.toDate) 
+                        @save(vm.toDate, before='search')
+                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.registry.filter.todate}" />
+                    </x:div>
                 </n:div>
                 
                 

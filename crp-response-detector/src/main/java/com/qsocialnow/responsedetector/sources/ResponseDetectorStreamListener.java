@@ -1,69 +1,112 @@
 package com.qsocialnow.responsedetector.sources;
 
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.qsocialnow.responsedetector.service.SourceDetectorService;
+
 import twitter4j.DirectMessage;
 import twitter4j.StallWarning;
 import twitter4j.Status;
 import twitter4j.StatusDeletionNotice;
 import twitter4j.User;
 import twitter4j.UserList;
+import twitter4j.UserMentionEntity;
 import twitter4j.UserStreamListener;
 
 public class ResponseDetectorStreamListener implements UserStreamListener {
 
+    private SourceDetectorService sourceService;
+
+    public ResponseDetectorStreamListener(SourceDetectorService sourceDetectorService) {
+        this.sourceService = sourceDetectorService;
+    }
+
+    private static final Logger log = LoggerFactory.getLogger(ResponseDetectorStreamListener.class);
+
     @Override
     public void onStatus(Status status) {
-        System.out.println("onStatus @" + status.getUser().getScreenName() + " - " + status.getText());
+        log.info("onStatus @ screenName: " + status.getUser().getScreenName() + " messageId: " + status.getId()
+                + " id:" + status.getUser().getId() + "name: " + status.getUser().getName() + " original profile: "
+                + status.getUser().getOriginalProfileImageURLHttps() + " profile image: "
+                + status.getUser().getProfileImageURL() + " text: " + status.getText() + " isRetweet: "
+                + status.isRetweet() + " inReplyToStatusId: " + status.getInReplyToStatusId()
+                + " currentUserRetweetId: " + status.getCurrentUserRetweetId() + " inReplyToScrenName: "
+                + status.getInReplyToScreenName() + " inReplyToUSerId: " + status.getInReplyToUserId()
+                + " quotedStatusId: " + status.getQuotedStatusId() + " rateLimit: " + status.getRateLimitStatus());
+
+        String[] userMentions = null;
+
+        UserMentionEntity[] mentions = status.getUserMentionEntities();
+        if (mentions != null) {
+            userMentions = new String[mentions.length];
+            for (int i = 0; i < mentions.length; i++) {
+                UserMentionEntity userMentionEntity = mentions[i];
+                userMentions[i] = userMentionEntity.getScreenName();
+                log.info("User Mentions: " + userMentions[i]);
+            }
+        }
+
+        boolean isRetweet = false;
+        String userResolver = null;
+
+        if (status.getInReplyToStatusId() > 0) {
+            isRetweet = true;
+            userResolver = status.getInReplyToScreenName();
+        }
+        Date created = status.getCreatedAt();
+        sourceService.processEvent(isRetweet, created.getTime(), userResolver, userMentions, String.valueOf(status
+                .getId()), status.getText(), String.valueOf(status.getInReplyToStatusId()), String.valueOf(status
+                .getUser().getId()), status.getUser().getName(), status.getUser().getOriginalProfileImageURLHttps());
     }
 
     @Override
     public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-        System.out.println("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+        log.info("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
     }
 
     @Override
     public void onDeletionNotice(long directMessageId, long userId) {
-        System.out.println("Got a direct message deletion notice id:" + directMessageId);
+        log.info("Got a direct message deletion notice id:" + directMessageId);
     }
 
     @Override
     public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-        System.out.println("Got a track limitation notice:" + numberOfLimitedStatuses);
+        log.info("Got a track limitation notice:" + numberOfLimitedStatuses);
     }
 
     @Override
     public void onScrubGeo(long userId, long upToStatusId) {
-        System.out.println("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+        log.info("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
     }
 
     @Override
     public void onStallWarning(StallWarning warning) {
-        System.out.println("Got stall warning:" + warning);
+        log.info("Got stall warning:" + warning);
     }
 
     @Override
     public void onFriendList(long[] friendIds) {
-        System.out.print("onFriendList");
-        for (long friendId : friendIds) {
-            System.out.print(" " + friendId);
-        }
-        System.out.println();
+
     }
 
     @Override
     public void onFavorite(User source, User target, Status favoritedStatus) {
-        System.out.println("onFavorite source:@" + source.getScreenName() + " target:@" + target.getScreenName() + " @"
+        log.info("onFavorite source:@" + source.getScreenName() + " target:@" + target.getScreenName() + " @"
                 + favoritedStatus.getUser().getScreenName() + " - " + favoritedStatus.getText());
     }
 
     @Override
     public void onUnfavorite(User source, User target, Status unfavoritedStatus) {
-        System.out.println("onUnFavorite source:@" + source.getScreenName() + " target:@" + target.getScreenName()
-                + " @" + unfavoritedStatus.getUser().getScreenName() + " - " + unfavoritedStatus.getText());
+        log.info("onUnFavorite source:@" + source.getScreenName() + " target:@" + target.getScreenName() + " @"
+                + unfavoritedStatus.getUser().getScreenName() + " - " + unfavoritedStatus.getText());
     }
 
     @Override
     public void onFollow(User source, User followedUser) {
-        System.out.println("onFollow source:@" + source.getScreenName() + " target:@" + followedUser.getScreenName());
+        log.info("onFollow source:@" + source.getScreenName() + " target:@" + followedUser.getScreenName());
     }
 
     @Override

@@ -1,5 +1,6 @@
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
-	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditCaseViewModel')" 
+	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditCaseViewModel')"
+	validationMessages="@id('vmsgs')" 
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
         <n:div>
@@ -86,8 +87,7 @@
 	            <n:div class="col-md-2">
 		            <div zclass="input-group input-group-sm">
 			            <selectbox sclass="form-control" model="@load(vm.actionFilterOptions)"
-			                selectedItem="@bind(vm.action)"
-			                onSelect="@command('search')">
+			                selectedItem="@bind(vm.action)">
 			                <template name="model">
 			                    <label value="${c:l(c:cat('cases.actions.',each))}" />
 			                </template>
@@ -106,9 +106,12 @@
                 </n:div>
                 
                 <n:div class="col-md-2">
-                    <div zclass="input-group input-group-sm">
-                       <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.toDate)" placeholder="${labels.cases.registry.filter.todate}" />
-                    </div>
+                	<x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
+                       <datebox id = "todate" sclass="input-group" format="MM/dd/yyyy" value="@load(vm.toDate) 
+                        @save(vm.toDate, before='search')
+                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')"
+                        placeholder="${labels.cases.registry.filter.todate}" />
+                    </x:div>
                 </n:div>
                 
                 

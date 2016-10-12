@@ -19,6 +19,8 @@ public class CreateTriggerAdminViewModel implements Serializable {
 
     private boolean createCriteria = false;
 
+    private boolean createAction = false;
+
     public boolean isCreateTrigger() {
         return createTrigger;
     }
@@ -31,6 +33,10 @@ public class CreateTriggerAdminViewModel implements Serializable {
         return createCriteria;
     }
 
+    public boolean isCreateAction() {
+        return createAction;
+    }
+
     @Init
     public void init() {
         createTrigger = true;
@@ -39,27 +45,39 @@ public class CreateTriggerAdminViewModel implements Serializable {
     }
 
     @GlobalCommand
-    @NotifyChange({ "createTrigger", "createSegment", "createCriteria" })
+    @NotifyChange({ "createTrigger", "createSegment", "createCriteria", "createAction" })
     public void goToTrigger() {
         createTrigger = true;
         createSegment = false;
         createCriteria = false;
+        createAction = false;
     }
 
     @GlobalCommand
-    @NotifyChange({ "createTrigger", "createSegment", "createCriteria" })
+    @NotifyChange({ "createTrigger", "createSegment", "createCriteria", "createAction" })
     public void goToSegment() {
         createTrigger = false;
         createSegment = true;
         createCriteria = false;
+        createAction = false;
     }
 
     @GlobalCommand
-    @NotifyChange({ "createTrigger", "createSegment", "createCriteria" })
+    @NotifyChange({ "createTrigger", "createSegment", "createCriteria", "createAction" })
     public void goToCriteria() {
         createTrigger = false;
         createSegment = false;
         createCriteria = true;
+        createAction = false;
+    }
+
+    @GlobalCommand
+    @NotifyChange({ "createTrigger", "createSegment", "createCriteria", "createAction" })
+    public void goToAction() {
+        createTrigger = false;
+        createSegment = false;
+        createCriteria = false;
+        createAction = true;
     }
 
 }

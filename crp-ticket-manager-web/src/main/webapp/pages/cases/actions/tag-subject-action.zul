@@ -1,0 +1,12 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('tagSubjectActionVm') @init('com.qsocialnow.viewmodel.TagSubjectActionViewModel')"
+		validationMessages="@id('vmsgs')">
+	<x:form form="@id('fxTagSubjectAction') @load(tagSubjectActionVm.tagSubjectAction) @save(tagSubjectActionVm.tagSubjectAction, before='execute')">
+		<include src="/pages/actions/tag-subject-action-body.zul"/>
+		<div class="form-group text-center">
+	    	<button onClick="@command('execute')" disabled="@load(not tagSubjectActionVm.categorySetListView.enabledAdd and not empty tagSubjectActionVm.categorySetListView.filteredList)" label="${labels.app.button.execute}" zclass="btn btn-success" />
+		</div>
+	</x:form>
+</div>
