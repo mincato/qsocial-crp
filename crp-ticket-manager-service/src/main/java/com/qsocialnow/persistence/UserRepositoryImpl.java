@@ -3,6 +3,8 @@ package com.qsocialnow.persistence;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,6 +20,8 @@ import com.qsocialnow.model.User;
 
 public class UserRepositoryImpl implements UserRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(UserRepositoryImpl.class);
+
     @Autowired
     private AWSLambdaClientConfig awsLambdaClientConfig;
 
@@ -25,8 +29,11 @@ public class UserRepositoryImpl implements UserRepository {
     private Integer clientId;
 
     @Override
-    @Cacheable(value = CacheConfig.USERS_CACHE, unless = "#result == null")
+    @Cacheable(value = CacheConfig.USERS, unless = "#result == null")
     public List<UserListView> findAll() {
+
+        log.info("Searching users on external service");
+
         AWSLambda lambda = AWSLambdaClientBuilder.standard().withCredentials(awsLambdaClientConfig)
                 .withRegion(awsLambdaClientConfig.getRegion()).build();
 

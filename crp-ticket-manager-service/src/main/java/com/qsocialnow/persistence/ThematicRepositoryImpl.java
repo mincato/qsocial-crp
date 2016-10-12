@@ -3,6 +3,8 @@ package com.qsocialnow.persistence;
 import java.util.Comparator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,6 +22,8 @@ import com.qsocialnow.model.OrganizationId;
 
 public class ThematicRepositoryImpl implements ThematicRepository {
 
+    private static final Logger log = LoggerFactory.getLogger(ThematicRepositoryImpl.class);
+
     @Autowired
     private AWSLambdaClientConfig awsLambdaClientConfig;
 
@@ -27,8 +31,11 @@ public class ThematicRepositoryImpl implements ThematicRepository {
     private Integer clientId;
 
     @Override
-    @Cacheable(value = CacheConfig.THEMATICS_CACHE, unless = "#result == null")
+    @Cacheable(value = CacheConfig.THEMATICS, unless = "#result == null")
     public List<Thematic> findAll() {
+
+        log.info("Searching thematics on external service");
+
         AWSLambda lambda = AWSLambdaClientBuilder.standard().withCredentials(awsLambdaClientConfig)
                 .withRegion(awsLambdaClientConfig.getRegion()).build();
 
@@ -40,8 +47,11 @@ public class ThematicRepositoryImpl implements ThematicRepository {
     }
 
     @Override
-    @Cacheable(value = CacheConfig.CATEGORIES_CACHE, unless = "#result == null")
+    @Cacheable(value = CacheConfig.CATEGORIES, unless = "#result == null")
     public List<CategoryGroup> findCategoryGroupsBySerieId(Long thematicId, Long serieId) {
+
+        log.info("Searching categories on external service");
+
         AWSLambda lambda = AWSLambdaClientBuilder.standard().withCredentials(awsLambdaClientConfig)
                 .withRegion(awsLambdaClientConfig.getRegion()).build();
 
