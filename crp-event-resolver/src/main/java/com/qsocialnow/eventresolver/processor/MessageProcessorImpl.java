@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.event.Event;
-import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.exception.InvalidDomainException;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
 import com.qsocialnow.eventresolver.service.DomainService;
@@ -19,9 +18,6 @@ import com.qsocialnow.kafka.model.Message;
 public class MessageProcessorImpl implements MessageProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageProcessorImpl.class);
-
-    @Autowired
-    private EventResolverConfig appConfig;
 
     @Autowired
     private DetectionMessageProcessor detectionMessageProcessor;
@@ -38,8 +34,7 @@ public class MessageProcessorImpl implements MessageProcessor {
 
     public void process(Message message) throws Exception {
         // reintentar ES
-        Event inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
-                .fromJson(message.getMessage(), Event.class);
+        Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);
         String domainId = message.getGroup();
         LOGGER.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
         LOGGER.info(String.format("Searching for domain: %s", domainId));
