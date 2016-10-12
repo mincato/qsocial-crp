@@ -131,7 +131,7 @@ public class ConfigurationRepository {
         team.setUserResolvers(Arrays.asList(userResolver));
 
         User user1 = new User();
-        user1.setId("user 1");
+        user1.setId(1);
 
         List<User> users = new ArrayList<>();
         users.add(user1);

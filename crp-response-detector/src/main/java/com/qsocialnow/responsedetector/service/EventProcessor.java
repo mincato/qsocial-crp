@@ -15,14 +15,12 @@ import com.qsocialnow.kafka.producer.Producer;
 @Component
 public class EventProcessor {
 
-    private static final String EVENT_DATE_FORMAT = "dd/MM/yyyy";
-
     @Autowired
     private Producer kafkaProducer;
 
     public void process(List<Event> events) {
         if (CollectionUtils.isNotEmpty(events)) {
-            Gson gson = new GsonBuilder().setDateFormat(EVENT_DATE_FORMAT).create();
+            Gson gson = new GsonBuilder().create();
             List<String> messages = events.stream().map(event -> gson.toJson(event)).collect(Collectors.toList());
             kafkaProducer.send(messages);
         }
@@ -30,7 +28,7 @@ public class EventProcessor {
     }
 
     public void process(Event event) {
-        Gson gson = new GsonBuilder().setDateFormat(EVENT_DATE_FORMAT).create();
+        Gson gson = new GsonBuilder().create();
         String message = gson.toJson(event);
         kafkaProducer.send(message);
     }
