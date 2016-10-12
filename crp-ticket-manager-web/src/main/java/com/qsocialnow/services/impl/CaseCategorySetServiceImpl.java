@@ -45,8 +45,8 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             CaseCategorySet createdCaseCategorySet = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseCategorySetServiceUrl), currentCaseCategorySet,
-                    CaseCategorySet.class);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseCategorySetServiceUrl),
+                    currentCaseCategorySet, CaseCategorySet.class);
             return createdCaseCategorySet;
         } catch (Exception e) {
             log.error("There was an error while trying to call CaseCategorySet service", e);
