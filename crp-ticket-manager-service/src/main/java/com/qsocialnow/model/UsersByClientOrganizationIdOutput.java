@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.qsocialnow.common.model.config.Thematic;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ThematicsByClientOrganizationIdOutput {
+public class UsersByClientOrganizationIdOutput {
 
     private Integer clientOrganizationId;
 
-    private List<Thematic> thematics = new ArrayList<Thematic>();
+    private List<User> users = new ArrayList<User>();
 
     public Integer getClientOrganizationId() {
         return clientOrganizationId;
@@ -21,12 +20,12 @@ public class ThematicsByClientOrganizationIdOutput {
         this.clientOrganizationId = clientOrganizationId;
     }
 
-    public List<Thematic> getThematics() {
-        return thematics;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setThematics(List<Thematic> thematics) {
-        this.thematics = thematics;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
 }

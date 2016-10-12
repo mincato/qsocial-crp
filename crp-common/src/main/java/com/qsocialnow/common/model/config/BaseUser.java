@@ -6,7 +6,7 @@ public class BaseUser implements Serializable {
 
     private static final long serialVersionUID = 3151356977508560054L;
 
-    private String id;
+    private Integer id;
 
     private String username;
 
@@ -18,11 +18,11 @@ public class BaseUser implements Serializable {
         this.setUsername(user.getUsername());
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

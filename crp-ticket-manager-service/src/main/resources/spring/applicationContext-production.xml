@@ -10,6 +10,9 @@
  	<bean id="thematicRepository" class="com.qsocialnow.persistence.ThematicRepositoryImpl">
 	</bean>
 	
+	<bean id="userRepository" class="com.qsocialnow.persistence.UserRepositoryImpl">
+	</bean>
+	
 	<bean id="awsLambdaClientConfig" class="com.qsocialnow.config.AWSLambdaClientConfigFactory" factory-method="create">
  		<constructor-arg ref="zookeeperClient"></constructor-arg>
  		<constructor-arg value="${app.elastic.config.configurator.path}"></constructor-arg>

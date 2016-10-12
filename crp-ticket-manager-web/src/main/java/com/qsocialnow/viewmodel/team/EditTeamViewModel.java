@@ -43,7 +43,7 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
     @WireVariable
     private TeamService teamService;
 
-    @WireVariable("mockUserService")
+    @WireVariable
     private UserService userService;
 
     @WireVariable
