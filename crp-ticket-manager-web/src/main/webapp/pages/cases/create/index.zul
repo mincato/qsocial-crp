@@ -4,6 +4,7 @@
 <?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
 <?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
 <?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
+<?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
 <zk xmlns:n="native">
 	<div class="wrapper">
 	    
