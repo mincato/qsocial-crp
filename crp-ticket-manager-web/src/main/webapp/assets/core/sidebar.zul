@@ -51,139 +51,72 @@
 										</ul>
 									</li> -->
 									<li>
-										<n:a href="#">
-											<i
+										<a href="/pages/user-resolver/list/index.zul">
+											<span
 												class="fa fa-comments-o fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.usersresolver}
-											<span
-												class="fa chevron-down-left">
 											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a
-													href="/pages/user-resolver/list/index.zul">
-													${labels.sidebar.menu.list}
-												</a>
-											</li>
-										</ul>
+											<span>
+											${labels.sidebar.menu.usersresolver}</span>
+										</a>
 									</li>
 
 									<li>
-										<n:a href="#">
-											<i
+										<a href="/pages/team/list/index.zul">
+											<span
 												class="fa fa-sitemap fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.teams}
-											<span
-												class="fa chevron-down-left">
 											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a href="/pages/team/list/index.zul">
-													${labels.sidebar.menu.list}</a>
-											</li>
-										</ul>
+											<span>${labels.sidebar.menu.teams}</span>
+										</a>
 									</li>
 									<li>
-										<n:a href="#">
-											<i
+										<a href="/pages/cases/list/index.zul">
+											<span
 												class="fa fa-file-text-o fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.cases}
-											<span
-												class="fa chevron-down-left">
 											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a
-													href="/pages/cases/list/index.zul">
-													${labels.sidebar.menu.list}
-												</a>
-											</li>
-										</ul>
+											<span>
+											${labels.sidebar.menu.cases}</span>
+										</a>
 									</li>
 									<li>
-										<n:a href="#">
-											<i
-												class="fa fa-tags fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.casecategorysets}
+										<a href="/pages/case-category-set/list/index.zul">
 											<span
-												class="fa chevron-down-left">
+												class="fa fa-tags fa-fw fa-lg">
 											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a
-													href="/pages/case-category-set/list/index.zul">
-													${labels.sidebar.menu.list}
-												</a>
-											</li>
-										</ul>
+											<span>${labels.sidebar.menu.casecategorysets}
+											
+											</span>
+										</a>
 									</li>
 									
 									<li>
-										<n:a href="#">
-											<i
-												class="fa fa-tags fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.subjectcategorysets}
+										<a href="/pages/subject-category-set/list/index.zul">
 											<span
-												class="fa chevron-down-left">
+												class="fa fa-tags fa-fw fa-lg">
 											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a
-													href="/pages/subject-category-set/list/index.zul">
-													${labels.sidebar.menu.list}
-												</a>
-											</li>
-										</ul>
+											<span>${labels.sidebar.menu.subjectcategorysets}
+											</span>
+										</a>
 									</li>
 
 									<li>
-										<n:a href="#">
-											<i
-												class="fa fa-desktop fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.domains}
+										<a href="/pages/domain/list/index.zul">
 											<span
-												class="fa chevron-down-left">
+												class="fa fa-desktop fa-fw fa-lg">
 											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a
-													href="/pages/domain/list/index.zul">
-													${labels.sidebar.menu.list}
-												</a>
-											</li>
-										</ul>
+											<span>${labels.sidebar.menu.domains}
+											</span>
+										</a>
 									</li>
 									
 									<li>
-										<n:a href="#">
-											<i
-												class="fa fa-child fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.subjects}
+										<a href="/pages/subject/list/index.zul">
 											<span
-												class="fa chevron-down-left">
+												class="fa fa-child fa-fw fa-lg">
 											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a
-													href="/pages/subject/list/index.zul">
-													${labels.sidebar.menu.list}
-												</a>
-											</li>
-										</ul>
+											<span>${labels.sidebar.menu.subjects}
+									
+											</span>
+										</a>
 									</li>
 								</ul><!-- sidebar-nav -->
 							</n:nav>
