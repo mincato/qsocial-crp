@@ -17,7 +17,7 @@ import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
-public class ActionRegistryService extends DynamicIndexService {
+public class ActionRegistryService extends CaseIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(ActionRegistryService.class);
 
