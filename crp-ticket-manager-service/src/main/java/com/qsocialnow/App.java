@@ -20,7 +20,7 @@ public class App {
     }
 
     private App() {
-        String env = System.getProperty("environment");
+        String env = System.getenv("environment");
         if (env == null) {
             env = DEFAULT_ENVIRONMENT;
         }
