@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class UserActivityData {
 
-	private static final long SECONDS_IN_A_MINUTE = 60;
-	private static final long MILISECONDS_IN_A_SECOND = 1000;
+	private static final long SECONDS_IN_A_MINUTE = 60L;
+	private static final long MILISECONDS_IN_A_SECOND = 1000L;
 
 	private long epochExpirationTime;
 
@@ -28,9 +28,7 @@ public class UserActivityData {
 	}
 
 	public void calculateNewEpochExpirationTime() {
-		epochExpirationTime = new Date(
-				new Date().getTime() + MILISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * sessionTimeoutInMinutes)
-						.getTime();
+		epochExpirationTime = new Date().getTime() + (MILISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * sessionTimeoutInMinutes);
 	}
 
 	public boolean isExpired() {

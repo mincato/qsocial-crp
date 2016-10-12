@@ -1,4 +1,4 @@
-package com.qsocialnow.security;
+package com.qsocialnow.security.exception;
 
 public class UnauthorizedException extends RuntimeException {
 

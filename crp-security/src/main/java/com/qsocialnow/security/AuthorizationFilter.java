@@ -16,6 +16,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.qsocialnow.security.exception.SessionExpiredException;
+import com.qsocialnow.security.exception.ShortTokenExpiredException;
+import com.qsocialnow.security.exception.TokenNotFoundException;
+
 public class AuthorizationFilter implements Filter {
 
 	private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
@@ -65,12 +69,12 @@ public class AuthorizationFilter implements Filter {
 			session.setAttribute(USER_SESSION_PARAMETER, user);
 			zookeeperClient.updateUserActivityData(token, activity);
 
-			chain.doFilter(request, response);
-
 		} catch (Exception e) {
 			LOGGER.error("Error authorizing token", e);
 			redirectToLogin(response);
 		}
+		
+		chain.doFilter(request, response);
 	}
 
 	private String findTokenFromRequestParam(ZookeeperClient zookeeperClient, HttpServletRequest httpRequest)
@@ -88,7 +92,11 @@ public class AuthorizationFilter implements Filter {
 			}
 			
 			// Si es un short token nuevo hay que ir a buscarlo a zookeeper
-			token = zookeeperClient.findToken(shortToken);
+			ShortTokenEntry entry = zookeeperClient.findToken(shortToken);
+			if (entry.isExpired()) {
+				throw new ShortTokenExpiredException();
+			}
+			token = entry.getToken();
 			zookeeperClient.removeToken(shortToken);
 			
 			// El short token se remueve de zookeeper para evitar accesos foraneos, y se guarda en la sesion
