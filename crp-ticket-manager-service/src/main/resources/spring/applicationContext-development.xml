@@ -10,4 +10,7 @@
  	<bean id="thematicRepository" class="com.qsocialnow.persistence.MockThematicRepository">
 	</bean>
 	
+	<bean id="userRepository" class="com.qsocialnow.persistence.MockUserRepository">
+	</bean>
+	
 </beans>

@@ -31,7 +31,7 @@ public class CreateTeamViewModel extends EditableTeamViewModel implements Serial
     @WireVariable
     private TeamService teamService;
 
-    @WireVariable("mockUserService")
+    @WireVariable
     private UserService userService;
 
     @WireVariable
