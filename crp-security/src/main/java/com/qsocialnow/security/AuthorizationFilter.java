@@ -62,7 +62,7 @@ public class AuthorizationFilter implements Filter {
 			UserData user = tokenHandler.verifyToken(token);
 
 			UserActivityData activity = zookeeperClient.findUserActivityData(token);
-			verifyExpiration(activity);
+			verifyExpiration(token, activity, zookeeperClient);
 
 			session.setMaxInactiveInterval((int) activity.getSessionTimeoutInSeconds());
 			session.setAttribute(TOKEN_SESSION_PARAMETER, token);
@@ -73,7 +73,7 @@ public class AuthorizationFilter implements Filter {
 			LOGGER.error("Error authorizing token", e);
 			redirectToLogin(response);
 		}
-		
+
 		chain.doFilter(request, response);
 	}
 
@@ -83,30 +83,38 @@ public class AuthorizationFilter implements Filter {
 		String token = null;
 		String shortToken = httpRequest.getParameter(TOKEN_REQUEST_PARAMETER);
 		if (StringUtils.isNotBlank(shortToken)) {
-			
-			// Se busca si el short token ya fue usado y si esta en la sesion, para no ir a zookeeper
+
+			// Se busca si el short token ya fue usado y si esta en la sesion,
+			// para no ir a zookeeper
 			HttpSession session = httpRequest.getSession();
 			String shortTokenFromSession = (String) session.getAttribute(SHORT_TOKEN_SESSION_PARAMETER);
 			if (shortToken.equals(shortTokenFromSession)) {
 				return (String) session.getAttribute(TOKEN_SESSION_PARAMETER);
 			}
-			
+
 			// Si es un short token nuevo hay que ir a buscarlo a zookeeper
 			ShortTokenEntry entry = zookeeperClient.findToken(shortToken);
+
+			// El short token se remueve de zookeeper para evitar accesos
+			// foraneos
+			zookeeperClient.removeToken(shortToken);
+
 			if (entry.isExpired()) {
 				throw new ShortTokenExpiredException();
 			}
 			token = entry.getToken();
-			zookeeperClient.removeToken(shortToken);
-			
-			// El short token se remueve de zookeeper para evitar accesos foraneos, y se guarda en la sesion
+
 			session.setAttribute(SHORT_TOKEN_SESSION_PARAMETER, shortToken);
 		}
 		return token;
 	}
 
-	private void verifyExpiration(UserActivityData activity) {
+	private void verifyExpiration(String token, UserActivityData activity, ZookeeperClient zookeeperClient)
+			throws Exception {
+
 		if (activity.isExpired()) {
+			// Si la sesion esta expirada se borra de zookeeper
+			zookeeperClient.removeSession(token);
 			throw new SessionExpiredException();
 		}
 	}

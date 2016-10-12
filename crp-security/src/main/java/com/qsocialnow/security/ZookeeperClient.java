@@ -52,4 +52,8 @@ public class ZookeeperClient {
 		zookeeperClient.delete().forPath(path);
 	}
 
+	public void removeSession(String token) throws Exception {
+		String path = MessageFormat.format(ZOOKEPEER_SESSION_PATH, token);
+		zookeeperClient.delete().forPath(path);
+	}
 }
