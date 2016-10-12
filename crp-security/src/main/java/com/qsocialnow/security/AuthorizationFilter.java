@@ -24,6 +24,7 @@ public class AuthorizationFilter implements Filter {
 	private static final String TOKEN_REQUEST_PARAMETER = "token";
 	private static final String TOKEN_SESSION_PARAMETER = "token";
 	private static final String USER_SESSION_PARAMETER = "user";
+	private static final String SHORT_TOKEN_SESSION_PARAMETER = "shortToken";
 
 	private String urlLogin;
 
@@ -78,8 +79,20 @@ public class AuthorizationFilter implements Filter {
 		String token = null;
 		String shortToken = httpRequest.getParameter(TOKEN_REQUEST_PARAMETER);
 		if (StringUtils.isNotBlank(shortToken)) {
+			
+			// Se busca si el short token ya fue usado y si esta en la sesion, para no ir a zookeeper
+			HttpSession session = httpRequest.getSession();
+			String shortTokenFromSession = (String) session.getAttribute(SHORT_TOKEN_SESSION_PARAMETER);
+			if (shortToken.equals(shortTokenFromSession)) {
+				return (String) session.getAttribute(TOKEN_SESSION_PARAMETER);
+			}
+			
+			// Si es un short token nuevo hay que ir a buscarlo a zookeeper
 			token = zookeeperClient.findToken(shortToken);
 			zookeeperClient.removeToken(shortToken);
+			
+			// El short token se remueve de zookeeper para evitar accesos foraneos, y se guarda en la sesion
+			session.setAttribute(SHORT_TOKEN_SESSION_PARAMETER, shortToken);
 		}
 		return token;
 	}

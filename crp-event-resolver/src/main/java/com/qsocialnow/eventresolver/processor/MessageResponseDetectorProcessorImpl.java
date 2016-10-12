@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.event.Event;
-import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
 import com.qsocialnow.kafka.model.Message;
 
@@ -16,9 +15,6 @@ import com.qsocialnow.kafka.model.Message;
 public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageResponseDetectorProcessorImpl.class);
-
-    @Autowired
-    private EventResolverConfig appConfig;
 
     @Autowired
     private DetectionMessageProcessor detectionMessageProcessor;
@@ -32,8 +28,7 @@ public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
 
     public void process(Message message) throws Exception {
         // reintentar ES
-        Event inputBeanDocument = new GsonBuilder().setDateFormat(appConfig.getDateFormat()).create()
-                .fromJson(message.getMessage(), Event.class);
+        Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);
 
         String domainId = message.getGroup();
         LOGGER.info(String.format("Processing message from Response Detector using domain %s: %s", domainId,
