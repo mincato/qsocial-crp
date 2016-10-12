@@ -1335,6 +1335,31 @@ router.get('/thematics', function (req, res) {
   thematicService.findAll(asyncResponse);
 });
 
+router.get('/thematics/:thematicId/series/:serieId/categories', function (req, res) {
+
+    function asyncResponse(err,response) {
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(response !== null) {
+      try {
+        res.set('Content-Type', 'application/json');
+        res.send(gson.toJsonSync(response));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+  var thematicId = req.params.thematicId;
+  var serieId = req.params.serieId;
+  var thematicService = javaContext.getBeanSync("thematicService");	  
+  thematicService.findCategoryGroupsBySerieId(thematicId, serieId, asyncResponse);
+});
+
 
 
 router.get('/subjects', function (req, res) {

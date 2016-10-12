@@ -14,40 +14,27 @@ import com.qsocialnow.persistence.ThematicRepository;
 @Service
 public class ThematicService {
 
-	private static final Logger log = LoggerFactory.getLogger(ThematicService.class);
-	
+    private static final Logger log = LoggerFactory.getLogger(ThematicService.class);
+
     @Autowired
     private ThematicRepository thematicRepository;
 
     public List<Thematic> findAll() {
-    	try {
-    		return thematicRepository.findAll();
-    	} catch (Exception e) {
-    		log.error("There was an error finding thematics", e);
-    		throw new RuntimeException(e);
-    	}
+        try {
+            return thematicRepository.findAll();
+        } catch (Exception e) {
+            log.error("There was an error finding thematics", e);
+            throw new RuntimeException(e);
+        }
     }
 
     public List<CategoryGroup> findCategoryGroupsBySerieId(String thematicId, String serieId) {
-        // AWSLambda lambda =
-        // AWSLambdaClientBuilder.standard().withCredentials(awsLambdaClientConfig)
-        // .withRegion(awsLambdaClientConfig.getRegion()).build();
-        //
-        // CategoryGroupsBySerieService service =
-        // LambdaInvokerFactory.builder().lambdaClient(lambda).build(CategoryGroupsBySerieService.class);
-        // CategoryGroupsBySerieIdOuptut conjuntosBySerieId =
-        // service.conjuntosBySerieId(categoryGroupInput);
-        // conjuntosBySerieId.getConjuntos().sort(new
-        // Comparator<CategoryGroup>() {
-        //
-        // @Override
-        // public int compare(CategoryGroup o1, CategoryGroup o2) {
-        // return o1.getNumeroDeOrden().compareTo(o2.getNumeroDeOrden());
-        // }
-        //
-        // });
-        // return conjuntosBySerieId.getConjuntos();
-        return null;
+        try {
+            return thematicRepository.findCategoryGroupsBySerieId(Long.parseLong(thematicId), Long.parseLong(serieId));
+        } catch (Exception e) {
+            log.error("There was an error finding category groups", e);
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.CategoryGroup;
 import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
@@ -50,6 +51,29 @@ public class ThematicServiceImpl implements ThematicService {
 
             List<Thematic> thematics = response.getBody();
             return thematics;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call thematic service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CategoryGroup> findCategoriesBySerieId(Long thematicId, Long serieId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", thematicServiceUrl))
+                    .path("/" + thematicId).path("/series/" + serieId).path("/categories");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<CategoryGroup>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null, new ParameterizedTypeReference<List<CategoryGroup>>() {
+                    });
+
+            List<CategoryGroup> categories = response.getBody();
+            return categories;
         } catch (Exception e) {
             log.error("There was an error while trying to call thematic service", e);
             throw new RuntimeException(e);

@@ -7,8 +7,6 @@ public class AWSLambdaClientConfig implements AWSCredentials, AWSCredentialsProv
 
     private String region;
 
-    private String host;
-
     private String accessKey;
 
     private String secretAccessKey;
@@ -40,14 +38,6 @@ public class AWSLambdaClientConfig implements AWSCredentials, AWSCredentialsProv
 
     public void setRegion(String region) {
         this.region = region;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
 }
