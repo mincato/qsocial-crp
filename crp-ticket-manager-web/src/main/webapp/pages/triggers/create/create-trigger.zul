@@ -195,12 +195,12 @@
 											<a
 												sclass="btn-list-action"
 												onClick="@command('editSegment', segment=each, fxTrigger = fxTrigger)">
-												<i class="glyphicon glyphicon-pencil fa-2x"></i>
+												<i class="glyphicon glyphicon-pencil fa-lg"></i>
 											</a>
 											<a zclass="btn-list-action"
 												onClick="@command('removeSegment', segment=each, fxTrigger = fxTrigger.trigger)">
 												<i
-													class="glyphicon glyphicon-erase fa-2x">
+													class="glyphicon glyphicon-erase fa-lg">
 												</i>
 											</a>
 										</n:div>

@@ -2744,6 +2744,11 @@ TABLE OF CONTENTS
 	display: inline-block;
 }
 
+.btn-list-action > i {
+	margin-left: 10px;
+} 
+
+
 .remove {
     font-size: 21px;
     font-weight: 700;

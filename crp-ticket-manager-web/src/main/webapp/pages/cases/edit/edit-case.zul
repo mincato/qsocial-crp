@@ -9,7 +9,7 @@
                 <n:h5>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h5>
             </div>
         </n:div>
-    </n:div>
+    </n:div>	
 
     <div zclass="panel-group">
         <div zclass="pane equal">

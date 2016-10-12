@@ -51,7 +51,7 @@
 								<a zclass="btn-list-action"
 									onClick="@command('deleteCategory', index = forEachStatus.index, fx = fx)">
 									<i
-										class="glyphicon glyphicon-erase fa-2x">
+										class="glyphicon glyphicon-erase fa-lg">
 									</i>
 								</a>
 							</n:div>

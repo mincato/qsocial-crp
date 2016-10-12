@@ -42,10 +42,10 @@
 
 					</x:div>
 					<div zclass="col-sm-2">
-						<a class="link-button"
+						<a class="btn-list-action"
 							onClick="@command('deleteResolution', index = forEachStatus.index, domain = domain)">
 							<i
-								class="glyphicon glyphicon-erase fa-2x">
+								class="glyphicon glyphicon-erase fa-lg">
 							</i>
 						</a>
 					</div>

@@ -91,7 +91,7 @@
 									<li>
 										<a href="/pages/subject-category-set/list/index.zul">
 											<span
-												class="fa fa-tags fa-fw fa-lg">
+												class="fa fa-users fa-fw fa-lg">
 											</span>
 											<span>${labels.sidebar.menu.subjectcategorysets}
 											</span>

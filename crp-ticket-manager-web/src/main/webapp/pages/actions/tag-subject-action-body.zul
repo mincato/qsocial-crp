@@ -1,8 +1,8 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<n:div class="col-sm-12">
-		<div zclass="link-button pull-right">
-			<a onClick="@command('addCategorySet', fxTagSubjectAction = fxTagSubjectAction)"
+		<div zclass="pull-right">
+			<a class="link-button" onClick="@command('addCategorySet', fxTagSubjectAction = fxTagSubjectAction)"
 				disabled="@load(not tagSubjectActionVm.categorySetListView.enabledAdd)">
 				<i class="fa fa-plus-circle fa-2x"></i>
 				${labels.app.button.add}
@@ -30,8 +30,8 @@
 									</span>
 								</template>
 	    					</div>
-	    					<n:div class="link-button col-sm-2">
-								<a visible="@load(each.categorySet ne null)" onClick="@command('editCategories', index = forEachStatus.index, fxTagSubjectAction = fxTagSubjectAction)">
+	    					<n:div class="col-sm-2">
+								<a class="link-button" visible="@load(each.categorySet ne null)" onClick="@command('editCategories', index = forEachStatus.index, fxTagSubjectAction = fxTagSubjectAction)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 								</a>
 							</n:div>
@@ -41,12 +41,12 @@
 								<a
 									sclass="btn-list-action"
 									onClick="@command('editCategorySet', index = forEachStatus.index, fxTagSubjectAction = fxTagSubjectAction)">
-									<i class="glyphicon glyphicon-pencil fa-2x"></i>
+									<i class="glyphicon glyphicon-pencil fa-lg"></i>
 								</a>
 								<a zclass="btn-list-action"
 									onClick="@command('deleteCategorySet', index = forEachStatus.index, fxTagSubjectAction = fxTagSubjectAction)">
 									<i
-										class="glyphicon glyphicon-erase fa-2x">
+										class="glyphicon glyphicon-erase fa-lg">
 									</i>
 								</a>
 							</n:div>
@@ -80,8 +80,8 @@
 									</span>
 								</template>
 	    					</div>
-	    					<n:div class="link-button col-sm-2">
-								<a visible="@load(each.categorySet ne null)" onClick="@command('editCategories', index = forEachStatus.index, fxTagSubjectAction = fxTagSubjectAction)">
+	    					<n:div class="col-sm-2">
+								<a class="link-button" visible="@load(each.categorySet ne null)" onClick="@command('editCategories', index = forEachStatus.index, fxTagSubjectAction = fxTagSubjectAction)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 								</a>
 							</n:div>
@@ -92,12 +92,12 @@
 									sclass="@load(each.categorySet eq null ? '' : 'btn-list-action')"
 									disabled="@load(each.categorySet eq null)"
 									onClick="@command('confirmCategorySet', index = forEachStatus.index, fxTagSubjectAction = fxTagSubjectAction)">
-									<i class="fa fa-check fa-2x"></i>
+									<i class="glyphicon glyphicon-ok fa-lg"></i>
 								</a>
 								<a zclass="btn-list-action"
 									onClick="@command('deleteCategorySet', index = forEachStatus.index, fxTagSubjectAction = fxTagSubjectAction)">
 									<i
-										class="glyphicon glyphicon-erase fa-2x">
+										class="glyphicon glyphicon-erase fa-lg">
 									</i>
 								</a>
 							</n:div>
