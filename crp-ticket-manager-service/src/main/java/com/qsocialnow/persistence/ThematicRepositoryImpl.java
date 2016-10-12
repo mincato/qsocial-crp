@@ -21,7 +21,7 @@ public class ThematicRepositoryImpl implements ThematicRepository {
     @Autowired
     private AWSLambdaClientConfig awsLambdaClientConfig;
 
-    @Value("app.client")
+    @Value("${app.client}")
     private Integer clientId;
 
     @Override
