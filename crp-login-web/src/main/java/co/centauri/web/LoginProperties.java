@@ -2,14 +2,29 @@ package co.centauri.web;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.MessageFormat;
 import java.util.Properties;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 public class LoginProperties {
 
-	private final static String ZOOKEEPER_HOST_KEY = "zookeeper.host";
-	private final static String TIMEOUT_MINUTES = "timeout.minutes";
-	private final static String ZOOKEEPER_PATH_TOKENS = "zookeeper.path.tokens";
-	private final static String ZOOKEEPER_PATH_SESSIONS = "zookeeper.path.sessions";
+	private interface Keys {
+		final static String ZOOKEEPER_HOST = "zookeeper.host";
+		final static String TIMEOUT_MINUTES = "timeout.minutes";
+		final static String ZOOKEEPER_PATH_TOKENS = "zookeeper.path.tokens";
+		final static String ZOOKEEPER_PATH_SESSIONS = "zookeeper.path.sessions";
+	}
+
+	private interface DefaultValues {
+		final static String ZOOKEEPER_HOST = "localhost:2182";
+		final static long TIMEOUT_MINUTES = 10L;
+		final static String ZOOKEEPER_PATH_TOKENS = "/tokens/{0}";
+		final static String ZOOKEEPER_PATH_SESSIONS = "/sessions/{0}";
+	}
+
+	private static final Logger LOGGER = Logger.getLogger(LoginProperties.class);
 
 	private Properties properties;
 
@@ -23,25 +38,51 @@ public class LoginProperties {
 
 			properties = new Properties();
 			properties.load(new FileInputStream(new File(absolutePath)));
+
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			properties = null;
+			LOGGER.info("=====> login.properties file not found: using default values:");
+			LOGGER.info(MessageFormat.format("{0}: {1}", Keys.ZOOKEEPER_HOST, DefaultValues.ZOOKEEPER_HOST));
+			LOGGER.info(MessageFormat.format("{0}: {1}", Keys.TIMEOUT_MINUTES, DefaultValues.TIMEOUT_MINUTES));
+			LOGGER.info(
+					MessageFormat.format("{0}: {1}", Keys.ZOOKEEPER_PATH_TOKENS, DefaultValues.ZOOKEEPER_PATH_TOKENS));
+			LOGGER.info(MessageFormat.format("{0}: {1}", Keys.ZOOKEEPER_PATH_SESSIONS,
+					DefaultValues.ZOOKEEPER_PATH_SESSIONS));
 		}
 	}
 
 	public String getZookeeperHost() {
-		return properties.getProperty(ZOOKEEPER_HOST_KEY);
+		return getString(Keys.ZOOKEEPER_HOST, DefaultValues.ZOOKEEPER_HOST);
 	}
 
 	public long getTimeoutInMinutes() {
-		String timeout = properties.getProperty(TIMEOUT_MINUTES);
-		return Long.parseLong(timeout);
+		return getLong(Keys.TIMEOUT_MINUTES, DefaultValues.TIMEOUT_MINUTES);
 	}
 
 	public String getZookeeperPathTokens() {
-		return properties.getProperty(ZOOKEEPER_PATH_TOKENS);
+		return getString(Keys.ZOOKEEPER_PATH_TOKENS, DefaultValues.ZOOKEEPER_PATH_TOKENS);
 	}
 
 	public String getZookeeperPathSessions() {
-		return properties.getProperty(ZOOKEEPER_PATH_SESSIONS);
+		return getString(Keys.ZOOKEEPER_PATH_SESSIONS, DefaultValues.ZOOKEEPER_PATH_SESSIONS);
+	}
+
+	private String getString(String key, String defaultValue) {
+		String value = null;
+		if (properties != null) {
+			value = properties.getProperty(key);
+		}
+		return (StringUtils.isBlank(value)) ? defaultValue : value;
+	}
+
+	private long getLong(String key, long defaultValue) {
+		Long value = null;
+		try {
+			String valueStr = properties.getProperty(key);
+			value = Long.parseLong(valueStr);
+		} catch (Exception e) {
+			value = defaultValue;
+		}
+		return value;
 	}
 }
