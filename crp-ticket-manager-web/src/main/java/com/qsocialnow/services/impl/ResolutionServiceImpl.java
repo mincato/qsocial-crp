@@ -37,8 +37,8 @@ public class ResolutionServiceImpl implements ResolutionService {
         try {
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl)).path("/" + domainId)
-                    .path("/resolutions");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
+                    .path("/" + domainId).path("/resolutions");
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
@@ -60,8 +60,8 @@ public class ResolutionServiceImpl implements ResolutionService {
     public Resolution update(String domainId, Resolution resolution) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl)).path("/" + domainId)
-                    .path("/resolutions/").path(resolution.getId());
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
+                    .path("/" + domainId).path("/resolutions/").path(resolution.getId());
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
@@ -83,8 +83,8 @@ public class ResolutionServiceImpl implements ResolutionService {
     public void delete(String domainId, String resolutionId) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl)).path("/" + domainId)
-                    .path("/resolutions/").path(resolutionId);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
+                    .path("/" + domainId).path("/resolutions/").path(resolutionId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");

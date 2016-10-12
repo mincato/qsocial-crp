@@ -88,8 +88,8 @@ public class CaseServiceImpl implements CaseService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl)).path("/" + caseId)
-                    .path("/action");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
+                    .path("/" + caseId).path("/action");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Case caseUpdated = restTemplate.postForObject(builder.toUriString(), actionRequest, Case.class);
@@ -108,8 +108,8 @@ public class CaseServiceImpl implements CaseService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl)).path("/" + caseId)
-                    .path("/availableResolutions");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
+                    .path("/" + caseId).path("/availableResolutions");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<List<Resolution>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
@@ -128,8 +128,8 @@ public class CaseServiceImpl implements CaseService {
     public Case create(Case newCase) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            Case createdCase = restTemplate.postForObject(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl),
-                    newCase, Case.class);
+            Case createdCase = restTemplate.postForObject(
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl), newCase, Case.class);
             return createdCase;
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);

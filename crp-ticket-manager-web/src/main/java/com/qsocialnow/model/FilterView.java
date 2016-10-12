@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.AdmUnitFilter;
+import com.qsocialnow.common.model.config.Series;
+import com.qsocialnow.common.model.config.SubSeries;
+import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.config.WordFilter;
 
 public class FilterView {

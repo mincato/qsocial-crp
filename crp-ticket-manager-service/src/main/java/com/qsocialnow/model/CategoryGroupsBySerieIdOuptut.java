@@ -3,6 +3,8 @@ package com.qsocialnow.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.qsocialnow.common.model.config.CategoryGroup;
+
 public class CategoryGroupsBySerieIdOuptut {
 
     private Long id;
