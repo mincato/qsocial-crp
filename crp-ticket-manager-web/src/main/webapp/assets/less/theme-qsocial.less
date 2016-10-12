@@ -1408,11 +1408,15 @@ PAGE - PROFILE
 CUSTOM
 *******************************/    
     
-.link-button > a > i {
-	color: @default
+.link-button > i {
+	color: @default;
+	border: 0; 
+	float: right; 
+	margin-right: 15px;
+	margin-left: 10px;
 } 
 
-.link-button > a  {
+.link-button, .link-button:hover, .link-button:visited, link-button:focus  {
 	color: @body-text
 } 
 

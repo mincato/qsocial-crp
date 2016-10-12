@@ -155,8 +155,8 @@
 							${labels.trigger.criteria.word.title}
 						</n:label>
 						<n:div class="col-sm-10">
-							<div zclass="link-button pull-right">
-								<a onClick="@command('addFilterWord', fxFilter=fxFilter)">
+							<div zclass="pull-right">
+								<a class="link-button" onClick="@command('addFilterWord', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 									${labels.trigger.criteria.add.filter}
 								</a>
@@ -256,8 +256,8 @@
 							${labels.trigger.criteria.category.title}
 						</n:label>
 						<n:div class="col-sm-10">
-							<div zclass="link-button pull-right">
-								<a onClick="@command('addFilterCategory', fxFilter=fxFilter)">
+							<div zclass="pull-right">
+								<a class="link-button" onClick="@command('addFilterCategory', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 									${labels.trigger.criteria.add.category}
 								</a>
@@ -327,8 +327,8 @@
 							${labels.trigger.automaticActions}
 						</n:h6>
 						<n:div class="col-sm-10">
-							<div zclass="link-button pull-right">
-								<a onClick="@command('createNewAction', fxCriteria = fxCriteria)">
+							<div zclass="pull-right">
+								<a class="link-button" onClick="@command('createNewAction', fxCriteria = fxCriteria)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 										${labels.app.button.add}
 								</a>

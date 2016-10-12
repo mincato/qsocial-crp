@@ -1,8 +1,8 @@
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<x:div>
 		<n:div class="col-sm-12">
-			<div zclass="link-button pull-right">
-				<a onClick="@command('addResolution', fxTrigger = fxTrigger)"
+			<div zclass="pull-right">
+				<a class="link-button" onClick="@command('addResolution', fxTrigger = fxTrigger)"
 					disabled="@load(not triggerVm.resolutionListView.enabledAdd)">
 					<i class="fa fa-plus-circle fa-2x"></i>
 						${labels.app.button.add}

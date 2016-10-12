@@ -11,13 +11,11 @@
 					<label value="@bind(vmsgs['resolutions'])" />
 				</x:span>
 			</x:div>
-			<n:div class="col-md-3 col-sm-4 col-xs-6 pull-right">
-				<n:div class="link-button">
-					<a onClick="@command('addResolution', domain = domain)">
+			<n:div class="pull-right">
+					<a class="link-button" onClick="@command('addResolution', domain = domain)">
 						${labels.domain.add.resolution}
 						<i class="fa fa-plus-circle fa-2x"></i>
 					</a>
-				</n:div>
 			</n:div>
 		</x:div>
 		<div
@@ -43,12 +41,12 @@
 						</x:div>
 
 					</x:div>
-					<div zclass="col-sm-2 link-button">
-						<a
+					<div zclass="col-sm-2">
+						<a class="link-button"
 							onClick="@command('deleteResolution', index = forEachStatus.index, domain = domain)">
 							<i
 								class="glyphicon glyphicon-erase fa-2x">
-							</i>${labels.domain.delete.resolution}
+							</i>
 						</a>
 					</div>
 				</x:div>

@@ -51,8 +51,8 @@
 						${labels.trigger.detectionCriterias}
 					</n:h6>
 					<n:div class="col-sm-10">
-						<div zclass="link-button pull-right">
-							<a onClick="@command('createNewCriteria', fxSegment = fxSegment)">
+						<div zclass="pull-right">
+							<a class="link-button" onClick="@command('createNewCriteria', fxSegment = fxSegment)">
 								<i class="fa fa-plus-circle fa-2x"></i>
 									${labels.app.button.add}
 							</a>
