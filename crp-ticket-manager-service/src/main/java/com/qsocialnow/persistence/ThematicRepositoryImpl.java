@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
@@ -12,6 +13,7 @@ import com.amazonaws.services.lambda.invoke.LambdaInvokerFactory;
 import com.qsocialnow.common.model.config.CategoryGroup;
 import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.config.AWSLambdaClientConfig;
+import com.qsocialnow.config.CacheConfig;
 import com.qsocialnow.model.CategoryGroupBySerieIdInput;
 import com.qsocialnow.model.CategoryGroupsBySerieIdOuptut;
 import com.qsocialnow.model.OrganizationId;
@@ -25,6 +27,7 @@ public class ThematicRepositoryImpl implements ThematicRepository {
     private Integer clientId;
 
     @Override
+    @Cacheable(value = CacheConfig.THEMATICS_CACHE, unless = "#result == null")
     public List<Thematic> findAll() {
         AWSLambda lambda = AWSLambdaClientBuilder.standard().withCredentials(awsLambdaClientConfig)
                 .withRegion(awsLambdaClientConfig.getRegion()).build();
@@ -37,6 +40,7 @@ public class ThematicRepositoryImpl implements ThematicRepository {
     }
 
     @Override
+    @Cacheable(value = CacheConfig.CATEGORIES_CACHE, unless = "#result == null")
     public List<CategoryGroup> findCategoryGroupsBySerieId(Long thematicId, Long serieId) {
         AWSLambda lambda = AWSLambdaClientBuilder.standard().withCredentials(awsLambdaClientConfig)
                 .withRegion(awsLambdaClientConfig.getRegion()).build();

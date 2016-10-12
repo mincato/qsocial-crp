@@ -5,12 +5,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.invoke.LambdaInvokerFactory;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.config.AWSLambdaClientConfig;
+import com.qsocialnow.config.CacheConfig;
 import com.qsocialnow.model.OrganizationId;
 import com.qsocialnow.model.User;
 
@@ -23,6 +25,7 @@ public class UserRepositoryImpl implements UserRepository {
     private Integer clientId;
 
     @Override
+    @Cacheable(value = CacheConfig.USERS_CACHE, unless = "#result == null")
     public List<UserListView> findAll() {
         AWSLambda lambda = AWSLambdaClientBuilder.standard().withCredentials(awsLambdaClientConfig)
                 .withRegion(awsLambdaClientConfig.getRegion()).build();
