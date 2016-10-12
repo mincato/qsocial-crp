@@ -27,7 +27,7 @@ import com.qsocialnow.persistence.UserResolverRepository;
 @Component("sendResponseCaseAction")
 public class SendResponseCaseAction implements Action {
 
-    private Logger log = LoggerFactory.getLogger(SendMessageCaseAction.class);
+    private Logger log = LoggerFactory.getLogger(SendResponseCaseAction.class);
 
     @Resource
     private Map<Long, SourceStrategy> sources;
@@ -59,6 +59,10 @@ public class SendResponseCaseAction implements Action {
         UserResolver userResolver = userResolverRepository.findOne(userResolverId);
         String lastPostId = caseObject.getLastPostId();
         String postId = sources.get(userResolver.getSource()).sendResponse(caseObject, userResolver, text);
+
+        if (caseObject.getIdRootComment() == null)
+            caseObject.setIdRootComment(postId);
+
         caseObject.setPendingResponse(false);
         caseObject.setLastPostId(postId);
         caseObject.setUserResolver(new BaseUserResolver(userResolver));
@@ -89,14 +93,15 @@ public class SendResponseCaseAction implements Action {
                 String clientFacebookUsersZnodePath = MessageFormat.format(facebookUsersZnodePath, appClient);
                 FacebookFeedEvent facebookFeedEvent = new FacebookFeedEvent(caseObject.getId(),
                         caseObject.getLastPostId(), caseObject.getSubject().getSourceId(), caseObject.getSubject()
-                                .getIdentifier(), postId, lastPostId, postId, userResolver.getIdentifier());
+                                .getIdentifier(), postId, lastPostId, postId, caseObject.getIdRootComment(),
+                        userResolver.getIdentifier());
 
                 String facebookEvent = new Gson().toJson(facebookFeedEvent);
 
                 log.info("Adding a facebook user converstation:" + facebookEvent);
                 zookeeperClient.create().forPath(
-                        clientFacebookUsersZnodePath + "/" + userResolver.getIdentifier() + "/" + postId,
-                        facebookEvent.getBytes());
+                        clientFacebookUsersZnodePath + "/" + userResolver.getIdentifier() + "/"
+                                + caseObject.getIdRootComment(), facebookEvent.getBytes());
             }
         } catch (Exception e) {
             log.error("Unexpected error trying to creade conversation node to be consumed by response", e);
