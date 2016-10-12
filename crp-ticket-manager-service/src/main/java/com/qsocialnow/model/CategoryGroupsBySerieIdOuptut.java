@@ -3,8 +3,10 @@ package com.qsocialnow.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.qsocialnow.common.model.config.CategoryGroup;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoryGroupsBySerieIdOuptut {
 
     private Long id;
