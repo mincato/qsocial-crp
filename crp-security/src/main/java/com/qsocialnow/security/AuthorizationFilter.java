@@ -1,7 +1,6 @@
 package com.qsocialnow.security;
 
 import java.io.IOException;
-import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -22,16 +21,12 @@ public class AuthorizationFilter implements Filter {
 	private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
 
 	private static final String URL_LOGIN_INIT_PARAMETER = "urlLogin";
-	private static final String TOKEN_HEADER_PARAMETER = "Authorization";
+	private static final String TOKEN_REQUEST_PARAMETER = "token";
 	private static final String TOKEN_SESSION_PARAMETER = "token";
 	private static final String USER_SESSION_PARAMETER = "user";
-	
-	private static final String TOKEN_TYPE = "Bearer";
-	
-	private static final String ID_TOKEN_PARAMETER = "tokenid"; 
 
 	private String urlLogin;
-	
+
 	@Override
 	public void destroy() {
 		LOGGER.info("=== Destroying AuthorizationFilter ===");
@@ -41,24 +36,15 @@ public class AuthorizationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
-		LOGGER.info("=== AuthorizationFilter ===");
-
 		try {
 			ServletContext context = request.getServletContext();
 			TokenHandlerFactory factory = createTokenHandlerFactory(context);
 			TokenHandler tokenHandler = factory.create();
-			
 			ZookeeperClient zookeeperClient = new ZookeeperClient(context);
-
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			String token = httpRequest.getHeader(TOKEN_HEADER_PARAMETER);
-			String tokenId = httpRequest.getParameter(ID_TOKEN_PARAMETER);
-			
-			if (StringUtils.isNotBlank(token) && token.startsWith(TOKEN_TYPE)) {
-				token = token.substring(TOKEN_TYPE.length());
-			}
-
 			HttpSession session = httpRequest.getSession(true);
+
+			String token = findTokenFromRequestParam(zookeeperClient, httpRequest);
 
 			if (StringUtils.isBlank(token)) {
 				token = (String) session.getAttribute(TOKEN_SESSION_PARAMETER);
@@ -73,6 +59,7 @@ public class AuthorizationFilter implements Filter {
 			UserActivityData activity = zookeeperClient.findUserActivityData(token);
 			verifyExpiration(activity);
 
+			session.setMaxInactiveInterval((int) activity.getSessionTimeoutInSeconds());
 			session.setAttribute(TOKEN_SESSION_PARAMETER, token);
 			session.setAttribute(USER_SESSION_PARAMETER, user);
 			zookeeperClient.updateUserActivityData(token, activity);
@@ -85,10 +72,20 @@ public class AuthorizationFilter implements Filter {
 		}
 	}
 
+	private String findTokenFromRequestParam(ZookeeperClient zookeeperClient, HttpServletRequest httpRequest)
+			throws Exception {
+
+		String token = null;
+		String shortToken = httpRequest.getParameter(TOKEN_REQUEST_PARAMETER);
+		if (StringUtils.isNotBlank(shortToken)) {
+			token = zookeeperClient.findToken(shortToken);
+			zookeeperClient.removeToken(shortToken);
+		}
+		return token;
+	}
+
 	private void verifyExpiration(UserActivityData activity) {
-		long expirationTime = activity.getEpochExpirationTime();
-		long now = new Date().getTime();
-		if (now >= expirationTime) {
+		if (activity.isExpired()) {
 			throw new SessionExpiredException();
 		}
 	}

@@ -1,9 +1,10 @@
 package com.qsocialnow.security;
 
-import java.util.Date;
+import java.text.MessageFormat;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang3.CharEncoding;
 import org.apache.curator.framework.CuratorFramework;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -11,37 +12,42 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import com.google.gson.GsonBuilder;
 
 public class ZookeeperClient {
-	
-	private static final long SECONDS_IN_A_MINUTE = 60;
-	private static final long MILISECONDS_IN_A_SECOND = 1000;
-	
+
+	private static final String ZOOKEPEER_TOKEN_PATH = "/tokens/{0}";
+	private static final String ZOOKEPEER_SESSION_PATH = "/sessions/{0}";
+
 	private CuratorFramework zookeeperClient;
-	
+
 	public ZookeeperClient(ServletContext context) {
 		WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
 		zookeeperClient = springContext.getBean(CuratorFramework.class);
 	}
-	
+
 	public UserActivityData findUserActivityData(String token) throws Exception {
-		String path = "/sessions/" + token;
+		String path = MessageFormat.format(ZOOKEPEER_SESSION_PATH, token);
 		byte[] bytes = zookeeperClient.getData().forPath(path);
-		UserActivityData activity = new GsonBuilder().create().fromJson(new String(bytes), UserActivityData.class);
+		UserActivityData activity = new GsonBuilder().create().fromJson(new String(bytes, CharEncoding.UTF_8),
+				UserActivityData.class);
 		return activity;
 	}
-	
-	public void updateUserActivityData(String token, UserActivityData activity) throws Exception {		
-		long newExpirationTime = calculateNewExpirationTime(activity);
-		activity.setEpochExpirationTime(newExpirationTime);
-		
-		String path = "/sessions/" + token;
-		byte[] bytes = new GsonBuilder().serializeNulls().create().toJson(activity).getBytes();
+
+	public void updateUserActivityData(String token, UserActivityData activity) throws Exception {
+		activity.calculateNewEpochExpirationTime();
+
+		String path = MessageFormat.format(ZOOKEPEER_SESSION_PATH, token);
+		byte[] bytes = new GsonBuilder().serializeNulls().create().toJson(activity).getBytes(CharEncoding.UTF_8);
 		zookeeperClient.setData().forPath(path, bytes);
 	}
 
-	private long calculateNewExpirationTime(UserActivityData activity) {
-		long timeoutInMinutes = activity.getSessionTimeoutInMinutes();
-		return new Date(new Date().getTime() + MILISECONDS_IN_A_SECOND * SECONDS_IN_A_MINUTE * timeoutInMinutes)
-				.getTime();
+	public String findToken(String shortToken) throws Exception {
+		String path = MessageFormat.format(ZOOKEPEER_TOKEN_PATH, shortToken);
+		byte[] bytes = zookeeperClient.getData().forPath(path);
+		return new String(bytes, CharEncoding.UTF_8);
 	}
 	
+	public void removeToken(String shortToken) throws Exception {
+		String path = MessageFormat.format(ZOOKEPEER_TOKEN_PATH, shortToken);
+		zookeeperClient.delete().forPath(path);
+	}
+
 }

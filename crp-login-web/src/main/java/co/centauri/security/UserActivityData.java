@@ -1,4 +1,4 @@
-package com.qsocialnow.security;
+package co.centauri.security;
 
 import java.util.Date;
 
@@ -13,10 +13,6 @@ public class UserActivityData {
 
 	public long getSessionTimeoutInMinutes() {
 		return sessionTimeoutInMinutes;
-	}
-	
-	public long getSessionTimeoutInSeconds() {
-		return sessionTimeoutInMinutes * SECONDS_IN_A_MINUTE;
 	}
 
 	public void setSessionTimeoutInMinutes(long sessionTimeoutInMinutes) {
@@ -41,4 +37,5 @@ public class UserActivityData {
 		long now = new Date().getTime();
 		return (now >= epochExpirationTime);
 	}
+
 }
