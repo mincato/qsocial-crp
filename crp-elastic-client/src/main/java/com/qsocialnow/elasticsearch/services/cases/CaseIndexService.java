@@ -9,12 +9,11 @@ import java.time.LocalDateTime;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.qsocialnow.elasticsearch.repositories.ElasticsearchRepository;
 import com.qsocialnow.elasticsearch.repositories.Repository;
-import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
+
 
 public class CaseIndexService {
 
@@ -36,14 +35,15 @@ public class CaseIndexService {
         if (!isCreated) {
             repository.createIndex(INDEX_NAME);
             //updateAlias(repository, indexName);
+            //createMappings(repository, INDEX_NAME);
         }
         return INDEX_NAME;
     }
-    
+
     public <T> String getQueryIndex() {
         return INDEX_NAME;
     }
-    
+
     private <T> void createMappings(Repository<T> repository, String index) {
         try {
 

@@ -147,9 +147,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
     }
 
-    public <E> void createMapping(Mapping<T, E> mapping) {
-        PutMapping putMapping = new PutMapping.Builder(mapping.getIndex(), mapping.getType(),
-                mapping.getMappingDefinition()).build();
+    @Override
+    public void createMapping(String index, String type, String jsonMapping) {
+        PutMapping putMapping = new PutMapping.Builder(index, type, jsonMapping).build();
         try {
             client.execute(putMapping);
         } catch (IOException e) {
