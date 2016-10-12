@@ -1,6 +1,5 @@
 package co.centauri.security;
 
-
 public class UserData {
 
 	private Long id;
@@ -14,6 +13,8 @@ public class UserData {
 	private String timezone;
 
 	private String language;
+
+	private Long organization;
 
 	public Long getId() {
 		return id;
@@ -61,6 +62,14 @@ public class UserData {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+	public Long getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(Long organization) {
+		this.organization = organization;
 	}
 
 }
