@@ -235,7 +235,7 @@ public class TwitterDetectorService extends SourceDetectorService {
     }
 
     @Override
-    public void processEvent(Boolean isResponseFromMessage, String userResolver, String[] userMentions,
+    public void processEvent(Boolean isResponseFromMessage, Long timestamp, String userResolver, String[] userMentions,
             String sourceMessageId, String messageText, String inReplyToMessageId, String userId, String userName,
             String userProfileImage) {
 
@@ -244,6 +244,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             String mainUserResolver = null;
             event.setId(sourceMessageId);
             event.setFecha(new Date());
+            event.setTimestamp(timestamp);
             event.setMedioId(FilterConstants.MEDIA_TWITTER);
             event.setName(messageText);
             event.setTitulo(messageText);
@@ -271,24 +272,8 @@ public class TwitterDetectorService extends SourceDetectorService {
                     }
 
                 }
-            } else {
-
-                for (Map.Entry<String, TwitterMessageEvent> entry : conversations.entrySet()) {
-                    String inReplyMessageIdNode = entry.getKey();
-                    TwitterMessageEvent twitterMessageEvent = entry.getValue();
-                    log.info("Trying to match existing converstations idReply:" + entry.getKey() + "-from case:"
-                            + twitterMessageEvent.getCaseId());
-                    if (twitterMessageEvent.getUserId().equals(userId)) {
-                        // is response from existing user
-                        log.info("Matching existing converstations from user: " + userId + "-from conversation node:"
-                                + inReplyMessageIdNode);
-                        event.setIdPadre(twitterMessageEvent.getEventId());
-                        event.setOriginIdCase(twitterMessageEvent.getCaseId());
-                        removeSourceConversation(inReplyMessageIdNode);
-                        break;
-                    }
-                }
             }
+
             event.setUsuarioOriginal(userName);
             event.setIdUsuarioOriginal(userId);
             event.setProfileImage(userProfileImage);

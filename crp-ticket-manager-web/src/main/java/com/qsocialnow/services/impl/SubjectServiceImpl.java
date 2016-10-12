@@ -21,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.SubjectService;
@@ -42,7 +43,7 @@ public class SubjectServiceImpl implements SubjectService {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Subject createdSubjectCategorySet = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl("centaurico", subjectServiceUrl), currentSubject, Subject.class);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl), currentSubject, Subject.class);
             return createdSubjectCategorySet;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
@@ -57,7 +58,7 @@ public class SubjectServiceImpl implements SubjectService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", subjectServiceUrl)).path("/" + subjectId);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl)).path("/" + subjectId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Subject subjectSelected = restTemplate.getForObject(builder.toUriString(), Subject.class);
@@ -74,7 +75,7 @@ public class SubjectServiceImpl implements SubjectService {
 
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", subjectServiceUrl)).path("/" + currentSubject.getId());
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl)).path("/" + currentSubject.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
@@ -100,7 +101,7 @@ public class SubjectServiceImpl implements SubjectService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", subjectServiceUrl))
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl))
                     .queryParam("pageNumber", pageNumber);
 
             if (filters != null) {

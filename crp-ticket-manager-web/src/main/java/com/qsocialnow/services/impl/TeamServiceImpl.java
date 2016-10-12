@@ -24,6 +24,7 @@ import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TeamListView;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.TeamService;
@@ -43,7 +44,7 @@ public class TeamServiceImpl implements TeamService {
     public Team create(Team team) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            Team createdTeam = restTemplate.postForObject(serviceUrlResolver.resolveUrl("centaurico", teamServiceUrl),
+            Team createdTeam = restTemplate.postForObject(serviceUrlResolver.resolveUrl(Organization.ODATECH, teamServiceUrl),
                     team, Team.class);
             return createdTeam;
         } catch (Exception e) {
@@ -58,7 +59,7 @@ public class TeamServiceImpl implements TeamService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", teamServiceUrl)).path("/" + teamId);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, teamServiceUrl)).path("/" + teamId);
             Team team = restTemplate.getForObject(builder.toUriString(), Team.class);
             return team;
         } catch (Exception e) {
@@ -71,7 +72,7 @@ public class TeamServiceImpl implements TeamService {
     public Team update(Team currentTeam) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", teamServiceUrl)).path("/" + currentTeam.getId());
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, teamServiceUrl)).path("/" + currentTeam.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
@@ -97,7 +98,7 @@ public class TeamServiceImpl implements TeamService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", teamServiceUrl)).path("/list")
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, teamServiceUrl)).path("/list")
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             if (filters != null) {
@@ -125,7 +126,7 @@ public class TeamServiceImpl implements TeamService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico",
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH,
                     teamServiceUrl));
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -147,7 +148,7 @@ public class TeamServiceImpl implements TeamService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", teamServiceUrl)).path("/" + teamId)
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, teamServiceUrl)).path("/" + teamId)
                     .path("/userResolvers");
 
             if (filters != null) {
@@ -172,7 +173,7 @@ public class TeamServiceImpl implements TeamService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", teamServiceUrl)).path("/" + teamId)
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, teamServiceUrl)).path("/" + teamId)
                     .path("/users");
 
             ResponseEntity<List<User>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,

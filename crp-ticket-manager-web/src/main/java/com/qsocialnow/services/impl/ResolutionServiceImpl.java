@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.config.Resolution;
+import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ResolutionService;
 import com.qsocialnow.services.ServiceUrlResolver;
@@ -36,7 +37,7 @@ public class ResolutionServiceImpl implements ResolutionService {
         try {
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl)).path("/" + domainId)
                     .path("/resolutions");
 
             HttpHeaders headers = new HttpHeaders();
@@ -59,7 +60,7 @@ public class ResolutionServiceImpl implements ResolutionService {
     public Resolution update(String domainId, Resolution resolution) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl)).path("/" + domainId)
                     .path("/resolutions/").path(resolution.getId());
 
             HttpHeaders headers = new HttpHeaders();
@@ -82,7 +83,7 @@ public class ResolutionServiceImpl implements ResolutionService {
     public void delete(String domainId, String resolutionId) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", domainServiceUrl)).path("/" + domainId)
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl)).path("/" + domainId)
                     .path("/resolutions/").path(resolutionId);
 
             HttpHeaders headers = new HttpHeaders();

@@ -1,6 +1,7 @@
 package com.qsocialnow.responsedetector.sources;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -70,11 +71,12 @@ public class TwitterClient {
                             log.info("Historical reply detected : " + statusReply.getId() + " Text: "
                                     + statusReply.getText());
 
+                            Date createdDate = statusReply.getCreatedAt();
                             log.info("Creating event to handle automatic response detection");
-                            sourceService.processEvent(true, statusReply.getInReplyToScreenName(), null,
-                                    String.valueOf(statusReply.getId()), statusReply.getText(),
-                                    messageEvent.getReplyMessageId(), String.valueOf(user.getId()),
-                                    user.getScreenName(), user.getProfileImageURL());
+                            sourceService.processEvent(true, createdDate.getTime(),
+                                    statusReply.getInReplyToScreenName(), null, String.valueOf(statusReply.getId()),
+                                    statusReply.getText(), messageEvent.getReplyMessageId(),
+                                    String.valueOf(user.getId()), user.getScreenName(), user.getProfileImageURL());
                             break;
                         }
                     }
