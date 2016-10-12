@@ -22,6 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.config.UserResolverListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.UserResolverService;
@@ -42,7 +43,7 @@ public class UserResolverServiceImpl implements UserResolverService {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             UserResolver createdUserResolver = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl), userResolver,
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl), userResolver,
                     UserResolver.class);
             return createdUserResolver;
         } catch (Exception e) {
@@ -57,7 +58,7 @@ public class UserResolverServiceImpl implements UserResolverService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl)).path("/" + userResolverId);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path("/" + userResolverId);
             UserResolver userResolver = restTemplate.getForObject(builder.toUriString(), UserResolver.class);
             return userResolver;
         } catch (Exception e) {
@@ -70,7 +71,7 @@ public class UserResolverServiceImpl implements UserResolverService {
     public UserResolver update(UserResolver currentUserResolver) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl)).path(
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path(
                     "/" + currentUserResolver.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -97,7 +98,7 @@ public class UserResolverServiceImpl implements UserResolverService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl)).path("/list")
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path("/list")
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             if (filters != null) {
@@ -123,7 +124,7 @@ public class UserResolverServiceImpl implements UserResolverService {
     public void delete(String userResolverId) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl("centaurico", userResolverServiceUrl)).path("/" + userResolverId);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path("/" + userResolverId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
@@ -143,7 +144,7 @@ public class UserResolverServiceImpl implements UserResolverService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl("centaurico",
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH,
                     userResolverServiceUrl));
 
             if (filters != null) {
