@@ -2,7 +2,6 @@ package com.qsocialnow.responsedetector.service;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;
@@ -242,6 +241,7 @@ public class TwitterDetectorService extends SourceDetectorService {
         try {
             Event event = new Event();
             String mainUserResolver = null;
+
             event.setId(sourceMessageId);
             event.setFecha(new Date());
             event.setTimestamp(timestamp);
@@ -284,5 +284,15 @@ public class TwitterDetectorService extends SourceDetectorService {
         } catch (Exception e) {
             log.error("Error trying to register event :" + e);
         }
+    }
+
+    @Override
+    public String getReplyIdToTrack(String idRootComment) {
+        return null;
+    }
+
+    @Override
+    public String getUserIdToTrack(String idRootComment) {
+        return null;
     }
 }
