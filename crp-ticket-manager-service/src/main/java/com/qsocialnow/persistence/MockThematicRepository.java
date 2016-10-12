@@ -1,26 +1,29 @@
-package com.qsocialnow.services.impl;
+package com.qsocialnow.persistence;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Comparator;
 import java.util.List;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Service;
-
 import com.google.gson.GsonBuilder;
-import com.qsocialnow.model.CategoryGroup;
-import com.qsocialnow.model.CategoryGroupBySerieIdInput;
+import com.qsocialnow.common.model.config.CategoryGroup;
+import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.model.CategoryGroupsBySerieIdOuptut;
-import com.qsocialnow.services.CategoryService;
+import com.qsocialnow.model.ThematicsByClientOrganizationIdOutput;
 
-@Service("mockCategoryService")
-@Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MockCategoryService implements CategoryService {
+public class MockThematicRepository implements ThematicRepository {
 
     @Override
-    public List<CategoryGroup> findBySerieId(CategoryGroupBySerieIdInput categoryGroupInput) {
+    public List<Thematic> findAll() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/thematics.json");
+        return gsonBuilder.create()
+                .fromJson(new InputStreamReader(systemResourceAsStream), ThematicsByClientOrganizationIdOutput.class)
+                .getThematics();
+    }
+
+    @Override
+    public List<CategoryGroup> findCategoryGroupsBySerieId(Long thematicId, Long serieId) {
         GsonBuilder gsonBuilder = new GsonBuilder();
         InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/conjuntos.json");
         CategoryGroupsBySerieIdOuptut conjuntosBySerieId = gsonBuilder.create().fromJson(
@@ -34,6 +37,7 @@ public class MockCategoryService implements CategoryService {
 
         });
         return conjuntosBySerieId.getConjuntos();
+
     }
 
 }

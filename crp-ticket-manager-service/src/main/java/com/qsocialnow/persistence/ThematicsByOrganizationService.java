@@ -1,4 +1,4 @@
-package com.qsocialnow.services;
+package com.qsocialnow.persistence;
 
 import com.amazonaws.services.lambda.invoke.LambdaFunction;
 import com.qsocialnow.model.OrganizationId;

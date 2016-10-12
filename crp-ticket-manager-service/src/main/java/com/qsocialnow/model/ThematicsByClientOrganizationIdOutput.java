@@ -3,6 +3,8 @@ package com.qsocialnow.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.qsocialnow.common.model.config.Thematic;
+
 public class ThematicsByClientOrganizationIdOutput {
 
     private Integer clientOrganizationId;

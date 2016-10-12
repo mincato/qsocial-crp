@@ -28,7 +28,9 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.ListModelList;
 
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.Category;
 import com.qsocialnow.common.model.config.CategoryFilter;
+import com.qsocialnow.common.model.config.CategoryGroup;
 import com.qsocialnow.common.model.config.ConnotationFilter;
 import com.qsocialnow.common.model.config.DetectionCriteria;
 import com.qsocialnow.common.model.config.Domain;
@@ -39,12 +41,12 @@ import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.MediaFilter;
 import com.qsocialnow.common.model.config.PeriodFilter;
 import com.qsocialnow.common.model.config.SerieFilter;
+import com.qsocialnow.common.model.config.Series;
+import com.qsocialnow.common.model.config.SubSeries;
+import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.config.WordFilter;
 import com.qsocialnow.common.model.config.WordFilterType;
-import com.qsocialnow.model.Category;
 import com.qsocialnow.model.CategoryFilterView;
-import com.qsocialnow.model.CategoryGroup;
-import com.qsocialnow.model.CategoryGroupBySerieIdInput;
 import com.qsocialnow.model.Connotation;
 import com.qsocialnow.model.ConnotationView;
 import com.qsocialnow.model.FilterView;
@@ -52,11 +54,7 @@ import com.qsocialnow.model.Language;
 import com.qsocialnow.model.LanguageView;
 import com.qsocialnow.model.MediaView;
 import com.qsocialnow.model.SegmentView;
-import com.qsocialnow.model.Series;
-import com.qsocialnow.model.SubSeries;
-import com.qsocialnow.model.Thematic;
 import com.qsocialnow.model.TriggerView;
-import com.qsocialnow.services.CategoryService;
 import com.qsocialnow.services.ThematicService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -66,11 +64,8 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private static final long serialVersionUID = -4119198423406156946L;
 
-    @WireVariable("mockThematicService")
+    @WireVariable
     private ThematicService thematicService;
-
-    @WireVariable("mockCategoryService")
-    private CategoryService categoryService;
 
     private DetectionCriteria currentCriteria;
 
@@ -334,10 +329,8 @@ public class CreateCriteriaViewModel implements Serializable {
         fxFilter.setSubSerie(null);
         categoryGroupOptions.clear();
         if (fxFilter.getSerie() != null && categoryGroupOptions.isEmpty()) {
-            CategoryGroupBySerieIdInput categoryGroupBySerieIdInput = new CategoryGroupBySerieIdInput();
-            categoryGroupBySerieIdInput.setId(fxFilter.getSerie().getId());
-            categoryGroupBySerieIdInput.setThematicId(fxFilter.getThematic().getId());
-            categoryGroupOptions.addAll(categoryService.findBySerieId(categoryGroupBySerieIdInput));
+            categoryGroupOptions.addAll(thematicService.findCategoriesBySerieId(fxFilter.getThematic().getId(),
+                    fxFilter.getSerie().getId()));
         }
         fxFilter.getFilterCategories().clear();
         BindUtils.postNotifyChange(null, null, fxFilter, "subSerie");
@@ -437,10 +430,8 @@ public class CreateCriteriaViewModel implements Serializable {
                     subSerieOptions.addAll(filterView.getSerie().getSubSeries());
                 }
                 if (filterView.getSerie() != null && categoryGroupOptions.isEmpty()) {
-                    CategoryGroupBySerieIdInput categoryGroupBySerieIdInput = new CategoryGroupBySerieIdInput();
-                    categoryGroupBySerieIdInput.setId(filterView.getSerie().getId());
-                    categoryGroupBySerieIdInput.setThematicId(filterView.getThematic().getId());
-                    categoryGroupOptions.addAll(categoryService.findBySerieId(categoryGroupBySerieIdInput));
+                    categoryGroupOptions.addAll(thematicService.findCategoriesBySerieId(filterView.getThematic()
+                            .getId(), filterView.getSerie().getId()));
                 }
             }
             if (serieFilter.getSubSerieId() != null) {

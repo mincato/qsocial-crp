@@ -41,8 +41,9 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl)).path("/" + caseId)
-                    .path("/registries").queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
+                    .path("/" + caseId).path("/registries").queryParam("pageNumber", pageNumber)
+                    .queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate
@@ -81,8 +82,8 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
             }
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl)).path("/" + caseId)
-                    .path("/registries").queryParam("text", keyword).queryParam("action", action)
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
+                    .path("/" + caseId).path("/registries").queryParam("text", keyword).queryParam("action", action)
                     .queryParam("user", user).queryParam("fromDate", fromDateFormat).queryParam("toDate", toDateFormat)
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 

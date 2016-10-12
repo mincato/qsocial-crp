@@ -1,8 +1,11 @@
-package com.qsocialnow.model;
+package com.qsocialnow.common.model.config;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CategoryGroup {
 
     private Long id;
