@@ -65,6 +65,8 @@ public class Case implements Serializable {
 
     private String lastPostId;
 
+    private String idRootComment;
+
     private Long source;
 
     private BaseUser assignee;
@@ -306,6 +308,14 @@ public class Case implements Serializable {
 
     public void setLastPostId(String lastPostId) {
         this.lastPostId = lastPostId;
+    }
+
+    public String getIdRootComment() {
+        return idRootComment;
+    }
+
+    public void setIdRootComment(String idRootComment) {
+        this.idRootComment = idRootComment;
     }
 
     public String getSegmentId() {

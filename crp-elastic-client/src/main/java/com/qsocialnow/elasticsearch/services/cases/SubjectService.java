@@ -16,7 +16,7 @@ import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
-public class SubjectService extends DynamicIndexService {
+public class SubjectService extends CaseIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(SubjectService.class);
 

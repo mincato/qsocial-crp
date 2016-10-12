@@ -31,7 +31,7 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 import io.searchbox.core.BulkResult.BulkResultItem;
 
-public class CaseService extends DynamicIndexService {
+public class CaseService extends CaseIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(CaseService.class);
 
