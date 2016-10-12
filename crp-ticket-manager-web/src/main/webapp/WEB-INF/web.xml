@@ -121,6 +121,19 @@
 	</filter-mapping>
 	-->
 
+	<filter>
+		<filter-name>authorizationFilter</filter-name>
+		<filter-class>com.qsocialnow.security.AuthorizationFilter</filter-class>
+		<init-param>
+			<param-name>urlLogin</param-name>
+			<param-value>/crp-login-web/</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>authorizationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 	<!-- DSP (optional) 
 	Uncomment it if you want to use DSP
 	However, it is turned on since zksandbox uses DSP to generate CSS.

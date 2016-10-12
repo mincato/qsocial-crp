@@ -45,6 +45,11 @@
 			<artifactId>crp-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.qsocialnow.crp</groupId>
+			<artifactId>crp-security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<!-- Curator -->
 		<dependency>
