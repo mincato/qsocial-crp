@@ -8,26 +8,27 @@ import com.qsocialnow.elasticsearch.mappings.types.config.ResolutionType;
 
 public class ResolutionMapping implements ChildMapping<ResolutionType, Resolution> {
 
-    private static final String INDEX_NAME = "configuration";
-
     private static final String TYPE = "resolution";
 
     private static ResolutionMapping instance;
 
     private String idParent;
 
-    private ResolutionMapping() {
+    private final String index;
+
+    private ResolutionMapping(String index) {
+        this.index = index;
     }
 
-    public static ResolutionMapping getInstance() {
+    public static ResolutionMapping getInstance(String index) {
         if (instance == null)
-            instance = new ResolutionMapping();
+            instance = new ResolutionMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override

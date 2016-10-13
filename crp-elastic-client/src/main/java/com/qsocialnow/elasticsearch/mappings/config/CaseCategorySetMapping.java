@@ -8,24 +8,25 @@ import com.qsocialnow.elasticsearch.mappings.types.config.CaseCategorySetType;
 
 public class CaseCategorySetMapping implements Mapping<CaseCategorySetType, CaseCategorySet> {
 
-    private static final String INDEX_NAME = "configuration";
-
     private static final String TYPE = "caseCategorySet";
 
     private static CaseCategorySetMapping instance;
 
-    private CaseCategorySetMapping() {
+    private final String index;
+
+    private CaseCategorySetMapping(String index) {
+        this.index = index;
     }
 
-    public static CaseCategorySetMapping getInstance() {
+    public static CaseCategorySetMapping getInstance(String index) {
         if (instance == null)
-            instance = new CaseCategorySetMapping();
+            instance = new CaseCategorySetMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override

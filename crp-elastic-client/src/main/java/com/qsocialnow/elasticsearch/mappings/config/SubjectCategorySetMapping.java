@@ -8,24 +8,25 @@ import com.qsocialnow.elasticsearch.mappings.types.config.SubjectCategorySetType
 
 public class SubjectCategorySetMapping implements Mapping<SubjectCategorySetType, SubjectCategorySet> {
 
-    private static final String INDEX_NAME = "configuration";
-
     private static final String TYPE = "subjectCategorySet";
 
     private static SubjectCategorySetMapping instance;
 
-    private SubjectCategorySetMapping() {
+    private final String index;
+
+    private SubjectCategorySetMapping(String index) {
+        this.index = index;
     }
 
-    public static SubjectCategorySetMapping getInstance() {
+    public static SubjectCategorySetMapping getInstance(String index) {
         if (instance == null)
-            instance = new SubjectCategorySetMapping();
+            instance = new SubjectCategorySetMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override

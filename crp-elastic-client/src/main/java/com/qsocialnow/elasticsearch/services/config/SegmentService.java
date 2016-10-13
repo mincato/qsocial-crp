@@ -20,6 +20,8 @@ public class SegmentService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     public void indexSegments(String triggerId, List<Segment> segments) {
         RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
 
@@ -36,7 +38,7 @@ public class SegmentService {
     }
 
     private String indexSegment(String triggerId, Segment segment, Repository<SegmentType> repository) {
-        SegmentMapping mapping = SegmentMapping.getInstance();
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         SegmentType documentIndexed = mapping.getDocumentType(segment);
@@ -50,7 +52,7 @@ public class SegmentService {
         Repository<SegmentType> repository = esfactory.initManager();
         repository.initClient();
 
-        SegmentMapping mapping = SegmentMapping.getInstance();
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<Segment> response = repository.find(segmentId, mapping);
 
@@ -72,7 +74,7 @@ public class SegmentService {
     }
 
     private List<Segment> getSegments(String triggerId, Repository<SegmentType> repository) {
-        SegmentMapping mapping = SegmentMapping.getInstance();
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.matchQuery("triggerId", triggerId));
@@ -108,12 +110,12 @@ public class SegmentService {
     }
 
     private void deleteSegment(String segmentId, Repository<SegmentType> repository) {
-        SegmentMapping mapping = SegmentMapping.getInstance();
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
         repository.removeMapping(segmentId, mapping);
     }
 
     private String updateSegment(String triggerId, Segment segment, Repository<SegmentType> repository) {
-        SegmentMapping mapping = SegmentMapping.getInstance();
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         SegmentType documentIndexed = mapping.getDocumentType(segment);
@@ -125,6 +127,10 @@ public class SegmentService {
 
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }
