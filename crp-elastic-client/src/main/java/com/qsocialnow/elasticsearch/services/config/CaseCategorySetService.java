@@ -25,13 +25,15 @@ public class CaseCategorySetService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     public CaseCategorySet indexCaseCategorySet(CaseCategorySet caseCategorySet, List<CaseCategory> caseCategories) {
         RepositoryFactory<CaseCategorySetType> esfactory = new RepositoryFactory<CaseCategorySetType>(configurator);
 
         Repository<CaseCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance();
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         CaseCategorySetType documentIndexed = mapping.getDocumentType(caseCategorySet);
@@ -47,7 +49,7 @@ public class CaseCategorySetService {
         Repository<CaseCategoryType> repositoryCaseCategory = esCaseCategoryfactory.initManager();
         repositoryCaseCategory.initClient();
 
-        CaseCategoryMapping mappingCaseCategory = CaseCategoryMapping.getInstance();
+        CaseCategoryMapping mappingCaseCategory = CaseCategoryMapping.getInstance(indexConfiguration.getIndexName());
 
         for (CaseCategory caseCategory : caseCategories) {
             CaseCategoryType documentCaseCategoryIndexed = mappingCaseCategory.getDocumentType(caseCategory);
@@ -69,7 +71,7 @@ public class CaseCategorySetService {
         Repository<CaseCategoryType> repository = esfactory.initManager();
         repository.initClient();
 
-        CaseCategoryMapping mapping = CaseCategoryMapping.getInstance();
+        CaseCategoryMapping mapping = CaseCategoryMapping.getInstance(indexConfiguration.getIndexName());
 
         for (CaseCategory caseCategory : caseCategories) {
             CaseCategoryType documentIndexed = mapping.getDocumentType(caseCategory);
@@ -88,7 +90,7 @@ public class CaseCategorySetService {
         Repository<CaseCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance();
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance(indexConfiguration.getIndexName());
         BoolQueryBuilder filters = null;
         if (name != null) {
             filters = QueryBuilders.boolQuery();
@@ -108,7 +110,7 @@ public class CaseCategorySetService {
         Repository<CaseCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance();
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<CaseCategorySet> response = repository.find(caseCategorySetId, mapping);
 
@@ -120,7 +122,7 @@ public class CaseCategorySetService {
 
         Repository<CaseCategoryType> repositoryCaseCategory = esCaseCategoryfactory.initManager();
         repositoryCaseCategory.initClient();
-        CaseCategoryMapping caseCategoryMapping = CaseCategoryMapping.getInstance();
+        CaseCategoryMapping caseCategoryMapping = CaseCategoryMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<CaseCategory> responseCaseCategories = repositoryCaseCategory.queryByField(caseCategoryMapping,
                 0, -1, "description", "idCaseCategorySet", caseCategorySetId);
@@ -138,7 +140,7 @@ public class CaseCategorySetService {
 
         Repository<CaseCategoryType> repositoryCaseCategory = esCaseCategoryfactory.initManager();
         repositoryCaseCategory.initClient();
-        CaseCategoryMapping caseCategoryMapping = CaseCategoryMapping.getInstance();
+        CaseCategoryMapping caseCategoryMapping = CaseCategoryMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<CaseCategory> responseCaseCategories = repositoryCaseCategory.queryByField(caseCategoryMapping,
                 0, -1, "description", "idCaseCategorySet", caseCategorySetId);
@@ -161,7 +163,7 @@ public class CaseCategorySetService {
         Repository<CaseCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance();
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance(indexConfiguration.getIndexName());
         CaseCategorySetType documentIndexed = mapping.getDocumentType(caseCategorySet);
         String response = repository.updateMapping(caseCategorySet.getId(), mapping, documentIndexed);
         repository.closeClient();
@@ -172,7 +174,7 @@ public class CaseCategorySetService {
         Repository<CaseCategoryType> repositoryCaseCategory = esCaseCategoryfactory.initManager();
         repositoryCaseCategory.initClient();
 
-        CaseCategoryMapping mappingCaseCategory = CaseCategoryMapping.getInstance();
+        CaseCategoryMapping mappingCaseCategory = CaseCategoryMapping.getInstance(indexConfiguration.getIndexName());
         SearchResponse<CaseCategory> responseCaseCategories = repositoryCaseCategory.queryByField(mappingCaseCategory,
                 0, -1, "description", "idCaseCategorySet", caseCategorySet.getId());
 
@@ -207,7 +209,7 @@ public class CaseCategorySetService {
         Repository<CaseCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance();
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
@@ -218,6 +220,10 @@ public class CaseCategorySetService {
 
         repository.closeClient();
         return caseCategorySets;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }

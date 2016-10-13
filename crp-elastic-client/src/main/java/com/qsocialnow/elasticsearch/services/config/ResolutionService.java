@@ -18,6 +18,8 @@ public class ResolutionService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     public String indexResolution(String domainId, Resolution resolution) {
         RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
 
@@ -30,7 +32,7 @@ public class ResolutionService {
     }
 
     private String indexResolution(String domainId, Resolution resolution, Repository<ResolutionType> repository) {
-        ResolutionMapping mapping = ResolutionMapping.getInstance();
+        ResolutionMapping mapping = ResolutionMapping.getInstance(indexConfiguration.getIndexName());
         mapping.setIdParent(domainId);
 
         // index document
@@ -52,7 +54,7 @@ public class ResolutionService {
     }
 
     private String updateResolution(String domainId, Resolution resolution, Repository<ResolutionType> repository) {
-        ResolutionMapping mapping = ResolutionMapping.getInstance();
+        ResolutionMapping mapping = ResolutionMapping.getInstance(indexConfiguration.getIndexName());
         mapping.setIdParent(domainId);
 
         ResolutionType documentIndexed = mapping.getDocumentType(resolution);
@@ -72,7 +74,7 @@ public class ResolutionService {
     }
 
     private void deleteResolution(String domainId, String resolutionId, Repository<ResolutionType> repository) {
-        ResolutionMapping mapping = ResolutionMapping.getInstance();
+        ResolutionMapping mapping = ResolutionMapping.getInstance(indexConfiguration.getIndexName());
         mapping.setIdParent(domainId);
 
         repository.removeChildMapping(resolutionId, mapping);
@@ -92,7 +94,7 @@ public class ResolutionService {
     }
 
     private List<Resolution> getResolutions(String domainId, Repository<ResolutionType> repository) {
-        ResolutionMapping mapping = ResolutionMapping.getInstance();
+        ResolutionMapping mapping = ResolutionMapping.getInstance(indexConfiguration.getIndexName());
         mapping.setIdParent(domainId);
 
         SearchResponse<Resolution> response = repository.searchChildMapping(mapping);
@@ -143,6 +145,10 @@ public class ResolutionService {
 
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }

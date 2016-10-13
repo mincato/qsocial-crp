@@ -9,24 +9,25 @@ import com.qsocialnow.elasticsearch.mappings.types.config.DomainType;
 
 public class DomainMapping implements Mapping<DomainType, Domain> {
 
-    private static final String INDEX_NAME = "configuration";
-
     public static final String TYPE = "domain";
 
     private static DomainMapping instance;
 
-    private DomainMapping() {
+    private final String index;
+
+    private DomainMapping(String index) {
+        this.index = index;
     }
 
-    public static DomainMapping getInstance() {
+    public static DomainMapping getInstance(String index) {
         if (instance == null)
-            instance = new DomainMapping();
+            instance = new DomainMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override

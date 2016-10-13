@@ -11,9 +11,16 @@
     	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     	
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 		<property name="triggerService" ref="triggerElasticService"></property>
 	</bean>
+	
+	<bean id="configurationIndexService" class="com.qsocialnow.elasticsearch.services.config.ConfigurationIndexService" init-method="initIndex">
+		<property name="configurator" ref="elasticDomainConfig"></property>
+		<property name="indexName" value="${elastic.configuration.index.name}"></property>
+	</bean>
+	
 	
 	<bean id="caseElasticService" class="com.qsocialnow.elasticsearch.services.cases.CaseService">
 	   <constructor-arg ref="queueConfigurator" />
@@ -29,15 +36,18 @@
     </bean>
     
     <bean id="userResolverService" class="com.qsocialnow.elasticsearch.services.config.UserResolverService">
+ 		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
    
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 		<property name="segmentService" ref="segmentElasticService"></property>
 	</bean>
 	
 	<bean id="segmentElasticService" class="com.qsocialnow.elasticsearch.services.config.SegmentService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	

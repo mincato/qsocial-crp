@@ -2,6 +2,8 @@ package co.centauri.web;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -32,7 +34,9 @@ public class Login extends HttpServlet {
 
 	private static final String ODATECH = "odatech";
 	
-	private static final Long ORGANIZATION = 2l;
+	private static final Long ORGANIZATION = 2L;
+	
+	private static final Map<String, Long> organizations;
 
 	private static final Logger LOGGER = Logger.getLogger(Login.class);
 
@@ -41,6 +45,11 @@ public class Login extends HttpServlet {
 	private TokenHandler tokenHandler;
 
 	private LoginProperties loginProperties;
+	
+	static {
+		organizations = new HashMap<>();
+		organizations.put("diego", 10l);
+	}
 
 	@Override
 	public void init() throws ServletException {
@@ -58,7 +67,7 @@ public class Login extends HttpServlet {
 		user.setUsername(username);
 		user.setOdatech(ODATECH.compareToIgnoreCase(username) == 0);
 		user.setPrcAdmin(ADMIN.compareToIgnoreCase(username) == 0);
-		user.setOrganization(ORGANIZATION);
+		user.setOrganization(organizations.getOrDefault(username, ORGANIZATION));
 
 		String shortToken = UUID.randomUUID().toString();
 		String token = tokenHandler.createToken(user);

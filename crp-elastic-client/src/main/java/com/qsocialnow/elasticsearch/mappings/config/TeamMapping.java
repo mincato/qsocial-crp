@@ -8,24 +8,25 @@ import com.qsocialnow.elasticsearch.mappings.types.config.TeamType;
 
 public class TeamMapping implements Mapping<TeamType, Team> {
 
-    private static final String INDEX_NAME = "configuration";
-
     private static final String TYPE = "teams";
 
     private static TeamMapping instance;
 
-    private TeamMapping() {
+    private final String index;
+
+    private TeamMapping(String index) {
+        this.index = index;
     }
 
-    public static TeamMapping getInstance() {
+    public static TeamMapping getInstance(String index) {
         if (instance == null)
-            instance = new TeamMapping();
+            instance = new TeamMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override

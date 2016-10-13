@@ -25,6 +25,8 @@ public class SubjectCategorySetService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     public SubjectCategorySet indexSubjectCategorySet(SubjectCategorySet subjectCategorySet,
             List<SubjectCategory> subjectCategories) {
         RepositoryFactory<SubjectCategorySetType> esfactory = new RepositoryFactory<SubjectCategorySetType>(
@@ -33,7 +35,7 @@ public class SubjectCategorySetService {
         Repository<SubjectCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance();
+        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         SubjectCategorySetType documentIndexed = mapping.getDocumentType(subjectCategorySet);
@@ -49,7 +51,8 @@ public class SubjectCategorySetService {
         Repository<SubjectCategoryType> repositorySubjectCategory = esSubjectCategoryfactory.initManager();
         repositorySubjectCategory.initClient();
 
-        SubjectCategoryMapping mappingCaseCategory = SubjectCategoryMapping.getInstance();
+        SubjectCategoryMapping mappingCaseCategory = SubjectCategoryMapping.getInstance(indexConfiguration
+                .getIndexName());
 
         for (SubjectCategory subjectCategory : subjectCategories) {
             SubjectCategoryType documentSubjectCategoryIndexed = mappingCaseCategory.getDocumentType(subjectCategory);
@@ -73,7 +76,7 @@ public class SubjectCategorySetService {
         Repository<SubjectCategoryType> repository = esfactory.initManager();
         repository.initClient();
 
-        SubjectCategoryMapping mapping = SubjectCategoryMapping.getInstance();
+        SubjectCategoryMapping mapping = SubjectCategoryMapping.getInstance(indexConfiguration.getIndexName());
 
         for (SubjectCategory subjectCategory : subjectCategories) {
             SubjectCategoryType documentIndexed = mapping.getDocumentType(subjectCategory);
@@ -93,7 +96,7 @@ public class SubjectCategorySetService {
         Repository<SubjectCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance();
+        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance(indexConfiguration.getIndexName());
         BoolQueryBuilder filters = null;
         if (name != null) {
             filters = QueryBuilders.boolQuery();
@@ -114,7 +117,7 @@ public class SubjectCategorySetService {
         Repository<SubjectCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance();
+        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<SubjectCategorySet> response = repository.find(subjectCategorySetId, mapping);
 
@@ -126,7 +129,8 @@ public class SubjectCategorySetService {
 
         Repository<SubjectCategoryType> repositorySubjectCategory = esSubjectCategoryfactory.initManager();
         repositorySubjectCategory.initClient();
-        SubjectCategoryMapping subjectCategoryMapping = SubjectCategoryMapping.getInstance();
+        SubjectCategoryMapping subjectCategoryMapping = SubjectCategoryMapping.getInstance(indexConfiguration
+                .getIndexName());
 
         SearchResponse<SubjectCategory> responseSubjectCategories = repositorySubjectCategory.queryByField(
                 subjectCategoryMapping, 0, -1, "description", "idSubjectCategorySet", subjectCategorySetId);
@@ -144,7 +148,8 @@ public class SubjectCategorySetService {
 
         Repository<SubjectCategoryType> repositorySubjectCategory = esSubjectCategoryfactory.initManager();
         repositorySubjectCategory.initClient();
-        SubjectCategoryMapping subjectCategoryMapping = SubjectCategoryMapping.getInstance();
+        SubjectCategoryMapping subjectCategoryMapping = SubjectCategoryMapping.getInstance(indexConfiguration
+                .getIndexName());
 
         SearchResponse<SubjectCategory> responseSubjectCategories = repositorySubjectCategory.queryByField(
                 subjectCategoryMapping, 0, -1, "description", "idSubjectCategorySet", subjectCategorySetId);
@@ -161,7 +166,7 @@ public class SubjectCategorySetService {
         Repository<SubjectCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance();
+        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
@@ -187,7 +192,7 @@ public class SubjectCategorySetService {
         Repository<SubjectCategorySetType> repository = esfactory.initManager();
         repository.initClient();
 
-        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance();
+        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance(indexConfiguration.getIndexName());
         SubjectCategorySetType documentIndexed = mapping.getDocumentType(subjectCategorySet);
         String response = repository.updateMapping(subjectCategorySet.getId(), mapping, documentIndexed);
         repository.closeClient();
@@ -198,7 +203,8 @@ public class SubjectCategorySetService {
         Repository<SubjectCategoryType> repositorySubjectCategory = esSubjectCategoryfactory.initManager();
         repositorySubjectCategory.initClient();
 
-        SubjectCategoryMapping mappingSubjectCategory = SubjectCategoryMapping.getInstance();
+        SubjectCategoryMapping mappingSubjectCategory = SubjectCategoryMapping.getInstance(indexConfiguration
+                .getIndexName());
         SearchResponse<SubjectCategory> responseCaseCategories = repositorySubjectCategory.queryByField(
                 mappingSubjectCategory, 0, -1, "description", "idSubjectCategorySet", subjectCategorySet.getId());
 
@@ -227,6 +233,10 @@ public class SubjectCategorySetService {
         }
         repositorySubjectCategory.initClient();
         return response;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }

@@ -34,6 +34,11 @@
  		<constructor-arg value="${app.elastic.config.configurator.path}"></constructor-arg>
 	</bean>
 	
+	<bean id="configurationIndexService" class="com.qsocialnow.elasticsearch.services.config.ConfigurationIndexService" init-method="initIndex">
+		<property name="configurator" ref="elasticDomainConfig"></property>
+		<property name="indexName" value="${elastic.configuration.index.name}"></property>
+	</bean>
+	
 	<bean id="twitterConfig" class="com.qsocialnow.config.TwitterConfigFactory" factory-method="findConfig">
  		<constructor-arg ref="zookeeperClient"></constructor-arg>
  		<constructor-arg value="${app.twitter.app.configurator.path}"></constructor-arg>
@@ -45,6 +50,7 @@
 	</bean>
 	
 	<bean id="domainElasticService" class="com.qsocialnow.elasticsearch.services.config.DomainService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 		<property name="triggerService" ref="triggerElasticService"></property>
 		<property name="resolutionService" ref="resolutionElasticService"></property>
@@ -64,31 +70,38 @@
     </bean>
 	
 	<bean id="resolutionElasticService" class="com.qsocialnow.elasticsearch.services.config.ResolutionService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 		<property name="segmentService" ref="segmentElasticService"></property>
 	</bean>
 	
 	<bean id="segmentElasticService" class="com.qsocialnow.elasticsearch.services.config.SegmentService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 	
 	<bean id="userResolverElasticService" class="com.qsocialnow.elasticsearch.services.config.UserResolverService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
 
 	<bean id="teamElasticService" class="com.qsocialnow.elasticsearch.services.config.TeamService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
     
     <bean id="caseCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.CaseCategorySetService">
+    	<property name="indexConfiguration" ref="configurationIndexService"></property>
         <property name="configurator" ref="elasticDomainConfig"></property>
     </bean>
     
     <bean id="subjectCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.SubjectCategorySetService">
+    	<property name="indexConfiguration" ref="configurationIndexService"></property>
         <property name="configurator" ref="elasticDomainConfig"></property>
     </bean>
     
