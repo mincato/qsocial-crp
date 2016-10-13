@@ -27,7 +27,7 @@ public class AuthorizationFilter implements Filter {
 	private static final String URL_LOGIN_INIT_PARAMETER = "urlLogin";
 	private static final String TOKEN_REQUEST_PARAMETER = "token";
 	private static final String TOKEN_SESSION_PARAMETER = "token";
-	private static final String USER_SESSION_PARAMETER = "user";
+	public static final String USER_SESSION_PARAMETER = "user";
 	private static final String SHORT_TOKEN_SESSION_PARAMETER = "shortToken";
 
 	private String urlLogin;
@@ -41,6 +41,8 @@ public class AuthorizationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
+		boolean continueProcessing = true;
+		
 		try {
 			ServletContext context = request.getServletContext();
 			TokenHandlerFactory factory = createTokenHandlerFactory(context);
@@ -69,12 +71,15 @@ public class AuthorizationFilter implements Filter {
 			session.setAttribute(USER_SESSION_PARAMETER, user);
 			zookeeperClient.updateUserActivityData(token, activity);
 
+
 		} catch (Exception e) {
 			LOGGER.error("Error authorizing token", e);
 			redirectToLogin(response);
+			continueProcessing = false;
 		}
-
-		chain.doFilter(request, response);
+		if (continueProcessing) {
+			chain.doFilter(request, response);
+		}
 	}
 
 	private String findTokenFromRequestParam(ZookeeperClient zookeeperClient, HttpServletRequest httpRequest)

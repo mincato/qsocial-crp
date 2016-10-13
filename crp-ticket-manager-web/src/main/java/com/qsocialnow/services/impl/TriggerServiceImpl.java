@@ -26,7 +26,6 @@ import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.TriggerService;
@@ -48,8 +47,7 @@ public class TriggerServiceImpl implements TriggerService {
         try {
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .path("/" + domainId).path("/trigger");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId).path("/trigger");
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
@@ -75,9 +73,8 @@ public class TriggerServiceImpl implements TriggerService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .path("/" + domainId).path("/trigger").queryParam("pageNumber", pageNumber)
-                    .queryParam("pageSize", pageSize);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId).path("/trigger")
+                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -104,8 +101,8 @@ public class TriggerServiceImpl implements TriggerService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .path("/" + domainId).path("/trigger/" + triggerId);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId);
 
             Trigger trigger = restTemplate.getForObject(builder.toUriString(), Trigger.class);
             return trigger;
@@ -120,8 +117,8 @@ public class TriggerServiceImpl implements TriggerService {
         try {
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .path("/" + domainId).path("/trigger/" + trigger.getId());
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + trigger.getId());
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
@@ -145,8 +142,8 @@ public class TriggerServiceImpl implements TriggerService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .path("/" + domainId).path("/trigger/" + triggerId).path("/segment/" + segmentId);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/segment/" + segmentId);
 
             Segment segment = restTemplate.getForObject(builder.toUriString(), Segment.class);
             return segment;
@@ -162,8 +159,8 @@ public class TriggerServiceImpl implements TriggerService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .path("/" + domainId).path("/trigger/" + triggerId).path("/segments");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/segments");
 
             ResponseEntity<List<SegmentListView>> response = restTemplate.exchange(builder.toUriString(),
                     HttpMethod.GET, null, new ParameterizedTypeReference<List<SegmentListView>>() {
@@ -181,8 +178,8 @@ public class TriggerServiceImpl implements TriggerService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .path("/" + domainId).path("/trigger/" + triggerId).path("/caseCategories");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/caseCategories");
 
             ResponseEntity<List<CaseCategorySet>> response = restTemplate.exchange(builder.toUriString(),
                     HttpMethod.GET, null, new ParameterizedTypeReference<List<CaseCategorySet>>() {
@@ -200,8 +197,8 @@ public class TriggerServiceImpl implements TriggerService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .path("/" + domainId).path("/trigger/" + triggerId).path("/subjectCategories");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/subjectCategories");
 
             ResponseEntity<List<SubjectCategorySet>> response = restTemplate.exchange(builder.toUriString(),
                     HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategorySet>>() {
