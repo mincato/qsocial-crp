@@ -14,14 +14,18 @@ public class FacebookFeedEvent {
 
     private final String commentId;
 
+    private final String rootCommentId;
+
     private final String userPageId;
 
     public FacebookFeedEvent(final String caseId, final String eventId, final String userId, final String userName,
-            final String replyMessageId, final String messageId, String commentId, final String userPageId) {
+            final String replyMessageId, final String messageId, final String commentId, final String rootCommentId,
+            final String userPageId) {
         this.caseId = caseId;
         this.eventId = eventId;
         this.userId = userId;
         this.userName = userName;
+        this.rootCommentId = rootCommentId;
         this.commentId = commentId;
         this.messageId = messageId;
         this.userPageId = userPageId;
@@ -55,10 +59,14 @@ public class FacebookFeedEvent {
         return userPageId;
     }
 
+    public String getRootCommentId() {
+        return rootCommentId;
+    }
+
     @Override
     public int hashCode() {
         return caseId.hashCode() + eventId.hashCode() + userId.hashCode() + userName.hashCode() + messageId.hashCode()
-                + commentId.hashCode() + userPageId.hashCode();
+                + commentId.hashCode() + rootCommentId.hashCode() + userPageId.hashCode();
     }
 
     @Override
@@ -87,6 +95,9 @@ public class FacebookFeedEvent {
             return false;
 
         if (!messageId.equals(other.messageId))
+            return false;
+
+        if (!rootCommentId.equals(other.rootCommentId))
             return false;
 
         if (!commentId.equals(other.commentId))

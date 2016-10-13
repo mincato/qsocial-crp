@@ -15,6 +15,9 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.qsocialnow.security.exception.TokenExpiredException;
+import com.qsocialnow.security.exception.TokenGenerationException;
+import com.qsocialnow.security.exception.UnauthorizedException;
 
 public class TokenHandler {
 

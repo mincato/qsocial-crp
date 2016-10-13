@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import com.google.gson.GsonBuilder;
 
+import co.centauri.security.ShortTokenEntry;
 import co.centauri.security.TokenHandler;
 import co.centauri.security.TokenHandlerFactory;
 import co.centauri.security.TokenHandlerStandaloneFactory;
@@ -30,6 +31,8 @@ public class Login extends HttpServlet {
 	private static final String ADMIN = "administrador";
 
 	private static final String ODATECH = "odatech";
+	
+	private static final Long ORGANIZATION = 2l;
 
 	private static final Logger LOGGER = Logger.getLogger(Login.class);
 
@@ -55,6 +58,7 @@ public class Login extends HttpServlet {
 		user.setUsername(username);
 		user.setOdatech(ODATECH.compareToIgnoreCase(username) == 0);
 		user.setPrcAdmin(ADMIN.compareToIgnoreCase(username) == 0);
+		user.setOrganization(ORGANIZATION);
 
 		String shortToken = UUID.randomUUID().toString();
 		String token = tokenHandler.createToken(user);
@@ -85,8 +89,12 @@ public class Login extends HttpServlet {
 
 	private void persistShortToken(CuratorFramework client, String shortToken, String token) {
 		try {
-			client.create().forPath(MessageFormat.format(loginProperties.getZookeeperPathTokens(), shortToken),
-					token.getBytes(CharEncoding.UTF_8));
+			ShortTokenEntry entry = new ShortTokenEntry();
+			entry.setToken(token);
+			entry.calculateNewEpochExpirationTime();
+
+			byte[] bytes = new GsonBuilder().serializeNulls().create().toJson(entry).getBytes(CharEncoding.UTF_8);
+			client.create().forPath(MessageFormat.format(loginProperties.getZookeeperPathTokens(), shortToken), bytes);
 		} catch (Exception e) {
 			LOGGER.error(e);
 			throw new RuntimeException(e);

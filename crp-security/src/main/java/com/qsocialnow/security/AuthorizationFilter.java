@@ -16,6 +16,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.qsocialnow.security.exception.SessionExpiredException;
+import com.qsocialnow.security.exception.ShortTokenExpiredException;
+import com.qsocialnow.security.exception.TokenNotFoundException;
+
 public class AuthorizationFilter implements Filter {
 
 	private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
@@ -23,7 +27,8 @@ public class AuthorizationFilter implements Filter {
 	private static final String URL_LOGIN_INIT_PARAMETER = "urlLogin";
 	private static final String TOKEN_REQUEST_PARAMETER = "token";
 	private static final String TOKEN_SESSION_PARAMETER = "token";
-	private static final String USER_SESSION_PARAMETER = "user";
+	public static final String USER_SESSION_PARAMETER = "user";
+	private static final String SHORT_TOKEN_SESSION_PARAMETER = "shortToken";
 
 	private String urlLogin;
 
@@ -36,6 +41,8 @@ public class AuthorizationFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 
+		boolean continueProcessing = true;
+		
 		try {
 			ServletContext context = request.getServletContext();
 			TokenHandlerFactory factory = createTokenHandlerFactory(context);
@@ -57,18 +64,21 @@ public class AuthorizationFilter implements Filter {
 			UserData user = tokenHandler.verifyToken(token);
 
 			UserActivityData activity = zookeeperClient.findUserActivityData(token);
-			verifyExpiration(activity);
+			verifyExpiration(token, activity, zookeeperClient);
 
 			session.setMaxInactiveInterval((int) activity.getSessionTimeoutInSeconds());
 			session.setAttribute(TOKEN_SESSION_PARAMETER, token);
 			session.setAttribute(USER_SESSION_PARAMETER, user);
 			zookeeperClient.updateUserActivityData(token, activity);
 
-			chain.doFilter(request, response);
 
 		} catch (Exception e) {
 			LOGGER.error("Error authorizing token", e);
 			redirectToLogin(response);
+			continueProcessing = false;
+		}
+		if (continueProcessing) {
+			chain.doFilter(request, response);
 		}
 	}
 
@@ -78,14 +88,38 @@ public class AuthorizationFilter implements Filter {
 		String token = null;
 		String shortToken = httpRequest.getParameter(TOKEN_REQUEST_PARAMETER);
 		if (StringUtils.isNotBlank(shortToken)) {
-			token = zookeeperClient.findToken(shortToken);
+
+			// Se busca si el short token ya fue usado y si esta en la sesion,
+			// para no ir a zookeeper
+			HttpSession session = httpRequest.getSession();
+			String shortTokenFromSession = (String) session.getAttribute(SHORT_TOKEN_SESSION_PARAMETER);
+			if (shortToken.equals(shortTokenFromSession)) {
+				return (String) session.getAttribute(TOKEN_SESSION_PARAMETER);
+			}
+
+			// Si es un short token nuevo hay que ir a buscarlo a zookeeper
+			ShortTokenEntry entry = zookeeperClient.findToken(shortToken);
+
+			// El short token se remueve de zookeeper para evitar accesos
+			// foraneos
 			zookeeperClient.removeToken(shortToken);
+
+			if (entry.isExpired()) {
+				throw new ShortTokenExpiredException();
+			}
+			token = entry.getToken();
+
+			session.setAttribute(SHORT_TOKEN_SESSION_PARAMETER, shortToken);
 		}
 		return token;
 	}
 
-	private void verifyExpiration(UserActivityData activity) {
+	private void verifyExpiration(String token, UserActivityData activity, ZookeeperClient zookeeperClient)
+			throws Exception {
+
 		if (activity.isExpired()) {
+			// Si la sesion esta expirada se borra de zookeeper
+			zookeeperClient.removeSession(token);
 			throw new SessionExpiredException();
 		}
 	}

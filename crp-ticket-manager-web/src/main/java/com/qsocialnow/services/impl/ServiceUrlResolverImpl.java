@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.ClientOrganization;
+import com.qsocialnow.services.OrganizationService;
 import com.qsocialnow.services.ServiceUrlResolver;
 
 @Service("serviceUrlResolver")
@@ -30,6 +32,9 @@ public class ServiceUrlResolverImpl implements ServiceUrlResolver {
     @Qualifier("zookeeperClient")
     private CuratorFramework zookeeperClient;
 
+    @Autowired
+    private OrganizationService organizationService;
+
     private Map<String, ServiceDiscoverer> serviceDiscoverersByClients;
 
     public ServiceUrlResolverImpl() {
@@ -37,7 +42,9 @@ public class ServiceUrlResolverImpl implements ServiceUrlResolver {
     }
 
     @Override
-    public String resolveUrl(String clientName, String serviceUrlPath) throws Exception {
+    public String resolveUrl(String serviceUrlPath) throws Exception {
+        ClientOrganization organization = organizationService.getCurrentOrganization();
+        String clientName = organization.getId().toString();
         initServiceDiscover(clientName);
         ServiceInstance<Object> serviceInstance = serviceDiscoverersByClients.get(clientName).getServiceInstance();
         if (serviceInstance == null) {
