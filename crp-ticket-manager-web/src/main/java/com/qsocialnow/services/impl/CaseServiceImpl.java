@@ -21,6 +21,7 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.Resolution;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
@@ -41,14 +42,14 @@ public class CaseServiceImpl implements CaseService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public PageResponse<CaseListView> findAll(int pageNumber, int pageSize) {
+    public PageResponse<CaseListView> findAll(PageRequest pageRequest) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+                    .queryParam("pageNumber", pageRequest.getPageNumber()).queryParam("pageSize", pageRequest.getPageSize());
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate

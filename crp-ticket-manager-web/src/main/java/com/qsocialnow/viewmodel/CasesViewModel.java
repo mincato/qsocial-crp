@@ -12,6 +12,7 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.CaseService;
 
@@ -55,7 +56,7 @@ public class CasesViewModel implements Serializable {
     }
 
     private PageResponse<CaseListView> findCases() {
-        PageResponse<CaseListView> pageResponse = caseService.findAll(activePage, pageSize);
+        PageResponse<CaseListView> pageResponse = caseService.findAll(new PageRequest(activePage, pageSize,null));
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.cases.addAll(pageResponse.getItems());
             this.moreResults = true;

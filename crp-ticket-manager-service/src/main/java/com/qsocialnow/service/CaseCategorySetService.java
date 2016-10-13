@@ -11,7 +11,7 @@ import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.CaseCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.CaseCategorySetRepository;
 
 @Service
@@ -24,7 +24,7 @@ public class CaseCategorySetService {
 
     public PageResponse<CaseCategorySetListView> findAll(Integer pageNumber, Integer pageSize, String name) {
         List<CaseCategorySetListView> caseCategorySets = caseCategorySetRepository.findAll(new PageRequest(pageNumber,
-                pageSize), name);
+                pageSize,null), name);
 
         PageResponse<CaseCategorySetListView> page = new PageResponse<CaseCategorySetListView>(caseCategorySets,
                 pageNumber, pageSize);

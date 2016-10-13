@@ -11,7 +11,7 @@ import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.SubjectListRequest;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.SubjectRepository;
 
 @Service
@@ -23,7 +23,7 @@ public class SubjectService {
     private SubjectRepository subjectRepository;
 
     public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String identifier, String source) {
-        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize),
+        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize,null),
                 new SubjectListRequest(identifier, source));
 
         PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageNumber, pageSize);

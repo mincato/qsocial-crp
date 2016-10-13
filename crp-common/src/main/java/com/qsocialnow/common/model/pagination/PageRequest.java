@@ -1,8 +1,8 @@
-package com.qsocialnow.common.pagination;
+package com.qsocialnow.common.model.pagination;
 
-import com.qsocialnow.model.BackEndObject;
+import java.io.Serializable;
 
-public class PageRequest extends BackEndObject {
+public class PageRequest implements Serializable {
 
     private static final long serialVersionUID = -7328689392321734924L;
 
@@ -42,5 +42,4 @@ public class PageRequest extends BackEndObject {
 	public String getSortField() {
 		return sortField;
 	}
-
 }

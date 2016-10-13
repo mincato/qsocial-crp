@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.SubjectCategorySetRepository;
 
 @Service
@@ -23,7 +23,7 @@ public class SubjectCategorySetService {
 
     public PageResponse<SubjectCategorySetListView> findAll(Integer pageNumber, Integer pageSize, String name) {
         List<SubjectCategorySetListView> subjectCategorySets = subjectCategorySetRepository.findAll(new PageRequest(
-                pageNumber, pageSize), name);
+                pageNumber, pageSize,null), name);
 
         PageResponse<SubjectCategorySetListView> page = new PageResponse<SubjectCategorySetListView>(
                 subjectCategorySets, pageNumber, pageSize);

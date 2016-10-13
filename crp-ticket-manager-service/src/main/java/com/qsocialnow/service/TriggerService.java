@@ -20,7 +20,7 @@ import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.TriggerListRequest;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.CaseCategorySetRepository;
 import com.qsocialnow.persistence.SubjectCategorySetRepository;
 import com.qsocialnow.persistence.TriggerRepository;
@@ -69,7 +69,7 @@ public class TriggerService {
             String status, String fromDate, String toDate) {
         Status filterStatus = status != null ? Status.valueOf(status) : null;
         TriggerListRequest triggerListRequest = new TriggerListRequest(name, filterStatus, fromDate, toDate);
-        List<TriggerListView> triggers = triggerRepository.findAll(domainId, new PageRequest(pageNumber, pageSize),
+        List<TriggerListView> triggers = triggerRepository.findAll(domainId, new PageRequest(pageNumber, pageSize,null),
                 triggerListRequest);
 
         PageResponse<TriggerListView> page = new PageResponse<TriggerListView>(triggers, pageNumber, pageSize);

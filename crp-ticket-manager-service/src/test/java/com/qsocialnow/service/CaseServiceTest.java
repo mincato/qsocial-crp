@@ -15,7 +15,7 @@ import org.unitils.reflectionassert.ReflectionAssert;
 
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.mock.CaseBuilder;
 import com.qsocialnow.persistence.CaseRepository;
 
