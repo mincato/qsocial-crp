@@ -14,17 +14,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 
-
 public class CaseIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(CaseIndexService.class);
-	
-	private final static String INDEX_NAME = "cases";
+
+    private final static String INDEX_NAME = "cases";
 
     private static final String ALIAS_QUERY_INDEX = "cases_alias";
 
-	private static final String[] MAPPING_TYPES = {"case"};
-	
+    private static final String[] MAPPING_TYPES = { "case" };
+
     public CaseIndexService() {
 
     }
@@ -34,8 +33,8 @@ public class CaseIndexService {
         // create index
         if (!isCreated) {
             repository.createIndex(INDEX_NAME);
-            //updateAlias(repository, indexName);
-            //createMappings(repository, INDEX_NAME);
+            // updateAlias(repository, indexName);
+            // createMappings(repository, INDEX_NAME);
         }
         return INDEX_NAME;
     }
@@ -47,9 +46,9 @@ public class CaseIndexService {
     private <T> void createMappings(Repository<T> repository, String index) {
         try {
 
-        	for (int i = 0; i < MAPPING_TYPES.length; i++) {
-        		InputStream in = getClass().getResourceAsStream("/mappings/"+MAPPING_TYPES[i]+".json");
-            	BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            for (int i = 0; i < MAPPING_TYPES.length; i++) {
+                InputStream in = getClass().getResourceAsStream("/mappings/" + MAPPING_TYPES[i] + ".json");
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
                 JSONParser jsonParser = new JSONParser();
                 JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
@@ -68,8 +67,6 @@ public class CaseIndexService {
             log.error("Error parsing mapping definition: ", e);
         }
     }
-    
-    
 
     private <T> void updateAlias(Repository<T> repository, String index) {
         repository.updateIndexAlias(index, ALIAS_QUERY_INDEX);

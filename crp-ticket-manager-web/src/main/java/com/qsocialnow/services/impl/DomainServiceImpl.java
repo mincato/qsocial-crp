@@ -19,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ServiceUrlResolver;
@@ -39,8 +38,8 @@ public class DomainServiceImpl implements DomainService {
     public Domain create(Domain domain) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            Domain createdDomain = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl), domain, Domain.class);
+            Domain createdDomain = restTemplate.postForObject(serviceUrlResolver.resolveUrl(domainServiceUrl), domain,
+                    Domain.class);
             return createdDomain;
         } catch (Exception e) {
             log.error("There was an error while trying to call domain service", e);
@@ -54,7 +53,7 @@ public class DomainServiceImpl implements DomainService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl)).path("/" + domainId);
+                    serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId);
             Domain domain = restTemplate.getForObject(builder.toUriString(), Domain.class);
             return domain;
         } catch (Exception e) {
@@ -67,7 +66,7 @@ public class DomainServiceImpl implements DomainService {
     public Domain update(Domain domain) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl)).path("/" + domain.getId());
+                    serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domain.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
@@ -93,8 +92,8 @@ public class DomainServiceImpl implements DomainService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).queryParam("pageNumber", pageNumber)
+                    .queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<PageResponse<DomainListView>> response = restTemplate.exchange(builder.toUriString(),
@@ -116,8 +115,8 @@ public class DomainServiceImpl implements DomainService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, domainServiceUrl))
-                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize).queryParam("name", name);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).queryParam("pageNumber", pageNumber)
+                    .queryParam("pageSize", pageSize).queryParam("name", name);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<PageResponse<DomainListView>> response = restTemplate.exchange(builder.toUriString(),

@@ -31,6 +31,8 @@ public class Login extends HttpServlet {
 	private static final String ADMIN = "administrador";
 
 	private static final String ODATECH = "odatech";
+	
+	private static final Long ORGANIZATION = 2l;
 
 	private static final Logger LOGGER = Logger.getLogger(Login.class);
 
@@ -56,6 +58,7 @@ public class Login extends HttpServlet {
 		user.setUsername(username);
 		user.setOdatech(ODATECH.compareToIgnoreCase(username) == 0);
 		user.setPrcAdmin(ADMIN.compareToIgnoreCase(username) == 0);
+		user.setOrganization(ORGANIZATION);
 
 		String shortToken = UUID.randomUUID().toString();
 		String token = tokenHandler.createToken(user);

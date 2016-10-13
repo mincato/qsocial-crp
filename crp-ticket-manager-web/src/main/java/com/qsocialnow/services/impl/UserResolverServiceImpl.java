@@ -22,7 +22,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.config.UserResolverListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.UserResolverService;
@@ -43,8 +42,7 @@ public class UserResolverServiceImpl implements UserResolverService {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             UserResolver createdUserResolver = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl), userResolver,
-                    UserResolver.class);
+                    serviceUrlResolver.resolveUrl(userResolverServiceUrl), userResolver, UserResolver.class);
             return createdUserResolver;
         } catch (Exception e) {
             log.error("There was an error while trying to call user resolver service", e);
@@ -58,8 +56,7 @@ public class UserResolverServiceImpl implements UserResolverService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path(
-                    "/" + userResolverId);
+                    serviceUrlResolver.resolveUrl(userResolverServiceUrl)).path("/" + userResolverId);
             UserResolver userResolver = restTemplate.getForObject(builder.toUriString(), UserResolver.class);
             return userResolver;
         } catch (Exception e) {
@@ -72,8 +69,7 @@ public class UserResolverServiceImpl implements UserResolverService {
     public UserResolver update(UserResolver currentUserResolver) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path(
-                    "/" + currentUserResolver.getId());
+                    serviceUrlResolver.resolveUrl(userResolverServiceUrl)).path("/" + currentUserResolver.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
@@ -99,8 +95,8 @@ public class UserResolverServiceImpl implements UserResolverService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl))
-                    .path("/list").queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(userResolverServiceUrl)).path("/list")
+                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -125,8 +121,7 @@ public class UserResolverServiceImpl implements UserResolverService {
     public void delete(String userResolverId) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path(
-                    "/" + userResolverId);
+                    serviceUrlResolver.resolveUrl(userResolverServiceUrl)).path("/" + userResolverId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
@@ -146,8 +141,8 @@ public class UserResolverServiceImpl implements UserResolverService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl(
-                    Organization.ODATECH, userResolverServiceUrl));
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(userResolverServiceUrl));
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {
