@@ -148,13 +148,15 @@ public class FacebookDetectorService extends SourceDetectorService {
     private void addFacebookFeedEvent(String commentId, String commentPath, FacebookFeedEvent facebookFeedEvent) {
         try {
 
-            log.info("Adding message conversation from comment :" + commentId + " from Case:"
-                    + facebookFeedEvent.getCaseId());
-            nodePaths.put(commentId, commentPath);
-            conversations.put(commentId, facebookFeedEvent);
-            facebookClient.addNewConversation(facebookFeedEvent.getCommentId());
+            log.info("Adding message conversation from comment :" + facebookFeedEvent.getRootCommentId()
+                    + " from Case:" + facebookFeedEvent.getCaseId());
+
+            nodePaths.put(facebookFeedEvent.getRootCommentId(), commentPath);
+            conversations.put(facebookFeedEvent.getRootCommentId(), facebookFeedEvent);
+            facebookClient.addNewConversation(facebookFeedEvent.getRootCommentId());
         } catch (Exception e) {
-            log.error("There was an error adding converstaions from userResolver: " + commentId, e);
+            log.error("There was an error adding converstaions from userResolver tracking response from id: "
+                    + commentId, e);
         }
     }
 
@@ -196,6 +198,7 @@ public class FacebookDetectorService extends SourceDetectorService {
         try {
             Event event = new Event();
             event.setId(messageId);
+
             event.setTimestamp(timestamp);
             event.setFecha(new Date());
             event.setMedioId(FilterConstants.MEDIA_FACEBOOK);
@@ -224,5 +227,18 @@ public class FacebookDetectorService extends SourceDetectorService {
         } catch (Exception e) {
             log.error("Error trying to register event :" + e);
         }
+    }
+
+    @Override
+    public String getReplyIdToTrack(String idRootComment) {
+        FacebookFeedEvent conversationsByCommentId = conversations.get(idRootComment);
+        return conversationsByCommentId != null ? conversationsByCommentId.getCommentId() : null;
+
+    }
+
+    @Override
+    public String getUserIdToTrack(String idRootComment) {
+        FacebookFeedEvent conversationsByCommentId = conversations.get(idRootComment);
+        return conversationsByCommentId != null ? conversationsByCommentId.getUserId() : null;
     }
 }

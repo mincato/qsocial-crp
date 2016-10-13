@@ -39,15 +39,21 @@ public class ZookeeperClient {
 		zookeeperClient.setData().forPath(path, bytes);
 	}
 
-	public String findToken(String shortToken) throws Exception {
+	public ShortTokenEntry findToken(String shortToken) throws Exception {
 		String path = MessageFormat.format(ZOOKEPEER_TOKEN_PATH, shortToken);
 		byte[] bytes = zookeeperClient.getData().forPath(path);
-		return new String(bytes, CharEncoding.UTF_8);
+		ShortTokenEntry entry = new GsonBuilder().create().fromJson(new String(bytes, CharEncoding.UTF_8),
+				ShortTokenEntry.class);
+		return entry;
 	}
-	
+
 	public void removeToken(String shortToken) throws Exception {
 		String path = MessageFormat.format(ZOOKEPEER_TOKEN_PATH, shortToken);
 		zookeeperClient.delete().forPath(path);
 	}
 
+	public void removeSession(String token) throws Exception {
+		String path = MessageFormat.format(ZOOKEPEER_SESSION_PATH, token);
+		zookeeperClient.delete().forPath(path);
+	}
 }

@@ -1,0 +1,61 @@
+{
+  "properties": {
+    "domainId": {
+      "type": "string",
+      "analyzer": "standard"
+    },
+    "triggerId":{
+      "type": "string",
+      "store" : "yes",
+      "analyzer": "standard"
+    },
+    "segmentId":{
+      "type": "string",
+      "analyzer": "standard"
+    },
+    "open":{
+      "type": "boolean",
+      "analyzer": "standard"
+    },
+    "pendingResponse":{
+      "type": "boolean",
+      "analyzer": "standard"
+    },
+    "openDate":{
+      "type": "date",
+      "index":"no"
+    },
+    "closeDate":{
+      "type": "date",
+      "index":"no"
+    },
+    "title":{
+      "type": "string",
+      "analyzer": "standard"
+    },
+    "description":{
+      "type": "string",
+      "analyzer": "standard"
+    },
+    "resolution":{
+      "type": "string",
+      "analyzer": "standard"
+    },
+    "asignedValue":{
+      "type": "integer",
+      "index":"no"
+    },
+    "unitValue":{
+      "type": "string",
+      "analyzer": "standard"
+    },
+    "sourceUser":{
+      "type": "string",
+      "analyzer": "standard"
+    },
+    "lastPostId":{
+      "type": "string",
+      "analyzer": "standard"
+    },
+  }
+}

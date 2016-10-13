@@ -80,23 +80,40 @@ public class FacebookClient {
                     JSONObject jsonObject = batchResponse.asJSONObject();
                     JSONArray comments = jsonObject.getJSONArray("data");
 
+                    String commentId = messages.get(indexMessage);
+                    boolean startToTrackComment = false;
+
                     if (comments.length() > 0) {
+                        String idCommentToTrack = sourceService.getReplyIdToTrack(commentId);
+                        String userToTrack = sourceService.getUserIdToTrack(commentId);
+
+                        log.info("Retrieving :" + comments.length() + " comments from rootReply:" + commentId);
+
                         for (int i = 0; i < comments.length(); i++) {
+
                             JSONObject jsonComment = comments.getJSONObject(i);
                             Comment comment = DataObjectFactory.createComment(jsonComment.toString());
 
-                            String commentId = messages.get(indexMessage);
-
-                            log.info("Conversation:" + commentId);
                             log.info("Comment: " + comment.getId() + " from:" + comment.getFrom().getName()
                                     + " parent: " + comment.getParent() + " message:" + comment.getMessage());
 
-                            Date createdTime = comment.getCreatedTime();
-                            sourceService.processEvent(true, createdTime.getTime(), null, null, comment.getId(),
-                                    comment.getMessage(), commentId, comment.getFrom().getId(), comment.getFrom()
-                                            .getName(), null);
+                            if (startToTrackComment) {
+                                if (comment.getFrom().getId().equals(userToTrack)) {
+                                    log.info("Finding user:" + userToTrack + "and comment:" + comment.getId()
+                                            + "from conversation rootReply:" + commentId);
+                                    Date createdTime = comment.getCreatedTime();
+                                    sourceService.processEvent(true, createdTime.getTime(), null, null,
+                                            comment.getId(), comment.getMessage(), commentId,
+                                            comment.getFrom().getId(), comment.getFrom().getName(), null);
 
-                            removeConversation(commentId);
+                                    removeConversation(commentId);
+                                    break;
+                                }
+                            }
+                            if (!startToTrackComment && comment.getId().equals(idCommentToTrack)) {
+                                startToTrackComment = true;
+                                log.info("Init to Track comment from response: " + commentId);
+                            }
                         }
                     }
                     indexMessage++;
