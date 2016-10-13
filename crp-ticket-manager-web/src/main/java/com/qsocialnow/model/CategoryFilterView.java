@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.zkoss.zul.ListModelList;
 
+import com.qsocialnow.common.model.config.Category;
+import com.qsocialnow.common.model.config.CategoryGroup;
+
 public class CategoryFilterView {
 
     private CategoryGroup categoryGroup;

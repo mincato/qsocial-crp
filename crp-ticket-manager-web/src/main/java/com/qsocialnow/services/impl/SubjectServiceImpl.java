@@ -43,7 +43,8 @@ public class SubjectServiceImpl implements SubjectService {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Subject createdSubjectCategorySet = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl), currentSubject, Subject.class);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl), currentSubject,
+                    Subject.class);
             return createdSubjectCategorySet;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
@@ -75,7 +76,8 @@ public class SubjectServiceImpl implements SubjectService {
 
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl)).path("/" + currentSubject.getId());
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl)).path(
+                    "/" + currentSubject.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
@@ -101,8 +103,8 @@ public class SubjectServiceImpl implements SubjectService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl))
-                    .queryParam("pageNumber", pageNumber);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectServiceUrl)).queryParam("pageNumber",
+                    pageNumber);
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {

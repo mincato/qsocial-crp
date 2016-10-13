@@ -12,9 +12,6 @@ public class EventResolverConfig {
     @Value("${app.kafka.config.znode.path}")
     private String kafkaConfigZnodePath;
 
-    @Value("${app.dateFormat:dd/MM/yyyy}")
-    private String dateFormat;
-
     @Value("${app.elastic.config.configurator.path}")
     private String elasticConfigConfiguratorZnodePath;
 
@@ -36,10 +33,6 @@ public class EventResolverConfig {
 
     public String getKafkaConfigZnodePath() {
         return kafkaConfigZnodePath;
-    }
-
-    public String getDateFormat() {
-        return dateFormat;
     }
 
     public String getElasticConfigConfiguratorZnodePath() {

@@ -37,7 +37,7 @@ public class DomainService {
         } catch (Exception e) {
             log.error("There was an error saving domain: " + newDomain.getName(), e);
             // TODO rollback;
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
         return domainSaved;
     }
@@ -55,7 +55,7 @@ public class DomainService {
             zookeeperClient.setData().forPath(domainsPath.concat(domainId));
         } catch (Exception e) {
             log.error("There was an error updating domain: " + domain.getName(), e);
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
         return domainSaved;
     }

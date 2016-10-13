@@ -15,7 +15,7 @@
         http://www.springframework.org/schema/aop 
         http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<import resource="cache.xml" />
+	<import resource="profiles.xml" />
 
 	<context:property-placeholder location="${extPropDir:classpath:}application.properties, classpath:config.properties" ignore-unresolvable="true"/>
 	
