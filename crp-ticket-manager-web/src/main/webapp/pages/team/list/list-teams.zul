@@ -39,7 +39,7 @@
 						<td class="list-text-column">${each.name}</td>
 						<td>
                        		<ul class="list-inline">
-  								<li><a class="list-action"><i onClick="@command('openEdit', teamId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.team.edit.action}"></i></a></li>
+  								<li><a class="btn-list-action"><i onClick="@command('openEdit', teamId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.team.edit.action}"></i></a></li>
   							</ul>
 			           	</td>
                		</tr>

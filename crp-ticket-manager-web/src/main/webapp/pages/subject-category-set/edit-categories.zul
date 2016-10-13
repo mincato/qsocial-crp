@@ -48,7 +48,7 @@
 						</x:div>
 						<n:div class="col-xs-4 col-sm-3">
 							<n:div class="pull-right">
-								<a zclass="btn-list-action"
+								<a zclass="btn-row-list"
 									onClick="@command('deleteCategory', index = forEachStatus.index, fx = fx)">
 									<i
 										class="glyphicon glyphicon-erase fa-lg">

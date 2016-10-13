@@ -42,7 +42,7 @@
 
 					</x:div>
 					<div zclass="col-sm-2">
-						<a class="btn-list-action"
+						<a class="btn-row-list"
 							onClick="@command('deleteResolution', index = forEachStatus.index, domain = domain)">
 							<i
 								class="glyphicon glyphicon-erase fa-lg">

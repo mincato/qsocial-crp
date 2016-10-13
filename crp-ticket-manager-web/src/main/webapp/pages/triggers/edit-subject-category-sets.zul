@@ -22,7 +22,7 @@
 					</n:div>
 					<n:div class="col-xs-4 col-sm-3">
 						<n:div class="pull-right">
-							<a zclass="btn-list-action"
+							<a zclass="btn-row-list"
 								onClick="@command('removeSubjectCategorySet', index = forEachStatus.index, fxTrigger = fxTrigger)">
 								<i
 									class="glyphicon glyphicon-erase fa-lg">
@@ -51,12 +51,12 @@
 					<n:div class="col-xs-4 col-sm-3">
 						<n:div class="pull-right">
 							<a
-								sclass="@load(each.subjectCategorySet eq null ? '' : 'btn-list-action')"
+								sclass="@load(each.subjectCategorySet eq null ? '' : 'btn-row-list')"
 								disabled="@load(each.subjectCategorySet eq null)"
 								onClick="@command('confirmSubjectCategorySet', subjectCategorySet=each, fxTrigger = fxTrigger)">
 								<i class="glyphicon glyphicon-ok fa-lg"></i>
 							</a>
-							<a zclass="btn-list-action"
+							<a zclass="btn-row-list"
 								onClick="@command('removeSubjectCategorySet', index = forEachStatus.index, fxTrigger = fxTrigger)">
 								<i
 									class="glyphicon glyphicon-erase fa-lg">

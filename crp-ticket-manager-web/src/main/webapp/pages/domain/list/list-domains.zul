@@ -45,8 +45,8 @@
                        	<td>${each.thematics}</td>
                        	<td>
                        		<ul class="list-inline">
-  								<li><a class="list-action"><i onClick="@command('openEdit', domainId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.domain.edit.action}"></i></a></li>
-								<li><a class="list-action" href="/pages/triggers/list/index.zul?domain=${each.id}"><i class="fa fa-list" data-toggle="tooltip" data-placement="top" title="${labels.domain.view.triggers.action}"></i></a></li>
+  								<li><a class="btn-list-action"><i onClick="@command('openEdit', domainId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.domain.edit.action}"></i></a></li>
+								<li><a class="btn-list-action" href="/pages/triggers/list/index.zul?domain=${each.id}"><i class="fa fa-list" data-toggle="tooltip" data-placement="top" title="${labels.domain.view.triggers.action}"></i></a></li>
 							</ul>
 			           	</td>
                		</tr>

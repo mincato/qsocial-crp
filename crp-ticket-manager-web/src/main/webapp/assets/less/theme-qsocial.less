@@ -45,7 +45,7 @@ SKINS
     @skin-main: #000000;          /*Main elements color - Default: green*/
     
 /* ----- Main Body Color ----- */
-    @body-text: #666666;
+    @body-text: #484747;
     @body-bg: #EDF0F5; /*Background Color*/
     @body-container: #ffffff; /*Page title and panes*/
     @body-pane-title-border: #f4f4f4;
@@ -702,19 +702,25 @@ FOOTER
 		margin-top: 1em
 	}
    
+   .footer-section {
+  	  border-color: @ui-default;
+   }
+   
+   .footer-links  {
+    	border-color: @footer-font-color;
+   }
+   
    .footer-links ul > li > a {
     	color: @footer-font-color;
-    }
+   }
     
     .footer-mail > a {
     	color: @default;
 	}
     
-    .footer-social > a {
+    #footer-social > a {
     	color: @footer-font-color;
     }
-    
-    
 
 /*******************************
 DRAG & DROP
@@ -1190,18 +1196,18 @@ FORMS
     label,
     .radio label,
     .checkbox label {
-        color: @ui-default-color;
+        color: darken(@ui-default-color, 20%);
     }
 
 /* ----- INPUT FIELDS ----- */
     .form-control {
-        border-color: darken(@ui-default, 2%);
+        border-color: darken(@ui-default, 25%);
         color: @ui-default-color;
     }
 
     .form-control:focus {
         background-color: lighten(@ui-default, 4%);
-        border-color: darken(@ui-default, 4%);
+        border-color: darken(@ui-default, 35%);
         color: darken(@ui-default-color, 50%);
     }
 
@@ -1420,8 +1426,12 @@ CUSTOM
 	color: @body-text
 } 
 
-.btn-list-action > i  {
-	color: @default
+.btn-list-action {
+	color: @body-text !important;
+} 
+
+.btn-list-action, btn-list-action:hover, btn-list-action:visited  {
+	color: darken(@body-text, 10%) !important;
 } 
 
 .list-text-column > span {
@@ -1429,12 +1439,14 @@ CUSTOM
 	font-weight: bold !important;
 } 
 
-.more-results > a {
+a, a:visited, a:focus {
 	color: darken(@default, 10%);
+	text-decoration: none;
 }
 
-.more-results > a:hover {
+a:hover {
 	color: darken(@default, 3%);
+	text-decoration: none;
 } 
 
 .list-action {

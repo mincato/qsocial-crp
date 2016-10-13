@@ -74,11 +74,11 @@
 									<n:div class="col-xs-4 col-sm-3">
 										<n:div class="pull-right">
 											<a
-												sclass="btn-list-action"
+												sclass="btn-row-list"
 												onClick="@command('editCriteria', fxSegment = fxSegment, criteria=each)">
 												<i class="glyphicon glyphicon-pencil fa-lg"></i>
 											</a>
-											<a zclass="btn-list-action"
+											<a zclass="btn-row-list"
 												onClick="@command('removeCriteria', fxSegment = fxSegment, criteria=each)">
 												<i
 													class="glyphicon glyphicon-erase fa-lg">

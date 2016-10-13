@@ -1,54 +1,64 @@
-<zk xmlns:n="native"> <n:div class="row">
-	<n:div class="col-xs-12 col-sm-3">
-		<n:div class="col-xs-6 col-sm-12">
-			<img src="/assets/img/core/qslogo.png" alt=" Logo" width="200"></img>
-		</n:div>
-		<n:div class="col-xs-6 col-sm-12">
-			<img src="/assets/img/core/sma.png" width="150" alt=" Logo"></img>
-		</n:div>
-		<n:div class="footer-mail col-xs-6 col-sm-12">
-			<a href="mailto:contacto@qsocialnow.com.ar">contacto@qsocialnow.com.ar</a>
-		</n:div>
+<zk xmlns:n="native"> 
+	<n:div class="row">
+		<div class="col-xs-6 col-sm-4">
+			<img src="/assets/img/core/qslogo.png" alt=" Logo" width="200" style="display:block; margin-left: auto;margin-right: auto;"></img>
+		</div>
 	</n:div>
-	<n:div class="col-xs-12 col-sm-4">
-		<n:div class="col-xs-6 col-sm-8 footer-links">
+	 <n:div class="row">
+		<n:div class="col-xs-6 col-sm-4">
+			<img src="/assets/img/core/sma.png" width="150" alt=" Logo" style="display:block; margin-left: auto;margin-right: auto;"></img>
+			<a style="display:block;text-align:center;font-weight: bold;" href="mailto:info@qsocialnow.com">info@qsocialnow.com</a>
+		</n:div>
+		<n:div id="footer-social" class="col-xs-6 visible-xs">
+			<n:a href="#">
+				<i class="fa fa-youtube fa-2x"></i>
+			</n:a>
+			<n:a href="#">
+				<i class="fa fa-facebook fa-2x"></i>
+			</n:a>
+			<n:a href="#">
+				<i class="fa fa-twitter fa-2x"></i>
+			</n:a>
+		</n:div>
+		<n:div class="hidden-xs col-sm-3 footer-links" style="border-left: 1px solid;">
 			<n:ul class="list fa-ul">
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">ESTUDIOS Y PUBLICACIONES</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">PROYECTOS E INICIATIVAS</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">NOTICIAS</a></li>
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">QSocfasdfasdial</a></li>
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">QNow</a></li>
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.dashboards}</a></li>
 			</n:ul>
 		</n:div>
-		<n:div class="col-xs-6 col-sm-4 footer-links">
-
+		<n:div class="hidden-xs col-sm-3 footer-links" style="border-right: 1px solid; border-left: 1px solid;">
 			<n:ul class="list fa-ul">
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">AGENDA</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">AREAS DE TRABAJO</a></li>
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.reports}</a></li>
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.about}</a></li>
 			</n:ul>
 		</n:div>
+		<n:div id="footer-social" class="hidden-xs col-sm-2">
+			<n:a href="#">
+				<i class="fa fa-youtube fa-2x"></i>
+			</n:a>
+			<n:a href="#">
+				<i class="fa fa-facebook fa-2x"></i>
+			</n:a>
+			<n:a href="#">
+				<i class="fa fa-twitter fa-2x"></i>
+			</n:a>
+		</n:div>
+		
 	</n:div>
-	<n:div class="col-xs-6 col-sm-3 footer-newsletter">
-		<n:span>
-			<b>NEWSLETTER</b>
-		</n:span><br/>
-		<n:span>Suscribite y recibí nuestros trabajos,</n:span><br/>
-		<n:span>proyectos y publicaciones</n:span><br/>
-		<n:input zclass="form-control" placeholder="Tu mail acá" />
-	</n:div>
-	<n:div class="col-xs-6 col-sm-2 footer-social">
-		<n:a href="#">
-			<n:span class="fa fa-youtube fa-2x"></n:span>
-		</n:a>
-		<n:a href="#">
-			<n:span class="fa fa-facebook fa-2x"></n:span>
-		</n:a>
-
-		<n:a href="#">
-			<n:span class="fa fa-twitter fa-2x"></n:span>
-		</n:a>
-
-		<n:a href="#">
-			<n:span class="fa fa-envelope fa-2x"></n:span>
-		</n:a>
-
-	</n:div>
-</n:div></zk>
+	<n:div class="row visible-xs">
+			<n:div class="col-xs-6 footer-links" style="border-left: 1px solid;">
+			<n:ul class="list fa-ul">
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">QSocial</a></li>
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">QNow</a></li>
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.dashboards}</a></li>
+			</n:ul>
+		</n:div>
+		<n:div class="col-xs-6 footer-links" style="border-right: 1px solid; border-left: 1px solid;">
+			<n:ul class="list fa-ul">
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.reports}</a></li>
+				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.about}</a></li>
+			</n:ul>
+		</n:div>
+	
+</zk>

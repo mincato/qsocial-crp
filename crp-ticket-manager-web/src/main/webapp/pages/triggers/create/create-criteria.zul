@@ -198,7 +198,7 @@
 										</x:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
-												<a zclass="btn-list-action"
+												<a zclass="btn-row-list"
 													onClick="@command('removeFilterWord', fxFilter=fxFilter, filter = filterWord)">
 													<i
 														class="glyphicon glyphicon-erase fa-lg">
@@ -301,7 +301,7 @@
 										</n:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
-												<a zclass="btn-list-action"
+												<a zclass="btn-row-list"
 													onClick="@command('removeFilterCategory', fxFilter=fxFilter, filter = filterCategory)">
 													<i
 														class="glyphicon glyphicon-erase fa-lg">
@@ -349,7 +349,7 @@
 										</n:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
-												<a zclass="btn-list-action"
+												<a zclass="btn-row-list"
 													onClick="@command('removeAction', fxCriteria = fxCriteria, action=each)">
 													<i
 														class="glyphicon glyphicon-erase fa-lg">

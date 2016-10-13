@@ -53,7 +53,7 @@
 						<td class="list-text-column">${each.description}</td>
 						<td>
                        		<ul class="list-inline">
-  								<li><a class="list-action"><i onClick="@command('openEdit', subjectcategoryset=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.subjectcategoryset.edit.action}"></i></a></li>
+  								<li><a class="btn-list-action"><i onClick="@command('openEdit', subjectcategoryset=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.subjectcategoryset.edit.action}"></i></a></li>
   							</ul>
 			           	</td>
                		</tr>
