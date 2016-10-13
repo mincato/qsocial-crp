@@ -58,7 +58,8 @@ public class UserResolverServiceImpl implements UserResolverService {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path("/" + userResolverId);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path(
+                    "/" + userResolverId);
             UserResolver userResolver = restTemplate.getForObject(builder.toUriString(), UserResolver.class);
             return userResolver;
         } catch (Exception e) {
@@ -98,8 +99,8 @@ public class UserResolverServiceImpl implements UserResolverService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path("/list")
-                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl))
+                    .path("/list").queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -124,7 +125,8 @@ public class UserResolverServiceImpl implements UserResolverService {
     public void delete(String userResolverId) {
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path("/" + userResolverId);
+                    serviceUrlResolver.resolveUrl(Organization.ODATECH, userResolverServiceUrl)).path(
+                    "/" + userResolverId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Type", "application/json");
@@ -144,8 +146,8 @@ public class UserResolverServiceImpl implements UserResolverService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH,
-                    userResolverServiceUrl));
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl(
+                    Organization.ODATECH, userResolverServiceUrl));
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {

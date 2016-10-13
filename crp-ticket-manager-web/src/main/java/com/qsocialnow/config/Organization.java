@@ -2,6 +2,6 @@ package com.qsocialnow.config;
 
 public interface Organization {
 
-	static final String ODATECH = "2";
+    static final String ODATECH = "2";
 
 }

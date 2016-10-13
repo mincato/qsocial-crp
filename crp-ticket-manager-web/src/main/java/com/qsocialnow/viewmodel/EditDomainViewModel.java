@@ -25,8 +25,8 @@ import org.zkoss.zul.Div;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Resolution;
+import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.model.DomainView;
-import com.qsocialnow.model.Thematic;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ThematicService;
 
@@ -40,7 +40,7 @@ public class EditDomainViewModel implements Serializable {
     @WireVariable
     private DomainService domainService;
 
-    @WireVariable("mockThematicService")
+    @WireVariable
     private ThematicService thematicService;
 
     private DomainView currentDomain;
