@@ -51,8 +51,8 @@
 						${labels.trigger.detectionCriterias}
 					</n:h6>
 					<n:div class="col-sm-10">
-						<div zclass="link-button pull-right">
-							<a onClick="@command('createNewCriteria', fxSegment = fxSegment)">
+						<div zclass="pull-right">
+							<a class="link-button" onClick="@command('createNewCriteria', fxSegment = fxSegment)">
 								<i class="fa fa-plus-circle fa-2x"></i>
 									${labels.app.button.add}
 							</a>
@@ -74,14 +74,14 @@
 									<n:div class="col-xs-4 col-sm-3">
 										<n:div class="pull-right">
 											<a
-												sclass="btn-list-action"
+												sclass="btn-row-list"
 												onClick="@command('editCriteria', fxSegment = fxSegment, criteria=each)">
-												<i class="glyphicon glyphicon-pencil fa-2x"></i>
+												<i class="glyphicon glyphicon-pencil fa-lg"></i>
 											</a>
-											<a zclass="btn-list-action"
+											<a zclass="btn-row-list"
 												onClick="@command('removeCriteria', fxSegment = fxSegment, criteria=each)">
 												<i
-													class="glyphicon glyphicon-erase fa-2x">
+													class="glyphicon glyphicon-erase fa-lg">
 												</i>
 											</a>
 										</n:div>

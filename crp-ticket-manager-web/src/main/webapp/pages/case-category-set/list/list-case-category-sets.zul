@@ -17,9 +17,7 @@
 			    	</div>
                 </n:div>
                 <n:div class="col-md-2 col-xs-4">
-                	<n:div class="link-button">
-					<a href="/pages/case-category-set/create/index.zul">${labels.casecategoryset.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
-	    			</n:div>
+					<a class="link-button" href="/pages/case-category-set/create/index.zul">${labels.casecategoryset.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
 	    		</n:div>
 	       </div>
 	   </n:div>
@@ -55,7 +53,7 @@
 						<td class="list-text-column">${each.description}</td>
 						<td>
                        		<ul class="list-inline">
-  								<li><a class="list-action"><i onClick="@command('openEdit', casecategoryset=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.casecategoryset.edit.action}"></i></a></li>
+  								<li><a class="btn-list-action"><i onClick="@command('openEdit', casecategoryset=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.casecategoryset.edit.action}"></i></a></li>
   							</ul>
 			           	</td>
                		</tr>

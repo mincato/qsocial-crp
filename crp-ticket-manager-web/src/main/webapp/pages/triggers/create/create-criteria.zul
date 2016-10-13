@@ -155,8 +155,8 @@
 							${labels.trigger.criteria.word.title}
 						</n:label>
 						<n:div class="col-sm-10">
-							<div zclass="link-button pull-right">
-								<a onClick="@command('addFilterWord', fxFilter=fxFilter)">
+							<div zclass="pull-right">
+								<a class="link-button" onClick="@command('addFilterWord', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 									${labels.trigger.criteria.add.filter}
 								</a>
@@ -198,10 +198,10 @@
 										</x:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
-												<a zclass="btn-list-action"
+												<a zclass="btn-row-list"
 													onClick="@command('removeFilterWord', fxFilter=fxFilter, filter = filterWord)">
 													<i
-														class="glyphicon glyphicon-erase fa-2x">
+														class="glyphicon glyphicon-erase fa-lg">
 													</i>
 												</a>
 											</n:div>
@@ -256,8 +256,8 @@
 							${labels.trigger.criteria.category.title}
 						</n:label>
 						<n:div class="col-sm-10">
-							<div zclass="link-button pull-right">
-								<a onClick="@command('addFilterCategory', fxFilter=fxFilter)">
+							<div zclass="pull-right">
+								<a class="link-button" onClick="@command('addFilterCategory', fxFilter=fxFilter)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 									${labels.trigger.criteria.add.category}
 								</a>
@@ -301,10 +301,10 @@
 										</n:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
-												<a zclass="btn-list-action"
+												<a zclass="btn-row-list"
 													onClick="@command('removeFilterCategory', fxFilter=fxFilter, filter = filterCategory)">
 													<i
-														class="glyphicon glyphicon-erase fa-2x">
+														class="glyphicon glyphicon-erase fa-lg">
 													</i>
 												</a>
 											</n:div>
@@ -327,8 +327,8 @@
 							${labels.trigger.automaticActions}
 						</n:h6>
 						<n:div class="col-sm-10">
-							<div zclass="link-button pull-right">
-								<a onClick="@command('createNewAction', fxCriteria = fxCriteria)">
+							<div zclass="pull-right">
+								<a class="link-button" onClick="@command('createNewAction', fxCriteria = fxCriteria)">
 									<i class="fa fa-plus-circle fa-2x"></i>
 										${labels.app.button.add}
 								</a>
@@ -349,10 +349,10 @@
 										</n:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">
-												<a zclass="btn-list-action"
+												<a zclass="btn-row-list"
 													onClick="@command('removeAction', fxCriteria = fxCriteria, action=each)">
 													<i
-														class="glyphicon glyphicon-erase fa-2x">
+														class="glyphicon glyphicon-erase fa-lg">
 													</i>
 												</a>
 											</n:div>

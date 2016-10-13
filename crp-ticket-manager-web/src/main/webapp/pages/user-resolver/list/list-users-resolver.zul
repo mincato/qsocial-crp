@@ -5,10 +5,10 @@
 	<n:div class="row">
 	   <n:div class="col-lg-12">
 	       <div zclass="pane equal col-md-12 col-xs-12">
-				<n:div class="col-md-6 col-xs-12">
+				<n:div class="col-sm-5 col-xs-12">
     				<n:h5>${labels.userresolver.list.title}</n:h5>
 				</n:div>
-				<n:div class="col-md-offset-1 col-md-3 col-xs-8">
+				<n:div class="col-sm-offset-1 col-sm-3 col-xs-8">
 					<div zclass="input-group input-group-sm">
 						  <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" />
 							<span zclass="input-group-btn">
@@ -16,10 +16,8 @@
 							</span>
 			    	</div>
                 </n:div>
-                <n:div class="col-md-2 col-xs-4">
-                	<n:div class="link-button">
-					<a href="/pages/user-resolver/create/index.zul">${labels.userresolver.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
-	    			</n:div>
+                <n:div class="col-sm-3 col-xs-4">
+                	<a class="link-button"  href="/pages/user-resolver/create/index.zul">${labels.userresolver.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
 	    		</n:div>
 	       </div>
 	   </n:div>
@@ -45,7 +43,7 @@
 						<td>${c:l(c:cat('userresolver.active.',each.active))}</td>
 						<td>
                        		<ul class="list-inline">
-  								<li><a class="list-action"><i onClick="@command('openEdit', userresolver=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.userresolver.edit.action}"></i></a></li>
+  								<li><a class="btn-list-action"><i onClick="@command('openEdit', userresolver=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.userresolver.edit.action}"></i></a></li>
   								<!-- <li><a class="list-action"><i onClick="@command('openDelete', userresolver=each.id)" class="glyphicon glyphicon-erase" data-toggle="tooltip" data-placement="top" title="${labels.userresolver.delete.action}"></i></a></li> -->
 							</ul>
 			           	</td>

@@ -1,8 +1,8 @@
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<x:div>
 		<n:div class="col-sm-12">
-			<div zclass="link-button pull-right">
-				<a onClick="@command('addCaseCategorySet', fxTrigger = fxTrigger)"
+			<div zclass="pull-right">
+				<a class="link-button" onClick="@command('addCaseCategorySet', fxTrigger = fxTrigger)"
 					disabled="@load(not triggerVm.caseCategorySetListView.enabledAdd)">
 					<i class="fa fa-plus-circle fa-2x"></i>
 						${labels.app.button.add}
@@ -22,10 +22,10 @@
 					</n:div>
 					<n:div class="col-xs-4 col-sm-3">
 						<n:div class="pull-right">
-							<a zclass="btn-list-action"
+							<a zclass="btn-row-list"
 								onClick="@command('removeCaseCategorySet', index = forEachStatus.index, fxTrigger = fxTrigger)">
 								<i
-									class="glyphicon glyphicon-erase fa-2x">
+									class="glyphicon glyphicon-erase fa-lg">
 								</i>
 							</a>
 						</n:div>
@@ -51,15 +51,15 @@
 					<n:div class="col-xs-4 col-sm-3">
 						<n:div class="pull-right">
 							<a
-								sclass="@load(each.caseCategorySet eq null ? '' : 'btn-list-action')"
+								sclass="@load(each.caseCategorySet eq null ? '' : 'btn-row-list')"
 								disabled="@load(each.caseCategorySet eq null)"
 								onClick="@command('confirmCaseCategorySet', caseCategorySet=each, fxTrigger = fxTrigger)">
-								<i class="fa fa-check fa-2x"></i>
+								<i class="glyphicon glyphicon-ok fa-lg"></i>
 							</a>
-							<a zclass="btn-list-action"
+							<a zclass="btn-row-list"
 								onClick="@command('removeCaseCategorySet', index = forEachStatus.index, fxTrigger = fxTrigger)">
 								<i
-									class="glyphicon glyphicon-erase fa-2x">
+									class="glyphicon glyphicon-erase fa-lg">
 								</i>
 							</a>
 						</n:div>
