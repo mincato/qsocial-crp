@@ -19,7 +19,7 @@ public interface Repository<T> {
     public void createIndex(String index);
 
     public void createMapping(String index, String type, String jsonMapping);
-    
+
     public boolean validateIndex(String index);
 
     public boolean updateIndexAlias(String index, String alias);

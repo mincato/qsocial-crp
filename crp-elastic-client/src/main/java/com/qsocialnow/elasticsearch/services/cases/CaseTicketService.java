@@ -13,10 +13,9 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class CaseTicketService extends CaseIndexService {
 
-    private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
-
     public CaseTicketService(AWSElasticsearchConfigurationProvider configurationProvider) {
-        elasticSearchCaseConfigurator = configurationProvider;
+        super(configurationProvider);
+        initIndex();
     }
 
     public Case findCaseById(String originIdCase) {
