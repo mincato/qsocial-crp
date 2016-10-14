@@ -21,7 +21,7 @@ import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
 import com.qsocialnow.persistence.TriggerRepository;
@@ -44,8 +44,8 @@ public class CaseService {
     @Resource
     private Map<ActionType, Action> actions;
 
-    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<CaseListView> cases = repository.findAll(new PageRequest(pageNumber, pageSize));
+    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField) {
+        List<CaseListView> cases = repository.findAll(new PageRequest(pageNumber, pageSize, sortField));
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;

@@ -30,7 +30,6 @@ public class ProducerTask extends TimerTask {
     @Override
     public void run() {
 
-        System.out.println("Creating case");
         Case caseDocument = new Case();
         caseDocument.setTitle("Testing case:" + itemCount.get());
         caseDocument.setDescription("Case: " + itemCount.get());

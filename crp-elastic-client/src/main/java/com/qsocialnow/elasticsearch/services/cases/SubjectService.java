@@ -20,10 +20,9 @@ public class SubjectService extends CaseIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(SubjectService.class);
 
-    private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
-
     public SubjectService(AWSElasticsearchConfigurationProvider configurationProvider) {
-        elasticSearchCaseConfigurator = configurationProvider;
+        super(configurationProvider);
+        initIndex();
     }
 
     public String indexSubject(Subject document) {

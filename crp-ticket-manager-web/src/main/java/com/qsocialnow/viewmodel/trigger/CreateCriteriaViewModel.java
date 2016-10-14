@@ -3,7 +3,6 @@ package com.qsocialnow.viewmodel.trigger;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -457,10 +456,10 @@ public class CreateCriteriaViewModel implements Serializable {
     private void fillDateRangeFilter(FilterView filterView, PeriodFilter periodFilter) {
         if (periodFilter != null) {
             if (periodFilter.getStartDateTime() != null) {
-                filterView.setStartDateTime(new Date(periodFilter.getStartDateTime()));
+                filterView.setStartDateTime(periodFilter.getStartDateTime());
             }
             if (periodFilter.getEndDateTime() != null) {
-                filterView.setEndDateTime(new Date(periodFilter.getEndDateTime()));
+                filterView.setEndDateTime(periodFilter.getEndDateTime());
             }
         }
     }
@@ -493,10 +492,10 @@ public class CreateCriteriaViewModel implements Serializable {
         if (filterView.getStartDateTime() != null || filterView.getEndDateTime() != null) {
             PeriodFilter periodFilter = new PeriodFilter();
             if (filterView.getStartDateTime() != null) {
-                periodFilter.setStartDateTime(filterView.getStartDateTime().getTime());
+                periodFilter.setStartDateTime(filterView.getStartDateTime());
             }
             if (filterView.getEndDateTime() != null) {
-                periodFilter.setEndDateTime(filterView.getEndDateTime().getTime());
+                periodFilter.setEndDateTime(filterView.getEndDateTime());
             }
             filter.setPeriodFilter(periodFilter);
         }

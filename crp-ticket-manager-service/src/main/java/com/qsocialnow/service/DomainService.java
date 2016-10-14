@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.DomainRepository;
 
 @Service
@@ -61,14 +61,15 @@ public class DomainService {
     }
 
     public PageResponse<DomainListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<DomainListView> domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize));
+        List<DomainListView> domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize, null));
 
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
         return page;
     }
 
     public PageResponse<DomainListView> findAllByName(Integer pageNumber, Integer pageSize, String name) {
-        List<DomainListView> domains = domainRepository.findAllByName(new PageRequest(pageNumber, pageSize), name);
+        List<DomainListView> domains = domainRepository
+                .findAllByName(new PageRequest(pageNumber, pageSize, null), name);
 
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
         return page;

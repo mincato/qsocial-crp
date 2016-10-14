@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.config.SubjectCategorySetService;
 
 @Service

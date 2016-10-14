@@ -20,7 +20,7 @@ public class ZookeeperClient {
 
 	public ZookeeperClient(ServletContext context) {
 		WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
-		zookeeperClient = springContext.getBean(CuratorFramework.class);
+		zookeeperClient = (CuratorFramework) springContext.getBean("zookeeperClient");
 	}
 
 	public UserActivityData findUserActivityData(String token) throws Exception {

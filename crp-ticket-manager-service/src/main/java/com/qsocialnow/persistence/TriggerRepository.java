@@ -13,7 +13,7 @@ import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.request.TriggerListRequest;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.config.SegmentService;
 import com.qsocialnow.elasticsearch.services.config.TriggerService;
 

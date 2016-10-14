@@ -3,7 +3,6 @@ package com.qsocialnow.viewmodel.trigger;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,11 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.model.DomainView;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.TriggerService;
+import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class TriggersViewModel implements Serializable {
@@ -43,6 +44,11 @@ public class TriggersViewModel implements Serializable {
 
     private DomainView currentDomain;
 
+    private DateConverter dateConverter;
+
+    @WireVariable
+    private UserSessionService userSessionService;
+
     @WireVariable
     private TriggerService triggerService;
 
@@ -59,14 +65,15 @@ public class TriggersViewModel implements Serializable {
 
     private String status;
 
-    private Date fromDate;
+    private Long fromDate;
 
-    private Date toDate;
+    private Long toDate;
 
     private boolean filterActive = false;
 
     @Init
     public void init(@QueryParam("domain") String domain) {
+        this.dateConverter = new DateConverter(userSessionService.getTimeZone());
         this.domain = domain;
         this.currentDomain = new DomainView();
         this.currentDomain.setDomain(domainService.findOne(domain));
@@ -113,20 +120,24 @@ public class TriggersViewModel implements Serializable {
         return statusOptions;
     }
 
-    public Date getFromDate() {
+    public Long getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(Long fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Date getToDate() {
+    public Long getToDate() {
         return toDate;
     }
 
-    public void setToDate(Date toDate) {
+    public void setToDate(Long toDate) {
         this.toDate = toDate;
+    }
+
+    public DateConverter getDateConverter() {
+        return dateConverter;
     }
 
     @Command
@@ -174,10 +185,10 @@ public class TriggersViewModel implements Serializable {
             filters.put("status", this.status);
         }
         if (this.fromDate != null) {
-            filters.put("fromDate", String.valueOf(this.fromDate.getTime()));
+            filters.put("fromDate", String.valueOf(this.fromDate));
         }
         if (this.toDate != null) {
-            filters.put("toDate", String.valueOf(this.toDate.getTime()));
+            filters.put("toDate", String.valueOf(this.toDate));
         }
         return filters;
     }

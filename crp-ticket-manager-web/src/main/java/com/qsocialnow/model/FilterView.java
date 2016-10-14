@@ -1,7 +1,6 @@
 package com.qsocialnow.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.AdmUnitFilter;
@@ -12,9 +11,9 @@ import com.qsocialnow.common.model.config.WordFilter;
 
 public class FilterView {
 
-    private Date startDateTime;
+    private Long startDateTime;
 
-    private Date endDateTime;
+    private Long endDateTime;
 
     private Long followersGreaterThan;
 
@@ -37,19 +36,19 @@ public class FilterView {
         filterCategories = new ArrayList<>();
     }
 
-    public Date getStartDateTime() {
+    public Long getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(Date startDateTime) {
+    public void setStartDateTime(Long startDateTime) {
         this.startDateTime = startDateTime;
     }
 
-    public Date getEndDateTime() {
+    public Long getEndDateTime() {
         return endDateTime;
     }
 
-    public void setEndDateTime(Date endDateTime) {
+    public void setEndDateTime(Long endDateTime) {
         this.endDateTime = endDateTime;
     }
 

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.config.UserResolverListView;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.elasticsearch.services.config.UserResolverService;
 

@@ -1,7 +1,6 @@
 package com.qsocialnow.common.model.config;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -16,10 +15,10 @@ public class Trigger {
     private String name;
 
     @NotNull(message = "{field.empty}")
-    private Date init;
+    private Long init;
 
     @NotNull(message = "{field.empty}")
-    private Date end;
+    private Long end;
 
     private String description;
 
@@ -52,19 +51,19 @@ public class Trigger {
         this.id = id;
     }
 
-    public Date getInit() {
+    public Long getInit() {
         return init;
     }
 
-    public void setInit(Date init) {
+    public void setInit(Long init) {
         this.init = init;
     }
 
-    public Date getEnd() {
+    public Long getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(Long end) {
         this.end = end;
     }
 

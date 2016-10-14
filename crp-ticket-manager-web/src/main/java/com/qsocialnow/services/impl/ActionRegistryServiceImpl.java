@@ -58,7 +58,7 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public PageResponse<RegistryListView> findRegistriesBy(int pageNumber, int pageSize, String caseId, String keyword,
-            String action, String user, Date fromDate, Date toDate) {
+            String action, String user, Long fromDate, Long toDate) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -72,11 +72,11 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
             String toDateFormat = null;
 
             if (fromDate != null) {
-                fromDateFormat = String.valueOf(fromDate.getTime());
+                fromDateFormat = String.valueOf(fromDate);
             }
 
             if (toDate != null) {
-                toDateFormat = String.valueOf(toDate.getTime());
+                toDateFormat = String.valueOf(toDate);
             }
 
             UriComponentsBuilder builder = UriComponentsBuilder

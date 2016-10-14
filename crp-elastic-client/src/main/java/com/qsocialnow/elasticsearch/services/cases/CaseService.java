@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
-import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
@@ -47,16 +46,15 @@ public class CaseService extends CaseIndexService {
 
     private static QueueConfigurator caseQueueConfigurator;
 
-    private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
-
     private static final AtomicInteger failRetriesCount = new AtomicInteger(0);
 
     private static final int TOTAL_BULK_INDEX_RETRIES_COUNT = 5;
 
     public CaseService(QueueConfigurator queueConfigurator, AWSElasticsearchConfigurationProvider configurationProvider) {
+        super(configurationProvider);
         caseQueueConfigurator = queueConfigurator;
-        elasticSearchCaseConfigurator = configurationProvider;
         initQueues();
+        initIndex();
     }
 
     private void initQueues() {
