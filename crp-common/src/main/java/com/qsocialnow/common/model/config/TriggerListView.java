@@ -1,7 +1,6 @@
 package com.qsocialnow.common.model.config;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 public class TriggerListView implements Serializable {
@@ -16,9 +15,9 @@ public class TriggerListView implements Serializable {
 
     private Status status;
 
-    private Date fromDate;
+    private Long fromDate;
 
-    private Date toDate;
+    private Long toDate;
 
     private List<Segment> segments;
 
@@ -54,19 +53,19 @@ public class TriggerListView implements Serializable {
         return status;
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(Long fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Date getFromDate() {
+    public Long getFromDate() {
         return fromDate;
     }
 
-    public void setToDate(Date toDate) {
+    public void setToDate(Long toDate) {
         this.toDate = toDate;
     }
 
-    public Date getToDate() {
+    public Long getToDate() {
         return toDate;
     }
 

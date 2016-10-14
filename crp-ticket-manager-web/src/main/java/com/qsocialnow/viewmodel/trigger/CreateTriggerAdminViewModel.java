@@ -6,12 +6,18 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
+
+import com.qsocialnow.converters.DateInputConverter;
+import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateTriggerAdminViewModel implements Serializable {
 
     private static final long serialVersionUID = -8475951019777234240L;
+
+    private DateInputConverter dateConverter = new DateInputConverter();
 
     private boolean createTrigger = true;
 
@@ -20,6 +26,13 @@ public class CreateTriggerAdminViewModel implements Serializable {
     private boolean createCriteria = false;
 
     private boolean createAction = false;
+
+    @WireVariable
+    private UserSessionService userSessionService;
+
+    public DateInputConverter getDateConverter() {
+        return dateConverter;
+    }
 
     public boolean isCreateTrigger() {
         return createTrigger;
