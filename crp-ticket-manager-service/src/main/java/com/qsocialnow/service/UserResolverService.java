@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.config.UserResolverListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.UserResolverRepository;
 
 @Service
@@ -36,8 +36,8 @@ public class UserResolverService {
     }
 
     public PageResponse<UserResolverListView> findAll(Integer pageNumber, Integer pageSize, String identifier) {
-        List<UserResolverListView> userResolvers = userResolverRepository.findAll(
-                new PageRequest(pageNumber, pageSize), identifier);
+        List<UserResolverListView> userResolvers = userResolverRepository.findAll(new PageRequest(pageNumber, pageSize,
+                null), identifier);
 
         PageResponse<UserResolverListView> page = new PageResponse<UserResolverListView>(userResolvers, pageNumber,
                 pageSize);

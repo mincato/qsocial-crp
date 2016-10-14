@@ -21,10 +21,9 @@ public class ActionRegistryService extends CaseIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(ActionRegistryService.class);
 
-    private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
-
     public ActionRegistryService(AWSElasticsearchConfigurationProvider configurationProvider) {
-        elasticSearchCaseConfigurator = configurationProvider;
+        super(configurationProvider);
+        initIndex();
     }
 
     public String indexRegistry(String idCase, ActionRegistry document) {

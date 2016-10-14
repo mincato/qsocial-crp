@@ -27,7 +27,13 @@
 			    		<thead>
 							<tr>
 					    		<th>${labels.cases.list.column.id}</th>
-					    		<th>${labels.cases.list.column.title}</th>
+					    		<th>
+						    		 <div class="text-center">
+						    		    <a style="text-decoration:none" onClick="@command('sortList')" >
+						    		       ${labels.cases.list.column.title}
+						    		    </a>
+    					    	  	</div>
+    					    	</th>
 					    		<th>${labels.cases.list.column.description}</th>
 					    		<th>${labels.cases.list.column.subject}</th>
 					    		<th>${labels.cases.list.column.pendingResponse}</th>

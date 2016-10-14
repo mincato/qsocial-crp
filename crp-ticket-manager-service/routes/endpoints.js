@@ -40,7 +40,8 @@ router.get('/cases', function (req, res) {
   var caseService = javaContext.getBeanSync("caseService");
   var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
   var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-  caseService.findAll(pageNumber, pageSize, asyncResponse);
+  var sortField = req.query.sortField ? req.query.sortField : null;
+  caseService.findAll(pageNumber, pageSize,sortField,asyncResponse);
 
 });
 

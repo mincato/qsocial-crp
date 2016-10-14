@@ -12,7 +12,11 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
+import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
+import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 
 public class CaseIndexService {
 
@@ -24,18 +28,33 @@ public class CaseIndexService {
 
     private static final String[] MAPPING_TYPES = { "case" };
 
-    public CaseIndexService() {
+    protected static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
+    public CaseIndexService(AWSElasticsearchConfigurationProvider configurationProvider) {
+        elasticSearchCaseConfigurator = configurationProvider;
     }
 
-    public <T> String getIndex(Repository<T> repository) {
+    public void initIndex() {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
         boolean isCreated = repository.validateIndex(INDEX_NAME);
         // create index
         if (!isCreated) {
             repository.createIndex(INDEX_NAME);
-            // updateAlias(repository, indexName);
-            // createMappings(repository, INDEX_NAME);
+            createMappings(repository, INDEX_NAME);
         }
+    }
+
+    public <T> String getIndex(Repository<T> repository) {
+        // boolean isCreated = repository.validateIndex(INDEX_NAME);
+        // create index
+        // if (!isCreated) {
+        // repository.createIndex(INDEX_NAME);
+        // updateAlias(repository, indexName);
+        // createMappings(repository, INDEX_NAME);
+        // }
         return INDEX_NAME;
     }
 

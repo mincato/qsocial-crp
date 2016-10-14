@@ -13,7 +13,7 @@ import com.qsocialnow.common.model.config.TeamListView;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.TeamRepository;
 import com.qsocialnow.persistence.UserResolverRepository;
 
@@ -43,7 +43,7 @@ public class TeamService {
     }
 
     public PageResponse<TeamListView> findAll(Integer pageNumber, Integer pageSize, String name) {
-        List<TeamListView> teams = teamRepository.findAll(new PageRequest(pageNumber, pageSize), name);
+        List<TeamListView> teams = teamRepository.findAll(new PageRequest(pageNumber, pageSize, null), name);
 
         PageResponse<TeamListView> page = new PageResponse<TeamListView>(teams, pageNumber, pageSize);
         return page;

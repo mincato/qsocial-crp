@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.RegistryListView;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.ActionRegistryService;
 
 @Component
