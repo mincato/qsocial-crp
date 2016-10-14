@@ -3,6 +3,9 @@ package com.qsocialnow.elasticsearch.services.cases;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
@@ -12,6 +15,8 @@ import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class CaseTicketService extends CaseIndexService {
+
+    private static final Logger log = LoggerFactory.getLogger(CaseTicketService.class);
 
     public CaseTicketService(AWSElasticsearchConfigurationProvider configurationProvider) {
         super(configurationProvider);
@@ -39,6 +44,7 @@ public class CaseTicketService extends CaseIndexService {
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
+        log.info("retrieving cases from :" + from + " size" + size + " sorted by;" + sortField);
         SearchResponse<Case> response = repository.queryMatchAll(from, size, sortField, mapping);
 
         List<Case> cases = response.getSources();

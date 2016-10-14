@@ -89,6 +89,10 @@ public class FacebookClient {
 
                         log.info("Retrieving :" + comments.length() + " comments from rootReply:" + commentId);
 
+                        if (comments != null && comments.length() == 1) {
+                            startToTrackComment = true;
+                        }
+
                         for (int i = 0; i < comments.length(); i++) {
 
                             JSONObject jsonComment = comments.getJSONObject(i);
