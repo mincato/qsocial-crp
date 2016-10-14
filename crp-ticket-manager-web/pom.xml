@@ -169,12 +169,11 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>8.1.16.v20140903</version>
 				<configuration>
+					  <webAppConfig>
+                                <contextPath>/${project.artifactId}</contextPath>
+                                <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
+                      </webAppConfig>
 					  <contextHandlers>
-					      <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
-					         <war>${basedir}/target/crp-ticket-manager-web.war</war>
-					         <contextPath>/${project.artifactId}</contextPath>
-					         <allowNullPathInfo>true</allowNullPathInfo>
-					      </contextHandler>
 					      <contextHandler implementation="org.eclipse.jetty.webapp.WebAppContext">
 					         <war>${basedir}/../crp-login-web/target/crp-login-web.war</war>
 					         <contextPath>/crp-login-web</contextPath>
