@@ -15,7 +15,7 @@ public class RegistryListView implements Serializable {
     private String description;
 
     private Long date;
-    
+
     private Boolean automatic;
 
     public String getId() {
@@ -58,13 +58,12 @@ public class RegistryListView implements Serializable {
         this.date = date;
     }
 
-	public Boolean getAutomatic() {
-		return automatic;
-	}
+    public Boolean getAutomatic() {
+        return automatic;
+    }
 
-	public void setAutomatic(Boolean automatic) {
-		this.automatic = automatic;
-	}
+    public void setAutomatic(Boolean automatic) {
+        this.automatic = automatic;
+    }
 
-    
 }
