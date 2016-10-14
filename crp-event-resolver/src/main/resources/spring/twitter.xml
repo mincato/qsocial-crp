@@ -11,7 +11,7 @@
     	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     	
 	<bean id="twitterConfig" class="com.qsocialnow.eventresolver.factories.TwitterConfigFactory" factory-method="findConfig">
- 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
  		<constructor-arg value="${app.twitter.app.configurator.path}"></constructor-arg>
 	</bean>
 	

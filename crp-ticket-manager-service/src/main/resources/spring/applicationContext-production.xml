@@ -20,14 +20,14 @@
 	</bean>
 	
 	<bean id="awsLambdaClientConfig" class="com.qsocialnow.config.AWSLambdaClientConfigFactory" factory-method="create">
- 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
  		<constructor-arg value="${app.elastic.config.configurator.path}"></constructor-arg>
 	</bean>
 	
    	<cache:annotation-driven />
    		
 	<bean id="cacheManager" class="com.qsocialnow.factories.CacheManagerFactory" factory-method="create">
-		<constructor-arg ref="zookeeperClient"></constructor-arg>
+		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
 		<constructor-arg ref="caches"></constructor-arg>
     </bean>
     

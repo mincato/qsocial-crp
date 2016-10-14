@@ -9,6 +9,7 @@ import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 
 public class ServiceDiscoveryRegister {
@@ -18,6 +19,7 @@ public class ServiceDiscoveryRegister {
     private static final Logger log = LoggerFactory.getLogger(ServiceDiscoveryRegister.class);
 
     @Autowired
+    @Qualifier("zookeeperCentralClient")
     private CuratorFramework zookeeperClient;
 
     @Value("${app.service.base.path}")

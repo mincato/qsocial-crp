@@ -11,7 +11,7 @@
     	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     	
 	<bean id="kafkaConfig" class="com.qsocialnow.eventresolver.factories.KafkaConsumerConfigFactory" factory-method="create">
-		<constructor-arg ref="zookeeperClient" />
+		<constructor-arg ref="zookeeperCentralClient" />
 		<constructor-arg value="${app.kafka.config.znode.path}" />
 		<constructor-arg ref="kafkaConfigWatcher" />
 	</bean>
