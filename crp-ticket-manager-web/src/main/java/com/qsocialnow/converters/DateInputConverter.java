@@ -22,7 +22,9 @@ public class DateInputConverter implements Converter {
                 Calendar calendar = Calendar.getInstance();
                 TimeZone timeZone = (TimeZone) Executions.getCurrent().getSession()
                         .getAttribute(Attributes.PREFERRED_TIME_ZONE);
-                calendar.setTimeZone(timeZone);
+                if (timeZone != null) {
+                    calendar.setTimeZone(timeZone);
+                }
                 calendar.setTime(date);
                 calendar.set(Calendar.HOUR_OF_DAY, 23);
                 calendar.set(Calendar.MINUTE, 59);
