@@ -52,7 +52,7 @@
 	</bean>
 	
     <bean id="configurationProvider" class="com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory" factory-method="getConfigurator">
-         <constructor-arg ref="zookeeperClient"></constructor-arg>
+         <constructor-arg ref="zookeeperCentralClient"></constructor-arg>
          <constructor-arg value="${app.elastic.cases.configurator.path}" />
          <constructor-arg ref="elasticCaseConfigWatcher" />
     </bean>
@@ -65,7 +65,7 @@
 	</bean> 
     
 	<bean id="elasticDomainConfig" class="com.qsocialnow.eventresolver.factories.ElasticConfiguratorFactory" factory-method="getConfigurator">
-		<constructor-arg ref="zookeeperClient" />
+		<constructor-arg ref="zookeeperCentralClient" />
 		<constructor-arg value="${app.elastic.config.configurator.path}" />
 		<constructor-arg ref="elasticDomainConfigWatcher" />
 	</bean>

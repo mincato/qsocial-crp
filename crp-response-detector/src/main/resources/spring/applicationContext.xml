@@ -17,8 +17,23 @@
  	<bean id="app" init-method="start" destroy-method="close" class="com.qsocialnow.responsedetector.App">
 	</bean>
  	
- 	<bean id="zookeeperClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
+ 	<bean id="zookeeperCentralClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
  		<constructor-arg value="${app.zookeeper.host}"></constructor-arg>
+ 		<constructor-arg>
+ 			<bean class="org.apache.curator.retry.ExponentialBackoffRetry">
+				<constructor-arg  value="1000"></constructor-arg>
+				<constructor-arg  value="3"></constructor-arg>
+			</bean>
+ 		</constructor-arg>
+	</bean>
+	
+	<bean id="zookeeperConnectionString" class="com.qsocialnow.responsedetector.factories.ZookeeperConnectionStringFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
+ 		<constructor-arg value="${app.zookeeper.configurator.path}"></constructor-arg>
+	</bean>
+	
+	<bean id="zookeeperClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
+ 		<constructor-arg ref="zookeeperConnectionString"></constructor-arg>
  		<constructor-arg>
  			<bean class="org.apache.curator.retry.ExponentialBackoffRetry">
 				<constructor-arg  value="1000"></constructor-arg>
@@ -32,7 +47,7 @@
 	</bean>
 	
 	<bean id="kafkaConfig" class="com.qsocialnow.responsedetector.factories.KafkaProducerConfigFactory" factory-method="create">
-		<constructor-arg ref="zookeeperClient" />
+		<constructor-arg ref="zookeeperCentralClient" />
 		<constructor-arg value="${app.kafka.config.znode.path}" />
 	</bean>
 	
