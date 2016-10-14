@@ -1,7 +1,5 @@
 package com.qsocialnow.validators;
 
-import java.util.Date;
-
 import org.zkoss.bind.ValidationContext;
 import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.util.resource.Labels;
@@ -12,8 +10,8 @@ public class ToDateValidator extends AbstractValidator {
     private static final String EMPTY_FIELD_KEY_LABEL = "app.field.empty.validation";
 
     public void validate(ValidationContext ctx) {
-        Date to = (Date) ctx.getProperty().getValue();
-        Date from = (Date) ctx.getBindContext().getValidatorArg("fromDate");
+        Comparable to = (Comparable) ctx.getProperty().getValue();
+        Comparable from = (Comparable) ctx.getBindContext().getValidatorArg("fromDate");
         String labelKey = (String) ctx.getBindContext().getValidatorArg("label");
         String componentId = (String) ctx.getBindContext().getValidatorArg("id");
         Boolean required = (Boolean) ctx.getBindContext().getValidatorArg("required");

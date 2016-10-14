@@ -58,10 +58,12 @@ public class TriggerService {
             filters = filters.must(QueryBuilders.matchQuery("status", triggerListRequest.getStatus()));
         }
         if (triggerListRequest.getFromDate() != null) {
-            filters = filters.filter(QueryBuilders.rangeQuery("init").lte(triggerListRequest.getFromDate()));
+            filters = filters.filter(QueryBuilders.rangeQuery("init").lte(
+                    Long.parseLong(triggerListRequest.getFromDate())));
         }
         if (triggerListRequest.getToDate() != null) {
-            filters = filters.filter(QueryBuilders.rangeQuery("end").gte(triggerListRequest.getToDate()));
+            filters = filters.filter(QueryBuilders.rangeQuery("end")
+                    .gte(Long.parseLong(triggerListRequest.getToDate())));
         }
         SearchResponse<Trigger> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
         List<Trigger> triggers = response.getSources();

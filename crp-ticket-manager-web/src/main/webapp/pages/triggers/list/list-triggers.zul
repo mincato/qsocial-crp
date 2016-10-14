@@ -21,14 +21,15 @@
 	            </n:div>
 	            <n:div class="col-md-2">
                     <div zclass="input-group input-group-sm">
-                          <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.fromDate)" placeholder="${labels.trigger.list.filter.fromDate}" />
+                          <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.trigger.list.filter.fromDate}" />
                     </div>
                 </n:div>
                 
                 <n:div class="col-md-2 " >
                      <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
-                       <datebox  id="todate" sclass="input-group" format="MM/dd/yyyy" value="@load(vm.toDate) 
+                       <datebox  id="todate" sclass="input-group" format="short" value="@load(vm.toDate) 
                         @save(vm.toDate, before='search')
+                        @converter('com.qsocialnow.converters.DateInputConverter', endDay = true)
                         @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.trigger.list.filter.toDate}" />
                     </x:div>
                 </n:div>
@@ -84,8 +85,8 @@
                    		<td class="list-text-column">${each.name}</td>
                    		<td>${each.description}</td>
                    		<td>${c:l(c:cat('trigger.status.',each.status))}</td>
-                   		<td><label value="@load(each.fromDate) @converter('formatedDate',format='MM/dd/yyyy')"/></td>
-                   		<td><label value="@load(each.toDate) @converter('formatedDate',format='MM/dd/yyyy')"/></td>
+                   		<td><label value="@load(each.fromDate) @converter(vm.dateConverter)"/></td>
+                   		<td><label value="@load(each.toDate) @converter(vm.dateConverter)"/></td>
                    		<td>
                    			<ul class="list-inline">
   								<li><a class="btn-list-action" href="/pages/triggers/create/index.zul?domain=${vm.domain}&amp;trigger=${each.id}"><i class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.trigger.edit.action}"></i></a></li>
