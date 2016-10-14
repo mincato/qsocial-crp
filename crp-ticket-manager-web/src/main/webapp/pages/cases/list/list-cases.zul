@@ -29,15 +29,40 @@
 					    		<th>${labels.cases.list.column.id}</th>
 					    		<th>
 						    		 <div class="text-center">
-						    		    <a style="text-decoration:none" onClick="@command('sortList')" >
+						    		    <a style="text-decoration:none" onClick="@command('sortList' , sortField='title')" >
 						    		       ${labels.cases.list.column.title}
 						    		    </a>
     					    	  	</div>
     					    	</th>
-					    		<th>${labels.cases.list.column.description}</th>
-					    		<th>${labels.cases.list.column.subject}</th>
-					    		<th>${labels.cases.list.column.pendingResponse}</th>
-					    		<th>${labels.cases.list.column.open}</th>
+					    		<th>
+					    		     <div class="text-center">
+                                        <a style="text-decoration:none" onClick="@command('sortList' , sortField='description')" >
+					    		             ${labels.cases.list.column.description}
+					    		         </a>
+					    		    </div>
+					    		</th>
+					    		             
+					    		<th>
+                                     <div class="text-center">
+                                        <a style="text-decoration:none" onClick="@command('sortList' , sortField='subject.identifier')" >
+					    		             ${labels.cases.list.column.subject}
+					    		        </a>
+                                    </div>
+					    		 </th>
+					    		 <th>
+						    		 <div class="text-center">
+	                                        <a style="text-decoration:none" onClick="@command('sortList',sortField='pendingResponse')" >
+	    					    		     ${labels.cases.list.column.pendingResponse}
+	    					               </a>
+	    					         </div>
+    					         </th>   
+					    		<th>
+					    		     <div class="text-center">
+                                            <a style="text-decoration:none" onClick="@command('sortList',sortField='open')" >
+					    		             ${labels.cases.list.column.open}
+					    		            </a>
+					    		     </div>
+					    		 </th>
 					    		<th>${labels.cases.list.column.action}</th>
 							</tr>
 			    		</thead>

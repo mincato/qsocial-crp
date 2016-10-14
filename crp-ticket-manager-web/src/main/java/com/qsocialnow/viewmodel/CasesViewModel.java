@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
@@ -25,7 +26,7 @@ public class CasesViewModel implements Serializable {
 
     private int activePage = 0;
 
-    private String sortField = "title";
+    private String sortField = "openDate";
 
     @WireVariable
     private CaseService caseService;
@@ -60,8 +61,8 @@ public class CasesViewModel implements Serializable {
 
     @Command
     @NotifyChange({ "cases", "moreResults" })
-    public void sortList() {
-        this.sortField = "title";
+    public void sortList(@BindingParam("sortField") String sortField) {
+        this.sortField = sortField;
         this.activePage = 0;
         this.cases.clear();
         this.findCases();
