@@ -137,6 +137,10 @@ public class CaseService {
         actionRegistry.setDate(new Date().getTime());
         actionRegistry.setAction(actionRequest.getActionType().name());
         if (actionRequest.getParameters() != null) {
+            Object executor = actionRequest.getParameters().get(ActionParameter.EXECUTOR);
+            if (executor != null) {
+                actionRegistry.setUserName((String) executor);
+            }
             Object comment = actionRequest.getParameters().get(ActionParameter.COMMENT);
             if (comment != null) {
                 actionRegistry.setComment((String) comment);

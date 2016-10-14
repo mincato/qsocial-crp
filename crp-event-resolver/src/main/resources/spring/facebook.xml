@@ -11,7 +11,7 @@
     	http://www.springframework.org/schema/util/spring-util-3.0.xsd">
     	
 	<bean id="facebookConfig" class="com.qsocialnow.eventresolver.factories.FacebookConfigFactory" factory-method="findConfig">
- 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
  		<constructor-arg value="${app.facebook.app.configurator.path}"></constructor-arg>
 	</bean>
 	

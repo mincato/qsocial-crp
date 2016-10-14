@@ -40,6 +40,7 @@ public class ActionRegistryRepository {
                     registryListView.setId(registry.getId());
                     registryListView.setUser(registry.getUserName());
                     registryListView.setAction(registry.getAction());
+                    registryListView.setAutomatic(registry.getAutomatic());
                     /*
                      * if (registry.getEvent() != null)
                      * registryListView.setDescription
@@ -68,6 +69,7 @@ public class ActionRegistryRepository {
                     registryListView.setId(registry.getId());
                     registryListView.setUser(registry.getUserName());
                     registryListView.setAction(registry.getAction());
+                    registryListView.setAutomatic(registry.getAutomatic());
                     /*
                      * if (registry.getEvent() != null)
                      * registryListView.setDescription

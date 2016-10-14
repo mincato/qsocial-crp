@@ -27,7 +27,7 @@ public class MergeCaseAction {
         ActionRegistry registry = new ActionRegistry();
         registry.setAction(ActionType.MERGE_CASE.name());
         registry.setAutomatic(true);
-        registry.setComment("Id: " + event.getId() + " - " + event.getTitulo());
+        registry.setComment(event.getIdUsuarioOriginal() + " - " + event.getTitulo());
         registry.setDate(new Date().getTime());
         registry.setEvent(event);
         registries.add(registry);

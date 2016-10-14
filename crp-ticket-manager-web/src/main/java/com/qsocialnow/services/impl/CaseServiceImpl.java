@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
@@ -26,6 +28,7 @@ import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.ServiceUrlResolver;
+import com.qsocialnow.services.UserSessionService;
 
 @Service("caseService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -38,6 +41,9 @@ public class CaseServiceImpl implements CaseService {
 
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
+
+    @Autowired
+    private UserSessionService userSessionService;
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
@@ -85,6 +91,7 @@ public class CaseServiceImpl implements CaseService {
 
     @Override
     public Case executeAction(String caseId, ActionRequest actionRequest) {
+        addExecutor(actionRequest);
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -100,6 +107,13 @@ public class CaseServiceImpl implements CaseService {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private void addExecutor(ActionRequest actionRequest) {
+        if (actionRequest.getParameters() == null) {
+            actionRequest.setParameters(new HashMap<ActionParameter, Object>());
+        }
+        actionRequest.getParameters().put(ActionParameter.EXECUTOR, userSessionService.getUsername());
     }
 
     @Override
