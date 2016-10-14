@@ -158,12 +158,13 @@
 			    		<tbody children="@bind(vm.registries)">
 			    			<template name="children">
 								<tr>
-									<td>${each.user}</td>
-                       				<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
+									<td visible="@load(each.automatic)">${labels.cases.registry.automatic.user}</td>
+									<td visible="@load(not each.automatic)">${each.user}</td>
+									<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
                        				<td>${each.description}</td>
                        				<td>${each.date}</td>
                        				<td></td>
-               					</tr>
+                       			</tr>
                				</template>
 						</tbody>
 					</table>
