@@ -18,6 +18,8 @@ public class TriggerService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     private SegmentService segmentService;
 
     public String indexTrigger(String domainId, Trigger trigger) {
@@ -26,14 +28,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
-
-        // validete index name
-        boolean isCreated = repository.validateIndex(mapping.getIndex());
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         TriggerType documentIndexed = mapping.getDocumentType(trigger);
@@ -52,7 +47,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
@@ -80,7 +75,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
@@ -101,7 +96,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<Trigger> response = repository.find(triggerId, mapping);
 
@@ -129,7 +124,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         TriggerType documentIndexed = mapping.getDocumentType(trigger);
@@ -144,6 +139,10 @@ public class TriggerService {
 
     public void setSegmentService(SegmentService segmentService) {
         this.segmentService = segmentService;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }

@@ -7,8 +7,8 @@
 			${labels.team.users.label}
 		</n:label>
 		<n:div class="col-sm-10">
-			<div zclass="link-button pull-right">
-				<a onClick="@command('addUser', fx = fx)"
+			<div zclass="pull-right">
+				<a class="link-button" onClick="@command('addUser', fx = fx)"
 					disabled="@load(not vm.userListView.enabledAdd)">
 					<i class="fa fa-plus-circle fa-2x"></i>
 					${labels.team.add.user}
@@ -47,10 +47,10 @@
 
 						<n:div class="col-xs-4 col-sm-3">
 							<n:div class="pull-right">
-								<a zclass="btn-list-action"
+								<a zclass="btn-row-list"
 									onClick="@command('deleteUser', index = forEachStatus.index, fx = fx)">
 									<i
-										class="glyphicon glyphicon-erase fa-2x">
+										class="glyphicon glyphicon-erase fa-lg">
 									</i>
 								</a>
 							</n:div>
@@ -81,15 +81,15 @@
 						<n:div class="col-xs-4 col-sm-3">
 							<n:div class="pull-right">
 								<a
-									sclass="@load(each.user eq null ? '' : 'btn-list-action')"
+									sclass="@load(each.user eq null ? '' : 'btn-row-list')"
 									disabled="@load(each.user eq null)"
 									onClick="@command('confirmUser', index = forEachStatus.index, fx = fx)">
-									<i class="fa fa-check fa-2x"></i>
+									<i class="glyphicon glyphicon-ok fa-lg"></i>
 								</a>
-								<a zclass="btn-list-action"
+								<a zclass="btn-row-list"
 									onClick="@command('deleteUser', index = forEachStatus.index, fx = fx)">
 									<i
-										class="glyphicon glyphicon-erase fa-2x">
+										class="glyphicon glyphicon-erase fa-lg">
 									</i>
 								</a>
 							</n:div>

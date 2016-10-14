@@ -7,8 +7,8 @@
 			${labels.casecategoryset.categories.label}
 		</n:label>
 		<n:div class="col-sm-10">
-			<div zclass="link-button pull-right">
-				<a onClick="@command('addCategory', fx = fx)">
+			<div zclass="pull-right">
+				<a class="link-button" onClick="@command('addCategory', fx = fx)">
 					<i class="fa fa-plus-circle fa-2x"></i>
 					${labels.casecategoryset.add.category}
 				</a>
@@ -48,10 +48,10 @@
 						</x:div>
 						<n:div class="col-xs-4 col-sm-3">
 							<n:div class="pull-right">
-								<a zclass="btn-list-action"
+								<a zclass="btn-row-list"
 									onClick="@command('deleteCategory', index = forEachStatus.index, fx = fx)">
 									<i
-										class="glyphicon glyphicon-erase fa-2x">
+										class="glyphicon glyphicon-erase fa-lg">
 									</i>
 								</a>
 							</n:div>

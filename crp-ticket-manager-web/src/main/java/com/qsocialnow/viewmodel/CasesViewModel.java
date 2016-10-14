@@ -22,7 +22,10 @@ public class CasesViewModel implements Serializable {
     private static final long serialVersionUID = 2259179419421396093L;
 
     private int pageSize = 15;
+
     private int activePage = 0;
+
+    private String sortField = "title";
 
     @WireVariable
     private CaseService caseService;
@@ -55,8 +58,17 @@ public class CasesViewModel implements Serializable {
         this.findCases();
     }
 
+    @Command
+    @NotifyChange({ "cases", "moreResults" })
+    public void sortList() {
+        this.sortField = "title";
+        this.activePage = 0;
+        this.cases.clear();
+        this.findCases();
+    }
+
     private PageResponse<CaseListView> findCases() {
-        PageResponse<CaseListView> pageResponse = caseService.findAll(new PageRequest(activePage, pageSize,null));
+        PageResponse<CaseListView> pageResponse = caseService.findAll(new PageRequest(activePage, pageSize, sortField));
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.cases.addAll(pageResponse.getItems());
             this.moreResults = true;

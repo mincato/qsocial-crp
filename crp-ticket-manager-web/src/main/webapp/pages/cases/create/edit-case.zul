@@ -177,4 +177,15 @@
 			</div>
 		</n:div>
 	</div>
+	<n:br/>		
+ 	<div class="row">
+		<n:div class="col-lg-12">
+			<div zclass="pane equal">
+				<div class="form-group text-center">
+					<button href="/pages/cases/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>	
+				</div>
+			</div>
+		</n:div>
+	</div>
+	<n:br/>	
 </x:div>

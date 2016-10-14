@@ -25,7 +25,8 @@ public class CaseRepository {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
-            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit());
+            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
+                    pageRequest.getSortField());
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();

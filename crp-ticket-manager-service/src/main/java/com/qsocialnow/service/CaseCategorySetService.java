@@ -24,7 +24,7 @@ public class CaseCategorySetService {
 
     public PageResponse<CaseCategorySetListView> findAll(Integer pageNumber, Integer pageSize, String name) {
         List<CaseCategorySetListView> caseCategorySets = caseCategorySetRepository.findAll(new PageRequest(pageNumber,
-                pageSize,null), name);
+                pageSize, null), name);
 
         PageResponse<CaseCategorySetListView> page = new PageResponse<CaseCategorySetListView>(caseCategorySets,
                 pageNumber, pageSize);

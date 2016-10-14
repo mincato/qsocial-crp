@@ -23,7 +23,7 @@ public class SubjectService {
     private SubjectRepository subjectRepository;
 
     public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String identifier, String source) {
-        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize,null),
+        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize, null),
                 new SubjectListRequest(identifier, source));
 
         PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageNumber, pageSize);

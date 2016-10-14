@@ -5,28 +5,28 @@ import org.json.simple.JSONObject;
 import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.CaseCategoryType;
-import com.qsocialnow.elasticsearch.mappings.types.config.TeamType;
 
 public class CaseCategoryMapping implements Mapping<CaseCategoryType, CaseCategory> {
-
-    private static final String INDEX_NAME = "configuration";
 
     private static final String TYPE = "caseCategory";
 
     private static CaseCategoryMapping instance;
 
-    private CaseCategoryMapping() {
+    private final String index;
+
+    private CaseCategoryMapping(String index) {
+        this.index = index;
     }
 
-    public static CaseCategoryMapping getInstance() {
+    public static CaseCategoryMapping getInstance(String index) {
         if (instance == null)
-            instance = new CaseCategoryMapping();
+            instance = new CaseCategoryMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override

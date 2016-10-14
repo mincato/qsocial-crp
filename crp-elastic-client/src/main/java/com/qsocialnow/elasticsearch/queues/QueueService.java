@@ -14,11 +14,11 @@ import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 
 public class QueueService {
 
-    private static final int TOTAL_ITEM_COUNTS = 20;
+    private static final int TOTAL_ITEM_COUNTS = 200;
 
-    private static final int TOTAL_FAIL_ITEM_COUNTS = 40;
+    private static final int TOTAL_FAIL_ITEM_COUNTS = 400;
 
-    private static final int TOTAL_MAX_DEAD_ITEM_COUNTS = 120;
+    private static final int TOTAL_MAX_DEAD_ITEM_COUNTS = 1200;
 
     private static final int DELAY = 10;
 

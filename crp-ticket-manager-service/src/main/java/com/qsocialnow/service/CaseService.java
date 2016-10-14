@@ -44,8 +44,8 @@ public class CaseService {
     @Resource
     private Map<ActionType, Action> actions;
 
-    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<CaseListView> cases = repository.findAll(new PageRequest(pageNumber, pageSize,null));
+    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField) {
+        List<CaseListView> cases = repository.findAll(new PageRequest(pageNumber, pageSize, sortField));
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;

@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import com.qsocialnow.common.model.config.ClientOrganization;
 import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.services.OauthService;
+import com.qsocialnow.services.OrganizationService;
 import com.qsocialnow.services.impl.FacebookOauthService;
 import com.qsocialnow.services.impl.TwitterOauthService;
 
@@ -21,13 +23,18 @@ public class OauthServiceFactory {
     @Autowired
     private CuratorFramework zookeeperClient;
 
+    @Autowired
+    private OrganizationService organizationService;
+
     @Value("${app.twitter.app.configurator.path}")
     private String twitterConfigZnodePath;
 
     @Value("${app.facebook.app.configurator.path}")
     private String facebookConfigZnodePath;
 
-    public OauthService createService(Long sourceId, String client) {
+    public OauthService createService(Long sourceId) {
+        ClientOrganization currentOrganization = organizationService.getCurrentOrganization();
+        String client = currentOrganization.getId().toString();
         if (FilterConstants.MEDIA_TWITTER.equals(sourceId)) {
             String clientTwitterConfigZnodePath = MessageFormat.format(twitterConfigZnodePath, client);
             return new TwitterOauthService(zookeeperClient, clientTwitterConfigZnodePath);

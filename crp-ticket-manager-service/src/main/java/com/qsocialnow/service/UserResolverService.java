@@ -36,8 +36,8 @@ public class UserResolverService {
     }
 
     public PageResponse<UserResolverListView> findAll(Integer pageNumber, Integer pageSize, String identifier) {
-        List<UserResolverListView> userResolvers = userResolverRepository.findAll(
-                new PageRequest(pageNumber, pageSize,null), identifier);
+        List<UserResolverListView> userResolvers = userResolverRepository.findAll(new PageRequest(pageNumber, pageSize,
+                null), identifier);
 
         PageResponse<UserResolverListView> page = new PageResponse<UserResolverListView>(userResolvers, pageNumber,
                 pageSize);

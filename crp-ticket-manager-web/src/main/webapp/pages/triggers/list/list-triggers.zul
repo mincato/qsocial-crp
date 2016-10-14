@@ -45,9 +45,7 @@
                    </div>
                 </n:div>
                 <n:div class="col-md-2 col-xs-4">
-                	<n:div class="link-button">
-					<a href="/pages/triggers/create/index.zul?domain=${vm.domain}">${labels.trigger.create.trigger.action} <i class="fa fa-plus-circle fa-2x"></i></a>
-	    			</n:div>
+                	<a class="link-button" href="/pages/triggers/create/index.zul?domain=${vm.domain}">${labels.trigger.create.trigger.action} <i class="fa fa-plus-circle fa-2x"></i></a>
 	    		</n:div>
 	       </div>
 	   </n:div>
@@ -90,7 +88,7 @@
                    		<td><label value="@load(each.toDate) @converter('formatedDate',format='MM/dd/yyyy')"/></td>
                    		<td>
                    			<ul class="list-inline">
-  								<li><a class="list-action" href="/pages/triggers/create/index.zul?domain=${vm.domain}&amp;trigger=${each.id}"><i class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.trigger.edit.action}"></i></a></li>
+  								<li><a class="btn-list-action" href="/pages/triggers/create/index.zul?domain=${vm.domain}&amp;trigger=${each.id}"><i class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.trigger.edit.action}"></i></a></li>
 							</ul>
                    		</td>
                		</tr>

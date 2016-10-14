@@ -17,20 +17,15 @@ public class TeamService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     public String indexTeam(Team team) {
         RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
 
         Repository<TeamType> repository = esfactory.initManager();
         repository.initClient();
 
-        TeamMapping mapping = TeamMapping.getInstance();
-
-        // validete index name
-        boolean isCreated = repository.validateIndex(mapping.getIndex());
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
+        TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         TeamType documentIndexed = mapping.getDocumentType(team);
@@ -44,7 +39,7 @@ public class TeamService {
         Repository<TeamType> repository = esfactory.initManager();
         repository.initClient();
 
-        TeamMapping mapping = TeamMapping.getInstance();
+        TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = null;
         if (name != null) {
@@ -64,7 +59,7 @@ public class TeamService {
         Repository<TeamType> repository = esfactory.initManager();
         repository.initClient();
 
-        TeamMapping mapping = TeamMapping.getInstance();
+        TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<Team> response = repository.find(teamId, mapping);
 
@@ -84,11 +79,15 @@ public class TeamService {
         Repository<TeamType> repository = esfactory.initManager();
         repository.initClient();
 
-        TeamMapping mapping = TeamMapping.getInstance();
+        TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
         TeamType documentIndexed = mapping.getDocumentType(team);
         String response = repository.updateMapping(team.getId(), mapping, documentIndexed);
         repository.closeClient();
         return response;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }

@@ -20,7 +20,6 @@ import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.CaseCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.services.CaseCategorySetService;
 
 @Service("mockCaseCategorySetService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)

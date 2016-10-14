@@ -1368,17 +1368,19 @@ TABLE OF CONTENTS
 14.0 - FOOTER
 *******************************/
     #footer {
-        text-align: center;
-        font-weight: 400;
-        font-size: 12px;
+        font-size: 14px;
         vertical-align: middle;
+    }
+    
+    #footer-social > a > i {
+    	margin-right: 20px;
     }
     
             
 /* ----- FOOTER RESPONSIVE ----- */
 	@media (min-width: 769px) {
         #footer {
-        	height: 150px;
+        	height: 185px;
         	bottom: 0;
             width: 100%;
             position: absolute;
@@ -1399,18 +1401,12 @@ TABLE OF CONTENTS
     
 	.footer-links ul > li > a {
         text-decoration: none;
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
     
-    .footer-mail > a {
-    	font-size: 0.8em;
-		font-weight: bold;
-		text-decoration: none;
-		text-align: center;
-    }
-    
-    .footer-social > a {
+    #footer-social > a {
     	vertical-align: middle;
+    	text-align: center;
 	}
     
     .footer-newsletter {
@@ -2738,10 +2734,20 @@ TABLE OF CONTENTS
 	border-bottom: 1px solid;
 }
 
-.link-button > a {
+.link-button  {
 	text-decoration: none !important;
 	font-size: 0.8em;
+	display: inline-block;
 }
+
+.btn-list-action > i {
+	margin-left: 10px;
+} 
+
+.btn-row-list > i {
+	margin-left: 10px;
+} 
+
 
 .remove {
     font-size: 21px;

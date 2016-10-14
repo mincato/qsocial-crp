@@ -43,7 +43,7 @@ public class TeamService {
     }
 
     public PageResponse<TeamListView> findAll(Integer pageNumber, Integer pageSize, String name) {
-        List<TeamListView> teams = teamRepository.findAll(new PageRequest(pageNumber, pageSize,null), name);
+        List<TeamListView> teams = teamRepository.findAll(new PageRequest(pageNumber, pageSize, null), name);
 
         PageResponse<TeamListView> page = new PageResponse<TeamListView>(teams, pageNumber, pageSize);
         return page;

@@ -23,7 +23,6 @@ import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.ServiceUrlResolver;
@@ -48,8 +47,10 @@ public class CaseServiceImpl implements CaseService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .queryParam("pageNumber", pageRequest.getPageNumber()).queryParam("pageSize", pageRequest.getPageSize());
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl))
+                    .queryParam("pageNumber", pageRequest.getPageNumber())
+                    .queryParam("pageSize", pageRequest.getPageSize())
+                    .queryParam("sortField", pageRequest.getSortField());
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate
@@ -70,7 +71,7 @@ public class CaseServiceImpl implements CaseService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl)).path("/" + caseId);
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/" + caseId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Case caseSelected = restTemplate.getForObject(builder.toUriString(), Case.class);
@@ -89,8 +90,7 @@ public class CaseServiceImpl implements CaseService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .path("/" + caseId).path("/action");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/" + caseId).path("/action");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Case caseUpdated = restTemplate.postForObject(builder.toUriString(), actionRequest, Case.class);
@@ -109,8 +109,8 @@ public class CaseServiceImpl implements CaseService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .path("/" + caseId).path("/availableResolutions");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/" + caseId)
+                    .path("/availableResolutions");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<List<Resolution>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
@@ -129,8 +129,8 @@ public class CaseServiceImpl implements CaseService {
     public Case create(Case newCase) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            Case createdCase = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl), newCase, Case.class);
+            Case createdCase = restTemplate.postForObject(serviceUrlResolver.resolveUrl(caseServiceUrl), newCase,
+                    Case.class);
             return createdCase;
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);

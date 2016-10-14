@@ -23,7 +23,7 @@ public class SubjectCategorySetService {
 
     public PageResponse<SubjectCategorySetListView> findAll(Integer pageNumber, Integer pageSize, String name) {
         List<SubjectCategorySetListView> subjectCategorySets = subjectCategorySetRepository.findAll(new PageRequest(
-                pageNumber, pageSize,null), name);
+                pageNumber, pageSize, null), name);
 
         PageResponse<SubjectCategorySetListView> page = new PageResponse<SubjectCategorySetListView>(
                 subjectCategorySets, pageNumber, pageSize);

@@ -17,7 +17,7 @@ public class ActionRegistryService {
     private ActionRegistryRepository repository;
 
     public PageResponse<RegistryListView> findAll(String caseId, Integer pageNumber, Integer pageSize) {
-        List<RegistryListView> cases = repository.findAll(caseId, new PageRequest(pageNumber, pageSize,null));
+        List<RegistryListView> cases = repository.findAll(caseId, new PageRequest(pageNumber, pageSize, null));
 
         PageResponse<RegistryListView> page = new PageResponse<RegistryListView>(cases, pageNumber, pageSize);
         return page;
@@ -27,7 +27,7 @@ public class ActionRegistryService {
             String fromDate, String toDate, Integer pageNumber, Integer pageSize) {
 
         List<RegistryListView> cases = repository.findAllBy(caseId, textValue, action, user, fromDate, toDate,
-                new PageRequest(pageNumber, pageSize,null));
+                new PageRequest(pageNumber, pageSize, null));
 
         PageResponse<RegistryListView> page = new PageResponse<RegistryListView>(cases, pageNumber, pageSize);
         return page;

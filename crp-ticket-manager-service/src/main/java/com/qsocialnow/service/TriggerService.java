@@ -69,8 +69,8 @@ public class TriggerService {
             String status, String fromDate, String toDate) {
         Status filterStatus = status != null ? Status.valueOf(status) : null;
         TriggerListRequest triggerListRequest = new TriggerListRequest(name, filterStatus, fromDate, toDate);
-        List<TriggerListView> triggers = triggerRepository.findAll(domainId, new PageRequest(pageNumber, pageSize,null),
-                triggerListRequest);
+        List<TriggerListView> triggers = triggerRepository.findAll(domainId,
+                new PageRequest(pageNumber, pageSize, null), triggerListRequest);
 
         PageResponse<TriggerListView> page = new PageResponse<TriggerListView>(triggers, pageNumber, pageSize);
         return page;

@@ -8,24 +8,25 @@ import com.qsocialnow.elasticsearch.mappings.types.config.SegmentType;
 
 public class SegmentMapping implements Mapping<SegmentType, Segment> {
 
-    private static final String INDEX_NAME = "configuration";
-
     private static final String TYPE = "segment";
 
     private static SegmentMapping instance;
 
-    private SegmentMapping() {
+    private final String index;
+
+    private SegmentMapping(String index) {
+        this.index = index;
     }
 
-    public static SegmentMapping getInstance() {
+    public static SegmentMapping getInstance(String index) {
         if (instance == null)
-            instance = new SegmentMapping();
+            instance = new SegmentMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override

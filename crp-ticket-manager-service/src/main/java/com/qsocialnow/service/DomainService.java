@@ -61,14 +61,15 @@ public class DomainService {
     }
 
     public PageResponse<DomainListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<DomainListView> domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize,null));
+        List<DomainListView> domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize, null));
 
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
         return page;
     }
 
     public PageResponse<DomainListView> findAllByName(Integer pageNumber, Integer pageSize, String name) {
-        List<DomainListView> domains = domainRepository.findAllByName(new PageRequest(pageNumber, pageSize,null), name);
+        List<DomainListView> domains = domainRepository
+                .findAllByName(new PageRequest(pageNumber, pageSize, null), name);
 
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
         return page;
