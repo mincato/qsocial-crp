@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -77,6 +78,7 @@ public class Login extends HttpServlet {
 		user.setOdatech(ODATECH.compareToIgnoreCase(username) == 0);
 		user.setPrcAdmin(ADMIN.compareToIgnoreCase(username) == 0);
 		user.setOrganization(organizations.getOrDefault(username, ORGANIZATION));
+		user.setTimezone(TimeZone.getTimeZone("GMT-5").getID());
 
 		String shortToken = UUID.randomUUID().toString();
 		String token = tokenHandler.createToken(user);

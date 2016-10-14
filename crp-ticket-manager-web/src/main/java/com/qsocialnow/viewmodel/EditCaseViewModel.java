@@ -3,7 +3,6 @@ package com.qsocialnow.viewmodel;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,12 +32,14 @@ import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.ActionRegistryService;
 import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.FileService;
 import com.qsocialnow.services.TriggerService;
+import com.qsocialnow.services.UserSessionService;
 import com.qsocialnow.util.DeleteOnCloseInputStream;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -63,7 +64,12 @@ public class EditCaseViewModel implements Serializable {
     @WireVariable
     private FileService fileService;
 
+    @WireVariable
+    private UserSessionService userSessionService;
+
     private EditCaseView currentCase;
+
+    private DateConverter dateConverter;
 
     private static final int PAGE_SIZE_DEFAULT = 15;
 
@@ -85,9 +91,9 @@ public class EditCaseViewModel implements Serializable {
 
     private String user;
 
-    private Date fromDate;
+    private Long fromDate;
 
-    private Date toDate;
+    private Long toDate;
 
     private List<RegistryListView> registries = new ArrayList<>();
 
@@ -112,6 +118,7 @@ public class EditCaseViewModel implements Serializable {
         initCaseCategories();
         initCategoriesForSubject();
         this.actionOptions = getAllowedActionsByCase();
+        this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
 
     private void initCaseCategories() {
@@ -354,19 +361,19 @@ public class EditCaseViewModel implements Serializable {
         this.user = user;
     }
 
-    public Date getFromDate() {
+    public Long getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(Date fromDate) {
+    public void setFromDate(Long fromDate) {
         this.fromDate = fromDate;
     }
 
-    public Date getToDate() {
+    public Long getToDate() {
         return toDate;
     }
 
-    public void setToDate(Date toDate) {
+    public void setToDate(Long toDate) {
         this.toDate = toDate;
     }
 
@@ -376,5 +383,9 @@ public class EditCaseViewModel implements Serializable {
 
     public boolean isFilterActive() {
         return filterActive;
+    }
+
+    public DateConverter getDateConverter() {
+        return dateConverter;
     }
 }

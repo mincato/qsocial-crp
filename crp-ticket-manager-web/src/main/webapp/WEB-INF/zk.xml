@@ -10,6 +10,10 @@
 	</preference>
 	-->
 	
+	<listener>
+    	<listener-class>com.qsocialnow.interceptors.TimeZoneProvider</listener-class>
+	</listener>
+	
 	<system-config>
     	<label-location>/WEB-INF/i18n/domain.properties</label-location>
     	<label-location>/WEB-INF/i18n/app.properties</label-location>
