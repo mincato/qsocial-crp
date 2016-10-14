@@ -46,6 +46,8 @@ public class Login extends HttpServlet {
 
 	private LoginProperties loginProperties;
 	
+	private CuratorFramework client;
+	
 	static {
 		organizations = new HashMap<>();
 		organizations.put("diego", 10l);
@@ -58,6 +60,13 @@ public class Login extends HttpServlet {
 
 		loginProperties = new LoginProperties();
 		loginProperties.load();
+		
+		client = createZookeeperClient();
+	}
+	
+	@Override
+	public void destroy() {
+		client.close();
 	}
 
 	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -72,7 +81,6 @@ public class Login extends HttpServlet {
 		String shortToken = UUID.randomUUID().toString();
 		String token = tokenHandler.createToken(user);
 
-		CuratorFramework client = createZookeeperClient();
 		persistShortToken(client, shortToken, token);
 		persistUserActivityData(client, token);
 
