@@ -2,7 +2,7 @@
 <div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('triggerVm') @init('com.qsocialnow.viewmodel.trigger.CreateTriggerViewModel')"
 		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
-		form="@id('fxTrigger') @load(triggerVm.currentTrigger) @save(triggerVm.currentTrigger, before={'save'} ) @validator('com.qsocialnow.validators.TriggerFormValidator')">
+		form="@id('fxTrigger') @load(triggerVm.currentTrigger) @save(triggerVm.currentTrigger, before={'saveTrigger'} ) @validator('com.qsocialnow.validators.TriggerFormValidator')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
@@ -78,7 +78,7 @@
 						<n:div class="col-sm-9">
 							<datebox id="endDate" sclass="input-group"
 								format="short"
-								value="@load(fxTrigger.trigger.end) @converter(adminVm.dateConverter, endDay = true) @save(fxTrigger.trigger.end, before='save')  @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxTrigger.trigger.init, label='trigger.enddate.validation', id = 'endDate', required = true)"  />
+								value="@load(fxTrigger.trigger.end) @converter(adminVm.dateConverter, endDay = true) @save(fxTrigger.trigger.end, before='saveTrigger')  @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxTrigger.trigger.init, label='trigger.enddate.validation', id = 'endDate', required = true)"  />
 							<x:span
 								sclass="@load(empty vmsgs[endDate] ? 'hidden' : 'help-block')">
 								<label value="@load(vmsgs[endDate])" />
@@ -226,7 +226,7 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<div class="form-group text-center">
-			    	<button onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
+			    	<button onClick="@global-command('saveTrigger')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
 			    		label="${labels.app.button.save}" zclass="btn btn-success" />
 			    	<button href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.cancel}" zclass="btn btn-default"/>	
 				</div>

@@ -298,9 +298,9 @@ public class CreateTriggerViewModel implements Serializable {
         }).collect(Collectors.toList()));
     }
 
-    @Command
+    @GlobalCommand
     @NotifyChange("currentTrigger")
-    public void save() {
+    public void saveTrigger() {
         currentTrigger.getTrigger().setResolutions(
                 currentTrigger.getResolutions().stream().map(TriggerResolutionView::getResolution)
                         .collect(Collectors.toList()));

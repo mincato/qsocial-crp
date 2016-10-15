@@ -25,7 +25,7 @@
 	    <div class="main">
 	    <!-- CONTENT -->
 		<n:div id="content">
-		    <include src="/pages/utils/main.zul"/>
+		    <include src="/pages/cases/list/list-cases.zul"/>
 		</n:div><!-- content -->
 	    <!-- CONTENT -->
 		
