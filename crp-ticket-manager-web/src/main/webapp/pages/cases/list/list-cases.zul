@@ -30,14 +30,18 @@
 					    		<th>
 						    		 <div class="text-center">
 						    		    <a style="text-decoration:none" onClick="@command('sortList' , sortField='title')" >
-						    		       ${labels.cases.list.column.title}
+						    		        <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
+						    		            ${labels.cases.list.column.title}
+						    		        </i>
 						    		    </a>
     					    	  	</div>
     					    	</th>
 					    		<th>
 					    		     <div class="text-center">
                                         <a style="text-decoration:none" onClick="@command('sortList' , sortField='description')" >
-					    		             ${labels.cases.list.column.description}
+					    		             <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
+					    		                 ${labels.cases.list.column.description}
+					    		             </i>
 					    		         </a>
 					    		    </div>
 					    		</th>
@@ -45,21 +49,27 @@
 					    		<th>
                                      <div class="text-center">
                                         <a style="text-decoration:none" onClick="@command('sortList' , sortField='subject.identifier')" >
+                                            <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
 					    		             ${labels.cases.list.column.subject}
+					    		            </i> 
 					    		        </a>
                                     </div>
 					    		 </th>
 					    		 <th>
 						    		 <div class="text-center">
 	                                        <a style="text-decoration:none" onClick="@command('sortList',sortField='pendingResponse')" >
-	    					    		     ${labels.cases.list.column.pendingResponse}
+	                                           <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
+	    					    		            ${labels.cases.list.column.pendingResponse}
+	    					    		       </i>     
 	    					               </a>
 	    					         </div>
     					         </th>   
 					    		<th>
 					    		     <div class="text-center">
                                             <a style="text-decoration:none" onClick="@command('sortList',sortField='open')" >
-					    		             ${labels.cases.list.column.open}
+                                                <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
+					    		                     ${labels.cases.list.column.open}
+					    		                </i>
 					    		            </a>
 					    		     </div>
 					    		 </th>

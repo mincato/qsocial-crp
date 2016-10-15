@@ -210,12 +210,10 @@ public class FacebookDetectorService extends SourceDetectorService {
                 log.info("Adding facebookevent information into event");
                 FacebookFeedEvent conversationsByCommentId = conversations.get(commentId);
                 if (conversationsByCommentId != null) {
-                    if (conversationsByCommentId.getCommentId().equals(commentId)) {
-                        event.setIdPadre(conversationsByCommentId.getEventId());
-                        event.setOriginIdCase(conversationsByCommentId.getCaseId());
-                        removeSourceConversation(commentId);
-                    }
+                    event.setIdPadre(conversationsByCommentId.getEventId());
+                    event.setOriginIdCase(conversationsByCommentId.getCaseId());
                 }
+                removeSourceConversation(commentId);
             }
             event.setUsuarioOriginal(userName);
             event.setIdUsuarioOriginal(userId);
