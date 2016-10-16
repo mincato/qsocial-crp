@@ -18,7 +18,6 @@ public class DateValidator extends AbstractValidator {
         String key = (String) context.getBindContext().getValidatorArg("key");
         if (required) {
             if (mainDate == null) {
-                System.out.println("invalid1");
                 addInvalidMessage(context, key, Labels.getLabel("field.empty"));
             } else {
                 Object startDateProperty = context.getBindContext().getValidatorArg("startDate");
@@ -41,7 +40,6 @@ public class DateValidator extends AbstractValidator {
                 }
 
                 if (startDate != null && endDate != null) {
-                    System.out.println("invalid2");
                     if (!startDate.before(endDate)) {
                         String label;
                         if (mainDate == startDate) {
@@ -49,7 +47,6 @@ public class DateValidator extends AbstractValidator {
                         } else {
                             label = "date.should.after";
                         }
-                        System.out.println("invalid2 " + label);
                         addInvalidMessage(context, key, Labels.getLabel(label));
                     }
                 }

@@ -99,7 +99,7 @@ public class Case implements Serializable {
         List<ActionRegistry> registries = new ArrayList<>();
         ActionRegistry registry = new ActionRegistry();
         registry.setAction(ActionType.OPEN_CASE.name());
-        registry.setComment(event.getIdUsuarioOriginal() + " - " + event.getTitulo());
+        registry.setComment(event.getUsuarioOriginal() + " - " + event.getTitulo());
         registry.setAutomatic(true);
         registry.setDate(openDate);
 

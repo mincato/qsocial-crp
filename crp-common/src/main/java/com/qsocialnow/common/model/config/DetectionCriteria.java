@@ -1,7 +1,6 @@
 package com.qsocialnow.common.model.config;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -13,9 +12,9 @@ public class DetectionCriteria {
     @NotBlank(message = "{field.empty}")
     private String name;
 
-    private Date validateFrom;
+    private Long validateFrom;
 
-    private Date validateTo;
+    private Long validateTo;
 
     private Integer sequenceOrder;
 
@@ -39,19 +38,19 @@ public class DetectionCriteria {
         this.id = id;
     }
 
-    public Date getValidateFrom() {
+    public Long getValidateFrom() {
         return validateFrom;
     }
 
-    public void setValidateFrom(Date validateFrom) {
+    public void setValidateFrom(Long validateFrom) {
         this.validateFrom = validateFrom;
     }
 
-    public Date getValidateTo() {
+    public Long getValidateTo() {
         return validateTo;
     }
 
-    public void setValidateTo(Date validateTo) {
+    public void setValidateTo(Long validateTo) {
         this.validateTo = validateTo;
     }
 

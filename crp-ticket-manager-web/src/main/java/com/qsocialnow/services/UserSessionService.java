@@ -28,4 +28,13 @@ public class UserSessionService {
             return (UserData) httpSession.getAttribute(USER_SESSION_PARAMETER);
         return null;
     }
+
+    public String getTimeZone() {
+        UserData userData = getUserData();
+        if (userData != null) {
+            return userData.getTimezone();
+        }
+        return null;
+    }
+
 }

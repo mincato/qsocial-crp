@@ -129,7 +129,7 @@ public class FacebookDetectorService extends SourceDetectorService {
                         break;
                     }
                     default:
-                        System.out.println("Other event: " + event.getType().name());
+                        log.info("Other event: " + event.getType().name());
                 }
             }
 

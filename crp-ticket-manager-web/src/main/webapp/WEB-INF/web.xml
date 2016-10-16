@@ -21,7 +21,7 @@
 	 <listener>
     	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
-
+	
 	<!-- ZK -->
 	<listener>
 		<description>ZK listener for session cleanup</description>
@@ -133,6 +133,11 @@
 		<filter-name>authorizationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/pages/errors/notFoundError.zul</location>
+	</error-page>
 
 	<!-- DSP (optional) 
 	Uncomment it if you want to use DSP
