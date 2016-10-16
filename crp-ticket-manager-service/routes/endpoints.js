@@ -41,7 +41,8 @@ router.get('/cases', function (req, res) {
   var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
   var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
   var sortField = req.query.sortField ? req.query.sortField : null;
-  caseService.findAll(pageNumber, pageSize,sortField,asyncResponse);
+  var sortOrder = req.query.sortOrder?req.query.sortOrder :null;
+  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,asyncResponse);
 
 });
 

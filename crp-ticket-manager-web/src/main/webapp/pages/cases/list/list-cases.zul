@@ -26,8 +26,7 @@
 					<table class="table table-striped table-hover">
 			    		<thead>
 							<tr>
-					    		<th>${labels.cases.list.column.id}</th>
-					    		<th>
+							    <th>
 						    		 <div class="text-center">
 						    		    <a style="text-decoration:none" onClick="@command('sortList' , sortField='title')" >
 						    		        <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
@@ -45,7 +44,15 @@
 					    		         </a>
 					    		    </div>
 					    		</th>
-					    		             
+					    		<th>
+                                     <div class="text-center">
+                                        <a style="text-decoration:none" onClick="@command('sortList' , sortField='openDate')" >
+                                            <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
+                                                ${labels.cases.list.column.openDate}
+                                            </i>
+                                        </a>
+                                    </div>
+                                </th>
 					    		<th>
                                      <div class="text-center">
                                         <a style="text-decoration:none" onClick="@command('sortList' , sortField='subject.identifier')" >
@@ -79,9 +86,9 @@
 			    		<tbody children="@bind(vm.cases)">
 			    			<template name="children">
 								<tr>
-									<td>${each.id}</td>
-                   					<td class="list-text-column">${each.title}</td>
+								    <td class="list-text-column">${each.title}</td>
                        				<td>${each.description}</td>
+                       				<td>${each.openDate}</td>
                        				<td>${each.subject}</td>
                 				    <td>${c:l(c:cat('cases.pendingResponse.',each.pendingResponse))}</td>   
                        				<td>${c:l(c:cat('cases.open.',each.open))}</td>

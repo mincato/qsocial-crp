@@ -4,13 +4,15 @@ import java.io.Serializable;
 
 public class PageRequest implements Serializable {
 
-    private static final long serialVersionUID = -7328689392321734924L;
+	private static final long serialVersionUID = -7328689392321734924L;
 
     private final Integer pageNumber;
     private final Integer pageSize;
     private final Integer limit;
     private final Integer offset;
     private final String sortField;
+    
+    private boolean sortOrder;
 
     private static final Integer DEFAULT_PAGE_NUMBER = 0;
     private static final Integer DEFAULT_PAGE_SIZE = 20;
@@ -42,4 +44,16 @@ public class PageRequest implements Serializable {
     public String getSortField() {
         return sortField;
     }
+
+	public boolean isSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(boolean sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+	
+	public boolean getSortOrder() {
+		return this.sortOrder;
+	}
 }
