@@ -5,6 +5,7 @@ import java.util.List;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
+import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -81,6 +82,28 @@ public class TriggerService {
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        SearchResponse<Trigger> response = repository.searchWithFilters(filters, mapping);
+
+        List<Trigger> triggers = response.getSources();
+
+        repository.closeClient();
+        for (Trigger trigger : triggers) {
+            trigger.setSegments(segmentService.getSegments(trigger.getId()));
+        }
+        return triggers;
+
+    }
+
+    public List<Trigger> getActiveTriggers(String domainId) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        filters = filters.must(QueryBuilders.matchQuery("status", Status.ACTIVE));
         SearchResponse<Trigger> response = repository.searchWithFilters(filters, mapping);
 
         List<Trigger> triggers = response.getSources();

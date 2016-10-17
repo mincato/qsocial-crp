@@ -35,7 +35,7 @@
         <constructor-arg ref="configurationProvider" />
     </bean>
     
-    <bean id="userResolverService" class="com.qsocialnow.elasticsearch.services.config.UserResolverService">
+    <bean id="userResolverElasticService" class="com.qsocialnow.elasticsearch.services.config.UserResolverService">
  		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
