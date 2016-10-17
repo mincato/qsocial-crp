@@ -46,12 +46,12 @@ public class CaseServiceTest {
 
         PageResponse<CaseListView> expectedPageCases = new PageResponse<CaseListView>(expectedCases, 0, 0);
         when(
-                caseRepository.findAll(Mockito.any(PageRequest.class),Mockito.matches("subject"),Mockito.matches("title"),
-                        Mockito.matches("description"), Mockito.matches("true"), Mockito.matches("1476719187665"),
-                        Mockito.matches("1476719187665"))).thenReturn(expectedCases);
+                caseRepository.findAll(Mockito.any(PageRequest.class), Mockito.matches("subject"),
+                        Mockito.matches("title"), Mockito.matches("description"), Mockito.matches("true"),
+                        Mockito.matches("1476719187665"), Mockito.matches("1476719187665"))).thenReturn(expectedCases);
 
-        PageResponse<CaseListView> results = caseService.findAll(0, 0,"subject", "title", "true", "title", "description", "true",
-                "1476719187665", "1476719187665");
+        PageResponse<CaseListView> results = caseService.findAll(0, 0, "title", "true", "subject", "title",
+                "description", "true", "1476719187665", "1476719187665");
         ReflectionAssert.assertReflectionEquals(expectedPageCases, results);
     }
 }

@@ -145,7 +145,6 @@ public class CasesViewModel implements Serializable {
         }
 
         filters.put("pendingResponse", String.valueOf(this.pendingResponse));
-        
 
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
@@ -154,7 +153,7 @@ public class CasesViewModel implements Serializable {
         if (this.toDate != null) {
             filters.put("toOpenDate", String.valueOf(this.toDate));
         }
-        
+
         if (this.subject != null) {
             filters.put("subject", this.subject);
         }

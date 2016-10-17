@@ -45,12 +45,13 @@ public class CaseService {
     private Map<ActionType, Action> actions;
 
     public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
-            String subject,String title, String description, String pendingResponse, String fromOpenDate, String toOpenDate) {
+            String subject, String title, String description, String pendingResponse, String fromOpenDate,
+            String toOpenDate) {
         PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
         pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
 
-        List<CaseListView> cases = repository.findAll(pageRequest,subject,title, description, pendingResponse, fromOpenDate,
-                toOpenDate);
+        List<CaseListView> cases = repository.findAll(pageRequest, subject, title, description, pendingResponse,
+                fromOpenDate, toOpenDate);
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;

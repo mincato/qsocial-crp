@@ -14,7 +14,7 @@ import com.qsocialnow.common.model.cases.Case;
 public class AttachFileCaseAction implements Action {
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         List<String> files = (List<String>) parameters.get(ActionParameter.FILES);
         caseObject.setAttachments(new HashSet<>(files));
