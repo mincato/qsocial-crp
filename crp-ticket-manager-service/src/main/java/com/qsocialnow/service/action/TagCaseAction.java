@@ -13,7 +13,7 @@ import com.qsocialnow.common.model.cases.Case;
 public class TagCaseAction implements Action {
 
     @SuppressWarnings("unchecked")
-	@Override
+    @Override
     public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         List<String> caseCategoriesSet = (List<String>) parameters.get(ActionParameter.CATEGORIES_SET);
         caseObject.setCaseCategoriesSet(new HashSet<>(caseCategoriesSet));
