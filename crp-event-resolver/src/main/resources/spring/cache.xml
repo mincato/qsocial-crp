@@ -22,6 +22,7 @@
     
     <util:map id="caches">
     	<entry key="#{T(com.qsocialnow.eventresolver.config.CacheEnum).DOMAINS_CACHE}" value="${app.cache.domains.config.path}"/>
+    	<entry key="#{T(com.qsocialnow.eventresolver.config.CacheEnum).USER_RESOLVERS_CACHE}" value="${app.cache.userResolvers.config.path}"/>
 	</util:map>
 	
 </beans>

@@ -4,6 +4,8 @@ public class CacheConfig {
 
     public static final String DOMAINS_CACHE = "domains";
 
+    public static final String USER_RESOLVERS_CACHE = "userResolvers";
+
     private Long maxSize;
 
     public Long getMaxSize() {

@@ -30,6 +30,18 @@ public class MockDetectionCriteriaBuilder {
         return detectionCriterias;
     }
 
+    public static List<DetectionCriteria> buildOneTrueInvalid() {
+        List<DetectionCriteria> detectionCriterias = new ArrayList<>();
+        DetectionCriteria detectionCriteria = new DetectionCriteria();
+        detectionCriteria.setId("1");
+        Filter filter = new Filter();
+        filter.setId("true");
+        detectionCriteria.setFilter(filter);
+        detectionCriteria.setValidateTo(System.currentTimeMillis() - 10000);
+        detectionCriterias.add(detectionCriteria);
+        return detectionCriterias;
+    }
+
     public static List<DetectionCriteria> buildTwoFalse() {
         List<DetectionCriteria> detectionCriterias = new ArrayList<>();
         DetectionCriteria detectionCriteria = new DetectionCriteria();
