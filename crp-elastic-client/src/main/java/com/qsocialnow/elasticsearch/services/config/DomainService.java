@@ -119,6 +119,14 @@ public class DomainService {
         return domain;
     }
 
+    public Domain findDomainWithActiveTriggers(String domainId) {
+        Domain domain = findDomain(domainId);
+        if (domain != null) {
+            domain.setTriggers(triggerService.getActiveTriggers(domainId));
+        }
+        return domain;
+    }
+
     public void setTriggerService(TriggerService triggerService) {
         this.triggerService = triggerService;
     }

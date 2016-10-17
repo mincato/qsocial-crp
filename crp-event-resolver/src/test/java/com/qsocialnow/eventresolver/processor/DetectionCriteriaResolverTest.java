@@ -65,6 +65,16 @@ public class DetectionCriteriaResolverTest {
     }
 
     @Test
+    public void testResolveOneTrueInvalid() {
+        List<DetectionCriteria> detectionCriterias = MockDetectionCriteriaBuilder.buildOneTrueInvalid();
+
+        DetectionCriteria detectionCriteria = detectionCriteriaResolver.resolve(new NormalizedInputBeanDocument(
+                new Event()), detectionCriterias);
+
+        Assert.assertNull(detectionCriteria);
+    }
+
+    @Test
     public void testResolveTwoFalseTrue() {
         List<DetectionCriteria> detectionCriterias = MockDetectionCriteriaBuilder.buildTwoFalseTrue();
 
