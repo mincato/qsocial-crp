@@ -63,7 +63,7 @@ public class CasesViewModel implements Serializable {
 
     private String subject;
 
-    private Boolean isPendingResponse;
+    private boolean pendingResponse;
 
     @Init
     public void init() {
@@ -144,9 +144,8 @@ public class CasesViewModel implements Serializable {
             filters.put("description", this.description);
         }
 
-        if (this.isPendingResponse != null) {
-            filters.put("pendingResponse", String.valueOf(this.isPendingResponse));
-        }
+        filters.put("pendingResponse", String.valueOf(this.pendingResponse));
+        
 
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
@@ -154,6 +153,10 @@ public class CasesViewModel implements Serializable {
 
         if (this.toDate != null) {
             filters.put("toOpenDate", String.valueOf(this.toDate));
+        }
+        
+        if (this.subject != null) {
+            filters.put("subject", this.subject);
         }
 
         return filters;
@@ -221,11 +224,11 @@ public class CasesViewModel implements Serializable {
     }
 
     public boolean isPendingResponse() {
-        return isPendingResponse;
+        return pendingResponse;
     }
 
     public void setPendingResponse(boolean isPendingResponse) {
-        this.isPendingResponse = isPendingResponse;
+        this.pendingResponse = isPendingResponse;
     }
 
 }

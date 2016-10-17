@@ -39,7 +39,7 @@ public class CaseTicketService extends CaseIndexService {
         return caseDocument;
     }
 
-    public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String title,
+    public List<Case> getCases(int from, int size, String sortField, boolean sortOrder,String subject,String title,
             String description, String pendingResponse, String fromOpenDate, String toOpenDate) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
@@ -51,6 +51,9 @@ public class CaseTicketService extends CaseIndexService {
 
         Map<String, String> searchValues = new HashMap<>();
 
+        if (subject != null)
+            searchValues.put("subject.identifier", subject);
+        
         if (title != null)
             searchValues.put("title", title);
 
