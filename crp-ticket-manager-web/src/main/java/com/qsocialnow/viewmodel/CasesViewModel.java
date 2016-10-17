@@ -65,7 +65,7 @@ public class CasesViewModel implements Serializable {
     @NotifyChange({ "cases", "moreResults" })
     public void sortList(@BindingParam("sortField") String sortField) {
         this.sortField = sortField;
-        this.sortOrder = this.sortOrder?!this.sortOrder:this.sortOrder;
+        this.sortOrder = !this.sortOrder;
         this.activePage = 0;
         this.cases.clear();
         this.findCases();

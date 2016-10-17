@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +45,11 @@ public class CaseService {
     @Resource
     private Map<ActionType, Action> actions;
 
-    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField,boolean sortOrderValue) {
-    	PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
-    	pageRequest.setSortOrder(sortOrderValue);
-    	
-    	List<CaseListView> cases = repository.findAll(pageRequest);
+    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder) {
+        PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
+        pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
+        log.info("Retriving cases :" + sortField + " ");
+        List<CaseListView> cases = repository.findAll(pageRequest);
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;
     }

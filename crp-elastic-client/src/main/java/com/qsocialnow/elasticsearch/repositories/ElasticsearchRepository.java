@@ -357,9 +357,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
-    public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField,boolean sortOrder,Mapping<T, E> mapping) {
-    	SortOrder sortOrderEnum = sortOrder? SortOrder.ASC : SortOrder.DESC;
-    	SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
+            Mapping<T, E> mapping) {
+        SortOrder sortOrderEnum = sortOrder ? SortOrder.ASC : SortOrder.DESC;
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderEnum).query(QueryBuilders.matchAllQuery());
         Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
         return executeSearch(mapping, search);
