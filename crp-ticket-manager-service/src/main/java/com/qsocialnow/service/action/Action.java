@@ -7,6 +7,6 @@ import com.qsocialnow.common.model.cases.Case;
 
 public interface Action {
 
-    boolean execute(Case caseObject, Map<ActionParameter, Object> map);
+    void execute(Case caseObject, Map<ActionParameter, Object> map);
 
 }

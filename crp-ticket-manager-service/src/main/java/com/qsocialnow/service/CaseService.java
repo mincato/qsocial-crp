@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,8 @@ import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
 import com.qsocialnow.persistence.TriggerRepository;
@@ -87,8 +86,8 @@ public class CaseService {
             if (caseObject != null) {
                 Action action = actions.get(actionRequest.getActionType());
                 if (action != null) {
-                    boolean needsUpdate = action.execute(caseObject, actionRequest.getParameters());
-                    boolean updated = needsUpdate ? repository.update(caseObject) : !needsUpdate;
+                    action.execute(caseObject, actionRequest.getParameters());
+                    boolean updated = repository.update(caseObject);
                     if (!updated) {
                         log.error("There was an error trying to update the case");
                         throw new RuntimeException("There was an error trying to update the case");

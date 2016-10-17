@@ -12,13 +12,13 @@ import com.qsocialnow.common.model.cases.Case;
 @Component("tagCaseAction")
 public class TagCaseAction implements Action {
 
-    @Override
-    public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    @SuppressWarnings("unchecked")
+	@Override
+    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         List<String> caseCategoriesSet = (List<String>) parameters.get(ActionParameter.CATEGORIES_SET);
         caseObject.setCaseCategoriesSet(new HashSet<>(caseCategoriesSet));
         List<String> caseCategories = (List<String>) parameters.get(ActionParameter.CATEGORIES);
         caseObject.setCaseCategories(new HashSet<>(caseCategories));
-        return true;
     }
 
 }

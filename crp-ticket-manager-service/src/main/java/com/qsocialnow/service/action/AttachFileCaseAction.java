@@ -13,12 +13,12 @@ import com.qsocialnow.common.model.cases.Case;
 @Component("attachFileCaseAction")
 public class AttachFileCaseAction implements Action {
 
-    @Override
-    public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    @SuppressWarnings("unchecked")
+	@Override
+    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         List<String> files = (List<String>) parameters.get(ActionParameter.FILES);
         caseObject.setAttachments(new HashSet<>(files));
         parameters.put(ActionParameter.COMMENT, StringUtils.join(files, ", "));
-        return true;
     }
 
 }

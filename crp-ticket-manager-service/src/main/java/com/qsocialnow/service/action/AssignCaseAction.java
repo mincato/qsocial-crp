@@ -19,7 +19,7 @@ public class AssignCaseAction implements Action {
     private TeamRepository teamRepository;
 
     @Override
-    public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         String userId = (String) parameters.get(ActionParameter.USER);
         String teamId = (String) parameters.get(ActionParameter.TEAM);
         Team team = teamRepository.findOne(teamId);
@@ -27,7 +27,6 @@ public class AssignCaseAction implements Action {
         User assignee = team.getUsers().stream().filter(user -> user.getId().equals(userId)).findFirst().get();
         caseObject.setAssignee(new BaseUser(assignee));
         parameters.put(ActionParameter.COMMENT, buildComment(oldAssignee, assignee));
-        return true;
     }
 
     private String buildComment(BaseUser oldUser, User user) {
