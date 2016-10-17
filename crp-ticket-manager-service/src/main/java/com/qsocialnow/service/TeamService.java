@@ -50,8 +50,13 @@ public class TeamService {
     }
 
     public List<TeamListView> findAll() {
-        List<TeamListView> teams = teamRepository.findAll(null, null);
-        return teams;
+    	try {
+	        List<TeamListView> teams = teamRepository.findAll(null, null);
+	        return teams;
+    	} catch (Exception e) {
+    		log.error("There was an error finding teams", e);
+    		throw new RuntimeException(e.getMessage());
+    	}
     }
 
     public Team findOne(String teamId) {

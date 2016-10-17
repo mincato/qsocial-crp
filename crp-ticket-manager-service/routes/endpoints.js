@@ -851,8 +851,6 @@ router.post('/teams', function (req, res) {
 
 router.get('/teams/list', function (req, res) {
 
-	try {
-	
 	  function asyncResponse(err,response) {
 	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
@@ -878,9 +876,6 @@ router.get('/teams/list', function (req, res) {
 	  
 	  teamService.findAll(pageNumber, pageSize, name, asyncResponse);
 	  
-	} catch (exception) {
-		res.status(500).json(exception.cause.getMessageSync());
-	}
 });
 
 router.get('/teams', function (req, res) {
