@@ -31,21 +31,35 @@ public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
         Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);
 
         String domainId = message.getGroup();
-        LOGGER.info(String.format("Processing message from Response Detector using domain %s: %s", domainId,
-                inputBeanDocument));
+        logProcessingEvent(inputBeanDocument, domainId);
 
         if (messageFilter.shouldProcess(inputBeanDocument, null)) {
             ExecutionMessageRequest executionMessageRequest = detectionMessageProcessor.detect(inputBeanDocument, null);
             if (executionMessageRequest != null) {
                 executionMessageProcessor.execute(executionMessageRequest);
             } else {
-                LOGGER.info(String.format("Message from Response Detect were not detected to execute an action: %s",
-                        inputBeanDocument));
+                logMessageNotDetected(inputBeanDocument);
             }
         } else {
             LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
         }
     }
+
+	private void logMessageNotDetected(Event inputBeanDocument) {
+		LOGGER.info(String.format("Message from Response Detect were not detected to execute an action: %s",
+		        inputBeanDocument.getId()));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+		}
+	}
+
+	private void logProcessingEvent(Event inputBeanDocument, String domainId) {
+		LOGGER.info(String.format("Processing message from Response Detector using domain %s: %s", domainId,
+                inputBeanDocument.getId()));
+        if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+        }
+	}
 
     public void setDetectionMessageProcessor(DetectionMessageProcessor detectionMessageProcessor) {
         this.detectionMessageProcessor = detectionMessageProcessor;
