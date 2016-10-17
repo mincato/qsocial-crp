@@ -22,11 +22,21 @@
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
-	
+
 	<logger name="kafka">
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
-	</logger>	
+	</logger>
+
+	<logger name="org.apache">
+		<level value="WARN" />
+		<appender-ref ref="fileAppender" />
+	</logger>
+
+	<logger name="org.I0Itec">
+		<level value="WARN" />
+		<appender-ref ref="fileAppender" />
+	</logger>
 
 	<root>
 		<priority value="INFO" />
