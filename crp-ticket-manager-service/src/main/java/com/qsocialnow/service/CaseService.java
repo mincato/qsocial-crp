@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +20,8 @@ import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
 import com.qsocialnow.persistence.TriggerRepository;
@@ -45,11 +44,14 @@ public class CaseService {
     @Resource
     private Map<ActionType, Action> actions;
 
-    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder) {
+    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
+            String title, String description, String pendingResponse, String fromOpenDate, String toOpenDate) {
         PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
         pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
         log.info("Retriving cases :" + sortField + " ");
-        List<CaseListView> cases = repository.findAll(pageRequest);
+        List<CaseListView> cases = repository.findAll(pageRequest, title, description, pendingResponse, fromOpenDate,
+                toOpenDate);
+
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;
     }
