@@ -30,14 +30,19 @@ public class DetectionCriteriaResolver {
             DetectionCriteria currentDetectionCriteria = null;
             for (int i = 0; !match && i < detectionCriterias.size(); i++) {
                 currentDetectionCriteria = detectionCriterias.get(i);
-                Filter configFilter = currentDetectionCriteria.getFilter();
-                match = filters.stream().allMatch(filter -> {
-                    if (filter.apply(configFilter)) {
-                        return filter.match(normalizedMessage, configFilter);
-                    } else {
-                        return true;
-                    }
-                });
+                if (isDetectionCriteriaValidRightNow(currentDetectionCriteria)) {
+                    Filter configFilter = currentDetectionCriteria.getFilter();
+                    match = filters.stream().allMatch(filter -> {
+                        if (filter.apply(configFilter)) {
+                            return filter.match(normalizedMessage, configFilter);
+                        } else {
+                            return true;
+                        }
+                    });
+                } else {
+                    log.info(String.format("The deteccion criteria with name %s is not valid this time",
+                            currentDetectionCriteria.getName()));
+                }
 
             }
             if (match) {
@@ -45,6 +50,13 @@ public class DetectionCriteriaResolver {
             }
         }
         return detectionCriteria;
+    }
+
+    private boolean isDetectionCriteriaValidRightNow(DetectionCriteria detectionCriteria) {
+        long currentTime = System.currentTimeMillis();
+        boolean isValid = ((detectionCriteria.getValidateFrom() == null || detectionCriteria.getValidateFrom() <= currentTime) && (detectionCriteria
+                .getValidateTo() == null || currentTime <= detectionCriteria.getValidateTo()));
+        return isValid;
     }
 
     public void setFilters(List<DetectionCriteriaFilter> filters) {

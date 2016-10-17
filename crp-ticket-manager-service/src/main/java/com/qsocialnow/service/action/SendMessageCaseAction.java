@@ -24,14 +24,13 @@ public class SendMessageCaseAction implements Action {
     private UserResolverRepository userResolverRepository;
 
     @Override
-    public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         String text = (String) parameters.get(ActionParameter.TEXT);
         String userResolverId = (String) parameters.get(ActionParameter.USER_RESOLVER);
         UserResolver userResolver = userResolverRepository.findOne(userResolverId);
         String postId = sources.get(userResolver.getSource()).sendMessage(caseObject, userResolver, text);
         caseObject.addMessage(new Message(postId, false));
         parameters.put(ActionParameter.COMMENT, postId + " - " + text);
-        return false;
     }
 
 }

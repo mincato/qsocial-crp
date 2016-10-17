@@ -16,8 +16,8 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Message;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.services.strategies.SourceStrategy;
-import com.qsocialnow.elasticsearch.services.config.UserResolverService;
 import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
+import com.qsocialnow.eventresolver.service.UserResolverService;
 
 @Component("sendResponseCaseAction")
 public class SendResponseCaseAction implements Action {

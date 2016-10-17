@@ -39,7 +39,7 @@ public class MessageProcessorImpl implements MessageProcessor {
         LOGGER.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
         LOGGER.info(String.format("Searching for domain: %s", domainId));
 
-        Domain domain = domainService.findDomainWithTriggers(domainId);
+        Domain domain = domainService.findDomainWithActiveTriggers(domainId);
         if (domain != null) {
             if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
                 ExecutionMessageRequest executionMessageRequest = detectionMessageProcessor.detect(inputBeanDocument,

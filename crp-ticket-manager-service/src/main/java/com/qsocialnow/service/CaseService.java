@@ -89,8 +89,8 @@ public class CaseService {
             if (caseObject != null) {
                 Action action = actions.get(actionRequest.getActionType());
                 if (action != null) {
-                    boolean needsUpdate = action.execute(caseObject, actionRequest.getParameters());
-                    boolean updated = needsUpdate ? repository.update(caseObject) : !needsUpdate;
+                    action.execute(caseObject, actionRequest.getParameters());
+                    boolean updated = repository.update(caseObject);
                     if (!updated) {
                         log.error("There was an error trying to update the case");
                         throw new RuntimeException("There was an error trying to update the case");
