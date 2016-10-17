@@ -28,6 +28,8 @@ public class CasesViewModel implements Serializable {
 
     private String sortField = "openDate";
 
+    private boolean sortOrder = false;
+
     @WireVariable
     private CaseService caseService;
 
@@ -63,13 +65,17 @@ public class CasesViewModel implements Serializable {
     @NotifyChange({ "cases", "moreResults" })
     public void sortList(@BindingParam("sortField") String sortField) {
         this.sortField = sortField;
+        this.sortOrder = !this.sortOrder;
         this.activePage = 0;
         this.cases.clear();
         this.findCases();
     }
 
     private PageResponse<CaseListView> findCases() {
-        PageResponse<CaseListView> pageResponse = caseService.findAll(new PageRequest(activePage, pageSize, sortField));
+    	PageRequest pageRequest = new PageRequest(activePage, pageSize, sortField);
+    	pageRequest.setSortOrder(this.sortOrder);
+
+        PageResponse<CaseListView> pageResponse = caseService.findAll(pageRequest);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.cases.addAll(pageResponse.getItems());
             this.moreResults = true;

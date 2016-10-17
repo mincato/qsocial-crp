@@ -12,6 +12,8 @@ public class PageRequest implements Serializable {
     private final Integer offset;
     private final String sortField;
 
+    private boolean sortOrder;
+
     private static final Integer DEFAULT_PAGE_NUMBER = 0;
     private static final Integer DEFAULT_PAGE_SIZE = 20;
 
@@ -41,5 +43,17 @@ public class PageRequest implements Serializable {
 
     public String getSortField() {
         return sortField;
+    }
+
+    public boolean isSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(boolean sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public boolean getSortOrder() {
+        return this.sortOrder;
     }
 }

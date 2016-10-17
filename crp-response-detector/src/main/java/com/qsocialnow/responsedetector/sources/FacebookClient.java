@@ -103,7 +103,7 @@ public class FacebookClient {
 
                             if (startToTrackComment) {
                                 if (comment.getFrom().getId().equals(userToTrack)) {
-                                    log.info("Finding user:" + userToTrack + "and comment:" + comment.getId()
+                                    log.info("Finding user:" + userToTrack + " and comment:" + comment.getId()
                                             + "from conversation rootReply:" + commentId);
                                     Date createdTime = comment.getCreatedTime();
                                     sourceService.processEvent(true, createdTime.getTime(), null, null,
