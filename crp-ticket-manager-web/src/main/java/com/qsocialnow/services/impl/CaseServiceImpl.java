@@ -56,7 +56,8 @@ public class CaseServiceImpl implements CaseService {
                     .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl))
                     .queryParam("pageNumber", pageRequest.getPageNumber())
                     .queryParam("pageSize", pageRequest.getPageSize())
-                    .queryParam("sortField", pageRequest.getSortField());
+                    .queryParam("sortField", pageRequest.getSortField())
+                    .queryParam("sortOrder", pageRequest.getSortOrder());
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate

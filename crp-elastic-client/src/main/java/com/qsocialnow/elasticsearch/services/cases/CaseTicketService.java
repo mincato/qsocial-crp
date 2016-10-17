@@ -37,7 +37,7 @@ public class CaseTicketService extends CaseIndexService {
         return caseDocument;
     }
 
-    public List<Case> getCases(int from, int size, String sortField) {
+    public List<Case> getCases(int from, int size, String sortField, boolean sortOrder) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -45,7 +45,7 @@ public class CaseTicketService extends CaseIndexService {
 
         CaseMapping mapping = CaseMapping.getInstance();
         log.info("retrieving cases from :" + from + " size" + size + " sorted by;" + sortField);
-        SearchResponse<Case> response = repository.queryMatchAll(from, size, sortField, mapping);
+        SearchResponse<Case> response = repository.queryMatchAll(from, size, sortField, sortOrder, mapping);
 
         List<Case> cases = response.getSources();
 

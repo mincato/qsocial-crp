@@ -47,7 +47,7 @@ public class CaseServiceTest {
         PageResponse<CaseListView> expectedPageCases = new PageResponse<CaseListView>(expectedCases, 0, 0);
         when(caseRepository.findAll(Mockito.any(PageRequest.class))).thenReturn(expectedCases);
 
-        PageResponse<CaseListView> results = caseService.findAll(0, 0, "title");
+        PageResponse<CaseListView> results = caseService.findAll(0, 0, "title", "true");
 
         ReflectionAssert.assertReflectionEquals(expectedPageCases, results);
     }

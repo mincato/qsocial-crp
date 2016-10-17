@@ -198,22 +198,6 @@ public class CaseService extends CaseIndexService {
         return caseDocument;
     }
 
-    public List<Case> getCases(int from, int size) {
-
-        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
-        Repository<CaseType> repository = esfactory.initManager();
-        repository.initClient();
-
-        CaseMapping mapping = CaseMapping.getInstance();
-        mapping.setIndex(this.getQueryIndex());
-        SearchResponse<Case> response = repository.queryMatchAll(from, size, "openDate", mapping);
-
-        List<Case> cases = response.getSources();
-
-        repository.closeClient();
-        return cases;
-    }
-
     private boolean addItemInQueue(Case item) {
         boolean isQueueCreatedOK = false;
         if (producer != null) {
