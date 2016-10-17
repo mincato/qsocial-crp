@@ -19,6 +19,67 @@
           </div>  
 		</n:div>
     </n:div>
+	
+	<div class="row" visible="@load(empty vm.cases)">
+        <n:div class="col-lg-12">
+            <div zclass="pane equal">
+                <div class="text-center" visible="@load(vm.filterActive)">
+                    ${labels.app.pagination.noResultsFound} 
+                </div>
+            </div>
+        </n:div>
+    </div>
+	
+	
+	<n:div class="row">
+       <n:div class="col-lg-12">
+           <div zclass="pane equal col-md-12 col-xs-12">
+                <n:div class="col-md-2 col-xs-12">
+
+                </n:div>
+                
+                <n:div class="col-md-2">
+                    <div zclass="input-group input-group-sm">
+                         <textbox zclass="form-control" value="@bind(vm.subject)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.subject}"/>
+                   </div>
+                </n:div>
+
+                <n:div class="col-md-2">
+                    <div zclass="input-group input-group-sm">
+                          <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
+                    </div>
+                </n:div>
+                <n:div class="col-md-2">
+                   <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
+                       <datebox id="todate" sclass="input-group" format="short" value="@load(vm.toDate) 
+                        @save(vm.toDate, before='search')
+                        @converter('com.qsocialnow.converters.DateInputConverter', endDay = true)
+                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.registry.filter.todate}" />
+                    </x:div>
+                </n:div>
+                
+                <n:div class="col-md-1">
+                    <div zclass="input-group input-group-sm">
+                         <textbox zclass="form-control" value="@bind(vm.title)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.title}"/>
+                   </div>
+                </n:div>
+
+                <n:div class="col-md-1">
+                    <div zclass="input-group input-group-sm">
+                         <textbox zclass="form-control" value="@bind(vm.description)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.description}"/>
+                   </div>
+                </n:div>
+                <n:div class="col-md-1">
+                   <div zclass="input-group input-group-sm">
+                      <span zclass="input-group-btn">
+                          <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+                      </span>
+                   </div>
+                </n:div>
+            </div>
+       </n:div>
+    </n:div>
+
 	<div class="row">
     	<n:div class="col-lg-12">
     		<div zclass="pane equal">
