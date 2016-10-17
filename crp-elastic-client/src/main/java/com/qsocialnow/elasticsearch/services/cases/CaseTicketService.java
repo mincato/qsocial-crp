@@ -1,7 +1,9 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +39,8 @@ public class CaseTicketService extends CaseIndexService {
         return caseDocument;
     }
 
-    public List<Case> getCases(int from, int size, String sortField, boolean sortOrder) {
+    public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String title,
+            String description, String pendingResponse, String fromOpenDate, String toOpenDate) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -45,7 +48,20 @@ public class CaseTicketService extends CaseIndexService {
 
         CaseMapping mapping = CaseMapping.getInstance();
         log.info("retrieving cases from :" + from + " size" + size + " sorted by;" + sortField);
-        SearchResponse<Case> response = repository.queryMatchAll(from, size, sortField, sortOrder, mapping);
+
+        Map<String, String> searchValues = new HashMap<>();
+
+        if (title != null)
+            searchValues.put("title", title);
+
+        if (description != null)
+            searchValues.put("description", description);
+
+        if (pendingResponse != null)
+            searchValues.put("pendingResponse", pendingResponse);
+
+        SearchResponse<Case> response = repository.queryByFields(mapping, from, size, sortField,
+                Boolean.valueOf(sortOrder), searchValues, "openDate", fromOpenDate, toOpenDate);
 
         List<Case> cases = response.getSources();
 

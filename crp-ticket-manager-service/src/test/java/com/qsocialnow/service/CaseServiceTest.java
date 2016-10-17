@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.internal.matchers.Matches;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.unitils.reflectionassert.ReflectionAssert;
 
@@ -45,10 +46,13 @@ public class CaseServiceTest {
         List<CaseListView> expectedCases = Arrays.asList(case1ListView, case2ListView, case3ListView);
 
         PageResponse<CaseListView> expectedPageCases = new PageResponse<CaseListView>(expectedCases, 0, 0);
-        when(caseRepository.findAll(Mockito.any(PageRequest.class))).thenReturn(expectedCases);
+        when(
+                caseRepository.findAll(Mockito.any(PageRequest.class), Mockito.matches("title"),
+                        Mockito.matches("description"), Mockito.matches("true"), Mockito.matches("1476719187665"),
+                        Mockito.matches("1476719187665"))).thenReturn(expectedCases);
 
-        PageResponse<CaseListView> results = caseService.findAll(0, 0, "title", "true");
-
+        PageResponse<CaseListView> results = caseService.findAll(0, 0, "title", "true", "title", "description", "true",
+                "1476719187665", "1476719187665");
         ReflectionAssert.assertReflectionEquals(expectedPageCases, results);
     }
 }

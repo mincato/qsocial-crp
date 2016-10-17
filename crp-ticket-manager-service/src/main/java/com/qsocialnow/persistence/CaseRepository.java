@@ -21,12 +21,14 @@ public class CaseRepository {
     @Autowired
     private CaseTicketService caseElasticService;
 
-    public List<CaseListView> findAll(PageRequest pageRequest) {
+    public List<CaseListView> findAll(PageRequest pageRequest, String title, String description,
+            String pendingResponse, String fromOpenDate, String toOpenDate) {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
             List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
-                    pageRequest.getSortField(), pageRequest.getSortOrder());
+                    pageRequest.getSortField(), pageRequest.getSortOrder(), title, description, pendingResponse,
+                    fromOpenDate, toOpenDate);
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();

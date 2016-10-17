@@ -1,6 +1,7 @@
 package com.qsocialnow.services;
 
 import java.util.List;
+import java.util.Map;
 
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
@@ -11,7 +12,7 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 
 public interface CaseService {
 
-    PageResponse<CaseListView> findAll(PageRequest pageRequest);
+    PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters);
 
     Case findById(String caseId);
 

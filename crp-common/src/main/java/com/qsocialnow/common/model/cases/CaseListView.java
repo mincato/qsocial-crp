@@ -75,5 +75,4 @@ public class CaseListView implements Serializable {
     public void setOpen(boolean open) {
         this.open = open;
     }
-
 }

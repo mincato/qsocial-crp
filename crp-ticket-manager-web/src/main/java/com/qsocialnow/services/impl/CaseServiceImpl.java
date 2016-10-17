@@ -2,6 +2,7 @@ package com.qsocialnow.services.impl;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,7 @@ public class CaseServiceImpl implements CaseService {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public PageResponse<CaseListView> findAll(PageRequest pageRequest) {
+    public PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -58,6 +59,12 @@ public class CaseServiceImpl implements CaseService {
                     .queryParam("pageSize", pageRequest.getPageSize())
                     .queryParam("sortField", pageRequest.getSortField())
                     .queryParam("sortOrder", pageRequest.getSortOrder());
+
+            if (filters != null) {
+                for (Map.Entry<String, String> filter : filters.entrySet()) {
+                    builder.queryParam(filter.getKey(), filter.getValue());
+                }
+            }
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate

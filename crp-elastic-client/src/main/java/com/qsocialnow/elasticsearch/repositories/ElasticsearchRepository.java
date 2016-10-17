@@ -329,9 +329,16 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
+            boolean sortOrder, Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
+
+        SortOrder sortOrderValue;
+        if (sortOrder)
+            sortOrderValue = SortOrder.ASC;
+        else
+            sortOrderValue = SortOrder.DESC;
+
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC);
+        searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderValue);
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         for (String searchField : searchValues.keySet()) {
