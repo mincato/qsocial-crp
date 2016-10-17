@@ -4,7 +4,7 @@
 
 	<!-- FILE: Appender for RequestInfo log -->
 	<appender name="fileAppender" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="./logs/console.out" />
+		<param name="file" value="logs/console.out" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<param name="append" value="true" />
 		<layout class="org.apache.log4j.PatternLayout">
