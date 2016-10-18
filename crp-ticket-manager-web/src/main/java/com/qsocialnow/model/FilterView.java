@@ -3,7 +3,6 @@ package com.qsocialnow.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.qsocialnow.common.model.config.AdmUnitFilter;
 import com.qsocialnow.common.model.config.Series;
 import com.qsocialnow.common.model.config.SubSeries;
 import com.qsocialnow.common.model.config.Thematic;
@@ -21,7 +20,7 @@ public class FilterView {
 
     private List<WordFilter> filterWords;
 
-    private List<AdmUnitFilter> admUnitFilters;
+    private List<AdmUnitFilterView> admUnitFilters;
 
     private Thematic thematic;
 
@@ -34,6 +33,7 @@ public class FilterView {
     public FilterView() {
         filterWords = new ArrayList<>();
         filterCategories = new ArrayList<>();
+        admUnitFilters = new ArrayList<>();
     }
 
     public Long getStartDateTime() {
@@ -76,11 +76,11 @@ public class FilterView {
         this.filterWords = filterWords;
     }
 
-    public void setAdmUnitFilters(List<AdmUnitFilter> admUnitFilters) {
+    public void setAdmUnitFilters(List<AdmUnitFilterView> admUnitFilters) {
         this.admUnitFilters = admUnitFilters;
     }
 
-    public List<AdmUnitFilter> getAdmUnitFilters() {
+    public List<AdmUnitFilterView> getAdmUnitFilters() {
         return admUnitFilters;
     }
 

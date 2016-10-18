@@ -216,6 +216,85 @@
 			    </n:form>
 			    <n:br />
 			    <n:hr />
+			    <n:form class="form-horizontal pane">
+			    	<x:div class="form-group">
+						<n:label class="control-label col-sm-2 text-right">
+							${labels.trigger.criteria.admUnit.title}
+						</n:label>
+						<n:div class="col-sm-10">
+							<div zclass="pull-right">
+								<a class="link-button" onClick="@command('addFilterAdmUnit', fxFilter=fxFilter)"
+									disabled="@load(not vm.enableAddAdmUnit)">
+									<i class="fa fa-plus-circle fa-2x"></i>
+									${labels.trigger.criteria.add.filter}
+								</a>
+							</div>
+						</n:div>
+					</x:div>
+					<div class="form-group">
+						<n:div class="col-sm-offset-2 ">
+							<x:ol class="list-group order" children="@bind(fxFilter.admUnitFilters) @template(each.editingStatus ? 'editable' : 'noneditable')">
+								<template name="noneditable" var="filterAdmUnit">
+									<n:div
+										class="list-group-item col-xs-12 col-sm-11">
+										<n:div class="col-xs-6 col-sm-6">
+											<label value="@load(vm.createAdmUnitValue(filterAdmUnit.adminUnit))"/>
+										</n:div>
+										<n:div class="col-xs-2 col-sm-3">
+										</n:div>
+										<n:div class="col-xs-4 col-sm-3">
+											<n:div class="pull-right">
+												<a zclass="btn-row-list"
+													onClick="@command('removeAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+													<i
+														class="glyphicon glyphicon-erase fa-lg">
+													</i>
+												</a>
+											</n:div>
+										</n:div>
+									</n:div>
+								</template>
+								<template name="editable" var="filterAdmUnit">
+									<n:div class="list-group-item col-xs-11 col-sm-11">
+										<x:div 
+												sclass="@load(empty vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+											<combobox model="@load(vm.adminUnits)" autodrop="true" buttonVisible="false" selectedItem="@bind(filterAdmUnit.adminUnit)">
+  												<template name="model">
+    												<comboitem label="@load(vm.createAdmUnitValue(each))" description="@load(vm.createAdmUnitDescription(each))"/>
+  												</template>
+											</combobox>
+											<x:span
+												sclass="@load(vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)] ? 'hidden' : 'help-block')">
+												<label
+													value="@bind(vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)])" />
+											</x:span>
+										</x:div>
+										<n:div class="col-xs-8 col-sm-3">
+										</n:div>
+										<n:div class="col-xs-4 col-sm-3">
+											<n:div class="pull-right">
+												<a
+													sclass="@load(filterAdmUnit.adminUnit eq null ? '' : 'btn-row-list')"
+													disabled="@load(filterAdmUnit.adminUnit eq null)"
+													onClick="@command('confirmAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+													<i class="glyphicon glyphicon-ok fa-lg"></i>
+												</a>
+												<a zclass="btn-row-list"
+													onClick="@command('removeAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+													<i
+														class="glyphicon glyphicon-erase fa-lg">
+													</i>
+												</a>
+											</n:div>
+										</n:div>
+									</n:div>
+								</template>
+							</x:ol>
+						</n:div>
+					</div>
+			    </n:form>
+			    <n:br />
+			    <n:hr />
 		     	<n:div class="pane">
 					<n:label class="control-label col-sm-2 text-right">${labels.trigger.criteria.thematics.title}</n:label>
 			    	<n:form class="form-inline text-center">								

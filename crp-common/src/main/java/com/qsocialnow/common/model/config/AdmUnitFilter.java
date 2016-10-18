@@ -2,6 +2,8 @@ package com.qsocialnow.common.model.config;
 
 public class AdmUnitFilter {
 
+    private AdminUnit adminUnit;
+
     private Long continent;
 
     private Long country;
@@ -17,6 +19,22 @@ public class AdmUnitFilter {
     private Long city;
 
     private Long neighborhood;
+
+    public AdmUnitFilter() {
+        // TODO Auto-generated constructor stub
+    }
+
+    public AdmUnitFilter(AdmUnitFilter other) {
+        this.adminUnit = other.getAdminUnit();
+        this.adm1 = other.getAdm1();
+        this.adm2 = other.getAdm2();
+        this.adm3 = other.getAdm3();
+        this.adm4 = other.getAdm4();
+        this.continent = other.getContinent();
+        this.city = other.getCity();
+        this.country = other.getCountry();
+        this.neighborhood = other.getNeighborhood();
+    }
 
     public Long getContinent() {
         return continent;
@@ -80,6 +98,14 @@ public class AdmUnitFilter {
 
     public void setNeighborhood(Long neighborhood) {
         this.neighborhood = neighborhood;
+    }
+
+    public AdminUnit getAdminUnit() {
+        return adminUnit;
+    }
+
+    public void setAdminUnit(AdminUnit adminUnit) {
+        this.adminUnit = adminUnit;
     }
 
 }

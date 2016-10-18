@@ -28,4 +28,11 @@
  		<constructor-arg value="${app.amazonS3.app.configurator.path}"></constructor-arg>
 	</bean>
 	
+	<bean id="adminUnitServiceUrl" class="com.qsocialnow.factories.AdminUnitServiceConfigFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${app.service.adminUnits.configurator.path}"></constructor-arg>
+	</bean>
+	
+	
+	
 </beans>
