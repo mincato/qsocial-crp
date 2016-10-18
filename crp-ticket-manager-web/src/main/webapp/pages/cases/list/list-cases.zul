@@ -42,12 +42,17 @@
                          <textbox zclass="form-control" value="@bind(vm.subject)" onOK="@command('search')" placeholder="${labels.cases.list.filter.subject}"/>
                    </div>
                 </n:div>
-                
                 <n:div class="col-md-2">
-                    <n:label class="control-label col-sm-3">${labels.cases.list.filter.pendingResponse}</n:label>
-                    <checkbox checked="@bind(vm.pendingResponse)" />
+	                <n:label class="control-label col-sm-3">${labels.cases.list.filter.pendingResponse}</n:label>
+	                <div zclass="input-group input-group-sm">
+	                       <selectbox sclass="form-control" model="@load(vm.pendingOptions)"
+	                           selectedItem="@bind(vm.pendingResponse)">
+	                           <template name="model">
+	                               <label value="${c:l(c:cat('cases.pendingResponse.',each))}" />
+	                           </template>
+	                       </selectbox>
+	                </div>
                 </n:div>
-
                 <n:div class="col-md-2">
                     <div zclass="input-group input-group-sm">
                           <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
