@@ -121,7 +121,7 @@
 	</filter-mapping>
 	-->
 
-	<filter>
+<!-- <filter>
 		<filter-name>authorizationFilter</filter-name>
 		<filter-class>com.qsocialnow.security.AuthorizationFilter</filter-class>
 		<init-param>
@@ -132,7 +132,7 @@
 	<filter-mapping>
 		<filter-name>authorizationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
 	
 	<error-page>
 		<error-code>404</error-code>

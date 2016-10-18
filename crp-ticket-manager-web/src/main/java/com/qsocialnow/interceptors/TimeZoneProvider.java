@@ -10,7 +10,7 @@ import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.util.RequestInterceptor;
 
-import com.qsocialnow.security.AuthorizationFilter;
+import com.qsocialnow.security.AuthorizationHelper;
 import com.qsocialnow.security.UserData;
 
 public class TimeZoneProvider implements RequestInterceptor {
@@ -20,7 +20,7 @@ public class TimeZoneProvider implements RequestInterceptor {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpSession httpSession = httpRequest.getSession(false);
         if (httpSession != null) {
-            UserData userData = (UserData) httpSession.getAttribute(AuthorizationFilter.USER_SESSION_PARAMETER);
+            UserData userData = (UserData) httpSession.getAttribute(AuthorizationHelper.USER_SESSION_PARAMETER);
             if (userData != null && userData.getTimezone() != null) {
                 session.setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(userData.getTimezone()));
 

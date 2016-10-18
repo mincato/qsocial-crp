@@ -10,6 +10,7 @@
 <?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
 <?script content="if (window.location.hash == '#_=_')window.location.hash = '';"?>
 
+<?init class="com.qsocialnow.handler.AjaxAccessDeniedHandler"?>
 <zk xmlns:n="native">
 	<div class="wrapper">
 	    
