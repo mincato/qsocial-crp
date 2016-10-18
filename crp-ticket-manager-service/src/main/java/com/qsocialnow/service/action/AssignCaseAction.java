@@ -20,7 +20,7 @@ public class AssignCaseAction implements Action {
 
     @Override
     public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
-        String userId = (String) parameters.get(ActionParameter.USER);
+        Integer userId = findUserId(parameters);
         String teamId = (String) parameters.get(ActionParameter.TEAM);
         Team team = teamRepository.findOne(teamId);
         BaseUser oldAssignee = caseObject.getAssignee();
@@ -37,6 +37,15 @@ public class AssignCaseAction implements Action {
         }
         sb.append(user.getUsername());
         return sb.toString();
+    }
+    
+    private Integer findUserId(Map<ActionParameter, Object> parameters) {
+    	Object obj = parameters.get(ActionParameter.USER);
+    	if (obj instanceof Double) {
+    		Double doubleValue = (Double) obj;
+    		return doubleValue.intValue();
+    	}
+    	return (Integer) obj;
     }
 
 }
