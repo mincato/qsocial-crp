@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
     viewModel="@id('vm') @init('com.qsocialnow.viewmodel.team.TeamsViewModel')" 

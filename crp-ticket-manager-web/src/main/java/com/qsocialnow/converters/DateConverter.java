@@ -1,7 +1,8 @@
 package com.qsocialnow.converters;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.joda.time.DateTime;
@@ -9,6 +10,7 @@ import org.joda.time.DateTimeZone;
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.Executions;
 
 public class DateConverter implements Converter {
 
@@ -35,7 +37,13 @@ public class DateConverter implements Converter {
             } else {
                 date = dt.toLocalDateTime().toDate();
             }
-            outputDate = new SimpleDateFormat().format(date);
+            Locale locale = (Locale) Executions.getCurrent().getSession()
+                    .getAttribute(org.zkoss.web.Attributes.PREFERRED_LOCALE);
+            if (locale != null) {
+                outputDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale).format(date);
+            } else {
+                outputDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(date);
+            }
 
         }
         return outputDate;

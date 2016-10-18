@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute" ca:data-filter=""
 	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.trigger.CreateCriteriaViewModel', currentDomain=arg.currentDomain)"
 		validationMessages="@id('vmsgs')" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">

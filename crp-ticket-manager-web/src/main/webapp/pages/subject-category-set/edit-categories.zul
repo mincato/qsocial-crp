@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<n:br />
 	<n:hr />
