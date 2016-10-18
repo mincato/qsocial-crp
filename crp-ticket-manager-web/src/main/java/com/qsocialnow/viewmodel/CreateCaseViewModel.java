@@ -92,6 +92,10 @@ public class CreateCaseViewModel implements Serializable {
         newCase.setDomainId(currentCase.getSelectedDomain().getId());
         newCase.setTriggerId(currentCase.getSelectedTrigger().getId());
         newCase.setSegmentId(currentCase.getSelectedSegment().getId());
+
+        if (currentCase.getSelectedSegment() != null)
+            newCase.setTeamId(currentCase.getSelectedSegment().getTeamId());
+
         currentCase.setNewCase(caseService.create(newCase));
         Clients.showNotification(Labels.getLabel("cases.create.notification.success", new String[] { currentCase
                 .getNewCase().getId() }));

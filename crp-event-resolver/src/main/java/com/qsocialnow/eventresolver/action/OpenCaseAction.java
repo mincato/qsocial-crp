@@ -50,6 +50,10 @@ public class OpenCaseAction {
             newCase.setDomainId(request.getDomain().getId());
             newCase.setTriggerId(request.getTrigger().getId());
             newCase.setSegmentId(request.getSegment().getId());
+
+            if (request.getSegment() != null)
+                newCase.setTeamId(request.getSegment().getTeam());
+
             newCase.setSubject(subject);
             newCase.setTriggerEvent(inputElement);
 

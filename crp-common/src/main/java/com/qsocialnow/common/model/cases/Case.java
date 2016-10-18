@@ -71,6 +71,8 @@ public class Case implements Serializable {
 
     private BaseUser assignee;
 
+    private String teamId;
+
     private Set<String> attachments;
 
     private List<Message> messages;
@@ -356,6 +358,14 @@ public class Case implements Serializable {
 
     public void setAssignee(BaseUser assignee) {
         this.assignee = assignee;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 
     public Set<String> getAttachments() {
