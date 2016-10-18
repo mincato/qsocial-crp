@@ -12,10 +12,9 @@ import com.qsocialnow.common.model.cases.Case;
 public class CloseCaseAction implements Action {
 
     @Override
-    public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         caseObject.setCloseDate(new Date().getTime());
         caseObject.setOpen(false);
-        return true;
     }
 
 }

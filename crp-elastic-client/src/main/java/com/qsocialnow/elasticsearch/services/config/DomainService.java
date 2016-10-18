@@ -2,6 +2,9 @@ package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.List;
 
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.DomainMapping;
@@ -18,13 +21,15 @@ public class DomainService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     public Domain findDomain(String id) {
 
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
 
-        DomainMapping mapping = DomainMapping.getInstance();
+        DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<Domain> response = repository.find(id, mapping);
 
@@ -46,7 +51,7 @@ public class DomainService {
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
 
-        DomainMapping mapping = DomainMapping.getInstance();
+        DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
         DomainType document = mapping.getDocumentType(domain);
 
         String response = repository.indexMapping(mapping, document);
@@ -63,7 +68,7 @@ public class DomainService {
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
 
-        DomainMapping mapping = DomainMapping.getInstance();
+        DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
         DomainType document = mapping.getDocumentType(domain);
 
         String response = repository.updateMapping(domain.getId(), mapping, document);
@@ -79,8 +84,8 @@ public class DomainService {
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
 
-        DomainMapping mapping = DomainMapping.getInstance();
-        SearchResponse<Domain> response = repository.queryMatchAll(offset, limit, "name", mapping);
+        DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", null, mapping);
 
         List<Domain> domains = response.getSources();
 
@@ -92,8 +97,15 @@ public class DomainService {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
         repository.initClient();
-        DomainMapping mapping = DomainMapping.getInstance();
-        SearchResponse<Domain> response = repository.queryByField(mapping, offset, limit, "name", "name", name);
+        DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = null;
+        if (name != null) {
+            filters = QueryBuilders.boolQuery();
+            filters = filters.must(QueryBuilders.matchQuery("name", name));
+        }
+
+        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
         List<Domain> domains = response.getSources();
         repository.closeClient();
         return domains;
@@ -103,6 +115,14 @@ public class DomainService {
         Domain domain = findDomain(domainId);
         if (domain != null) {
             domain.setTriggers(triggerService.getTriggers(domainId));
+        }
+        return domain;
+    }
+
+    public Domain findDomainWithActiveTriggers(String domainId) {
+        Domain domain = findDomain(domainId);
+        if (domain != null) {
+            domain.setTriggers(triggerService.getActiveTriggers(domainId));
         }
         return domain;
     }
@@ -117,6 +137,10 @@ public class DomainService {
 
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }

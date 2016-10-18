@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.RegistryListView;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.ActionRegistryService;
 
 @Component
@@ -40,6 +40,7 @@ public class ActionRegistryRepository {
                     registryListView.setId(registry.getId());
                     registryListView.setUser(registry.getUserName());
                     registryListView.setAction(registry.getAction());
+                    registryListView.setAutomatic(registry.getAutomatic());
                     /*
                      * if (registry.getEvent() != null)
                      * registryListView.setDescription
@@ -68,6 +69,7 @@ public class ActionRegistryRepository {
                     registryListView.setId(registry.getId());
                     registryListView.setUser(registry.getUserName());
                     registryListView.setAction(registry.getAction());
+                    registryListView.setAutomatic(registry.getAutomatic());
                     /*
                      * if (registry.getEvent() != null)
                      * registryListView.setDescription

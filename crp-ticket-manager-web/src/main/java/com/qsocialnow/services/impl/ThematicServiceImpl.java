@@ -19,7 +19,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.config.CategoryGroup;
 import com.qsocialnow.common.model.config.Thematic;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.ThematicService;
@@ -42,8 +41,8 @@ public class ThematicServiceImpl implements ThematicService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl(
-                    Organization.ODATECH, thematicServiceUrl));
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(thematicServiceUrl));
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<List<Thematic>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
@@ -65,8 +64,8 @@ public class ThematicServiceImpl implements ThematicService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, thematicServiceUrl))
-                    .path("/" + thematicId).path("/series/" + serieId).path("/categories");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(thematicServiceUrl)).path("/" + thematicId)
+                    .path("/series/" + serieId).path("/categories");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<List<CategoryGroup>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,

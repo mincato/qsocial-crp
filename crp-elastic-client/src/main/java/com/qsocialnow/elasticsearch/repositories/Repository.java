@@ -19,7 +19,7 @@ public interface Repository<T> {
     public void createIndex(String index);
 
     public void createMapping(String index, String type, String jsonMapping);
-    
+
     public boolean validateIndex(String index);
 
     public boolean updateIndexAlias(String index, String alias);
@@ -46,9 +46,10 @@ public interface Repository<T> {
             String serchField, String searchValue);
 
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            Map<String, String> fieldValues, String rangeField, String fromValue, String toValue);
+            boolean sortOrder, Map<String, String> fieldValues, String rangeField, String fromValue, String toValue);
 
-    public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, Mapping<T, E> mapping);
+    public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
+            Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping);
 

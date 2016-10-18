@@ -9,7 +9,7 @@
                 <n:h5>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h5>
             </div>
         </n:div>
-    </n:div>
+    </n:div>	
 
     <div zclass="panel-group">
         <div zclass="pane equal">
@@ -32,7 +32,7 @@
                             ${labels.cases.details.opendate}
                         </n:label>
                         <n:div class="col-sm-9 form-control-static">
-                            <label value="@load(vm.currentCase.caseObject.openDate)" />
+                            <label value="@load(vm.currentCase.caseObject.openDate)  @converter(vm.dateConverter)" />
                         </n:div>
                     </x:div>
                 </n:div>
@@ -52,7 +52,7 @@
                             ${labels.cases.details.closedate}
                         </n:label>
                         <n:div class="col-sm-9 form-control-static">
-                            <label value="@load(vm.currentCase.caseObject.closeDate)" />
+                            <label value="@load(vm.currentCase.caseObject.closeDate)  @converter(vm.dateConverter)" />
                         </n:div>
                     </x:div>
                     <x:div sclass="form-group col-sm-6">
@@ -178,13 +178,14 @@
                 </n:div>
                 <n:div class="col-md-2">
                     <div zclass="input-group input-group-sm">
-                          <datebox sclass="input-group" format="MM/dd/yyyy" value="@bind(vm.fromDate)" placeholder="${labels.cases.registry.filter.fromdate}" />
+                          <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
                     </div>
                 </n:div>
                 <n:div class="col-md-2">
                    <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
-                       <datebox id="todate" sclass="input-group" format="MM/dd/yyyy" value="@load(vm.toDate) 
+                       <datebox id="todate" sclass="input-group" format="short" value="@load(vm.toDate) 
                         @save(vm.toDate, before='search')
+                        @converter('com.qsocialnow.converters.DateInputConverter', endDay = true)
                         @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.registry.filter.todate}" />
                     </x:div>
                 </n:div>
@@ -233,10 +234,11 @@
 			    		<tbody children="@bind(vm.registries)">
 			    			<template name="children">
 								<tr>
-									<td>${each.user}</td>
-                       				<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
+									<td visible="@load(each.automatic)">${labels.cases.registry.automatic.user}</td>
+									<td visible="@load(not each.automatic)">${each.user}</td>
+									<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
                        				<td>${each.description}</td>
-                       				<td>${each.date}</td>
+                       				<td><label value="@load(each.date) @converter(vm.dateConverter)"/></td>
                        				<td></td>
                					</tr>
                				</template>
@@ -252,4 +254,15 @@
 			</div>
 		</n:div>
 	</div>
+	<n:br/>
+	<div class="row">
+		<n:div class="col-lg-12">
+			<div zclass="pane equal">
+				<div class="form-group text-center">
+					<button href="/pages/cases/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>	
+				</div>
+			</div>
+		</n:div>
+	</div>
+	<n:br/>
 </x:div>

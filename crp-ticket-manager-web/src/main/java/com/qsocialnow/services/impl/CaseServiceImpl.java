@@ -1,6 +1,8 @@
 package com.qsocialnow.services.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +19,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.Resolution;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.ServiceUrlResolver;
+import com.qsocialnow.services.UserSessionService;
 
 @Service("caseService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -39,16 +43,28 @@ public class CaseServiceImpl implements CaseService {
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
+    @Autowired
+    private UserSessionService userSessionService;
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public PageResponse<CaseListView> findAll(int pageNumber, int pageSize) {
+    public PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl))
+                    .queryParam("pageNumber", pageRequest.getPageNumber())
+                    .queryParam("pageSize", pageRequest.getPageSize())
+                    .queryParam("sortField", pageRequest.getSortField())
+                    .queryParam("sortOrder", pageRequest.getSortOrder());
+
+            if (filters != null) {
+                for (Map.Entry<String, String> filter : filters.entrySet()) {
+                    builder.queryParam(filter.getKey(), filter.getValue());
+                }
+            }
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate
@@ -69,7 +85,7 @@ public class CaseServiceImpl implements CaseService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl)).path("/" + caseId);
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/" + caseId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Case caseSelected = restTemplate.getForObject(builder.toUriString(), Case.class);
@@ -83,13 +99,13 @@ public class CaseServiceImpl implements CaseService {
 
     @Override
     public Case executeAction(String caseId, ActionRequest actionRequest) {
+        addExecutor(actionRequest);
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .path("/" + caseId).path("/action");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/" + caseId).path("/action");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             Case caseUpdated = restTemplate.postForObject(builder.toUriString(), actionRequest, Case.class);
@@ -101,6 +117,13 @@ public class CaseServiceImpl implements CaseService {
 
     }
 
+    private void addExecutor(ActionRequest actionRequest) {
+        if (actionRequest.getParameters() == null) {
+            actionRequest.setParameters(new HashMap<ActionParameter, Object>());
+        }
+        actionRequest.getParameters().put(ActionParameter.EXECUTOR, userSessionService.getUsername());
+    }
+
     @Override
     public List<Resolution> getAvailableResolutions(String caseId) {
         try {
@@ -108,8 +131,8 @@ public class CaseServiceImpl implements CaseService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .path("/" + caseId).path("/availableResolutions");
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/" + caseId)
+                    .path("/availableResolutions");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<List<Resolution>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
@@ -128,8 +151,8 @@ public class CaseServiceImpl implements CaseService {
     public Case create(Case newCase) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-            Case createdCase = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl), newCase, Case.class);
+            Case createdCase = restTemplate.postForObject(serviceUrlResolver.resolveUrl(caseServiceUrl), newCase,
+                    Case.class);
             return createdCase;
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);

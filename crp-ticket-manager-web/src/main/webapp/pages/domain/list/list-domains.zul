@@ -15,11 +15,12 @@
 							</span>
 			    	</div>
                 </n:div>
-                <n:div class="col-md-2 col-xs-4">
-                	<n:div class="link-button">
-					<a href="/pages/domain/create/index.zul">${labels.domain.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
-	    			</n:div>
-	    		</n:div>
+                <n:div class="col-sm-2 col-xs-4">
+                	<a class="link-button"  href="/pages/domain/create/index.zul">
+						${labels.domain.create.action}
+						<i  class="fa fa-plus-circle fa-2x"  /> 
+					</a>
+                </n:div>
 	       </div>
 	   </n:div>
     </n:div>
@@ -44,8 +45,8 @@
                        	<td>${each.thematics}</td>
                        	<td>
                        		<ul class="list-inline">
-  								<li><a class="list-action"><i onClick="@command('openEdit', domainId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.domain.edit.action}"></i></a></li>
-								<li><a class="list-action" href="/pages/triggers/list/index.zul?domain=${each.id}"><i class="fa fa-list" data-toggle="tooltip" data-placement="top" title="${labels.domain.view.triggers.action}"></i></a></li>
+  								<li><a class="btn-list-action"><i onClick="@command('openEdit', domainId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.domain.edit.action}"></i></a></li>
+								<li><a class="btn-list-action" href="/pages/triggers/list/index.zul?domain=${each.id}"><i class="fa fa-list" data-toggle="tooltip" data-placement="top" title="${labels.domain.view.triggers.action}"></i></a></li>
 							</ul>
 			           	</td>
                		</tr>

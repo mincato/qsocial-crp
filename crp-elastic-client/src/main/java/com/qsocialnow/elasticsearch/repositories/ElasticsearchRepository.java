@@ -19,6 +19,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.amazonaws.protocol.json.SdkStructuredJsonFactoryImpl;
 import com.google.common.base.Supplier;
 import com.qsocialnow.common.exception.RepositoryException;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -328,9 +329,16 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
+            boolean sortOrder, Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
+
+        SortOrder sortOrderValue;
+        if (sortOrder)
+            sortOrderValue = SortOrder.ASC;
+        else
+            sortOrderValue = SortOrder.DESC;
+
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC);
+        searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderValue);
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         for (String searchField : searchValues.keySet()) {
@@ -356,9 +364,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
-    public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, Mapping<T, E> mapping) {
+    public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
+            Mapping<T, E> mapping) {
+        SortOrder sortOrderEnum = sortOrder ? SortOrder.ASC : SortOrder.DESC;
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, SortOrder.ASC).query(QueryBuilders.matchAllQuery());
+        searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderEnum).query(QueryBuilders.matchAllQuery());
         Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
         return executeSearch(mapping, search);
     }

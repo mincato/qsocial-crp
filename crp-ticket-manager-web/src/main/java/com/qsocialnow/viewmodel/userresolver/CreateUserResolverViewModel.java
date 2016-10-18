@@ -19,7 +19,6 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.UserResolver;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.OauthServiceFactory;
 import com.qsocialnow.services.OauthService;
 import com.qsocialnow.services.UserResolverService;
@@ -54,7 +53,7 @@ public class CreateUserResolverViewModel implements Serializable {
         if (sessionOauthServices == null) {
             oauthServices = new HashMap<>();
             for (Media media : mediaTypes) {
-                oauthServices.put(media, oauthServiceFactory.createService(media.getValue(), Organization.ODATECH));
+                oauthServices.put(media, oauthServiceFactory.createService(media.getValue()));
             }
         } else {
             oauthServices = (Map<Media, OauthService>) sessionOauthServices;

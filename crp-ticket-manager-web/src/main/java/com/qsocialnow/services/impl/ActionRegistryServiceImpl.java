@@ -17,7 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.services.ActionRegistryService;
 import com.qsocialnow.services.ServiceUrlResolver;
 
@@ -41,9 +40,8 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .path("/" + caseId).path("/registries").queryParam("pageNumber", pageNumber)
-                    .queryParam("pageSize", pageSize);
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/" + caseId).path("/registries")
+                    .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate
@@ -60,7 +58,7 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public PageResponse<RegistryListView> findRegistriesBy(int pageNumber, int pageSize, String caseId, String keyword,
-            String action, String user, Date fromDate, Date toDate) {
+            String action, String user, Long fromDate, Long toDate) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
@@ -74,17 +72,17 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
             String toDateFormat = null;
 
             if (fromDate != null) {
-                fromDateFormat = String.valueOf(fromDate.getTime());
+                fromDateFormat = String.valueOf(fromDate);
             }
 
             if (toDate != null) {
-                toDateFormat = String.valueOf(toDate.getTime());
+                toDateFormat = String.valueOf(toDate);
             }
 
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, caseServiceUrl))
-                    .path("/" + caseId).path("/registries").queryParam("text", keyword).queryParam("action", action)
-                    .queryParam("user", user).queryParam("fromDate", fromDateFormat).queryParam("toDate", toDateFormat)
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/" + caseId).path("/registries")
+                    .queryParam("text", keyword).queryParam("action", action).queryParam("user", user)
+                    .queryParam("fromDate", fromDateFormat).queryParam("toDate", toDateFormat)
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = new RestTemplate();

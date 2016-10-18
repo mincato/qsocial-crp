@@ -1,7 +1,12 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -13,10 +18,11 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class CaseTicketService extends CaseIndexService {
 
-    private static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
+    private static final Logger log = LoggerFactory.getLogger(CaseTicketService.class);
 
     public CaseTicketService(AWSElasticsearchConfigurationProvider configurationProvider) {
-        elasticSearchCaseConfigurator = configurationProvider;
+        super(configurationProvider);
+        initIndex();
     }
 
     public Case findCaseById(String originIdCase) {
@@ -33,14 +39,32 @@ public class CaseTicketService extends CaseIndexService {
         return caseDocument;
     }
 
-    public List<Case> getCases(int from, int size) {
+    public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String subject, String title,
+            String description, String pendingResponse, String fromOpenDate, String toOpenDate) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        SearchResponse<Case> response = repository.queryMatchAll(from, size, "openDate", mapping);
+        log.info("retrieving cases from :" + from + " size" + size + " sorted by;" + sortField);
+
+        Map<String, String> searchValues = new HashMap<>();
+
+        if (subject != null)
+            searchValues.put("subject.identifier", subject);
+
+        if (title != null)
+            searchValues.put("title", title);
+
+        if (description != null)
+            searchValues.put("description", description);
+
+        if (pendingResponse != null)
+            searchValues.put("pendingResponse", pendingResponse);
+
+        SearchResponse<Case> response = repository.queryByFields(mapping, from, size, sortField,
+                Boolean.valueOf(sortOrder), searchValues, "openDate", fromOpenDate, toOpenDate);
 
         List<Case> cases = response.getSources();
 

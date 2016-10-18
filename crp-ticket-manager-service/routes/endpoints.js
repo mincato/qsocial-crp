@@ -40,7 +40,19 @@ router.get('/cases', function (req, res) {
   var caseService = javaContext.getBeanSync("caseService");
   var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
   var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-  caseService.findAll(pageNumber, pageSize, asyncResponse);
+  var sortField = req.query.sortField ? req.query.sortField : null;
+  var sortOrder = req.query.sortOrder?req.query.sortOrder :null;
+  
+  var subject = req.query.subject?req.query.subject :null;
+  var title = req.query.title?req.query.title :null;
+  var description = req.query.description?req.query.description :null;
+  var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
+  
+  
+  var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
+  var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
+
+  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,subject,title,description,pendingResponse,fromOpenDate,toOpenDate,asyncResponse);
 
 });
 
@@ -873,6 +885,7 @@ router.get('/teams/list', function (req, res) {
 	  var name = req.query.name ? req.query.name : null;
 	  
 	  teamService.findAll(pageNumber, pageSize, name, asyncResponse);
+	  
 });
 
 router.get('/teams', function (req, res) {

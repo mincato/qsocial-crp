@@ -22,7 +22,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.SubjectCategorySetService;
@@ -44,8 +43,8 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             SubjectCategorySet createdSubjectCategorySet = restTemplate.postForObject(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl),
-                    currentSubjectCategorySet, SubjectCategorySet.class);
+                    serviceUrlResolver.resolveUrl(subjectCategorySetServiceUrl), currentSubjectCategorySet,
+                    SubjectCategorySet.class);
             return createdSubjectCategorySet;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
@@ -60,8 +59,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl)).path(
-                    "/" + subjectCategorySetId);
+                    serviceUrlResolver.resolveUrl(subjectCategorySetServiceUrl)).path("/" + subjectCategorySetId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             SubjectCategorySet subjectCategorySetSelected = restTemplate.getForObject(builder.toUriString(),
@@ -79,7 +77,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
 
         try {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl)).path(
+                    serviceUrlResolver.resolveUrl(subjectCategorySetServiceUrl)).path(
                     "/" + currentSubjectCategorySet.getId());
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -111,7 +109,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
                 description = filters.get("description");
             }
             UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl))
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(subjectCategorySetServiceUrl))
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize)
                     .queryParam("name", description);
 
@@ -137,7 +135,7 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(Organization.ODATECH, subjectCategorySetServiceUrl)).path("/all");
+                    serviceUrlResolver.resolveUrl(subjectCategorySetServiceUrl)).path("/all");
             ;
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();

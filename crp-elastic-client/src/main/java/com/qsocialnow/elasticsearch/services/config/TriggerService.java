@@ -5,6 +5,7 @@ import java.util.List;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
+import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -18,6 +19,8 @@ public class TriggerService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     private SegmentService segmentService;
 
     public String indexTrigger(String domainId, Trigger trigger) {
@@ -26,14 +29,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
-
-        // validete index name
-        boolean isCreated = repository.validateIndex(mapping.getIndex());
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         TriggerType documentIndexed = mapping.getDocumentType(trigger);
@@ -52,7 +48,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
@@ -63,10 +59,12 @@ public class TriggerService {
             filters = filters.must(QueryBuilders.matchQuery("status", triggerListRequest.getStatus()));
         }
         if (triggerListRequest.getFromDate() != null) {
-            filters = filters.filter(QueryBuilders.rangeQuery("init").lte(triggerListRequest.getFromDate()));
+            filters = filters.filter(QueryBuilders.rangeQuery("init").lte(
+                    Long.parseLong(triggerListRequest.getFromDate())));
         }
         if (triggerListRequest.getToDate() != null) {
-            filters = filters.filter(QueryBuilders.rangeQuery("end").gte(triggerListRequest.getToDate()));
+            filters = filters.filter(QueryBuilders.rangeQuery("end")
+                    .gte(Long.parseLong(triggerListRequest.getToDate())));
         }
         SearchResponse<Trigger> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
         List<Trigger> triggers = response.getSources();
@@ -80,10 +78,32 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        SearchResponse<Trigger> response = repository.searchWithFilters(filters, mapping);
+
+        List<Trigger> triggers = response.getSources();
+
+        repository.closeClient();
+        for (Trigger trigger : triggers) {
+            trigger.setSegments(segmentService.getSegments(trigger.getId()));
+        }
+        return triggers;
+
+    }
+
+    public List<Trigger> getActiveTriggers(String domainId) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
+        filters = filters.must(QueryBuilders.matchQuery("status", Status.ACTIVE));
         SearchResponse<Trigger> response = repository.searchWithFilters(filters, mapping);
 
         List<Trigger> triggers = response.getSources();
@@ -101,7 +121,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<Trigger> response = repository.find(triggerId, mapping);
 
@@ -129,7 +149,7 @@ public class TriggerService {
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
 
-        TriggerMapping mapping = TriggerMapping.getInstance();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         TriggerType documentIndexed = mapping.getDocumentType(trigger);
@@ -144,6 +164,10 @@ public class TriggerService {
 
     public void setSegmentService(SegmentService segmentService) {
         this.segmentService = segmentService;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }

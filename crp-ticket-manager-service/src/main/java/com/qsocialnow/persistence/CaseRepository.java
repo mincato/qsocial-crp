@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
-import com.qsocialnow.common.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
 @Service
@@ -21,11 +21,14 @@ public class CaseRepository {
     @Autowired
     private CaseTicketService caseElasticService;
 
-    public List<CaseListView> findAll(PageRequest pageRequest) {
+    public List<CaseListView> findAll(PageRequest pageRequest, String subject, String title, String description,
+            String pendingResponse, String fromOpenDate, String toOpenDate) {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
-            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit());
+            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
+                    pageRequest.getSortField(), pageRequest.getSortOrder(), subject, title, description,
+                    pendingResponse, fromOpenDate, toOpenDate);
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();

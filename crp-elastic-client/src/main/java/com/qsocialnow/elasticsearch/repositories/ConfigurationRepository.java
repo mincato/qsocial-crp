@@ -39,24 +39,24 @@ public class ConfigurationRepository {
 
             Trigger trigger1 = new Trigger();
             trigger1.setId(name + "-trigger 1");
-            trigger1.setInit(initDate);
-            trigger1.setEnd(endDate);
+            trigger1.setInit(initDate.getTime());
+            trigger1.setEnd(endDate.getTime());
             trigger1.setDescription("Attend complains about new campaigns");
             trigger1.setSegments(getSegmentsByTriggerId(trigger1.getId()));
             trigger1.setResolutions(getResolutionsByTriggerId(trigger1.getId()));
 
             Trigger trigger2 = new Trigger();
             trigger2.setId(name + "-trigger 2");
-            trigger2.setInit(initDate);
-            trigger2.setEnd(endDate);
+            trigger2.setInit(initDate.getTime());
+            trigger2.setEnd(endDate.getTime());
             trigger2.setDescription("Send new information about prices increase");
             trigger2.setSegments(getSegmentsByTriggerId(trigger2.getId()));
             trigger2.setResolutions(getResolutionsByTriggerId(trigger2.getId()));
 
             Trigger trigger3 = new Trigger();
             trigger3.setId(name + "-trigger 3");
-            trigger3.setInit(initDate);
-            trigger3.setEnd(endDate);
+            trigger3.setInit(initDate.getTime());
+            trigger3.setEnd(endDate.getTime());
             trigger3.setDescription("Review marketing campaing");
             trigger3.setSegments(getSegmentsByTriggerId(trigger3.getId()));
             trigger3.setResolutions(getResolutionsByTriggerId(trigger3.getId()));
@@ -164,24 +164,24 @@ public class ConfigurationRepository {
         criteria1.setSequenceOrder(1);
         criteria1.setId(id + "- criteria 1");
         criteria1.setFilter(filter);
-        criteria1.setValidateFrom(initDate);
-        criteria1.setValidateTo(endDate);
+        criteria1.setValidateFrom(initDate.getTime());
+        criteria1.setValidateTo(endDate.getTime());
         criteria1.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria1.getId()));
 
         DetectionCriteria criteria2 = new DetectionCriteria();
         criteria2.setSequenceOrder(2);
         criteria2.setId(id + "- criteria 2");
         criteria2.setFilter(filter);
-        criteria2.setValidateFrom(initDate);
-        criteria2.setValidateTo(endDate);
+        criteria2.setValidateFrom(initDate.getTime());
+        criteria2.setValidateTo(endDate.getTime());
         criteria2.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria2.getId()));
 
         DetectionCriteria criteria3 = new DetectionCriteria();
         criteria3.setSequenceOrder(3);
         criteria3.setId(id + "- criteria 3");
         criteria3.setFilter(filter);
-        criteria3.setValidateFrom(initDate);
-        criteria3.setValidateTo(endDate);
+        criteria3.setValidateFrom(initDate.getTime());
+        criteria3.setValidateTo(endDate.getTime());
         criteria3.setActionCriterias(getActionsCriteriaByDetectionCriteria(criteria3.getId()));
 
         detectionCriteriasFromSegment.add(criteria1);

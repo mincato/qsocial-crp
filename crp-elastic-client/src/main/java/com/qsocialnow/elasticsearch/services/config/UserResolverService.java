@@ -17,20 +17,15 @@ public class UserResolverService {
 
     private AWSElasticsearchConfigurationProvider configurator;
 
+    private ConfigurationIndexService indexConfiguration;
+
     public String indexUserResolver(UserResolver userResolver) {
         RepositoryFactory<UserResolverType> esfactory = new RepositoryFactory<UserResolverType>(configurator);
 
         Repository<UserResolverType> repository = esfactory.initManager();
         repository.initClient();
 
-        UserResolverMapping mapping = UserResolverMapping.getInstance();
-
-        // validete index name
-        boolean isCreated = repository.validateIndex(mapping.getIndex());
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
+        UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
 
         // index document
         UserResolverType documentIndexed = mapping.getDocumentType(userResolver);
@@ -50,7 +45,7 @@ public class UserResolverService {
             filters = filters.must(QueryBuilders.matchQuery("identifier", identifier));
         }
 
-        UserResolverMapping mapping = UserResolverMapping.getInstance();
+        UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<UserResolver> response = repository.searchWithFilters(offset, limit, null, filters, mapping);
         List<UserResolver> userResolvers = response.getSources();
@@ -64,7 +59,7 @@ public class UserResolverService {
         Repository<UserResolverType> repository = esfactory.initManager();
         repository.initClient();
 
-        UserResolverMapping mapping = UserResolverMapping.getInstance();
+        UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
 
         SearchResponse<UserResolver> response = repository.find(userResolverId, mapping);
 
@@ -84,7 +79,7 @@ public class UserResolverService {
         Repository<UserResolverType> repository = esfactory.initManager();
         repository.initClient();
 
-        UserResolverMapping mapping = UserResolverMapping.getInstance();
+        UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
 
         repository.removeMapping(userResolverId, mapping);
         repository.closeClient();
@@ -96,7 +91,7 @@ public class UserResolverService {
         Repository<UserResolverType> repository = esfactory.initManager();
         repository.initClient();
 
-        UserResolverMapping mapping = UserResolverMapping.getInstance();
+        UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
         UserResolverType documentIndexed = mapping.getDocumentType(userResolver);
         String response = repository.updateMapping(userResolver.getId(), mapping, documentIndexed);
         repository.closeClient();
@@ -108,7 +103,7 @@ public class UserResolverService {
         Repository<UserResolverType> repository = esfactory.initManager();
         repository.initClient();
 
-        UserResolverMapping mapping = UserResolverMapping.getInstance();
+        UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
@@ -125,6 +120,10 @@ public class UserResolverService {
 
         repository.closeClient();
         return userResolvers;
+    }
+
+    public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
+        this.indexConfiguration = indexConfiguration;
     }
 
 }

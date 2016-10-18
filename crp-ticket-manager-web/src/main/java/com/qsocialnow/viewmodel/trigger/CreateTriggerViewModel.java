@@ -323,6 +323,9 @@ public class CreateTriggerViewModel implements Serializable {
             currentTrigger.getTrigger().setResolutions(new ArrayList<>());
             currentTrigger.getTrigger().setCaseCategoriesSetIds(new ArrayList<>());
             currentTrigger.getTrigger().setSubjectCategoriesSetIds(new ArrayList<>());
+            currentTrigger.setResolutions(new ArrayList<TriggerResolutionView>());
+            currentTrigger.setSubjectCategorySets(new ArrayList<TriggerSubjectCategorySetView>());
+            currentTrigger.setCaseCategorySets(new ArrayList<TriggerCaseCategorySetView>());
             initCaseCategorySetListView(null);
             initSubjectCategorySetListView(null);
         }

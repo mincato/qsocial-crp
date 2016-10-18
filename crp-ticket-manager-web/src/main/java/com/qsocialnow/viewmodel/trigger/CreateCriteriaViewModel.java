@@ -3,7 +3,6 @@ package com.qsocialnow.viewmodel.trigger;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,13 +20,17 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.ToClientCommand;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.ListModelList;
 
+import com.qsocialnow.common.model.config.AdmUnitFilter;
+import com.qsocialnow.common.model.config.AdminUnit;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
+import com.qsocialnow.common.model.config.BaseAdminUnit;
 import com.qsocialnow.common.model.config.Category;
 import com.qsocialnow.common.model.config.CategoryFilter;
 import com.qsocialnow.common.model.config.CategoryGroup;
@@ -46,6 +49,7 @@ import com.qsocialnow.common.model.config.SubSeries;
 import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.config.WordFilter;
 import com.qsocialnow.common.model.config.WordFilterType;
+import com.qsocialnow.model.AdmUnitFilterView;
 import com.qsocialnow.model.CategoryFilterView;
 import com.qsocialnow.model.Connotation;
 import com.qsocialnow.model.ConnotationView;
@@ -55,7 +59,10 @@ import com.qsocialnow.model.LanguageView;
 import com.qsocialnow.model.MediaView;
 import com.qsocialnow.model.SegmentView;
 import com.qsocialnow.model.TriggerView;
+import com.qsocialnow.services.AutocompleteService;
 import com.qsocialnow.services.ThematicService;
+import com.qsocialnow.services.UserSessionService;
+import com.qsocialnow.viewmodel.AutocompleteListModel;
 
 @VariableResolver(DelegatingVariableResolver.class)
 @NotifyCommand(value = "filter$updateEvent", onChange = "_vm_.filters")
@@ -66,6 +73,14 @@ public class CreateCriteriaViewModel implements Serializable {
 
     @WireVariable
     private ThematicService thematicService;
+
+    @WireVariable
+    private AutocompleteService<AdminUnit> adminUnitsAutocompleteService;
+
+    @WireVariable
+    private UserSessionService userSessionService;
+
+    private AutocompleteListModel<AdminUnit> adminUnits;
 
     private DetectionCriteria currentCriteria;
 
@@ -96,6 +111,8 @@ public class CreateCriteriaViewModel implements Serializable {
     private TriggerView trigger;
 
     private SegmentView segment;
+
+    private boolean enableAddAdmUnit = true;
 
     public DetectionCriteria getCurrentCriteria() {
         return currentCriteria;
@@ -141,6 +158,14 @@ public class CreateCriteriaViewModel implements Serializable {
         return subSerieOptions;
     }
 
+    public AutocompleteListModel<AdminUnit> getAdminUnits() {
+        return adminUnits;
+    }
+
+    public boolean isEnableAddAdmUnit() {
+        return enableAddAdmUnit;
+    }
+
     @Init
     public void init() {
         currentCriteria = new DetectionCriteria();
@@ -150,7 +175,8 @@ public class CreateCriteriaViewModel implements Serializable {
         initMedias(null);
         initConnotations(null);
         initLanguages(null);
-
+        this.adminUnits = new AutocompleteListModel<AdminUnit>(adminUnitsAutocompleteService,
+                userSessionService.getLanguage());
     }
 
     @Command
@@ -164,6 +190,7 @@ public class CreateCriteriaViewModel implements Serializable {
         addWordFilters(filter);
         addSerieFilters(filter);
         addCategoriesFilters(filter);
+        addAdmUnitFilters(filter);
         currentCriteria.setFilter(filter);
         if (editing) {
             BindUtils.postGlobalCommand(null, null, "updateCriteria", new HashMap<>());
@@ -198,7 +225,6 @@ public class CreateCriteriaViewModel implements Serializable {
         filters = true;
         this.trigger = trigger;
         this.segment = segment;
-
     }
 
     @GlobalCommand
@@ -278,6 +304,60 @@ public class CreateCriteriaViewModel implements Serializable {
     public void addFilterWord(@BindingParam("fxFilter") FilterView fxFilter) {
         fxFilter.getFilterWords().add(new WordFilter());
         BindUtils.postNotifyChange(null, null, fxFilter, "filterWords");
+    }
+
+    @Command
+    @NotifyChange("enableAddAdmUnit")
+    public void addFilterAdmUnit(@BindingParam("fxFilter") FilterView fxFilter) {
+        AdmUnitFilterView admUnitFilter = new AdmUnitFilterView();
+        admUnitFilter.setEditingStatus(true);
+        fxFilter.getAdmUnitFilters().add(admUnitFilter);
+        this.enableAddAdmUnit = false;
+        BindUtils.postNotifyChange(null, null, fxFilter, "admUnitFilters");
+    }
+
+    @Command
+    @NotifyChange("enableAddAdmUnit")
+    public void confirmAdmUnit(@BindingParam("index") int idx, @BindingParam("fxFilter") FilterView fxFilter) {
+        AdmUnitFilterView admUnit = fxFilter.getAdmUnitFilters().get(idx);
+        admUnit.setEditingStatus(Boolean.FALSE);
+        this.enableAddAdmUnit = true;
+        BindUtils.postNotifyChange(null, null, fxFilter, "admUnitFilters");
+    }
+
+    @Command
+    @NotifyChange("enableAddAdmUnit")
+    public void removeAdmUnit(@BindingParam("index") int idx, @BindingParam("fxFilter") FilterView fxFilter) {
+        fxFilter.getAdmUnitFilters().remove(idx);
+        this.enableAddAdmUnit = true;
+        BindUtils.postNotifyChange(null, null, fxFilter, "admUnitFilters");
+    }
+
+    @Command
+    public String createAdmUnitValue(AdminUnit adminUnit) {
+        StringBuilder sb = new StringBuilder();
+        addAdmUnitText(sb, adminUnit);
+        return sb.toString();
+    }
+
+    @Command
+    public String createAdmUnitDescription(AdminUnit adminUnit) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < adminUnit.getParents().size(); i++) {
+            BaseAdminUnit baseAdminUnit = adminUnit.getParents().get(i);
+            if (i > 0 && i < adminUnit.getParents().size() - 1) {
+                sb.append(" - ");
+            }
+            addAdmUnitText(sb, baseAdminUnit);
+        }
+        return sb.toString();
+    }
+
+    private void addAdmUnitText(StringBuilder sb, BaseAdminUnit adminUnit) {
+        sb.append(adminUnit.getTranslation());
+        sb.append("(");
+        sb.append(Labels.getLabel("trigger.criteria.admUnit.value." + adminUnit.getType().name()));
+        sb.append(")");
     }
 
     @Command
@@ -385,6 +465,7 @@ public class CreateCriteriaViewModel implements Serializable {
         fillWordFilters(filterView, detectionCriteria.getFilter().getWordFilters());
         fillSerieFilters(filterView, detectionCriteria.getFilter().getSerieFilter());
         fillCategoriesFilters(filterView, detectionCriteria.getFilter().getCategoryFilter());
+        fillAdmUnitFilters(filterView, detectionCriteria.getFilter().getAdmUnitFilter());
     }
 
     private void fillCategoriesFilters(FilterView filterView, List<CategoryFilter> categoriesFilter) {
@@ -447,6 +528,13 @@ public class CreateCriteriaViewModel implements Serializable {
         }
     }
 
+    private void fillAdmUnitFilters(FilterView filterView, List<AdmUnitFilter> admUnitFilters) {
+        if (CollectionUtils.isNotEmpty(admUnitFilters)) {
+            filterView.setAdmUnitFilters(admUnitFilters.stream().map(admUnit -> new AdmUnitFilterView(admUnit))
+                    .collect(Collectors.toList()));
+        }
+    }
+
     private void fillFollowersFilter(FilterView filterView, FollowersFilter followersFilter) {
         if (followersFilter != null) {
             filterView.setFollowersGreaterThan(followersFilter.getMinFollowers());
@@ -457,10 +545,10 @@ public class CreateCriteriaViewModel implements Serializable {
     private void fillDateRangeFilter(FilterView filterView, PeriodFilter periodFilter) {
         if (periodFilter != null) {
             if (periodFilter.getStartDateTime() != null) {
-                filterView.setStartDateTime(new Date(periodFilter.getStartDateTime()));
+                filterView.setStartDateTime(periodFilter.getStartDateTime());
             }
             if (periodFilter.getEndDateTime() != null) {
-                filterView.setEndDateTime(new Date(periodFilter.getEndDateTime()));
+                filterView.setEndDateTime(periodFilter.getEndDateTime());
             }
         }
     }
@@ -493,10 +581,10 @@ public class CreateCriteriaViewModel implements Serializable {
         if (filterView.getStartDateTime() != null || filterView.getEndDateTime() != null) {
             PeriodFilter periodFilter = new PeriodFilter();
             if (filterView.getStartDateTime() != null) {
-                periodFilter.setStartDateTime(filterView.getStartDateTime().getTime());
+                periodFilter.setStartDateTime(filterView.getStartDateTime());
             }
             if (filterView.getEndDateTime() != null) {
-                periodFilter.setEndDateTime(filterView.getEndDateTime().getTime());
+                periodFilter.setEndDateTime(filterView.getEndDateTime());
             }
             filter.setPeriodFilter(periodFilter);
         }
@@ -562,6 +650,14 @@ public class CreateCriteriaViewModel implements Serializable {
                         return categoryFilter;
                     }).collect(Collectors.toList());
             filter.setCategoryFilter(categoryFilters);
+        }
+
+    }
+
+    private void addAdmUnitFilters(Filter filter) {
+        if (CollectionUtils.isNotEmpty(filterView.getAdmUnitFilters())) {
+            filter.setAdmUnitFilter(filterView.getAdmUnitFilters().stream().map(admUnit -> new AdmUnitFilter(admUnit))
+                    .collect(Collectors.toList()));
         }
 
     }

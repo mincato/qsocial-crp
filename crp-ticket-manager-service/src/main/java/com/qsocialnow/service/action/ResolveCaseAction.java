@@ -12,11 +12,10 @@ import com.qsocialnow.common.model.cases.Case;
 public class ResolveCaseAction implements Action {
 
     @Override
-    public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         caseObject.setCloseDate(new Date().getTime());
         caseObject.setOpen(false);
         caseObject.setResolution((String) parameters.get(ActionParameter.RESOLUTION));
-        return true;
     }
 
 }

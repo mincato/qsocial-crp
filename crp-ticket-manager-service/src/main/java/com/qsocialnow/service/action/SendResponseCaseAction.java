@@ -48,7 +48,7 @@ public class SendResponseCaseAction implements Action {
     private String facebookUsersZnodePath;
 
     @Override
-    public boolean execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         String text = (String) parameters.get(ActionParameter.TEXT);
         String userResolverId;
         if (caseObject.getUserResolver() == null) {
@@ -70,8 +70,6 @@ public class SendResponseCaseAction implements Action {
         parameters.put(ActionParameter.COMMENT, text);
 
         createNewUserResolverUserNode(userResolver, caseObject, lastPostId, postId);
-
-        return true;
     }
 
     private void createNewUserResolverUserNode(UserResolver userResolver, Case caseObject, String lastPostId,

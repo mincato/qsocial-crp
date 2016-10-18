@@ -44,7 +44,7 @@
 					                       	<td>${each.lastName}</td>
 					                       	<td>
 					                       		<ul class="list-inline">
-					  								<li><a class="list-action"><i onClick="@command('selectSubject', subject=each)" class="fa fa-check" data-toggle="tooltip" data-placement="top" title="${labels.cases.actions.changeSubject.select.action}"></i></a></li>
+					  								<li><a class="btn-row-list"><i onClick="@command('selectSubject', subject=each)" class="fa fa-check" data-toggle="tooltip" data-placement="top" title="${labels.cases.actions.changeSubject.select.action}"></i></a></li>
 												</ul>
 								           	</td>
 					               		</tr>

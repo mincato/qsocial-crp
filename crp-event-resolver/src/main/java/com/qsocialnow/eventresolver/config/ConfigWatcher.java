@@ -7,6 +7,7 @@ import org.apache.zookeeper.Watcher.Event.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 
 import com.google.gson.GsonBuilder;
@@ -20,6 +21,7 @@ public class ConfigWatcher<T extends RefreshableConfig<T>> implements CuratorWat
     private ApplicationContext appContext;
 
     @Autowired
+    @Qualifier("zookeeperCentralClient")
     private CuratorFramework zookeeperClient;
 
     private String beanRef;

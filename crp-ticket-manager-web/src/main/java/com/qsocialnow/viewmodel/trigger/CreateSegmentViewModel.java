@@ -78,7 +78,6 @@ public class CreateSegmentViewModel implements Serializable {
                 .findFirst().get());
         this.currentDomain = currentDomain;
         editing = true;
-        System.out.println("trigger: " + trigger);
         this.trigger = trigger;
     }
 

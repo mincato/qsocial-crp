@@ -1,10 +1,8 @@
 package com.qsocialnow.model;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.qsocialnow.common.model.config.AdmUnitFilter;
 import com.qsocialnow.common.model.config.Series;
 import com.qsocialnow.common.model.config.SubSeries;
 import com.qsocialnow.common.model.config.Thematic;
@@ -12,9 +10,9 @@ import com.qsocialnow.common.model.config.WordFilter;
 
 public class FilterView {
 
-    private Date startDateTime;
+    private Long startDateTime;
 
-    private Date endDateTime;
+    private Long endDateTime;
 
     private Long followersGreaterThan;
 
@@ -22,7 +20,7 @@ public class FilterView {
 
     private List<WordFilter> filterWords;
 
-    private List<AdmUnitFilter> admUnitFilters;
+    private List<AdmUnitFilterView> admUnitFilters;
 
     private Thematic thematic;
 
@@ -35,21 +33,22 @@ public class FilterView {
     public FilterView() {
         filterWords = new ArrayList<>();
         filterCategories = new ArrayList<>();
+        admUnitFilters = new ArrayList<>();
     }
 
-    public Date getStartDateTime() {
+    public Long getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(Date startDateTime) {
+    public void setStartDateTime(Long startDateTime) {
         this.startDateTime = startDateTime;
     }
 
-    public Date getEndDateTime() {
+    public Long getEndDateTime() {
         return endDateTime;
     }
 
-    public void setEndDateTime(Date endDateTime) {
+    public void setEndDateTime(Long endDateTime) {
         this.endDateTime = endDateTime;
     }
 
@@ -77,11 +76,11 @@ public class FilterView {
         this.filterWords = filterWords;
     }
 
-    public void setAdmUnitFilters(List<AdmUnitFilter> admUnitFilters) {
+    public void setAdmUnitFilters(List<AdmUnitFilterView> admUnitFilters) {
         this.admUnitFilters = admUnitFilters;
     }
 
-    public List<AdmUnitFilter> getAdmUnitFilters() {
+    public List<AdmUnitFilterView> getAdmUnitFilters() {
         return admUnitFilters;
     }
 

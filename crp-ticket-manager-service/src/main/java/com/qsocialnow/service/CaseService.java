@@ -20,8 +20,8 @@ import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.pagination.PageRequest;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
 import com.qsocialnow.persistence.TriggerRepository;
@@ -44,8 +44,14 @@ public class CaseService {
     @Resource
     private Map<ActionType, Action> actions;
 
-    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<CaseListView> cases = repository.findAll(new PageRequest(pageNumber, pageSize));
+    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
+            String subject, String title, String description, String pendingResponse, String fromOpenDate,
+            String toOpenDate) {
+        PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
+        pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
+
+        List<CaseListView> cases = repository.findAll(pageRequest, subject, title, description, pendingResponse,
+                fromOpenDate, toOpenDate);
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;
@@ -84,8 +90,8 @@ public class CaseService {
             if (caseObject != null) {
                 Action action = actions.get(actionRequest.getActionType());
                 if (action != null) {
-                    boolean needsUpdate = action.execute(caseObject, actionRequest.getParameters());
-                    boolean updated = needsUpdate ? repository.update(caseObject) : !needsUpdate;
+                    action.execute(caseObject, actionRequest.getParameters());
+                    boolean updated = repository.update(caseObject);
                     if (!updated) {
                         log.error("There was an error trying to update the case");
                         throw new RuntimeException("There was an error trying to update the case");
@@ -137,6 +143,10 @@ public class CaseService {
         actionRegistry.setDate(new Date().getTime());
         actionRegistry.setAction(actionRequest.getActionType().name());
         if (actionRequest.getParameters() != null) {
+            Object executor = actionRequest.getParameters().get(ActionParameter.EXECUTOR);
+            if (executor != null) {
+                actionRegistry.setUserName((String) executor);
+            }
             Object comment = actionRequest.getParameters().get(ActionParameter.COMMENT);
             if (comment != null) {
                 actionRegistry.setComment((String) comment);

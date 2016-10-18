@@ -19,13 +19,13 @@ public class DomainService {
     private com.qsocialnow.elasticsearch.services.config.DomainService domainElasticService;
 
     @Cacheable(value = CacheConfig.DOMAINS_CACHE, unless = "#result == null")
-    public Domain findDomainWithTriggers(String domainId) {
+    public Domain findDomainWithActiveTriggers(String domainId) {
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info("======== Recovering Domain from Configuration Storage ========");
         }
 
-        return domainElasticService.findDomainWithTriggers(domainId);
+        return domainElasticService.findDomainWithActiveTriggers(domainId);
     }
 
 }

@@ -19,7 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.config.UserListView;
-import com.qsocialnow.config.Organization;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ServiceUrlResolver;
 import com.qsocialnow.services.UserService;
@@ -42,8 +41,8 @@ public class UserServiceImpl implements UserService {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver.resolveUrl(
-                    Organization.ODATECH, userServiceUrl));
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(userServiceUrl));
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             ResponseEntity<List<UserListView>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,

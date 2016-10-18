@@ -77,7 +77,6 @@ public class FacebookOauthService implements OauthService {
             String oauthCode = Executions.getCurrent().getParameter("code");
             if (oauthCode != null) {
                 AccessToken accessToken = userFacebook.getOAuthAccessToken(oauthCode);
-                System.out.println(accessToken.getToken());
                 if (accessToken != null) {
                     AccessToken extendedAccessToken = userFacebook.extendTokenExpiration(accessToken.getToken());
                     if (extendedAccessToken != null) {

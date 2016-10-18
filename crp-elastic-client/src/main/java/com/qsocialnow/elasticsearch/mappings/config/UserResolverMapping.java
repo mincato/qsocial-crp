@@ -8,24 +8,25 @@ import com.qsocialnow.elasticsearch.mappings.types.config.UserResolverType;
 
 public class UserResolverMapping implements Mapping<UserResolverType, UserResolver> {
 
-    private static final String INDEX_NAME = "configuration";
-
     private static final String TYPE = "userResolver";
 
     private static UserResolverMapping instance;
 
-    private UserResolverMapping() {
+    private final String index;
+
+    private UserResolverMapping(String index) {
+        this.index = index;
     }
 
-    public static UserResolverMapping getInstance() {
+    public static UserResolverMapping getInstance(String index) {
         if (instance == null)
-            instance = new UserResolverMapping();
+            instance = new UserResolverMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override

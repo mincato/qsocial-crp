@@ -158,12 +158,13 @@
 			    		<tbody children="@bind(vm.registries)">
 			    			<template name="children">
 								<tr>
-									<td>${each.user}</td>
-                       				<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
+									<td visible="@load(each.automatic)">${labels.cases.registry.automatic.user}</td>
+									<td visible="@load(not each.automatic)">${each.user}</td>
+									<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
                        				<td>${each.description}</td>
                        				<td>${each.date}</td>
                        				<td></td>
-               					</tr>
+                       			</tr>
                				</template>
 						</tbody>
 					</table>
@@ -177,4 +178,15 @@
 			</div>
 		</n:div>
 	</div>
+	<n:br/>		
+ 	<div class="row">
+		<n:div class="col-lg-12">
+			<div zclass="pane equal">
+				<div class="form-group text-center">
+					<button href="/pages/cases/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>	
+				</div>
+			</div>
+		</n:div>
+	</div>
+	<n:br/>	
 </x:div>

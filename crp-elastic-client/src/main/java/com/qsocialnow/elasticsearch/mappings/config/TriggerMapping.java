@@ -8,24 +8,25 @@ import com.qsocialnow.elasticsearch.mappings.types.config.TriggerType;
 
 public class TriggerMapping implements Mapping<TriggerType, Trigger> {
 
-    private static final String INDEX_NAME = "configuration";
-
     public static final String TYPE = "trigger";
 
     private static TriggerMapping instance;
 
-    private TriggerMapping() {
+    private final String index;
+
+    private TriggerMapping(String index) {
+        this.index = index;
     }
 
-    public static TriggerMapping getInstance() {
+    public static TriggerMapping getInstance(String index) {
         if (instance == null)
-            instance = new TriggerMapping();
+            instance = new TriggerMapping(index);
         return instance;
     }
 
     @Override
     public String getIndex() {
-        return INDEX_NAME;
+        return index;
     }
 
     @Override
