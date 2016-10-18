@@ -162,24 +162,30 @@ public class CaseServiceImpl implements CaseService {
         }
     }
 
-	@Override
-	public byte[] getReport(Map<String, String> filters) {
-		 try {
-	            HttpHeaders headers = new HttpHeaders();
-	            headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+    @Override
+    public byte[] getReport(Map<String, String> filters) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
-	            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-	                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/report" );
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/report");
 
-	            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
-	            restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter()); 
-	            byte[] data = restTemplate.getForObject(builder.toUriString(), byte[].class);
+            if (filters != null) {
+                for (Map.Entry<String, String> filter : filters.entrySet()) {
+                    builder.queryParam(filter.getKey(), filter.getValue());
+                }
+            }
 
-	            return data;
-	        } catch (Exception e) {
-	            log.error("There was an error while trying to call case service", e);
-	            throw new RuntimeException(e);
-	        }
-	}
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
+            byte[] data = restTemplate.getForObject(builder.toUriString(), byte[].class);
+
+            return data;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call case service", e);
+            throw new RuntimeException(e);
+        }
+    }
 
 }

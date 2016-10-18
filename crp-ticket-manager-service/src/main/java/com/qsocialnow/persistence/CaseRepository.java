@@ -1,5 +1,6 @@
 package com.qsocialnow.persistence;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
@@ -47,6 +50,14 @@ public class CaseRepository {
             log.error("Unexpected error", e);
         }
         return cases;
+    }
+
+    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String title, String description,
+            String pendingResponse, String fromOpenDate, String toOpenDate) {
+        JsonObject jsonObject = caseElasticService.getCasesAsJsonObject(pageRequest.getOffset(),
+                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), title, description,
+                pendingResponse, fromOpenDate, toOpenDate);
+        return jsonObject.getAsJsonObject("hits").getAsJsonArray("hits");
     }
 
     public Long count() {

@@ -1,9 +1,5 @@
 package com.qsocialnow.service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,20 +64,6 @@ public class CaseService {
             log.error("There was an error executing action", e);
             throw e;
         }
-    }
-    
-    public byte[] getReport() {
-        	Path path = Paths.get("/home/frasco/desitank/obleas/20161004_234616_00282.pdf");
-    		byte[] data;
-    		try {
-    			data = Files.readAllBytes(path);
-    			return data;
-    		} catch (IOException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		}
-    		return null;
-        
     }
 
     public Case save(Case newCase) {

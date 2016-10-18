@@ -1,9 +1,5 @@
 package com.qsocialnow.viewmodel;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +16,6 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Filedownload;
 
 import com.qsocialnow.common.model.cases.CaseListView;
-import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.CaseService;
@@ -45,7 +40,7 @@ public class CasesViewModel implements Serializable {
 
     @WireVariable
     private CaseService caseService;
-    
+
     @WireVariable
     private SubjectService subjectService;
 
@@ -115,7 +110,7 @@ public class CasesViewModel implements Serializable {
         PageRequest pageRequest = new PageRequest(activePage, pageSize, sortField);
         pageRequest.setSortOrder(this.sortOrder);
 
-        PageResponse<CaseListView> pageResponse = caseService.findAll(pageRequest, getFilters());
+        PageResponse<CaseListView> pageResponse = caseService.findAll(pageRequest, filterActive ? getFilters() : null);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.cases.addAll(pageResponse.getItems());
             this.moreResults = true;
@@ -134,22 +129,14 @@ public class CasesViewModel implements Serializable {
         this.cases.clear();
         this.findCases();
     }
-    
+
     @Command
     public void download() {
-    	byte[] data = caseService.getReport(null);
-    		Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
-		
-    	
+        byte[] data = caseService.getReport(getFilters());
+        Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
     }
-    
-    
 
     private Map<String, String> getFilters() {
-        if (!filterActive) {
-            return null;
-        }
-
         Map<String, String> filters = new HashMap<String, String>();
         if (this.title != null && !this.title.isEmpty()) {
             filters.put("title", this.title);
