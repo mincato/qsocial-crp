@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
 <?link href="/vendor/bootstrap/bootstrap-social.css" rel="stylesheet"?>
 <?link href="/assets/css/style.css" rel="stylesheet"?>

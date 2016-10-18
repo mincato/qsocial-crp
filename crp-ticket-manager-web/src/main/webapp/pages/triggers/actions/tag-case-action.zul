@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
 		apply="org.zkoss.bind.BindComposer"

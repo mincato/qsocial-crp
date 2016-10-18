@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
     viewModel="@id('vm') @init('com.qsocialnow.viewmodel.DomainsViewModel')" 
     border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
