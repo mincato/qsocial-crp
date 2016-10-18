@@ -36,8 +36,7 @@ public class MessageProcessorImpl implements MessageProcessor {
         // reintentar ES
         Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);
         String domainId = message.getGroup();
-        LOGGER.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument));
-        LOGGER.info(String.format("Searching for domain: %s", domainId));
+        logProcessingEvent(inputBeanDocument, domainId);
 
         Domain domain = domainService.findDomainWithActiveTriggers(domainId);
         if (domain != null) {
@@ -47,7 +46,7 @@ public class MessageProcessorImpl implements MessageProcessor {
                 if (executionMessageRequest != null) {
                     executionMessageProcessor.execute(executionMessageRequest);
                 } else {
-                    LOGGER.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument));
+                    logMessageNotDetected(inputBeanDocument);
                 }
             } else {
                 LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
@@ -55,6 +54,21 @@ public class MessageProcessorImpl implements MessageProcessor {
         } else {
             throw new InvalidDomainException("Error trying to retrieve a domain");
         }
+    }
+
+    private void logMessageNotDetected(Event inputBeanDocument) {
+        LOGGER.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument.getId()));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+        }
+    }
+
+    private void logProcessingEvent(Event inputBeanDocument, String domainId) {
+        LOGGER.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+        }
+        LOGGER.info(String.format("Searching for domain: %s", domainId));
     }
 
     public void setDomainElasticService(DomainService domainElasticService) {

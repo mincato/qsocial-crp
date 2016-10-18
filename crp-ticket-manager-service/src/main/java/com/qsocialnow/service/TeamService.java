@@ -43,15 +43,25 @@ public class TeamService {
     }
 
     public PageResponse<TeamListView> findAll(Integer pageNumber, Integer pageSize, String name) {
-        List<TeamListView> teams = teamRepository.findAll(new PageRequest(pageNumber, pageSize, null), name);
-
-        PageResponse<TeamListView> page = new PageResponse<TeamListView>(teams, pageNumber, pageSize);
-        return page;
+    	try {
+	        List<TeamListView> teams = teamRepository.findAll(new PageRequest(pageNumber, pageSize, null), name);
+	
+	        PageResponse<TeamListView> page = new PageResponse<TeamListView>(teams, pageNumber, pageSize);
+	        return page;
+    	} catch (Throwable e) {
+    		log.error("There was an error finding teams", e);
+    		throw new RuntimeException(e.getMessage());
+    	}
     }
 
     public List<TeamListView> findAll() {
-        List<TeamListView> teams = teamRepository.findAll(null, null);
-        return teams;
+    	try {
+	        List<TeamListView> teams = teamRepository.findAll(null, null);
+	        return teams;
+    	} catch (Throwable e) {
+    		log.error("There was an error finding teams", e);
+    		throw new RuntimeException(e.getMessage());
+    	}
     }
 
     public Team findOne(String teamId) {
