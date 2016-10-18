@@ -1,5 +1,9 @@
 package com.qsocialnow.viewmodel;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +17,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
+import org.zkoss.zul.Filedownload;
 
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.cases.SubjectListView;
@@ -40,7 +45,7 @@ public class CasesViewModel implements Serializable {
 
     @WireVariable
     private CaseService caseService;
-
+    
     @WireVariable
     private SubjectService subjectService;
 
@@ -129,6 +134,16 @@ public class CasesViewModel implements Serializable {
         this.cases.clear();
         this.findCases();
     }
+    
+    @Command
+    public void download() {
+    	byte[] data = caseService.getReport(null);
+    		Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
+		
+    	
+    }
+    
+    
 
     private Map<String, String> getFilters() {
         if (!filterActive) {

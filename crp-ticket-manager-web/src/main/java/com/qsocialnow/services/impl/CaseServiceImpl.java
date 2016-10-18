@@ -1,5 +1,6 @@
 package com.qsocialnow.services.impl;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -159,5 +161,25 @@ public class CaseServiceImpl implements CaseService {
             throw new RuntimeException(e);
         }
     }
+
+	@Override
+	public byte[] getReport(Map<String, String> filters) {
+		 try {
+	            HttpHeaders headers = new HttpHeaders();
+	            headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+
+	            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+	                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/report" );
+
+	            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+	            restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter()); 
+	            byte[] data = restTemplate.getForObject(builder.toUriString(), byte[].class);
+
+	            return data;
+	        } catch (Exception e) {
+	            log.error("There was an error while trying to call case service", e);
+	            throw new RuntimeException(e);
+	        }
+	}
 
 }

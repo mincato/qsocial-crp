@@ -21,5 +21,7 @@ public interface CaseService {
     List<Resolution> getAvailableResolutions(String caseId);
 
     Case create(Case newCase);
+    
+    byte[] getReport(Map<String, String> filters);
 
 }

@@ -17,6 +17,32 @@ function prettyJSON(obj) {
     console.log(JSON.stringify(obj, null, 8));
 }
 
+router.get('/cases/report', function (req, res) {
+	  function asyncResponse(err,response) {
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	    	  res.writeHead(200, {
+	    	        'Content-Type': 'application/vnd.ms-excel',
+	    	        'Content-Length': response.length
+	    	    });
+	    	    res.end(new Buffer(response, 'binary'))
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var caseService = javaContext.getBeanSync("caseReportService");
+	  caseService.getReport(asyncResponse);
+	  
+	});
+
+
 router.get('/cases', function (req, res) {
 
   function asyncResponse(err,responseCases) {
@@ -29,7 +55,7 @@ router.get('/cases', function (req, res) {
         res.set('Content-Type', 'application/json');
         res.send(gson.toJsonSync(responseCases));
       } catch(ex) {
-        res.status(500).json(ex.cause.getMessageSync());
+    	res.status(500).json(ex.cause.getMessageSync());
       }
     } else {
       res.status(500).json("Token " + req.body['tokenId'] + " invalid.");

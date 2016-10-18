@@ -73,6 +73,7 @@
                    <div zclass="input-group input-group-sm">
                       <span zclass="input-group-btn">
                           <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+						  <button zclass="btn btn-default" type="button" onClick="@command('download')"  iconSclass="z-icon-file-excel-o"></button>
                       </span>
                    </div>
                 </n:div>
