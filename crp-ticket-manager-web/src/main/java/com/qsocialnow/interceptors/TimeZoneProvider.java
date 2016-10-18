@@ -5,6 +5,7 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.zkoss.util.Locales;
 import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Session;
 import org.zkoss.zk.ui.util.RequestInterceptor;
@@ -22,6 +23,10 @@ public class TimeZoneProvider implements RequestInterceptor {
             UserData userData = (UserData) httpSession.getAttribute(AuthorizationFilter.USER_SESSION_PARAMETER);
             if (userData != null && userData.getTimezone() != null) {
                 session.setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(userData.getTimezone()));
+
+            }
+            if (userData != null && userData.getLanguage() != null) {
+                session.setAttribute(Attributes.PREFERRED_LOCALE, Locales.getLocale(userData.getLanguage()));
             }
         }
     }

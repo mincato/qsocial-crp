@@ -79,6 +79,7 @@ public class Login extends HttpServlet {
 		user.setPrcAdmin(ADMIN.compareToIgnoreCase(username) == 0);
 		user.setOrganization(organizations.getOrDefault(username, ORGANIZATION));
 		user.setTimezone(TimeZone.getTimeZone("GMT-3").getID());
+		user.setLanguage("EN");
 
 		String shortToken = UUID.randomUUID().toString();
 		String token = tokenHandler.createToken(user);
