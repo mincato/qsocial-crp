@@ -37,4 +37,12 @@ public class UserSessionService {
         return null;
     }
 
+    public String getLanguage() {
+        UserData userData = getUserData();
+        if (userData != null) {
+            return userData.getLanguage();
+        }
+        return null;
+    }
+
 }
