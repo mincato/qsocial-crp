@@ -20,7 +20,7 @@ public class AssignCaseAction implements Action {
 
     @Override
     public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
-        String userId = (String) parameters.get(ActionParameter.USER);
+        Integer userId = (Integer) parameters.get(ActionParameter.USER);
         String teamId = (String) parameters.get(ActionParameter.TEAM);
         Team team = teamRepository.findOne(teamId);
         BaseUser oldAssignee = caseObject.getAssignee();
