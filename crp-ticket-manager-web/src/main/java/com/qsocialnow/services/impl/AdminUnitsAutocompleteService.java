@@ -1,5 +1,7 @@
 package com.qsocialnow.services.impl;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -9,12 +11,16 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.qsocialnow.common.model.config.AdminUnit;
-import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.model.AdminUnitResponse;
 import com.qsocialnow.services.AutocompleteService;
 
@@ -41,7 +47,16 @@ public class AdminUnitsAutocompleteService implements AutocompleteService<AdminU
                 builder.queryParam("language", language);
             }
 
-            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            RestTemplate restTemplate = new RestTemplate();
+            List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+            MappingJackson2HttpMessageConverter jsonMessageConverter = new MappingJackson2HttpMessageConverter();
+            jsonMessageConverter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON, MediaType.TEXT_HTML));
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            jsonMessageConverter.setObjectMapper(mapper);
+            messageConverters.add(jsonMessageConverter);
+            restTemplate.setMessageConverters(messageConverters);
             AdminUnitResponse response = restTemplate.getForObject(builder.toUriString(), AdminUnitResponse.class);
 
             return response.getAdministrativeUnits();
