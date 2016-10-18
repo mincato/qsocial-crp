@@ -1,6 +1,10 @@
 <?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
 <?link href="/vendor/plugins/form/bootstrap-select/bootstrap-select.css" rel="stylesheet"?>
 <?link href="/assets/css/style.css" rel="stylesheet"?>
+<?link href="/assets/css/footer.css" rel="stylesheet"?>
+<?link href="/assets/css/preloader.css" rel="stylesheet"?>
+<?link href="/assets/css/header.css" rel="stylesheet"?>
+<?link href="/assets/css/problematics.css" rel="stylesheet"?>
 <?link href="/assets/css/ui.css" rel="stylesheet"?>
 <?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
 <?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
@@ -8,44 +12,36 @@
 <?link href="/vendor/plugins/form/icheck/skins/square/_all.css" rel="stylesheet"?>
 <?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
 <zk xmlns:n="native">
-	<div class="wrapper">
-	    
-	<!-- HEADER -->
-	    <n:header id="header" class="header affix" role="banner">
-	    	<include src="/assets/core/header.zul" />
+	<div class="wrapper wrapper-serie dashboard">
+		<!-- HEADER -->
+		<include src="/assets/core/header.zul" />
 		<!-- Header elements are fetched via ajax. Go to assets/core/header.html to edit. -->
-	    </n:header>
-	<!-- HEADER -->
+		<!-- HEADER -->
 
-	<!-- SIDEBAR -->
-            <n:aside id="sidebar" class="sidebar affix" role="complementary">
-            	<include src="/assets/core/sidebar.zul"/>
-            </n:aside><!-- sidebar -->
-	<!-- SIDEBAR -->
-	    
-	<!-- MAIN -->
-	    <div class="main">
-	    <!-- CONTENT -->
-		<n:div id="content">
-		    <include src="create-domain.zul"/>
-		</n:div><!-- content -->
-	    <!-- CONTENT -->
-		
-	    <!-- FOOTER -->
-		<n:footer id="footer" role="contentinfo">
-		    <include src="/assets/core/footer.html"/>
-		</n:footer>
-	    <!-- FOOTER -->
-	    </div><!-- main -->
-	<!-- MAIN  -->
-	
+		<!-- SIDEBAR -->
+		<include src="/assets/core/sidebar.zul" />
+		<!-- SIDEBAR -->
+
+		<!-- MAIN -->
+		<div class="main">
+			<!-- CONTENT -->
+			<n:div id="content">
+				<include src="create-domain.zul" />
+			</n:div><!-- content -->
+			<!-- CONTENT -->
+		</div><!-- main -->
+		<!-- MAIN  -->
+
 	</div><!-- wrapper -->
-	
-    <!-- REQUIRED SCRIPTS -->
+	<!-- FOOTER -->
+	<include src="/assets/core/footer.html" />
+	<!-- FOOTER -->
+
+	<!-- REQUIRED SCRIPTS -->
 	<?script src="/vendor/js/required.js" type="text/javascript" ?>
 	<?script src="/assets/js/quarca.js" type="text/javascript" ?>
-	
+
 	<!-- Form Plugins -->
 	<?script src="/vendor/plugins/form/bootstrap-select/bootstrap-select.min.js"?>
-	
+
 </zk>

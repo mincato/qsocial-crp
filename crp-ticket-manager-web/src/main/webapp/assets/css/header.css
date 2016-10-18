@@ -1,0 +1,206 @@
+.header ul {
+	position: relative;
+	
+}
+
+.header .sidebar-switch {
+	z-index: 2001;
+	font-size: 17px;
+}
+
+.header .navbar-header {
+	z-index:1000;
+	position: absolute;
+	background-color: #fcb243;
+}
+
+.header-navbar > a {
+	z-index: 1001;
+	position: absolute;
+}
+
+.header .header-navbar .navbar-collapse {
+	background-color: #fcb243;
+}
+
+.header nav {
+	background-color: #fcb243;
+}
+
+.header .navbar-nav li > a {
+	border-style: none !important;
+	vertical-align: middle;
+	height: 100%;
+	min-width: 75px;
+}
+
+.header .header-navbar .navbar-collapse {
+	position: relative;
+	z-index: 800;
+}
+
+.header .navbar-nav li {
+	height: 50px;
+	/* width: 150px; */
+	text-align: center;
+}
+
+.header i {
+	color: #FFFFFF;
+}
+
+.header .navbar-right i {
+	font-size:20px;
+	position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
+.qsocial-logo {
+	width:140px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+}
+
+/**************** BUTTONS STYLES ******************/
+
+.header .header-qnowadmin {
+	background-color: #E1C36E;
+}
+
+.header .header-qreport {
+	background-color: #f15b29;
+}
+
+.header .header-contact {
+	background-color: #64b3ac;
+}
+
+.header .header-qnews {
+	background-color: #64b3ac;
+}
+
+.header .header-problematics > a > i {
+	width: 50px;
+
+}
+
+.header li.header-problematics {
+	width: 315px;
+}
+
+.header a.btn.btn-default.dropdown-toggle {
+	background-color: #fcb243;
+	/* width: 100%; */
+}
+
+.header .header-problematics > a > span {
+	/* display: inline-block !important; */
+	position: relative;
+    
+	top: 44%;
+    transform: translateY(-50%);
+    color: white;
+}
+
+.header .header-problematics-dropdown {
+	background-color: #fcb243;
+	position: absolute;
+    top: inherit;
+    overflow-y: scroll;
+    height: 400px;
+	overflow-x: hidden;
+}
+
+.header .header-problematics-dropdown li {
+    width: 300px;
+}
+
+.header .dropdown-toggle span.caret {
+	/* position: absolute; */
+	top: 0%;
+	float:right;
+}
+
+.header .problematic-icon {
+	border-radius: 20px;
+	width: 40px;
+	height: 40px;
+	float: left;
+	position:relative;
+}
+
+.header .header-problematics-dropdown .problematic-icon {
+	top: 0px;
+	transform: translateY(-8px);
+}
+
+.header .header-problematics-dropdown span {
+	width: 80%;
+	/* top: 50%; */
+}
+
+.header .header-refresh {
+	background-color: #64b3ac ;
+}
+
+.header .header-usermenu {
+	background-color: #dbbf73;
+}
+
+.header .header-map {
+	background-color: #dbbf73;
+}
+
+.header .header-exit {
+	background-color: #F4030c;
+}
+
+.header .header-back {
+	background-color: #dbbf73;
+}
+
+/****************** HIGH RESOLUTION STYLES ********************/
+@media(min-width: 768px) {
+	.header ul {
+		right: 20px;
+	}
+
+	.header .header-problematics-dropdown {
+		background-color: #fcb243;
+		position: absolute;
+		top: inherit;
+	}
+}
+
+/****************** LOW RESOLUTION STYLES ********************/
+@media (max-width: 767px) {
+	.navbar-collapse {
+		top: 50px;
+	}
+	
+	ul.nav.navbar-nav.navbar-right {
+	    margin:0px;
+	    margin-bottom: 2px;
+
+	    background: transparent;
+	}
+	
+	.header .navbar-header {
+	    border-bottom-color: black;
+	    border-bottom-style: groove;
+	    border-bottom-width: 1px;
+    }
+
+    .qsocial-logo {
+		position: relative;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.header li.header-problematics {
+		width: 100%;
+	}
+}

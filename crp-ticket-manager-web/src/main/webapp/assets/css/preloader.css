@@ -1,0 +1,25 @@
+/*******************************
+1.0 - PAGE PRELOADER
+*******************************/
+#preloaderIndicator {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 99999;
+	background: #6C7A89;
+}
+
+#status {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 24px;
+	height: 24px;
+	margin: -12px 0 0 -12px;
+	background-image: url(../img/core/status.gif);
+	background-size: 24px;
+	background-repeat: no-repeat;
+	background-position: center;
+}

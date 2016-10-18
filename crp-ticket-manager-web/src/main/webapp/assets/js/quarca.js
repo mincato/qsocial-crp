@@ -13,7 +13,7 @@ zk.afterMount(function() {
 	/*******************************
 	HEADER
 	*******************************/
-	        $('#header').hide().fadeIn();
+	       
 	        
 	        // SIDEBAR TOGGLE
 	        $('.sidebar-switch').on('click', function () {

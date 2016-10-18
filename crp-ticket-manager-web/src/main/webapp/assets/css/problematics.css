@@ -1,0 +1,138 @@
+.footer {
+	border-top-style: outset;
+    border-top-color: #edf0f5;
+    border-top-width: 10px;
+}
+
+.main {
+	padding-bottom: 0;
+}
+
+.dashboard .container-fluid {
+	padding-bottom: 0;
+}
+
+/* Hides the drag button */
+.widget .drag {
+	display:none !important;
+}
+
+.transparent {
+	background: transparent;
+}
+
+.theme-switcher a.active {
+	font-weight: bold;
+    background-color: #e36436;
+    color: white;
+    border-color: #bebebe;
+    height:71px;
+}
+
+.theme-switcher>li>a {
+	padding-left: 0px;
+    margin-left: 5px;
+    padding-top: 5px;
+}
+
+.sidebar {
+	position: absolute;
+	background-color: #333746;
+	font-family: sans-serif;
+}
+
+.sidebar .sidebar-title {
+	background-color: #64b3ac;
+}
+
+.sidebar .sidebar-title > i {
+	color: #FFFFFF;
+    vertical-align: middle;
+    width: 30px;
+    text-align: center;
+    
+	font-size: 27px;
+    margin-top: 5px;
+	margin-bottom: 5px;
+	margin-left: 5px;
+}
+
+.sidebar .sidebar-title > h4 {
+	font-size: 13px
+}
+
+.sidebar .sidebar-title > i {
+	cursor: pointer;
+}
+
+.sidebar .sidebar-title > h4 {
+	color: #FFFFFF;
+	display: inline-block;
+	background-color: #64b3ac;
+}
+
+.sidebar a.disabled {
+	cursor: default;
+	color: #666666;
+}
+
+.sidebar a.disabled:hover {
+	background-color:transparent;
+}
+
+.sidebar li .active > a {
+	background-color: #fcb243;
+}
+
+.sidebar ul .active {
+	background-color: #262a37;
+}
+
+.sidebar i {
+	color: #fcb243;
+	font-size: 16px;
+	width:25px;
+	vertical-align: middle;
+	text-align: center;
+	cursor: pointer;
+}
+
+.section i {
+	display: inline-block;
+	font-size: 35px;
+	text-align: center;
+	vertical-align: middle;
+	width: 60px;
+	color: #3C3C3C;
+}
+
+.section h5 {
+	display: inline-block;
+	font-family: sans-serif;
+}
+
+/****************** WIDGET STYLES *********************/
+/* Selected Serie Widget*/
+.selected-serie-widget > img {
+	display: inline-block;
+	width: 40px;
+}
+
+.selected-serie-widget > h5 {
+	display: inline-block;
+}
+
+/******************* INPUT STYLES *********************/
+.bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+  width: 100%;
+}
+
+select {
+	display: inherit;
+	width:100%;
+}
+
+.filter-conjuntos .z-listbox {
+	   height: 100px;
+    overflow-y: scroll;
+}
