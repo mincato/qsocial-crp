@@ -35,7 +35,7 @@ public class Login extends HttpServlet {
 
 	private static final String ODATECH = "odatech";
 	
-	private static final String LATIN = "_latino";
+	private static final String LATIN = "latino";
 	
 	private static final Long ORGANIZATION = 2L;
 	
