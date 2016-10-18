@@ -1,0 +1,16 @@
+<taglib>
+    <description>
+        Methods and actions for security
+    </description>
+ 
+    <function>
+        <name>isAllGranted</name>
+        <function-class>com.qsocialnow.security.SecurityUtil</function-class>
+        <function-signature> boolean isAllGranted(java.lang.String authorities) 
+        </function-signature>
+        <description> 
+            Return true if the authenticated principal is granted authorities of ALL the specified roles.
+        </description>
+    </function>
+    ...
+</taglib>

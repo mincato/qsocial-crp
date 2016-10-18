@@ -1,3 +1,4 @@
+<?taglib uri="/WEB-INF/tld/security.tld" prefix="sec"?>
 <div xmlns:n="native" xmlns:x="xhtml">
 
 	<n:aside id="sidebar" class="sidebar affix" role="complementary">
@@ -50,7 +51,7 @@
 											</li>
 										</ul>
 									</li> -->
-									<li>
+									<li if="${sec:isAllGranted('ADMIN')}">
 										<a href="/pages/user-resolver/list/index.zul">
 											<span
 												class="fa fa-comments-o fa-fw fa-lg">
@@ -60,7 +61,7 @@
 										</a>
 									</li>
 
-									<li>
+									<li if="${sec:isAllGranted('ADMIN')}">
 										<a href="/pages/team/list/index.zul">
 											<span
 												class="fa fa-sitemap fa-fw fa-lg">
@@ -77,7 +78,7 @@
 											${labels.sidebar.menu.cases}</span>
 										</a>
 									</li>
-									<li>
+									<li if="${sec:isAllGranted('ADMIN')}">
 										<a href="/pages/case-category-set/list/index.zul">
 											<span
 												class="fa fa-tags fa-fw fa-lg">
@@ -88,7 +89,7 @@
 										</a>
 									</li>
 									
-									<li>
+									<li if="${sec:isAllGranted('ADMIN')}">
 										<a href="/pages/subject-category-set/list/index.zul">
 											<span
 												class="fa fa-users fa-fw fa-lg">
@@ -98,7 +99,7 @@
 										</a>
 									</li>
 
-									<li>
+									<li if="${sec:isAllGranted('ADMIN')}">
 										<a href="/pages/domain/list/index.zul">
 											<span
 												class="fa fa-desktop fa-fw fa-lg">
@@ -108,7 +109,7 @@
 										</a>
 									</li>
 									
-									<li>
+									<li if="${sec:isAllGranted('ADMIN')}">
 										<a href="/pages/subject/list/index.zul">
 											<span
 												class="fa fa-child fa-fw fa-lg">

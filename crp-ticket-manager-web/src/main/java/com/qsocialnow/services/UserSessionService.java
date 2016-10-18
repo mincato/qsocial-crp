@@ -45,4 +45,12 @@ public class UserSessionService {
         return null;
     }
 
+    public boolean isAdmin() {
+        UserData userData = getUserData();
+        if (userData != null) {
+            return userData.isPrcAdmin();
+        }
+        return false;
+    }
+
 }
