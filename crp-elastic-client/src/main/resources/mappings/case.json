@@ -23,15 +23,11 @@
     },
     "openDate":{
       "type": "date",
-      "index":"not_analyzed"
+      "index":"no"
     },
     "closeDate":{
       "type": "date",
       "index":"no"
-    },
-    "lastModifiedTimestamp":{
-      "type": "long",
-      "analyzer": "standard"
     },
     "title":{
       "type": "string",
