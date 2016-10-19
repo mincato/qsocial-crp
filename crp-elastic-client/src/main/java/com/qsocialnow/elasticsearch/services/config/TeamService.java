@@ -96,29 +96,23 @@ public class TeamService {
     }
 
     public List<Team> findTeamsByUser(String userName) {
-        // RepositoryFactory<TeamType> esfactory = new
-        // RepositoryFactory<TeamType>(configurator);
-        // Repository<TeamType> repository = esfactory.initManager();
-        // repository.initClient();
+        RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
+        Repository<TeamType> repository = esfactory.initManager();
+        repository.initClient();
+        log.info("Repository from teams -from index: " + indexConfiguration.getIndexName() + " retrieving from user :"
+                + userName);
 
-        // TeamMapping mapping =
-        // TeamMapping.getInstance(indexConfiguration.getIndexName());
+        TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
+        BoolQueryBuilder filters = null;
 
-        // log.info("Repository from teams - retrieving from user :"+userName);
+        if (userName != null) {
+            filters = QueryBuilders.boolQuery();
+            filters = filters.must(QueryBuilders.matchQuery("users.username", "jperez"));
+        }
+        SearchResponse<Team> response = repository.searchWithFilters(null, null, null, null, mapping);
+        List<Team> teams = response.getSources();
 
-        // BoolQueryBuilder filters = null;
-        /*
-         * if (userName != null) { filters = QueryBuilders.boolQuery(); filters
-         * = filters.must(QueryBuilders.matchQuery("users.username", "jperez"));
-         * }
-         */
-        // SearchResponse<Team> response =
-        // repository.searchWithFilters(null,null,"name",null, mapping);
-        // List<Team> teams = response.getSources();
-
-        // repository.closeClient();
-        // return teams;
-        List<Team> teams = new ArrayList<>();
+        repository.closeClient();
         return teams;
     }
 

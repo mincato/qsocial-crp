@@ -19,11 +19,15 @@ import org.zkoss.zul.Filedownload;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.SubjectService;
+import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
+
+    private DateConverter dateConverter;
 
     private static final String FALSE_OPTION_VALUE = "false";
 
@@ -74,12 +78,16 @@ public class CasesViewModel implements Serializable {
 
     private String pendingResponse;
 
+    @WireVariable
+    private UserSessionService userSessionService;
+
     @Init
     public void init() {
         this.subjectsFilterOptions = getSubjects();
         this.filterActive = false;
         this.pendingOptions = getPendingOptionsList();
         findCases();
+        this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
 
     private List<String> getSubjects() {
@@ -155,9 +163,9 @@ public class CasesViewModel implements Serializable {
             filters.put("description", this.description);
         }
 
-        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE))
-            ;
-        filters.put("pendingResponse", this.pendingResponse);
+        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE)) {
+            filters.put("pendingResponse", this.pendingResponse);
+        }
 
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
@@ -256,4 +264,7 @@ public class CasesViewModel implements Serializable {
         return new ArrayList<String>(Arrays.asList(options));
     }
 
+    public DateConverter getDateConverter() {
+        return dateConverter;
+    }
 }
