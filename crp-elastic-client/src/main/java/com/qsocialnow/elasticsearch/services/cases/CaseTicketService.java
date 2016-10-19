@@ -45,9 +45,7 @@ public class CaseTicketService extends CaseIndexService {
     public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String subject, String title,
             String description, String pendingResponse, String fromOpenDate, String toOpenDate,
             List<String> teamsToFilter, String userName) {
-    	
-    	this.initIndex();
-    	
+
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
