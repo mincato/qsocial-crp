@@ -47,7 +47,7 @@ public class AuthorizationHelper {
 			session.setAttribute(USER_SESSION_PARAMETER, user);
 			return true;
 		} catch (Exception e) {
-			throw new RuntimeException();
+			throw new RuntimeException(e);
 		}
 	}
 

@@ -33,6 +33,7 @@ public class AuthorizationFilter implements Filter {
 		
 		try {
 			AuthorizationHelper authHelper = new AuthorizationHelper();
+			authHelper.saveUserInSession(request);
 			authHelper.authorize(request);
 			
 		} catch (Exception e) {
