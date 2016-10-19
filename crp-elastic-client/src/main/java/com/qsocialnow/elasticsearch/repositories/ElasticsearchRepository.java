@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.OrQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
@@ -330,7 +332,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
+            boolean sortOrder, Map<String, String> searchValues, List<RangeFilter> rangeFilters,
+            List<ShouldFilter> shouldFilters) {
 
         SortOrder sortOrderValue;
         if (sortOrder)
@@ -346,17 +349,29 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
         }
 
-        if (rangeField != null) {
-            RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeField);
-            if (fromValue != null)
-                range.gte(fromValue);
-            if (toValue != null)
-                range.lte(toValue);
-
-            boolQueryBuilder.filter(range);
+        if (rangeFilters != null) {
+            for (RangeFilter rangeFilter : rangeFilters) {
+                if (rangeFilter.getRangeField() != null) {
+                    RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeFilter.getRangeField());
+                    if (rangeFilter.getRangeFrom() != null)
+                        range.gte(rangeFilter.getRangeFrom());
+                    if (rangeFilter.getRangeTo() != null)
+                        range.lte(rangeFilter.getRangeTo());
+                    boolQueryBuilder.filter(range);
+                }
+            }
         }
-        searchSourceBuilder.query(boolQueryBuilder);
 
+        if (shouldFilters != null) {
+            BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+            for (ShouldFilter shouldFilter : shouldFilters) {
+                QueryBuilder query = QueryBuilders.matchQuery(shouldFilter.getField(), shouldFilter.getValue());
+                boolShouldQueryBuilder.should(query);
+            }
+            boolQueryBuilder.filter(boolShouldQueryBuilder);
+        }
+
+        searchSourceBuilder.query(boolQueryBuilder);
         log.info("Query: " + searchSourceBuilder.toString());
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())

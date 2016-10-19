@@ -1,5 +1,6 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +14,11 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
+import com.qsocialnow.elasticsearch.repositories.RangeFilter;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
+import com.qsocialnow.elasticsearch.repositories.ShouldFilter;
 
 import io.searchbox.core.SearchResult;
 
@@ -53,11 +56,11 @@ public class CaseTicketService extends CaseIndexService {
         CaseMapping mapping = CaseMapping.getInstance();
         log.info("retrieving cases from :" + from + " size" + size + " sorted by;" + sortField);
 
-        Map<String, String> searchValues = new HashMap<>();
+        RangeFilter rangeFilter = new RangeFilter("openDate", fromOpenDate, toOpenDate);
+        List<RangeFilter> rangeFilters = new ArrayList<>();
+        rangeFilters.add(rangeFilter);
 
-        if (userName != null) {
-            searchValues.put("assignee.username", userName);
-        }
+        Map<String, String> searchValues = new HashMap<>();
 
         if (subject != null)
             searchValues.put("subject.identifier", subject);
@@ -71,8 +74,24 @@ public class CaseTicketService extends CaseIndexService {
         if (pendingResponse != null)
             searchValues.put("pendingResponse", pendingResponse);
 
+        List<ShouldFilter> shouldFilters = null;
+
+        if (teamsToFilter == null || (teamsToFilter != null && teamsToFilter.size() == 0)) {
+            if (userName != null) {
+                searchValues.put("assignee.username", userName);
+            }
+        } else {
+            shouldFilters = new ArrayList<>();
+            for (String teamId : teamsToFilter) {
+                ShouldFilter shouldFilter = new ShouldFilter("teamId", teamId);
+                shouldFilters.add(shouldFilter);
+            }
+            ShouldFilter shouldFilter = new ShouldFilter("assignee.username", userName);
+            shouldFilters.add(shouldFilter);
+        }
+
         SearchResponse<Case> response = repository.queryByFields(mapping, from, size, sortField,
-                Boolean.valueOf(sortOrder), searchValues, "openDate", fromOpenDate, toOpenDate);
+                Boolean.valueOf(sortOrder), searchValues, rangeFilters, shouldFilters);
 
         List<Case> cases = response.getSources();
 
