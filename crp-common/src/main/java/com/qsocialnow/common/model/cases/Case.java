@@ -77,6 +77,8 @@ public class Case implements Serializable {
 
     private List<Message> messages;
 
+    private Priority priority;
+
     public Case() {
 
     }
@@ -88,6 +90,7 @@ public class Case implements Serializable {
         Long openDate = new Date().getTime();
         newCase.setOpenDate(openDate);
         newCase.setTitle(event.getTitulo());
+        newCase.setPriority(Priority.MEDIUM);
 
         newCase.setPendingResponse(true);
         newCase.setLastPostId(event.getId());
@@ -120,6 +123,7 @@ public class Case implements Serializable {
         Long openDate = new Date().getTime();
         newCase.setOpenDate(openDate);
         newCase.setPendingResponse(true);
+        newCase.setPriority(Priority.MEDIUM);
 
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
@@ -154,6 +158,7 @@ public class Case implements Serializable {
             actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
             actionsAllowed.add(ActionType.ATTACH_FILE);
+            actionsAllowed.add(ActionType.CHANGE_PRIORITY);
         } else {
             actionsAllowed.add(ActionType.REOPEN);
         }
@@ -398,6 +403,14 @@ public class Case implements Serializable {
         }
         messages.add(message);
 
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
 }
