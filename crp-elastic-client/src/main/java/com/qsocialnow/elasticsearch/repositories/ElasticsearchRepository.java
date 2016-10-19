@@ -152,6 +152,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public void createMapping(String index, String type, String jsonMapping) {
         PutMapping putMapping = new PutMapping.Builder(index, type, jsonMapping).build();
         try {
+            log.info("Creating mapping :" + type + " from index:" + index);
             client.execute(putMapping);
         } catch (IOException e) {
             log.error("Unexpected error: ", e);

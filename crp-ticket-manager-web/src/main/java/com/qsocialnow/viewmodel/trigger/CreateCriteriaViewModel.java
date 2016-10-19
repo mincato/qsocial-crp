@@ -42,6 +42,7 @@ import com.qsocialnow.common.model.config.FollowersFilter;
 import com.qsocialnow.common.model.config.LanguageFilter;
 import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.MediaFilter;
+import com.qsocialnow.common.model.config.NameByLanguage;
 import com.qsocialnow.common.model.config.PeriodFilter;
 import com.qsocialnow.common.model.config.SerieFilter;
 import com.qsocialnow.common.model.config.Series;
@@ -415,6 +416,12 @@ public class CreateCriteriaViewModel implements Serializable {
         fxFilter.getFilterCategories().clear();
         BindUtils.postNotifyChange(null, null, fxFilter, "subSerie");
         BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
+    }
+
+    @Command
+    public String createCategoryName(NameByLanguage category) {
+        String language = userSessionService.getLanguage();
+        return category.getNameByLanguage(language);
     }
 
     @Command
