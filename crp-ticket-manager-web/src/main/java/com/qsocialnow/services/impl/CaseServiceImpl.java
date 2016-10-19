@@ -53,16 +53,16 @@ public class CaseServiceImpl implements CaseService {
     @Override
     public PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters) {
         try {
-            
-        	String userName = userSessionService.getUsername();
+
+            String userName = userSessionService.getUsername();
             boolean isAdmin = userSessionService.isAdmin();
             log.info("User name:" + userName + " isAdmin:" + isAdmin);
 
-            if(userName.equals(null)){
-            	throw new PermissionException();
+            if (userName.equals(null)) {
+                throw new PermissionException();
             }
-        	
-        	HttpHeaders headers = new HttpHeaders();
+
+            HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder

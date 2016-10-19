@@ -64,10 +64,10 @@ public class CaseService {
             for (Team team : teams) {
                 List<User> users = team.getUsers();
                 for (User user : users) {
-                	log.info("Trying to mach User:" + user.getUsername()+" belongs to team :"+team.getName());
+                    log.info("Trying to mach User:" + user.getUsername() + " belongs to team :" + team.getName());
                     if (user.getUsername().equals(userName)) {
-                    	log.info("User:" + userName+" belongs to team :"+team.getName());
-                    	if (user.isCoordinator()) {
+                        log.info("User:" + userName + " belongs to team :" + team.getName());
+                        if (user.isCoordinator()) {
                             teamsToFilter.add(team.getId());
                         }
                     }

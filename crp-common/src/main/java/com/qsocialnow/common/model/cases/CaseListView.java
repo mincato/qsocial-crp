@@ -19,7 +19,9 @@ public class CaseListView implements Serializable {
     private boolean pendingResponse;
 
     private boolean open;
-    
+
+    private String priority;
+
     private String assignee;
 
     public String getId() {
@@ -78,11 +80,19 @@ public class CaseListView implements Serializable {
         this.open = open;
     }
 
-	public String getAssignee() {
-		return assignee;
-	}
+    public String getAssignee() {
+        return assignee;
+    }
 
-	public void setAssignee(String assignee) {
-		this.assignee = assignee;
-	}
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
 }

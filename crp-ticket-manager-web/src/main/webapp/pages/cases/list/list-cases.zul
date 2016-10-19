@@ -159,7 +159,16 @@
                                                 </i>
                                             </a>
                                      </div>
-                                </th>					    		 
+                                </th>
+                                <th>
+                                     <div class="text-center">
+                                            <a style="text-decoration:none" onClick="@command('sortList',sortField='priority')" >
+                                                <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
+                                                     ${labels.cases.list.column.priority}
+                                                </i>
+                                            </a>
+                                     </div>
+                                </th>
 					    		<th>${labels.cases.list.column.action}</th>
 							</tr>
 			    		</thead>
@@ -173,6 +182,7 @@
                 				    <td class="text-center">${c:l(c:cat('cases.pendingResponse.',each.pendingResponse))}</td>   
                        				<td class="text-center">${c:l(c:cat('cases.open.',each.open))}</td>
                        				<td class="text-center">${each.assignee}</td>
+                       				<td class="text-center">${c:l(c:cat('cases.priority.',each.priority))}</td>
                        				<td>
                        					<ul class="list-inline">
   											<li><a class="btn-list-action" href="/pages/cases/edit/index.zul?case=${each.id}"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="${labels.cases.list.edit.action}"></i></a></li>

@@ -28,8 +28,8 @@ import com.qsocialnow.services.UserSessionService;
 public class CasesViewModel implements Serializable {
 
     private DateConverter dateConverter;
-	
-	private static final String FALSE_OPTION_VALUE = "false";
+
+    private static final String FALSE_OPTION_VALUE = "false";
 
     private static final String TRUE_OPTION_VALUE = "true";
 
@@ -77,7 +77,7 @@ public class CasesViewModel implements Serializable {
     private List<String> pendingOptions = new ArrayList<>();
 
     private String pendingResponse;
-    
+
     @WireVariable
     private UserSessionService userSessionService;
 
@@ -163,8 +163,8 @@ public class CasesViewModel implements Serializable {
             filters.put("description", this.description);
         }
 
-        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE)){
-        	filters.put("pendingResponse", this.pendingResponse);
+        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE)) {
+            filters.put("pendingResponse", this.pendingResponse);
         }
 
         if (this.fromDate != null) {
