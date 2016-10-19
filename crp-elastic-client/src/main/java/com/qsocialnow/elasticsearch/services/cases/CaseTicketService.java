@@ -1,8 +1,5 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
-import io.searchbox.core.SearchResult;
-
-import java.io.InputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +16,8 @@ import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
+
+import io.searchbox.core.SearchResult;
 
 public class CaseTicketService extends CaseIndexService {
 
@@ -44,7 +43,8 @@ public class CaseTicketService extends CaseIndexService {
     }
 
     public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String subject, String title,
-            String description, String pendingResponse, String fromOpenDate, String toOpenDate) {
+            String description, String pendingResponse, String fromOpenDate, String toOpenDate,
+            List<String> teamsToFilter, String userName) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -54,6 +54,10 @@ public class CaseTicketService extends CaseIndexService {
         log.info("retrieving cases from :" + from + " size" + size + " sorted by;" + sortField);
 
         Map<String, String> searchValues = new HashMap<>();
+
+        if (userName != null) {
+            searchValues.put("assignee.username", userName);
+        }
 
         if (subject != null)
             searchValues.put("subject.identifier", subject);

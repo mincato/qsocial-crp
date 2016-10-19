@@ -19,11 +19,14 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Resolution;
+import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
+import com.qsocialnow.persistence.TeamRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 import com.qsocialnow.service.action.Action;
 
@@ -36,6 +39,9 @@ public class CaseService {
     private CaseRepository repository;
 
     @Autowired
+    private TeamRepository teamRepository;
+
+    @Autowired
     private ActionRegistryRepository actionRegistryRepository;
 
     @Autowired
@@ -46,12 +52,29 @@ public class CaseService {
 
     public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
             String subject, String title, String description, String pendingResponse, String fromOpenDate,
-            String toOpenDate) {
+            String toOpenDate, String userName) {
         PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
         pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
 
+        List<String> teamsToFilter = new ArrayList<String>();
+        log.info("Retriving cases from :" + userName);
+
+        List<Team> teams = teamRepository.findTeams(userName);
+        if (teams != null) {
+            for (Team team : teams) {
+                List<User> users = team.getUsers();
+                for (User user : users) {
+                    if (user.getUsername().equals(userName)) {
+                        if (user.isCoordinator()) {
+                            teamsToFilter.add(team.getId());
+                        }
+                    }
+                }
+            }
+        }
+        log.info("After process teams - trying to retrieve cases from :" + userName);
         List<CaseListView> cases = repository.findAll(pageRequest, subject, title, description, pendingResponse,
-                fromOpenDate, toOpenDate);
+                fromOpenDate, toOpenDate, teamsToFilter, userName);
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;
@@ -135,6 +158,10 @@ public class CaseService {
 
     public void setRepository(CaseRepository repository) {
         this.repository = repository;
+    }
+
+    public void setTeamRepository(TeamRepository teamRepository) {
+        this.teamRepository = teamRepository;
     }
 
     private ActionRegistry createActionRegistry(ActionRequest actionRequest) {
