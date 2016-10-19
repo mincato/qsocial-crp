@@ -14,39 +14,67 @@ import com.qsocialnow.security.exception.TokenNotFoundException;
 public class AuthorizationHelper {
 
 	private static final String TOKEN_REQUEST_PARAMETER = "token";
-	private static final String TOKEN_SESSION_PARAMETER = "token";	
+	private static final String TOKEN_SESSION_PARAMETER = "token";
 	private static final String SHORT_TOKEN_SESSION_PARAMETER = "shortToken";
-	
+
 	public static final String USER_SESSION_PARAMETER = "user";
 
-	public void authorize(ServletRequest request) throws Exception {
-		
-		ServletContext context = request.getServletContext();
-		TokenHandlerFactory factory = createTokenHandlerFactory(context);
-		TokenHandler tokenHandler = factory.create();
-		ZookeeperClient zookeeperClient = new ZookeeperClient(context);
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		HttpSession session = httpRequest.getSession(true);
+	public boolean saveUserInSession(ServletRequest request) {
 
-		String token = findTokenFromRequestParam(zookeeperClient, httpRequest);
+		try {
+			ServletContext context = request.getServletContext();
+			TokenHandlerFactory factory = createTokenHandlerFactory(context);
+			TokenHandler tokenHandler = factory.create();
+			ZookeeperClient zookeeperClient = new ZookeeperClient(context);
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			HttpSession session = httpRequest.getSession(true);
 
-		if (StringUtils.isBlank(token)) {
-			token = (String) session.getAttribute(TOKEN_SESSION_PARAMETER);
+			// Se busca si hay un shortToken en el request parameter
+			String token = findTokenFromRequestParam(zookeeperClient, httpRequest);
+
+			// Si no se recibio un shortToken, no se hace nada
+			if (StringUtils.isBlank(token)) {
+				return false;
+			}
+
+			UserData user = tokenHandler.verifyToken(token);
+
+			UserActivityData activity = zookeeperClient.findUserActivityData(token);
+			verifyExpiration(token, activity, zookeeperClient);
+
+			session.setMaxInactiveInterval((int) activity.getSessionTimeoutInSeconds());
+			session.setAttribute(TOKEN_SESSION_PARAMETER, token);
+			session.setAttribute(USER_SESSION_PARAMETER, user);
+			return true;
+		} catch (Exception e) {
+			throw new RuntimeException();
 		}
+	}
 
-		if (StringUtils.isBlank(token)) {
-			throw new TokenNotFoundException();
+	public void authorize(ServletRequest request) {
+
+		try {
+			ServletContext context = request.getServletContext();
+			ZookeeperClient zookeeperClient = new ZookeeperClient(context);
+			HttpServletRequest httpRequest = (HttpServletRequest) request;
+			HttpSession session = httpRequest.getSession(true);
+
+			// El token tiene que estar si o si en la sesion
+			String token = (String) session.getAttribute(TOKEN_SESSION_PARAMETER);
+
+			if (StringUtils.isBlank(token)) {
+				throw new TokenNotFoundException();
+			}
+
+			UserActivityData activity = zookeeperClient.findUserActivityData(token);
+			verifyExpiration(token, activity, zookeeperClient);
+
+			// Se actualiza la actividad en zookeeper
+			zookeeperClient.updateUserActivityData(token, activity);
+			
+		} catch (Exception e) {
+			throw new RuntimeException();
 		}
-
-		UserData user = tokenHandler.verifyToken(token);
-
-		UserActivityData activity = zookeeperClient.findUserActivityData(token);
-		verifyExpiration(token, activity, zookeeperClient);
-
-		session.setMaxInactiveInterval((int) activity.getSessionTimeoutInSeconds());
-		session.setAttribute(TOKEN_SESSION_PARAMETER, token);
-		session.setAttribute(USER_SESSION_PARAMETER, user);
-		zookeeperClient.updateUserActivityData(token, activity);
 	}
 
 	private String findTokenFromRequestParam(ZookeeperClient zookeeperClient, HttpServletRequest httpRequest)

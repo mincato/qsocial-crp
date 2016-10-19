@@ -31,8 +31,9 @@
 			</table>
 		</center>
 	</form>
-	<h1>Usuario: odatech</h1>
-	<h1>Usuario: admin</h1>
-	<h1>Cualquier otro es un operador</h1>
+	<h3>Usuario: odatech</h3>
+	<h3>Usuario: administrador</h3>
+	<h3>Cualquier otro es un operador</h3>
+	<h3>A cualquier usuario que se le agregue _latino pasa a ver la UI en español y en GMT-3</h3>
 </body>
 </html>
