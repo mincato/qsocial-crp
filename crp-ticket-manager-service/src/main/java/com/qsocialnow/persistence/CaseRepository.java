@@ -44,6 +44,9 @@ public class CaseRepository {
                 caseListView.setOpenDate(caseRepo.getOpenDate());
                 caseListView.setPendingResponse(caseRepo.getPendingResponse());
                 caseListView.setOpen(caseRepo.getOpen());
+                if(caseRepo.getAssignee()!=null){
+                	caseListView.setAssignee(caseRepo.getAssignee().getUsername());
+                }
                 cases.add(caseListView);
             }
         } catch (Exception e) {

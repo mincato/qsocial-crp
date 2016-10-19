@@ -77,9 +77,7 @@ public class TeamRepository {
     }
 
     public List<Team> findTeams(String userName) {
-        log.info("Retriving teams from user :" + userName);
         List<Team> teamsRepo = teamElasticService.findTeamsByUser(userName);
-        log.info("After Retrive teams from user :" + userName);
         if (teamsRepo != null) {
             for (Team team : teamsRepo) {
                 log.info("retrieving teams: " + team.getName());

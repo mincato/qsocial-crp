@@ -55,9 +55,9 @@ public class CaseTicketService extends CaseIndexService {
 
         Map<String, String> searchValues = new HashMap<>();
 
-        // if (userName != null) {
-        // searchValues.put("assignee.username", userName);
-        // }
+        if (userName != null) {
+        	searchValues.put("assignee.username", userName);
+        }
 
         if (subject != null)
             searchValues.put("subject.identifier", subject);
