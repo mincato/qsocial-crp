@@ -43,7 +43,7 @@
                    </div>
                 </n:div>
                 <n:div class="col-md-2">
-	                <n:label class="control-label col-sm-3">${labels.cases.list.filter.pendingResponse}</n:label>
+                    <n:label class="control-label col-sm-4">${labels.cases.list.filter.pendingResponse}</n:label>
 	                <div zclass="input-group input-group-sm">
 	                       <selectbox sclass="form-control" model="@load(vm.pendingOptions)"
 	                           selectedItem="@bind(vm.pendingResponse)">

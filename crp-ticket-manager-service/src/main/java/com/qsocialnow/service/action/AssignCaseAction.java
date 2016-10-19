@@ -38,14 +38,14 @@ public class AssignCaseAction implements Action {
         sb.append(user.getUsername());
         return sb.toString();
     }
-    
+
     private Integer findUserId(Map<ActionParameter, Object> parameters) {
-    	Object obj = parameters.get(ActionParameter.USER);
-    	if (obj instanceof Double) {
-    		Double doubleValue = (Double) obj;
-    		return doubleValue.intValue();
-    	}
-    	return (Integer) obj;
+        Object obj = parameters.get(ActionParameter.USER);
+        if (obj instanceof Double) {
+            Double doubleValue = (Double) obj;
+            return doubleValue.intValue();
+        }
+        return (Integer) obj;
     }
 
 }

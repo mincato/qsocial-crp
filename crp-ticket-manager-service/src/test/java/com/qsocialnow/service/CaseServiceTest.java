@@ -18,12 +18,16 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.mock.CaseBuilder;
 import com.qsocialnow.persistence.CaseRepository;
+import com.qsocialnow.persistence.TeamRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CaseServiceTest {
 
     @Mock
     private CaseRepository caseRepository;
+
+    @Mock
+    private TeamRepository teamRepository;
 
     private CaseService caseService;
 
@@ -35,6 +39,7 @@ public class CaseServiceTest {
     public void init() {
         caseService = new CaseService();
         caseService.setRepository(caseRepository);
+        caseService.setTeamRepository(teamRepository);
         case1ListView = CaseBuilder.createCase1ListView();
         case2ListView = CaseBuilder.createCase2ListView();
         case3ListView = CaseBuilder.createCase3ListView();
@@ -45,13 +50,16 @@ public class CaseServiceTest {
         List<CaseListView> expectedCases = Arrays.asList(case1ListView, case2ListView, case3ListView);
 
         PageResponse<CaseListView> expectedPageCases = new PageResponse<CaseListView>(expectedCases, 0, 0);
+        when(teamRepository.findTeams(Mockito.matches("bruceWayne"))).thenReturn(null);
+
         when(
                 caseRepository.findAll(Mockito.any(PageRequest.class), Mockito.matches("subject"),
                         Mockito.matches("title"), Mockito.matches("description"), Mockito.matches("true"),
-                        Mockito.matches("1476719187665"), Mockito.matches("1476719187665"))).thenReturn(expectedCases);
+                        Mockito.matches("1476719187665"), Mockito.matches("1476719187665"), Mockito.anyList(),
+                        Mockito.matches("bruceWayne"))).thenReturn(expectedCases);
 
         PageResponse<CaseListView> results = caseService.findAll(0, 0, "title", "true", "subject", "title",
-                "description", "true", "1476719187665", "1476719187665");
+                "description", "true", "1476719187665", "1476719187665", "bruceWayne");
         ReflectionAssert.assertReflectionEquals(expectedPageCases, results);
     }
 }

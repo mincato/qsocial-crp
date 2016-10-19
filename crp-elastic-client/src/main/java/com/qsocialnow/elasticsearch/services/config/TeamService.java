@@ -1,9 +1,12 @@
 package com.qsocialnow.elasticsearch.services.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -18,6 +21,8 @@ public class TeamService {
     private AWSElasticsearchConfigurationProvider configurator;
 
     private ConfigurationIndexService indexConfiguration;
+
+    private Logger log = LoggerFactory.getLogger(TeamService.class);
 
     public String indexTeam(Team team) {
         RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
@@ -88,6 +93,33 @@ public class TeamService {
 
     public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
         this.indexConfiguration = indexConfiguration;
+    }
+
+    public List<Team> findTeamsByUser(String userName) {
+        // RepositoryFactory<TeamType> esfactory = new
+        // RepositoryFactory<TeamType>(configurator);
+        // Repository<TeamType> repository = esfactory.initManager();
+        // repository.initClient();
+
+        // TeamMapping mapping =
+        // TeamMapping.getInstance(indexConfiguration.getIndexName());
+
+        // log.info("Repository from teams - retrieving from user :"+userName);
+
+        // BoolQueryBuilder filters = null;
+        /*
+         * if (userName != null) { filters = QueryBuilders.boolQuery(); filters
+         * = filters.must(QueryBuilders.matchQuery("users.username", "jperez"));
+         * }
+         */
+        // SearchResponse<Team> response =
+        // repository.searchWithFilters(null,null,"name",null, mapping);
+        // List<Team> teams = response.getSources();
+
+        // repository.closeClient();
+        // return teams;
+        List<Team> teams = new ArrayList<>();
+        return teams;
     }
 
 }
