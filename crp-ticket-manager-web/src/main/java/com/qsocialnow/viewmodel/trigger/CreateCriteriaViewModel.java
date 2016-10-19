@@ -434,6 +434,7 @@ public class CreateCriteriaViewModel implements Serializable {
         Map<String, Object> args = new HashMap<>();
         args.put("filterCategory", filterCategory);
         Executions.createComponents("/pages/triggers/create/choose-categories.zul", null, args);
+        BindUtils.postNotifyChange(null, null, filterCategory, "categories");
     }
 
     @GlobalCommand
