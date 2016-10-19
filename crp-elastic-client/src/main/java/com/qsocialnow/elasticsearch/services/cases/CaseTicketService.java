@@ -8,7 +8,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.qsocialnow.common.exception.PermissionException;
+import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
@@ -16,6 +16,8 @@ import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
+
+import io.searchbox.core.SearchResult;
 
 public class CaseTicketService extends CaseIndexService {
 
@@ -76,6 +78,35 @@ public class CaseTicketService extends CaseIndexService {
 
         repository.closeClient();
         return cases;
+    }
+
+    public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String title,
+            String description, String pendingResponse, String fromOpenDate, String toOpenDate) {
+
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+        log.info("retrieving cases from :" + from + " size" + size + " sorted by;" + sortField);
+
+        Map<String, String> searchValues = new HashMap<>();
+
+        if (title != null)
+            searchValues.put("title", title);
+
+        if (description != null)
+            searchValues.put("description", description);
+
+        if (pendingResponse != null)
+            searchValues.put("pendingResponse", pendingResponse);
+
+        SearchResult response = repository.queryByFieldsAsJson(mapping, from, size, sortField,
+                Boolean.valueOf(sortOrder), searchValues, "openDate", fromOpenDate, toOpenDate);
+
+        JsonObject jsonObject = response.getJsonObject();
+        repository.closeClient();
+        return jsonObject;
     }
 
     public String indexCase(Case document) {

@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<div sclass="modal fade" ca:data-modal=""
 		ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
