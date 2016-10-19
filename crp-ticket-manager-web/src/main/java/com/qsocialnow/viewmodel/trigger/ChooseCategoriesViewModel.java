@@ -12,16 +12,22 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.NameByLanguage;
 import com.qsocialnow.model.CategoryFilterView;
+import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class ChooseCategoriesViewModel implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -2374328978702584103L;
 
     private CategoryFilterView filterCategory;
+
+    @WireVariable
+    private UserSessionService userSessionService;
 
     @Command
     public void close(@ContextParam(ContextType.VIEW) Component comp) {
@@ -39,5 +45,11 @@ public class ChooseCategoriesViewModel implements Serializable {
 
     public CategoryFilterView getFilterCategory() {
         return filterCategory;
+    }
+
+    @Command
+    public String createCategoryName(NameByLanguage category) {
+        String language = userSessionService.getLanguage();
+        return category.getNameByLanguage(language);
     }
 }

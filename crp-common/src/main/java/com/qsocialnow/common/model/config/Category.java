@@ -1,23 +1,15 @@
 package com.qsocialnow.common.model.config;
 
-import java.util.ArrayList;
-
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Category {
+public class Category extends NameByLanguage {
 
     private Long id;
 
     private String descripcion;
 
-    private String nombre;
-
     private Long idCategoriaOpuesta;
-
-    private List<NameByLanguage> nombrePorIdioma = new ArrayList<NameByLanguage>();
 
     public Long getId() {
         return id;
@@ -35,28 +27,12 @@ public class Category {
         this.descripcion = descripcion;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public Long getIdCategoriaOpuesta() {
         return idCategoriaOpuesta;
     }
 
     public void setIdCategoriaOpuesta(Long idCategoriaOpuesta) {
         this.idCategoriaOpuesta = idCategoriaOpuesta;
-    }
-
-    public List<NameByLanguage> getNombrePorIdioma() {
-        return nombrePorIdioma;
-    }
-
-    public void setNombrePorIdioma(List<NameByLanguage> nombrePorIdioma) {
-        this.nombrePorIdioma = nombrePorIdioma;
     }
 
 }
