@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.handler.AjaxAccessDeniedHandler"?>
 <?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
 <?link href="/vendor/bootstrap/bootstrap-social.css" rel="stylesheet"?>
@@ -15,7 +16,6 @@
 <?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
 <?script content="if (window.location.hash == '#_=_')window.location.hash = '';"?>
 
-<?init class="com.qsocialnow.handler.AjaxAccessDeniedHandler"?>
 <zk xmlns:n="native">
 	<div class="wrapper wrapper-serie dashboard">
 		<!-- HEADER -->

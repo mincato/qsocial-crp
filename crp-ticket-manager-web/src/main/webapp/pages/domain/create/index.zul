@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.handler.AjaxAccessDeniedHandler"?>
 <?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
 <?link href="/vendor/plugins/form/bootstrap-select/bootstrap-select.css" rel="stylesheet"?>
@@ -12,7 +13,6 @@
 <?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
 <?link href="/vendor/plugins/form/icheck/skins/square/_all.css" rel="stylesheet"?>
 <?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
-<?init class="com.qsocialnow.handler.AjaxAccessDeniedHandler"?>
 <zk xmlns:n="native">
 	<div class="wrapper wrapper-serie dashboard">
 		<!-- HEADER -->
