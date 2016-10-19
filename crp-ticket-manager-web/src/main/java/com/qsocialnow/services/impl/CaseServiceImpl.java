@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.exception.PermissionException;
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
@@ -52,7 +53,16 @@ public class CaseServiceImpl implements CaseService {
     @Override
     public PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters) {
         try {
-            HttpHeaders headers = new HttpHeaders();
+            
+        	String userName = userSessionService.getUsername();
+            boolean isAdmin = userSessionService.isAdmin();
+            log.info("User name:" + userName + " isAdmin:" + isAdmin);
+
+            if(userName.equals(null)){
+            	throw new PermissionException();
+            }
+        	
+        	HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
             UriComponentsBuilder builder = UriComponentsBuilder
@@ -69,10 +79,6 @@ public class CaseServiceImpl implements CaseService {
             }
 
             // user
-            String userName = userSessionService.getUsername();
-            boolean isAdmin = userSessionService.isAdmin();
-            log.info("User name:" + userName + " isAdmin:" + isAdmin);
-
             if (!isAdmin) {
                 builder.queryParam("userName", userName);
             }
