@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute" sclass="modal fade" ca:data-modal=""
 	ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
 	apply="org.zkoss.bind.BindComposer" viewModel="@id('categoryVm') @init('com.qsocialnow.viewmodel.trigger.ChooseCategoriesViewModel', filterCategory=arg.filterCategory)">
@@ -18,7 +19,7 @@
 										selectedItems="@bind(categoryVm.filterCategory.categories)">
 										<template name="model">
 											<listitem>
-												<listcell label="${each.nombre}" />
+												<listcell label="@load(categoryVm.createCategoryName(each))" />
 											</listitem>
 										</template>
 									</listbox>

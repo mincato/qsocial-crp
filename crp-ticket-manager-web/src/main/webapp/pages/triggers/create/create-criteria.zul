@@ -1,10 +1,11 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute" ca:data-filter=""
 	apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.trigger.CreateCriteriaViewModel', currentDomain=arg.currentDomain)"
 		validationMessages="@id('vmsgs')" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
-				<n:h5>${labels.trigger.criteria.title}</n:h5>
+				<n:h4>${labels.trigger.criteria.title}</n:h4>
 			</div>
 		</n:div>
 	</n:div>	
@@ -358,7 +359,7 @@
 												<template name="model">
 													<listitem>
 														<listcell
-														label="${each.nombre}" />
+														label="@load(vm.createCategoryName(each))" />
 													</listitem>
 												</template>
 											</listbox>
@@ -372,7 +373,7 @@
 											<div class="form-group" children="@load(filterCategory.categories)">
 												<template name="children">
 													<span>
-														<label value="${each.nombre}"/>
+														<label value="@load(vm.createCategoryName(each))"/>
 														<span>
 															<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', filter=filterCategory, category=each)"/>
 														</span>

@@ -8,104 +8,40 @@
       "nombre": "Sentimientos",
       "iconoHabilitado": "http://hhhhold.com/s?1533402",
       "iconoDesHabilitado": "http://hhhhold.com/s?12511695",
-      "nombrePorIdioma": [
-        {
-          "idioma": "pay",
-          "nombre": "commoners"
-        },
-        {
-          "idioma": "travelling",
-          "nombre": "a"
-        },
-        {
-          "idioma": "event",
-          "nombre": "to"
-        },
-        {
-          "idioma": "house",
-          "nombre": "rebounds"
-        }
-      ],
+      "nombrePorIdioma": {
+	      "espaniol": "Sentimientos",
+    	  "english": "Feelings"
+      },
       "categorias": [
         {
           "id": 1,
           "descripcion": "Superficially frail by 2008, she nevertheless had the stamina and agility to teach her granddaughter the skills of chasing and capturing goannas.",
           "nombre": "Alegria",
           "idCategoriaOpuesta": 71,
-          "nombrePorIdioma": [
-            {
-              "idioma": "was",
-              "name": "on"
-            },
-            {
-              "idioma": "manra",
-              "name": "hospital"
-            },
-            {
-              "idioma": "notorious",
-              "name": "and"
-            },
-            {
-              "idioma": "particular",
-              "name": "animals"
-            }
-          ]
+          "nombrePorIdioma": {
+      		"espaniol": "Alegria",
+	  		"english": "Happiness"
+		  }
         },
         {
           "id": 2,
           "descripcion": "A collection of Edwardian buildings in the city's old downtown core were, in their day, the tallest commercial buildings in the British Empire.",
           "nombre": "Odio",
           "idCategoriaOpuesta": -74,
-          "nombrePorIdioma": [
-            {
-              "idioma": "killed",
-              "name": "angeles"
-            },
-            {
-              "idioma": "albert",
-              "name": "points"
-            },
-            {
-              "idioma": "a",
-              "name": "no"
-            },
-            {
-              "idioma": "classified",
-              "name": "was"
-            },
-            {
-              "idioma": "under",
-              "name": "solo"
-            }
-          ]
+          "nombrePorIdioma": {
+	      	"espaniol": "Odio",
+    	  	"english": "Hate"
+  		  }
         },
         {
           "id": 3,
           "descripcion": "There they faced the Chicago Bulls, led by shooting guard Michael Jordan, a five-time scoring champion regarded as the finest player of his era.",
           "nombre": "Incomodo",
           "idCategoriaOpuesta": -61,
-          "nombrePorIdioma": [
-            {
-              "idioma": "james",
-              "name": "became"
-            },
-            {
-              "idioma": "verons",
-              "name": "son"
-            },
-            {
-              "idioma": "and",
-              "name": "grow"
-            },
-            {
-              "idioma": "born",
-              "name": "not"
-            },
-            {
-              "idioma": "of",
-              "name": "of"
-            }
-          ]
+          "nombrePorIdioma": {
+	        "espaniol": "Incomodo",
+    	    "english": "Uncomfortable"
+      	  }
         }
       ]
     },
@@ -116,64 +52,40 @@
       "nombre": "Division",
       "iconoHabilitado": "http://hhhhold.com/s?16057139",
       "iconoDesHabilitado": "http://hhhhold.com/s?1019902",
-      "nombrePorIdioma": [
-        {
-          "idioma": "criminal",
-          "nombre": "in"
-        },
-        {
-          "idioma": "unit",
-          "nombre": "cat"
-        },
-        {
-          "idioma": "circular",
-          "nombre": "these"
-        }
-      ],
+      "nombrePorIdioma": {
+	      "espaniol": "Division",
+    	  "english": "Category"
+      },
       "categorias": [
         {
           "id": 4,
           "descripcion": "63806°N 8.",
           "nombre": "Primera",
           "idCategoriaOpuesta": 59,
-          "nombrePorIdioma": [
-            {
-              "idioma": "is",
-              "name": "lbs"
-            }
-          ]
+          "nombrePorIdioma": {
+	    	"espaniol": "Primera",
+    	  	"english": "First"
+      	  }
         },
         {
           "id": 5,
           "descripcion": "It was attended by 19 countries and 300 delegates.",
           "nombre": "Segunda",
           "idCategoriaOpuesta": -17,
-          "nombrePorIdioma": [
-            {
-              "idioma": "force",
-              "name": "university"
-            },
-            {
-              "idioma": "the",
-              "name": "rehearsals"
-            }
-          ]
+          "nombrePorIdioma": {
+	        "espaniol": "Segunda",
+    	    "english": "Second"
+      	  }
         },
         {
           "id": 6,
           "descripcion": ") In the household of Henry Stafford in 1469, gentle members received 2.",
           "nombre": "Tercera",
           "idCategoriaOpuesta": -88,
-          "nombrePorIdioma": [
-            {
-              "idioma": "years",
-              "name": "was"
-            },
-            {
-              "idioma": "woodward",
-              "name": "jobs"
-            }
-          ]
+          "nombrePorIdioma": {
+	        "espaniol": "Tercera",
+    	    "english": "Third"
+      	  }
         }
       ]
     }

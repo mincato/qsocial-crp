@@ -1,0 +1,338 @@
+[
+{
+  "_index": "cases",
+  "_type": "case",
+  "_id": "AVfS_YzUuCHMWTA6zYaa",
+  "_score": 1,
+  "_source": {
+    "idCase": "AVfS_YzUuCHMWTA6zYaa",
+    "domainId": "AVfFSiZvgeHP5kyJ43lS",
+    "triggerId": "AVfFTRnwgeHP5kyJ43ld",
+    "segmentId": "AVfFTRoRgeHP5kyJ43le",
+    "open": true,
+    "pendingResponse": true,
+    "openDate": 1476713527935,
+    "lastModifiedTimestamp": 1476716661215,
+    "title": "Soy Bond, James Bond.",
+    "triggerEvent": {
+      "timestamp": 1476312866000,
+      "tokenId": 2,
+      "seriesId": [
+        1474655049924,
+        1451306629266
+      ],
+      "subSeriesId": [
+        1474651959596,
+        1474656263371
+      ],
+      "id": "1643796052578463_1654238811534187",
+      "idOriginal": "1643796052578463_1654238811534187",
+      "medioId": 1086,
+      "tipoDeMedio": "r",
+      "connotacion": 1,
+      "sistemaOrigenExterno": "CRP-FB",
+      "fecha": "2016-10-12T00:00:00+0000",
+      "esTapa": false,
+      "usuarioOriginal": "Usurio Enojado",
+      "usuarioCreacion": "Usurio Enojado",
+      "noticiaStatus": 10,
+      "odaCategorizada": 0,
+      "esSecundario": true,
+      "esLike": false,
+      "esReproduccion": true,
+      "fechaCreacion": "2016-10-12T22:54:26+0000",
+      "reproduccionesCount": 0,
+      "likeCount": 0,
+      "titulo": "Soy Bond, James Bond.",
+      "texto": "Soy Bond, James Bond.",
+      "normalizeMessage": "Soy Bond, James Bond.",
+      "followersCount": 0,
+      "idUsuarioOriginal": "118678508597731",
+      "idUsuarioReproduccion": "118678508597731",
+      "idUsuarioCreacion": "118678508597731",
+      "language": "es",
+      "menciones": [
+        "BOCA"
+      ],
+      "actores": [],
+      "hashTags": [],
+      "responseDetected": false
+    },
+    "subject": {
+      "id": "AVfFUGQguCHMWTA6zYZx",
+      "identifier": "Usurio",
+      "sourceId": "118678508597731",
+      "source": 1086,
+      "signedDate": "2016-10-14T22:28:01+0000",
+      "lastAccionDate": "2016-10-14T22:28:01+0000"
+    },
+    "userResolver": {
+      "id": "AVfFSFmLgeHP5kyJ43lP",
+      "source": 1086,
+      "identifier": "Centaurico BotTres"
+    },
+    "lastPostId": "1654238811534187_1654265668198168",
+    "idRootComment": "1654238811534187_1654240921533976",
+    "source": 1086,
+    "messages": [
+      {
+        "id": "1643796052578463_1654238811534187",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654240921533976",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654240994867302",
+        "fromResponseDetector": true
+      },
+      {
+        "id": "1654238811534187_1654241408200594",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654241788200556",
+        "fromResponseDetector": true
+      },
+      {
+        "id": "1654238811534187_1654241921533876",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654242078200527",
+        "fromResponseDetector": true
+      },
+      {
+        "id": "1654238811534187_1654242248200510",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654242351533833",
+        "fromResponseDetector": true
+      },
+      {
+        "id": "1654238811534187_1654242658200469",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654242918200443",
+        "fromResponseDetector": true
+      },
+      {
+        "id": "1654238811534187_1654243168200418",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654243244867077",
+        "fromResponseDetector": true
+      },
+      {
+        "id": "1654238811534187_1654245324866869",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654245371533531",
+        "fromResponseDetector": true
+      },
+      {
+        "id": "1654238811534187_1654251891532879",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654263964865005",
+        "fromResponseDetector": true
+      },
+      {
+        "id": "1654238811534187_1654265521531516",
+        "fromResponseDetector": false
+      },
+      {
+        "id": "1654238811534187_1654265668198168",
+        "fromResponseDetector": true
+      }
+    ]
+  },
+  "fields": {
+    "subject.lastAccionDate": [
+      1476484081000
+    ],
+    "triggerEvent.fechaCreacion": [
+      1476312866000
+    ],
+    "triggerEvent.fecha": [
+      1476230400000
+    ],
+    "subject.signedDate": [
+      1476484081000
+    ]
+  }
+},
+{
+  "_index": "cases",
+  "_type": "case",
+  "_id": "AVfUwgc2uCHMWTA6zYc2",
+  "_score": 1,
+  "_source": {
+    "domainId": "AVfFSiZvgeHP5kyJ43lS",
+    "triggerId": "AVfFS_gtgeHP5kyJ43lb",
+    "segmentId": "AVfFS_hmgeHP5kyJ43lc",
+    "open": true,
+    "pendingResponse": true,
+    "openDate": 1476743265632,
+    "lastModifiedTimestamp": 1476743267410,
+    "title": "Este tweet no existe.",
+    "triggerEvent": {
+      "timestamp": 1476735857354,
+      "tokenId": 2,
+      "seriesId": [
+        33,
+        7
+      ],
+      "subSeriesId": [
+        9
+      ],
+      "id": "788113013853269999",
+      "idOriginal": "788113013853269999",
+      "medioId": 1087,
+      "tipoDeMedio": "morbi",
+      "connotacion": 36,
+      "seccionExternaOrigen": 72,
+      "sistemaOrigenExterno": "ac",
+      "fecha": "2016-10-13T00:00:00-0300",
+      "esTapa": false,
+      "usuarioOriginal": "LagartusRoot",
+      "usuarioCreacion": "LagartusRoot",
+      "usuarioReproduccion": "LagartusRoot",
+      "usuarioCategorizador": "LagartusRoot",
+      "fechaCategorizacion": "2016-10-13T00:00:00-0300",
+      "noticiaStatus": 1,
+      "odaCategorizada": 23,
+      "esSecundario": false,
+      "idPadre": "sociis",
+      "esLike": false,
+      "esReproduccion": false,
+      "fechaCreacion": "2016-10-13T00:00:00-0300",
+      "reproduccionesCount": 18,
+      "likeCount": 50,
+      "titulo": "Este tweet no existe.",
+      "texto": "Este tweet no existe.",
+      "normalizeMessage": "Este tweet no existe.",
+      "urlNoticia": "https://prnewswire.com/tortor/id.png",
+      "urlMultimediaContent": "https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+      "volanta": "maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+      "bajada": "nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+      "copete": "in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+      "followersCount": 1,
+      "idUsuarioOriginal": "2507734136",
+      "idUsuarioReproduccion": "2507734136",
+      "idUsuarioCreacion": "2507734136",
+      "profileImage": "https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
+      "name": "Lagartus Root",
+      "language": "es",
+      "originalLocation": "donec",
+      "location": {
+        "lat": 16.69938,
+        "lon": 121.18614
+      },
+      "menciones": [
+        "et",
+        "elementum",
+        "fringilla"
+      ],
+      "actores": [
+        "augue",
+        "ante",
+        "vel"
+      ],
+      "hashTags": [
+        "feugiat",
+        "messi",
+        "quis"
+      ],
+      "areasTematicas": [
+        19,
+        23,
+        36
+      ],
+      "hotTopics": [
+        "luctus",
+        "lectus",
+        "a"
+      ],
+      "temas": [
+        95,
+        1,
+        8
+      ],
+      "categorias": [
+        55,
+        73,
+        66
+      ],
+      "conjuntos": [
+        15,
+        66,
+        100
+      ],
+      "continent": 31,
+      "country": 63,
+      "adm1": 22,
+      "adm3": 63,
+      "city": 28,
+      "neighborhood": 29,
+      "responseDetected": false
+    },
+    "subject": {
+      "id": "AVfFTnXxuCHMWTA6zYZr",
+      "identifier": "LagartusRoot",
+      "sourceId": "2507734136",
+      "source": 1087,
+      "profileImage": "https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
+      "signedDate": "2016-10-14T19:25:54-0300",
+      "lastAccionDate": "2016-10-14T19:25:54-0300"
+    },
+    "lastPostId": "788113013853269999",
+    "source": 1087,
+    "messages": [
+      {
+        "id": "788113013853269999",
+        "fromResponseDetector": false
+      }
+    ]
+  },
+  "fields": {
+    "subject.lastAccionDate": [
+      1476483954000
+    ],
+    "triggerEvent.fechaCreacion": [
+      1476327600000
+    ],
+    "triggerEvent.fecha": [
+      1476327600000
+    ],
+    "subject.signedDate": [
+      1476483954000
+    ],
+    "triggerEvent.fechaCategorizacion": [
+      1476327600000
+    ]
+  }
+},
+{
+  "_index": "cases",
+  "_type": "case",
+  "_id": "AVfFTWjguCHMWTA6zYZm",
+  "_score": 1,
+  "_source": {
+    "domainId": "AVfFSiZvgeHP5kyJ43lS",
+    "triggerId": "AVfFS_gtgeHP5kyJ43lb",
+    "segmentId": "AVfFS_hmgeHP5kyJ43lc",
+    "open": true,
+    "pendingResponse": true,
+    "openDate": 1476483885960,
+    "lastModifiedTimestamp": 1476484108268,
+    "title": "Caso Manual",
+    "description": "Este es un caso manual"
+  }
+}]

@@ -152,6 +152,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public void createMapping(String index, String type, String jsonMapping) {
         PutMapping putMapping = new PutMapping.Builder(index, type, jsonMapping).build();
         try {
+            log.info("Creating mapping :" + type + " from index:" + index);
             client.execute(putMapping);
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
@@ -364,6 +365,42 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
+            boolean sortOrder, Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
+
+        SortOrder sortOrderValue;
+        if (sortOrder)
+            sortOrderValue = SortOrder.ASC;
+        else
+            sortOrderValue = SortOrder.DESC;
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderValue);
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        for (String searchField : searchValues.keySet()) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+        }
+
+        if (rangeField != null) {
+            RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeField);
+            if (fromValue != null)
+                range.gte(fromValue);
+            if (toValue != null)
+                range.lte(toValue);
+
+            boolQueryBuilder.filter(range);
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        log.info("Query: " + searchSourceBuilder.toString());
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+        return executeSearch(search);
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
             Mapping<T, E> mapping) {
         SortOrder sortOrderEnum = sortOrder ? SortOrder.ASC : SortOrder.DESC;
@@ -438,6 +475,21 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             throw new RepositoryException(e);
         }
         return response;
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    private SearchResult executeSearch(Search search) {
+        SearchResult result = null;
+        try {
+            result = client.execute(search);
+            if (!result.isSucceeded()) {
+                throw new RepositoryException(result.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Serching documents - Unexpected error: ", e);
+            throw new RepositoryException(e);
+        }
+        return result;
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
