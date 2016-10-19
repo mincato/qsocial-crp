@@ -6,7 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CategoryGroup {
+public class CategoryGroup extends NameByLanguage {
 
     private Long id;
 
@@ -14,13 +14,9 @@ public class CategoryGroup {
 
     private String descripcion;
 
-    private String nombre;
-
     private String iconoHabilitado;
 
     private String iconoDesHabilitado;
-
-    private List<NameByLanguage> nombrePorIdioma = new ArrayList<NameByLanguage>();
 
     private List<Category> categorias = new ArrayList<Category>();
 
@@ -48,14 +44,6 @@ public class CategoryGroup {
         this.descripcion = descripcion;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getIconoHabilitado() {
         return iconoHabilitado;
     }
@@ -70,14 +58,6 @@ public class CategoryGroup {
 
     public void setIconoDesHabilitado(String iconoDesHabilitado) {
         this.iconoDesHabilitado = iconoDesHabilitado;
-    }
-
-    public List<NameByLanguage> getNombrePorIdioma() {
-        return nombrePorIdioma;
-    }
-
-    public void setNombrePorIdioma(List<NameByLanguage> nombrePorIdioma) {
-        this.nombrePorIdioma = nombrePorIdioma;
     }
 
     public List<Category> getCategorias() {

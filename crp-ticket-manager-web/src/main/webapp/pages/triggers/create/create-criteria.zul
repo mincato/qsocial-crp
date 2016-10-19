@@ -359,7 +359,7 @@
 												<template name="model">
 													<listitem>
 														<listcell
-														label="${each.nombre}" />
+														label="@load(vm.createCategoryName(each))" />
 													</listitem>
 												</template>
 											</listbox>
@@ -373,7 +373,7 @@
 											<div class="form-group" children="@load(filterCategory.categories)">
 												<template name="children">
 													<span>
-														<label value="${each.nombre}"/>
+														<label value="@load(vm.createCategoryName(each))"/>
 														<span>
 															<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', filter=filterCategory, category=each)"/>
 														</span>

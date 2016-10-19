@@ -19,7 +19,7 @@
 										selectedItems="@bind(categoryVm.filterCategory.categories)">
 										<template name="model">
 											<listitem>
-												<listcell label="${each.nombre}" />
+												<listcell label="@load(categoryVm.createCategoryName(each))" />
 											</listitem>
 										</template>
 									</listbox>
