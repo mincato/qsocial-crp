@@ -148,6 +148,14 @@
 						</div>
 					</n:div>
 	             </n:div>
+	             <n:div class="row">
+                     <x:div sclass="form-group col-sm-6">
+                          <n:label class="control-label col-sm-3">${labels.cases.details.priority}</n:label>
+                          <x:div class="col-sm-9">
+                              <label class="control-label col-sm-1" value="@load(c:l(c:cat('cases.priority.',vm.currentCase.caseObject.priority)))"></label>
+                          </x:div>  
+                     </x:div>
+				</n:div>
 			</x:form>
 		</div>
 	</div>
