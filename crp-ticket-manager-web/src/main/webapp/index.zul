@@ -26,6 +26,11 @@
 			<!-- CONTENT -->
 			<n:div id="content">
 				<include src="/pages/cases/list/list-cases.zul" />
+				<x:div viewModel="@id('vm') @init('com.qsocialnow.viewmodel.HomeViewModel')" xmlns:x="xhtml">
+					<vbox vflex="1" hflex="1" align="center" pack="center" spacing="20px" >
+						<label value="Version: ${vm.applicationVersion.version} - Build: ${vm.applicationVersion.build} - Branch: ${vm.applicationVersion.branch}" sclass="head3"/>
+					</vbox>
+				</x:div>				
 			</n:div><!-- content -->
 			<!-- CONTENT -->
 		</div><!-- main -->
