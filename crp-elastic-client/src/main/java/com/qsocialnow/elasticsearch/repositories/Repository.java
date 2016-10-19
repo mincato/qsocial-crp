@@ -48,7 +48,8 @@ public interface Repository<T> {
             String serchField, String searchValue);
 
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> fieldValues, String rangeField, String fromValue, String toValue);
+            boolean sortOrder, Map<String, String> fieldValues, List<RangeFilter> rangeFilters,
+            List<ShouldFilter> shouldFilters);
 
     public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
             boolean sortOrder, Map<String, String> fieldValues, String rangeField, String fromValue, String toValue);

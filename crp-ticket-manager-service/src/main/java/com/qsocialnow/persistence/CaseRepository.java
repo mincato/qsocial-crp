@@ -1,6 +1,5 @@
 package com.qsocialnow.persistence;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 

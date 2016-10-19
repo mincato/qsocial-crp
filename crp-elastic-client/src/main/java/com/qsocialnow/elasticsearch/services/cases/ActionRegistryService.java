@@ -1,5 +1,6 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
+import com.qsocialnow.elasticsearch.repositories.RangeFilter;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
@@ -84,8 +86,12 @@ public class ActionRegistryService extends CaseIndexService {
         if (user != null)
             searchValues.put("user", user);
 
+        RangeFilter rangeFilter = new RangeFilter("date", fromDate, toDate);
+        List<RangeFilter> rangeFilters = new ArrayList<>();
+        rangeFilters.add(rangeFilter);
+
         SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", true,
-                searchValues, "date", fromDate, toDate);
+                searchValues, rangeFilters, null);
         List<ActionRegistry> registries = response.getSources();
 
         repository.closeClient();
