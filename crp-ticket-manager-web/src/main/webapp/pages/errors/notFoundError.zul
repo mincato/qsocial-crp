@@ -20,11 +20,11 @@
 			<n:p>
 				<img src="/imgs/carita.png" />
 			</n:p>
-			<n:h1>No se encontró esta página</n:h1>
+			<n:h1>${labels.errors.notfound.title}</n:h1>
 			<n:p>
-				La página que buscas no existe o ha ocurrido un error inesperado.
+				${labels.errors.notfound.message.one}
 				<n:br />
-				Vuelve atrás, o dirígete a Qsocialnow para ir a otra dirección.
+				${labels.errors.notfound.message.two}
 			</n:p>
 		</n:div>
 
