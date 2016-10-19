@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('triggerVm') @init('com.qsocialnow.viewmodel.trigger.CreateTriggerViewModel')"

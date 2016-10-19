@@ -116,6 +116,7 @@ public class TriggerRepository {
             SegmentListView segmentListView = new SegmentListView();
             segmentListView.setId(segmentRepo.getId());
             segmentListView.setDescription(segmentRepo.getDescription());
+            segmentListView.setTeamId(segmentRepo.getTeam());
             segments.add(segmentListView);
         }
         return segments;

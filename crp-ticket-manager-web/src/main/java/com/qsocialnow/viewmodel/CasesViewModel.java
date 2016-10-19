@@ -2,6 +2,7 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,12 @@ import com.qsocialnow.services.SubjectService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
+
+    private static final String FALSE_OPTION_VALUE = "false";
+
+    private static final String TRUE_OPTION_VALUE = "true";
+
+    private static final String ALL_OPTION_VALUE = "all";
 
     private static final long serialVersionUID = 2259179419421396093L;
 
@@ -63,12 +70,15 @@ public class CasesViewModel implements Serializable {
 
     private String subject;
 
-    private Boolean isPendingResponse;
+    private List<String> pendingOptions = new ArrayList<>();
+
+    private String pendingResponse;
 
     @Init
     public void init() {
         this.subjectsFilterOptions = getSubjects();
         this.filterActive = false;
+        this.pendingOptions = getPendingOptionsList();
         findCases();
     }
 
@@ -109,7 +119,6 @@ public class CasesViewModel implements Serializable {
     private PageResponse<CaseListView> findCases() {
         PageRequest pageRequest = new PageRequest(activePage, pageSize, sortField);
         pageRequest.setSortOrder(this.sortOrder);
-
         PageResponse<CaseListView> pageResponse = caseService.findAll(pageRequest, filterActive ? getFilters() : null);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.cases.addAll(pageResponse.getItems());
@@ -146,9 +155,9 @@ public class CasesViewModel implements Serializable {
             filters.put("description", this.description);
         }
 
-        if (this.isPendingResponse != null) {
-            filters.put("pendingResponse", String.valueOf(this.isPendingResponse));
-        }
+        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE))
+            ;
+        filters.put("pendingResponse", this.pendingResponse);
 
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
@@ -156,6 +165,10 @@ public class CasesViewModel implements Serializable {
 
         if (this.toDate != null) {
             filters.put("toOpenDate", String.valueOf(this.toDate));
+        }
+
+        if (this.subject != null) {
+            filters.put("subject", this.subject);
         }
 
         return filters;
@@ -222,12 +235,25 @@ public class CasesViewModel implements Serializable {
         this.subject = subject;
     }
 
-    public boolean isPendingResponse() {
-        return isPendingResponse;
+    public String getPendingResponse() {
+        return pendingResponse;
     }
 
-    public void setPendingResponse(boolean isPendingResponse) {
-        this.isPendingResponse = isPendingResponse;
+    public void setPendingResponse(String pendingResponse) {
+        this.pendingResponse = pendingResponse;
+    }
+
+    public List<String> getPendingOptions() {
+        return pendingOptions;
+    }
+
+    public void setPendingOptions(List<String> pendingOptions) {
+        this.pendingOptions = pendingOptions;
+    }
+
+    private List<String> getPendingOptionsList() {
+        String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
+        return new ArrayList<String>(Arrays.asList(options));
     }
 
 }

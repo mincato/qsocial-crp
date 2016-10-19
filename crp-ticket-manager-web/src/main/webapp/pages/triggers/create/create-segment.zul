@@ -1,3 +1,4 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <div apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('segmentVm') @init('com.qsocialnow.viewmodel.trigger.CreateSegmentViewModel')"
 		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"

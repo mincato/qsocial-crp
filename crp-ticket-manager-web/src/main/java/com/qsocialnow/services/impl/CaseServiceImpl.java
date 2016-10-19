@@ -67,6 +67,9 @@ public class CaseServiceImpl implements CaseService {
                     builder.queryParam(filter.getKey(), filter.getValue());
                 }
             }
+            // user
+            String userName = userSessionService.getUsername();
+            log.info("UserName:" + userName);
 
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<PageResponse> response = restTemplate

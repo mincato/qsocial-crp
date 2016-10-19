@@ -76,14 +76,16 @@ router.get('/cases', function (req, res) {
   var sortField = req.query.sortField ? req.query.sortField : null;
   var sortOrder = req.query.sortOrder?req.query.sortOrder :null;
   
+  var subject = req.query.subject?req.query.subject :null;
   var title = req.query.title?req.query.title :null;
   var description = req.query.description?req.query.description :null;
   var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
   
+  
   var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
   var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
 
-  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,title,description,pendingResponse,fromOpenDate,toOpenDate,asyncResponse);
+  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,subject,title,description,pendingResponse,fromOpenDate,toOpenDate,asyncResponse);
 
 });
 

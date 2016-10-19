@@ -10,6 +10,8 @@ public class SegmentListView implements Serializable {
 
     private String description;
 
+    private String teamId;
+
     public String getId() {
         return id;
     }
@@ -24,5 +26,13 @@ public class SegmentListView implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 }

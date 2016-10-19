@@ -35,15 +35,24 @@
        <n:div class="col-lg-12">
            <div zclass="pane equal col-md-12 col-xs-12">
                 <n:div class="col-md-2 col-xs-12">
-
                 </n:div>
                 
-                <n:div class="col-md-2">
+                <n:div class="col-md-1">
                     <div zclass="input-group input-group-sm">
-                         <textbox zclass="form-control" value="@bind(vm.subject)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.subject}"/>
+                         <textbox zclass="form-control" value="@bind(vm.subject)" onOK="@command('search')" placeholder="${labels.cases.list.filter.subject}"/>
                    </div>
                 </n:div>
-
+                <n:div class="col-md-2">
+	                <n:label class="control-label col-sm-3">${labels.cases.list.filter.pendingResponse}</n:label>
+	                <div zclass="input-group input-group-sm">
+	                       <selectbox sclass="form-control" model="@load(vm.pendingOptions)"
+	                           selectedItem="@bind(vm.pendingResponse)">
+	                           <template name="model">
+	                               <label value="${c:l(c:cat('cases.pendingResponse.',each))}" />
+	                           </template>
+	                       </selectbox>
+	                </div>
+                </n:div>
                 <n:div class="col-md-2">
                     <div zclass="input-group input-group-sm">
                           <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
@@ -54,19 +63,19 @@
                        <datebox id="todate" sclass="input-group" format="short" value="@load(vm.toDate) 
                         @save(vm.toDate, before='search')
                         @converter('com.qsocialnow.converters.DateInputConverter', endDay = true)
-                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.registry.filter.todate}" />
+                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.list.filter.todate}" />
                     </x:div>
                 </n:div>
                 
                 <n:div class="col-md-1">
                     <div zclass="input-group input-group-sm">
-                         <textbox zclass="form-control" value="@bind(vm.title)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.title}"/>
+                         <textbox zclass="form-control" value="@bind(vm.title)" onOK="@command('search')" placeholder="${labels.cases.list.filter.title}"/>
                    </div>
                 </n:div>
 
                 <n:div class="col-md-1">
                     <div zclass="input-group input-group-sm">
-                         <textbox zclass="form-control" value="@bind(vm.description)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.description}"/>
+                         <textbox zclass="form-control" value="@bind(vm.description)" onOK="@command('search')" placeholder="${labels.cases.list.filter.description}"/>
                    </div>
                 </n:div>
                 <n:div class="col-md-1">
