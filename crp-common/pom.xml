@@ -91,13 +91,6 @@
 	        <version>${twitter4j.version}</version>
         </dependency>
         
-        <!-- Twitter -->
-		<dependency>
-	        <groupId>org.twitter4j</groupId>
-	        <artifactId>twitter4j-core</artifactId>
-	        <version>${twitter4j.version}</version>
-        </dependency>
-        
         <!-- Facebook -->        
 		<dependency>
 			<groupId>org.facebook4j</groupId>

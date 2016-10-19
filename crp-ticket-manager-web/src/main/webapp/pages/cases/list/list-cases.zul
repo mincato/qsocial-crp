@@ -6,7 +6,7 @@
 		<n:div class="col-lg-12">
 		  <div zclass="pane equal col-md-12 col-xs-12">	
 			<n:div class="col-md-6 col-xs-12">
-				<n:h5>${labels.cases.list.title}</n:h5>
+				<n:h4>${labels.cases.list.title}</n:h4>
 			</n:div>
 			<n:div class="col-md-offset-1 col-md-3 col-xs-8">
                  <div zclass="input-group input-group-sm">
@@ -42,12 +42,17 @@
                          <textbox zclass="form-control" value="@bind(vm.subject)" onOK="@command('search')" placeholder="${labels.cases.list.filter.subject}"/>
                    </div>
                 </n:div>
-                
                 <n:div class="col-md-2">
-                    <n:label class="control-label col-sm-3">${labels.cases.list.filter.pendingResponse}</n:label>
-                    <checkbox checked="@bind(vm.pendingResponse)" />
+                    <n:label class="control-label col-sm-4">${labels.cases.list.filter.pendingResponse}</n:label>
+	                <div zclass="input-group input-group-sm">
+	                       <selectbox sclass="form-control" model="@load(vm.pendingOptions)"
+	                           selectedItem="@bind(vm.pendingResponse)">
+	                           <template name="model">
+	                               <label value="${c:l(c:cat('cases.pendingResponse.',each))}" />
+	                           </template>
+	                       </selectbox>
+	                </div>
                 </n:div>
-
                 <n:div class="col-md-2">
                     <div zclass="input-group input-group-sm">
                           <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
@@ -77,6 +82,7 @@
                    <div zclass="input-group input-group-sm">
                       <span zclass="input-group-btn">
                           <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+						  <!-- <button zclass="btn btn-default" type="button" onClick="@command('download')"  iconSclass="z-icon-file-excel-o"></button> -->
                       </span>
                    </div>
                 </n:div>

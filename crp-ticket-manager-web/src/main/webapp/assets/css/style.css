@@ -1,3 +1,5 @@
+
+
 /*******************************
 MAIN STYLESHEET
     Theme Name: Quarca - Bootstrap Admin Template
@@ -7,7 +9,7 @@ MAIN STYLESHEET
     Author Website: http://www.cazylabs.com/
 
 TABLE OF CONTENTS
-    1.0 - PAGE PRELOADER
+    1.0 - PAGE PRELOADER (se sacó a un css separado)
     2.0 - GLOBALS
     3.0 - HEADER
     4.0 - SIDEBAR
@@ -31,277 +33,389 @@ TABLE OF CONTENTS
 *******************************/
 
 /*******************************
-1.0 - PAGE PRELOADER
-*******************************/
-    #preloader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 99999;
-        background: #6C7A89;
-    }
-    
-    #status {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 24px;
-        height: 24px;
-        margin: -12px 0 0 -12px;
-        background-image:url(../img/core/status.gif);
-        background-size: 24px;
-        background-repeat: no-repeat;
-        background-position: center;
-    }
-
-/*******************************
 2.0 - GLOBALS
 *******************************/
-    body {
-        line-height: 160%;
-        font-family: 'Open Sans', sans-serif;
-        font-weight: 300;
-        padding: 0 !important;
-    }
-    
+body {
+	line-height: 160%;
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300;
+	padding: 0 !important;
+}
+
 /* ----- HEADINGS ----- */
-    h1, h2, h3, h4, h5, h6 {
-        margin: 0 0 30px;
-        font-weight: 300;
-    }
-    
-    h1 {font-size: 46px;}
-    h2 {font-size: 40px;}
-    h3 {font-size: 36px;}
-    h4 {font-size: 30px;}
-    h5 {font-size: 26px;}
-    h6 {font-size: 20px;}
+h1, h2, h3, h4, h5 {
+	margin: 0 0 30px;
+	font-weight: 300;
+}
+
+h1 {
+	font-size: 46px;
+}
+
+h2 {
+	font-size: 40px;
+}
+
+h3 {
+	font-size: 36px;
+}
+
+h4 {
+	font-size: 22px;
+}
+
+h5 {
+	font-size: 16px;
+}
+
+h6 {
+	margin-top: 10px;
+	margin-left: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	font-size: 12px;
+}
 
 /* ----- TYPOGRAPHY ----- */
-    p {
-        font-weight: 400;
-        color: #666;
-    }
-    
-    p.lead {
-        font-weight: 400;
-        font-size: 16px;
-    }
-    
-    pre {
-        overflow-x: auto;
-        border: none;
-        border-radius: 0;
-        padding: 10px;
-        word-wrap: normal;
-        background: #333;
-    }
-    
+.profile-details span {
+	text-align: center;
+	/*
+		 * Lo deshabilito para que no se rompa el cuadro de valores generales de la izquierda. 
+		 * Sino habrá que definir un nuevo estilo
+		 */ //
+	font-size: 12px;
+}
+
+p {
+	font-weight: 400;
+	color: #666;
+}
+
+p.lead {
+	font-weight: 400;
+	font-size: 16px;
+}
+
+pre {
+	overflow-x: auto;
+	border: none;
+	border-radius: 0;
+	padding: 10px;
+	word-wrap: normal;
+	background: #333;
+}
+
 /* ----- FIT TEXT ----- */
-    .fit-text {
-        display: block;
-        width: 100%;
-    }
+.fit-text {
+	display: block;
+	width: 100%;
+}
+
+div.checkbox-label {
+    line-height: 10px;	
+}
+
+span.checkbox-label {
+    line-height: 40px;	
+}
+
+.tab-content {
+	overflow: auto;
+}
+
+div.sub-title {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+span.sub-title {
+	font-size:18px;
+}
+
+span.form-data-label {
+	font-style: italic;
+}
+
+/* ----- HEADINGS RESPONSIVE ----- */
+@media ( max-width : 360px) {
+	h4 {
+		font-size: 14px;
+	}
+	h5 {
+		font-size: 16px;
+	}
+} /*End*/
 
 /*******************************
 3.0 - HEADER
 *******************************/
-    .header {
-        z-index: 999;
-        top: 0;
-        width: 100%;
-        height: 60px;
-    }
-    
-    .navbar-header {
-        float: left;
-        width: 280px;
-        height: 50px;
-    }
-    
+.header {
+	z-index: 999;
+	top: 0;
+	width: 100%;
+	height: 50px;
+}
+
+.navbar-header {
+	float: left;
+	width: 280px;
+	height: 50px;
+}
+
+.navbar-left h5 {
+	font-weight: 400;
+	margin: 15px;
+	text-overflow: elipsis;
+}
+
+
+
 /* ----- LOGO ----- */
-    .logo {
-        display: block;
-        width: 230px;
-        height: 50px;
-        line-height: 45px;
-        padding: 0 15px;
-    }
-    
+.logo {
+	display: block;
+	width: 230px;
+	height: 50px;
+	line-height: 45px;
+	padding: 0 15px;
+}
+
 /* ----- SIDEBAR SWITCH ----- */
-    .sidebar-switch {
-        cursor: pointer;
-        display: block;
-        width: 50px;
-        height: 50px;
-        line-height: 50px;
-        text-align: center;
-        font-size: 14px;
-        -webkit-transition: all 0.3s ease;
-        -moz-transition:    all 0.3s ease;
-        -ms-transition:     all 0.3s ease;
-        -o-transition:      all 0.3s ease;
-        transition:         all 0.3s ease;
-    }
-    
-    .sidebar-switch .icon:before {
-        content: "\f03b";
-    }
-    
-    .sidebar-toggle .sidebar-switch .icon:before,
-    .sidebar-toggle-sm .sidebar-switch .icon:before {
-        content: "\f03c";
-    }
-    
+.sidebar-switch {
+	cursor: pointer;
+	display: block;
+	width: 50px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-size: 14px;
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	-ms-transition: all 0.3s ease;
+	-o-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+.sidebar-switch .icon:before {
+	content: "\f03b";
+}
+
+.sidebar-toggle .sidebar-switch .icon:before, .sidebar-toggle-sm .sidebar-switch .icon:before
+	{
+	content: "\f03c";
+}
+
 /* ----- HEADER ICONS/BUTTONS ----- */
-    .header-navbar .navbar-toggle {
-        cursor: pointer;
-        float: left;
-        width: 10%;
-        height: 50px;
-        line-height: 50px;
-        margin: 0;
-        padding: 0;
-        text-align: center;
-        font-size: 14px;
-        border: none;
-        border-radius: 0;
-    }
+.header-navbar .navbar-toggle {
+	cursor: pointer;
+	float: left;
+	width: 10%;
+	height: 50px;
+	line-height: 50px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	font-size: 14px;
+	border: none;
+	border-radius: 0;
+}
 
-    /*Search*/
-        .header-navbar .navbar-form {
-            margin: 10px 0;
-            padding: 0 10px;
-            border: none;
-            box-shadow: none;
-        }
-        
-        .header-navbar .navbar-form .form-control {
-            width: 240px;
-        }
+/*Search*/
+.header-navbar .navbar-form {
+	margin: 10px 0;
+	padding: 0 10px;
+	border: none;
+	box-shadow: none;
+}
 
-    /*Icons Navigation*/
-        .header-navbar .navbar-nav > li > a {
-            min-width: 70px;
-            min-height: 60px;
-            border-left: 1px solid;
-            text-align: center;
-        }
-        
-         .header-navbar .navbar-nav > li > a > i {
-            vertical-align: middle;
-        }
-        
-        .header-navbar .navbar-nav > li > a > span {
-            display: block;
-            font-weight: 400;
-            font-size: 12px;
-        }
-        
-        .header-navbar .navbar-nav > li > a:hover,
-        .header-navbar .navbar-nav > li > a:focus {
-            background: none;
-            color: #fff;
-        }
+.header-navbar .navbar-form .form-control {
+	width: 240px;
+}
 
-        .header-navbar .navbar-nav > li.turn-off > a:hover,
-        .header-navbar .navbar-nav > li.turn-off > a:focus {
-            background: none;
-            color: #d24d57;
-        }
-        
-       
-    /*Navbar Collapse*/
-        .header-navbar .navbar-collapse {
-            border: none;
-            box-shadow: none;
-        }
-        
+/*Icons Navigation*/
+.header-navbar .navbar-nav>li>a {
+	min-width: 95px;
+	padding: 5px 10px;
+	border-left: 1px solid;
+	text-align: center;
+}
+
+.header-navbar .navbar-nav>li>a>span {
+	display: block;
+	font-weight: 400;
+	font-size: 12px;
+}
+
+.header-navbar .navbar-nav>li>a:hover, .header-navbar .navbar-nav>li>a:focus
+	{
+	background: none;
+	color: #f78f1e;
+}
+
+.header-navbar .navbar-nav>li.turn-off>a:hover, .header-navbar .navbar-nav>li.turn-off>a:focus
+	{
+	background: none;
+	color: #d24d57;
+}
+
+/*Navbar Collapse*/
+.header-navbar .navbar-collapse {
+	border: none;
+	box-shadow: none;
+}
+
+/*Search*/
+.form-error {
+	color: #C75757;
+}
+
+.data-error {
+	font-size: 12px;
+	font-weight: bold;
+	color: #60606a;
+	fill: #60606a;
+}
+
+.error-zone-fix {
+	padding-top: 14px;
+}
+
+ul.thematic {
+	overflow-y: auto;
+	overflow-x: hidden;
+	height: 200px;
+}
+
 /* ----- HEADER RESPONSIVE ----- */
-    @media (min-width: 993px) {
-    /*Search*/
+@media ( max-width : 1024px) {
+	/*Search*/
+	.header-navbar .navbar-form .form-control {
+		width: auto;
+	}
+	.navbar-left h5 {
+		font-size: 18px;
+	}
+	.sidebar-switch {
+		width: 10%;
+	}
+} /*End*/
+
+/*     @media (max-width: 992px) and (min-width: 768px) {*/
+@media ( max-width : 1200px) and (min-width: 1000px) {
+	/*Icons Navigation*/
+	.header-navbar .navbar-nav>li>a {
+		min-width: 70px;
+	}
+	.header-navbar .navbar-nav>li>a>span {
+		font-size: 10px;
+	}
+	.navbar-left h5 {
+		font-size: 16px;
+	}
+} /*End*/
+@media ( max-width : 1000px) and (min-width: 900px) {
+	.header-navbar .navbar-form .form-control {
+		width: 90px;
+	}
+	.navbar-left h5 {
+		font-size: 16px;
+	}
+	.header-navbar .navbar-nav>li>a {
+		min-width: 55px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+}
+
+@media ( max-width : 899px) and (min-width: 768px) {
+	.header-navbar .navbar-form .form-control {
+		width: 80px;
+	}
+	.navbar-left h5 {
+		font-size: 10px;
+	}
+	.header-navbar .navbar-nav>li>a {
+		min-width: 55px;
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+}
+
+/*
+    @media (max-width: 1000px) and (min-width: 768px) {
         .header-navbar .navbar-form .form-control {
-            width: auto;
+            width: 90px;
         }
-        
-        .btn-logo, .btn-logo:hover, .btn-logo:focus {
-			padding:5px 15px !important;
+		.navbar-left h5 {
+			font-size: 12px;
 		}
-        
-    }/*End*/
-    
-    @media (max-width: 992px) and (min-width: 768px) {
-    /*Icons Navigation*/
-        .header-navbar .navbar-nav > li > a {
-            min-width: 60px;
-            min-height: 60px;
-        }
-        
-        .btn-logo {
-			padding:5px 15px !important;
-		}
-    	.btn-logo:hover, .btn-logo:focus {padding:5px 15px !important;} 
-        
-    }/*End*/
-    
-    @media (max-width: 830px) and (min-width: 768px) {
-    /*Search*/
-        .header-navbar .navbar-collapse {
-            min-height: 60px;
-        }
-        
-        .btn-logo {
-			padding:5px 15px !important;
-		}
-    	.btn-logo:hover, .btn-logo:focus {padding:5px 15px !important;} 
-        
-    }/*End*/
-    
-    @media (max-width: 767px) {
-    /*Header*/
-        .navbar-header {
-            width: 100%;
-        }
-    
-    /*Sidebar Switch*/
-        .sidebar-switch {
-            width: 10%;
-        }
-        
-    /*Icons Navigation*/
-        .header-navbar .navbar-nav {
-            margin: 0px 0;
-            text-align: center;
-        }
-        .header-navbar .navbar-nav > li {
-            display: inline-block;
-        }
-        
-        .header-navbar .navbar-nav > li > a {
-        	line-height: 50px;
-        }
-        
-        
-    }/*End*/
-    
-    @media (max-width: 460px) {
-        /*Icons Navigation*/
-        .header-navbar .navbar-nav > li > a {
-            min-width: 60px;
-            padding: 5px 0px;
-        }
-        
         .header-navbar .navbar-nav > li > a > span {
             font-size: 10px;
         }
-    }/*End*/
-        
+        .header-navbar .navbar-nav > li  {
+        	min-width: 45px;
+            padding: 0px 0px;
+        }
+        .header-navbar .navbar-nav > li {
+        	width: 55px;
+        }
+    }
+        */
+@media ( max-width : 767px) {
+	/*Header*/
+	.navbar-header {
+		width: 100%;
+	}
+	.navbar-left h5 {
+		font-size: 14px;
+	}
+	.logo {
+		width: 80%;
+		text-align: center;
+	}
+
+	/*Sidebar Switch*/
+	.sidebar-switch {
+		width: 10%;
+	}
+	.header-navbar .navbar-form {
+		margin: 15px 0;
+		padding: 0;
+	}
+	.header-navbar .navbar-form .form-control {
+		width: 100%;
+	}
+
+	/*Icons Navigation*/
+	.header-navbar .navbar-nav {
+		margin: 15px 0;
+		text-align: center;
+	}
+	.header-navbar .navbar-nav>li {
+		display: inline-block;
+	}
+	.header-navbar .navbar-nav>li:last-child>a {
+		border-right: 1px solid;
+	}
+} /*End*/
+@media ( max-width : 460px) {
+	/*Icons Navigation*/
+	.header-navbar .navbar-nav>li>a {
+		min-width: 60px;
+		padding: 5px 0px;
+	}
+	.header-navbar .navbar-nav>li>a>span {
+		font-size: 10px;
+	}
+	.navbar-left h5 {
+		font-size: 14px;
+	}
+} /*End*/
+
 /*******************************
 4.0 - SIDEBAR
 *******************************/
-    .sidebar-content {
+.sidebar-content {
         position: relative;
         left: 0;
     }
@@ -316,7 +430,7 @@ TABLE OF CONTENTS
     }
     
 /* ----- SIDEBAR/MESSENGER SCROLLPANE ----- */
-    .sidebar-container {
+/* .sidebar-container {
         padding-bottom: 50px;
     }
     
@@ -383,9 +497,11 @@ TABLE OF CONTENTS
     }
     
 /* ----- SIDEBAR-PROFILE ----- */
-    .sidebar-profile {
+/*.sidebar-profile {
         width: 100%;
+        height: 100px;
         padding: 15px;
+        background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHhtbG5zOnhsaW5rPSdodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rJyB3aWR0aD0nMjQ1Ljk5OTk5OTk5OTk5OTk3JyBoZWlnaHQ9JzEyNi4wMDAwMDAwMDAwMDAwMScgdmlld0JveD0nMCAwIDQ5LjE5OTk5OTk5OTk5OTk5NiAyNS4yMDAwMDAwMDAwMDAwMDMnPgoJPGRlZnM+CgkJPHBhdGggaWQ9J3MnIGZpbGw9JyNmZmZmZmYnIGQ9J00wLDBsNCAybC00LDJ6Jy8+Cgk8L2RlZnM+Cgk8ZyBpZD0nYic+Cgk8dXNlIHg9Jy00JyB5PSctMicgdHJhbnNmb3JtPSdtYXRyaXgoLTEgMCAwIDEgMCAwKScgZmlsbC1vcGFjaXR5PScwLjA1MjAwMDAwMDAwMDAwMDAwNScgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9JzAnIHk9JzAuMScgZmlsbC1vcGFjaXR5PScwLjA3OCcgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9Jy00JyB5PScyLjInIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIGZpbGwtb3BhY2l0eT0nMC4wNzgnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PScwJyB5PSc0LjMnIGZpbGwtb3BhY2l0eT0nMC4wNzgnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSctNCcgeT0nNi40JyB0cmFuc2Zvcm09J21hdHJpeCgtMSAwIDAgMSAwIDApJyBmaWxsLW9wYWNpdHk9JzAuMTA0MDAwMDAwMDAwMDAwMDEnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PScwJyB5PSc4LjUnIGZpbGwtb3BhY2l0eT0nMC4wNTIwMDAwMDAwMDAwMDAwMDUnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSctNCcgeT0nMTAuNicgdHJhbnNmb3JtPSdtYXRyaXgoLTEgMCAwIDEgMCAwKScgZmlsbC1vcGFjaXR5PScwLjA1MjAwMDAwMDAwMDAwMDAwNScgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9JzQuMScgeT0nLTInIGZpbGwtb3BhY2l0eT0nMC4wNzgnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSctOC4xJyB5PScwLjEnIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIGZpbGwtb3BhY2l0eT0nMC4xMDQwMDAwMDAwMDAwMDAwMScgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9JzQuMScgeT0nMi4yJyBmaWxsLW9wYWNpdHk9JzAuMDc4JyB4bGluazpocmVmPScjcycgLz4KCTx1c2UgeD0nLTguMScgeT0nNC4zJyB0cmFuc2Zvcm09J21hdHJpeCgtMSAwIDAgMSAwIDApJyBmaWxsLW9wYWNpdHk9JzAuMDUyMDAwMDAwMDAwMDAwMDA1JyB4bGluazpocmVmPScjcycgLz4KCTx1c2UgeD0nNC4xJyB5PSc2LjQnIGZpbGwtb3BhY2l0eT0nMC4wMjYwMDAwMDAwMDAwMDAwMDInIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSctOC4xJyB5PSc4LjUnIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIGZpbGwtb3BhY2l0eT0nMC4wNTIwMDAwMDAwMDAwMDAwMDUnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSc0LjEnIHk9JzEwLjYnIGZpbGwtb3BhY2l0eT0nMC4wNzgnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSctMTIuMicgeT0nLTInIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIGZpbGwtb3BhY2l0eT0nMC4wNTIwMDAwMDAwMDAwMDAwMDUnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSc4LjInIHk9JzAuMScgZmlsbC1vcGFjaXR5PScwLjA1MjAwMDAwMDAwMDAwMDAwNScgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9Jy0xMi4yJyB5PScyLjInIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIGZpbGwtb3BhY2l0eT0nMC4wNzgnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSc4LjInIHk9JzQuMycgZmlsbC1vcGFjaXR5PScwLjA1MjAwMDAwMDAwMDAwMDAwNScgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9Jy0xMi4yJyB5PSc2LjQnIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIGZpbGwtb3BhY2l0eT0nMC4wMjYwMDAwMDAwMDAwMDAwMDInIHhsaW5rOmhyZWY9JyNzJyAvPgkKCTx1c2UgeD0nOC4yJyB5PSc4LjUnIGZpbGwtb3BhY2l0eT0nMC4wNTIwMDAwMDAwMDAwMDAwMDUnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSctMTIuMicgeT0nMTAuNicgdHJhbnNmb3JtPSdtYXRyaXgoLTEgMCAwIDEgMCAwKScgZmlsbC1vcGFjaXR5PScwLjA1MjAwMDAwMDAwMDAwMDAwNScgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9JzEyLjI5OTk5OTk5OTk5OTk5OScgeT0nLTInIGZpbGwtb3BhY2l0eT0nMC4wNTIwMDAwMDAwMDAwMDAwMDUnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSctMTYuMjk5OTk5OTk5OTk5OTk3JyB5PScwLjEnIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIGZpbGwtb3BhY2l0eT0nMC4wNTIwMDAwMDAwMDAwMDAwMDUnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PScxMi4yOTk5OTk5OTk5OTk5OTknIHk9JzIuMicgZmlsbC1vcGFjaXR5PScwLjAyNjAwMDAwMDAwMDAwMDAwMicgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9Jy0xNi4yOTk5OTk5OTk5OTk5OTcnIHk9JzQuMycgdHJhbnNmb3JtPSdtYXRyaXgoLTEgMCAwIDEgMCAwKScgZmlsbC1vcGFjaXR5PScwLjA3OCcgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9JzEyLjI5OTk5OTk5OTk5OTk5OScgeT0nNi40JyBmaWxsLW9wYWNpdHk9JzAuMDc4JyB4bGluazpocmVmPScjcycgLz4KCTx1c2UgeD0nLTE2LjI5OTk5OTk5OTk5OTk5NycgeT0nOC41JyB0cmFuc2Zvcm09J21hdHJpeCgtMSAwIDAgMSAwIDApJyBmaWxsLW9wYWNpdHk9JzAuMDI2MDAwMDAwMDAwMDAwMDAyJyB4bGluazpocmVmPScjcycgLz4KCTx1c2UgeD0nMTIuMjk5OTk5OTk5OTk5OTk5JyB5PScxMC42JyBmaWxsLW9wYWNpdHk9JzAuMDUyMDAwMDAwMDAwMDAwMDA1JyB4bGluazpocmVmPScjcycgLz4KCTx1c2UgeD0nLTIwLjQnIHk9Jy0yJyB0cmFuc2Zvcm09J21hdHJpeCgtMSAwIDAgMSAwIDApJyBmaWxsLW9wYWNpdHk9JzAuMDc4JyB4bGluazpocmVmPScjcycgLz4JCgk8dXNlIHg9JzE2LjQnIHk9JzAuMScgZmlsbC1vcGFjaXR5PScwLjEwNDAwMDAwMDAwMDAwMDAxJyB4bGluazpocmVmPScjcycgLz4KCTx1c2UgeD0nLTIwLjQnIHk9JzIuMicgdHJhbnNmb3JtPSdtYXRyaXgoLTEgMCAwIDEgMCAwKScgZmlsbC1vcGFjaXR5PScwLjAyNjAwMDAwMDAwMDAwMDAwMicgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9JzE2LjQnIHk9JzQuMycgZmlsbC1vcGFjaXR5PScwLjA1MjAwMDAwMDAwMDAwMDAwNScgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9Jy0yMC40JyB5PSc2LjQnIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIGZpbGwtb3BhY2l0eT0nMC4wNzgnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PScxNi40JyB5PSc4LjUnIGZpbGwtb3BhY2l0eT0nMC4wMjYwMDAwMDAwMDAwMDAwMDInIHhsaW5rOmhyZWY9JyNzJyAvPgoJPHVzZSB4PSctMjAuNCcgeT0nMTAuNicgdHJhbnNmb3JtPSdtYXRyaXgoLTEgMCAwIDEgMCAwKScgZmlsbC1vcGFjaXR5PScwLjA3OCcgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9JzIwLjUnIHk9Jy0yJyBmaWxsLW9wYWNpdHk9JzAuMDUyMDAwMDAwMDAwMDAwMDA1JyB4bGluazpocmVmPScjcycgLz4KCTx1c2UgeD0nLTI0LjQ5OTk5OTk5OTk5OTk5NicgeT0nMC4xJyB0cmFuc2Zvcm09J21hdHJpeCgtMSAwIDAgMSAwIDApJyBmaWxsLW9wYWNpdHk9JzAuMDUyMDAwMDAwMDAwMDAwMDA1JyB4bGluazpocmVmPScjcycgLz4JCgk8dXNlIHg9JzIwLjUnIHk9JzIuMicgZmlsbC1vcGFjaXR5PScwLjEwNDAwMDAwMDAwMDAwMDAxJyB4bGluazpocmVmPScjcycgLz4KCTx1c2UgeD0nLTI0LjQ5OTk5OTk5OTk5OTk5NicgeT0nNC4zJyB0cmFuc2Zvcm09J21hdHJpeCgtMSAwIDAgMSAwIDApJyBmaWxsLW9wYWNpdHk9JzAuMDUyMDAwMDAwMDAwMDAwMDA1JyB4bGluazpocmVmPScjcycgLz4JCgk8dXNlIHg9JzIwLjUnIHk9JzYuNCcgZmlsbC1vcGFjaXR5PScwLjA3OCcgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9Jy0yNC40OTk5OTk5OTk5OTk5OTYnIHk9JzguNScgdHJhbnNmb3JtPSdtYXRyaXgoLTEgMCAwIDEgMCAwKScgZmlsbC1vcGFjaXR5PScwLjA1MjAwMDAwMDAwMDAwMDAwNScgeGxpbms6aHJlZj0nI3MnIC8+Cgk8dXNlIHg9JzIwLjUnIHk9JzEwLjYnIGZpbGwtb3BhY2l0eT0nMC4wNTIwMDAwMDAwMDAwMDAwMDUnIHhsaW5rOmhyZWY9JyNzJyAvPgoJPC9nPgoJPHVzZSB4PSctMjQuNDk5OTk5OTk5OTk5OTk2JyB5PScxMi42MDAwMDAwMDAwMDAwMDEnIHRyYW5zZm9ybT0nbWF0cml4KC0xIDAgMCAxIDAgMCknIHhsaW5rOmhyZWY9JyNiJyAvPgoJPHVzZSB4PSctNDkuMDk5OTk5OTk5OTk5OTk0JyB5PSctOC40JyB0cmFuc2Zvcm09J21hdHJpeCgtMSAwIDAgLTEgMCAwKScgeGxpbms6aHJlZj0nI2InIC8+Cgk8dXNlIHg9JzI0LjU5OTk5OTk5OTk5OTk5OCcgeT0nLTE2LjgnIHRyYW5zZm9ybT0nbWF0cml4KDEgMCAwIC0xIDAgMCknIHhsaW5rOmhyZWY9JyNiJyAvPgoJPHVzZSB4PScyNC41OTk5OTk5OTk5OTk5OTgnIHk9Jy0yOS40MDAwMDAwMDAwMDAwMDInIHRyYW5zZm9ybT0nbWF0cml4KDEgMCAwIC0xIDAgMCknIHhsaW5rOmhyZWY9JyNiJyAvPgo8L3N2Zz4K');
         -webkit-transition: all 0.3s ease;
         -moz-transition:    all 0.3s ease;
         -ms-transition:     all 0.3s ease;
@@ -417,7 +533,7 @@ TABLE OF CONTENTS
     }
     
     /*Change Status*/
-        .sidebar-profile .btn-group a {
+/*.sidebar-profile .btn-group a {
             cursor: pointer;
             text-decoration: none !important;
             font-weight: 400;
@@ -425,7 +541,7 @@ TABLE OF CONTENTS
         }
     
     /*Text*/
-        .sidebar-profile .busy,
+/* .sidebar-profile .busy,
         .sidebar-profile .away,
         .sidebar-profile .offline {
             display: none;
@@ -444,7 +560,7 @@ TABLE OF CONTENTS
         }
     
     /*Chat Labels/Status*/
-        .label-status {
+/* .label-status {
             display: inline-block;
             width: 10px;
             height: 10px;
@@ -455,7 +571,7 @@ TABLE OF CONTENTS
         }
         
 /* ----- SIDEBAR TABS ----- */
-    .sidebar .tab-nav {
+ .sidebar .tab-nav {
         position: relative;
         z-index: 10;
         height: 43px;
@@ -493,24 +609,24 @@ TABLE OF CONTENTS
     }
     
     /*Badge*/
-        .sidebar .tab-nav > li > a .badge {
-            position: absolute;
-            top: 4px;
-            right: 37px;
-            padding: 3px 5px;
-            font-weight: 400;
-            font-size: 10px;
-        }
-    
-    /*Tab Content*/
-        .sidebar .tab-content {
+.sidebar .tab-nav>li>a .badge {
+	position: absolute;
+	top: 4px;
+	right: 37px;
+	padding: 3px 5px;
+	font-weight: 400;
+	font-size: 10px;
+}
+
+/*Tab Content*/
+ .sidebar .tab-content {
             border: none;
             padding: 0;
             background: none;
         }
     
 /* ----- SIDEBAR NAVIGATION ----- */
-    .sidebar-nav {
+.sidebar-nav {
         margin: 0;
         padding: 0;
         list-style-type: none;
@@ -589,46 +705,46 @@ TABLE OF CONTENTS
 /*******************************
 5.0 - LEFT SIDEBAR
 *******************************/
-    .sidebar {
-        top: 50px;
-        width: 280px;
-        height: 100%;
-    }
+.sidebar {
+    top: 50px;
+    width: 280px;
+    height: 100%;
+}
 
-    .main {
-        z-index: 11;
-        margin-left: 280px;
-        -webkit-transition: margin-left 0.3s ease, left 0.3s ease;
-        -moz-transition:    margin-left 0.3s ease, left 0.3s ease;
-        -ms-transition:     margin-left 0.3s ease, left 0.3s ease;
-        -o-transition:      margin-left 0.3s ease, left 0.3s ease;
-        transition:         margin-left 0.3s ease, left 0.3s ease;
-    }
+.main {
+    z-index: 11;
+    margin-left: 280px;
+    -webkit-transition: margin-left 0.3s ease, left 0.3s ease;
+    -moz-transition:    margin-left 0.3s ease, left 0.3s ease;
+    -ms-transition:     margin-left 0.3s ease, left 0.3s ease;
+    -o-transition:      margin-left 0.3s ease, left 0.3s ease;
+    transition:         margin-left 0.3s ease, left 0.3s ease;
+}
     
 /* ----- SIDEBAR TOGGLE ----- */
-    .sidebar-toggle .main {
-        margin-left: 0;
-    }
+.sidebar-toggle .main {
+	margin-left: 0;
+}
     
-    @media (max-width: 1170px) {
-        .wrapper {
-            overflow: hidden;
-        }
+@media (max-width: 1170px) {
+	.wrapper {
+		overflow: hidden;
+	}
         
-        .main {
-            margin-left: auto;
-            left: 0;
-        }
+	.main {
+		margin-left: auto;
+		left: 0;
+	}
         
-        .sidebar-toggle-sm .main {
-            left: 280px;
-        }
-    }/*End*/
-    
+	.sidebar-toggle-sm .main {
+		left: 280px;
+	}
+}/*End*/
+
 /*******************************
 6.0 - RIGHT SIDEBAR
 *******************************/
-    .right-sidebar .sidebar {
+/* .right-sidebar .sidebar {
         right: 0;
     }
 
@@ -643,7 +759,7 @@ TABLE OF CONTENTS
     }
     
 /* ----- HEADER ----- */
-    @media (min-width: 768px) {
+/* @media (min-width: 768px) {
         .right-sidebar .navbar-header {
             float: right;
         }
@@ -667,14 +783,14 @@ TABLE OF CONTENTS
             border-right: 1px solid;
         }
     }/*End*/
-    
+
 /* ----- SIDEBAR TOGGLE ----- */
-    .right-sidebar .sidebar-toggle .main {
-        margin-right: 0;
-    }
+.right-sidebar .sidebar-toggle .main {
+    margin-right: 0;
+}
     
 /* ----- CHAT/MESSENGER ----- */
-    .right-sidebar .messenger-wrap {
+/* .right-sidebar .messenger-wrap {
         left: auto;
         right: -280px;
     }
@@ -701,7 +817,7 @@ TABLE OF CONTENTS
     }
     
     /*Toggle*/
-        .right-sidebar .chat-box .sidebar-content {
+ /*       .right-sidebar .chat-box .sidebar-content {
             left: -280px;
         }
     
@@ -721,12 +837,12 @@ TABLE OF CONTENTS
 /*******************************
 7.0 - CHAT/MESSENGER
 *******************************/
-    .chat-wrap {
+/*   .chat-wrap {
         position: relative;
     }
 
 /* ----- FRIENDS LIST ----- */
-    .friends-list {
+/*    .friends-list {
         margin: 0;
         padding: 0;
         list-style: none;
@@ -762,7 +878,7 @@ TABLE OF CONTENTS
     }
 
 /* ----- MESSENGER CONTAINER ----- */
-    .messenger-wrap {
+ /*   .messenger-wrap {
         position: fixed;
         z-index: 10;
         top: 50px;
@@ -781,7 +897,7 @@ TABLE OF CONTENTS
     }
         
     /*Toggle*/
-        .chat-box .sidebar-content {
+ /*       .chat-box .sidebar-content {
             left: 280px;
         }
     
@@ -791,7 +907,7 @@ TABLE OF CONTENTS
         
 /* ----- MESSENGER ----- */
     /*Header*/
-        .messenger-header .toggle-list {
+/*        .messenger-header .toggle-list {
             display: block;
             float: right;
             padding: 24px 10px;
@@ -818,7 +934,7 @@ TABLE OF CONTENTS
         
         
     /*Content*/
-        .messenger-content {
+ /*       .messenger-content {
             position: relative;
             padding-bottom: 174px;
         }
@@ -906,7 +1022,7 @@ TABLE OF CONTENTS
         }
         
     /*Footer*/
-        .messenger-footer {
+ /*       .messenger-footer {
             position: absolute;
             bottom: 50px;
             width: 100%;
@@ -922,7 +1038,7 @@ TABLE OF CONTENTS
         }
         
     /*Addons*/
-        .messenger-footer .form-group:first-child {
+   /*     .messenger-footer .form-group:first-child {
             text-align: center;
         }
         
@@ -952,7 +1068,7 @@ TABLE OF CONTENTS
         }
         
     /*Message box*/
-        .messenger-footer .form-control {
+   /*     .messenger-footer .form-control {
             overflow: hidden;
             resize: none;
             height: 54px;
@@ -963,7 +1079,7 @@ TABLE OF CONTENTS
 8.0 - TASKS/TO-DO LIST
 *******************************/
 /* ----- FORM ----- */
-    .tasks form {
+ /*   .tasks form {
         padding: 10px;
     }
     
@@ -972,7 +1088,7 @@ TABLE OF CONTENTS
     }
 
 /* ----- TASKS LIST ----- */
-    .tasks-list {
+ /*   .tasks-list {
         list-style: none;
         margin: 0;
         padding: 0;
@@ -1024,7 +1140,7 @@ TABLE OF CONTENTS
 9.0 - INBOX/SENT SIDEBAR
 *******************************/    
 /* ----- TABS ----- */
-    .sidebar-emails-container .nav-tabs {
+  /*  .sidebar-emails-container .nav-tabs {
         background: none;
     }
     
@@ -1053,7 +1169,7 @@ TABLE OF CONTENTS
     }
 
 /* ----- EMAILS LIST ----- */
-    .emails-list {
+  /*  .emails-list {
         margin: 0;
         padding: 0;
     }
@@ -1075,7 +1191,7 @@ TABLE OF CONTENTS
     }
 
     /*Short Emails*/
-        .email-thumb {
+   /*     .email-thumb {
             float: left;
             width: 50px;
             height: 50px;
@@ -1107,7 +1223,7 @@ TABLE OF CONTENTS
         }
     
     /*When*/
-        .emails-list .when {
+   /*     .emails-list .when {
             position: absolute;
             top: 0;
             right: 0;
@@ -1119,7 +1235,7 @@ TABLE OF CONTENTS
 /*******************************
 10.0 - NOTIFICATIONS SIDEBAR
 *******************************/
-    .notifications {
+  /*  .notifications {
         margin: 0;
         padding: 0;
     }
@@ -1164,12 +1280,12 @@ TABLE OF CONTENTS
 /*******************************
 11.0 - MAIN
 *******************************/
-    .main {
-        position: relative;
-        padding-top: 50px;
-        padding-bottom: 150px;
-    }
-    
+.main {
+	position: relative;
+/* 	padding-top: 50px; */
+	padding-bottom: 50px;
+}
+
 /* ----- CONTENT ----- */
     .dashboard {
         overflow: hidden;
@@ -1238,7 +1354,6 @@ TABLE OF CONTENTS
     
     .container-fluid {
         padding-top: 20px;
-        padding-bottom: 20px;
         padding-left: 20px;
         padding-right: 20px;
     }
@@ -1368,53 +1483,17 @@ TABLE OF CONTENTS
 /*******************************
 14.0 - FOOTER
 *******************************/
-    #footer {
-        font-size: 14px;
-        vertical-align: middle;
-    }
+	#footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 50px;
+		line-height: 50px;
+		text-align: center;
+		font-weight: 400;
+		font-size: 12px;
+}
     
-    #footer-social > a > i {
-    	margin-right: 20px;
-    }
-    
-            
-/* ----- FOOTER RESPONSIVE ----- */
-	@media (min-width: 769px) {
-        #footer {
-        	height: 185px;
-        	bottom: 0;
-            width: 100%;
-            position: absolute;
-        }
-    }
-    @media (max-width: 768px) {
-        #footer {
-        	bottom: 0;
-            width: auto;
-            position: relative;
-        }
-    }
-    
-    .footer-links ul > li  {
-        text-align: left !important;
-    }
-    
-    
-	.footer-links ul > li > a {
-        text-decoration: none;
-        font-size: 0.9em;
-    }
-    
-    #footer-social > a {
-    	vertical-align: middle;
-    	text-align: center;
-	}
-    
-    .footer-newsletter {
-    	font-size: 0.7em;
-    }
-    
-
 /*******************************
 15.0 - DRAG & DROP
 *******************************/

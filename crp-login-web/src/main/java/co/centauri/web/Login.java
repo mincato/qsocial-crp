@@ -35,6 +35,8 @@ public class Login extends HttpServlet {
 
 	private static final String ODATECH = "odatech";
 	
+	private static final String LATIN = "latino";
+	
 	private static final Long ORGANIZATION = 2L;
 	
 	private static final Map<String, Long> organizations;
@@ -75,11 +77,19 @@ public class Login extends HttpServlet {
 
 		UserData user = new UserData();
 		user.setUsername(username);
-		user.setOdatech(ODATECH.compareToIgnoreCase(username) == 0);
-		user.setPrcAdmin(ADMIN.compareToIgnoreCase(username) == 0);
+		String[] split = username.split("_");
+		String role = split[0];
+		String locale = split.length > 1 ? split[1] : "";
+		user.setOdatech(ODATECH.compareToIgnoreCase(role) == 0);
+		user.setPrcAdmin(ADMIN.compareToIgnoreCase(role) == 0 || ODATECH.compareToIgnoreCase(role) == 0);
 		user.setOrganization(organizations.getOrDefault(username, ORGANIZATION));
-		user.setTimezone(TimeZone.getTimeZone("GMT-3").getID());
-		user.setLanguage("EN");
+		if (locale.endsWith(LATIN)) {
+			user.setTimezone(TimeZone.getTimeZone("GMT-3").getID());
+			user.setLanguage("ES");
+		} else {
+			user.setTimezone(TimeZone.getTimeZone("GMT-0").getID());
+			user.setLanguage("EN");
+		}
 
 		String shortToken = UUID.randomUUID().toString();
 		String token = tokenHandler.createToken(user);

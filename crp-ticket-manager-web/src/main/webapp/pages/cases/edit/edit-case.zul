@@ -6,7 +6,7 @@
 	<n:div class="row">
         <n:div>
             <div zclass="pane equal">
-                <n:h5>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h5>
+                <n:h4>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h4>
             </div>
         </n:div>
     </n:div>	

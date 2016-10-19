@@ -11,6 +11,8 @@ import com.qsocialnow.security.UserData;
 @Service
 public class UserSessionService {
 
+    public static final String USER_SESSION_PARAMETER = "user";
+
     public String getUsername() {
         UserData userData = getUserData();
         if (userData != null) {
@@ -18,8 +20,6 @@ public class UserSessionService {
         }
         return null;
     }
-
-    public static final String USER_SESSION_PARAMETER = "user";
 
     private UserData getUserData() {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -43,6 +43,14 @@ public class UserSessionService {
             return userData.getLanguage();
         }
         return null;
+    }
+
+    public boolean isAdmin() {
+        UserData userData = getUserData();
+        if (userData != null) {
+            return userData.isPrcAdmin();
+        }
+        return false;
     }
 
 }

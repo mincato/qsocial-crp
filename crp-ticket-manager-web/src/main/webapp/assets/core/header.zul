@@ -1,58 +1,83 @@
-<vlayout xmlns:n="native" xmlns:x="xhtml">
-	<x:nav class="header-navbar" xmlns:n="native">
-		<div class="navbar-header clearfix col-sm-2">
-			<n:a class="navbar-toggle collapsed" data-toggle="collapse"
-				data-target="#mini-navbar-collapse">
-				<span class="sr-only">Toggle navigation</span>
-				<i class="fa fa-plus"></i>
+<zk xmlns:n="native" xmlns:x="xhtml">
+<n:header class="header">
+	<n:nav class="header-navbar">
+		<x:a class="navbar-toggle collapsed" data-toggle="collapse"
+			data-target="#header" aria-expanded="false">
+			<i class="fa fa-plus"></i>
+		</x:a>
+		<n:div class="navbar-header clearfix">
+			<n:a href="" class=""></n:a>
+			<n:a class="sidebar-switch pull-right">
+				<span class="icon fa "></span>
 			</n:a>
-
-			<a class="sidebar-switch pull-left">
-				<span class="icon fa"></span>
-			</a>
-		</div>
-
-
-		<n:div class="collapse navbar-collapse col-xs-12 col-sm-10 pull-right" 
-			id="mini-navbar-collapse">
-
+			<img class="qsocial-logo"
+				src="/assets/img/core/logo-white.png"/>
+		</n:div>
+		<n:div class="navbar-collapse collapse" id="header">
 			<ul class="nav navbar-nav navbar-right">
-				<li>
-					<a href="#" zclass="btn-logo">
-						<img src="/assets/img/core/icon-logo.png"></img>
-					</a>
+				<li class="header-back" data-toggle="tooltip"
+					data-placement="bottom">
+					<n:a 
+						href="#"
+						class="#">
+						<i class="fa fa-arrow-left"></i>
+					</n:a>
 				</li>
-				<li>
-					<a href="#" zclass="btn-search">
-						<i class="fa fa-search fa-2x"></i>
-					</a>
+				<li class="header-qnews" data-toggle="tooltip"
+					data-placement="bottom" data-original-title=""
+					title="">
+					<n:a 
+						href="#"
+						class="#">
+						<i class="fa fa-area-chart"></i>
+					</n:a>
 				</li>
-				<li>
-					<a href="#" zclass="btn-bell">
-						<i class="fa fa-bell-o fa-2x"></i>
-					</a>
+				<li class="header-usermenu" data-toggle="modal"
+					data-placement="bottom" data-original-title="user"
+					title="user" data-target="#user-admin-id">
+					<n:a class="button-switch button-switch-user"
+						href="#">
+						<i class="fa fa-user"></i>
+					</n:a>
 				</li>
-				<li>
-					<a href="#" zclass="btn-cog">
-						<i class="fa fa-cog fa-2x"></i>
-					</a>
+				<li class="header-qreport" data-toggle="tooltip"
+					data-placement="bottom" data-original-title=""
+					title="">
+					<n:a 
+						href="#"
+						class="#">
+						<i class="fa fa-file-text-o"></i>
+					</n:a>
 				</li>
-				<li>
-					<a href="#" zclass="btn-note">
-						<img src="/assets/img/core/icon-note.png"></img>
-					</a>
+				<li class="header-map" data-toggle="tooltip"
+					data-placement="bottom" data-original-title=""
+					title="">
+					<n:a 
+						href="#"
+						class="#">
+						<i class="fa fa-globe"></i>
+					</n:a>
 				</li>
-				<li>
-					<a href="#" zclass="btn-envelope">
-						<i class="fa fa-envelope fa-2x"></i>
-					</a>
+				<li class="header-contact" data-toggle="tooltip"
+					data-placement="bottom" data-original-title=""
+					title="">
+					<n:a
+						href="#"
+						data-target="#user-contact-id" data-toggle="modal">
+						<i class="fa fa-envelope-o"></i>
+					</n:a>
 				</li>
-				<li>
-					<a href="page-logging-out.html">
-						<i class="fa fa-power-off fa-2x"></i>
-					</a>
+				<li class="header-exit" title=""
+					data-toggle="tooltip" data-placement="bottom"
+					data-original-title="">
+					<n:a 
+						href="#"
+						class="#">
+						<i class="fa fa-power-off"></i>
+					</n:a>
 				</li>
 			</ul>
-		</n:div><!-- navbar-collapse -->
-	</x:nav>
-</vlayout>
+		</n:div>
+	</n:nav>
+</n:header>
+</zk>
