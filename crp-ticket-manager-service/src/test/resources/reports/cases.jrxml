@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2016-10-18T14:42:41 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cases" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1616061c-2862-49eb-b8b1-e5e646f45f54">
+<!-- 2016-10-19T16:48:24 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cases" pageWidth="1008" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="1008" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1616061c-2862-49eb-b8b1-e5e646f45f54">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<queryString language="json">
 		<![CDATA[cases]]>
 	</queryString>
@@ -20,13 +29,16 @@
 	<field name="pendingResponse" class="java.lang.Boolean">
 		<fieldDescription><![CDATA[_source.pendingResponse]]></fieldDescription>
 	</field>
+	<field name="assignee" class="java.lang.String">
+		<fieldDescription><![CDATA[_source.assignee.username]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="80" splitType="Stretch">
+		<band height="31" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="50" width="100" height="30" uuid="4c8a186a-d1aa-4592-a49f-c9dffe2adb8a"/>
+				<reportElement x="0" y="0" width="80" height="30" uuid="4c8a186a-d1aa-4592-a49f-c9dffe2adb8a"/>
 				<textFieldExpression><![CDATA["Cases"]]></textFieldExpression>
 			</textField>
 		</band>
@@ -35,61 +47,177 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="41" splitType="Stretch">
+		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="20" width="100" height="16" uuid="7b36dc41-8374-439a-844a-83efaf7e8707"/>
+				<reportElement x="0" y="0" width="80" height="30" uuid="7b36dc41-8374-439a-844a-83efaf7e8707">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Open Date]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="20" width="80" height="16" uuid="dce07e47-7707-4342-9d1b-ad3456cb437f"/>
+				<reportElement x="80" y="0" width="100" height="30" uuid="dce07e47-7707-4342-9d1b-ad3456cb437f">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Title]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="180" y="20" width="100" height="16" uuid="7085f2bb-71af-462f-8459-a104b4c5506a"/>
+				<reportElement x="180" y="0" width="80" height="30" uuid="7085f2bb-71af-462f-8459-a104b4c5506a">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Subject]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="280" y="20" width="100" height="16" uuid="d48d3102-5580-4e0c-a164-e6fb1d89ccd4"/>
+				<reportElement x="260" y="0" width="60" height="30" uuid="d48d3102-5580-4e0c-a164-e6fb1d89ccd4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[State]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="380" y="20" width="100" height="16" uuid="60787295-43fb-4550-88d5-3324080dfe82"/>
+				<reportElement x="440" y="0" width="50" height="30" uuid="60787295-43fb-4550-88d5-3324080dfe82"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Pending Response]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="490" y="0" width="70" height="30" uuid="a2699964-ac02-4d1f-8a4b-2a0e47b0db7c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Pending Client Action]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="560" y="0" width="80" height="30" uuid="5ddf9e69-5446-4633-8cf1-f672c7304066"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Trigger]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="640" y="0" width="90" height="30" uuid="f82c177e-ed06-46ab-9bb1-29856e703ce2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Segment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="730" y="0" width="60" height="30" uuid="fc7e3302-a8a9-44aa-9688-3e5fc8a2bf16"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Domain]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="790" y="0" width="70" height="30" uuid="65206c44-aeee-46bd-93ac-8d6433ae8876"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Last Comment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="860" y="0" width="60" height="30" uuid="6aa4b93d-9438-4626-9d35-df0155956c6d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Category Subject]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="320" y="0" width="60" height="30" uuid="e4c9173c-242f-495c-8c27-ef14c61d23c5"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Resolution]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="0" width="60" height="30" uuid="08d87a26-de60-46db-a536-b7340aabaf8e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Assignee]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="920" y="0" width="50" height="30" uuid="50fec069-62c9-480d-a6b1-942edf764737"/>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Category Case]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
-			<textField isStretchWithOverflow="true">
-				<reportElement x="100" y="0" width="80" height="30" uuid="d33ed4d0-dd6a-4951-a3d7-2bfcab22e0b6"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="80" y="0" width="100" height="20" uuid="d33ed4d0-dd6a-4951-a3d7-2bfcab22e0b6"/>
 				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy HH:mm">
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="30" uuid="03847324-31ce-4123-b44d-f4912e10d4c9"/>
+			<textField pattern="dd/MM/yyyy HH:mm" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="80" height="20" uuid="03847324-31ce-4123-b44d-f4912e10d4c9"/>
 				<textFieldExpression><![CDATA[new Date($F{openDate})]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="100" height="30" uuid="dc53e811-24df-46bc-a027-63153fef6122"/>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="80" height="20" uuid="dc53e811-24df-46bc-a027-63153fef6122"/>
 				<textFieldExpression><![CDATA[$F{subject}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="280" y="0" width="100" height="30" uuid="cb2083e4-32e4-4ba3-8ad8-0f8903d2d3c1"/>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="260" y="0" width="60" height="20" uuid="cb2083e4-32e4-4ba3-8ad8-0f8903d2d3c1"/>
 				<textFieldExpression><![CDATA[$F{open} ? "Open" : "Close"]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="380" y="0" width="100" height="30" uuid="6b4b9288-8ec5-4dd7-b606-d833dce02bfd"/>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="440" y="0" width="50" height="20" uuid="6b4b9288-8ec5-4dd7-b606-d833dce02bfd">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
 				<textFieldExpression><![CDATA[$F{pendingResponse} ? "Yes" : "No"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="490" y="0" width="70" height="20" uuid="6bd13226-362d-4221-9281-e78aaa57069d">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{pendingResponse} ? "No" : "Yes"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="380" y="0" width="60" height="20" uuid="20559dd5-9ddf-478b-a119-11beba6852c3"/>
+				<textFieldExpression><![CDATA[$F{assignee}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch"/>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="54" splitType="Stretch"/>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		</band>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		</band>
 	</summary>
 </jasperReport>
