@@ -7,7 +7,7 @@
 	   <n:div class="col-lg-12">
 	       <div zclass="pane equal col-md-12 col-xs-12">
 				<n:div class="col-sm-5 col-xs-12">
-    				<n:h5>${labels.userresolver.list.title}</n:h5>
+    				<n:h4>${labels.userresolver.list.title}</n:h4>
 				</n:div>
 				<n:div class="col-sm-offset-1 col-sm-3 col-xs-8">
 					<div zclass="input-group input-group-sm">

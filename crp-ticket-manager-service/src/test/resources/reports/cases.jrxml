@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2016-10-18T14:42:41 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cases" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1616061c-2862-49eb-b8b1-e5e646f45f54">
+	<queryString language="json">
+		<![CDATA[cases]]>
+	</queryString>
+	<field name="title" class="java.lang.String">
+		<fieldDescription><![CDATA[_source.title]]></fieldDescription>
+	</field>
+	<field name="openDate" class="java.lang.Long">
+		<fieldDescription><![CDATA[_source.openDate]]></fieldDescription>
+	</field>
+	<field name="subject" class="java.lang.String">
+		<fieldDescription><![CDATA[_source.subject.identifier]]></fieldDescription>
+	</field>
+	<field name="open" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[_source.open]]></fieldDescription>
+	</field>
+	<field name="pendingResponse" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[_source.pendingResponse]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="50" width="100" height="30" uuid="4c8a186a-d1aa-4592-a49f-c9dffe2adb8a"/>
+				<textFieldExpression><![CDATA["Cases"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="20" width="100" height="16" uuid="7b36dc41-8374-439a-844a-83efaf7e8707"/>
+				<text><![CDATA[Open Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="20" width="80" height="16" uuid="dce07e47-7707-4342-9d1b-ad3456cb437f"/>
+				<text><![CDATA[Title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="20" width="100" height="16" uuid="7085f2bb-71af-462f-8459-a104b4c5506a"/>
+				<text><![CDATA[Subject]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="20" width="100" height="16" uuid="d48d3102-5580-4e0c-a164-e6fb1d89ccd4"/>
+				<text><![CDATA[State]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="20" width="100" height="16" uuid="60787295-43fb-4550-88d5-3324080dfe82"/>
+				<text><![CDATA[Pending Response]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="100" y="0" width="80" height="30" uuid="d33ed4d0-dd6a-4951-a3d7-2bfcab22e0b6"/>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="30" uuid="03847324-31ce-4123-b44d-f4912e10d4c9"/>
+				<textFieldExpression><![CDATA[new Date($F{openDate})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="180" y="0" width="100" height="30" uuid="dc53e811-24df-46bc-a027-63153fef6122"/>
+				<textFieldExpression><![CDATA[$F{subject}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="280" y="0" width="100" height="30" uuid="cb2083e4-32e4-4ba3-8ad8-0f8903d2d3c1"/>
+				<textFieldExpression><![CDATA[$F{open} ? "Open" : "Close"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="380" y="0" width="100" height="30" uuid="6b4b9288-8ec5-4dd7-b606-d833dce02bfd"/>
+				<textFieldExpression><![CDATA[$F{pendingResponse} ? "Yes" : "No"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

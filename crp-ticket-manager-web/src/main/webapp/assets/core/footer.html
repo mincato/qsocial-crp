@@ -1,64 +1,45 @@
-<zk xmlns:n="native"> 
-	<n:div class="row">
-		<div class="col-xs-6 col-sm-4">
-			<img src="/assets/img/core/qslogo.png" alt=" Logo" width="200" style="display:block; margin-left: auto;margin-right: auto;"></img>
-		</div>
-	</n:div>
-	 <n:div class="row">
-		<n:div class="col-xs-6 col-sm-4">
-			<img src="/assets/img/core/sma.png" width="150" alt=" Logo" style="display:block; margin-left: auto;margin-right: auto;"></img>
-			<a style="display:block;text-align:center;font-weight: bold;" href="mailto:info@qsocialnow.com">info@qsocialnow.com</a>
-		</n:div>
-		<n:div id="footer-social" class="col-xs-6 visible-xs">
-			<n:a href="#">
-				<i class="fa fa-youtube fa-2x"></i>
-			</n:a>
-			<n:a href="#">
-				<i class="fa fa-facebook fa-2x"></i>
-			</n:a>
-			<n:a href="#">
-				<i class="fa fa-twitter fa-2x"></i>
-			</n:a>
-		</n:div>
-		<n:div class="hidden-xs col-sm-3 footer-links" style="border-left: 1px solid;">
-			<n:ul class="list fa-ul">
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">QSocial</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">QNow</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.dashboards}</a></li>
-			</n:ul>
-		</n:div>
-		<n:div class="hidden-xs col-sm-3 footer-links" style="border-right: 1px solid; border-left: 1px solid;">
-			<n:ul class="list fa-ul">
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.reports}</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.about}</a></li>
-			</n:ul>
-		</n:div>
-		<n:div id="footer-social" class="hidden-xs col-sm-2">
-			<n:a href="#">
-				<i class="fa fa-youtube fa-2x"></i>
-			</n:a>
-			<n:a href="#">
-				<i class="fa fa-facebook fa-2x"></i>
-			</n:a>
-			<n:a href="#">
-				<i class="fa fa-twitter fa-2x"></i>
-			</n:a>
-		</n:div>
+<zk xmlns:n="native">
+<n:footer id="footer" role="contentinfo">
 		
+<n:div class="footer-column footer-column-1">
+	<img id="pV9Plx" class="footer-logo"
+		src="/assets/img/core/footer-logo.png"><a
+		class="footer-contact-mail" href="mailto:info@qsocial.com"
+		target="_blank"><span>info@qsocialnow.com</span></a>
+	<n:div class="footer-border-right"></n:div>
+</n:div>
+<n:div class="footer-column footer-column-2">
+	<ul>
+		<li><a href="#" target="_blank">QSocial</a></li>
+		<li><a href="#" target="_blank">QNow</a></li>
+		<li><a href="#"
+			target="_blank">${labels.app.footer.dashboards}</a></li>
+	</ul>
+	<n:div class="footer-border-right"></n:div>
+</n:div>
+<n:div class="footer-column footer-column-2">
+	<ul>
+		<li><a href="#"
+			target="_blank">${labels.app.footer.reports}</a></li>
+		<li><a href="#"
+			target="_blank">${labels.app.footer.about}</a></li>
+	</ul>
+	<n:div class="footer-border-right"></n:div>
+</n:div>
+<n:div class="footer-column footer-column-4">
+	<n:div>
+		<a href="https://www.youtube.com/channel/UCxVtPTAZbUzzr7K3906t0FQ"
+			target="_blank"><i class="fa fa-youtube"></i></a>
 	</n:div>
-	<n:div class="row visible-xs">
-			<n:div class="col-xs-6 footer-links" style="border-left: 1px solid;">
-			<n:ul class="list fa-ul">
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">QSocial</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">QNow</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.dashboards}</a></li>
-			</n:ul>
-		</n:div>
-		<n:div class="col-xs-6 footer-links" style="border-right: 1px solid; border-left: 1px solid;">
-			<n:ul class="list fa-ul">
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.reports}</a></li>
-				<li><i class="fa-li fa fa-caret-right"></i><a href="#">${labels.app.footer.about}</a></li>
-			</n:ul>
-		</n:div>
-	
+	<n:div>
+		<a href="https://www.facebook.com/qsocialnow/" target="_blank"><i
+			class="fa fa-facebook-square"></i></a>
+	</n:div>
+	<n:div>
+		<a href="https://twitter.com/qsocialnow" target="_blank"><i
+			class="fa fa-twitter"></i></a>
+	</n:div>
+</n:div>
+</n:footer>
+
 </zk>

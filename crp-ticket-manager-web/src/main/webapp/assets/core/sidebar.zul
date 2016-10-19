@@ -1,130 +1,83 @@
-<?taglib uri="/WEB-INF/tld/security.tld" prefix="sec"?>
-<div xmlns:n="native" xmlns:x="xhtml">
+<zk xmlns:n="native">
+	<?taglib uri="/WEB-INF/tld/security.tld" prefix="sec"?>
+	<div xmlns:n="native" xmlns:x="xhtml">
 
-	<n:aside id="sidebar" class="sidebar affix" role="complementary">
-		<div class="sidebar-container">
-			<div class="sidebar-scrollpane">
-				<div class="sidebar-content">
-					<ul class="sidebar-profile clearfix list-inline">
-						<li>
-							<n:h5>${labels.sidebar.title1}</n:h5>
-							<n:h5>${labels.sidebar.title2}</n:h5>
-						</li>
-						<li class="pull-right">
-							<a class="sidebar-switch">
-								<i class="fa fa-navicon"></i>
-							</a>
-						</li>
-					</ul>
-				</div><!-- sidebar-profile -->
+		<n:aside id="sidebar" class="sidebar affix"
+			role="complementary">
+			<n:div class="sidebar-content">
+				<n:div class="sidebar-title">
+					<i class="fa fa-bullseye"></i>
+					<n:h4>${labels.sidebar.title}</n:h4>
+				</n:div><!-- sidebar-profile -->
+				<ul id="sidebar-nav" class="sidebar-nav">
+					<li if="${sec:isAllGranted('ADMIN')}">
+						<a href="/pages/user-resolver/list/index.zul">
+							<span
+								class="fa fa-comments-o fa-fw fa-lg">
+							</span>
+							<span>
+								${labels.sidebar.menu.usersresolver}
+							</span>
+						</a>
+					</li>
 
-				<n:div role="tabpanel">
-					<!-- Tab panes -->
-					<div class="tab-content">
+					<li if="${sec:isAllGranted('ADMIN')}">
+						<a href="/pages/team/list/index.zul">
+							<span class="fa fa-sitemap fa-fw fa-lg">
+							</span>
+							<span>${labels.sidebar.menu.teams}</span>
+						</a>
+					</li>
+					<li>
+						<a href="/pages/cases/list/index.zul">
+							<span
+								class="fa fa-file-text-o fa-fw fa-lg">
+							</span>
+							<span>${labels.sidebar.menu.cases}</span>
+						</a>
+					</li>
+					<li if="${sec:isAllGranted('ADMIN')}">
+						<a
+							href="/pages/case-category-set/list/index.zul">
+							<span class="fa fa-tags fa-fw fa-lg"></span>
+							<span>
+								${labels.sidebar.menu.casecategorysets}
 
-						<n:div role="tabpanel"
-							class="tab-pane fade in active" id="nav">
-							<n:nav class="main-nav">
-								<ul id="sidebar-nav"
-									class="sidebar-nav">
-									<!-- <li>
-										<n:a href="#"
-											class="menu-first-level">
-											<i
-												class="fa fa-user fa-fw fa-lg">
-											</i>
-											${labels.sidebar.menu.users}
-											<span
-												class="fa chevron-down-left">
-											</span>
-										</n:a>
-										<ul>
-											<li>
-												<a href="#">
-													Usuario 1
-												</a>
-											</li>
-											<li>
-												<a href="#">
-													Usuario 2
-												</a>
-											</li>
-										</ul>
-									</li> -->
-									<li if="${sec:isAllGranted('ADMIN')}">
-										<a href="/pages/user-resolver/list/index.zul">
-											<span
-												class="fa fa-comments-o fa-fw fa-lg">
-											</span>
-											<span>
-											${labels.sidebar.menu.usersresolver}</span>
-										</a>
-									</li>
+							</span>
+						</a>
+					</li>
 
-									<li if="${sec:isAllGranted('ADMIN')}">
-										<a href="/pages/team/list/index.zul">
-											<span
-												class="fa fa-sitemap fa-fw fa-lg">
-											</span>
-											<span>${labels.sidebar.menu.teams}</span>
-										</a>
-									</li>
-									<li>
-										<a href="/pages/cases/list/index.zul">
-											<span
-												class="fa fa-file-text-o fa-fw fa-lg">
-											</span>
-											<span>
-											${labels.sidebar.menu.cases}</span>
-										</a>
-									</li>
-									<li if="${sec:isAllGranted('ADMIN')}">
-										<a href="/pages/case-category-set/list/index.zul">
-											<span
-												class="fa fa-tags fa-fw fa-lg">
-											</span>
-											<span>${labels.sidebar.menu.casecategorysets}
-											
-											</span>
-										</a>
-									</li>
-									
-									<li if="${sec:isAllGranted('ADMIN')}">
-										<a href="/pages/subject-category-set/list/index.zul">
-											<span
-												class="fa fa-users fa-fw fa-lg">
-											</span>
-											<span>${labels.sidebar.menu.subjectcategorysets}
-											</span>
-										</a>
-									</li>
+					<li if="${sec:isAllGranted('ADMIN')}">
+						<a
+							href="/pages/subject-category-set/list/index.zul">
+							<span class="fa fa-users fa-fw fa-lg">
+							</span>
+							<span>
+								${labels.sidebar.menu.subjectcategorysets}
+							</span>
+						</a>
+					</li>
 
-									<li if="${sec:isAllGranted('ADMIN')}">
-										<a href="/pages/domain/list/index.zul">
-											<span
-												class="fa fa-desktop fa-fw fa-lg">
-											</span>
-											<span>${labels.sidebar.menu.domains}
-											</span>
-										</a>
-									</li>
-									
-									<li if="${sec:isAllGranted('ADMIN')}">
-										<a href="/pages/subject/list/index.zul">
-											<span
-												class="fa fa-child fa-fw fa-lg">
-											</span>
-											<span>${labels.sidebar.menu.subjects}
-									
-											</span>
-										</a>
-									</li>
-								</ul><!-- sidebar-nav -->
-							</n:nav>
-						</n:div><!-- tab-content -->
-					</div><!-- tabpanel -->
-				</n:div><!-- sidebar-content -->
-			</div><!-- scrollpane -->
-		</div><!-- sidebar-container -->
-	</n:aside>
-</div>
+					<li if="${sec:isAllGranted('ADMIN')}">
+						<a href="/pages/domain/list/index.zul">
+							<span class="fa fa-desktop fa-fw fa-lg">
+							</span>
+							<span>${labels.sidebar.menu.domains}</span>
+						</a>
+					</li>
+
+					<li if="${sec:isAllGranted('ADMIN')}">
+						<a href="/pages/subject/list/index.zul">
+							<span class="fa fa-child fa-fw fa-lg">
+							</span>
+							<span>
+								${labels.sidebar.menu.subjects}
+
+							</span>
+						</a>
+					</li>
+				</ul>
+			</n:div>
+		</n:aside>
+	</div>
+</zk>

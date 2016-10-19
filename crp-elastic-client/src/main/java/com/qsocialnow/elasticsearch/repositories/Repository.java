@@ -1,5 +1,7 @@
 package com.qsocialnow.elasticsearch.repositories;
 
+import io.searchbox.core.SearchResult;
+
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +48,9 @@ public interface Repository<T> {
             String serchField, String searchValue);
 
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
+            boolean sortOrder, Map<String, String> fieldValues, String rangeField, String fromValue, String toValue);
+
+    public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
             boolean sortOrder, Map<String, String> fieldValues, String rangeField, String fromValue, String toValue);
 
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,

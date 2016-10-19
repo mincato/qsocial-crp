@@ -7,7 +7,7 @@
 	<n:div class="row">
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
-				<n:h5>${labels.trigger.create.segments}</n:h5>
+				<n:h4>${labels.trigger.create.segments}</n:h4>
 			</div>
 		</n:div>
 	</n:div>
