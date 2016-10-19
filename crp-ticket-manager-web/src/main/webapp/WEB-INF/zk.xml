@@ -11,7 +11,7 @@
 	-->
 	
 	<listener>
-    	<listener-class>com.qsocialnow.interceptors.TimeZoneProvider</listener-class>
+    	<listener-class>com.qsocialnow.interceptors.UserConfigurator</listener-class>
 	</listener>
 	
 	<system-config>

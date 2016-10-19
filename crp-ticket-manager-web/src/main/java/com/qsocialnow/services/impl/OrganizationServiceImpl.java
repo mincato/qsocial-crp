@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.zkoss.zk.ui.Executions;
 
 import com.qsocialnow.common.model.config.ClientOrganization;
-import com.qsocialnow.security.AuthorizationFilter;
+import com.qsocialnow.security.AuthorizationHelper;
 import com.qsocialnow.security.UserData;
 import com.qsocialnow.services.OrganizationService;
 
@@ -14,7 +14,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public ClientOrganization getCurrentOrganization() {
         UserData userData = (UserData) Executions.getCurrent().getSession()
-                .getAttribute(AuthorizationFilter.USER_SESSION_PARAMETER);
+                .getAttribute(AuthorizationHelper.USER_SESSION_PARAMETER);
         ClientOrganization currentOrganization = new ClientOrganization();
         currentOrganization.setId(userData.getOrganization());
         return currentOrganization;
