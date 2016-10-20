@@ -6,15 +6,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoginConfigBean {
 
-	@Value("${login.url}")
-	private String loginUrl;
+    @Value("${login.url}")
+    private String loginUrl;
 
-	public String getLoginUrl() {
-		return loginUrl;
-	}
+    public String getLoginUrl() {
+        return loginUrl;
+    }
 
-	public void setLoginUrl(String loginUrl) {
-		this.loginUrl = loginUrl;
-	}
+    public void setLoginUrl(String loginUrl) {
+        this.loginUrl = loginUrl;
+    }
 
 }

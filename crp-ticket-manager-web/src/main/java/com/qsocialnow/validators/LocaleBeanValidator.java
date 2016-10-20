@@ -6,7 +6,7 @@ import org.zkoss.util.resource.Labels;
 
 public class LocaleBeanValidator extends BeanValidator {
 
-	protected void addInvalidMessage(ValidationContext ctx,String message) {
-		super.addInvalidMessage(ctx, Labels.getLabel(message));
-	}
+    protected void addInvalidMessage(ValidationContext ctx, String message) {
+        super.addInvalidMessage(ctx, Labels.getLabel(message));
+    }
 }
