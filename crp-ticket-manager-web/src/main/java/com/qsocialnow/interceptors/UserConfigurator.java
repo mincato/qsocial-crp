@@ -15,24 +15,24 @@ import com.qsocialnow.security.UserData;
 
 public class UserConfigurator implements RequestInterceptor {
 
-	@Override
-	public void request(Session session, Object request, Object response) {
+    @Override
+    public void request(Session session, Object request, Object response) {
 
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-		AuthorizationHelper authHelper = new AuthorizationHelper();
-		boolean userSaved = authHelper.saveUserInSession(httpRequest);
+        AuthorizationHelper authHelper = new AuthorizationHelper();
+        boolean userSaved = authHelper.saveUserInSession(httpRequest);
 
-		if (userSaved) {
-			HttpSession httpSession = httpRequest.getSession(false);
-			UserData userData = (UserData) httpSession.getAttribute(AuthorizationHelper.USER_SESSION_PARAMETER);
-			if (userData != null && userData.getTimezone() != null) {
-				session.setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(userData.getTimezone()));
+        if (userSaved) {
+            HttpSession httpSession = httpRequest.getSession(false);
+            UserData userData = (UserData) httpSession.getAttribute(AuthorizationHelper.USER_SESSION_PARAMETER);
+            if (userData != null && userData.getTimezone() != null) {
+                session.setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(userData.getTimezone()));
 
-			}
-			if (userData != null && userData.getLanguage() != null) {
-				session.setAttribute(Attributes.PREFERRED_LOCALE, Locales.getLocale(userData.getLanguage()));
-			}
-		}
-	}
+            }
+            if (userData != null && userData.getLanguage() != null) {
+                session.setAttribute(Attributes.PREFERRED_LOCALE, Locales.getLocale(userData.getLanguage()));
+            }
+        }
+    }
 }
