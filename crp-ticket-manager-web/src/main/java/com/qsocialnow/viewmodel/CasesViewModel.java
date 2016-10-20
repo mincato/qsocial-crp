@@ -74,6 +74,10 @@ public class CasesViewModel implements Serializable {
 
     private String subject;
 
+    private List<String> statusOptions = new ArrayList<>();
+
+    private String status;
+
     private List<String> pendingOptions = new ArrayList<>();
 
     private String pendingResponse;
@@ -86,6 +90,7 @@ public class CasesViewModel implements Serializable {
         this.subjectsFilterOptions = getSubjects();
         this.filterActive = false;
         this.pendingOptions = getPendingOptionsList();
+        this.statusOptions = getStatusOptionsList();
         findCases();
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
@@ -167,6 +172,10 @@ public class CasesViewModel implements Serializable {
             filters.put("pendingResponse", this.pendingResponse);
         }
 
+        if (status != null && !status.equals(ALL_OPTION_VALUE)) {
+            filters.put("status", this.status);
+        }
+
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
         }
@@ -243,6 +252,22 @@ public class CasesViewModel implements Serializable {
         this.subject = subject;
     }
 
+    public List<String> getStatusOptions() {
+        return statusOptions;
+    }
+
+    public void setStatusOptions(List<String> statusOptions) {
+        this.statusOptions = statusOptions;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getPendingResponse() {
         return pendingResponse;
     }
@@ -260,6 +285,11 @@ public class CasesViewModel implements Serializable {
     }
 
     private List<String> getPendingOptionsList() {
+        String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
+        return new ArrayList<String>(Arrays.asList(options));
+    }
+
+    private List<String> getStatusOptionsList() {
         String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
         return new ArrayList<String>(Arrays.asList(options));
     }
