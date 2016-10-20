@@ -19,7 +19,7 @@
 					    <n:label class="control-label col-sm-1">${labels.trigger.name}</n:label>
 					    <n:div class="col-sm-11">
 			    			<textbox type="text" class="form-control" id="name" 
-				    			value="@bind(fxSegment.segment.description) @validator('beanValidator')"></textbox>
+				    			value="@bind(fxSegment.segment.description) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 					    	<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
 			    				<label value="@load(vmsgs[name])" />
 			    			</x:span>
@@ -29,7 +29,7 @@
 						<n:label class="control-label col-sm-1">${labels.trigger.team}:</n:label>
 						<n:div class="col-sm-11">
 							<selectbox sclass="form-control" model="@load(segmentVm.teamOptions)" id="team"
-								selectedItem="@bind(fxSegment.team) @validator('beanValidator')">
+								selectedItem="@bind(fxSegment.team) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 				    			<template name="model">
 									<label value="${each.name}" />
 								</template>

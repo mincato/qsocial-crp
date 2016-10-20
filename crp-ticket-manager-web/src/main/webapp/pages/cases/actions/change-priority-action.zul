@@ -7,7 +7,7 @@
 		<div sclass="@load(empty vmsgs[priority] ? 'form-group' : 'form-group has-error')">
 			<n:label class="control-label">${labels.cases.actions.changePriority.priority}:</n:label>
 			<selectbox sclass="form-control" id="priority" model="@load(changePriorityActionVm.priorityOptions)"
-				selectedItem="@bind(fxChangePriorityAction.selectedPriority) @validator('beanValidator')">
+				selectedItem="@bind(fxChangePriorityAction.selectedPriority) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 			    <template name="model">
 					<label value="@load(c:l(c:cat('cases.priority.',each)))" />
 				</template>

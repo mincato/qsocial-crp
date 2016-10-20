@@ -11,13 +11,13 @@ public class Trigger {
 
     private String id;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String name;
 
-    @NotNull(message = "{field.empty}")
+    @NotNull(message = "app.field.empty.validation")
     private Long init;
 
-    @NotNull(message = "{field.empty}")
+    @NotNull(message = "app.field.empty.validation")
     private Long end;
 
     private String description;
@@ -32,7 +32,7 @@ public class Trigger {
 
     private List<String> subjectCategoriesSetIds;
 
-    @NotNull(message = "{field.empty}")
+    @NotNull(message = "app.field.empty.validation")
     private Status status;
 
     public Trigger() {

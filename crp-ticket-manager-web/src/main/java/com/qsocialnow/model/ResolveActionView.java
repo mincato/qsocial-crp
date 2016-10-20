@@ -6,7 +6,7 @@ import com.qsocialnow.common.model.config.Resolution;
 
 public class ResolveActionView {
 
-    @NotNull(message = "{resolutions.null}")
+    @NotNull(message = "cases.resolutions.null.validation")
     private Resolution selectedResolution;
 
     public Resolution getSelectedResolution() {

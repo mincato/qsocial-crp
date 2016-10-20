@@ -16,7 +16,7 @@ public class DomainView {
     @Valid
     private Domain domain;
 
-    @NotEmpty(message = "{thematics.size}")
+    @NotEmpty(message = "domain.thematics.size.validation")
     private Set<Thematic> selectedThematics;
 
     private List<Resolution> resolutions;

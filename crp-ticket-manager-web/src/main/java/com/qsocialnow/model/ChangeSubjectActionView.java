@@ -6,7 +6,7 @@ import com.qsocialnow.common.model.cases.SubjectListView;
 
 public class ChangeSubjectActionView {
 
-    @NotNull(message = "{subject.null}")
+    @NotNull(message = "app.subject.null.validation")
     private SubjectListView selectedSubject;
 
     public SubjectListView getSelectedSubject() {

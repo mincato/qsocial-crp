@@ -11,7 +11,7 @@ public class SegmentView {
     @Valid
     private Segment segment;
 
-    @NotNull(message = "{field.empty}")
+    @NotNull(message = "app.field.empty.validation")
     private TeamListView team;
 
     public Segment getSegment() {

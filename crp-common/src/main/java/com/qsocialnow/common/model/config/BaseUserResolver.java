@@ -12,7 +12,7 @@ public class BaseUserResolver implements Serializable {
 
     private Long source;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String identifier;
 
     public BaseUserResolver() {

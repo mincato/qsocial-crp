@@ -35,10 +35,10 @@ public class Case implements Serializable {
 
     private Long lastModifiedTimestamp;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String title;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String description;
 
     private Event triggerEvent;

@@ -6,7 +6,7 @@ import com.qsocialnow.common.model.cases.Priority;
 
 public class ChangePriorityActionView {
 
-    @NotNull(message = "{priority.null}")
+    @NotNull(message = "app.priority.null.validation")
     private Priority selectedPriority;
 
     public Priority getSelectedPriority() {

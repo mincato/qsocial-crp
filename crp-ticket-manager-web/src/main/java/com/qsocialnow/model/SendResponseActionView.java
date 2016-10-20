@@ -8,10 +8,10 @@ import com.qsocialnow.common.model.config.BaseUserResolver;
 
 public class SendResponseActionView {
 
-    @NotNull(message = "{userResolver.null}")
+    @NotNull(message = "app.userResolver.null.validation")
     private BaseUserResolver selectedUserResolver;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String text;
 
     public BaseUserResolver getSelectedUserResolver() {

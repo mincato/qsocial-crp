@@ -11,7 +11,7 @@ public class UserResolverView {
     @Valid
     private UserResolver userResolver;
 
-    @NotNull(message = "{field.empty}")
+    @NotNull(message = "app.field.empty.validation")
     private Media source;
 
     public UserResolver getUserResolver() {

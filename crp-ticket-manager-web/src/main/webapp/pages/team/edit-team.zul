@@ -31,7 +31,7 @@
 										<x:div class="col-sm-10">
 											<textbox type="text"
 												class="form-control" id="name" name="normal_input"
-												value="@bind(fx.team.name) @validator('beanValidator')">
+												value="@bind(fx.team.name) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 											</textbox>
 											<x:span
 												sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">

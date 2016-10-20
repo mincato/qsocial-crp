@@ -108,7 +108,7 @@
 										<x:div class="col-sm-10">
 											<textbox type="text"
 												class="form-control" id="name" name="normal_input"
-												value="@bind(fx.subject.name) @validator('beanValidator')">
+												value="@bind(fx.subject.name) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 											</textbox>
 											<x:span
 												sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
@@ -126,7 +126,7 @@
 										<x:div class="col-sm-10">
 											<textbox type="text"
 												class="form-control" id="lastname" name="normal_input"
-												value="@bind(fx.subject.lastName) @validator('beanValidator')">
+												value="@bind(fx.subject.lastName) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 											</textbox>
 											<x:span
 												sclass="@load(empty vmsgs[lastname] ? 'hidden' : 'help-block')">
@@ -168,7 +168,7 @@
 										<x:div class="col-sm-10">
 											<textbox type="text"
 												class="form-control" id="email" name="normal_input"
-												value="@bind(fx.subject.contactInfo.email) @validator('beanValidator')">
+												value="@bind(fx.subject.contactInfo.email) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 											</textbox>
 											<x:span
 												sclass="@load(empty vmsgs[email] ? 'hidden' : 'help-block')">
@@ -186,7 +186,7 @@
 										<x:div class="col-sm-10">
 											<intbox class="form-control"
 												id="age" name="normal_input" maxlength="3"
-												value="@bind(fx.subject.age) @validator('beanValidator')">
+												value="@bind(fx.subject.age) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 											</intbox>
 											<x:span
 												sclass="@load(empty vmsgs[age] ? 'hidden' : 'help-block')">
@@ -204,7 +204,7 @@
 										<x:div class="col-sm-10">
 											<textbox type="text"
 												class="form-control" id="address" name="normal_input"
-												value="@bind(fx.subject.address) @validator('beanValidator')">
+												value="@bind(fx.subject.address) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 											</textbox>
 											<x:span
 												sclass="@load(empty vmsgs[address] ? 'hidden' : 'help-block')">

@@ -22,7 +22,7 @@
 							${labels.userresolver.source.label}
 						</n:label>
 						<x:div class="col-sm-10">
-							<radiogroup id="source" selectedItem="@bind(fx.source) @validator('beanValidator')"/>
+							<radiogroup id="source" selectedItem="@bind(fx.source) @validator('com.qsocialnow.validators.LocaleBeanValidator')"/>
 							<x:div children="@load(vm.mediaTypes)">
 								<template name="children">
 									<radio radiogroup="source" value="@load(each)" disabled="@load(fx.userResolver.credentials ne null)"
