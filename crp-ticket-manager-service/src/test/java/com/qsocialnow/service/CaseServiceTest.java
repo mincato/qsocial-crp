@@ -55,11 +55,11 @@ public class CaseServiceTest {
         when(
                 caseRepository.findAll(Mockito.any(PageRequest.class), Mockito.matches("subject"),
                         Mockito.matches("title"), Mockito.matches("description"), Mockito.matches("true"),
-                        Mockito.matches("1476719187665"), Mockito.matches("1476719187665"), Mockito.anyList(),
-                        Mockito.matches("bruceWayne"))).thenReturn(expectedCases);
+                        Mockito.matches("true"), Mockito.matches("1476719187665"), Mockito.matches("1476719187665"),
+                        Mockito.anyList(), Mockito.matches("bruceWayne"))).thenReturn(expectedCases);
 
         PageResponse<CaseListView> results = caseService.findAll(0, 0, "title", "true", "subject", "title",
-                "description", "true", "1476719187665", "1476719187665", "bruceWayne");
+                "description", "true", "true", "1476719187665", "1476719187665", "bruceWayne");
         ReflectionAssert.assertReflectionEquals(expectedPageCases, results);
     }
 }

@@ -51,8 +51,8 @@ public class CaseService {
     private Map<ActionType, Action> actions;
 
     public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
-            String subject, String title, String description, String pendingResponse, String fromOpenDate,
-            String toOpenDate, String userName) {
+            String subject, String title, String description, String pendingResponse, String status,
+            String fromOpenDate, String toOpenDate, String userName) {
         PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
         pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
 
@@ -76,7 +76,7 @@ public class CaseService {
         }
         log.info("After process teams - trying to retrieve cases from :" + userName);
         List<CaseListView> cases = repository.findAll(pageRequest, subject, title, description, pendingResponse,
-                fromOpenDate, toOpenDate, teamsToFilter, userName);
+                status, fromOpenDate, toOpenDate, teamsToFilter, userName);
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;

@@ -46,7 +46,7 @@ public class CaseTicketService extends CaseIndexService {
     }
 
     public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String subject, String title,
-            String description, String pendingResponse, String fromOpenDate, String toOpenDate,
+            String description, String pendingResponse, String status, String fromOpenDate, String toOpenDate,
             List<String> teamsToFilter, String userName) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
@@ -73,6 +73,9 @@ public class CaseTicketService extends CaseIndexService {
 
         if (pendingResponse != null)
             searchValues.put("pendingResponse", pendingResponse);
+
+        if (status != null)
+            searchValues.put("open", status);
 
         List<ShouldFilter> shouldFilters = null;
 
