@@ -57,7 +57,7 @@ public class CaseServiceImpl implements CaseService {
             String userName = userSessionService.getUsername();
             boolean isAdmin = userSessionService.isAdmin();
 
-            if (userName.equals(null)) {
+            if (userName==null) {
                 throw new PermissionException();
             }
 
