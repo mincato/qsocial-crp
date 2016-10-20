@@ -9,7 +9,7 @@ public class SendResponseAutomaticActionView {
 
     private List<UserResolverBySource> userResolvers;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String text;
 
     public SendResponseAutomaticActionView() {

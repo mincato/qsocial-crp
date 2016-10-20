@@ -7,7 +7,7 @@ public class Resolution {
 
     private String id;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String description;
 
     public String getId() {

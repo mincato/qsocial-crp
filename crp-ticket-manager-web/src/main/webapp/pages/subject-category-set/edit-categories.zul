@@ -39,7 +39,7 @@
 							sclass="@load(empty vmsgs['description_'.concat(forEachStatus.index)] ? 'col-xs-8 col-sm-9' : 'col-xs-8 col-sm-9 has-error')">
 							<textbox type="text" class="form-control"
 								name="normal_input"
-								value="@bind(each.description) @validator('beanValidator')">
+								value="@bind(each.description) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 							</textbox>
 							<x:span
 								sclass="@load(vmsgs['description_'.concat(forEachStatus.index)] ? 'hidden' : 'help-block')">

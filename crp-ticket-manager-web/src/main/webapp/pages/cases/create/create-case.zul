@@ -16,7 +16,7 @@
 						<x:div sclass="@load(empty vmsgs[title] ? 'form-group' : 'form-group has-error')">
 						    <n:label class="control-label">${labels.cases.details.title}:</n:label>
 				    		<textbox type="text" class="form-control" id="title" 
-					    			name="normal_input" value="@bind(newCase.newCase.title) @validator('beanValidator')"></textbox>
+					    			name="normal_input" value="@bind(newCase.newCase.title) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 					    	<x:span sclass="@load(empty vmsgs[title] ? 'hidden' : 'help-block')">
 			    				<label value="@load(vmsgs[title])" />
 			    			</x:span>
@@ -25,7 +25,7 @@
 						<x:div sclass="@load(empty vmsgs[description] ? 'form-group' : 'form-group has-error')">
 	                        <n:label class="control-label col-sm-3">${labels.cases.details.description}</n:label>
 	                        <textbox rows="5" type="text" id="description"
-	                               class="form-control" value="@bind(newCase.newCase.description) @validator('beanValidator')"></textbox>
+	                               class="form-control" value="@bind(newCase.newCase.description) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 	                        <x:span sclass="@load(empty vmsgs[description] ? 'hidden' : 'help-block')">
                                 <label value="@load(vmsgs[description])" />
                             </x:span>       
@@ -39,7 +39,7 @@
 						<div sclass="@load(empty vmsgs[domain] ? 'form-group' : 'form-group has-error')">
                             <n:label class="control-label col-sm-3">${labels.cases.details.domains}</n:label>
                             <selectbox id="domain" sclass="form-control" model="@load(vm.domains) "
-				                selectedItem="@bind(newCase.selectedDomain) @validator('beanValidator')"
+				                selectedItem="@bind(newCase.selectedDomain) @validator('com.qsocialnow.validators.LocaleBeanValidator')"
 				                onSelect="@command('onSelectDomain', domain = newCase.selectedDomain)">
 				                <template name="model">
 				                    <label  value="${each.name}"/>
@@ -54,7 +54,7 @@
                             <selectbox id="trigger" sclass="form-control" 
 								disabled="@load(newCase.selectedDomain eq null or vm.triggers eq null )"
                              	model="@load(vm.triggers)"
-                                selectedItem="@bind(newCase.selectedTrigger)  @validator('beanValidator')"
+                                selectedItem="@bind(newCase.selectedTrigger)  @validator('com.qsocialnow.validators.LocaleBeanValidator')"
                                 onSelect="@command('onSelectTrigger', domain = newCase.selectedDomain,  trigger = newCase.selectedTrigger)">
                                 <template name="model">
                                     <label  value="${each.name}"/>
@@ -69,7 +69,7 @@
                             <selectbox id="segment" sclass="form-control" 
                             	model="@load(vm.segments)"
                             	disabled="@load(newCase.selectedTrigger eq null or vm.segments eq null)"	
-                                selectedItem="@bind(newCase.selectedSegment)  @validator('beanValidator')">
+                                selectedItem="@bind(newCase.selectedSegment)  @validator('com.qsocialnow.validators.LocaleBeanValidator')">
                                 <template name="model">
                                     <label  value="${each.description}"/>
                                 </template>

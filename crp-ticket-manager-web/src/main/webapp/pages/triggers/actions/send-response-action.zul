@@ -10,7 +10,7 @@
 				<x:label sclass="@load(sendResponseActionVm.anyTwitterSource ? 'hidden': 'control-label')" >${labels.trigger.actions.response.text}:</x:label>
 				<x:label sclass="@load(sendResponseActionVm.anyTwitterSource ? 'control-label' : 'hidden')">${labels.trigger.actions.response.twitter.warning}:</x:label>
 				<textbox id="responseText" type="text" class="form-control" maxlength="@load(sendResponseActionVm.textMaxlength)"
-	    			value="@bind(fxSendResponseAction.text) @validator('beanValidator')"></textbox>
+	    			value="@bind(fxSendResponseAction.text) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 	    		<x:span sclass="@load(empty vmsgs[responseText] ? 'hidden' : 'help-block')">
 					<label value="@load(vmsgs[responseText])" />
 				</x:span>	

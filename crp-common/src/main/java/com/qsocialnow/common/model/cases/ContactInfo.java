@@ -12,7 +12,7 @@ public class ContactInfo implements Serializable {
 
     private String mobile;
 
-    @Email(message = "{invalid.email}")
+    @Email(message = "app.invalid.email.validation")
     private String email;
 
     public String getPhone() {

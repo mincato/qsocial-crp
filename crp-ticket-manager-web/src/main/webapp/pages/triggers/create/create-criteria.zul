@@ -17,7 +17,7 @@
 						    <n:label class="control-label col-sm-2">${labels.trigger.name}</n:label>
 				    		<n:div class="col-sm-10">
 		    					<textbox type="text" class="form-control" id="name" 
-			    					value="@bind(fxCriteria.name) @validator('beanValidator')"></textbox>
+			    					value="@bind(fxCriteria.name) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 				    			<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
 		    						<label value="@load(vmsgs[name])" />
 		    					</x:span>

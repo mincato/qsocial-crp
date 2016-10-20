@@ -9,7 +9,7 @@ public class Segment {
 
     private String id;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String description;
 
     private String team;

@@ -11,7 +11,7 @@ public class UserResolverBySource {
 
     private Media source;
 
-    @NotNull(message = "{userResolver.null}")
+    @NotNull(message = "app.userResolver.null.validation")
     private BaseUserResolver selectedUserResolver;
 
     private List<BaseUserResolver> userResolverOptions;

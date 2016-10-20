@@ -9,7 +9,7 @@ public class DetectionCriteria {
 
     private String id;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String name;
 
     private Long validateFrom;

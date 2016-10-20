@@ -6,7 +6,7 @@ import com.qsocialnow.common.model.config.User;
 
 public class AssignActionView {
 
-    @NotNull(message = "{user.null}")
+    @NotNull(message = "app.user.null.validation")
     private User selectedUser;
 
     public User getSelectedUser() {
