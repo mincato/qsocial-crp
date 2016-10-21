@@ -2,16 +2,21 @@ package com.qsocialnow.services;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.qsocialnow.security.TokenHandler;
 import com.qsocialnow.security.UserData;
 
 @Service
 public class UserSessionService {
 
     public static final String USER_SESSION_PARAMETER = "user";
+
+    @Autowired
+    private TokenHandler tokenHandler;
 
     public String getUsername() {
         UserData userData = getUserData();
@@ -52,13 +57,21 @@ public class UserSessionService {
         }
         return false;
     }
-    
+
     public boolean isAnalyticsAllowed() {
         UserData userData = getUserData();
         if (userData != null) {
             return userData.isAnalyticsAllowed();
         }
         return false;
+    }
+
+    public String createToken() {
+        return tokenHandler.createToken(getUserData());
+    }
+
+    public int getExpirationInMinutes() {
+        return tokenHandler.getExpirationInMinutes();
     }
 
 }

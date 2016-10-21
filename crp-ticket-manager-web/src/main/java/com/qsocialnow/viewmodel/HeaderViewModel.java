@@ -13,9 +13,9 @@ import com.qsocialnow.services.impl.AnalyticsAuthService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class HeaderViewModel implements Serializable {
 
-   private static final long serialVersionUID = -5168365811321248975L;
+    private static final long serialVersionUID = -5168365811321248975L;
 
-	@WireVariable
+    @WireVariable
     private AnalyticsAuthService analyticsAuthService;
 
     @Init
@@ -27,5 +27,4 @@ public class HeaderViewModel implements Serializable {
         analyticsAuthService.redirectAnalyticsHome();
     }
 
-    
 }
