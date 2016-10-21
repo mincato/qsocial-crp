@@ -24,6 +24,15 @@ public class FacebookSourceStrategy implements SourceStrategy {
 
     @Override
     public String sendResponse(Case caseObject, UserResolver userResolver, String text) {
+        return postMessage(caseObject, userResolver, text);
+    }
+
+    @Override
+    public String sendMessage(Case caseObject, UserResolver userResolver, String text) {
+        return postMessage(caseObject, userResolver, text);
+    }
+
+    private String postMessage(Case caseObject, UserResolver userResolver, String text) {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.setOAuthAppId(facebookConfig.getOAuthAppId());
         configurationBuilder.setOAuthAppSecret(facebookConfig.getOAuthAppSecret());
@@ -58,11 +67,6 @@ public class FacebookSourceStrategy implements SourceStrategy {
             log.error("There was an error trying to send response via facebook", e);
             throw new SourceException(e);
         }
-    }
-
-    @Override
-    public String sendMessage(Case caseObject, UserResolver userResolver, String text) {
-        return null;
     }
 
     public void setFacebookConfig(FacebookConfig facebookConfig) {

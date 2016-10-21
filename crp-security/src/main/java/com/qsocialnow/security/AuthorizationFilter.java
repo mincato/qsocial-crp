@@ -5,13 +5,18 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.curator.framework.CuratorFramework;
 import org.apache.log4j.Logger;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
+@Deprecated
 public class AuthorizationFilter implements Filter {
 
 	private static final Logger LOGGER = Logger.getLogger(AuthorizationFilter.class);
@@ -32,8 +37,12 @@ public class AuthorizationFilter implements Filter {
 		boolean continueProcessing = true;
 		
 		try {
+			ServletContext context = request.getServletContext();
+			WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
+			CuratorFramework curatorFramework = (CuratorFramework) springContext.getBean("zookeeperClient");
+			
 			AuthorizationHelper authHelper = new AuthorizationHelper();
-			authHelper.saveUserInSession(request);
+			authHelper.saveUserInSession(request, curatorFramework);
 			authHelper.authorize(request);
 			
 		} catch (Exception e) {
