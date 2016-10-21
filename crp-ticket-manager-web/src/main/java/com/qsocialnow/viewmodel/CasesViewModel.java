@@ -319,7 +319,7 @@ public class CasesViewModel implements Serializable {
 			Execution exec = Executions.getCurrent();
 			HttpServletResponse response = (HttpServletResponse) exec.getNativeResponse();
 			response.sendRedirect(response.encodeRedirectURL(loginUrl));
-			exec.setVoided(true);
+			//exec.setVoided(true);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
