@@ -19,40 +19,40 @@ import com.qsocialnow.security.AuthorizationHelper;
 import com.qsocialnow.security.UserData;
 
 public class UserConfigurator implements RequestInterceptor {
-	
-	private static final Logger LOGGER = Logger.getLogger(UserConfigurator.class);
 
-	@Override
-	public void request(Session session, Object request, Object response) {
+    private static final Logger LOGGER = Logger.getLogger(UserConfigurator.class);
 
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
+    @Override
+    public void request(Session session, Object request, Object response) {
 
-		CuratorFramework loginZookeeper = findZookeeperLogin(httpRequest);
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-		try {
-			AuthorizationHelper authHelper = new AuthorizationHelper();
-			boolean userSaved = authHelper.saveUserInSession(httpRequest, loginZookeeper);
-	
-			if (userSaved) {
-				HttpSession httpSession = httpRequest.getSession(false);
-				UserData userData = (UserData) httpSession.getAttribute(AuthorizationHelper.USER_SESSION_PARAMETER);
-				if (userData != null && userData.getTimezone() != null) {
-					session.setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(userData.getTimezone()));
-	
-				}
-				if (userData != null && userData.getLanguage() != null) {
-					session.setAttribute(Attributes.PREFERRED_LOCALE, Locales.getLocale(userData.getLanguage()));
-				}
-			}
-		} catch (Exception e) {
-			LOGGER.error("There was an error configurating the user in the session", e);
-		}
-	}
+        CuratorFramework loginZookeeper = findZookeeperLogin(httpRequest);
 
-	private CuratorFramework findZookeeperLogin(HttpServletRequest request) {
-		ServletContext context = request.getServletContext();
-		WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
-		return (CuratorFramework) springContext.getBean("zookeeperLogin");
-	}
+        try {
+            AuthorizationHelper authHelper = new AuthorizationHelper();
+            boolean userSaved = authHelper.saveUserInSession(httpRequest, loginZookeeper);
+
+            if (userSaved) {
+                HttpSession httpSession = httpRequest.getSession(false);
+                UserData userData = (UserData) httpSession.getAttribute(AuthorizationHelper.USER_SESSION_PARAMETER);
+                if (userData != null && userData.getTimezone() != null) {
+                    session.setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(userData.getTimezone()));
+
+                }
+                if (userData != null && userData.getLanguage() != null) {
+                    session.setAttribute(Attributes.PREFERRED_LOCALE, Locales.getLocale(userData.getLanguage()));
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("There was an error configurating the user in the session", e);
+        }
+    }
+
+    private CuratorFramework findZookeeperLogin(HttpServletRequest request) {
+        ServletContext context = request.getServletContext();
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
+        return (CuratorFramework) springContext.getBean("zookeeperLogin");
+    }
 
 }

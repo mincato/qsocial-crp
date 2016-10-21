@@ -12,5 +12,14 @@
             Return true if the authenticated principal is granted authorities of ALL the specified roles.
         </description>
     </function>
+     <function>
+        <name>isAnalyticsAllowed</name>
+        <function-class>com.qsocialnow.security.SecurityUtil</function-class>
+        <function-signature> boolean isAnalyticsAllowed() 
+        </function-signature>
+        <description> 
+            Return true if access to analytics is allowed.
+        </description>
+    </function>
     ...
 </taglib>
