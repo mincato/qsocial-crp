@@ -7,19 +7,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.zk.ui.Execution;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Filedownload;
 
+import com.qsocialnow.common.exception.PermissionException;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
+import com.qsocialnow.security.LoginConfigBean;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.SubjectService;
 import com.qsocialnow.services.UserSessionService;
@@ -84,6 +90,9 @@ public class CasesViewModel implements Serializable {
 
     @WireVariable
     private UserSessionService userSessionService;
+    
+    @WireVariable
+    private LoginConfigBean loginConfigBean;
 
     @Init
     public void init() {
@@ -126,7 +135,11 @@ public class CasesViewModel implements Serializable {
         this.sortOrder = !this.sortOrder;
         this.activePage = 0;
         this.cases.clear();
-        this.findCases();
+        try {
+        	this.findCases();
+        } catch (PermissionException ex) {
+        	redirectToLogin(loginConfigBean.getLoginUrl());        	
+        }
     }
 
     private PageResponse<CaseListView> findCases() {
@@ -297,4 +310,15 @@ public class CasesViewModel implements Serializable {
     public DateConverter getDateConverter() {
         return dateConverter;
     }
+    
+    private void redirectToLogin(String loginUrl) {
+    	try {
+	        Execution exec = Executions.getCurrent();
+	        HttpServletResponse response = (HttpServletResponse) exec.getNativeResponse();
+	        response.sendRedirect(response.encodeRedirectURL(loginUrl));
+	        exec.setVoided(true);
+    	} catch (Exception e) {
+    		throw new RuntimeException(e);
+    	}
+    }    
 }

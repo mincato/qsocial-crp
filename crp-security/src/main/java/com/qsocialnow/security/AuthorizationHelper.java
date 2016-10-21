@@ -54,8 +54,6 @@ public class AuthorizationHelper {
 	public void authorize(ServletRequest request) {
 
 		try {
-			ServletContext context = request.getServletContext();
-			ZookeeperClient zookeeperClient = new ZookeeperClient(context);
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			HttpSession session = httpRequest.getSession(true);
 
@@ -66,12 +64,9 @@ public class AuthorizationHelper {
 				throw new TokenNotFoundException();
 			}
 
-			UserActivityData activity = zookeeperClient.findUserActivityData(token);
-			verifyExpiration(token, activity, zookeeperClient);
+			// Controlar la expiracion no va a ser necesario en esta version
+			// manageUserActivityExpiration(request, token);
 
-			// Se actualiza la actividad en zookeeper
-			zookeeperClient.updateUserActivityData(token, activity);
-			
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
@@ -127,6 +122,16 @@ public class AuthorizationHelper {
 		// TokenHandlerFactory factory = new TokenHandlerStandaloneFactory();
 
 		return factory;
+	}
+
+	private void manageUserActivityExpiration(HttpServletRequest request, String token) throws Exception {
+		ServletContext context = request.getServletContext();
+		ZookeeperClient zookeeperClient = new ZookeeperClient(context);
+		UserActivityData activity = zookeeperClient.findUserActivityData(token);
+		verifyExpiration(token, activity, zookeeperClient);
+
+		// Se actualiza la actividad en zookeeper
+		zookeeperClient.updateUserActivityData(token, activity);
 	}
 
 }

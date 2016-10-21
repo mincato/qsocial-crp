@@ -12,7 +12,7 @@
     <bean id="tokenHandler" class="com.qsocialnow.security.TokenHandler">
         <property name="headerContentType" value="text/plain"/>
         <property name="simetricKey" value="eeeb0a3e-d96b-4229-9201-d9c0b1a394be"/>
-        <property name="expirationInMinutes" value="1440"/>
+        <property name="expirationInMinutes" value="43200"/>
         <property name="issuer" value="QSocialNow"/>
         <property name="audience" value="http://qsocialnow.com"/>
         <property name="subject" value="QSocialNow User"/>
