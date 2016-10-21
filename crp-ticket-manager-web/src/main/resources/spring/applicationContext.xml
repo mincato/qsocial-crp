@@ -33,6 +33,11 @@
  		<constructor-arg value="${app.service.adminUnits.configurator.path}"></constructor-arg>
 	</bean>
 	
+	<bean id="analyticsConfig" class="com.qsocialnow.config.AnalyticsConfigFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${app.analytics.configurator.path}"></constructor-arg>
+	</bean>
+	
 	
 	
 </beans>

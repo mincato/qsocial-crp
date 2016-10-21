@@ -52,5 +52,13 @@ public class UserSessionService {
         }
         return false;
     }
+    
+    public boolean isAnalyticsAllowed() {
+        UserData userData = getUserData();
+        if (userData != null) {
+            return userData.isAnalyticsAllowed();
+        }
+        return false;
+    }
 
 }

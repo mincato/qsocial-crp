@@ -82,6 +82,7 @@ public class Login extends HttpServlet {
 		String locale = split.length > 1 ? split[1] : "";
 		user.setOdatech(ODATECH.compareToIgnoreCase(role) == 0);
 		user.setPrcAdmin(ADMIN.compareToIgnoreCase(role) == 0 || ODATECH.compareToIgnoreCase(role) == 0);
+		user.setAnalyticsAllowed(ADMIN.compareToIgnoreCase(role) == 0 || ODATECH.compareToIgnoreCase(role) == 0);
 		user.setOrganization(organizations.getOrDefault(username, ORGANIZATION));
 		if (locale.endsWith(LATIN)) {
 			user.setTimezone(TimeZone.getTimeZone("GMT-3").getID());

@@ -26,5 +26,10 @@ public class SecurityUtil {
         }
         return isGranted;
     }
+    
+    public static boolean isAnalyticsAllowed() {
+    	 UserSessionService userSessionService = new UserSessionService();
+    	 return userSessionService.isAnalyticsAllowed();
+    }
 
 }

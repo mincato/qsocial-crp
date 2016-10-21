@@ -1,5 +1,7 @@
-<zk xmlns:n="native" xmlns:x="xhtml">
-<n:header class="header">
+<zk xmlns:n="native" xmlns:x="xhtml" >
+<?taglib uri="/WEB-INF/tld/security.tld" prefix="sec"?>
+<x:header class="header"  apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.HeaderViewModel')">
 	<n:nav class="header-navbar">
 		<x:a class="navbar-toggle collapsed" data-toggle="collapse"
 			data-target="#header" aria-expanded="false">
@@ -15,22 +17,13 @@
 		</n:div>
 		<n:div class="navbar-collapse collapse" id="header">
 			<ul class="nav navbar-nav navbar-right">
-				<li class="header-back" data-toggle="tooltip"
-					data-placement="bottom">
-					<n:a 
-						href="#"
-						class="#">
-						<i class="fa fa-arrow-left"></i>
-					</n:a>
-				</li>
 				<li class="header-qnews" data-toggle="tooltip"
 					data-placement="bottom" data-original-title=""
-					title="">
-					<n:a 
-						href="#"
+					title="${labels.app.header.tooltip.analysis}" if="${sec:isAnalyticsAllowed()}">
+					<a onClick="@command('redirectAnalytics')" 
 						class="#">
 						<i class="fa fa-area-chart"></i>
-					</n:a>
+					</a>
 				</li>
 				<li class="header-usermenu" data-toggle="modal"
 					data-placement="bottom" data-original-title="user"
@@ -79,5 +72,5 @@
 			</ul>
 		</n:div>
 	</n:nav>
-</n:header>
+</x:header>
 </zk>
