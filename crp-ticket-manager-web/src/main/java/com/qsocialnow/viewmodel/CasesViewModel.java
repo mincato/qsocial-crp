@@ -25,7 +25,7 @@ import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
-import com.qsocialnow.security.LoginConfigBean;
+import com.qsocialnow.security.LoginConfig;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.SubjectService;
 import com.qsocialnow.services.UserSessionService;
@@ -92,7 +92,7 @@ public class CasesViewModel implements Serializable {
 	private UserSessionService userSessionService;
 
 	@WireVariable
-	private LoginConfigBean loginConfigBean;
+	private LoginConfig loginConfig;
 
 	@Init
 	public void init() {
@@ -104,7 +104,7 @@ public class CasesViewModel implements Serializable {
 		try {
 			findCases();
 		} catch (PermissionException ex) {
-			redirectToLogin(loginConfigBean.getLoginUrl());
+			redirectToLogin(loginConfig.getLoginUrl());
 			return;
 		}
 

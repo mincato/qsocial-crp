@@ -14,7 +14,7 @@ import org.zkoss.zk.ui.Page;
 import org.zkoss.zk.ui.util.GenericInitiator;
 
 import com.qsocialnow.security.AuthorizationHelper;
-import com.qsocialnow.security.LoginConfigBean;
+import com.qsocialnow.security.LoginConfig;
 
 public class AjaxAccessDeniedHandler extends GenericInitiator {
 
@@ -44,9 +44,8 @@ public class AjaxAccessDeniedHandler extends GenericInitiator {
         ServletContext context = httpRequest.getServletContext();
         WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
 
-        LoginConfigBean loginConfigBean = springContext.getBean(LoginConfigBean.class);
-        String loginUrl = loginConfigBean.getLoginUrl();
-        return loginUrl;
+        LoginConfig loginConfig = springContext.getBean(LoginConfig.class);
+        return loginConfig.getLoginUrl();
     }
 
 }
