@@ -8,6 +8,9 @@ public class LoginConfigBean {
 
     @Value("${login.url}")
     private String loginUrl;
+    
+    @Value("${zookeeper.login.path")
+    private String zookeeperLoginPath;
 
     public String getLoginUrl() {
         return loginUrl;
@@ -16,5 +19,13 @@ public class LoginConfigBean {
     public void setLoginUrl(String loginUrl) {
         this.loginUrl = loginUrl;
     }
+    
+    public String getZookeeperLoginPath() {
+		return zookeeperLoginPath;
+	}
+    
+    public void setZookeeperLoginPath(String zookeeperLoginPath) {
+		this.zookeeperLoginPath = zookeeperLoginPath;
+	}
 
 }
