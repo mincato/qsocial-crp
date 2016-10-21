@@ -48,6 +48,9 @@
  		<constructor-arg value="${app.service.adminUnits.configurator.path}"></constructor-arg>
 	</bean>
 	
-	
+	<bean id="loginConfigFactory" class="com.qsocialnow.config.LoginConfigFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperLogin"></constructor-arg>
+ 		<constructor-arg value="${app.service.adminUnits.configurator.path}"></constructor-arg>
+	</bean>	
 	
 </beans>
