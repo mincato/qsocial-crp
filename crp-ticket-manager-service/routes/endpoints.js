@@ -47,8 +47,30 @@ router.get('/cases/report', function (req, res) {
 	  var caseService = javaContext.getBeanSync("caseReportService");
 	  caseService.getReport(title,description,pendingResponse,fromOpenDate,toOpenDate,asyncResponse);
 	  
-	});
+});
 
+router.get('/cases/results', function (req, res) {
+	function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	    	res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  var domainId = req.query.domainId?req.query.domainId :null;
+	  var caseService = javaContext.getBeanSync("caseResultsService");
+	  caseService.getResults(domainId,asyncResponse);
+});
 
 router.get('/cases', function (req, res) {
 

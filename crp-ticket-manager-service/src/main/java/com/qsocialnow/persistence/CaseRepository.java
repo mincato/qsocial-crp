@@ -1,7 +1,10 @@
 package com.qsocialnow.persistence;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +15,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
@@ -56,6 +60,24 @@ public class CaseRepository {
             log.error("Unexpected error", e);
         }
         return cases;
+    }
+
+    public List<ResultsListView> sumarizeResolvedByResolution(PageRequest pageRequest, String domainId) {
+        List<ResultsListView> results = new ArrayList<>();
+        try {
+            Map<String, Long> resultsRepo = caseElasticService.getCasesCountByResolution(domainId);
+            Set<String> resultKeys = resultsRepo.keySet();
+            for (String key : resultKeys) {
+                ResultsListView resultView = new ResultsListView();
+                resultView.setResolution(key);
+                resultView.setTotal(resultsRepo.get(key));
+                results.add(resultView);
+            }
+
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return results;
     }
 
     public JsonArray findAllAsJsonObject(PageRequest pageRequest, String title, String description,
