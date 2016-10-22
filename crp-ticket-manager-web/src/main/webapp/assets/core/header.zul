@@ -18,8 +18,8 @@
 		<n:div class="navbar-collapse collapse" id="header">
 			<ul class="nav navbar-nav navbar-right">
 				<li class="header-qnews" data-toggle="tooltip"
-					data-placement="bottom" data-original-title=""
-					title="${labels.app.header.tooltip.analysis}" if="${sec:isAnalyticsAllowed()}">
+					data-placement="bottom" data-original-title="${labels.app.header.tooltip.analysis}"
+					title="" if="${sec:isAnalyticsAllowed()}">
 					<a onClick="@command('redirectAnalytics')" 
 						class="#">
 						<i class="fa fa-area-chart"></i>
@@ -62,12 +62,11 @@
 				</li>
 				<li class="header-exit" title=""
 					data-toggle="tooltip" data-placement="bottom"
-					data-original-title="">
-					<n:a 
-						href="#"
+					data-original-title="${labels.app.header.tooltip.logout}">
+					<a onClick="@command('logout')" 
 						class="#">
 						<i class="fa fa-power-off"></i>
-					</n:a>
+					</a>
 				</li>
 			</ul>
 		</n:div>
