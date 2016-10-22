@@ -8,6 +8,7 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.security.SessionHandler;
 import com.qsocialnow.services.impl.AnalyticsAuthService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -18,6 +19,9 @@ public class HeaderViewModel implements Serializable {
     @WireVariable
     private AnalyticsAuthService analyticsAuthService;
 
+    @WireVariable
+    private SessionHandler sessionHandler;
+
     @Init
     public void init() {
     }
@@ -25,6 +29,11 @@ public class HeaderViewModel implements Serializable {
     @Command
     public void redirectAnalytics() {
         analyticsAuthService.redirectAnalyticsHome();
+    }
+
+    @Command
+    public void logout() {
+        sessionHandler.logout();
     }
 
 }
