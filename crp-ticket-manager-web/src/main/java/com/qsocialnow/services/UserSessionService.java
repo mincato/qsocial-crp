@@ -9,7 +9,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.qsocialnow.security.TokenHandler;
 import com.qsocialnow.security.UserData;
-import com.qsocialnow.security.exception.UserNotFoundException;
+import com.qsocialnow.security.exception.AuthorizationException;
 
 @Service
 public class UserSessionService {
@@ -22,7 +22,7 @@ public class UserSessionService {
 	public String getUsername() {
 		UserData userData = getUserData();
 		if (userData == null) {
-			throw new UserNotFoundException();
+			throw new AuthorizationException();
 		}
 		return userData.getUsername();
 	}
@@ -30,7 +30,7 @@ public class UserSessionService {
 	public String getTimeZone() {
 		UserData userData = getUserData();
 		if (userData == null) {
-			throw new UserNotFoundException();
+			throw new AuthorizationException();
 		}
 		return userData.getTimezone();
 	}
@@ -38,7 +38,7 @@ public class UserSessionService {
 	public String getLanguage() {
 		UserData userData = getUserData();
 		if (userData == null) {
-			throw new UserNotFoundException();
+			throw new AuthorizationException();
 		}
 		return userData.getLanguage();
 	}
@@ -46,7 +46,7 @@ public class UserSessionService {
 	public boolean isAdmin() {
 		UserData userData = getUserData();
 		if (userData == null) {
-			throw new UserNotFoundException();
+			throw new AuthorizationException();
 		}
 		return userData.isPrcAdmin();
 	}
@@ -54,7 +54,7 @@ public class UserSessionService {
 	public boolean isAnalyticsAllowed() {
 		UserData userData = getUserData();
 		if (userData == null) {
-			throw new UserNotFoundException();
+			throw new AuthorizationException();
 		}
 		return userData.isAnalyticsAllowed();
 	}

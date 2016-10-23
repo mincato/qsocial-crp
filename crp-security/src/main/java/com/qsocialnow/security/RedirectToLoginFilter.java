@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import com.qsocialnow.security.exception.UserNotFoundException;
+import com.qsocialnow.security.exception.AuthorizationException;
 
 public class RedirectToLoginFilter implements Filter {
 
@@ -31,7 +31,7 @@ public class RedirectToLoginFilter implements Filter {
 			throws IOException, ServletException {
 		try {
 			chain.doFilter(request, response);
-		} catch (UserNotFoundException e) {
+		} catch (AuthorizationException e) {
 			redirectToLogin(request, response);
 		}
 	}
