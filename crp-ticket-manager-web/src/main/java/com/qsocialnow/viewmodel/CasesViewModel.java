@@ -7,20 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
-import org.zkoss.zk.ui.Execution;
-import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Filedownload;
 
-import com.qsocialnow.common.exception.PermissionException;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -100,14 +95,7 @@ public class CasesViewModel implements Serializable {
 		this.filterActive = false;
 		this.pendingOptions = getPendingOptionsList();
 		this.statusOptions = getStatusOptionsList();
-
-		try {
-			findCases();
-		} catch (PermissionException ex) {
-			redirectToLogin(loginConfig.getLoginUrl());
-			return;
-		}
-
+		findCases();
 		this.dateConverter = new DateConverter(userSessionService.getTimeZone());
 	}
 
@@ -314,14 +302,4 @@ public class CasesViewModel implements Serializable {
 		return dateConverter;
 	}
 
-	private void redirectToLogin(String loginUrl) {
-		try {
-			Execution exec = Executions.getCurrent();
-			HttpServletResponse response = (HttpServletResponse) exec.getNativeResponse();
-			response.sendRedirect(response.encodeRedirectURL(loginUrl));
-			//exec.setVoided(true);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
 }

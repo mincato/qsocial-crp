@@ -1,8 +1,6 @@
 package com.qsocialnow.services.impl;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -11,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
@@ -21,20 +17,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.qsocialnow.common.exception.PermissionException;
-import com.qsocialnow.common.model.cases.ActionParameter;
-import com.qsocialnow.common.model.cases.ActionRequest;
-import com.qsocialnow.common.model.cases.Case;
-import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.cases.ResultsListView;
-import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
-import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.ResultsService;
 import com.qsocialnow.services.ServiceUrlResolver;
-import com.qsocialnow.services.UserSessionService;
 
 @Service("resultsService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
