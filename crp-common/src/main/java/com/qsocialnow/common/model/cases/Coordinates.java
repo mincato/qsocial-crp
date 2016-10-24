@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class Coordinates implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1571236095884526627L;
 
-    private double longitude;
+	private double longitude;
 
     private double latitude;
 

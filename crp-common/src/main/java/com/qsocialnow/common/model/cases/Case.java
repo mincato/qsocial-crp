@@ -15,9 +15,9 @@ import com.qsocialnow.common.model.event.Event;
 
 public class Case implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2733196579634071076L;
 
-    private String id;
+	private String id;
 
     private String domainId;
 
