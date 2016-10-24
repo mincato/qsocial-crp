@@ -8,9 +8,9 @@ import com.qsocialnow.common.model.config.Media;
 
 public class SubjectListView implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 8113061120707981442L;
 
-    private String id;
+	private String id;
 
     private String name;
 

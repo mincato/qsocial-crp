@@ -6,8 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.curator.framework.CuratorFramework;
 
-import com.qsocialnow.security.exception.SessionExpiredException;
 import com.qsocialnow.security.exception.ShortTokenExpiredException;
 import com.qsocialnow.security.exception.TokenNotFoundException;
 
@@ -19,13 +19,14 @@ public class AuthorizationHelper {
 
 	public static final String USER_SESSION_PARAMETER = "user";
 
-	public boolean saveUserInSession(ServletRequest request) {
+	public boolean saveUserInSession(ServletRequest request, CuratorFramework curatorFramework) {
 
 		try {
 			ServletContext context = request.getServletContext();
 			TokenHandlerFactory factory = createTokenHandlerFactory(context);
 			TokenHandler tokenHandler = factory.create();
-			ZookeeperClient zookeeperClient = new ZookeeperClient(context);
+			
+			ZookeeperClient zookeeperClient = new ZookeeperClient(curatorFramework);
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			HttpSession session = httpRequest.getSession(true);
 
@@ -40,7 +41,9 @@ public class AuthorizationHelper {
 			UserData user = tokenHandler.verifyToken(token);
 
 			UserActivityData activity = zookeeperClient.findUserActivityData(token);
-			verifyExpiration(token, activity, zookeeperClient);
+			
+			// No hace falta verificar la expiracion en esta version
+			//verifyExpiration(token, activity, zookeeperClient);
 
 			session.setMaxInactiveInterval((int) activity.getSessionTimeoutInSeconds());
 			session.setAttribute(TOKEN_SESSION_PARAMETER, token);
@@ -54,24 +57,19 @@ public class AuthorizationHelper {
 	public void authorize(ServletRequest request) {
 
 		try {
-			ServletContext context = request.getServletContext();
-			ZookeeperClient zookeeperClient = new ZookeeperClient(context);
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
 			HttpSession session = httpRequest.getSession(true);
 
 			// El token tiene que estar si o si en la sesion
 			String token = (String) session.getAttribute(TOKEN_SESSION_PARAMETER);
-
+			
 			if (StringUtils.isBlank(token)) {
 				throw new TokenNotFoundException();
 			}
 
-			UserActivityData activity = zookeeperClient.findUserActivityData(token);
-			verifyExpiration(token, activity, zookeeperClient);
+			// Controlar la expiracion no va a ser necesario en esta version
+			// manageUserActivityExpiration(request, token);
 
-			// Se actualiza la actividad en zookeeper
-			zookeeperClient.updateUserActivityData(token, activity);
-			
 		} catch (Exception e) {
 			throw new RuntimeException();
 		}
@@ -109,7 +107,7 @@ public class AuthorizationHelper {
 		return token;
 	}
 
-	private void verifyExpiration(String token, UserActivityData activity, ZookeeperClient zookeeperClient)
+/*	private void verifyExpiration(String token, UserActivityData activity, ZookeeperClient zookeeperClient)
 			throws Exception {
 
 		if (activity.isExpired()) {
@@ -117,7 +115,7 @@ public class AuthorizationHelper {
 			zookeeperClient.removeSession(token);
 			throw new SessionExpiredException();
 		}
-	}
+	} */
 
 	private TokenHandlerFactory createTokenHandlerFactory(ServletContext context) {
 
@@ -128,5 +126,15 @@ public class AuthorizationHelper {
 
 		return factory;
 	}
+
+/*	private void manageUserActivityExpiration(HttpServletRequest request, String token) throws Exception {
+		ServletContext context = request.getServletContext();
+		ZookeeperClient zookeeperClient = new ZookeeperClient(context);
+		UserActivityData activity = zookeeperClient.findUserActivityData(token);
+		verifyExpiration(token, activity, zookeeperClient);
+
+		// Se actualiza la actividad en zookeeper
+		zookeeperClient.updateUserActivityData(token, activity);
+	} */
 
 }

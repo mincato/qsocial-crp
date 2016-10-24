@@ -102,77 +102,38 @@
 					<table class="table table-striped table-hover">
 			    		<thead>
 							<tr>
-							    <th>
-						    		 <div class="text-center">
-						    		    <a style="text-decoration:none" onClick="@command('sortList' , sortField='title')" >
-						    		        <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
-						    		            ${labels.cases.list.column.title}
-						    		        </i>
-						    		    </a>
-    					    	  	</div>
-    					    	</th>
-					    		<th>
-					    		     <div class="text-center">
-                                        <a style="text-decoration:none" onClick="@command('sortList' , sortField='description')" >
-					    		             <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
-					    		                 ${labels.cases.list.column.description}
-					    		             </i>
-					    		         </a>
-					    		    </div>
+							    <th sclass="@load(vm.sortField eq 'title' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
+							    onClick="@command('sortList' , sortField='title')" >
+									${labels.cases.list.column.title}
+						    	</th>
+					    		<th sclass="@load(vm.sortField eq 'description' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
+					    		onClick="@command('sortList' , sortField='description')">
+									 ${labels.cases.list.column.description}
 					    		</th>
-					    		<th>
-                                     <div class="text-center">
-                                        <a style="text-decoration:none" onClick="@command('sortList' , sortField='openDate')" >
-                                            <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
+					    		<th sclass="@load(vm.sortField eq 'openDate' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
+					    			onClick="@command('sortList' , sortField='openDate')" >
                                                 ${labels.cases.list.column.openDate}
-                                            </i>
-                                        </a>
-                                    </div>
-                                </th>
-					    		<th>
-                                     <div class="text-center">
-                                        <a style="text-decoration:none" onClick="@command('sortList' , sortField='subject.identifier')" >
-                                            <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
-					    		             ${labels.cases.list.column.subject}
-					    		            </i> 
-					    		        </a>
-                                    </div>
+                                 </th>
+					    		<th sclass="@load(vm.sortField eq 'subject.identifier' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')"
+					    			onClick="@command('sortList' , sortField='subject.identifier')" >
+										${labels.cases.list.column.subject}
+					    		  </th>
+					    		 <th style="width:40px" sclass="@load(vm.sortField eq 'pendingResponse' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')"
+					    		 	onClick="@command('sortList',sortField='pendingResponse')">
+									${labels.cases.list.column.pendingResponse}
+	    					     </th>   
+					    		<th sclass="@load(vm.sortField eq 'open' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
+					    			 onClick="@command('sortList',sortField='open')" >
+										${labels.cases.list.column.open}
 					    		 </th>
-					    		 <th>
-						    		 <div class="text-center">
-	                                        <a style="text-decoration:none" onClick="@command('sortList',sortField='pendingResponse')" >
-	                                           <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
-	    					    		            ${labels.cases.list.column.pendingResponse}
-	    					    		       </i>     
-	    					               </a>
-	    					         </div>
-    					         </th>   
-					    		<th>
-					    		     <div class="text-center">
-                                            <a style="text-decoration:none" onClick="@command('sortList',sortField='open')" >
-                                                <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
-					    		                     ${labels.cases.list.column.open}
-					    		                </i>
-					    		            </a>
-					    		     </div>
-					    		 </th>
-					    		 <th>
-                                     <div class="text-center">
-                                            <a style="text-decoration:none" onClick="@command('sortList',sortField='assignee.username')" >
-                                                <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
-                                                     ${labels.cases.list.column.assignee}
-                                                </i>
-                                            </a>
-                                     </div>
+					    		<th  sclass="@load(vm.sortField eq 'assignee.username' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
+					    		 	onClick="@command('sortList',sortField='assignee.username')">
+                                    	${labels.cases.list.column.assignee}
                                 </th>
-                                <th>
-                                     <div class="text-center">
-                                            <a style="text-decoration:none" onClick="@command('sortList',sortField='priority')" >
-                                                <i data-toggle="tooltip" data-placement="top" title="${labels.cases.list.sort}">
-                                                     ${labels.cases.list.column.priority}
-                                                </i>
-                                            </a>
-                                     </div>
+                                <th sclass="@load(vm.sortField eq 'priority' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
+                                	onClick="@command('sortList',sortField='priority')">
+										${labels.cases.list.column.priority}
+                                    
                                 </th>
 					    		<th>${labels.cases.list.column.action}</th>
 							</tr>

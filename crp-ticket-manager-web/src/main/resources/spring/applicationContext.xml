@@ -23,6 +23,21 @@
  		</constructor-arg>
 	</bean>
 	
+	<bean id="zookeeperConnectionString" class="com.qsocialnow.factories.ZookeeperLoginConnectionStringFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${zookeeper.login.path}"></constructor-arg>
+	</bean>
+	
+	<bean id="zookeeperLogin" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
+ 		<constructor-arg ref="zookeeperConnectionString"></constructor-arg>
+ 		<constructor-arg>
+ 			<bean class="org.apache.curator.retry.ExponentialBackoffRetry">
+				<constructor-arg  value="1000"></constructor-arg>
+				<constructor-arg  value="3"></constructor-arg>
+			</bean>
+ 		</constructor-arg>
+	</bean>	
+	
 	<bean id="amazonS3Config" class="com.qsocialnow.config.AmazonS3ConfigFactory" factory-method="create">
  		<constructor-arg ref="zookeeperClient"></constructor-arg>
  		<constructor-arg value="${app.amazonS3.app.configurator.path}"></constructor-arg>
@@ -33,6 +48,14 @@
  		<constructor-arg value="${app.service.adminUnits.configurator.path}"></constructor-arg>
 	</bean>
 	
+	<bean id="analyticsConfig" class="com.qsocialnow.config.AnalyticsConfigFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${app.analytics.configurator.path}"></constructor-arg>
+	</bean>
 	
+	<bean id="loginConfig" class="com.qsocialnow.config.LoginConfigFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperClient"></constructor-arg>
+ 		<constructor-arg value="${zookeeper.login.path}"></constructor-arg>
+	</bean>	
 	
 </beans>

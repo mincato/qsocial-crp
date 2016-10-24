@@ -7,9 +7,9 @@ import com.qsocialnow.common.model.event.Event;
 
 public class ActionRegistry implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2122762241985708580L;
 
-    private String id;
+	private String id;
 
     private Boolean automatic;
 

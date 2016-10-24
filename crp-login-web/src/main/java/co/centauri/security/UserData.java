@@ -16,6 +16,8 @@ public class UserData {
 
 	private Long organization;
 
+	private boolean analyticsAllowed;
+
 	public Long getId() {
 		return id;
 	}
@@ -70,6 +72,14 @@ public class UserData {
 
 	public void setOrganization(Long organization) {
 		this.organization = organization;
+	}
+
+	public boolean isAnalyticsAllowed() {
+		return analyticsAllowed;
+	}
+
+	public void setAnalyticsAllowed(boolean analyticsAllowed) {
+		this.analyticsAllowed = analyticsAllowed;
 	}
 
 }

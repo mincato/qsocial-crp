@@ -170,4 +170,23 @@ public class CaseTicketService extends CaseIndexService {
         repository.closeClient();
         return response;
     }
+
+    public Map<String, Long> getCasesCountByResolution(String domainId) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+        log.info("retrieving cases from :" + domainId);
+
+        Map<String, String> searchValues = new HashMap<>();
+        if (domainId != null)
+            searchValues.put("domainId", domainId);
+
+        SearchResponse<Case> response = repository
+                .queryByFieldsAndAggs(mapping, searchValues, null, null, "resolution");
+        Map<String, Long> results = response.getCountAggregation();
+        repository.closeClient();
+        return results;
+    }
 }
