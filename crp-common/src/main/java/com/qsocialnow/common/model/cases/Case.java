@@ -14,6 +14,7 @@ import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.util.DeepLinkBuilder;
 
 public class Case implements Serializable {
 
@@ -109,7 +110,7 @@ public class Case implements Serializable {
 		registry.setComment(event.getUsuarioOriginal() + " - " + event.getTitulo());
 		registry.setAutomatic(true);
 		registry.setDate(openDate);
-		registry.setDeepLink(buildDeepLink(event));
+		registry.setDeepLink(DeepLinkBuilder.build(event));
 
 		registry.setEvent(event);
 
@@ -117,20 +118,6 @@ public class Case implements Serializable {
 		newCase.setActionsRegistry(registries);
 
 		return newCase;
-	}
-
-	private static String buildDeepLink(Event event) {
-		if (Media.TWITTER.getValue().equals(event.getMedioId())) {
-			return MessageFormat.format("https://twitter.com/{0}/status/{1}", event.getUsuarioCreacion(),
-					event.getId());
-		}
-		if (Media.FACEBOOK.getValue().equals(event.getMedioId())) {
-			String[] splittedId = event.getId().split("_");
-			String[] splittedOriginalId = event.getId().split("_");
-			return MessageFormat.format("https://facebook.com/{0}/posts/{1}?commentId={2}", splittedId[0],
-					splittedOriginalId[1], splittedId[1]);
-		}
-		return null;
 	}
 
 	public static Case getNewCase() {

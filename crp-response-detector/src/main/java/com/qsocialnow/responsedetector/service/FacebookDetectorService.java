@@ -28,215 +28,217 @@ import com.qsocialnow.responsedetector.sources.FacebookFeedConsumer;
 
 public class FacebookDetectorService extends SourceDetectorService {
 
-    private static final Logger log = LoggerFactory.getLogger(FacebookDetectorService.class);
+	private static final Logger log = LoggerFactory.getLogger(FacebookDetectorService.class);
 
-    @Autowired
-    private CuratorFramework zookeeperClient;
+	@Autowired
+	private CuratorFramework zookeeperClient;
 
-    @Autowired
-    private ResponseDetectorConfig appConfig;
+	@Autowired
+	private ResponseDetectorConfig appConfig;
 
-    private TreeCache treeCache;
+	private TreeCache treeCache;
 
-    @Autowired
-    private FacebookConfiguratorFactory facebookConfiguratorFactory;
+	@Autowired
+	private FacebookConfiguratorFactory facebookConfiguratorFactory;
 
-    @Autowired
-    private EventProcessor eventProcessor;
+	@Autowired
+	private EventProcessor eventProcessor;
 
-    private FacebookClient facebookClient;
+	private FacebookClient facebookClient;
 
-    private FacebookConfigurator configurator;
+	private FacebookConfigurator configurator;
 
-    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+	private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 
-    private FacebookFeedConsumer facebookFeedConsumer;
+	private FacebookFeedConsumer facebookFeedConsumer;
 
-    private HashMap<String, FacebookFeedEvent> conversations;
+	private HashMap<String, FacebookFeedEvent> conversations;
 
-    private HashMap<String, String> nodePaths;
+	private HashMap<String, String> nodePaths;
 
-    @Override
-    public void run() {
+	@Override
+	public void run() {
 
-        try {
+		try {
 
-            configurator = facebookConfiguratorFactory.getConfigurator(appConfig.getFacebookAppConfiguratorZnodePath());
+			configurator = facebookConfiguratorFactory.getConfigurator(appConfig.getFacebookAppConfiguratorZnodePath());
 
-            facebookClient = new FacebookClient(configurator, this);
-            facebookClient.initClient();
-            facebookFeedConsumer = new FacebookFeedConsumer(facebookClient);
+			facebookClient = new FacebookClient(configurator, this);
+			facebookClient.initClient();
+			facebookFeedConsumer = new FacebookFeedConsumer(facebookClient);
 
-            conversations = new HashMap<String, FacebookFeedEvent>();
-            nodePaths = new HashMap<String, String>();
-            treeCache = new TreeCache(zookeeperClient, appConfig.getFacebookUsersZnodePath());
+			conversations = new HashMap<String, FacebookFeedEvent>();
+			nodePaths = new HashMap<String, String>();
+			treeCache = new TreeCache(zookeeperClient, appConfig.getFacebookUsersZnodePath());
 
-            addListener();
-            treeCache.start(); // start(StartMode.POST_INITIALIZED_EVENT);
-            startFeedConsumer();
+			addListener();
+			treeCache.start(); // start(StartMode.POST_INITIALIZED_EVENT);
+			startFeedConsumer();
 
-        } catch (Exception e) {
-            log.error("There was an unexpected error", e);
-            System.exit(1);
-        }
-    }
+		} catch (Exception e) {
+			log.error("There was an unexpected error", e);
+			System.exit(1);
+		}
+	}
 
-    private void addListener() {
-        TreeCacheListener listener = new TreeCacheListener() {
+	private void addListener() {
+		TreeCacheListener listener = new TreeCacheListener() {
 
-            @Override
-            public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
-                switch (event.getType()) {
-                    case NODE_ADDED: {
-                        String nodeAdded = ZKPaths.getNodeFromPath(event.getData().getPath());
-                        String nodePath = event.getData().getPath();
+			@Override
+			public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
+				switch (event.getType()) {
+				case NODE_ADDED: {
+					String nodeAdded = ZKPaths.getNodeFromPath(event.getData().getPath());
+					String nodePath = event.getData().getPath();
 
-                        log.info("Adding node:" + nodeAdded + " from path: " + event.getData().getPath());
-                        if (event.getData().getData() != null) {
-                            String nodeValue = new String(event.getData().getData());
-                            log.info("Adding node value:-" + nodeValue + "-");
-                            if (nodeValue.equals("NEW")) {
-                                addUserResolverTrack(nodeAdded);
-                            } else {
-                                // new conversation
-                                if (!Strings.isNullOrEmpty(nodeValue)) {
-                                    byte[] messageBytes = event.getData().getData();
-                                    FacebookFeedEvent facebookFeedEvent = new GsonBuilder().create().fromJson(
-                                            new String(messageBytes), FacebookFeedEvent.class);
-                                    if (facebookFeedEvent != null) {
-                                        addFacebookFeedEvent(nodeAdded, nodePath, facebookFeedEvent);
-                                    }
-                                } else {
-                                    log.info("Not Adding node with empty value ");
-                                }
-                            }
-                        } else {
-                            log.info("Not Adding node value");
-                        }
-                        break;
-                    }
-                    case NODE_UPDATED: {
-                        log.info("Facebook conversation TreeNode changed: "
-                                + ZKPaths.getNodeFromPath(event.getData().getPath()) + ", value: "
-                                + new String(event.getData().getData()));
-                        break;
-                    }
-                    case NODE_REMOVED: {
-                        log.info("Facebook conversation removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
-                        break;
-                    }
-                    case INITIALIZED: {
-                        break;
-                    }
-                    default:
-                        log.info("Other event: " + event.getType().name());
-                }
-            }
+					log.info("Adding node:" + nodeAdded + " from path: " + event.getData().getPath());
+					if (event.getData().getData() != null) {
+						String nodeValue = new String(event.getData().getData());
+						log.info("Adding node value:-" + nodeValue + "-");
+						if (nodeValue.equals("NEW")) {
+							addUserResolverTrack(nodeAdded);
+						} else {
+							// new conversation
+							if (!Strings.isNullOrEmpty(nodeValue)) {
+								byte[] messageBytes = event.getData().getData();
+								FacebookFeedEvent facebookFeedEvent = new GsonBuilder().create()
+										.fromJson(new String(messageBytes), FacebookFeedEvent.class);
+								if (facebookFeedEvent != null) {
+									addFacebookFeedEvent(nodeAdded, nodePath, facebookFeedEvent);
+								}
+							} else {
+								log.info("Not Adding node with empty value ");
+							}
+						}
+					} else {
+						log.info("Not Adding node value");
+					}
+					break;
+				}
+				case NODE_UPDATED: {
+					log.info("Facebook conversation TreeNode changed: "
+							+ ZKPaths.getNodeFromPath(event.getData().getPath()) + ", value: "
+							+ new String(event.getData().getData()));
+					break;
+				}
+				case NODE_REMOVED: {
+					log.info("Facebook conversation removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
+					break;
+				}
+				case INITIALIZED: {
+					break;
+				}
+				default:
+					log.info("Other event: " + event.getType().name());
+				}
+			}
 
-        };
-        treeCache.getListenable().addListener(listener);
-    }
+		};
+		treeCache.getListenable().addListener(listener);
+	}
 
-    private void addUserResolverTrack(String userResolverToFilter) {
-        try {
-            log.info("Adding UserResolver:" + userResolverToFilter);
-        } catch (Exception e) {
-            log.error("There was an error adding new User Resolver to track :" + userResolverToFilter, e);
-        }
-    }
+	private void addUserResolverTrack(String userResolverToFilter) {
+		try {
+			log.info("Adding UserResolver:" + userResolverToFilter);
+		} catch (Exception e) {
+			log.error("There was an error adding new User Resolver to track :" + userResolverToFilter, e);
+		}
+	}
 
-    private void addFacebookFeedEvent(String commentId, String commentPath, FacebookFeedEvent facebookFeedEvent) {
-        try {
+	private void addFacebookFeedEvent(String commentId, String commentPath, FacebookFeedEvent facebookFeedEvent) {
+		try {
 
-            log.info("Adding message conversation from comment :" + facebookFeedEvent.getRootCommentId()
-                    + " from Case:" + facebookFeedEvent.getCaseId());
+			log.info("Adding message conversation from comment :" + facebookFeedEvent.getRootCommentId() + " from Case:"
+					+ facebookFeedEvent.getCaseId());
 
-            nodePaths.put(facebookFeedEvent.getRootCommentId(), commentPath);
-            conversations.put(facebookFeedEvent.getRootCommentId(), facebookFeedEvent);
-            facebookClient.addNewConversation(facebookFeedEvent.getRootCommentId());
-        } catch (Exception e) {
-            log.error("There was an error adding converstaions from userResolver tracking response from id: "
-                    + commentId, e);
-        }
-    }
+			nodePaths.put(facebookFeedEvent.getRootCommentId(), commentPath);
+			conversations.put(facebookFeedEvent.getRootCommentId(), facebookFeedEvent);
+			facebookClient.addNewConversation(facebookFeedEvent.getRootCommentId());
+		} catch (Exception e) {
+			log.error(
+					"There was an error adding converstaions from userResolver tracking response from id: " + commentId,
+					e);
+		}
+	}
 
-    public void stop() {
-        if (facebookClient != null) {
-            this.facebookClient.stop();
-        }
-        try {
-            if (treeCache != null) {
-                treeCache.close();
-            }
-        } catch (Exception e) {
-            log.error("Unexpected error. Cause", e);
-        }
-    }
+	public void stop() {
+		if (facebookClient != null) {
+			this.facebookClient.stop();
+		}
+		try {
+			if (treeCache != null) {
+				treeCache.close();
+			}
+		} catch (Exception e) {
+			log.error("Unexpected error. Cause", e);
+		}
+	}
 
-    @Override
-    public void removeSourceConversation(String conversation) {
-        try {
-            String nodePath = nodePaths.get(conversation);
-            log.info("Removing node after detect response: " + nodePath);
-            conversations.remove(conversation);
-            zookeeperClient.delete().forPath(nodePath);
-        } catch (Exception e) {
-            log.error("Unable to remove message conversation: " + conversation, e);
-        }
-    }
+	@Override
+	public void removeSourceConversation(String conversation) {
+		try {
+			String nodePath = nodePaths.get(conversation);
+			log.info("Removing node after detect response: " + nodePath);
+			conversations.remove(conversation);
+			zookeeperClient.delete().forPath(nodePath);
+		} catch (Exception e) {
+			log.error("Unable to remove message conversation: " + conversation, e);
+		}
+	}
 
-    private void startFeedConsumer() {
-        log.info("Starting Feed Consumer to check new comments from existing posts");
-        executor.scheduleWithFixedDelay(facebookFeedConsumer, 10, 10, TimeUnit.SECONDS);
-    }
+	private void startFeedConsumer() {
+		log.info("Starting Feed Consumer to check new comments from existing posts");
+		executor.scheduleWithFixedDelay(facebookFeedConsumer, 10, 10, TimeUnit.SECONDS);
+	}
 
-    @Override
-    public void processEvent(Boolean isResponseFromMessage, Long timestamp, String userResolver, String[] userMentions,
-            String messageId, String messageText, String commentId, String userId, String userName,
-            String userProfileImage) {
+	@Override
+	public void processEvent(Boolean isResponseFromMessage, Long timestamp, String userResolver, String[] userMentions,
+			String messageId, String messageText, String commentId, String userId, String userName,
+			String userProfileImage) {
 
-        try {
-            Event event = new Event();
-            event.setId(messageId);
+		try {
+			Event event = new Event();
+			event.setId(messageId);
 
-            event.setTimestamp(timestamp);
-            event.setFecha(new Date());
-            event.setMedioId(FilterConstants.MEDIA_FACEBOOK);
-            event.setTitulo(messageText);
-            event.setTexto(messageText);
-            event.setNormalizeMessage(messageText);
+			event.setTimestamp(timestamp);
+			event.setFecha(new Date());
+			event.setMedioId(FilterConstants.MEDIA_FACEBOOK);
+			event.setTitulo(messageText);
+			event.setTexto(messageText);
+			event.setNormalizeMessage(messageText);
 
-            if (isResponseFromMessage) {
-                log.info("Adding facebookevent information into event");
-                FacebookFeedEvent conversationsByCommentId = conversations.get(commentId);
-                if (conversationsByCommentId != null) {
-                    event.setIdPadre(conversationsByCommentId.getEventId());
-                    event.setOriginIdCase(conversationsByCommentId.getCaseId());
-                }
-                removeSourceConversation(commentId);
-            }
-            event.setUsuarioOriginal(userName);
-            event.setIdUsuarioOriginal(userId);
-            event.setProfileImage(userProfileImage);
-            event.setResponseDetected(true);
-            event.setFechaCreacion(new Date());
-            eventProcessor.process(event);
-            log.info("Creating event to handle automatic response detection");
-        } catch (Exception e) {
-            log.error("Error trying to register event :" + e);
-        }
-    }
+			if (isResponseFromMessage) {
+				log.info("Adding facebookevent information into event");
+				FacebookFeedEvent conversationsByCommentId = conversations.get(commentId);
+				if (conversationsByCommentId != null) {
+					event.setIdPadre(conversationsByCommentId.getEventId());
+					event.setOriginIdCase(conversationsByCommentId.getCaseId());
+					event.setIdOriginal(conversationsByCommentId.getOriginalId());
+				}
+				removeSourceConversation(commentId);
+			}
+			event.setUsuarioOriginal(userName);
+			event.setIdUsuarioOriginal(userId);
+			event.setProfileImage(userProfileImage);
+			event.setResponseDetected(true);
+			event.setFechaCreacion(new Date());
+			eventProcessor.process(event);
+			log.info("Creating event to handle automatic response detection");
+		} catch (Exception e) {
+			log.error("Error trying to register event :" + e);
+		}
+	}
 
-    @Override
-    public String getReplyIdToTrack(String idRootComment) {
-        FacebookFeedEvent conversationsByCommentId = conversations.get(idRootComment);
-        return conversationsByCommentId != null ? conversationsByCommentId.getCommentId() : null;
+	@Override
+	public String getReplyIdToTrack(String idRootComment) {
+		FacebookFeedEvent conversationsByCommentId = conversations.get(idRootComment);
+		return conversationsByCommentId != null ? conversationsByCommentId.getCommentId() : null;
 
-    }
+	}
 
-    @Override
-    public String getUserIdToTrack(String idRootComment) {
-        FacebookFeedEvent conversationsByCommentId = conversations.get(idRootComment);
-        return conversationsByCommentId != null ? conversationsByCommentId.getUserId() : null;
-    }
+	@Override
+	public String getUserIdToTrack(String idRootComment) {
+		FacebookFeedEvent conversationsByCommentId = conversations.get(idRootComment);
+		return conversationsByCommentId != null ? conversationsByCommentId.getUserId() : null;
+	}
 }
