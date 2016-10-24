@@ -5,7 +5,7 @@
     border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
 	   <n:div class="col-lg-12">
-	       <div zclass="pane equal col-md-12 col-xs-12">
+	       <n:div id="page-header" class="pane equal col-md-12 col-xs-12">
 				<n:div class="col-md-6 col-xs-12">
     				<n:h4>${labels.subjectcategoryset.list.title}</n:h4>
 				</n:div>
@@ -20,7 +20,7 @@
                 <n:div class="col-md-2 col-xs-4">
                 	<a class="link-button" href="/pages/subject-category-set/create/index.zul">${labels.subjectcategoryset.create.action} <i class="fa fa-plus-circle fa-2x"></i></a>
 	    		</n:div>
-	       </div>
+	       </n:div>
 	   </n:div>
     </n:div>
     

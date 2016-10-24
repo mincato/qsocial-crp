@@ -6,9 +6,9 @@
 		form="@id('fxTrigger') @load(triggerVm.currentTrigger) @save(triggerVm.currentTrigger, before={'save'} ) @validator('com.qsocialnow.validators.TriggerFormValidator')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
-			<div zclass="pane equal">
+			<n:div id="page-header" class="pane equal">
 				<n:h4>${triggerVm.currentDomain.domain.name} / ${labels.trigger.create.title}</n:h4>
-			</div>
+			</n:div>
 		</n:div>
 	</n:div>
 

@@ -3,9 +3,9 @@
 		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 		<n:div class="row">
 			<n:div class="col-lg-12">
-				<div zclass="pane equal">
+				<n:div id="page-header" class="pane equal">
 					<n:h4>${labels.cases.create.title}</n:h4>
-				</div>
+				</n:div>
 			</n:div>
 		</n:div>
 	

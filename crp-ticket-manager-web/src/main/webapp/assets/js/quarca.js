@@ -131,6 +131,17 @@ zk.afterMount(function() {
 	        $('#footer').hide().fadeIn();
 
 	$(document).ready(function(){
+		/*******************************
+		SET TITLE
+		*******************************/
+		function setTitle() {
+			var title = $('#page-header h4').html();
+			if (title !== undefined) {
+				document.title = title;
+			}	
+		};
+		setTitle();
+		
 	/*******************************
 	CONTENT MIN-HEIGHT
 	*******************************/
