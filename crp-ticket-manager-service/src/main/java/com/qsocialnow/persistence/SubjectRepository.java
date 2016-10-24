@@ -32,8 +32,7 @@ public class SubjectRepository {
                 for (Subject subjectRepo : subjectsRepo) {
                     SubjectListView subjectListView = new SubjectListView();
                     subjectListView.setId(subjectRepo.getId());
-                    subjectListView.setName(subjectRepo.getName());
-                    subjectListView.setLastName(subjectRepo.getLastName());
+                    subjectListView.setSourceName(subjectRepo.getSourceName());
                     subjectListView.setIdentifier(subjectRepo.getIdentifier());
                     subjectListView.setSource(subjectRepo.getSource());
                     subjects.add(subjectListView);
@@ -57,7 +56,7 @@ public class SubjectRepository {
         try {
             String id = subjectElasticService.indexSubject(subjectObject);
             subjectObject.setId(id);
-            log.info("Subject:", subjectObject.getName());
+            log.info("Subject:", subjectObject.getIdentifier());
             return subjectObject;
         } catch (Exception e) {
             log.error("Unexpected error", e);

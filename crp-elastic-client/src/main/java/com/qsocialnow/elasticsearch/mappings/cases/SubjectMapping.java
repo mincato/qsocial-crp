@@ -69,6 +69,7 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
         subjectType.setSubjectCategorySet(document.getSubjectCategorySet());
         subjectType.setLocation(document.getLocation());
         subjectType.setLocationMethod(document.getLocationMethod());
+        subjectType.setSourceName(document.getSourceName());
         return subjectType;
     }
 
@@ -94,6 +95,7 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
 
         subject.setLocation(documentType.getLocation());
         subject.setLocationMethod(documentType.getLocationMethod());
+        subject.setSourceName(documentType.getSourceName());
         return subject;
     }
 }

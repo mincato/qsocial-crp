@@ -39,7 +39,7 @@ public class OpenCaseAction {
                 subject.setIdentifier(inputElement.getUsuarioCreacion());
                 subject.setSourceId(sourceId);
                 subject.setProfileImage(inputElement.getProfileImage());
-                subject.setName(inputElement.getName());
+                subject.setSourceName(inputElement.getName() != null ? inputElement.getName() : subject.getIdentifier());
                 subject.setLocationMethod(inputElement.getLocationMethod());
                 subject.setLocation(inputElement.getOriginalLocation());
 

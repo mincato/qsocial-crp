@@ -48,6 +48,8 @@ public class Subject implements Serializable {
 
     private GeoSocialEventLocationMethod locationMethod;
 
+    private String sourceName;
+
     private String location;
 
     public String getId() {
@@ -197,6 +199,14 @@ public class Subject implements Serializable {
 
     public String getLocation() {
         return location;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
     }
 
 }

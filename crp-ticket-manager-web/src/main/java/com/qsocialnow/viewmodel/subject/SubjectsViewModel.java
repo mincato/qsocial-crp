@@ -8,12 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
-import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
@@ -21,7 +19,6 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
-import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.SubjectService;
@@ -121,20 +118,6 @@ public class SubjectsViewModel implements Serializable {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("subject", subjectId);
         Executions.createComponents("/pages/subject/edit-subject.zul", null, arg);
-    }
-
-    @GlobalCommand
-    @NotifyChange("subjects")
-    public void changeSubject(@BindingParam("subjectChanged") Subject subjectChanged) {
-        if (subjectChanged != null) {
-            Optional<SubjectListView> subjectOptional = subjects.stream()
-                    .filter(subject -> subject.getId().equals(subjectChanged.getId())).findFirst();
-            if (subjectOptional.isPresent()) {
-                SubjectListView subjectListView = subjectOptional.get();
-                subjectListView.setName(subjectChanged.getName());
-                subjectListView.setLastName(subjectChanged.getLastName());
-            }
-        }
     }
 
 }

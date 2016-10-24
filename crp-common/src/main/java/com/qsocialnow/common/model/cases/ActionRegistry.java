@@ -24,7 +24,7 @@ public class ActionRegistry implements Serializable {
     private Long date;
 
     private ActionType type;
-    
+
     private String deepLink;
 
     public String getId() {
@@ -92,10 +92,10 @@ public class ActionRegistry implements Serializable {
     }
 
     public String getDeepLink() {
-		return deepLink;
-	}
-    
+        return deepLink;
+    }
+
     public void setDeepLink(String deepLink) {
-		this.deepLink = deepLink;
-	}
+        this.deepLink = deepLink;
+    }
 }
