@@ -4,9 +4,9 @@
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
         <n:div>
-            <div zclass="pane equal">
+            <n:div id="page-header" class="pane equal">
                 <n:h4>${labels.cases.list.column.title} / ${vm.currentCase.title} </n:h4>
-            </div>
+            </n:div>
         </n:div>
     </n:div>
 
