@@ -12,15 +12,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.env.AbstractEnvironment;
 
 import com.qsocialnow.common.model.retroactive.RetroactiveProcessEvent;
-import com.qsocialnow.common.model.retroactive.RetroactiveProcessStatus;
 import com.qsocialnow.retroactiveprocess.config.RetroactiveProcessConfig;
 import com.qsocialnow.retroactiveprocess.processors.RetroactiveProcessor;
 
 public class App implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(App.class);
+
+	private static final String DEFAULT_ENVIRONMENT = "development";
 
     private ExecutorService appExecutor;
 
@@ -37,6 +39,11 @@ public class App implements Runnable {
 
     public static void main(String[] args) {
         try {
+        	String env = System.getenv("environment");
+            if (env == null) {
+                env = DEFAULT_ENVIRONMENT;
+            }
+            System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, env);
             ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
                     "classpath:spring/applicationContext.xml");
             context.registerShutdownHook();
@@ -58,16 +65,25 @@ public class App implements Runnable {
         try {
             nodeCache = new NodeCache(zookeeperClient, appConfig.getProcessZnodePath());
             addListener();
-            nodeCache.start();
+            nodeCache.start(true);
+            byte[] statusNode = nodeCache.getCurrentData().getData();
+            if (statusNode != null) {
+                RetroactiveProcessEvent processEvent = RetroactiveProcessEvent.valueOf(new String(statusNode));
+                process(processEvent, true);
+            }
         } catch (Exception e) {
             log.error("There was an error getting process status", e);
         }
     }
 
-    private void process(RetroactiveProcessEvent processEvent) {
+    private void process(RetroactiveProcessEvent processEvent, boolean tryToResume) {
         switch (processEvent) {
             case START:
-                retroactiveProcessor.start();
+            	if (tryToResume) {
+            		retroactiveProcessor.resume();
+            	} else {
+            		retroactiveProcessor.start();
+            	}
                 break;
             case STOP:
                 log.info("stoping process");
@@ -104,7 +120,7 @@ public class App implements Runnable {
                     byte[] statusNode = nodeCache.getCurrentData().getData();
                     if (statusNode != null) {
                         RetroactiveProcessEvent processEvent = RetroactiveProcessEvent.valueOf(new String(statusNode));
-                        process(processEvent);
+                        process(processEvent, false);
                     }
                 } catch (Exception e) {
                     log.error("There was an error getting process event", e);
