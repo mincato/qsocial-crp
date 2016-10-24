@@ -25,7 +25,7 @@ public class ActionRegistryType implements IdentityType {
     private Long date;
 
     private ActionType type;
-    
+
     private String deepLink;
 
     public String getId() {
@@ -99,12 +99,12 @@ public class ActionRegistryType implements IdentityType {
     public void setType(ActionType type) {
         this.type = type;
     }
-    
+
     public String getDeepLink() {
-		return deepLink;
-	}
-    
+        return deepLink;
+    }
+
     public void setDeepLink(String deepLink) {
-		this.deepLink = deepLink;
-	}
+        this.deepLink = deepLink;
+    }
 }

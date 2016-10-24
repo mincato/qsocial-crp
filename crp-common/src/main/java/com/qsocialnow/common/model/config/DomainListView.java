@@ -1,6 +1,11 @@
 package com.qsocialnow.common.model.config;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class DomainListView implements Serializable {
 
@@ -10,7 +15,11 @@ public class DomainListView implements Serializable {
 
     private String name;
 
-    private String thematics;
+    private Map<Long, Thematic> thematicsById;
+
+    private String thematicNames;
+
+    private List<Long> thematicIds;
 
     public String getId() {
         return id;
@@ -28,12 +37,29 @@ public class DomainListView implements Serializable {
         this.name = name;
     }
 
-    public String getThematics() {
-        return thematics;
+    public String getThematicNames() {
+        return thematicNames;
     }
 
-    public void setThematics(String thematics) {
-        this.thematics = thematics;
+    public Collection<Thematic> getThematics() {
+        return thematicsById.values();
+    }
+
+    public void setThematics(Collection<Thematic> thematics) {
+        thematicsById = new HashMap<>();
+        for (Thematic thematic : thematics) {
+            thematicsById.put(thematic.getId(), thematic);
+        }
+        Collection<Thematic> names = thematicsById.values();
+        thematicNames = names.stream().map(Thematic::getNombre).collect(Collectors.joining(", "));
+    }
+
+    public List<Long> getThematicIds() {
+        return thematicIds;
+    }
+
+    public void setThematicIds(List<Long> thematicIds) {
+        this.thematicIds = thematicIds;
     }
 
 }
