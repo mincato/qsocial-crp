@@ -17,7 +17,7 @@ public class FacebookFeedEvent {
     private final String rootCommentId;
 
     private final String userPageId;
-    
+
     private final String originalId;
 
     public FacebookFeedEvent(final String caseId, final String eventId, final String userId, final String userName,
@@ -65,10 +65,10 @@ public class FacebookFeedEvent {
     public String getRootCommentId() {
         return rootCommentId;
     }
-    
+
     public String getOriginalId() {
-		return originalId;
-	}
+        return originalId;
+    }
 
     @Override
     public int hashCode() {
@@ -112,10 +112,10 @@ public class FacebookFeedEvent {
 
         if (!userPageId.equals(other.userPageId))
             return false;
-        
+
         if (!originalId.equals(other.originalId))
-        	return false;
-        
+            return false;
+
         return true;
     }
 
