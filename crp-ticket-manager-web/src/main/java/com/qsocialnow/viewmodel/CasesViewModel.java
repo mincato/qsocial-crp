@@ -124,7 +124,7 @@ public class CasesViewModel implements Serializable {
 	}
 
 	@Command
-	@NotifyChange({ "cases", "moreResults" })
+	@NotifyChange({ "cases", "moreResults", "sortField", "sortOrder" })
 	public void sortList(@BindingParam("sortField") String sortField) {
 		this.sortField = sortField;
 		this.sortOrder = !this.sortOrder;
@@ -300,6 +300,22 @@ public class CasesViewModel implements Serializable {
 
 	public DateConverter getDateConverter() {
 		return dateConverter;
+	}
+
+	public boolean isSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(boolean sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
+	public String getSortField() {
+		return sortField;
+	}
+
+	public void setSortField(String sortField) {
+		this.sortField = sortField;
 	}
 
 }
