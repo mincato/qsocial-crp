@@ -1,12 +1,15 @@
 package com.qsocialnow.elasticsearch.services.config;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
+import com.qsocialnow.elasticsearch.mappings.config.DomainMapMapping;
 import com.qsocialnow.elasticsearch.mappings.config.DomainMapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.DomainType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
@@ -91,6 +94,25 @@ public class DomainService {
 
         repository.closeClient();
         return domains;
+    }
+
+    public Map<String, String> getAllDomainsAsMap() {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+
+        DomainMapMapping mapping = DomainMapMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Domain> response = repository.search(mapping);
+
+        List<Domain> domains = response.getSources();
+
+        repository.closeClient();
+        Map<String, String> map = new HashMap<String, String>();
+        for (Domain domain : domains) {
+            map.put(domain.getId(), domain.getName());
+        }
+
+        return map;
     }
 
     public List<Domain> getDomainsByName(Integer offset, Integer limit, String name) {

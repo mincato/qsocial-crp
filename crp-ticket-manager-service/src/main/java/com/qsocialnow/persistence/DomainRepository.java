@@ -2,6 +2,7 @@ package com.qsocialnow.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -107,6 +108,10 @@ public class DomainRepository {
             log.error("Unexpected error", e);
         }
         return domains;
+    }
+
+    public Map<String, String> findAllReport() {
+        return domainElasticService.getAllDomainsAsMap();
     }
 
 }

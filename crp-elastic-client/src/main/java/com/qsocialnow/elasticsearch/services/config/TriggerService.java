@@ -1,12 +1,16 @@
 package com.qsocialnow.elasticsearch.services.config;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
+import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.common.model.config.TriggerReport;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.TriggerMapping;
@@ -168,6 +172,31 @@ public class TriggerService {
 
     public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
         this.indexConfiguration = indexConfiguration;
+    }
+
+    public Map<String, TriggerReport> getAllTriggersAsMap() {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
+
+        SearchResponse<Trigger> response = repository.search(mapping);
+
+        List<Trigger> triggers = response.getSources();
+
+        repository.closeClient();
+        Map<String, TriggerReport> map = new HashMap<String, TriggerReport>();
+        for (Trigger trigger : triggers) {
+            TriggerReport triggerReport = new TriggerReport();
+            triggerReport.setName(trigger.getName());
+            List<Segment> segments = segmentService.getSegments(trigger.getId());
+            for (Segment segment : segments) {
+                triggerReport.getSegments().put(segment.getId(), segment.getDescription());
+            }
+            map.put(trigger.getId(), triggerReport);
+        }
+        return map;
     }
 
 }

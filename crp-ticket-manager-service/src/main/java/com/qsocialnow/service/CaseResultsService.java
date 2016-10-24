@@ -1,10 +1,7 @@
 package com.qsocialnow.service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -38,7 +35,6 @@ public class CaseResultsService {
     private Map<ActionType, Action> actions;
 
     public PageResponse<ResultsListView> getResults(String domainId) {
-
         log.info("Trying to retrieve cases from :" + domainId);
         List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(null, domainId);
         if (casesByResolution != null && casesByResolution.size() > 0) {

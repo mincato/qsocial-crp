@@ -36,16 +36,18 @@ router.get('/cases/report', function (req, res) {
 	    }
 
 	  }
+	  var userName = req.query.userName?req.query.userName :null;
+	  var subject = req.query.subject?req.query.subject :null;
 	  var title = req.query.title?req.query.title :null;
 	  var description = req.query.description?req.query.description :null;
 	  var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
+	  var status = req.query.status?req.query.status :null;
 	  
 	  var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
 	  var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
 
-
 	  var caseService = javaContext.getBeanSync("caseReportService");
-	  caseService.getReport(title,description,pendingResponse,fromOpenDate,toOpenDate,asyncResponse);
+	  caseService.getReport(subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName,asyncResponse);
 	  
 });
 

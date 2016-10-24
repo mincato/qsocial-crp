@@ -1,7 +1,6 @@
 package com.qsocialnow.persistence;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -80,11 +79,12 @@ public class CaseRepository {
         return results;
     }
 
-    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String title, String description,
-            String pendingResponse, String fromOpenDate, String toOpenDate) {
+    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String subject, String title, String description,
+            String pendingResponse, String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter,
+            String userName) {
         JsonObject jsonObject = caseElasticService.getCasesAsJsonObject(pageRequest.getOffset(),
-                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), title, description,
-                pendingResponse, fromOpenDate, toOpenDate);
+                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), subject, title,
+                description, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
         return jsonObject.getAsJsonObject("hits").getAsJsonArray("hits");
     }
 
