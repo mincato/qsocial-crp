@@ -2,14 +2,11 @@ package com.qsocialnow.viewmodel.subject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -120,11 +117,6 @@ public class EditSubjectViewModel implements Serializable {
     @Command
     public void close(@ContextParam(ContextType.VIEW) Div comp) {
         comp.detach();
-        if (saved) {
-            Map<String, Object> args = new HashMap<String, Object>();
-            args.put("subjectChanged", currentSubject.getSubject());
-            BindUtils.postGlobalCommand(null, null, "changeSubject", args);
-        }
     }
 
     @Command

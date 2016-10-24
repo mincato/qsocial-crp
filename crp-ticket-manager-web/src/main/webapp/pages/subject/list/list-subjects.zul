@@ -29,8 +29,7 @@
 					<tr>
 						<th></th>
 						<th>${labels.subject.list.column.identifier}</th>
-					    <th>${labels.subject.list.column.name}</th>
-						<th>${labels.subject.list.column.lastname}</th>
+					    <th>${labels.subject.list.column.sourceName}</th>
 					    <th>${labels.subject.list.column.action}</th>
 					</tr>
 			    </thead>
@@ -39,8 +38,7 @@
 					<tr>
 						<td><span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.media.icon))"><i sclass="@load('fa fa-'.concat(each.media.icon))" /></span></td>
 						<td class="list-text-column">${each.identifier}</td>
-						<td>${each.name}</td>
-                       	<td>${each.lastName}</td>
+						<td>${each.sourceName}</td>
                        	<td>
                        		<ul class="list-inline">
   								<li><a class="btn-list-action"><i onClick="@command('openEdit', subjectId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.subject.edit.action}"></i></a></li>
