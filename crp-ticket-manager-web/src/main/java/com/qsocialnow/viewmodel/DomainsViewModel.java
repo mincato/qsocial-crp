@@ -91,13 +91,7 @@ public class DomainsViewModel implements Serializable {
     public void openEdit(@BindingParam("domainId") String domainId) {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("domain", domainId);
-        arg.put("thematics", findDomainById(domainId).getThematics());
         Executions.createComponents("/pages/domain/edit-domain.zul", null, arg);
-    }
-
-    private DomainListView findDomainById(String domainId) {
-        Optional<DomainListView> domain = domains.stream().filter(d -> d.getId().equals(domainId)).findFirst();
-        return domain.get();
     }
 
     @GlobalCommand
@@ -160,7 +154,10 @@ public class DomainsViewModel implements Serializable {
             List<Long> ids = domain.getThematicIds();
             Collection<Thematic> thematics = new ArrayList<>();
             for (Long id : ids) {
-                thematics.add(thematicsById.get(id));
+                Thematic thematic = thematicsById.get(id);
+                if (thematic != null) {
+                    thematics.add(thematicsById.get(id));
+                }
             }
             domain.setThematics(thematics);
         }

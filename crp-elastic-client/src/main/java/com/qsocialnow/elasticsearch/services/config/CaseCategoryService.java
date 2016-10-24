@@ -24,7 +24,6 @@ public class CaseCategoryService {
 
     private ConfigurationIndexService indexConfiguration;
 
-   
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
     }

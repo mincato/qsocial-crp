@@ -28,6 +28,7 @@ import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.model.DomainView;
 import com.qsocialnow.services.DomainService;
+import com.qsocialnow.services.ThematicService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 @NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.saved")
@@ -44,6 +45,9 @@ public class EditDomainViewModel implements Serializable {
     private List<Thematic> thematics;
 
     private boolean saved;
+
+    @WireVariable
+    private ThematicService thematicService;
 
     public boolean isSaved() {
         return saved;
@@ -62,11 +66,11 @@ public class EditDomainViewModel implements Serializable {
     }
 
     @Init
-    public void init(@BindingParam("domain") String domain, @BindingParam("thematics") List<Thematic> thematics) {
+    public void init(@BindingParam("domain") String domain) {
         currentDomain = new DomainView();
         currentDomain.setDomain(domainService.findOne(domain));
-        this.thematics = thematics;
-        currentDomain.setSelectedThematics(thematics.stream()
+        this.thematics = thematicService.findAll();
+        currentDomain.setSelectedThematics(this.thematics.stream()
                 .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))
                 .collect(Collectors.toSet()));
         initResolutions();
