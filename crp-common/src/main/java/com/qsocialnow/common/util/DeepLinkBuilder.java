@@ -28,13 +28,13 @@ public class DeepLinkBuilder {
 			String[] splittedOriginalId = originalId.split("_");
 
 			if (StringUtils.isBlank(rootCommentId)) {
-				return MessageFormat.format("https://facebook.com/{0}/posts/{1}?commentId={2}", splittedOriginalId[0],
+				return MessageFormat.format("https://facebook.com/{0}/posts/{1}?comment_id={2}", splittedOriginalId[0],
 						splittedOriginalId[1], splittedId[1]);
 			}
 
 			String[] splittedRootCommentId = rootCommentId.split("_");
 			
-			return MessageFormat.format("https://facebook.com/{0}/posts/{1}?commentId={2}&reply_comment_id={3}",
+			return MessageFormat.format("https://facebook.com/{0}/posts/{1}?comment_id={2}&reply_comment_id={3}",
 					splittedOriginalId[0], splittedOriginalId[1], splittedRootCommentId[1], splittedId[1]);
 		}
 		return null;
