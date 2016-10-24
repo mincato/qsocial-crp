@@ -2,6 +2,7 @@ package com.qsocialnow.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
+import com.qsocialnow.common.model.config.TriggerReport;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.config.SegmentService;
@@ -120,6 +122,10 @@ public class TriggerRepository {
             segments.add(segmentListView);
         }
         return segments;
+    }
+
+    public Map<String, TriggerReport> findAllReport() {
+        return triggerElasticService.getAllTriggersAsMap();
     }
 
 }

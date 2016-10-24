@@ -115,7 +115,17 @@
         <property name="configurator" ref="elasticDomainConfig"></property>
     </bean>
     
+     <bean id="caseCategoryElasticService" class="com.qsocialnow.elasticsearch.services.config.CaseCategoryService">
+    	<property name="indexConfiguration" ref="configurationIndexService"></property>
+        <property name="configurator" ref="elasticDomainConfig"></property>
+    </bean>
+    
     <bean id="subjectCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.SubjectCategorySetService">
+    	<property name="indexConfiguration" ref="configurationIndexService"></property>
+        <property name="configurator" ref="elasticDomainConfig"></property>
+    </bean>
+    
+	<bean id="subjectCategoryElasticService" class="com.qsocialnow.elasticsearch.services.config.SubjectCategoryService">
     	<property name="indexConfiguration" ref="configurationIndexService"></property>
         <property name="configurator" ref="elasticDomainConfig"></property>
     </bean>

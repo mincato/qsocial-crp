@@ -1,6 +1,5 @@
 package com.qsocialnow.elasticsearch.services.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
