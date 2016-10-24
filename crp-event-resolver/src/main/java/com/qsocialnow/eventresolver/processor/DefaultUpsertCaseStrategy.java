@@ -57,17 +57,21 @@ public class DefaultUpsertCaseStrategy implements UpsertCaseStrategy {
                 }
             }
         } else {
-            if (detectionCriteria.isAlwaysOpenCase()) {
-                log.info("opening case since flag always open case is true");
-                caseObject = openAction.openCase(input, request);
+            if (Boolean.TRUE.equals(input.getEsReproduccion())) {
+                log.info("The event is a reproduction, so it is discarded");
             } else {
-                Case mergeCase = findCaseToMerge(request);
-                if (mergeCase != null) {
-                    log.info("merging case");
-                    caseObject = mergeAction.mergeCase(input, mergeCase);
-                } else {
-                    log.info("opening case since there is no case to merge");
+                if (detectionCriteria.isAlwaysOpenCase()) {
+                    log.info("opening case since flag always open case is true");
                     caseObject = openAction.openCase(input, request);
+                } else {
+                    Case mergeCase = findCaseToMerge(request);
+                    if (mergeCase != null) {
+                        log.info("merging case");
+                        caseObject = mergeAction.mergeCase(input, mergeCase);
+                    } else {
+                        log.info("opening case since there is no case to merge");
+                        caseObject = openAction.openCase(input, request);
+                    }
                 }
             }
         }
@@ -78,9 +82,9 @@ public class DefaultUpsertCaseStrategy implements UpsertCaseStrategy {
         Case caseToMerge = null;
         List<Case> openCases;
         if (request.getDetectionCriteria().isFindCaseOnAllDomains()) {
-            openCases = caseService.findOpenCasesForSubject(request.getInput().getIdUsuarioOriginal());
+            openCases = caseService.findOpenCasesForSubject(request.getInput().getIdUsuarioCreacion());
         } else {
-            openCases = caseService.findOpenCasesForSubjectByDomain(request.getInput().getIdUsuarioOriginal(), request
+            openCases = caseService.findOpenCasesForSubjectByDomain(request.getInput().getIdUsuarioCreacion(), request
                     .getDomain().getId());
         }
         if (CollectionUtils.isNotEmpty(openCases)) {

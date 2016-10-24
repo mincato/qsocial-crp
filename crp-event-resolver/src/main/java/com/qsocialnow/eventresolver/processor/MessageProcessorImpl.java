@@ -12,6 +12,7 @@ import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.eventresolver.exception.InvalidDomainException;
 import com.qsocialnow.eventresolver.filters.MessageFilter;
 import com.qsocialnow.eventresolver.service.DomainService;
+import com.qsocialnow.eventresolver.service.UserResolverService;
 import com.qsocialnow.kafka.model.Message;
 
 @Service
@@ -32,6 +33,9 @@ public class MessageProcessorImpl implements MessageProcessor {
     @Qualifier("messageFilter")
     private MessageFilter messageFilter;
 
+    @Autowired
+    private UserResolverService userResolverService;
+
     public void process(Message message) throws Exception {
         // reintentar ES
         Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);
@@ -41,12 +45,14 @@ public class MessageProcessorImpl implements MessageProcessor {
         Domain domain = domainService.findDomainWithActiveTriggers(domainId);
         if (domain != null) {
             if (messageFilter.shouldProcess(inputBeanDocument, domain)) {
-                ExecutionMessageRequest executionMessageRequest = detectionMessageProcessor.detect(inputBeanDocument,
-                        domain);
-                if (executionMessageRequest != null) {
-                    executionMessageProcessor.execute(executionMessageRequest);
-                } else {
-                    logMessageNotDetected(inputBeanDocument);
+                if (!isUserResolverEvent(inputBeanDocument)) {
+                    ExecutionMessageRequest executionMessageRequest = detectionMessageProcessor.detect(
+                            inputBeanDocument, domain);
+                    if (executionMessageRequest != null) {
+                        executionMessageProcessor.execute(executionMessageRequest);
+                    } else {
+                        logMessageNotDetected(inputBeanDocument);
+                    }
                 }
             } else {
                 LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
@@ -54,6 +60,15 @@ public class MessageProcessorImpl implements MessageProcessor {
         } else {
             throw new InvalidDomainException("Error trying to retrieve a domain");
         }
+    }
+
+    private boolean isUserResolverEvent(Event inputBeanDocument) {
+        boolean isUserResolverEvent = false;
+        if (userResolverService.findAllSourceIds().contains(inputBeanDocument.getIdUsuarioCreacion())) {
+            LOGGER.info("The event is from user resolver. So, it is discarded");
+            isUserResolverEvent = true;
+        }
+        return isUserResolverEvent;
     }
 
     private void logMessageNotDetected(Event inputBeanDocument) {

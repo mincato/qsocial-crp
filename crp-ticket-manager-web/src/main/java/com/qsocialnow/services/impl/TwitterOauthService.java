@@ -15,6 +15,7 @@ import com.qsocialnow.services.OauthService;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterFactory;
+import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.ConfigurationBuilder;
@@ -67,6 +68,7 @@ public class TwitterOauthService implements OauthService {
         try {
             SourceCredentials sourceCredentials = null;
             String identifier = null;
+            String sourceId = null;
             String verifier = Executions.getCurrent().getParameter("oauth_verifier");
             if (verifier != null) {
                 AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
@@ -75,11 +77,14 @@ public class TwitterOauthService implements OauthService {
                     sourceCredentials.setToken(accessToken.getToken());
                     sourceCredentials.setSecretToken(accessToken.getTokenSecret());
                     sourceCredentials.setIdentifier(SourceIdentifier.TWITTER);
-                    identifier = twitter.verifyCredentials().getScreenName();
+                    User user = twitter.verifyCredentials();
+                    identifier = user.getScreenName();
+                    sourceId = Long.toString(user.getId());
                 }
             }
             userResolver.setCredentials(sourceCredentials);
             userResolver.setIdentifier(identifier);
+            userResolver.setSourceId(sourceId);
         } catch (Exception e) {
             log.error("There was an error trying to get credentials for twitter", e);
             throw new RuntimeException(e);

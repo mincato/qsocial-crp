@@ -2,7 +2,8 @@ package com.qsocialnow.eventresolver.config;
 
 public enum CacheEnum {
 
-    DOMAINS_CACHE(CacheConfig.DOMAINS_CACHE), USER_RESOLVERS_CACHE(CacheConfig.USER_RESOLVERS_CACHE);
+    DOMAINS_CACHE(CacheConfig.DOMAINS_CACHE), USER_RESOLVERS_CACHE(CacheConfig.USER_RESOLVERS_CACHE), USER_RESOLVERS_SOURCE_IDS_CACHE(
+            CacheConfig.USER_RESOLVERS_SOURCE_IDS_CACHE);
 
     private String value;
 
