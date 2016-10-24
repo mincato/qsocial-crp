@@ -1,7 +1,6 @@
 package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,15 +11,14 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
-import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.util.DeepLinkBuilder;
 
 public class Case implements Serializable {
 
-	private static final long serialVersionUID = -2733196579634071076L;
+    private static final long serialVersionUID = -2733196579634071076L;
 
-	private String id;
+    private String id;
 
 	private String domainId;
 
@@ -107,7 +105,7 @@ public class Case implements Serializable {
 		List<ActionRegistry> registries = new ArrayList<>();
 		ActionRegistry registry = new ActionRegistry();
 		registry.setAction(ActionType.OPEN_CASE.name());
-		registry.setComment(event.getUsuarioOriginal() + " - " + event.getTitulo());
+		registry.setComment(event.getUsuarioCreacion() + " - " + event.getTitulo());
 		registry.setAutomatic(true);
 		registry.setDate(openDate);
 		registry.setDeepLink(DeepLinkBuilder.build(event));

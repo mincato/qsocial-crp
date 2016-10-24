@@ -7,6 +7,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.cache.NodeCache;
+import org.apache.curator.framework.recipes.cache.NodeCacheListener;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
@@ -68,6 +70,8 @@ public class App implements Runnable {
 
     private PathChildrenCache pathChildrenCache;
 
+    private NodeCache userResolversNodeCache;
+
     public static void main(String[] args) {
 
         try {
@@ -93,6 +97,15 @@ public class App implements Runnable {
         try {
             pathChildrenCache = new PathChildrenCache(zookeeperClient, appConfig.getDomainsPath(), true);
             addListener();
+            userResolversNodeCache = new NodeCache(zookeeperClient, appConfig.getUserResolversPath());
+            userResolversNodeCache.getListenable().addListener(new NodeCacheListener() {
+
+                @Override
+                public void nodeChanged() throws Exception {
+                    cacheManager.getCache(CacheConfig.USER_RESOLVERS_SOURCE_IDS_CACHE).clear();
+                }
+            });
+            userResolversNodeCache.start(true);
             eventHandlerExecutor = Executors.newCachedThreadPool();
             eventHandlerProcessors = new HashMap<>();
             createEventHandlerResponseDetectorProcessor();
@@ -118,6 +131,9 @@ public class App implements Runnable {
             }
             if (pathChildrenCache != null) {
                 pathChildrenCache.close();
+            }
+            if (userResolversNodeCache != null) {
+                userResolversNodeCache.close();
             }
             if (appExecutor != null) {
                 appExecutor.shutdown();

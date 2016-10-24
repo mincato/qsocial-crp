@@ -16,6 +16,7 @@ import facebook4j.Account;
 import facebook4j.Facebook;
 import facebook4j.FacebookFactory;
 import facebook4j.ResponseList;
+import facebook4j.User;
 import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
 
@@ -74,6 +75,7 @@ public class FacebookOauthService implements OauthService {
         try {
             SourceCredentials sourceCredentials = null;
             String identifier = null;
+            String sourceId = null;
             String oauthCode = Executions.getCurrent().getParameter("code");
             if (oauthCode != null) {
                 AccessToken accessToken = userFacebook.getOAuthAccessToken(oauthCode);
@@ -86,13 +88,16 @@ public class FacebookOauthService implements OauthService {
                             sourceCredentials = new SourceCredentials();
                             sourceCredentials.setToken(accessToken.getToken());
                             sourceCredentials.setIdentifier(SourceIdentifier.FACEBOOK);
-                            identifier = userFacebook.getMe().getName();
+                            User user = userFacebook.getMe();
+                            identifier = user.getName();
+                            sourceId = user.getId();
                         }
                     }
                 }
             }
             userResolver.setCredentials(sourceCredentials);
             userResolver.setIdentifier(identifier);
+            userResolver.setSourceId(sourceId);
         } catch (Exception e) {
             log.error("There was an error trying to get credentials for facebook", e);
             throw new RuntimeException(e);

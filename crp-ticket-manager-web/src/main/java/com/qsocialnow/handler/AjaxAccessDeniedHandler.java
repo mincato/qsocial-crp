@@ -14,18 +14,18 @@ import com.qsocialnow.security.exception.AuthorizationException;
 
 public class AjaxAccessDeniedHandler extends GenericInitiator {
 
-	public void doInit(Page page, Map<String, Object> args) throws Exception {
+    public void doInit(Page page, Map<String, Object> args) throws Exception {
 
-		Execution exec = Executions.getCurrent();
-		HttpServletRequest request = (HttpServletRequest) exec.getNativeRequest();
+        Execution exec = Executions.getCurrent();
+        HttpServletRequest request = (HttpServletRequest) exec.getNativeRequest();
 
-		try {
-			AuthorizationHelper authHelper = new AuthorizationHelper();
-			authHelper.authorize(request);
+        try {
+            AuthorizationHelper authHelper = new AuthorizationHelper();
+            authHelper.authorize(request);
 
-		} catch (Exception e) {
-			throw new AuthorizationException();
-		}
-	}
+        } catch (Exception e) {
+            throw new AuthorizationException();
+        }
+    }
 
 }

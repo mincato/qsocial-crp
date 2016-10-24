@@ -6,6 +6,8 @@ public class CacheConfig {
 
     public static final String USER_RESOLVERS_CACHE = "userResolvers";
 
+    public static final String USER_RESOLVERS_SOURCE_IDS_CACHE = "userResolversSourceIds";
+
     private Long maxSize;
 
     public Long getMaxSize() {
