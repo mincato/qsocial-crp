@@ -4,9 +4,9 @@
 		validationMessages="@id('vmsgs')" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
-			<div zclass="pane equal">
+			<n:div id="page-header" class="pane equal">
 				<n:h4>${labels.trigger.criteria.title}</n:h4>
-			</div>
+			</n:div>
 		</n:div>
 	</n:div>	
 	<div class="row">

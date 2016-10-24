@@ -24,7 +24,6 @@ public class OpenCaseAction {
 
     public Case openCase(Event inputElement, ExecutionMessageRequest request) {
         log.info("Executing action: " + ActionType.OPEN_CASE.name());
-
         String sourceId = inputElement.getIdUsuarioCreacion();
         Case newCase = Case.getNewCaseFromEvent(inputElement);
         try {
