@@ -51,6 +51,31 @@ router.get('/cases/report', function (req, res) {
 	  
 });
 
+router.get('/cases/results/report', function (req, res) {
+	  function asyncResponse(err,response) {
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	    	  res.writeHead(200, {
+	    	        'Content-Type': 'application/vnd.ms-excel',
+	    	        'Content-Length': response.length
+	    	    });
+	    	    res.end(new Buffer(response, 'binary'))
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  var domainId = req.query.domainId?req.query.domainId :null;
+	  var caseService = javaContext.getBeanSync("caseReportService");
+	  caseService.getCasesByResolutionReport(domainId,asyncResponse);
+	  
+});
+
 router.get('/cases/results', function (req, res) {
 	function asyncResponse(err,response) {
 	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();

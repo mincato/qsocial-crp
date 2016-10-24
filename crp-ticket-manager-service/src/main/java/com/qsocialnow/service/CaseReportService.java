@@ -10,6 +10,7 @@ import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
@@ -23,10 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
+import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.TriggerReport;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.CaseCategoryRepository;
 import com.qsocialnow.persistence.CaseRepository;
 import com.qsocialnow.persistence.DomainRepository;
@@ -56,6 +59,9 @@ public class CaseReportService {
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private CaseResultsService caseResultsService;
 
     public byte[] getReport(String subject, String title, String description, String pendingResponse, String status,
             String fromOpenDate, String toOpenDate, String userName) {
@@ -125,4 +131,17 @@ public class CaseReportService {
         return print;
     }
 
+    public byte[] getCasesByResolutionReport(String domainId) {
+        try {
+            PageResponse<ResultsListView> page = caseResultsService.getResults(domainId);
+            InputStream reportStream = this.getClass().getResourceAsStream("/reports/cases_by_resolution.jasper");
+            JasperPrint print = JasperFillManager.fillReport(reportStream, null,
+                    new JRBeanCollectionDataSource(page.getItems()));
+            byte[] data = exportPrintToExcel(print);
+            return data;
+        } catch (Exception e) {
+            log.error("error", e);
+        }
+        return null;
+    }
 }
