@@ -64,7 +64,7 @@ public class ResultsServiceImpl implements ResultsService {
             return results;
 
         } catch (Exception e) {
-            log.error("There was an error while trying to call case service", e);
+            log.error("There was an error while trying to call sumarize all service", e);
             throw new RuntimeException(e);
         }
     }
@@ -76,7 +76,7 @@ public class ResultsServiceImpl implements ResultsService {
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/report");
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/results/report");
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -90,7 +90,7 @@ public class ResultsServiceImpl implements ResultsService {
 
             return data;
         } catch (Exception e) {
-            log.error("There was an error while trying to call case service", e);
+            log.error("There was an error while trying to call results report service", e);
             throw new RuntimeException(e);
         }
     }
