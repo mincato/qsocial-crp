@@ -15,8 +15,8 @@ public class DeepLinkBuilder {
 		if (Media.FACEBOOK.getValue().equals(event.getMedioId())) {
 			String[] splittedId = event.getId().split("_");
 			String[] splittedOriginalId = event.getIdOriginal().split("_");
-			return MessageFormat.format("https://facebook.com/{0}/posts/{1}?commentId={2}", splittedOriginalId[0],
-					splittedOriginalId[1], splittedId[1]);
+			return MessageFormat.format("https://facebook.com/{0}/posts/{1}?commentId={2}&reply_comment_id={3}", splittedOriginalId[0],
+					splittedOriginalId[1], splittedId[0], splittedId[1]);
 		}
 		return null;
 	}
