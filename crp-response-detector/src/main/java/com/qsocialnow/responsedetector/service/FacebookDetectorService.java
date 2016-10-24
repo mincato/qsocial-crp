@@ -214,6 +214,7 @@ public class FacebookDetectorService extends SourceDetectorService {
 					event.setIdPadre(conversationsByCommentId.getEventId());
 					event.setOriginIdCase(conversationsByCommentId.getCaseId());
 					event.setIdOriginal(conversationsByCommentId.getOriginalId());
+					event.setRootCommentId(conversationsByCommentId.getRootCommentId());
 				}
 				removeSourceConversation(commentId);
 			}
