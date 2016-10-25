@@ -129,7 +129,7 @@ public class TriggerRepository {
         return triggers;
     }
 
-	 public Map<String, TriggerReport> findAllReport() {
+    public Map<String, TriggerReport> findAllReport() {
         return triggerElasticService.getAllTriggersAsMap();
     }
 

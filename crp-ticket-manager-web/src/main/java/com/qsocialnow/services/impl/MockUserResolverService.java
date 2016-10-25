@@ -86,5 +86,4 @@ public class MockUserResolverService implements UserResolverService {
     public void delete(String id) {
         // TODO Auto-generated method stub
     }
-
 }
