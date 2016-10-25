@@ -21,39 +21,38 @@ import com.qsocialnow.model.TagSubjectCategorySetView;
 @ToClientCommand("modal$closeEvent")
 public class ChooseSubjectCategoriesViewModel implements Serializable {
 
-	private static final long serialVersionUID = 1670037422141566180L;
+    private static final long serialVersionUID = 1670037422141566180L;
 
-	private TagSubjectCategorySetView subjectCategorySet;
+    private TagSubjectCategorySetView subjectCategorySet;
 
-	private boolean saved;
+    private boolean saved;
 
-	@Command
-	public void close(@ContextParam(ContextType.VIEW) Component comp) {
-		comp.detach();
-	}
+    @Command
+    public void close(@ContextParam(ContextType.VIEW) Component comp) {
+        comp.detach();
+    }
 
-	@Init
-	public void init(
-			@BindingParam("subjectCategorySet") TagSubjectCategorySetView subjectCategorySet) {
-		this.subjectCategorySet = subjectCategorySet;
-	}
+    @Init
+    public void init(@BindingParam("subjectCategorySet") TagSubjectCategorySetView subjectCategorySet) {
+        this.subjectCategorySet = subjectCategorySet;
+    }
 
-	public TagSubjectCategorySetView getSubjectCategorySet() {
-		return subjectCategorySet;
-	}
+    public TagSubjectCategorySetView getSubjectCategorySet() {
+        return subjectCategorySet;
+    }
 
-	@Command
-	@NotifyChange({ "saved" })
-	public void save() {
-		saved = true;
-	}
+    @Command
+    @NotifyChange({ "saved" })
+    public void save() {
+        saved = true;
+    }
 
-	public boolean isSaved() {
-		return saved;
-	}
+    public boolean isSaved() {
+        return saved;
+    }
 
-	public void setSaved(boolean saved) {
-		this.saved = saved;
-	}
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
 
 }
