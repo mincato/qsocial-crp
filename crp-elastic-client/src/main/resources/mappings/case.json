@@ -8,5 +8,6 @@
     "closeDate":{"type": "date","index":"not_analyzed"},
     "lastModifiedTimestamp":{"type": "date","index":"not_analyzed"},
     "title":{"type": "string","analyzer": "standard" },
-    "description":{"type": "string","analyzer": "standard" }
+    "description":{"type": "string","analyzer": "standard" },
+    "resolution":{"String": "date","index":"not_analyzed"},
     }}
