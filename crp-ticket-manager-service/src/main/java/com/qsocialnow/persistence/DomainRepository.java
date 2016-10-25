@@ -98,8 +98,18 @@ public class DomainRepository {
         }
         return domains;
     }
-    
-    
+
+    public List<DomainListView> findDomainsByIds(List<String> domainsIds) {
+        List<DomainListView> domains = new ArrayList<>();
+        List<Domain> domainsRepo = domainElasticService.getDomainsByIds(domainsIds);
+        for (Domain domainRepo : domainsRepo) {
+            DomainListView domainListView = new DomainListView();
+            domainListView.setId(domainRepo.getId());
+            domainListView.setName(domainRepo.getName());
+            domains.add(domainListView);
+        }
+        return domains;
+    }
     
     public Map<String, String> findAllReport() {
         return domainElasticService.getAllDomainsAsMap();
