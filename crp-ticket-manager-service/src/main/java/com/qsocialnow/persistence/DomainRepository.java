@@ -110,7 +110,7 @@ public class DomainRepository {
         }
         return domains;
     }
-    
+
     public Map<String, String> findAllReport() {
         return domainElasticService.getAllDomainsAsMap();
     }

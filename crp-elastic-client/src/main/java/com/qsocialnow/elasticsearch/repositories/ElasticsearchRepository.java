@@ -59,6 +59,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     private static final String PARENT_PARAMETER = "parent";
 
+    private static final Integer DEFAULT_SIZE_PAGE = 1000;
+
     private static final Logger log = LoggerFactory.getLogger(ElasticsearchRepository.class);
 
     private AWSElasticsearchConfigurationProvider config;
@@ -728,6 +730,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(filters);
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 
@@ -754,6 +757,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     @Override
     public <E> SearchResponse<E> search(Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 

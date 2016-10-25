@@ -126,4 +126,18 @@ public class UserResolverService {
         this.indexConfiguration = indexConfiguration;
     }
 
+    public List<UserResolver> getAllUserResolvers() {
+        RepositoryFactory<UserResolverType> esfactory = new RepositoryFactory<UserResolverType>(configurator);
+        Repository<UserResolverType> repository = esfactory.initManager();
+        repository.initClient();
+
+        UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
+
+        SearchResponse<UserResolver> response = repository.search(mapping);
+        List<UserResolver> userResolvers = response.getSources();
+
+        repository.closeClient();
+        return userResolvers;
+    }
+
 }
