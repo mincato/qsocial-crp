@@ -2,11 +2,11 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -20,8 +20,10 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.DomainService;
+import com.qsocialnow.services.ThematicService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class DomainsViewModel implements Serializable {
@@ -40,9 +42,16 @@ public class DomainsViewModel implements Serializable {
 
     private String keyword;
 
+    @WireVariable
+    private ThematicService thematicService;
+
+    private Map<Long, Thematic> thematicsById;
+
     @Init
     public void init() {
         findDomains();
+        findThematics();
+        fillThematicsInDomains();
     }
 
     public List<DomainListView> getDomains() {
@@ -94,10 +103,18 @@ public class DomainsViewModel implements Serializable {
             if (domainOptional.isPresent()) {
                 DomainListView domainListView = domainOptional.get();
                 domainListView.setName(domainChanged.getName());
-                domainListView.setThematics(domainChanged.getThematics().stream().map(number -> String.valueOf(number))
-                        .collect(Collectors.joining(", ")));
+                domainListView.setThematics(findThematicsByDomain(domainChanged));
             }
         }
+    }
+
+    private Collection<Thematic> findThematicsByDomain(Domain domain) {
+        Collection<Thematic> thematicsByDomain = new ArrayList<>();
+        for (Long thematicId : domain.getThematics()) {
+            Thematic thematic = thematicsById.get(thematicId);
+            thematicsByDomain.add(thematic);
+        }
+        return thematicsByDomain;
     }
 
     private PageResponse<DomainListView> findDomainsByName() {
@@ -122,6 +139,28 @@ public class DomainsViewModel implements Serializable {
         }
 
         return pageResponse;
+    }
+
+    private void findThematics() {
+        List<Thematic> thematics = thematicService.findAll();
+        thematicsById = new HashMap<>();
+        for (Thematic thematic : thematics) {
+            thematicsById.put(thematic.getId(), thematic);
+        }
+    }
+
+    private void fillThematicsInDomains() {
+        for (DomainListView domain : domains) {
+            List<Long> ids = domain.getThematicIds();
+            Collection<Thematic> thematics = new ArrayList<>();
+            for (Long id : ids) {
+                Thematic thematic = thematicsById.get(id);
+                if (thematic != null) {
+                    thematics.add(thematicsById.get(id));
+                }
+            }
+            domain.setThematics(thematics);
+        }
     }
 
 }
