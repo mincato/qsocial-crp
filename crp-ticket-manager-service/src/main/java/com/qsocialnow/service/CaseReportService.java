@@ -69,7 +69,7 @@ public class CaseReportService {
     @Autowired
     private ResolutionRepository resolutionRepository;
 
-    public byte[] getReport(String subject, String title, String description, String pendingResponse, String status,
+    public byte[] getReport(String domainId, String triggerId, String segmentId, String subject, String title, String description, String pendingResponse, String status,
             String fromOpenDate, String toOpenDate, String userName) {
         try {
             Map<String, String> domainsAsMap = domainRepository.findAllReport();
@@ -99,7 +99,7 @@ public class CaseReportService {
                     }
                 }
             }
-            JsonArray jsonObject = repository.findAllAsJsonObject(pageRequest, subject, title, description,
+            JsonArray jsonObject = repository.findAllAsJsonObject(pageRequest, domainId, triggerId, segmentId, subject, title, description,
                     pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
             InputStream is = new ByteArrayInputStream(jsonObject.toString().getBytes());
             Map<String, Object> params = new HashMap<String, Object>();
