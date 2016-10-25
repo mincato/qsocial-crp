@@ -44,6 +44,8 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> findByAlias(String id, Mapping<T, E> mapping);
 
+    public <E> SearchResponse<E> queryByIds(Mapping<T, E> mapping, String sortField, List<String> ids);
+
     public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, int from, int size, String sortField,
             String serchField, String searchValue);
 

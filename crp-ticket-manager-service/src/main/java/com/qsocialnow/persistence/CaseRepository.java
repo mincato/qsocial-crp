@@ -27,15 +27,15 @@ public class CaseRepository {
     @Autowired
     private CaseTicketService caseElasticService;
 
-    public List<CaseListView> findAll(PageRequest pageRequest, String subject, String title, String description,
-            String pendingResponse, String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter,
-            String userName) {
+    public List<CaseListView> findAll(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
+            String subject, String title, String pendingResponse, String status, String fromOpenDate,
+            String toOpenDate, List<String> teamsToFilter, String userName) {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
             List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
-                    pageRequest.getSortField(), pageRequest.getSortOrder(), subject, title, description,
-                    pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
+                    pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId, segmentId, subject,
+                    title, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();

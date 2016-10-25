@@ -1,12 +1,9 @@
 package com.qsocialnow.elasticsearch.services.config;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -21,8 +18,6 @@ public class TeamService {
     private AWSElasticsearchConfigurationProvider configurator;
 
     private ConfigurationIndexService indexConfiguration;
-
-    private Logger log = LoggerFactory.getLogger(TeamService.class);
 
     public String indexTeam(Team team) {
         RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
@@ -99,17 +94,15 @@ public class TeamService {
         RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
         Repository<TeamType> repository = esfactory.initManager();
         repository.initClient();
-        log.info("Repository from teams -from index: " + indexConfiguration.getIndexName() + " retrieving from user :"
-                + userName);
 
         TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
         BoolQueryBuilder filters = null;
 
         if (userName != null) {
             filters = QueryBuilders.boolQuery();
-            filters = filters.must(QueryBuilders.matchQuery("users.username", "jperez"));
+            filters = filters.must(QueryBuilders.matchQuery("users.username", userName));
         }
-        SearchResponse<Team> response = repository.searchWithFilters(null, null, null, null, mapping);
+        SearchResponse<Team> response = repository.searchWithFilters(null, null, null, filters, mapping);
         List<Team> teams = response.getSources();
 
         repository.closeClient();

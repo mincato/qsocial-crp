@@ -111,6 +111,17 @@ public class DomainService {
         return domains;
     }
 
+    public List<Domain> getDomainsByIds(List<String> domainsIds) {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+        DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Domain> response = repository.queryByIds(mapping, null, domainsIds);
+        List<Domain> domains = response.getSources();
+        repository.closeClient();
+        return domains;
+    }
+
     public Domain findDomainWithTriggers(String domainId) {
         Domain domain = findDomain(domainId);
         if (domain != null) {
@@ -142,5 +153,4 @@ public class DomainService {
     public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
         this.indexConfiguration = indexConfiguration;
     }
-
 }

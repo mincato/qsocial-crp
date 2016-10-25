@@ -97,17 +97,21 @@ router.get('/cases', function (req, res) {
   var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
   var sortField = req.query.sortField ? req.query.sortField : null;
   var sortOrder = req.query.sortOrder?req.query.sortOrder :null;
+  var domainId = req.query.domainId?req.query.domainId :null;
+  
+  var triggerId = req.query.triggerId?req.query.triggerId :null;
+  var segmentId = req.query.segmentId?req.query.segmentId :null;
+  
   var userName = req.query.userName?req.query.userName :null;
   var subject = req.query.subject?req.query.subject :null;
   var title = req.query.title?req.query.title :null;
-  var description = req.query.description?req.query.description :null;
   var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
   var status = req.query.status?req.query.status :null;
   
   var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
   var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
 
-  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName,asyncResponse);
+  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,domainId,triggerId,segmentId,subject,title,pendingResponse,status,fromOpenDate,toOpenDate,userName,asyncResponse);
 
 });
 
@@ -292,13 +296,18 @@ router.get('/domains', function (req, res) {
 	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
 	  var name = req.query.name ? req.query.name : null;
+	  var userName = req.query.userName ? req.query.userName : null;
 	  
 	  if(name === null) {
-		  domainService.findAll(pageNumber, pageSize, asyncResponse);
+		  if(userName === null) {
+			  domainService.findAll(pageNumber, pageSize, asyncResponse);
+		  }
+		  else{
+			  domainService.findAllByUserName(userName,asyncResponse);
+		  }
 	  }else{
 		  domainService.findAllByName(pageNumber, pageSize,name,asyncResponse);
 	  }
-
 });
 
 router.post('/domains', function (req, res) {

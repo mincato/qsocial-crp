@@ -109,6 +109,29 @@ public class DomainServiceImpl implements DomainService {
     }
 
     @Override
+    public PageResponse<DomainListView> findAllByUserNameAllowed(String userName) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(domainServiceUrl)).queryParam("userName", userName);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<PageResponse<DomainListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<PageResponse<DomainListView>>() {
+                    });
+
+            PageResponse<DomainListView> domains = response.getBody();
+            return domains;
+
+        } catch (Exception e) {
+            log.error("There was an error while trying to call domain service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public PageResponse<DomainListView> findAllByName(int pageNumber, int pageSize, String name) {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -130,5 +153,4 @@ public class DomainServiceImpl implements DomainService {
             throw new RuntimeException(e);
         }
     }
-
 }

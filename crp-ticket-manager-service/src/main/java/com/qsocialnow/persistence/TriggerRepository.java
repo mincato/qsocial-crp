@@ -122,4 +122,9 @@ public class TriggerRepository {
         return segments;
     }
 
+    public List<Trigger> findTriggersByIds(List<String> triggerIds) {
+        List<Trigger> triggers = triggerElasticService.getTriggersByIds(triggerIds);
+        return triggers;
+    }
+
 }

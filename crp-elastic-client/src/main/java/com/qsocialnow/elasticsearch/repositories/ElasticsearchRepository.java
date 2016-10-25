@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,20 +12,16 @@ import java.util.stream.Collectors;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.OrQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
-import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.metrics.valuecount.ValueCountBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.amazonaws.protocol.json.SdkStructuredJsonFactoryImpl;
 import com.google.common.base.Supplier;
 import com.qsocialnow.common.exception.RepositoryException;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -48,7 +43,6 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.search.aggregation.TermsAggregation;
-import io.searchbox.core.search.aggregation.ValueCountAggregation;
 import io.searchbox.core.search.aggregation.TermsAggregation.Entry;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
@@ -322,7 +316,17 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return idValue;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> queryByIds(Mapping<T, E> mapping, String sortField, List<String> ids) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        if (sortField != null)
+            searchSourceBuilder.sort(sortField, SortOrder.ASC);
+
+        searchSourceBuilder.query(QueryBuilders.idsQuery(mapping.getType()).addIds(ids));
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex()).build();
+        return executeSearch(mapping, search);
+    }
+
     public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, int from, int size, String sortField,
             String searchField, String searchValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -340,7 +344,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return executeSearch(mapping, search);
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
             boolean sortOrder, Map<String, String> searchValues, List<RangeFilter> rangeFilters,
             List<ShouldFilter> shouldFilters) {
@@ -352,11 +355,19 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             sortOrderValue = SortOrder.DESC;
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderValue);
+        searchSourceBuilder.from(from).size(size);
+
+        if (sortField != null)
+            searchSourceBuilder.sort(sortField, sortOrderValue);
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        for (String searchField : searchValues.keySet()) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+
+        if (searchValues != null) {
+            for (String searchField : searchValues.keySet()) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+            }
+        } else {
+            boolQueryBuilder.must(QueryBuilders.matchAllQuery());
         }
 
         if (rangeFilters != null) {
@@ -380,7 +391,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
             boolQueryBuilder.filter(boolShouldQueryBuilder);
         }
-
         searchSourceBuilder.query(boolQueryBuilder);
         log.info("Query: " + searchSourceBuilder.toString());
 
@@ -389,7 +399,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return executeSearch(mapping, search);
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> searchValues,
             List<RangeFilter> rangeFilters, List<ShouldFilter> shouldFilters, String fieldAggregation) {
 
@@ -433,7 +442,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
             boolean sortOrder, Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
 
@@ -502,7 +510,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     @Override
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> findByAlias(String id, Mapping<T, E> mapping) {
-        log.info("Elasticsearch get document with id:" + id);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.termsQuery("_id", id));
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())

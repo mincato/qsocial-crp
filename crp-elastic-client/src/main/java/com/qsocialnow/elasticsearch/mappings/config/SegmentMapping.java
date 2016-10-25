@@ -56,11 +56,13 @@ public class SegmentMapping implements Mapping<SegmentType, Segment> {
 
     @Override
     public Segment getDocument(SegmentType documentType) {
+        System.out.println(documentType.toString());
         Segment segment = new Segment();
         segment.setId(documentType.getId());
         segment.setDescription(documentType.getDescription());
         segment.setDetectionCriterias(documentType.getDetectionCriterias());
         segment.setTeam(documentType.getTeam());
+        segment.setTriggerId(documentType.getTriggerId());
         return segment;
     }
 

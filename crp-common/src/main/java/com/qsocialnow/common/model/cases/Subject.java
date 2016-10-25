@@ -10,9 +10,9 @@ import javax.validation.Valid;
 
 public class Subject implements Serializable {
 
-	private static final long serialVersionUID = -5000381409758581245L;
+    private static final long serialVersionUID = -5000381409758581245L;
 
-	private String id;
+    private String id;
 
     // identifier aka usuarioOriginal
     private String identifier;
