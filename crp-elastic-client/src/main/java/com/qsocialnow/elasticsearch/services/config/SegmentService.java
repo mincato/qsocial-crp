@@ -1,5 +1,6 @@
 package com.qsocialnow.elasticsearch.services.config;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -7,16 +8,22 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.SegmentMapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.SegmentType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
+import com.qsocialnow.elasticsearch.repositories.ShouldFilter;
 
 public class SegmentService {
+
+    private static final Logger log = LoggerFactory.getLogger(SegmentService.class);
 
     private AWSElasticsearchConfigurationProvider configurator;
 
@@ -81,7 +88,27 @@ public class SegmentService {
         SearchResponse<Segment> response = repository.searchWithFilters(filters, mapping);
 
         List<Segment> segments = response.getSources();
+        return segments;
+    }
 
+    public List<Segment> getSegmentsByTeams(List<Team> teams) {
+        RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
+        Repository<SegmentType> repository = esfactory.initManager();
+        repository.initClient();
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
+
+        List<ShouldFilter> shouldFilters = new ArrayList<>();
+        if (teams != null) {
+            for (Team team : teams) {
+                ShouldFilter shouldFilter = new ShouldFilter("team", team.getId());
+                shouldFilters.add(shouldFilter);
+            }
+        }
+        SearchResponse<Segment> response = repository.queryByFields(mapping, 0, -1, null, false, null, null,
+                shouldFilters);
+
+        List<Segment> segments = response.getSources();
+        repository.closeClient();
         return segments;
     }
 

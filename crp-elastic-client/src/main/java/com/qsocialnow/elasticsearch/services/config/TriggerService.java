@@ -166,6 +166,17 @@ public class TriggerService {
         return response;
     }
 
+    public List<Trigger> getTriggersByIds(List<String> triggerIds) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Trigger> response = repository.queryByIds(mapping, null, triggerIds);
+        List<Trigger> triggers = response.getSources();
+        repository.closeClient();
+        return triggers;
+    }
+
     public void setSegmentService(SegmentService segmentService) {
         this.segmentService = segmentService;
     }

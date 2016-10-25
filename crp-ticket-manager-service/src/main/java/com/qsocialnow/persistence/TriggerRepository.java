@@ -124,7 +124,12 @@ public class TriggerRepository {
         return segments;
     }
 
-    public Map<String, TriggerReport> findAllReport() {
+    public List<Trigger> findTriggersByIds(List<String> triggerIds) {
+        List<Trigger> triggers = triggerElasticService.getTriggersByIds(triggerIds);
+        return triggers;
+    }
+
+	 public Map<String, TriggerReport> findAllReport() {
         return triggerElasticService.getAllTriggersAsMap();
     }
 

@@ -16,6 +16,8 @@ public class Segment {
 
     private List<DetectionCriteria> detectionCriterias;
 
+    private String triggerId;
+
     public Segment() {
         this.detectionCriterias = new ArrayList<>();
     }
@@ -42,6 +44,14 @@ public class Segment {
 
     public void setTeam(String team) {
         this.team = team;
+    }
+
+    public String getTriggerId() {
+        return triggerId;
+    }
+
+    public void setTriggerId(String triggerId) {
+        this.triggerId = triggerId;
     }
 
     public List<DetectionCriteria> getDetectionCriterias() {

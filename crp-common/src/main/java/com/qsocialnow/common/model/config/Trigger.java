@@ -32,6 +32,8 @@ public class Trigger {
 
     private List<String> subjectCategoriesSetIds;
 
+    private String domainId;
+
     @NotNull(message = "app.field.empty.validation")
     private Status status;
 
@@ -129,6 +131,14 @@ public class Trigger {
 
     public void setSubjectCategoriesSetIds(List<String> subjectCategoriesSetIds) {
         this.subjectCategoriesSetIds = subjectCategoriesSetIds;
+    }
+
+    public String getDomainId() {
+        return domainId;
+    }
+
+    public void setDomainId(String domainId) {
+        this.domainId = domainId;
     }
 
 }

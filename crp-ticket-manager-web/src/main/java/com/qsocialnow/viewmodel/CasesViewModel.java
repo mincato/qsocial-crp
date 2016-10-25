@@ -7,28 +7,39 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Filedownload;
 
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.SegmentListView;
+import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.security.LoginConfig;
 import com.qsocialnow.services.CaseService;
+import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.SubjectService;
+import com.qsocialnow.services.TriggerService;
 import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
 
+    private static final String NOT_ID_ITEM_VALUE = "NOT_ID";
+
     private DateConverter dateConverter;
+
+    private static final String CASES_ALL_LABEL_KEY = "cases.list.filter.all";
 
     private static final String FALSE_OPTION_VALUE = "false";
 
@@ -63,8 +74,6 @@ public class CasesViewModel implements Serializable {
     // filters
     private boolean filterActive;
 
-    private List<String> subjectsFilterOptions = new ArrayList<>();
-
     private Long fromDate;
 
     private Long toDate;
@@ -75,6 +84,10 @@ public class CasesViewModel implements Serializable {
 
     private String subject;
 
+    private String userName;
+
+    private boolean isAdmin;
+
     private List<String> statusOptions = new ArrayList<>();
 
     private String status;
@@ -83,15 +96,35 @@ public class CasesViewModel implements Serializable {
 
     private String pendingResponse;
 
+    private List<DomainListView> domains = new ArrayList<>();
+
+    private DomainListView domain;
+
+    private List<TriggerListView> triggers = new ArrayList<>();
+
+    private TriggerListView trigger;
+
+    private List<SegmentListView> segments = new ArrayList<>();
+
+    private SegmentListView segment;
+
     @WireVariable
     private UserSessionService userSessionService;
 
     @WireVariable
     private LoginConfig loginConfig;
 
+    @WireVariable
+    private DomainService domainService;
+
+    @WireVariable
+    private TriggerService triggerService;
+
     @Init
     public void init() {
-        this.subjectsFilterOptions = getSubjects();
+        this.initUserInformation();
+        this.domains = getDomainsList();
+
         this.filterActive = false;
         this.pendingOptions = getPendingOptionsList();
         this.statusOptions = getStatusOptionsList();
@@ -99,21 +132,9 @@ public class CasesViewModel implements Serializable {
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
 
-    private List<String> getSubjects() {
-
-        return null;
-    }
-
-    public List<CaseListView> getCases() {
-        return this.cases;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public boolean isMoreResults() {
-        return moreResults;
+    private void initUserInformation() {
+        this.userName = userSessionService.getUsername();
+        this.isAdmin = userSessionService.isAdmin();
     }
 
     @Command
@@ -124,7 +145,7 @@ public class CasesViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "cases", "moreResults", "sortField", "sortOrder" })
+    @NotifyChange({ "cases", "moreResults" })
     public void sortList(@BindingParam("sortField") String sortField) {
         this.sortField = sortField;
         this.sortOrder = !this.sortOrder;
@@ -168,8 +189,16 @@ public class CasesViewModel implements Serializable {
             filters.put("title", this.title);
         }
 
-        if (this.description != null && !this.description.isEmpty()) {
-            filters.put("description", this.description);
+        if (this.domain != null && !this.domain.getId().equals(NOT_ID_ITEM_VALUE)) {
+            filters.put("domainId", this.domain.getId());
+        }
+
+        if (this.trigger != null && !this.trigger.getId().equals(NOT_ID_ITEM_VALUE)) {
+            filters.put("triggerId", this.trigger.getId());
+        }
+
+        if (this.segment != null && !this.segment.getId().equals(NOT_ID_ITEM_VALUE)) {
+            filters.put("segmentId", this.segment.getId());
         }
 
         if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE)) {
@@ -200,12 +229,16 @@ public class CasesViewModel implements Serializable {
         this.activePage = ACTIVE_PAGE_DEFAULT;
     }
 
-    public List<String> getSubjectsFilterOptions() {
-        return subjectsFilterOptions;
+    public List<CaseListView> getCases() {
+        return this.cases;
     }
 
-    public void setSubjectsFilterOptions(List<String> subjectsFilterOptions) {
-        this.subjectsFilterOptions = subjectsFilterOptions;
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public boolean isMoreResults() {
+        return moreResults;
     }
 
     public boolean isFilterActive() {
@@ -256,6 +289,22 @@ public class CasesViewModel implements Serializable {
         this.subject = subject;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     public List<String> getStatusOptions() {
         return statusOptions;
     }
@@ -293,6 +342,54 @@ public class CasesViewModel implements Serializable {
         return new ArrayList<String>(Arrays.asList(options));
     }
 
+    public DomainListView getDomain() {
+        return domain;
+    }
+
+    public void setDomain(DomainListView domain) {
+        this.domain = domain;
+    }
+
+    public List<TriggerListView> getTriggers() {
+        return triggers;
+    }
+
+    public void setTriggers(List<TriggerListView> triggers) {
+        this.triggers = triggers;
+    }
+
+    public List<SegmentListView> getSegments() {
+        return segments;
+    }
+
+    public void setSegments(List<SegmentListView> segments) {
+        this.segments = segments;
+    }
+
+    public List<DomainListView> getDomains() {
+        return domains;
+    }
+
+    public void setDomains(List<DomainListView> domains) {
+        this.domains = domains;
+    }
+
+    public TriggerListView getTrigger() {
+        return trigger;
+    }
+
+    public void setTrigger(TriggerListView trigger) {
+        this.trigger = trigger;
+    }
+
+    public SegmentListView getSegment() {
+        return segment;
+    }
+
+    public void setSegment(SegmentListView segment) {
+        this.segment = segment;
+    }
+
     private List<String> getStatusOptionsList() {
         String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
         return new ArrayList<String>(Arrays.asList(options));
@@ -302,20 +399,69 @@ public class CasesViewModel implements Serializable {
         return dateConverter;
     }
 
-    public boolean isSortOrder() {
-        return sortOrder;
+    private List<DomainListView> getDomainsList() {
+        List<DomainListView> domains = new ArrayList<>();
+        PageResponse<DomainListView> domainsResponse;
+        if (isAdmin)
+            domainsResponse = domainService.findAll(0, -1);
+        else
+            domainsResponse = domainService.findAllByUserNameAllowed(this.userName);
+
+        domains = domainsResponse.getItems();
+        if (domains != null) {
+            DomainListView domainBase = new DomainListView();
+            domainBase.setId(NOT_ID_ITEM_VALUE);
+            domainBase.setName(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            domains.add(0, domainBase);
+        }
+        return domains;
     }
 
-    public void setSortOrder(boolean sortOrder) {
-        this.sortOrder = sortOrder;
+    @Command
+    @NotifyChange({ "triggers", "segments", "trigger", "segment" })
+    public void selectDomain(@BindingParam("domain") DomainListView domain) {
+        triggers.clear();
+        segments.clear();
+        if (domain != null && !domain.getId().equals(NOT_ID_ITEM_VALUE)) {
+            triggers = getTriggerList(domain.getId());
+        }
+        setTrigger(null);
+        setSegment(null);
     }
 
-    public String getSortField() {
-        return sortField;
+    private List<TriggerListView> getTriggerList(String domainId) {
+        List<TriggerListView> triggers = new ArrayList<>();
+        PageResponse<TriggerListView> triggersResponse = triggerService.findAll(domainId, 0, -1, null);
+        triggers = triggersResponse.getItems();
+        if (triggers != null && !triggers.isEmpty()) {
+            TriggerListView triggerBase = new TriggerListView();
+            triggerBase.setId(NOT_ID_ITEM_VALUE);
+            triggerBase.setName(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            triggers.add(0, triggerBase);
+        }
+        return triggers;
     }
 
-    public void setSortField(String sortField) {
-        this.sortField = sortField;
+    @Command
+    @NotifyChange({ "segments", "trigger", "segment" })
+    public void selectTrigger(@BindingParam("trigger") TriggerListView trigger) {
+        segments.clear();
+        if (trigger != null && !trigger.getId().equals(NOT_ID_ITEM_VALUE)) {
+            segments = getSegments(domain.getId(), trigger.getId());
+        }
+        setSegment(null);
     }
 
+    private List<SegmentListView> getSegments(String domainId, String triggerId) {
+        List<SegmentListView> segments = new ArrayList<>();
+        segments = triggerService.findSegments(domainId, triggerId);
+        if (segments != null && !segments.isEmpty()) {
+            SegmentListView segmentBase = new SegmentListView();
+            segmentBase.setId(NOT_ID_ITEM_VALUE);
+            segmentBase.setDescription("all");
+            segmentBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            segments.add(0, segmentBase);
+        }
+        return segments;
+    }
 }
