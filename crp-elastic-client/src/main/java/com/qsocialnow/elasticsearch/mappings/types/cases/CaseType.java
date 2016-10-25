@@ -9,6 +9,8 @@ public class CaseType extends Case implements IdentityType {
     @JestId
     private String idCase;
 
+    private String titleSort;
+
     @Override
     public String getId() {
         return this.idCase;
@@ -17,5 +19,13 @@ public class CaseType extends Case implements IdentityType {
 
     public void setIdCase(String id) {
         this.idCase = id;
+    }
+
+    public String getTitleSort() {
+        return titleSort;
+    }
+
+    public void setTitleSort(String titleSort) {
+        this.titleSort = titleSort;
     }
 }

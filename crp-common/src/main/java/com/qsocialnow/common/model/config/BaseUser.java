@@ -2,6 +2,9 @@ package com.qsocialnow.common.model.config;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class BaseUser implements Serializable {
 
     private static final long serialVersionUID = 3151356977508560054L;
@@ -35,19 +38,20 @@ public class BaseUser implements Serializable {
     }
 
     public int hashCode() {
-        int hashcode = 0;
-        hashcode = id;
-        hashcode += username.hashCode();
-        return hashcode;
+        return new HashCodeBuilder(1, 3).append(id).append(username).toHashCode();
     }
 
     public boolean equals(Object obj) {
-        User user = (User) obj;
-        if ((user.getId().equals(this.id)) && (user.getUsername().equals(this.username))) {
-            return true;
-        } else {
+        if (obj == null) {
             return false;
         }
+        if (obj == this) {
+            return true;
+        }
+        if (obj.getClass() != getClass()) {
+            return false;
+        }
+        BaseUser rhs = (BaseUser) obj;
+        return new EqualsBuilder().append(id, rhs.getId()).append(username, rhs.getUsername()).isEquals();
     }
-
 }

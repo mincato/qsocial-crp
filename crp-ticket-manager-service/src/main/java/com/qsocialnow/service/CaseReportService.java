@@ -3,6 +3,7 @@ package com.qsocialnow.service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.config.Team;
@@ -80,6 +80,8 @@ public class CaseReportService {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             Map<String, ReportRepository> reportRepositories = new HashMap<>();
+            List<String> keys = Arrays.asList("DOMAINS", "TRIGGERS", "SEGMENTS", "CASE_CATEGORIES",
+                    "SUBJECT_CATEGORIES", "RESOLUTIONS");
             reportRepositories.put("DOMAINS", domainRepository);
             reportRepositories.put("TRIGGERS", triggerRepository);
             reportRepositories.put("SEGMENTS", segmentRepository);
@@ -87,8 +89,8 @@ public class CaseReportService {
             reportRepositories.put("SUBJECT_CATEGORIES", subjectCategoryRepository);
             reportRepositories.put("RESOLUTIONS", resolutionRepository);
             long time = System.currentTimeMillis();
-            reportRepositories.entrySet().stream().parallel().forEach(entry -> {
-                params.put(entry.getKey(), entry.getValue().findAllReport());
+            keys.stream().parallel().forEach(key -> {
+                params.put(key, reportRepositories.get(key).findAllReport());
             });
             System.out.println("tiempo: " + (System.currentTimeMillis() - time));
 
