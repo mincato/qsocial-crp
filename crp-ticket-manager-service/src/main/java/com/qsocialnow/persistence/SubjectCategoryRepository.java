@@ -11,7 +11,7 @@ import com.qsocialnow.elasticsearch.services.config.CaseCategoryService;
 import com.qsocialnow.elasticsearch.services.config.SubjectCategoryService;
 
 @Service
-public class SubjectCategoryRepository {
+public class SubjectCategoryRepository implements ReportRepository {
 
     private Logger log = LoggerFactory.getLogger(SubjectCategoryRepository.class);
 

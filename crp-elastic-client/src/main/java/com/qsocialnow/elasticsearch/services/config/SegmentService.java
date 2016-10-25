@@ -1,7 +1,9 @@
 package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -150,6 +152,25 @@ public class SegmentService {
         String response = repository.updateMapping(segment.getId(), mapping, documentIndexed);
         return response;
 
+    }
+
+    public Map<String, String> getAllSegmentsAsMap() {
+        RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
+        Repository<SegmentType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Segment> response = repository.search(mapping);
+
+        List<Segment> segments = response.getSources();
+
+        repository.closeClient();
+        Map<String, String> map = new HashMap<String, String>();
+        for (Segment segment : segments) {
+            map.put(segment.getId(), segment.getDescription());
+        }
+
+        return map;
     }
 
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
