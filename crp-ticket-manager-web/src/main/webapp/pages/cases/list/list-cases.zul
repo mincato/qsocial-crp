@@ -44,7 +44,6 @@
 	                       </selectbox>
 	                   </div>
                 </x:div>
-                
                 <x:div class="col-md-3" visible="@load(vm.triggers ne null and not empty vm.triggers)">
                     <n:label class="control-label col-sm-4">${labels.cases.list.filter.triggers}</n:label>
                     <div zclass="input-group input-group-sm">
@@ -64,6 +63,18 @@
                                selectedItem="@bind(vm.segment)">
                                <template name="model">
                                    <label value="${each.description}" />
+                               </template>
+                           </selectbox>
+                    </div>
+                </x:div>
+                
+                <x:div class="col-md-2" visible="@load(vm.users ne null and not empty vm.users)">
+                    <n:label class="control-label col-sm-4">${labels.cases.list.filter.user}</n:label>
+                    <div zclass="input-group input-group-sm">
+                           <selectbox sclass="form-control" model="@load(vm.users)"
+                               selectedItem="@bind(vm.userSelected)">
+                               <template name="model">
+                                   <label value="${each.username}" />
                                </template>
                            </selectbox>
                     </div>

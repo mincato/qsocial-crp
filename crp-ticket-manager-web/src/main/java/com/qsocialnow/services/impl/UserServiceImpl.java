@@ -56,4 +56,28 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public List<UserListView> findAllByUserName(String userName) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(userServiceUrl));
+
+            builder.queryParam("userName", userName);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<UserListView>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null, new ParameterizedTypeReference<List<UserListView>>() {
+                    });
+
+            List<UserListView> users = response.getBody();
+            return users;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call user service", e);
+            throw new RuntimeException(e);
+        }
+    }
 }
