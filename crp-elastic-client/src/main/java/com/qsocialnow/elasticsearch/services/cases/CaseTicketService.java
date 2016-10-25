@@ -47,7 +47,7 @@ public class CaseTicketService extends CaseIndexService {
 
     public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String domainId,
             String triggerId, String segmentId, String subject, String title, String pendingResponse, String status,
-            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName) {
+            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -83,6 +83,9 @@ public class CaseTicketService extends CaseIndexService {
         if (status != null)
             searchValues.put("open", status);
 
+        if (userSelected != null)
+            searchValues.put("assignee.username", userSelected);
+
         List<ShouldFilter> shouldFilters = null;
 
         if (teamsToFilter == null || (teamsToFilter != null && teamsToFilter.size() == 0)) {
@@ -109,9 +112,9 @@ public class CaseTicketService extends CaseIndexService {
     }
 
     public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String domainId,
-            String triggerId, String segmentId, String subject,
-            String title, String description, String pendingResponse, String status, String fromOpenDate,
-            String toOpenDate, List<String> teamsToFilter, String userName) {
+            String triggerId, String segmentId, String subject, String title, String description,
+            String pendingResponse, String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter,
+            String userName) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -134,7 +137,7 @@ public class CaseTicketService extends CaseIndexService {
 
         if (segmentId != null)
             searchValues.put("segmentId", segmentId);
-        
+
         if (subject != null)
             searchValues.put("subject.identifier", subject);
 

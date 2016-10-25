@@ -15,7 +15,7 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.config.DomainService;
 
 @Service
-public class DomainRepository {
+public class DomainRepository implements ReportRepository {
 
     private Logger log = LoggerFactory.getLogger(DomainRepository.class);
 
