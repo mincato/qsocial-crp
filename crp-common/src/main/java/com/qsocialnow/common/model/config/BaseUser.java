@@ -34,4 +34,20 @@ public class BaseUser implements Serializable {
         this.username = username;
     }
 
+    public int hashCode() {
+        int hashcode = 0;
+        hashcode = id;
+        hashcode += username.hashCode();
+        return hashcode;
+    }
+
+    public boolean equals(Object obj) {
+        User user = (User) obj;
+        if ((user.getId().equals(this.id)) && (user.getUsername().equals(this.username))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

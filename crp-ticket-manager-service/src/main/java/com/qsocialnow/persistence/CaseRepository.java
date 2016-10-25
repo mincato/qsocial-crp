@@ -28,13 +28,13 @@ public class CaseRepository {
 
     public List<CaseListView> findAll(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
             String subject, String title, String pendingResponse, String status, String fromOpenDate,
-            String toOpenDate, List<String> teamsToFilter, String userName) {
+            String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
             List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
                     pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId, segmentId, subject,
-                    title, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
+                    title, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected);
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();
