@@ -369,7 +369,7 @@
 													value="@bind(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)])" />
 											</x:span>
 										</x:div>
-										<n:div class="col-xs-8 col-sm-3">
+										<n:div class="col-xs-6 col-sm-3">
 											<div class="form-group" children="@load(filterCategory.categories)">
 												<template name="children">
 													<span>
@@ -381,7 +381,12 @@
 												</template>
 					    					</div>
 										</n:div>
-										<n:div class="col-xs-4 col-sm-3">
+										<n:div class="col-xs-2 col-sm-1" >
+											<a class="link-button" visible="@load(filterCategory.categories ne null)" onClick="@command('editCategories', fxFilter=fxFilter, filter = filterCategory)">
+												<i class="fa fa-plus-circle fa-2x"></i>
+											</a>
+										</n:div>
+										<n:div class="col-xs-4 col-sm-2">
 											<n:div class="pull-right">
 												<a zclass="btn-row-list"
 													onClick="@command('removeFilterCategory', fxFilter=fxFilter, filter = filterCategory)">
