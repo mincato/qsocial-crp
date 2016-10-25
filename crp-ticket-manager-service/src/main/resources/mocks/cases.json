@@ -1,338 +1,2787 @@
 [
-{
-  "_index": "cases",
-  "_type": "case",
-  "_id": "AVfS_YzUuCHMWTA6zYaa",
-  "_score": 1,
-  "_source": {
-    "idCase": "AVfS_YzUuCHMWTA6zYaa",
-    "domainId": "AVfFSiZvgeHP5kyJ43lS",
-    "triggerId": "AVfFTRnwgeHP5kyJ43ld",
-    "segmentId": "AVfFTRoRgeHP5kyJ43le",
-    "open": true,
-    "pendingResponse": true,
-    "openDate": 1476713527935,
-    "lastModifiedTimestamp": 1476716661215,
-    "title": "Soy Bond, James Bond.",
-    "triggerEvent": {
-      "timestamp": 1476312866000,
-      "tokenId": 2,
-      "seriesId": [
-        1474655049924,
-        1451306629266
-      ],
-      "subSeriesId": [
-        1474651959596,
-        1474656263371
-      ],
-      "id": "1643796052578463_1654238811534187",
-      "idOriginal": "1643796052578463_1654238811534187",
-      "medioId": 1086,
-      "tipoDeMedio": "r",
-      "connotacion": 1,
-      "sistemaOrigenExterno": "CRP-FB",
-      "fecha": "2016-10-12T00:00:00+0000",
-      "esTapa": false,
-      "usuarioOriginal": "Usurio Enojado",
-      "usuarioCreacion": "Usurio Enojado",
-      "noticiaStatus": 10,
-      "odaCategorizada": 0,
-      "esSecundario": true,
-      "esLike": false,
-      "esReproduccion": true,
-      "fechaCreacion": "2016-10-12T22:54:26+0000",
-      "reproduccionesCount": 0,
-      "likeCount": 0,
-      "titulo": "Soy Bond, James Bond.",
-      "texto": "Soy Bond, James Bond.",
-      "normalizeMessage": "Soy Bond, James Bond.",
-      "followersCount": 0,
-      "idUsuarioOriginal": "118678508597731",
-      "idUsuarioReproduccion": "118678508597731",
-      "idUsuarioCreacion": "118678508597731",
-      "language": "es",
-      "menciones": [
-        "BOCA"
-      ],
-      "actores": [],
-      "hashTags": [],
-      "responseDetected": false
-    },
-    "subject": {
-      "id": "AVfFUGQguCHMWTA6zYZx",
-      "identifier": "Usurio",
-      "sourceId": "118678508597731",
-      "source": 1086,
-      "signedDate": "2016-10-14T22:28:01+0000",
-      "lastAccionDate": "2016-10-14T22:28:01+0000"
-    },
-    "userResolver": {
-      "id": "AVfFSFmLgeHP5kyJ43lP",
-      "source": 1086,
-      "identifier": "Centaurico BotTres"
-    },
-    "lastPostId": "1654238811534187_1654265668198168",
-    "idRootComment": "1654238811534187_1654240921533976",
-    "source": 1086,
-    "messages": [
-      {
-        "id": "1643796052578463_1654238811534187",
-        "fromResponseDetector": false
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf4JANVRtUjuEK7_W_Z",
+      "_score":null,
+      "_source":{
+         "domainId":"AVfDx6gKgeHP5kyJ43kr",
+         "triggerId":"AVf3XcvFgeHP5kyJ43mw",
+         "segmentId":"AVf3Xc_QgeHP5kyJ43mx",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1477336872344,
+         "lastModifiedTimestamp":1477336877005,
+         "title":"accion automatica de diego",
+         "triggerEvent":{
+            "timestamp":1476313506000,
+            "tokenId":1,
+            "seriesId":[
+               1474655049924
+            ],
+            "subSeriesId":[
+
+            ],
+            "id":"786341957681483776",
+            "idOriginal":"786341957681483776",
+            "medioId":1087,
+            "tipoDeMedio":"r",
+            "connotacion":3,
+            "sistemaOrigenExterno":"CRP-TW",
+            "fecha":"2016-10-12T00:00:00-0300",
+            "esTapa":false,
+            "usuarioOriginal":"marchype http://pbs.twimg.com/profile_images/756579162572357633/zj6S4Z0i_normal.jpg",
+            "usuarioCreacion":"marchype http://pbs.twimg.com/profile_images/756579162572357633/zj6S4Z0i_normal.jpg",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":false,
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-12T23:05:06-0300",
+            "reproduccionesCount":0,
+            "titulo":"accion automatica de diego",
+            "texto":"#tbt ITF German Championships 2001 #thosewerethedays #turntablism #championsleague #hiphop� https://t.co/IYM5DpwhBD",
+            "normalizeMessage":"Texto: #tbt ITF German Championships 2001 #thosewerethedays #turntablism #championsleague #hiphop� https://t.co/IYM5DpwhBD | Autor: marchype | Fecha de creacion: Wed Oct 12 23:05:06 UTC 2016",
+            "urlMultimediaContent":"<a href=\"http://instagram.com\" rel=\"nofollow\">Instagram</a>",
+            "followersCount":1752,
+            "idUsuarioOriginal":"16643225",
+            "idUsuarioCreacion":"16643225",
+            "profileImage":"http://pbs.twimg.com/profile_images/756579162572357633/zj6S4Z0i_normal.jpg",
+            "name":"marchype",
+            "language":"en",
+            "originalLocation":"53.54945;10.00676",
+            "location":{
+               "lat":53.54945,
+               "lon":10.00676
+            },
+            "locationMethod":"GEO_LOCATION",
+            "actores":[
+
+            ],
+            "hashTags":[
+               "#championsleague",
+               "#hiphop�",
+               "#tbt",
+               "#thosewerethedays",
+               "#turntablism"
+            ],
+            "adm3":6547395,
+            "adm4":7602585,
+            "city":2911298,
+            "neighborhood":2911288,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf4I_TPRtUjuEK7_W_Y",
+            "identifier":"marchype",
+            "sourceId":"16643225",
+            "source":1087,
+            "profileImage":"http://pbs.twimg.com/profile_images/756579162572357633/zj6S4Z0i_normal.jpg",
+            "signedDate":"2016-10-24T16:21:13-0300",
+            "lastAccionDate":"2016-10-24T16:21:13-0300",
+            "locationMethod":"GEO_LOCATION",
+            "sourceName":"marchype",
+            "location":"53.54945;10.00676"
+         },
+         "lastPostId":"786341957681483776",
+         "source":1087,
+         "teamId":"AVfD56tfgeHP5kyJ43kz",
+         "messages":[
+            {
+               "id":"786341957681483776",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654240921533976",
-        "fromResponseDetector": false
+      "sort":[
+         1477336872344
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf4I7U1RtUjuEK7_W_W",
+      "_score":null,
+      "_source":{
+         "domainId":"AVfDx6gKgeHP5kyJ43kr",
+         "triggerId":"AVf3XcvFgeHP5kyJ43mw",
+         "segmentId":"AVf3Xc_QgeHP5kyJ43mx",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1477336855034,
+         "lastModifiedTimestamp":1477336857004,
+         "title":"caso automatico de diego. Apunta organizacion diego",
+         "triggerEvent":{
+            "timestamp":1476313461000,
+            "tokenId":1,
+            "seriesId":[
+               1474655049924
+            ],
+            "subSeriesId":[
+               1474656263371
+            ],
+            "id":"786341765976436736",
+            "idOriginal":"786341765976436736",
+            "medioId":1087,
+            "tipoDeMedio":"r",
+            "connotacion":3,
+            "sistemaOrigenExterno":"CRP-TW",
+            "fecha":"2016-10-12T00:00:00-0300",
+            "esTapa":false,
+            "usuarioOriginal":"AquiVENDOVE http://pbs.twimg.com/profile_images/750817777682882560/srm4o0o5_normal.jpg",
+            "usuarioCreacion":"AquiVENDOVE http://pbs.twimg.com/profile_images/750817777682882560/srm4o0o5_normal.jpg",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":false,
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-12T23:04:21-0300",
+            "reproduccionesCount":0,
+            "titulo":"caso automatico de diego. Apunta organizacion diego",
+            "texto":"via @alexandervazqz: Nike Blazer SB nuevos importados en #oferta #ventas nfd #Venezuela #Nike #Nikeplus  #Clasificados24 https://t.co/wd935",
+            "normalizeMessage":"Texto: via @alexandervazqz: Nike Blazer SB nuevos importados en #oferta #ventas nfd #Venezuela #Nike #Nikeplus  #Clasificados24 https://t.co/wd935 | Autor: AquiVENDOVE | Fecha de creacion: Wed Oct 12 23:04:21 UTC 2016",
+            "urlMultimediaContent":"<a href=\"http://posmagroup.com\" rel=\"nofollow\">MarcaOnline</a>",
+            "followersCount":11007,
+            "idUsuarioOriginal":"139388120",
+            "idUsuarioCreacion":"139388120",
+            "profileImage":"http://pbs.twimg.com/profile_images/750817777682882560/srm4o0o5_normal.jpg",
+            "name":"AquiVENDOVE",
+            "language":"es",
+            "menciones":[
+               "alexandervazqz"
+            ],
+            "actores":[
+               "@alexandervazqz"
+            ],
+            "hashTags":[
+               "#clasificados24",
+               "#nike",
+               "#nikeplus",
+               "#oferta",
+               "#venezuela",
+               "#ventas"
+            ],
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf4I7E5RtUjuEK7_W_V",
+            "identifier":"AquiVENDOVE",
+            "sourceId":"139388120",
+            "source":1087,
+            "profileImage":"http://pbs.twimg.com/profile_images/750817777682882560/srm4o0o5_normal.jpg",
+            "signedDate":"2016-10-24T16:20:55-0300",
+            "lastAccionDate":"2016-10-24T16:20:55-0300",
+            "sourceName":"AquiVENDOVE"
+         },
+         "lastPostId":"786341765976436736",
+         "source":1087,
+         "teamId":"AVfD56tfgeHP5kyJ43kz",
+         "messages":[
+            {
+               "id":"786341765976436736",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654240994867302",
-        "fromResponseDetector": true
+      "sort":[
+         1477336855034
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf4Ixj8RtUjuEK7_W_T",
+      "_score":null,
+      "_source":{
+         "domainId":"AVfDx6gKgeHP5kyJ43kr",
+         "triggerId":"AVf3XcvFgeHP5kyJ43mw",
+         "segmentId":"AVf3Xc_QgeHP5kyJ43mx",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1477336809581,
+         "lastModifiedTimestamp":1477336817002,
+         "title":"diego automatico. dominio de organizacion de diego",
+         "triggerEvent":{
+            "timestamp":1476310949000,
+            "tokenId":1,
+            "seriesId":[
+               1474655049924,
+               1451306629266
+            ],
+            "subSeriesId":[
+               1474651959596,
+               1474656263371
+            ],
+            "id":"633754766789463_633813356783604",
+            "idOriginal":"114264528738492_633754766789463",
+            "medioId":1086,
+            "tipoDeMedio":"r",
+            "connotacion":3,
+            "sistemaOrigenExterno":"CRP-FB",
+            "fecha":"2016-10-12T00:00:00-0300",
+            "esTapa":false,
+            "usuarioOriginal":"BOCA",
+            "usuarioCreacion":"Ariel Pablo Di Iorio",
+            "usuarioReproduccion":"BOCA",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":true,
+            "idPadre":"114264528738492_633754766789463",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-12T22:22:29-0300",
+            "reproduccionesCount":0,
+            "likeCount":0,
+            "titulo":"diego automatico. dominio de organizacion de diego",
+            "texto":"el manteca que jugador lpm! que manera de gritar uruguayo uruguayo!",
+            "normalizeMessage":"Texto: el manteca que jugador lpm! que manera de gritar uruguayo uruguayo! | Autor: Ariel Pablo Di Iorio | Fecha de creacion: Wed Oct 12 22:22:29 UTC 2016",
+            "followersCount":0,
+            "idUsuarioOriginal":"114264528738492",
+            "idUsuarioReproduccion":"114264528738492",
+            "idUsuarioCreacion":"10205729939264156",
+            "language":"es",
+            "menciones":[
+               "BOCA"
+            ],
+            "actores":[
+
+            ],
+            "hashTags":[
+
+            ],
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf4Iv-8RtUjuEK7_W_S",
+            "identifier":"Ariel Pablo Di Iorio",
+            "sourceId":"10205729939264156",
+            "source":1086,
+            "signedDate":"2016-10-24T16:20:10-0300",
+            "lastAccionDate":"2016-10-24T16:20:10-0300",
+            "sourceName":"Ariel Pablo Di Iorio"
+         },
+         "lastPostId":"633754766789463_633813356783604",
+         "source":1086,
+         "teamId":"AVfD56tfgeHP5kyJ43kz",
+         "messages":[
+            {
+               "id":"633754766789463_633813356783604",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654241408200594",
-        "fromResponseDetector": false
+      "sort":[
+         1477336809581
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf4IgeLRtUjuEK7_W_P",
+      "_score":null,
+      "_source":{
+         "domainId":"AVfDx6gKgeHP5kyJ43kr",
+         "triggerId":"AVf3XcvFgeHP5kyJ43mw",
+         "segmentId":"AVf3Xc_QgeHP5kyJ43mx",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1477336737100,
+         "lastModifiedTimestamp":1477336747001,
+         "title":"Caso creado automaticamente por diego. Apunta a dominio de la organizacion diego",
+         "triggerEvent":{
+            "timestamp":1476313460000,
+            "tokenId":1,
+            "seriesId":[
+               1451306629266
+            ],
+            "subSeriesId":[
+
+            ],
+            "id":"786341764898627585",
+            "idOriginal":"786341764898627585",
+            "medioId":1087,
+            "tipoDeMedio":"r",
+            "connotacion":3,
+            "sistemaOrigenExterno":"CRP-TW",
+            "fecha":"2016-10-12T00:00:00-0300",
+            "esTapa":false,
+            "usuarioOriginal":"FFontanot http://pbs.twimg.com/profile_images/743492720753147905/yXUsbl8w_normal.jpg",
+            "usuarioCreacion":"FFontanot http://pbs.twimg.com/profile_images/743492720753147905/yXUsbl8w_normal.jpg",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":false,
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-12T23:04:20-0300",
+            "reproduccionesCount":0,
+            "titulo":"Caso creado automaticamente por diego. Apunta a dominio de la organizacion diego",
+            "texto":"New dW Recipe: Learn how to deploy a Machine Condition Monitoring application on your IBM Bluemix account. https://t.co/qg3CL8V19Z",
+            "normalizeMessage":"Texto: New dW Recipe: Learn how to deploy a Machine Condition Monitoring application on your IBM Bluemix account. https://t.co/qg3CL8V19Z | Autor: FFontanot | Fecha de creacion: Wed Oct 12 23:04:20 UTC 2016",
+            "urlMultimediaContent":"<a href=\"http://ifttt.com\" rel=\"nofollow\">IFTTT</a>",
+            "followersCount":943,
+            "idUsuarioOriginal":"1267504688",
+            "idUsuarioCreacion":"1267504688",
+            "profileImage":"http://pbs.twimg.com/profile_images/743492720753147905/yXUsbl8w_normal.jpg",
+            "name":"Francesco Fontanot",
+            "language":"en",
+            "originalLocation":"Lima, Peru",
+            "locationMethod":"USER_LOCATION",
+            "actores":[
+
+            ],
+            "hashTags":[
+
+            ],
+            "categorias":[
+               122
+            ],
+            "conjuntos":[
+               11
+            ],
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf4IeSfRtUjuEK7_W_N",
+            "identifier":"FFontanot",
+            "sourceId":"1267504688",
+            "source":1087,
+            "profileImage":"http://pbs.twimg.com/profile_images/743492720753147905/yXUsbl8w_normal.jpg",
+            "signedDate":"2016-10-24T16:18:58-0300",
+            "lastAccionDate":"2016-10-24T16:18:58-0300",
+            "locationMethod":"USER_LOCATION",
+            "sourceName":"Francesco Fontanot",
+            "location":"Lima, Peru"
+         },
+         "lastPostId":"786341764898627585",
+         "source":1087,
+         "teamId":"AVfD56tfgeHP5kyJ43kz",
+         "messages":[
+            {
+               "id":"786341764898627585",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654241788200556",
-        "fromResponseDetector": true
+      "sort":[
+         1477336737100
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf3wXFURtUjuEK7_W-s",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf3wXFURtUjuEK7_W-s",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFTRnwgeHP5kyJ43ld",
+         "segmentId":"AVfFTRoRgeHP5kyJ43le",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1477330336233,
+         "lastModifiedTimestamp":1477330481011,
+         "title":"Soy Bond, James Bond.",
+         "triggerEvent":{
+            "timestamp":1476312866000,
+            "tokenId":2,
+            "seriesId":[
+               1474655049924,
+               1451306629266
+            ],
+            "subSeriesId":[
+               1474651959596,
+               1474656263371
+            ],
+            "id":"1643796052578463_1654238811534187",
+            "idOriginal":"1643796052578463_1654238811534187",
+            "medioId":1086,
+            "tipoDeMedio":"r",
+            "connotacion":1,
+            "sistemaOrigenExterno":"CRP-FB",
+            "fecha":"2016-10-12T00:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"Usurio Enojado",
+            "usuarioCreacion":"Usurio Enojado",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":true,
+            "esLike":false,
+            "esReproduccion":true,
+            "fechaCreacion":"2016-10-12T22:54:26+0000",
+            "reproduccionesCount":0,
+            "likeCount":0,
+            "titulo":"Soy Bond, James Bond.",
+            "texto":"Soy Bond, James Bond.",
+            "normalizeMessage":"Soy Bond, James Bond.",
+            "followersCount":0,
+            "idUsuarioOriginal":"118678508597731",
+            "idUsuarioReproduccion":"118678508597731",
+            "idUsuarioCreacion":"118678508597731",
+            "language":"es",
+            "menciones":[
+               "BOCA"
+            ],
+            "actores":[
+
+            ],
+            "hashTags":[
+
+            ],
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVfdNx9uuCHMWTA6zYeQ",
+            "identifier":"Usurio",
+            "sourceId":"118678508597731",
+            "source":1086,
+            "signedDate":"2016-10-19T13:51:13+0000",
+            "lastAccionDate":"2016-10-19T13:51:13+0000"
+         },
+         "userResolver":{
+            "id":"AVfFSFmLgeHP5kyJ43lP",
+            "source":1086,
+            "identifier":"Centaurico BotTres"
+         },
+         "lastPostId":"1654238811534187_1657507124540689",
+         "idRootComment":"1654238811534187_1657506727874062",
+         "source":1086,
+         "teamId":"AVfFSYQegeHP5kyJ43lR",
+         "messages":[
+            {
+               "id":"1643796052578463_1654238811534187",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1654238811534187_1657506727874062",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1654238811534187_1657506871207381",
+               "fromResponseDetector":true
+            },
+            {
+               "id":"1654238811534187_1657507054540696",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1654238811534187_1657507124540689",
+               "fromResponseDetector":true
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654241921533876",
-        "fromResponseDetector": false
+      "sort":[
+         1477330336233
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf3fdnSRtUjuEK7_W-D",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf3fdnSRtUjuEK7_W-D",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFTRnwgeHP5kyJ43ld",
+         "segmentId":"AVfFTRoRgeHP5kyJ43le",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477325902984,
+         "closeDate":1477330520712,
+         "lastModifiedTimestamp":1477330520741,
+         "title":"Ahora hablemos sobre el steampunk. Qué obra steampunk te gusta más?",
+         "triggerEvent":{
+            "timestamp":1476312866000,
+            "tokenId":2,
+            "seriesId":[
+               1474655049924,
+               1451306629266
+            ],
+            "subSeriesId":[
+               1474651959596,
+               1474656263371
+            ],
+            "id":"1643796052578463_1653060844985317",
+            "idOriginal":"1643796052578463_1653060844985317",
+            "medioId":1086,
+            "tipoDeMedio":"r",
+            "connotacion":1,
+            "sistemaOrigenExterno":"CRP-FB",
+            "fecha":"2016-10-12T00:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"Usurio Enojado",
+            "usuarioCreacion":"Usurio Enojado",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":true,
+            "esLike":false,
+            "esReproduccion":true,
+            "fechaCreacion":"2016-10-12T22:54:26+0000",
+            "reproduccionesCount":0,
+            "likeCount":0,
+            "titulo":"Ahora hablemos sobre el steampunk. Qué obra steampunk te gusta más?",
+            "texto":"Ahora hablemos sobre el steampunk. Qué obra steampunk te gusta más?",
+            "normalizeMessage":"Ahora hablemos sobre el steampunk. Qué obra steampunk te gusta más?",
+            "followersCount":0,
+            "idUsuarioOriginal":"118678508597731",
+            "idUsuarioReproduccion":"118678508597731",
+            "idUsuarioCreacion":"118678508597731",
+            "language":"es",
+            "menciones":[
+               "BOCA"
+            ],
+            "actores":[
+
+            ],
+            "hashTags":[
+
+            ],
+            "responseDetected":false
+         },
+         "resolution":"AVfFSibLgeHP5kyJ43lU",
+         "subject":{
+            "id":"AVfdNx9uuCHMWTA6zYeQ",
+            "identifier":"Usurio",
+            "sourceId":"118678508597731",
+            "source":1086,
+            "signedDate":"2016-10-19T13:51:13+0000",
+            "lastAccionDate":"2016-10-19T13:51:13+0000"
+         },
+         "userResolver":{
+            "id":"AVfFSFmLgeHP5kyJ43lP",
+            "source":1086,
+            "identifier":"Centaurico BotTres"
+         },
+         "lastPostId":"1653060844985317_1657506157874119",
+         "idRootComment":"1653060844985317_1657484001209668",
+         "source":1086,
+         "teamId":"AVfFSYQegeHP5kyJ43lR",
+         "messages":[
+            {
+               "id":"1643796052578463_1653060844985317",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653060844985317_1657484001209668",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653060844985317_1657484164542985",
+               "fromResponseDetector":true
+            },
+            {
+               "id":"1653060844985317_1657489611209107",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653060844985317_1657489681209100",
+               "fromResponseDetector":true
+            },
+            {
+               "id":"1653060844985317_1657492157875519",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653060844985317_1657492211208847",
+               "fromResponseDetector":true
+            },
+            {
+               "id":"1653060844985317_1657494301208638",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653060844985317_1657499251208143",
+               "fromResponseDetector":true
+            },
+            {
+               "id":"1653060844985317_1657506111207457",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653060844985317_1657506157874119",
+               "fromResponseDetector":true
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654242078200527",
-        "fromResponseDetector": true
+      "sort":[
+         1477325902984
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf3cDMMRtUjuEK7_W98",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf3cDMMRtUjuEK7_W98",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFTRnwgeHP5kyJ43ld",
+         "segmentId":"AVfFTRoRgeHP5kyJ43le",
+         "open":false,
+         "pendingResponse":false,
+         "openDate":1477325098271,
+         "closeDate":1477326119236,
+         "lastModifiedTimestamp":1477326119284,
+         "title":"Ahora vamos a hablar de Star Wars.",
+         "triggerEvent":{
+            "timestamp":1476312866000,
+            "tokenId":2,
+            "seriesId":[
+               1474655049924,
+               1451306629266
+            ],
+            "subSeriesId":[
+               1474651959596,
+               1474656263371
+            ],
+            "id":"1643796052578463_1653018001656268",
+            "idOriginal":"1643796052578463_1653018001656268",
+            "medioId":1086,
+            "tipoDeMedio":"r",
+            "connotacion":1,
+            "sistemaOrigenExterno":"CRP-FB",
+            "fecha":"2016-10-12T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"Usurio Enojado",
+            "usuarioCreacion":"Usurio Enojado",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":true,
+            "esLike":false,
+            "esReproduccion":true,
+            "fechaCreacion":"2016-10-13T01:54:26+0000",
+            "reproduccionesCount":0,
+            "likeCount":0,
+            "titulo":"Ahora vamos a hablar de Star Wars.",
+            "texto":"Ahora vamos a hablar de Star Wars.",
+            "normalizeMessage":"Ahora vamos a hablar de Star Wars.",
+            "followersCount":0,
+            "idUsuarioOriginal":"118678508597731",
+            "idUsuarioReproduccion":"118678508597731",
+            "idUsuarioCreacion":"118678508597731",
+            "language":"es",
+            "menciones":[
+               "BOCA"
+            ],
+            "actores":[
+
+            ],
+            "hashTags":[
+
+            ],
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVfdNx9uuCHMWTA6zYeQ",
+            "identifier":"Usurio",
+            "sourceId":"118678508597731",
+            "source":1086,
+            "signedDate":"2016-10-19T13:51:13+0000",
+            "lastAccionDate":"2016-10-19T13:51:13+0000"
+         },
+         "userResolver":{
+            "id":"AVfFSFmLgeHP5kyJ43lP",
+            "source":1086,
+            "identifier":"Centaurico BotTres"
+         },
+         "lastPostId":"1653018001656268_1657479354543466",
+         "idRootComment":"1653018001656268_1657479354543466",
+         "source":1086,
+         "teamId":"AVfFSYQegeHP5kyJ43lR",
+         "messages":[
+            {
+               "id":"1643796052578463_1653018001656268",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653018001656268_1657479354543466",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654242248200510",
-        "fromResponseDetector": false
+      "sort":[
+         1477325098271
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf3ApuORtUjuEK7_W9m",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf3ApuORtUjuEK7_W9m",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFTRnwgeHP5kyJ43ld",
+         "segmentId":"AVfFTRoRgeHP5kyJ43le",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477317913622,
+         "closeDate":1477330554953,
+         "lastModifiedTimestamp":1477330554988,
+         "title":"El espacio, la frontera final.",
+         "triggerEvent":{
+            "timestamp":1476312866000,
+            "tokenId":2,
+            "seriesId":[
+               1474655049924,
+               1451306629266
+            ],
+            "subSeriesId":[
+               1474651959596,
+               1474656263371
+            ],
+            "id":"1643796052578463_1653084938316241",
+            "idOriginal":"1643796052578463_1653084938316241",
+            "medioId":1086,
+            "tipoDeMedio":"r",
+            "connotacion":1,
+            "sistemaOrigenExterno":"CRP-FB",
+            "fecha":"2016-10-12T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"Usurio Enojado",
+            "usuarioCreacion":"Usurio Enojado",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":true,
+            "esLike":false,
+            "esReproduccion":true,
+            "fechaCreacion":"2016-10-13T01:54:26+0000",
+            "reproduccionesCount":0,
+            "likeCount":0,
+            "titulo":"El espacio, la frontera final.",
+            "texto":"El espacio, la frontera final.",
+            "normalizeMessage":"El espacio, la frontera final.",
+            "followersCount":0,
+            "idUsuarioOriginal":"118678508597731",
+            "idUsuarioReproduccion":"118678508597731",
+            "idUsuarioCreacion":"118678508597731",
+            "language":"es",
+            "menciones":[
+               "BOCA"
+            ],
+            "actores":[
+
+            ],
+            "hashTags":[
+
+            ],
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVfdNx9uuCHMWTA6zYeQ",
+            "identifier":"Usurio",
+            "sourceId":"118678508597731",
+            "source":1086,
+            "signedDate":"2016-10-19T13:51:13+0000",
+            "lastAccionDate":"2016-10-19T13:51:13+0000"
+         },
+         "userResolver":{
+            "id":"AVfFSFmLgeHP5kyJ43lP",
+            "source":1086,
+            "identifier":"Centaurico BotTres"
+         },
+         "lastPostId":"1653084938316241_1657460031212065",
+         "idRootComment":"1653084938316241_1657456767879058",
+         "source":1086,
+         "assignee":{
+            "id":2,
+            "username":"jgonzalez"
+         },
+         "teamId":"AVfFSYQegeHP5kyJ43lR",
+         "messages":[
+            {
+               "id":"1643796052578463_1653084938316241",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653084938316241_1657456767879058",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653084938316241_1657458067878928",
+               "fromResponseDetector":true
+            },
+            {
+               "id":"1653084938316241_1657459701212098",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1653084938316241_1657460031212065",
+               "fromResponseDetector":true
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654242351533833",
-        "fromResponseDetector": true
+      "sort":[
+         1477317913622
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf2_jtcRtUjuEK7_W9k",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf2_jtcRtUjuEK7_W9k",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":true,
+         "pendingResponse":false,
+         "openDate":1477317627484,
+         "lastModifiedTimestamp":1477340100939,
+         "title":"Quizá, después de tanto buscar, nos demos cuenta de que la trascendencia sea inmanente al ser humano, y a toda nuestra sed de inmortalidad.",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"782043277390409729",
+            "idOriginal":"782043277390409729",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T00:00:00-0300",
+            "esTapa":false,
+            "usuarioOriginal":"elfrasco2046",
+            "usuarioCreacion":"elfrasco2046",
+            "usuarioReproduccion":"elfrasco2046",
+            "usuarioCategorizador":"elfrasco2046",
+            "fechaCategorizacion":"2016-10-13T00:00:00-0300",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T00:00:00-0300",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"Quizá, después de tanto buscar, nos demos cuenta de que la trascendencia sea inmanente al ser humano, y a toda nuestra sed de inmortalidad.",
+            "texto":"Quizá, después de tanto buscar, nos demos cuenta de que la trascendencia sea inmanente al ser humano, y a toda nuestra sed de inmortalidad.",
+            "normalizeMessage":"Quizá, después de tanto buscar, nos demos cuenta de que la trascendencia sea inmanente al ser humano, y a toda nuestra sed de inmortalidad.",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"101308583",
+            "idUsuarioReproduccion":"101308583",
+            "idUsuarioCreacion":"101308583",
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "name":"elfrasco2046",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf0LUE1uCHMWTA6zYgd",
+            "identifier":"elfrasco2046",
+            "sourceId":"101308583",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "signedDate":"2016-10-23T21:53:08-0300",
+            "lastAccionDate":"2016-10-23T21:53:08-0300",
+            "subjectCategorySet":[
+               "AVfFSvb0geHP5kyJ43lY"
+            ],
+            "subjectCategory":[
+               "AVfFSvdHgeHP5kyJ43la",
+               "AVfFSvctgeHP5kyJ43lZ"
+            ]
+         },
+         "caseCategories":[
+            "AVfFSpXRgeHP5kyJ43lW",
+            "AVfFSpXqgeHP5kyJ43lX"
+         ],
+         "caseCategoriesSet":[
+            "AVfFSpWhgeHP5kyJ43lV"
+         ],
+         "userResolver":{
+            "id":"AVfFR8VRgeHP5kyJ43lK",
+            "source":1087,
+            "identifier":"centaurico_bot3"
+         },
+         "lastPostId":"790609905031852032",
+         "idRootComment":"790609473274454016",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"782043277390409729",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"790608669935362048",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"790609473274454016",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"790609626135920640",
+               "fromResponseDetector":true
+            },
+            {
+               "id":"790609905031852032",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654242658200469",
-        "fromResponseDetector": false
+      "sort":[
+         1477317627484
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf28cssRtUjuEK7_W9d",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf28cssRtUjuEK7_W9d",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477316815816,
+         "closeDate":1477317213356,
+         "lastModifiedTimestamp":1477317213377,
+         "title":"La humanidad será interplanetaria o no será.",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"782176716722692096",
+            "idOriginal":"782176716722692096",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"elfrasco2046",
+            "usuarioCreacion":"elfrasco2046",
+            "usuarioReproduccion":"elfrasco2046",
+            "usuarioCategorizador":"elfrasco2046",
+            "fechaCategorizacion":"2016-10-13T03:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T03:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"La humanidad será interplanetaria o no será.",
+            "texto":"La humanidad será interplanetaria o no será.",
+            "normalizeMessage":"La humanidad será interplanetaria o no será.",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"101308583",
+            "idUsuarioReproduccion":"101308583",
+            "idUsuarioCreacion":"101308583",
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "name":"elfrasco2046",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf0LUE1uCHMWTA6zYgd",
+            "identifier":"elfrasco2046",
+            "sourceId":"101308583",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "signedDate":"2016-10-24T00:53:08+0000",
+            "lastAccionDate":"2016-10-24T00:53:08+0000"
+         },
+         "lastPostId":"782176716722692096",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"782176716722692096",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654242918200443",
-        "fromResponseDetector": true
+      "sort":[
+         1477316815816
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf23h2SRtUjuEK7_W9Y",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf23h2SRtUjuEK7_W9Y",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477315490901,
+         "closeDate":1477316774422,
+         "lastModifiedTimestamp":1477316774449,
+         "title":"Muchos libros bíblicos pudieron haberse inspirado en tablillas sumerias.",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"783522265543696384",
+            "idOriginal":"783522265543696384",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"elfrasco2046",
+            "usuarioCreacion":"elfrasco2046",
+            "usuarioReproduccion":"elfrasco2046",
+            "usuarioCategorizador":"elfrasco2046",
+            "fechaCategorizacion":"2016-10-13T03:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T03:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"Muchos libros bíblicos pudieron haberse inspirado en tablillas sumerias.",
+            "texto":"Muchos libros bíblicos pudieron haberse inspirado en tablillas sumerias.",
+            "normalizeMessage":"Muchos libros bíblicos pudieron haberse inspirado en tablillas sumerias.",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"101308583",
+            "idUsuarioReproduccion":"101308583",
+            "idUsuarioCreacion":"101308583",
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "name":"elfrasco2046",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf0LUE1uCHMWTA6zYgd",
+            "identifier":"elfrasco2046",
+            "sourceId":"101308583",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "signedDate":"2016-10-24T00:53:08+0000",
+            "lastAccionDate":"2016-10-24T00:53:08+0000"
+         },
+         "lastPostId":"783522265543696384",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"783522265543696384",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654243168200418",
-        "fromResponseDetector": false
+      "sort":[
+         1477315490901
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf2yPuxRtUjuEK7_W9O",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf2yPuxRtUjuEK7_W9O",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477314144029,
+         "closeDate":1477315087750,
+         "lastModifiedTimestamp":1477315087790,
+         "title":"La lucha con el dragón seguida de su muerte es un tema recurrente en la mitología de casi todos los pueblos.",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"784069560685236224",
+            "idOriginal":"784069560685236224",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"elfrasco2046",
+            "usuarioCreacion":"elfrasco2046",
+            "usuarioReproduccion":"elfrasco2046",
+            "usuarioCategorizador":"elfrasco2046",
+            "fechaCategorizacion":"2016-10-13T03:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T03:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"La lucha con el dragón seguida de su muerte es un tema recurrente en la mitología de casi todos los pueblos.",
+            "texto":"La lucha con el dragón seguida de su muerte es un tema recurrente en la mitología de casi todos los pueblos.",
+            "normalizeMessage":"La lucha con el dragón seguida de su muerte es un tema recurrente en la mitología de casi todos los pueblos.",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"101308583",
+            "idUsuarioReproduccion":"101308583",
+            "idUsuarioCreacion":"101308583",
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "name":"elfrasco2046",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf0LUE1uCHMWTA6zYgd",
+            "identifier":"elfrasco2046",
+            "sourceId":"101308583",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "signedDate":"2016-10-24T00:53:08+0000",
+            "lastAccionDate":"2016-10-24T00:53:08+0000"
+         },
+         "lastPostId":"783878360816553984",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"784069560685236224",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"783878360816553984",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654243244867077",
-        "fromResponseDetector": true
+      "sort":[
+         1477314144029
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf2xQQQRtUjuEK7_W9L",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf2xQQQRtUjuEK7_W9L",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477313885897,
+         "closeDate":1477314134903,
+         "lastModifiedTimestamp":1477314134946,
+         "title":"En 1913 se inauguró el Subte de Buenos Aires, primer metro de Iberoamérica.",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"784876877303414785",
+            "idOriginal":"784876877303414785",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"elfrasco2046",
+            "usuarioCreacion":"elfrasco2046",
+            "usuarioReproduccion":"elfrasco2046",
+            "usuarioCategorizador":"elfrasco2046",
+            "fechaCategorizacion":"2016-10-13T03:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T03:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"En 1913 se inauguró el Subte de Buenos Aires, primer metro de Iberoamérica.",
+            "texto":"En 1913 se inauguró el Subte de Buenos Aires, primer metro de Iberoamérica.",
+            "normalizeMessage":"En 1913 se inauguró el Subte de Buenos Aires, primer metro de Iberoamérica.",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"101308583",
+            "idUsuarioReproduccion":"101308583",
+            "idUsuarioCreacion":"101308583",
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "name":"elfrasco2046",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf0LUE1uCHMWTA6zYgd",
+            "identifier":"elfrasco2046",
+            "sourceId":"101308583",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "signedDate":"2016-10-24T00:53:08+0000",
+            "lastAccionDate":"2016-10-24T00:53:08+0000"
+         },
+         "lastPostId":"784876877303414785",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"784876877303414785",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654245324866869",
-        "fromResponseDetector": false
+      "sort":[
+         1477313885897
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf2sVT-RtUjuEK7_W9D",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf2sVT-RtUjuEK7_W9D",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477312595868,
+         "closeDate":1477313667966,
+         "lastModifiedTimestamp":1477313667988,
+         "title":"@centaurico_bot3 Vos sí sos mi amigo!",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"785649391596019713",
+            "idOriginal":"785649391596019713",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"elfrasco2046",
+            "usuarioCreacion":"elfrasco2046",
+            "usuarioReproduccion":"elfrasco2046",
+            "usuarioCategorizador":"elfrasco2046",
+            "fechaCategorizacion":"2016-10-13T03:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T03:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"@centaurico_bot3 Vos sí sos mi amigo!",
+            "texto":"@centaurico_bot3 Vos sí sos mi amigo!",
+            "normalizeMessage":"@centaurico_bot3 Vos sí sos mi amigo!",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"101308583",
+            "idUsuarioReproduccion":"101308583",
+            "idUsuarioCreacion":"101308583",
+            "profileImage":"https://fbcdn-sphotos-c-a.akamaihd.net/hphotos-ak-xfl1/v/t1.0-9/14432941_104958253303990_8204361483170649024_n.jpg?oh=14df0843f8824d18eedd902cabb6a703&oe=587173C0&__gda__=1487176642_2a2cdbd9f8d056db3ea821121ce94e81",
+            "name":"elfrasco2046",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf0LUE1uCHMWTA6zYgd",
+            "identifier":"elfrasco2046",
+            "sourceId":"101308583",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "signedDate":"2016-10-24T00:53:08+0000",
+            "lastAccionDate":"2016-10-24T00:53:08+0000"
+         },
+         "lastPostId":"785649391596019713",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"785649391596019713",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654245371533531",
-        "fromResponseDetector": true
+      "sort":[
+         1477312595868
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf0LWozuCHMWTA6zYge",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf0LWozuCHMWTA6zYge",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477270387513,
+         "closeDate":1477312722569,
+         "lastModifiedTimestamp":1477312722596,
+         "title":"@centaurico_bot3 es mi amigo",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"785647664603893762",
+            "idOriginal":"785647664603893762",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"elfrasco2046",
+            "usuarioCreacion":"elfrasco2046",
+            "usuarioReproduccion":"elfrasco2046",
+            "usuarioCategorizador":"elfrasco2046",
+            "fechaCategorizacion":"2016-10-13T03:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T03:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"@centaurico_bot3 es mi amigo",
+            "texto":"@centaurico_bot3 es mi amigo",
+            "normalizeMessage":"@centaurico_bot3 es mi amigo",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"101308583",
+            "idUsuarioReproduccion":"101308583",
+            "idUsuarioCreacion":"101308583",
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "name":"elfrasco2046",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVf0LUE1uCHMWTA6zYgd",
+            "identifier":"elfrasco2046",
+            "sourceId":"101308583",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/737831811389239300/OLeR0FAc.jpg",
+            "signedDate":"2016-10-24T00:53:08+0000",
+            "lastAccionDate":"2016-10-24T00:53:08+0000"
+         },
+         "lastPostId":"785647664603893762",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"785647664603893762",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654251891532879",
-        "fromResponseDetector": false
+      "sort":[
+         1477270387513
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVf0J7E0uCHMWTA6zYgY",
+      "_score":null,
+      "_source":{
+         "idCase":"AVf0J7E0uCHMWTA6zYgY",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477270014320,
+         "closeDate":1477270426534,
+         "lastModifiedTimestamp":1477270426560,
+         "title":"Al final @centaurico_bot3 no me resolvió nada.",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"784145647033278464",
+            "idOriginal":"784145647033278464",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T03:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"usurioenojado",
+            "usuarioCreacion":"usurioenojado",
+            "usuarioReproduccion":"usurioenojado",
+            "usuarioCategorizador":"usurioenojado",
+            "fechaCategorizacion":"2016-10-13T03:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T03:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"Al final @centaurico_bot3 no me resolvió nada.",
+            "texto":"Al final @centaurico_bot3 no me resolvió nada.",
+            "normalizeMessage":"Al final @centaurico_bot3 no me resolvió nada.",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"772175713977982977",
+            "idUsuarioReproduccion":"772175713977982977",
+            "idUsuarioCreacion":"772175713977982977",
+            "profileImage":"https://pbs.twimg.com/profile_images/775102771011944448/Lor2o5Ji.jpg",
+            "name":"Usuario Enojado",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVfz1XMouCHMWTA6zYgR",
+            "identifier":"usurioenojado",
+            "sourceId":"772175713977982977",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/775102771011944448/Lor2o5Ji.jpg",
+            "signedDate":"2016-10-23T23:15:44+0000",
+            "lastAccionDate":"2016-10-23T23:15:44+0000"
+         },
+         "lastPostId":"784145647033278464",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"784145647033278464",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654263964865005",
-        "fromResponseDetector": true
+      "sort":[
+         1477270014320
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfz1ZB0uCHMWTA6zYgS",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfz1ZB0uCHMWTA6zYgS",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477264544020,
+         "closeDate":1477270114154,
+         "lastModifiedTimestamp":1477270114192,
+         "title":"Estoy teniendo un problema con mi celular, @centaurico_bot3, podrían darme una respuesta??",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"784137478831738880",
+            "idOriginal":"784137478831738880",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T00:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"usurioenojado",
+            "usuarioCreacion":"usurioenojado",
+            "usuarioReproduccion":"usurioenojado",
+            "usuarioCategorizador":"usurioenojado",
+            "fechaCategorizacion":"2016-10-13T00:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T00:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"Estoy teniendo un problema con mi celular, @centaurico_bot3, podrían darme una respuesta??",
+            "texto":"Estoy teniendo un problema con mi celular, @centaurico_bot3, podrían darme una respuesta??",
+            "normalizeMessage":"Estoy teniendo un problema con mi celular, @centaurico_bot3, podrían darme una respuesta??",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"772175713977982977",
+            "idUsuarioReproduccion":"772175713977982977",
+            "idUsuarioCreacion":"772175713977982977",
+            "profileImage":"https://pbs.twimg.com/profile_images/775102771011944448/Lor2o5Ji.jpg",
+            "name":"Usuario Enojado",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVfz1XMouCHMWTA6zYgR",
+            "identifier":"usurioenojado",
+            "sourceId":"772175713977982977",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/775102771011944448/Lor2o5Ji.jpg",
+            "signedDate":"2016-10-23T23:15:44+0000",
+            "lastAccionDate":"2016-10-23T23:15:44+0000"
+         },
+         "lastPostId":"784137478831738880",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"784137478831738880",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654265521531516",
-        "fromResponseDetector": false
+      "sort":[
+         1477264544020
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfo2S0ruCHMWTA6zYf5",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfo2S0ruCHMWTA6zYf5",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFTRnwgeHP5kyJ43ld",
+         "segmentId":"AVfFTRoRgeHP5kyJ43le",
+         "open":false,
+         "pendingResponse":false,
+         "openDate":1477080233740,
+         "closeDate":1477081511194,
+         "lastModifiedTimestamp":1477081512033,
+         "title":"Tengo menos facebook que john secada",
+         "triggerEvent":{
+            "timestamp":1477080269394,
+            "tokenId":2,
+            "seriesId":[
+               1474655049924,
+               1451306629266
+            ],
+            "subSeriesId":[
+               1474651959596,
+               1474656263371
+            ],
+            "id":"1643796052578463_1656142021343866",
+            "idOriginal":"1643796052578463_1656142021343866",
+            "medioId":1086,
+            "tipoDeMedio":"r",
+            "connotacion":1,
+            "sistemaOrigenExterno":"CRP-FB",
+            "fecha":"2016-10-11T21:00:00-0300",
+            "esTapa":false,
+            "usuarioOriginal":"Usurio Enojado",
+            "usuarioCreacion":"Usurio Enojado",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":true,
+            "esLike":false,
+            "esReproduccion":true,
+            "fechaCreacion":"2016-10-12T19:54:26-0300",
+            "reproduccionesCount":0,
+            "likeCount":0,
+            "titulo":"Tengo menos facebook que john secada",
+            "texto":"Tengo menos facebook que john secada",
+            "normalizeMessage":"Tengo menos facebook que john secada",
+            "followersCount":0,
+            "idUsuarioOriginal":"118678508597731",
+            "idUsuarioReproduccion":"118678508597731",
+            "idUsuarioCreacion":"118678508597731",
+            "language":"es",
+            "menciones":[
+               "BOCA"
+            ],
+            "actores":[
+
+            ],
+            "hashTags":[
+
+            ],
+            "responseDetected":false
+         },
+         "resolution":"AVfFSiawgeHP5kyJ43lT",
+         "subject":{
+            "id":"AVfdNx9uuCHMWTA6zYeQ",
+            "identifier":"Usurio",
+            "sourceId":"118678508597731",
+            "source":1086,
+            "signedDate":"2016-10-19T10:51:13-0300",
+            "lastAccionDate":"2016-10-19T10:51:13-0300"
+         },
+         "userResolver":{
+            "id":"AVfFSFmLgeHP5kyJ43lP",
+            "source":1086,
+            "identifier":"Centaurico BotTres"
+         },
+         "lastPostId":"1656142021343866_1656147448009990",
+         "idRootComment":"1656142021343866_1656147201343348",
+         "source":1086,
+         "teamId":"AVfFSYQegeHP5kyJ43lR",
+         "messages":[
+            {
+               "id":"1643796052578463_1656142021343866",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1656142021343866_1656146814676720",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1656142021343866_1656146904676711",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1656142021343866_1656147201343348",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1656142021343866_1656147361343332",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1656142021343866_1656147448009990",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
       },
-      {
-        "id": "1654238811534187_1654265668198168",
-        "fromResponseDetector": true
-      }
-    ]
-  },
-  "fields": {
-    "subject.lastAccionDate": [
-      1476484081000
-    ],
-    "triggerEvent.fechaCreacion": [
-      1476312866000
-    ],
-    "triggerEvent.fecha": [
-      1476230400000
-    ],
-    "subject.signedDate": [
-      1476484081000
-    ]
-  }
-},
-{
-  "_index": "cases",
-  "_type": "case",
-  "_id": "AVfUwgc2uCHMWTA6zYc2",
-  "_score": 1,
-  "_source": {
-    "domainId": "AVfFSiZvgeHP5kyJ43lS",
-    "triggerId": "AVfFS_gtgeHP5kyJ43lb",
-    "segmentId": "AVfFS_hmgeHP5kyJ43lc",
-    "open": true,
-    "pendingResponse": true,
-    "openDate": 1476743265632,
-    "lastModifiedTimestamp": 1476743267410,
-    "title": "Este tweet no existe.",
-    "triggerEvent": {
-      "timestamp": 1476735857354,
-      "tokenId": 2,
-      "seriesId": [
-        33,
-        7
-      ],
-      "subSeriesId": [
-        9
-      ],
-      "id": "788113013853269999",
-      "idOriginal": "788113013853269999",
-      "medioId": 1087,
-      "tipoDeMedio": "morbi",
-      "connotacion": 36,
-      "seccionExternaOrigen": 72,
-      "sistemaOrigenExterno": "ac",
-      "fecha": "2016-10-13T00:00:00-0300",
-      "esTapa": false,
-      "usuarioOriginal": "LagartusRoot",
-      "usuarioCreacion": "LagartusRoot",
-      "usuarioReproduccion": "LagartusRoot",
-      "usuarioCategorizador": "LagartusRoot",
-      "fechaCategorizacion": "2016-10-13T00:00:00-0300",
-      "noticiaStatus": 1,
-      "odaCategorizada": 23,
-      "esSecundario": false,
-      "idPadre": "sociis",
-      "esLike": false,
-      "esReproduccion": false,
-      "fechaCreacion": "2016-10-13T00:00:00-0300",
-      "reproduccionesCount": 18,
-      "likeCount": 50,
-      "titulo": "Este tweet no existe.",
-      "texto": "Este tweet no existe.",
-      "normalizeMessage": "Este tweet no existe.",
-      "urlNoticia": "https://prnewswire.com/tortor/id.png",
-      "urlMultimediaContent": "https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
-      "volanta": "maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
-      "bajada": "nulla nunc purus phasellus in felis donec semper sapien a libero nam",
-      "copete": "in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
-      "followersCount": 1,
-      "idUsuarioOriginal": "2507734136",
-      "idUsuarioReproduccion": "2507734136",
-      "idUsuarioCreacion": "2507734136",
-      "profileImage": "https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
-      "name": "Lagartus Root",
-      "language": "es",
-      "originalLocation": "donec",
-      "location": {
-        "lat": 16.69938,
-        "lon": 121.18614
+      "sort":[
+         1477080233740
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfoRO3vuCHMWTA6zYfq",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfoRO3vuCHMWTA6zYfq",
+         "domainId":"AVfoQBt3geHP5kyJ43me",
+         "triggerId":"AVfoQy7lgeHP5kyJ43mg",
+         "segmentId":"AVfoQy8BgeHP5kyJ43mh",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1477070512217,
+         "lastModifiedTimestamp":1477070781707,
+         "title":"Caso churro-coord",
+         "description":"dedede",
+         "assignee":{
+            "id":2,
+            "username":"jgonzalez"
+         },
+         "teamId":"AVfoPuLxgeHP5kyJ43md",
+         "priority":"MEDIUM"
       },
-      "menciones": [
-        "et",
-        "elementum",
-        "fringilla"
-      ],
-      "actores": [
-        "augue",
-        "ante",
-        "vel"
-      ],
-      "hashTags": [
-        "feugiat",
-        "messi",
-        "quis"
-      ],
-      "areasTematicas": [
-        19,
-        23,
-        36
-      ],
-      "hotTopics": [
-        "luctus",
-        "lectus",
-        "a"
-      ],
-      "temas": [
-        95,
-        1,
-        8
-      ],
-      "categorias": [
-        55,
-        73,
-        66
-      ],
-      "conjuntos": [
-        15,
-        66,
-        100
-      ],
-      "continent": 31,
-      "country": 63,
-      "adm1": 22,
-      "adm3": 63,
-      "city": 28,
-      "neighborhood": 29,
-      "responseDetected": false
-    },
-    "subject": {
-      "id": "AVfFTnXxuCHMWTA6zYZr",
-      "identifier": "LagartusRoot",
-      "sourceId": "2507734136",
-      "source": 1087,
-      "profileImage": "https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
-      "signedDate": "2016-10-14T19:25:54-0300",
-      "lastAccionDate": "2016-10-14T19:25:54-0300"
-    },
-    "lastPostId": "788113013853269999",
-    "source": 1087,
-    "messages": [
-      {
-        "id": "788113013853269999",
-        "fromResponseDetector": false
-      }
-    ]
-  },
-  "fields": {
-    "subject.lastAccionDate": [
-      1476483954000
-    ],
-    "triggerEvent.fechaCreacion": [
-      1476327600000
-    ],
-    "triggerEvent.fecha": [
-      1476327600000
-    ],
-    "subject.signedDate": [
-      1476483954000
-    ],
-    "triggerEvent.fechaCategorizacion": [
-      1476327600000
-    ]
-  }
-},
-{
-  "_index": "cases",
-  "_type": "case",
-  "_id": "AVfFTWjguCHMWTA6zYZm",
-  "_score": 1,
-  "_source": {
-    "domainId": "AVfFSiZvgeHP5kyJ43lS",
-    "triggerId": "AVfFS_gtgeHP5kyJ43lb",
-    "segmentId": "AVfFS_hmgeHP5kyJ43lc",
-    "open": true,
-    "pendingResponse": true,
-    "openDate": 1476483885960,
-    "lastModifiedTimestamp": 1476484108268,
-    "title": "Caso Manual",
-    "description": "Este es un caso manual"
-  }
-}]
+      "sort":[
+         1477070512217
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfoQ62PuCHMWTA6zYfn",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfoQ62PuCHMWTA6zYfn",
+         "domainId":"AVfoQBt3geHP5kyJ43me",
+         "triggerId":"AVfoQy7lgeHP5kyJ43mg",
+         "segmentId":"AVfoQy8BgeHP5kyJ43mh",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477070436694,
+         "closeDate":1477096930105,
+         "lastModifiedTimestamp":1477096930942,
+         "title":"caso re-churro",
+         "description":"oooooookkkkk",
+         "resolution":"AVfoQBuageHP5kyJ43mf",
+         "assignee":{
+            "id":1,
+            "username":"jperez"
+         },
+         "teamId":"AVfoPuLxgeHP5kyJ43md",
+         "priority":"MEDIUM"
+      },
+      "sort":[
+         1477070436694
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfoO5douCHMWTA6zYfj",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfoO5douCHMWTA6zYfj",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":false,
+         "pendingResponse":false,
+         "openDate":1477069895742,
+         "closeDate":1477097162438,
+         "lastModifiedTimestamp":1477097163309,
+         "title":"carilinas",
+         "description":"oeoeio",
+         "resolution":"AVfFSibLgeHP5kyJ43lU",
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "priority":"MEDIUM"
+      },
+      "sort":[
+         1477069895742
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfoLwi0uCHMWTA6zYfW",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfoLwi0uCHMWTA6zYfW",
+         "domainId":"AVfTj_1hgeHP5kyJ43mF",
+         "triggerId":"AVfUGUy2geHP5kyJ43mI",
+         "segmentId":"AVfUGU0MgeHP5kyJ43mJ",
+         "open":true,
+         "pendingResponse":false,
+         "openDate":1477069081641,
+         "lastModifiedTimestamp":1477069386109,
+         "title":"Perritos de la Web",
+         "description":"ohaoa",
+         "subject":{
+            "id":"AVfdNWhPuCHMWTA6zYeN",
+            "identifier":"LagartusRoot",
+            "sourceId":"2507734136",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
+            "signedDate":"2016-10-19T13:49:21+0000",
+            "lastAccionDate":"2016-10-19T13:49:21+0000"
+         },
+         "userResolver":{
+            "id":"AVfS8Y4vgeHP5kyJ43l7",
+            "source":1087,
+            "identifier":"centaurico_bot2"
+         },
+         "lastPostId":"789511702492487680",
+         "idRootComment":"789511702492487680",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"789511702492487680",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"MEDIUM"
+      },
+      "sort":[
+         1477069081641
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfnTSHnuCHMWTA6zYfC",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfnTSHnuCHMWTA6zYfC",
+         "domainId":"AVfShhrigeHP5kyJ43lx",
+         "triggerId":"AVfTTkuegeHP5kyJ43l-",
+         "segmentId":"AVfTTk7dgeHP5kyJ43l_",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1477054283090,
+         "closeDate":1477081157531,
+         "lastModifiedTimestamp":1477081158363,
+         "title":"lala lala",
+         "description":"eodfhoednoe",
+         "resolution":"AVfShhtDgeHP5kyJ43ly",
+         "teamId":"AVfFSYQegeHP5kyJ43lR",
+         "priority":"MEDIUM"
+      },
+      "sort":[
+         1477054283090
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfnS_6IuCHMWTA6zYfA",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfnS_6IuCHMWTA6zYfA",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1477054208820,
+         "lastModifiedTimestamp":1477069469443,
+         "title":"color politico",
+         "description":"dedeljdn",
+         "subject":{
+            "id":"AVfdNWhPuCHMWTA6zYeN",
+            "identifier":"LagartusRoot",
+            "sourceId":"2507734136",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
+            "signedDate":"2016-10-19T13:49:21+0000",
+            "lastAccionDate":"2016-10-19T13:49:21+0000"
+         },
+         "source":1087,
+         "assignee":{
+            "id":2,
+            "username":"jgonzalez"
+         },
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "priority":"MEDIUM"
+      },
+      "sort":[
+         1477054208820
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfnS0L8uCHMWTA6zYe9",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfnS0L8uCHMWTA6zYe9",
+         "domainId":"AVfShhrigeHP5kyJ43lx",
+         "triggerId":"AVfTUbuMgeHP5kyJ43mA",
+         "segmentId":"AVfTUb7EgeHP5kyJ43mB",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1477054123338,
+         "lastModifiedTimestamp":1477069485914,
+         "title":"Gatitos de la Web",
+         "description":"cuales son los gatitos mas divertidos de la web",
+         "subject":{
+            "id":"AVfdNWhPuCHMWTA6zYeN",
+            "identifier":"LagartusRoot",
+            "sourceId":"2507734136",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
+            "signedDate":"2016-10-19T13:49:21+0000",
+            "lastAccionDate":"2016-10-19T13:49:21+0000"
+         },
+         "source":1087,
+         "assignee":{
+            "id":2,
+            "username":"jgonzalez"
+         },
+         "teamId":"AVfFSYQegeHP5kyJ43lR",
+         "priority":"MEDIUM"
+      },
+      "sort":[
+         1477054123338
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfdr79AuCHMWTA6zYeg",
+      "_score":null,
+      "_source":{
+         "domainId":"AVfTj_1hgeHP5kyJ43mF",
+         "triggerId":"AVfUGUy2geHP5kyJ43mI",
+         "segmentId":"AVfUGU0MgeHP5kyJ43mJ",
+         "open":true,
+         "pendingResponse":true,
+         "openDate":1476893029472,
+         "lastModifiedTimestamp":1476893048882,
+         "title":"nuevo caso manual diego",
+         "description":"prueba diego",
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "priority":"MEDIUM"
+      },
+      "sort":[
+         1476893029472
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfdddDTuCHMWTA6zYeX",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfdddDTuCHMWTA6zYeX",
+         "domainId":"AVfTj_1hgeHP5kyJ43mF",
+         "triggerId":"AVfUGUy2geHP5kyJ43mI",
+         "segmentId":"AVfUGU0MgeHP5kyJ43mJ",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1476889233821,
+         "closeDate":1477079907553,
+         "lastModifiedTimestamp":1477079907573,
+         "title":"Caso manual diego",
+         "description":"diego",
+         "subject":{
+            "id":"AVfdNx9uuCHMWTA6zYeQ",
+            "identifier":"Usurio",
+            "sourceId":"118678508597731",
+            "source":1086,
+            "signedDate":"2016-10-19T13:51:13+0000",
+            "lastAccionDate":"2016-10-19T13:51:13+0000"
+         },
+         "source":1086,
+         "assignee":{
+            "id":1,
+            "username":"jperez"
+         },
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "priority":"HIGH"
+      },
+      "sort":[
+         1476889233821
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfdNz7euCHMWTA6zYeR",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfdNz7euCHMWTA6zYeR",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFTRnwgeHP5kyJ43ld",
+         "segmentId":"AVfFTRoRgeHP5kyJ43le",
+         "open":false,
+         "pendingResponse":true,
+         "openDate":1476885073674,
+         "closeDate":1477079921925,
+         "lastModifiedTimestamp":1477079921951,
+         "title":"Qu?? buena serie Mr. Robot.",
+         "triggerEvent":{
+            "timestamp":1476312866000,
+            "tokenId":2,
+            "seriesId":[
+               1474655049924,
+               1451306629266
+            ],
+            "subSeriesId":[
+               1474651959596,
+               1474656263371
+            ],
+            "id":"1643796052578463_1652958904995511",
+            "idOriginal":"1643796052578463_1652958904995511",
+            "medioId":1086,
+            "tipoDeMedio":"r",
+            "connotacion":1,
+            "sistemaOrigenExterno":"CRP-FB",
+            "fecha":"2016-10-12T00:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"Usurio Enojado",
+            "usuarioCreacion":"Usurio Enojado",
+            "noticiaStatus":10,
+            "odaCategorizada":0,
+            "esSecundario":true,
+            "esLike":false,
+            "esReproduccion":true,
+            "fechaCreacion":"2016-10-12T22:54:26+0000",
+            "reproduccionesCount":0,
+            "likeCount":0,
+            "titulo":"Qu?? buena serie Mr. Robot.",
+            "texto":"Qu?? buena serie Mr. Robot.",
+            "normalizeMessage":"Qu?? buena serie Mr. Robot.",
+            "followersCount":0,
+            "idUsuarioOriginal":"118678508597731",
+            "idUsuarioReproduccion":"118678508597731",
+            "idUsuarioCreacion":"118678508597731",
+            "language":"es",
+            "menciones":[
+               "BOCA"
+            ],
+            "actores":[
+
+            ],
+            "hashTags":[
+
+            ],
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVfdNx9uuCHMWTA6zYeQ",
+            "identifier":"Usurio",
+            "sourceId":"118678508597731",
+            "source":1086,
+            "signedDate":"2016-10-19T13:51:13+0000",
+            "lastAccionDate":"2016-10-19T13:51:13+0000"
+         },
+         "caseCategories":[
+            "AVfFSpXRgeHP5kyJ43lW",
+            "AVfFSpXqgeHP5kyJ43lX"
+         ],
+         "caseCategoriesSet":[
+            "AVfFSpWhgeHP5kyJ43lV"
+         ],
+         "lastPostId":"1643796052578463_1652958904995511",
+         "source":1086,
+         "assignee":{
+            "id":2,
+            "username":"jgonzalez"
+         },
+         "teamId":"AVfFSYQegeHP5kyJ43lR",
+         "messages":[
+            {
+               "id":"1643796052578463_1652958904995511",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1652958904995511_1655669904724411",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"1652958904995511_1655674511390617",
+               "fromResponseDetector":false
+            }
+         ],
+         "priority":"HIGH"
+      },
+      "sort":[
+         1476885073674
+      ]
+   },
+   {
+      "_index":"cases",
+      "_type":"case",
+      "_id":"AVfdNWo2uCHMWTA6zYeO",
+      "_score":null,
+      "_source":{
+         "idCase":"AVfdNWo2uCHMWTA6zYeO",
+         "domainId":"AVfFSiZvgeHP5kyJ43lS",
+         "triggerId":"AVfFS_gtgeHP5kyJ43lb",
+         "segmentId":"AVfFS_hmgeHP5kyJ43lc",
+         "open":true,
+         "pendingResponse":false,
+         "openDate":1476884961216,
+         "lastModifiedTimestamp":1477068607945,
+         "title":"Quiero abrir un caso!",
+         "triggerEvent":{
+            "timestamp":1472749500025,
+            "tokenId":2,
+            "seriesId":[
+               33,
+               7
+            ],
+            "subSeriesId":[
+               9
+            ],
+            "id":"788042952710946817",
+            "idOriginal":"788042952710946817",
+            "medioId":1087,
+            "tipoDeMedio":"morbi",
+            "connotacion":36,
+            "seccionExternaOrigen":72,
+            "sistemaOrigenExterno":"ac",
+            "fecha":"2016-10-13T00:00:00+0000",
+            "esTapa":false,
+            "usuarioOriginal":"LagartusRoot",
+            "usuarioCreacion":"LagartusRoot",
+            "usuarioReproduccion":"LagartusRoot",
+            "usuarioCategorizador":"LagartusRoot",
+            "fechaCategorizacion":"2016-10-13T00:00:00+0000",
+            "noticiaStatus":1,
+            "odaCategorizada":23,
+            "esSecundario":false,
+            "idPadre":"sociis",
+            "esLike":false,
+            "esReproduccion":false,
+            "fechaCreacion":"2016-10-13T00:00:00+0000",
+            "reproduccionesCount":18,
+            "likeCount":50,
+            "titulo":"Quiero abrir un caso!",
+            "texto":"Quiero abrir un caso!",
+            "normalizeMessage":"Quiero abrir un caso!",
+            "urlNoticia":"https://prnewswire.com/tortor/id.png",
+            "urlMultimediaContent":"https://comcast.net/at/vulputate/vitae/nisl/aenean/lectus/pellentesque.jpg",
+            "volanta":"maecenas leo odio condimentum id luctus nec molestie sed justo pellentesque viverra pede",
+            "bajada":"nulla nunc purus phasellus in felis donec semper sapien a libero nam",
+            "copete":"in consequat ut nulla sed accumsan felis ut at dolor quis odio consequat varius integer ac leo pellentesque",
+            "followersCount":1,
+            "idUsuarioOriginal":"2507734136",
+            "idUsuarioReproduccion":"2507734136",
+            "idUsuarioCreacion":"2507734136",
+            "profileImage":"https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
+            "name":"Lagartus Root",
+            "language":"es",
+            "originalLocation":"donec",
+            "location":{
+               "lat":16.69938,
+               "lon":121.18614
+            },
+            "menciones":[
+               "et",
+               "elementum",
+               "fringilla"
+            ],
+            "actores":[
+               "augue",
+               "ante",
+               "vel"
+            ],
+            "hashTags":[
+               "feugiat",
+               "messi",
+               "quis"
+            ],
+            "areasTematicas":[
+               19,
+               23,
+               36
+            ],
+            "hotTopics":[
+               "luctus",
+               "lectus",
+               "a"
+            ],
+            "temas":[
+               95,
+               1,
+               8
+            ],
+            "categorias":[
+               55,
+               73,
+               66
+            ],
+            "conjuntos":[
+               15,
+               66,
+               100
+            ],
+            "continent":31,
+            "country":63,
+            "adm1":22,
+            "adm3":63,
+            "city":28,
+            "neighborhood":29,
+            "responseDetected":false
+         },
+         "subject":{
+            "id":"AVfdNWhPuCHMWTA6zYeN",
+            "identifier":"LagartusRoot",
+            "sourceId":"2507734136",
+            "source":1087,
+            "profileImage":"https://pbs.twimg.com/profile_images/468416386553745412/ROvzMMAK.jpeg",
+            "signedDate":"2016-10-19T13:49:21+0000",
+            "lastAccionDate":"2016-10-19T13:49:21+0000"
+         },
+         "userResolver":{
+            "id":"AVfFR8VRgeHP5kyJ43lK",
+            "source":1087,
+            "identifier":"centaurico_bot3"
+         },
+         "lastPostId":"789508438472601600",
+         "idRootComment":"789508438472601600",
+         "source":1087,
+         "teamId":"AVfFSQsTgeHP5kyJ43lQ",
+         "messages":[
+            {
+               "id":"788042952710946817",
+               "fromResponseDetector":false
+            },
+            {
+               "id":"789508438472601600",
+               "fromResponseDetector":false
+            }
+         ]
+      },
+      "sort":[
+         1476884961216
+      ]
+   }
+]

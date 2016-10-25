@@ -115,7 +115,17 @@
         <property name="configurator" ref="elasticDomainConfig"></property>
     </bean>
     
+     <bean id="caseCategoryElasticService" class="com.qsocialnow.elasticsearch.services.config.CaseCategoryService">
+    	<property name="indexConfiguration" ref="configurationIndexService"></property>
+        <property name="configurator" ref="elasticDomainConfig"></property>
+    </bean>
+    
     <bean id="subjectCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.SubjectCategorySetService">
+    	<property name="indexConfiguration" ref="configurationIndexService"></property>
+        <property name="configurator" ref="elasticDomainConfig"></property>
+    </bean>
+    
+	<bean id="subjectCategoryElasticService" class="com.qsocialnow.elasticsearch.services.config.SubjectCategoryService">
     	<property name="indexConfiguration" ref="configurationIndexService"></property>
         <property name="configurator" ref="elasticDomainConfig"></property>
     </bean>
@@ -146,6 +156,7 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).ATTACH_FILE}" value-ref="attachFileCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_SUBJECT}" value-ref="changeSubjectCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_SUBJECT}" value-ref="tagSubjectCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_PRIORITY}" value-ref="changePriorityCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">

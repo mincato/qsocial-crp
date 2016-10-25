@@ -5,9 +5,9 @@
 	validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native"	xmlns:ca="client/attribute">
 	<n:div class="row">
 		<n:div class="col-lg-12">
-			<div zclass="pane equal">
+			<n:div id="page-header" class="pane equal">
 				<n:h4>${labels.userresolver.create.title}</n:h4>
-			</div>
+			</n:div>
 		</n:div>
 	</n:div>
 
@@ -22,7 +22,7 @@
 							${labels.userresolver.source.label}
 						</n:label>
 						<x:div class="col-sm-10">
-							<radiogroup id="source" selectedItem="@bind(fx.source) @validator('beanValidator')"/>
+							<radiogroup id="source" selectedItem="@bind(fx.source) @validator('com.qsocialnow.validators.LocaleBeanValidator')"/>
 							<x:div children="@load(vm.mediaTypes)">
 								<template name="children">
 									<radio radiogroup="source" value="@load(each)" disabled="@load(fx.userResolver.credentials ne null)"

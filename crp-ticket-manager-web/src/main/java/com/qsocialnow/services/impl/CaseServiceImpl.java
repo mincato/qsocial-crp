@@ -51,7 +51,12 @@ public class CaseServiceImpl implements CaseService {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters) {
+
+        String userName = userSessionService.getUsername();
+        boolean isAdmin = userSessionService.isAdmin();
+
         try {
+
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
@@ -69,10 +74,6 @@ public class CaseServiceImpl implements CaseService {
             }
 
             // user
-            String userName = userSessionService.getUsername();
-            boolean isAdmin = userSessionService.isAdmin();
-            log.info("User name:" + userName + " isAdmin:" + isAdmin);
-
             if (!isAdmin) {
                 builder.queryParam("userName", userName);
             }

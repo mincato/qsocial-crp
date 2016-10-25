@@ -7,7 +7,7 @@
 		<x:div sclass="@load(empty vmsgs[comment] ? 'form-group' : 'form-group has-error')">
 		    <n:label class="control-label">${labels.cases.actions.comment.required}:</n:label>
     		<textbox type="text" id="comment" class="form-control" rows="5" 
-    			value="@bind(fxRegisterCommentAction.comment) @validator('beanValidator')"></textbox>
+    			value="@bind(fxRegisterCommentAction.comment) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 			<x:span sclass="@load(empty vmsgs[comment] ? 'hidden' : 'help-block')">
 				<label value="@load(vmsgs[comment])" />
 			</x:span>

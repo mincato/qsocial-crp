@@ -18,9 +18,11 @@ public class FacebookFeedEvent {
 
     private final String userPageId;
 
+    private final String originalId;
+
     public FacebookFeedEvent(final String caseId, final String eventId, final String userId, final String userName,
             final String replyMessageId, final String messageId, final String commentId, final String rootCommentId,
-            final String userPageId) {
+            final String userPageId, final String originalId) {
         this.caseId = caseId;
         this.eventId = eventId;
         this.userId = userId;
@@ -29,6 +31,7 @@ public class FacebookFeedEvent {
         this.commentId = commentId;
         this.messageId = messageId;
         this.userPageId = userPageId;
+        this.originalId = originalId;
     }
 
     public String getCaseId() {
@@ -61,6 +64,10 @@ public class FacebookFeedEvent {
 
     public String getRootCommentId() {
         return rootCommentId;
+    }
+
+    public String getOriginalId() {
+        return originalId;
     }
 
     @Override
@@ -105,6 +112,10 @@ public class FacebookFeedEvent {
 
         if (!userPageId.equals(other.userPageId))
             return false;
+
+        if (!originalId.equals(other.originalId))
+            return false;
+
         return true;
     }
 

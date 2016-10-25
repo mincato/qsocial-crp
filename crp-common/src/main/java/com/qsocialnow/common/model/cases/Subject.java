@@ -8,9 +8,11 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import com.qsocialnow.common.model.event.GeoSocialEventLocationMethod;
+
 public class Subject implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -5000381409758581245L;
 
     private String id;
 
@@ -44,6 +46,12 @@ public class Subject implements Serializable {
     @Valid
     private ContactInfo contactInfo;
 
+    private GeoSocialEventLocationMethod locationMethod;
+
+    private String sourceName;
+
+    private String location;
+
     public String getId() {
         return id;
     }
@@ -58,7 +66,7 @@ public class Subject implements Serializable {
 
     public void setIdentifier(String identifier) {
         if (identifier != null) {
-            String[] identifierTokens = identifier.split("\\s+");
+            String[] identifierTokens = identifier.split("\\s+http");
             if (identifierTokens.length > 0)
                 this.identifier = identifierTokens[0];
             else
@@ -176,4 +184,29 @@ public class Subject implements Serializable {
         this.subjectCategory.addAll(subjectCategories);
 
     }
+
+    public GeoSocialEventLocationMethod getLocationMethod() {
+        return locationMethod;
+    }
+
+    public void setLocationMethod(GeoSocialEventLocationMethod locationMethod) {
+        this.locationMethod = locationMethod;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
 }

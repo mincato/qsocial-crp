@@ -13,13 +13,13 @@ public class CaseView {
     @Valid
     private Case newCase;
 
-    @NotNull(message = "{field.empty}")
+    @NotNull(message = "app.field.empty.validation")
     private DomainListView selectedDomain;
 
-    @NotNull(message = "{field.empty}")
+    @NotNull(message = "app.field.empty.validation")
     private TriggerListView selectedTrigger;
 
-    @NotNull(message = "{field.empty}")
+    @NotNull(message = "app.field.empty.validation")
     private SegmentListView selectedSegment;
 
     public CaseView() {

@@ -5,7 +5,7 @@
     border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
 	   <n:div class="col-lg-12">
-	       <div zclass="pane equal col-md-12 col-xs-12">
+	       <n:div id="page-header" class="pane equal col-md-12 col-xs-12">
 				<n:div class="col-md-6 col-xs-12">
     				<n:h4>${labels.subject.list.title}</n:h4>
 				</n:div>
@@ -17,7 +17,7 @@
 							</span>
 			    	</div>
                 </n:div>
-	       </div>
+	       </n:div>
 	   </n:div>
     </n:div>
     <div class="row">
@@ -29,8 +29,7 @@
 					<tr>
 						<th></th>
 						<th>${labels.subject.list.column.identifier}</th>
-					    <th>${labels.subject.list.column.name}</th>
-						<th>${labels.subject.list.column.lastname}</th>
+					    <th>${labels.subject.list.column.sourceName}</th>
 					    <th>${labels.subject.list.column.action}</th>
 					</tr>
 			    </thead>
@@ -39,8 +38,7 @@
 					<tr>
 						<td><span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.media.icon))"><i sclass="@load('fa fa-'.concat(each.media.icon))" /></span></td>
 						<td class="list-text-column">${each.identifier}</td>
-						<td>${each.name}</td>
-                       	<td>${each.lastName}</td>
+						<td>${each.sourceName}</td>
                        	<td>
                        		<ul class="list-inline">
   								<li><a class="btn-list-action"><i onClick="@command('openEdit', subjectId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.subject.edit.action}"></i></a></li>

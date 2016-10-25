@@ -7,7 +7,7 @@ import com.qsocialnow.common.model.event.Event;
 
 public class ActionRegistry implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -2122762241985708580L;
 
     private String id;
 
@@ -24,6 +24,8 @@ public class ActionRegistry implements Serializable {
     private Long date;
 
     private ActionType type;
+
+    private String deepLink;
 
     public String getId() {
         return id;
@@ -87,5 +89,13 @@ public class ActionRegistry implements Serializable {
 
     public void setType(ActionType type) {
         this.type = type;
+    }
+
+    public String getDeepLink() {
+        return deepLink;
+    }
+
+    public void setDeepLink(String deepLink) {
+        this.deepLink = deepLink;
     }
 }

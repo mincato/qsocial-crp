@@ -7,7 +7,7 @@
 		<x:div sclass="@load(empty vmsgs[resolutions] ? 'form-group' : 'form-group has-error')">
 			<n:label class="control-label">${labels.cases.actions.resolve.resolutions}:</n:label>
 			<selectbox sclass="form-control" id="resolutions" model="@load(resolveActionVm.resolutionOptions)"
-				selectedItem="@bind(fxResolutionAction.selectedResolution) @validator('beanValidator')">
+				selectedItem="@bind(fxResolutionAction.selectedResolution) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 			    <template name="model">
 					<label value="${each.description}" />
 				</template>

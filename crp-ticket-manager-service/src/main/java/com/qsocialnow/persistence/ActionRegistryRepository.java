@@ -48,6 +48,7 @@ public class ActionRegistryRepository {
                      */
                     registryListView.setDescription(registry.getComment());
                     registryListView.setDate(registry.getDate());
+                    registryListView.setDeepLink(registry.getDeepLink());
                     registriesView.add(registryListView);
                 }
             }
@@ -77,6 +78,7 @@ public class ActionRegistryRepository {
                      */
                     registryListView.setDescription(registry.getComment());
                     registryListView.setDate(registry.getDate());
+                    registryListView.setDeepLink(registry.getDeepLink());
                     registriesView.add(registryListView);
                 }
             }

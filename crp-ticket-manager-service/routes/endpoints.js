@@ -36,19 +36,68 @@ router.get('/cases/report', function (req, res) {
 	    }
 
 	  }
+	  var userName = req.query.userName?req.query.userName :null;
+	  var subject = req.query.subject?req.query.subject :null;
 	  var title = req.query.title?req.query.title :null;
 	  var description = req.query.description?req.query.description :null;
 	  var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
+	  var status = req.query.status?req.query.status :null;
 	  
 	  var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
 	  var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
 
-
 	  var caseService = javaContext.getBeanSync("caseReportService");
-	  caseService.getReport(title,description,pendingResponse,fromOpenDate,toOpenDate,asyncResponse);
+	  caseService.getReport(subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName,asyncResponse);
 	  
-	});
+});
 
+router.get('/cases/results/report', function (req, res) {
+	  function asyncResponse(err,response) {
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	    	  res.writeHead(200, {
+	    	        'Content-Type': 'application/vnd.ms-excel',
+	    	        'Content-Length': response.length
+	    	    });
+	    	    res.end(new Buffer(response, 'binary'))
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  var domainId = req.query.domainId?req.query.domainId :null;
+	  var caseService = javaContext.getBeanSync("caseReportService");
+	  caseService.getCasesByResolutionReport(domainId,asyncResponse);
+	  
+});
+
+router.get('/cases/results', function (req, res) {
+	function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	    	res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  var domainId = req.query.domainId?req.query.domainId :null;
+	  var caseService = javaContext.getBeanSync("caseResultsService");
+	  caseService.getResults(domainId,asyncResponse);
+});
 
 router.get('/cases', function (req, res) {
 
@@ -80,12 +129,12 @@ router.get('/cases', function (req, res) {
   var title = req.query.title?req.query.title :null;
   var description = req.query.description?req.query.description :null;
   var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
-  
+  var status = req.query.status?req.query.status :null;
   
   var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
   var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
 
-  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,subject,title,description,pendingResponse,fromOpenDate,toOpenDate,userName,asyncResponse);
+  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName,asyncResponse);
 
 });
 

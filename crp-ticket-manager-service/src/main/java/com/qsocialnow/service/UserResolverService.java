@@ -2,9 +2,11 @@ package com.qsocialnow.service;
 
 import java.util.List;
 
+import org.apache.curator.framework.CuratorFramework;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.UserResolver;
@@ -21,6 +23,12 @@ public class UserResolverService {
     @Autowired
     private UserResolverRepository userResolverRepository;
 
+    @Autowired
+    private CuratorFramework zookeeperClient;
+
+    @Value("${app.user.resolvers.path}")
+    private String userResolversPath;
+
     public UserResolver createUserResolver(UserResolver userResolver) {
         UserResolver userResolverSaved = null;
         try {
@@ -28,6 +36,7 @@ public class UserResolverService {
             if (userResolverSaved.getId() == null) {
                 throw new Exception("There was an error creating user resolver: " + userResolverSaved.getIdentifier());
             }
+            zookeeperClient.setData().forPath(userResolversPath);
         } catch (Exception e) {
             log.error("There was an error creating user resolver: " + userResolver.getIdentifier(), e);
             throw new RuntimeException(e.getMessage());

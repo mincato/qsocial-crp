@@ -1,6 +1,7 @@
 package com.qsocialnow.elasticsearch.repositories;
 
 import java.util.List;
+import java.util.Map;
 
 public class SearchResponse<T> {
 
@@ -13,6 +14,8 @@ public class SearchResponse<T> {
     private T source;
 
     private List<T> sources;
+
+    private Map<String, Long> countAggregation;
 
     public String getId() {
         return id;
@@ -52,5 +55,13 @@ public class SearchResponse<T> {
 
     public void setIndex(String index) {
         this.index = index;
+    }
+
+    public Map<String, Long> getCountAggregation() {
+        return countAggregation;
+    }
+
+    public void setCountAggregation(Map<String, Long> countAggregation) {
+        this.countAggregation = countAggregation;
     }
 }

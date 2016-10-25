@@ -19,11 +19,16 @@ import org.zkoss.zul.Filedownload;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.converters.DateConverter;
+import com.qsocialnow.security.LoginConfig;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.SubjectService;
+import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
+
+    private DateConverter dateConverter;
 
     private static final String FALSE_OPTION_VALUE = "false";
 
@@ -70,16 +75,28 @@ public class CasesViewModel implements Serializable {
 
     private String subject;
 
+    private List<String> statusOptions = new ArrayList<>();
+
+    private String status;
+
     private List<String> pendingOptions = new ArrayList<>();
 
     private String pendingResponse;
+
+    @WireVariable
+    private UserSessionService userSessionService;
+
+    @WireVariable
+    private LoginConfig loginConfig;
 
     @Init
     public void init() {
         this.subjectsFilterOptions = getSubjects();
         this.filterActive = false;
         this.pendingOptions = getPendingOptionsList();
+        this.statusOptions = getStatusOptionsList();
         findCases();
+        this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
 
     private List<String> getSubjects() {
@@ -107,7 +124,7 @@ public class CasesViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "cases", "moreResults" })
+    @NotifyChange({ "cases", "moreResults", "sortField", "sortOrder" })
     public void sortList(@BindingParam("sortField") String sortField) {
         this.sortField = sortField;
         this.sortOrder = !this.sortOrder;
@@ -155,9 +172,13 @@ public class CasesViewModel implements Serializable {
             filters.put("description", this.description);
         }
 
-        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE))
-            ;
-        filters.put("pendingResponse", this.pendingResponse);
+        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE)) {
+            filters.put("pendingResponse", this.pendingResponse);
+        }
+
+        if (status != null && !status.equals(ALL_OPTION_VALUE)) {
+            filters.put("status", this.status);
+        }
 
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
@@ -235,6 +256,22 @@ public class CasesViewModel implements Serializable {
         this.subject = subject;
     }
 
+    public List<String> getStatusOptions() {
+        return statusOptions;
+    }
+
+    public void setStatusOptions(List<String> statusOptions) {
+        this.statusOptions = statusOptions;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getPendingResponse() {
         return pendingResponse;
     }
@@ -254,6 +291,31 @@ public class CasesViewModel implements Serializable {
     private List<String> getPendingOptionsList() {
         String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
         return new ArrayList<String>(Arrays.asList(options));
+    }
+
+    private List<String> getStatusOptionsList() {
+        String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
+        return new ArrayList<String>(Arrays.asList(options));
+    }
+
+    public DateConverter getDateConverter() {
+        return dateConverter;
+    }
+
+    public boolean isSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(boolean sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
     }
 
 }

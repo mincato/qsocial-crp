@@ -12,10 +12,11 @@ import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.util.DeepLinkBuilder;
 
 public class Case implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -2733196579634071076L;
 
     private String id;
 
@@ -35,10 +36,10 @@ public class Case implements Serializable {
 
     private Long lastModifiedTimestamp;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String title;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String description;
 
     private Event triggerEvent;
@@ -77,6 +78,8 @@ public class Case implements Serializable {
 
     private List<Message> messages;
 
+    private Priority priority;
+
     public Case() {
 
     }
@@ -88,6 +91,7 @@ public class Case implements Serializable {
         Long openDate = new Date().getTime();
         newCase.setOpenDate(openDate);
         newCase.setTitle(event.getTitulo());
+        newCase.setPriority(Priority.MEDIUM);
 
         newCase.setPendingResponse(true);
         newCase.setLastPostId(event.getId());
@@ -101,9 +105,10 @@ public class Case implements Serializable {
         List<ActionRegistry> registries = new ArrayList<>();
         ActionRegistry registry = new ActionRegistry();
         registry.setAction(ActionType.OPEN_CASE.name());
-        registry.setComment(event.getUsuarioOriginal() + " - " + event.getTitulo());
+        registry.setComment(event.getUsuarioCreacion() + " - " + event.getTitulo());
         registry.setAutomatic(true);
         registry.setDate(openDate);
+        registry.setDeepLink(DeepLinkBuilder.build(event));
 
         registry.setEvent(event);
 
@@ -120,6 +125,7 @@ public class Case implements Serializable {
         Long openDate = new Date().getTime();
         newCase.setOpenDate(openDate);
         newCase.setPendingResponse(true);
+        newCase.setPriority(Priority.MEDIUM);
 
         // creating first registry
         List<ActionRegistry> registries = new ArrayList<>();
@@ -154,6 +160,7 @@ public class Case implements Serializable {
             actionsAllowed.add(ActionType.ASSIGN);
             actionsAllowed.add(ActionType.RESOLVE);
             actionsAllowed.add(ActionType.ATTACH_FILE);
+            actionsAllowed.add(ActionType.CHANGE_PRIORITY);
         } else {
             actionsAllowed.add(ActionType.REOPEN);
         }
@@ -398,6 +405,14 @@ public class Case implements Serializable {
         }
         messages.add(message);
 
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 
 }

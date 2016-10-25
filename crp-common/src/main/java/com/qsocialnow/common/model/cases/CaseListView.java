@@ -20,6 +20,10 @@ public class CaseListView implements Serializable {
 
     private boolean open;
 
+    private String priority;
+
+    private String assignee;
+
     public String getId() {
         return id;
     }
@@ -74,5 +78,21 @@ public class CaseListView implements Serializable {
 
     public void setOpen(boolean open) {
         this.open = open;
+    }
+
+    public String getAssignee() {
+        return assignee;
+    }
+
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 }

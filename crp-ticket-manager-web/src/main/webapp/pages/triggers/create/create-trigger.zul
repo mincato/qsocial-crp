@@ -6,9 +6,9 @@
 		form="@id('fxTrigger') @load(triggerVm.currentTrigger) @save(triggerVm.currentTrigger, before={'save'} ) @validator('com.qsocialnow.validators.TriggerFormValidator')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
-			<div zclass="pane equal">
+			<n:div id="page-header" class="pane equal">
 				<n:h4>${triggerVm.currentDomain.domain.name} / ${labels.trigger.create.title}</n:h4>
-			</div>
+			</n:div>
 		</n:div>
 	</n:div>
 
@@ -24,7 +24,7 @@
 						<n:div class="col-sm-9">
 							<textbox type="text" sclass="form-control"
 								id="name"
-								value="@bind(fxTrigger.trigger.name) @validator('beanValidator')">
+								value="@bind(fxTrigger.trigger.name) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 							</textbox>
 							<x:span
 								sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
@@ -51,7 +51,7 @@
 						<n:div class="col-sm-9">
 							<datebox id="startDate" sclass="input-group"
 								format="short"
-								value="@bind(fxTrigger.trigger.init) @converter(adminVm.dateConverter) @validator('beanValidator')" />
+								value="@bind(fxTrigger.trigger.init) @converter(adminVm.dateConverter) @validator('com.qsocialnow.validators.LocaleBeanValidator')" />
 							<x:span
 								sclass="@load(empty vmsgs[startDate] ? 'hidden' : 'help-block')">
 								<label value="@load(vmsgs[startDate])" />
@@ -90,7 +90,7 @@
 			    			<n:label class="control-label col-sm-3">${labels.trigger.status.title}</n:label>
 			    			<n:div class="col-sm-9">
 					    		<selectbox sclass="form-control" id="status" model="@load(triggerVm.statusOptions)"
-					    				selectedItem="@bind(fxTrigger.trigger.status) @validator('beanValidator')" >
+					    				selectedItem="@bind(fxTrigger.trigger.status) @validator('com.qsocialnow.validators.LocaleBeanValidator')" >
 								    <template name="model">
 	        							<label value="${c:l(c:cat('trigger.status.',each))}" />
 	    							</template>

@@ -1,8 +1,9 @@
 package com.qsocialnow.persistence;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
@@ -25,13 +27,14 @@ public class CaseRepository {
     private CaseTicketService caseElasticService;
 
     public List<CaseListView> findAll(PageRequest pageRequest, String subject, String title, String description,
-            String pendingResponse, String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName) {
+            String pendingResponse, String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter,
+            String userName) {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
             List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
                     pageRequest.getSortField(), pageRequest.getSortOrder(), subject, title, description,
-                    pendingResponse, fromOpenDate, toOpenDate, teamsToFilter, userName);
+                    pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();
@@ -44,6 +47,12 @@ public class CaseRepository {
                 caseListView.setOpenDate(caseRepo.getOpenDate());
                 caseListView.setPendingResponse(caseRepo.getPendingResponse());
                 caseListView.setOpen(caseRepo.getOpen());
+                if (caseRepo.getAssignee() != null) {
+                    caseListView.setAssignee(caseRepo.getAssignee().getUsername());
+                }
+                if (caseRepo.getPriority() != null) {
+                    caseListView.setPriority(caseRepo.getPriority().name());
+                }
                 cases.add(caseListView);
             }
         } catch (Exception e) {
@@ -52,11 +61,30 @@ public class CaseRepository {
         return cases;
     }
 
-    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String title, String description,
-            String pendingResponse, String fromOpenDate, String toOpenDate) {
+    public List<ResultsListView> sumarizeResolvedByResolution(PageRequest pageRequest, String domainId) {
+        List<ResultsListView> results = new ArrayList<>();
+        try {
+            Map<String, Long> resultsRepo = caseElasticService.getCasesCountByResolution(domainId);
+            Set<String> resultKeys = resultsRepo.keySet();
+            for (String key : resultKeys) {
+                ResultsListView resultView = new ResultsListView();
+                resultView.setResolution(key);
+                resultView.setTotal(resultsRepo.get(key));
+                results.add(resultView);
+            }
+
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return results;
+    }
+
+    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String subject, String title, String description,
+            String pendingResponse, String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter,
+            String userName) {
         JsonObject jsonObject = caseElasticService.getCasesAsJsonObject(pageRequest.getOffset(),
-                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), title, description,
-                pendingResponse, fromOpenDate, toOpenDate);
+                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), subject, title,
+                description, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
         return jsonObject.getAsJsonObject("hits").getAsJsonArray("hits");
     }
 

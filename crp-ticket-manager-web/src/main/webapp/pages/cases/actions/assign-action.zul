@@ -7,7 +7,7 @@
 		<div sclass="@load(empty vmsgs[user] ? 'form-group' : 'form-group has-error')">
 			<n:label class="control-label">${labels.cases.actions.assign.user}:</n:label>
 			<selectbox sclass="form-control" id="user" model="@load(assignActionVm.userOptions)"
-				selectedItem="@bind(fxAssignAction.selectedUser) @validator('beanValidator')">
+				selectedItem="@bind(fxAssignAction.selectedUser) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 			    <template name="model">
 					<label value="${each.username}" />
 				</template>

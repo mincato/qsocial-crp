@@ -5,9 +5,9 @@
 	validationMessages="@id('vmsgs')">
 	<n:div class="row">
         <n:div>
-            <div zclass="pane equal">
+            <n:div id="page-header" class="pane equal">
                 <n:h4>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h4>
-            </div>
+            </n:div>
         </n:div>
     </n:div>	
 
@@ -148,6 +148,14 @@
 						</div>
 					</n:div>
 	             </n:div>
+	             <n:div class="row">
+                     <x:div sclass="form-group col-sm-6">
+                          <n:label class="control-label col-sm-3">${labels.cases.details.priority}</n:label>
+                          <x:div class="col-sm-9">
+                              <label class="control-label col-sm-1" value="@load(c:l(c:cat('cases.priority.',vm.currentCase.caseObject.priority)))"></label>
+                          </x:div>  
+                     </x:div>
+				</n:div>
 			</x:form>
 		</div>
 	</div>
@@ -158,10 +166,7 @@
 	<n:div class="row">
        <n:div class="col-lg-12">
            <div zclass="pane equal col-md-12 col-xs-12">
-                <n:div class="col-md-2 col-xs-12">
-
-                </n:div>
-	            <n:div class="col-md-2">
+                <n:div class="col-md-2">
 		            <div zclass="input-group input-group-sm">
 			            <selectbox sclass="form-control" model="@load(vm.actionFilterOptions)"
 			                selectedItem="@bind(vm.action)">
@@ -237,7 +242,8 @@
 									<td visible="@load(each.automatic)">${labels.cases.registry.automatic.user}</td>
 									<td visible="@load(not each.automatic)">${each.user}</td>
 									<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
-                       				<td>${each.description}</td>
+									<td visible="@load(each.deepLink eq null)">${each.description}</td>
+                       				<td visible="@load(each.deepLink ne null)"><a href="${each.deepLink}" target="_blank">${each.description}</a></td>
                        				<td><label value="@load(each.date) @converter(vm.dateConverter)"/></td>
                        				<td></td>
                					</tr>

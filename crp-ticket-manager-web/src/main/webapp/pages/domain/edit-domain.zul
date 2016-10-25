@@ -16,29 +16,25 @@
 						<n:div class="col-lg-12">
 							<div zclass="pane equal">
 								<x:form>
-									<n:div class="form-group">
-									    <x:label>${labels.app.form.id}:</x:label>
-							    		<n:label>${vm.currentDomain.domain.id}</n:label>
-									</n:div>
 									<x:div sclass="@load(empty vmsgs[name] ? 'form-group' : 'form-group has-error')">
 									    <n:label class="control-label">${labels.domain.name}:</n:label>
 							    		<textbox type="text" class="form-control" id="name" 
-								    			name="normal_input" value="@bind(domain.domain.name) @validator('beanValidator')"></textbox>
+								    			name="normal_input" value="@bind(domain.domain.name) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 								    	<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
 						    				<label value="@load(vmsgs[name])" />
 						    			</x:span>
 									</x:div>
 								
 									<x:div class="form-group" sclass="@load(empty vmsgs[thematics] ? 'form-group' : 'form-group has-error')">
-										<n:label class="control-label">${labels.domain.thematics}:</n:label>
+										<n:label class="control-label">${labels.domain.thematics.$}:</n:label>
 										<listbox mold="select" sclass="form-control" model="@load(vm.thematics)"
 											 multiple="true"
 											checkmark="true"
-											selectedItems="@bind(vm.currentDomain.selectedThematics) @validator('beanValidator')"
+											selectedItems="@bind(vm.currentDomain.selectedThematics) @validator('com.qsocialnow.validators.LocaleBeanValidator')"
 											id="thematics">
 											<template name="model">
 												<listitem>
-													<listcell label="${each.id} - ${each.nombre}"/>
+													<listcell label="${each.nombre}"/>
 												</listitem>
 											</template>
 										</listbox>

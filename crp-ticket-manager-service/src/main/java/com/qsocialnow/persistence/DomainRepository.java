@@ -2,7 +2,7 @@ package com.qsocialnow.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,12 +68,7 @@ public class DomainRepository {
                 domainListView.setName(domainRepo.getName());
 
                 List<Long> thematics = domainRepo.getThematics();
-                if (thematics != null) {
-                    String values = thematics.stream().map(number -> String.valueOf(number))
-                            .collect(Collectors.joining(", "));
-
-                    domainListView.setThematics(values);
-                }
+                domainListView.setThematicIds(thematics);
                 domains.add(domainListView);
             }
         } catch (Exception e) {
@@ -95,18 +90,17 @@ public class DomainRepository {
                 domainListView.setName(domainRepo.getName());
 
                 List<Long> thematics = domainRepo.getThematics();
-                if (thematics != null) {
-                    String values = thematics.stream().map(number -> String.valueOf(number))
-                            .collect(Collectors.joining(", "));
-
-                    domainListView.setThematics(values);
-                }
+                domainListView.setThematicIds(thematics);
                 domains.add(domainListView);
             }
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
         return domains;
+    }
+
+    public Map<String, String> findAllReport() {
+        return domainElasticService.getAllDomainsAsMap();
     }
 
 }

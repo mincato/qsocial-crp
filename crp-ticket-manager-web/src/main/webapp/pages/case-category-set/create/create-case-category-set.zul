@@ -5,10 +5,8 @@
 	validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native"
 	xmlns:ca="client/attribute">
 	<n:div class="row">
-		<n:div class="col-lg-12">
-			<div zclass="pane equal">
-				<n:h4>${labels.casecategoryset.create.title}</n:h4>
-			</div>
+		<n:div id="page-header" class="pane equal">
+			<n:h4>${labels.casecategoryset.create.title}</n:h4>
 		</n:div>
 	</n:div>
 
@@ -25,7 +23,7 @@
 						<x:div class="col-sm-10">
 							<textbox type="text" class="form-control"
 								id="description" name="normal_input"
-								value="@bind(fx.description) @validator('beanValidator')">
+								value="@bind(fx.description) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 							</textbox>
 							<x:span
 								sclass="@load(empty vmsgs[description] ? 'hidden' : 'help-block')">

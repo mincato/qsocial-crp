@@ -1,0 +1,23 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('changePriorityActionVm') @init('com.qsocialnow.viewmodel.ChangePriorityActionViewModel')"
+		validationMessages="@id('vmsgs')">
+	<x:form form="@id('fxChangePriorityAction') @load(changePriorityActionVm.changePriorityAction) @save(changePriorityActionVm.changePriorityAction, before='execute')">
+		<div sclass="@load(empty vmsgs[priority] ? 'form-group' : 'form-group has-error')">
+			<n:label class="control-label">${labels.cases.actions.changePriority.priority}:</n:label>
+			<selectbox sclass="form-control" id="priority" model="@load(changePriorityActionVm.priorityOptions)"
+				selectedItem="@bind(fxChangePriorityAction.selectedPriority) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
+			    <template name="model">
+					<label value="@load(c:l(c:cat('cases.priority.',each)))" />
+				</template>
+			</selectbox>
+			<x:span sclass="@load(empty vmsgs[priority] ? 'hidden' : 'help-block')">
+				<label value="@load(vmsgs[priority])" />
+			</x:span>
+		</div>
+		<div class="form-group text-center">
+	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
+		</div>
+	</x:form>
+</div>

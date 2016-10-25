@@ -44,7 +44,6 @@ body {
 
 /* ----- HEADINGS ----- */
 h1, h2, h3, h4, h5 {
-	margin: 0 0 30px;
 	font-weight: 300;
 }
 
@@ -426,7 +425,6 @@ ul.thematic {
         padding: 10px 15px;
         font-weight: 400;
         font-size: 16px;
-        text-transform: uppercase;
     }
     
 /* ----- SIDEBAR/MESSENGER SCROLLPANE ----- */

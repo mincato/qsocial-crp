@@ -8,7 +8,7 @@ public class SubjectCategoryView {
 
     private String id;
 
-    @NotBlank(message = "{field.empty}")
+    @NotBlank(message = "app.field.empty.validation")
     private String description;
 
     public SubjectCategoryView() {

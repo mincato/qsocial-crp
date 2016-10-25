@@ -4,9 +4,9 @@
 		validationMessages="@id('vmsgs')" form="@id('fxCriteria') @load(vm.currentCriteria) @save(vm.currentCriteria, before='save')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
-			<div zclass="pane equal">
+			<n:div id="page-header" class="pane equal">
 				<n:h4>${labels.trigger.criteria.title}</n:h4>
-			</div>
+			</n:div>
 		</n:div>
 	</n:div>	
 	<div class="row">
@@ -17,7 +17,7 @@
 						    <n:label class="control-label col-sm-2">${labels.trigger.name}</n:label>
 				    		<n:div class="col-sm-10">
 		    					<textbox type="text" class="form-control" id="name" 
-			    					value="@bind(fxCriteria.name) @validator('beanValidator')"></textbox>
+			    					value="@bind(fxCriteria.name) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 				    			<x:span sclass="@load(empty vmsgs[name] ? 'hidden' : 'help-block')">
 		    						<label value="@load(vmsgs[name])" />
 		    					</x:span>
@@ -369,7 +369,7 @@
 													value="@bind(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)])" />
 											</x:span>
 										</x:div>
-										<n:div class="col-xs-8 col-sm-3">
+										<n:div class="col-xs-6 col-sm-3">
 											<div class="form-group" children="@load(filterCategory.categories)">
 												<template name="children">
 													<span>
@@ -381,7 +381,12 @@
 												</template>
 					    					</div>
 										</n:div>
-										<n:div class="col-xs-4 col-sm-3">
+										<n:div class="col-xs-2 col-sm-1" >
+											<a class="link-button" visible="@load(filterCategory.categories ne null)" onClick="@command('editCategories', fxFilter=fxFilter, filter = filterCategory)">
+												<i class="fa fa-plus-circle fa-2x"></i>
+											</a>
+										</n:div>
+										<n:div class="col-xs-4 col-sm-2">
 											<n:div class="pull-right">
 												<a zclass="btn-row-list"
 													onClick="@command('removeFilterCategory', fxFilter=fxFilter, filter = filterCategory)">

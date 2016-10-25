@@ -7,7 +7,7 @@
 		<x:div sclass="@load(empty vmsgs[responseText] ? 'form-group' : 'form-group has-error')">
 			<n:label class="control-label">${labels.cases.actions.response.text}:</n:label>
 			<textbox id="responseText" type="text" class="form-control" maxlength="@load(sendResponseActionVm.textMaxlength)"
-    			value="@bind(fxSendResponseAction.text) @validator('beanValidator')"></textbox>
+    			value="@bind(fxSendResponseAction.text) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
     		<x:span sclass="@load(empty vmsgs[responseText] ? 'hidden' : 'help-block')">
 				<label value="@load(vmsgs[responseText])" />
 			</x:span>	
@@ -15,7 +15,7 @@
 		<div sclass="@load(empty vmsgs[userResolvers] ? 'form-group' : 'form-group has-error')" visible="@load(sendResponseActionVm.chooseUserResolver)">
 			<n:label class="control-label">${labels.cases.actions.response.userResolver}:</n:label>
 			<selectbox sclass="form-control" id="userResolvers" model="@load(sendResponseActionVm.userResolverOptions)"
-				selectedItem="@bind(fxSendResponseAction.selectedUserResolver) @validator('beanValidator')">
+				selectedItem="@bind(fxSendResponseAction.selectedUserResolver) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
 			    <template name="model">
 					<label value="${each.identifier}" />
 				</template>

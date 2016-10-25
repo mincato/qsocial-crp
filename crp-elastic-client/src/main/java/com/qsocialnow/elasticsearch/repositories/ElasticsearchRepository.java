@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,9 +13,14 @@ import java.util.stream.Collectors;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.OrQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
+import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.metrics.valuecount.ValueCountBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -40,6 +47,9 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.search.aggregation.TermsAggregation;
+import io.searchbox.core.search.aggregation.ValueCountAggregation;
+import io.searchbox.core.search.aggregation.TermsAggregation.Entry;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
@@ -50,6 +60,8 @@ import vc.inreach.aws.request.AWSSigner;
 import vc.inreach.aws.request.AWSSigningRequestInterceptor;
 
 public class ElasticsearchRepository<T> implements Repository<T> {
+
+    private static final String RESULTS_AGG_NAME = "Results";
 
     private static final String PARENT_PARAMETER = "parent";
 
@@ -330,7 +342,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
+            boolean sortOrder, Map<String, String> searchValues, List<RangeFilter> rangeFilters,
+            List<ShouldFilter> shouldFilters) {
 
         SortOrder sortOrderValue;
         if (sortOrder)
@@ -346,17 +359,29 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
         }
 
-        if (rangeField != null) {
-            RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeField);
-            if (fromValue != null)
-                range.gte(fromValue);
-            if (toValue != null)
-                range.lte(toValue);
-
-            boolQueryBuilder.filter(range);
+        if (rangeFilters != null) {
+            for (RangeFilter rangeFilter : rangeFilters) {
+                if (rangeFilter.getRangeField() != null) {
+                    RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeFilter.getRangeField());
+                    if (rangeFilter.getRangeFrom() != null)
+                        range.gte(rangeFilter.getRangeFrom());
+                    if (rangeFilter.getRangeTo() != null)
+                        range.lte(rangeFilter.getRangeTo());
+                    boolQueryBuilder.filter(range);
+                }
+            }
         }
-        searchSourceBuilder.query(boolQueryBuilder);
 
+        if (shouldFilters != null) {
+            BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+            for (ShouldFilter shouldFilter : shouldFilters) {
+                QueryBuilder query = QueryBuilders.matchQuery(shouldFilter.getField(), shouldFilter.getValue());
+                boolShouldQueryBuilder.should(query);
+            }
+            boolQueryBuilder.filter(boolShouldQueryBuilder);
+        }
+
+        searchSourceBuilder.query(boolQueryBuilder);
         log.info("Query: " + searchSourceBuilder.toString());
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
@@ -365,8 +390,53 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> searchValues,
+            List<RangeFilter> rangeFilters, List<ShouldFilter> shouldFilters, String fieldAggregation) {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        for (String searchField : searchValues.keySet()) {
+            boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+        }
+
+        searchSourceBuilder.query(boolQueryBuilder);
+        AbstractAggregationBuilder aggregation = AggregationBuilders.terms(RESULTS_AGG_NAME).field(fieldAggregation);
+        searchSourceBuilder.aggregation(aggregation);
+        log.info("Query: " + searchSourceBuilder.toString());
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+            if (result.isSucceeded()) {
+                TermsAggregation terms = result.getAggregations().getTermsAggregation(RESULTS_AGG_NAME);
+                Map<String, Long> aggregations = new HashMap<String, Long>();
+                List<Entry> entries = terms.getBuckets();
+                if (entries != null) {
+                    for (Entry entry : entries) {
+                        aggregations.put(entry.getKey(), entry.getCount());
+                    }
+                }
+                response.setCountAggregation(aggregations);
+            } else {
+                throw new RepositoryException(result.getErrorMessage());
+            }
+        } catch (IOException e) {
+            log.error("Serching documents - Unexpected error: ", e);
+            throw new RepositoryException(e);
+        }
+        return response;
+
+    }
+
+    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> searchValues, String rangeField, String fromValue, String toValue) {
+            boolean sortOrder, Map<String, String> searchValues, List<RangeFilter> rangeFilters,
+            List<ShouldFilter> shouldFilters) {
 
         SortOrder sortOrderValue;
         if (sortOrder)
@@ -382,17 +452,29 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
         }
 
-        if (rangeField != null) {
-            RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeField);
-            if (fromValue != null)
-                range.gte(fromValue);
-            if (toValue != null)
-                range.lte(toValue);
-
-            boolQueryBuilder.filter(range);
+        if (rangeFilters != null) {
+            for (RangeFilter rangeFilter : rangeFilters) {
+                if (rangeFilter.getRangeField() != null) {
+                    RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeFilter.getRangeField());
+                    if (rangeFilter.getRangeFrom() != null)
+                        range.gte(rangeFilter.getRangeFrom());
+                    if (rangeFilter.getRangeTo() != null)
+                        range.lte(rangeFilter.getRangeTo());
+                    boolQueryBuilder.filter(range);
+                }
+            }
         }
-        searchSourceBuilder.query(boolQueryBuilder);
 
+        if (shouldFilters != null) {
+            BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+            for (ShouldFilter shouldFilter : shouldFilters) {
+                QueryBuilder query = QueryBuilders.matchQuery(shouldFilter.getField(), shouldFilter.getValue());
+                boolShouldQueryBuilder.should(query);
+            }
+            boolQueryBuilder.filter(boolShouldQueryBuilder);
+        }
+
+        searchSourceBuilder.query(boolQueryBuilder);
         log.info("Query: " + searchSourceBuilder.toString());
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
@@ -639,6 +721,32 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(filters);
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RepositoryException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @Override
+    public <E> SearchResponse<E> search(Mapping<T, E> mapping) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 
