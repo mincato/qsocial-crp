@@ -22,7 +22,6 @@ import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
-import com.qsocialnow.common.model.config.UserResolverListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
@@ -31,7 +30,6 @@ import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.SubjectService;
 import com.qsocialnow.services.TriggerService;
-import com.qsocialnow.services.UserResolverService;
 import com.qsocialnow.services.UserService;
 import com.qsocialnow.services.UserSessionService;
 
