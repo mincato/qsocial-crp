@@ -10,6 +10,9 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
 import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
+import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.NotifyCommand;
+import org.zkoss.bind.annotation.ToClientCommand;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
@@ -20,6 +23,8 @@ import com.qsocialnow.model.CategoryFilterView;
 import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
+@NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.saved")
+@ToClientCommand("modal$closeEvent")
 public class ChooseCategoriesViewModel implements Serializable {
 
     private static final long serialVersionUID = -2374328978702584103L;
@@ -28,14 +33,17 @@ public class ChooseCategoriesViewModel implements Serializable {
 
     @WireVariable
     private UserSessionService userSessionService;
+    
+    private boolean saved;
 
     @Command
     public void close(@ContextParam(ContextType.VIEW) Component comp) {
         comp.detach();
-        Map<String, Object> args = new HashMap<>();
-        args.put("filterCategory", filterCategory);
-        BindUtils.postGlobalCommand(null, null, "addCategories", args);
-
+        if (saved) {
+	        Map<String, Object> args = new HashMap<>();
+	        args.put("filterCategory", filterCategory);
+	        BindUtils.postGlobalCommand(null, null, "addCategories", args);
+        }    
     }
 
     @Init
@@ -52,4 +60,20 @@ public class ChooseCategoriesViewModel implements Serializable {
         String language = userSessionService.getLanguage();
         return category.getNameByLanguage(language);
     }
+    
+    @Command
+    @NotifyChange({ "saved" })
+    public void save() {
+    	saved = true;
+    }
+
+	public boolean isSaved() {
+		return saved;
+	}
+
+	public void setSaved(boolean saved) {
+		this.saved = saved;
+	}
+    
+    
 }

@@ -4,6 +4,10 @@
 	<n:div class="modal-dialog">
 		<div class="modal-content">
 			<n:div class="modal-header">
+				<n:button type="button" class="close"
+					data-dismiss="modal" aria-label="Close">
+					<n:span aria-hidden="true">&#x00D7;</n:span>
+				</n:button>
 				<n:h4 class="modal-title">${labels.cases.actions.changeSubject.select.title}</n:h4>
 			</n:div>
 			<n:div class="modal-body">

@@ -387,6 +387,16 @@ public class CreateCriteriaViewModel implements Serializable {
         filter.getCategories().remove(category);
         BindUtils.postNotifyChange(null, null, filter, "categories");
     }
+    
+    
+    @Command
+    public void editCategories(@BindingParam("filter") CategoryFilterView filter,
+            @BindingParam("category") Category category) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("filterCategory", filter);
+        Executions.createComponents("/pages/triggers/create/choose-categories.zul", null, args);
+        BindUtils.postNotifyChange(null, null, filter, "categories");
+    }
 
     @Command
     @NotifyChange({ "serieOptions", "categoryGroupOptions", "subSerieOptions" })
