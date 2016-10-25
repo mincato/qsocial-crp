@@ -39,7 +39,7 @@ public class UserResolverService {
         }
 
         Set<String> userResolverIds = null;
-        List<UserResolver> userResolvers = userResolverElasticService.getUserResolvers(null, null, null);
+        List<UserResolver> userResolvers = userResolverElasticService.getAllUserResolvers();
         if (userResolvers != null) {
             userResolverIds = userResolvers.stream().map(UserResolver::getSourceId).collect(Collectors.toSet());
         }
