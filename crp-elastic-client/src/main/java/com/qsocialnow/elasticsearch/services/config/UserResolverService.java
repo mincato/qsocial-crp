@@ -29,7 +29,7 @@ public class UserResolverService {
 
         // index document
         UserResolverType documentIndexed = mapping.getDocumentType(userResolver);
-        String response = repository.indexMapping(mapping, documentIndexed);
+        String response = repository.indexMappingAndRefresh(mapping, documentIndexed);
         repository.closeClient();
         return response;
     }

@@ -14,12 +14,12 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.factories.OauthServiceFactory;
+import com.qsocialnow.handler.NotificationHandler;
 import com.qsocialnow.services.OauthService;
 import com.qsocialnow.services.UserResolverService;
 
@@ -48,6 +48,7 @@ public class CreateUserResolverViewModel implements Serializable {
         initOauthServices();
     }
 
+    @SuppressWarnings("unchecked")
     private void initOauthServices() {
         Object sessionOauthServices = Executions.getCurrent().getSession().getAttribute("oauthServices");
         if (sessionOauthServices == null) {
@@ -90,9 +91,10 @@ public class CreateUserResolverViewModel implements Serializable {
             userResolver.setCredentials(currentUserResolver.getUserResolver().getCredentials());
             userResolver.setSourceId(currentUserResolver.getUserResolver().getSourceId());
             userResolver = userResolverService.create(userResolver);
-            Clients.showNotification(Labels.getLabel("userresolver.create.notification.success",
+            NotificationHandler.addNotification(Labels.getLabel("userresolver.create.notification.success",
                     new String[] { userResolver.getIdentifier() }));
             initUserResolver();
+            Executions.getCurrent().sendRedirect("/pages/user-resolver/list/index.zul");
         } else {
             authorized = false;
         }
