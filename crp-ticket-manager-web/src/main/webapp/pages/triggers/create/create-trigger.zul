@@ -249,7 +249,7 @@
 					</div>
 			    	<button onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
 			    		label="${labels.app.button.save}" zclass="btn btn-success" />
-			    	<button href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.cancel}" zclass="btn btn-default"/>	
+			    	<button href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.back}" zclass="btn btn-default"/>			    		
 				</div>
 			</div>
 		</n:div>

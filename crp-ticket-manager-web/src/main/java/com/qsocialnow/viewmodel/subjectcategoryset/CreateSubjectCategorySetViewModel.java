@@ -10,6 +10,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
@@ -17,6 +18,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.handler.NotificationHandler;
 import com.qsocialnow.services.SubjectCategorySetService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -50,9 +52,9 @@ public class CreateSubjectCategorySetViewModel implements Serializable {
             return newCategory;
         }).collect(Collectors.toList()));
         newSubjectCategorySet = subjectCategorySetService.create(newSubjectCategorySet);
-        Clients.showNotification(Labels.getLabel("subjectcategoryset.create.notification.success",
+        NotificationHandler.addNotification(Labels.getLabel("subjectcategoryset.create.notification.success",
                 new String[] { newSubjectCategorySet.getDescription() }));
-        initSubjectCategorySet();
+        Executions.getCurrent().sendRedirect("/pages/subject-category-set/list/index.zul");
     }
 
     @Command

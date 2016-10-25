@@ -73,8 +73,8 @@
 					<div class="form-group text-center">
 						<button onClick="@command('save')"
 							label="${labels.app.button.save}" zclass="btn btn-success" />
-						<button onClick="@command('clear')"
-							label="${labels.app.button.clear}" zclass="btn btn-default" />
+						<button href="/pages/user-resolver/list/index.zul"
+							label="${labels.app.button.back}" zclass="btn btn-default"/>							
 					</div>
 				</x:form>
 			</div>
