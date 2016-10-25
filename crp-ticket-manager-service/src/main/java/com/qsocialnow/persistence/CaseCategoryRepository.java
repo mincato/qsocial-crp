@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.qsocialnow.elasticsearch.services.config.CaseCategoryService;
 
 @Service
-public class CaseCategoryRepository {
+public class CaseCategoryRepository implements ReportRepository {
 
     private Logger log = LoggerFactory.getLogger(CaseCategoryRepository.class);
 
