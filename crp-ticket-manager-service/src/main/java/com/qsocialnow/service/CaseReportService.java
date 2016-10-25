@@ -81,7 +81,8 @@ public class CaseReportService {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             Map<String, ReportRepository> reportRepositories = new HashMap<>();
-            List<String> keys = Arrays.asList("DOMAINS","TRIGGERS","SEGMENTS","CASE_CATEGORIES","SUBJECT_CATEGORIES", "RESOLUTIONS");
+            List<String> keys = Arrays.asList("DOMAINS", "TRIGGERS", "SEGMENTS", "CASE_CATEGORIES",
+                    "SUBJECT_CATEGORIES", "RESOLUTIONS");
             reportRepositories.put("DOMAINS", domainRepository);
             reportRepositories.put("TRIGGERS", triggerRepository);
             reportRepositories.put("SEGMENTS", segmentRepository);

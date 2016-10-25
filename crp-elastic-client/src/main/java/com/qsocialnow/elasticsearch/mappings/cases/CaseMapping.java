@@ -68,6 +68,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setPendingResponse(document.getPendingResponse());
         caseType.setResolution(document.getResolution());
         caseType.setTitle(document.getTitle());
+        caseType.setTitleSort(document.getTitle());
         caseType.setTriggerEvent(document.getTriggerEvent());
         caseType.setUnitValue(document.getUnitValue());
         caseType.setTriggerId(document.getTriggerId());
