@@ -11,7 +11,7 @@ import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.elasticsearch.services.config.ResolutionService;
 
 @Service
-public class ResolutionRepository {
+public class ResolutionRepository implements ReportRepository {
 
     private Logger log = LoggerFactory.getLogger(ResolutionRepository.class);
 

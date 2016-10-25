@@ -13,14 +13,13 @@ import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
-import com.qsocialnow.common.model.config.TriggerReport;
-import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.model.pagination.PageRequest;
+import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.elasticsearch.services.config.SegmentService;
 import com.qsocialnow.elasticsearch.services.config.TriggerService;
 
 @Service
-public class TriggerRepository {
+public class TriggerRepository implements ReportRepository {
 
     private Logger log = LoggerFactory.getLogger(TriggerRepository.class);
 
@@ -129,7 +128,7 @@ public class TriggerRepository {
         return triggers;
     }
 
-    public Map<String, TriggerReport> findAllReport() {
+    public Map<String, String> findAllReport() {
         return triggerElasticService.getAllTriggersAsMap();
     }
 

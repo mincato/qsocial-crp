@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -22,6 +21,7 @@ import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
+import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
@@ -30,12 +30,15 @@ import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.SubjectService;
 import com.qsocialnow.services.TriggerService;
+import com.qsocialnow.services.UserService;
 import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
 
     private static final String NOT_ID_ITEM_VALUE = "NOT_ID";
+
+    private static final Integer NOT_ID_INT_VALUE = -1;
 
     private DateConverter dateConverter;
 
@@ -73,6 +76,10 @@ public class CasesViewModel implements Serializable {
 
     // filters
     private boolean filterActive;
+
+    private UserListView userSelected;
+
+    private List<UserListView> users = new ArrayList<>();
 
     private Long fromDate;
 
@@ -112,6 +119,9 @@ public class CasesViewModel implements Serializable {
     private UserSessionService userSessionService;
 
     @WireVariable
+    private UserService userService;
+
+    @WireVariable
     private LoginConfig loginConfig;
 
     @WireVariable
@@ -124,7 +134,7 @@ public class CasesViewModel implements Serializable {
     public void init() {
         this.initUserInformation();
         this.domains = getDomainsList();
-
+        this.users = getUsersList();
         this.filterActive = false;
         this.pendingOptions = getPendingOptionsList();
         this.statusOptions = getStatusOptionsList();
@@ -164,7 +174,6 @@ public class CasesViewModel implements Serializable {
         } else {
             this.moreResults = false;
         }
-
         return pageResponse;
     }
 
@@ -205,6 +214,10 @@ public class CasesViewModel implements Serializable {
             filters.put("pendingResponse", this.pendingResponse);
         }
 
+        if (userSelected != null && !userSelected.getId().equals(NOT_ID_INT_VALUE)) {
+            filters.put("userSelected", this.userSelected.getUsername());
+        }
+
         if (status != null && !status.equals(ALL_OPTION_VALUE)) {
             filters.put("status", this.status);
         }
@@ -227,6 +240,97 @@ public class CasesViewModel implements Serializable {
     private void setDefaultPage() {
         this.pageSize = PAGE_SIZE_DEFAULT;
         this.activePage = ACTIVE_PAGE_DEFAULT;
+    }
+
+    private List<String> getStatusOptionsList() {
+        String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
+        return new ArrayList<String>(Arrays.asList(options));
+    }
+
+    public DateConverter getDateConverter() {
+        return dateConverter;
+    }
+
+    private List<DomainListView> getDomainsList() {
+        List<DomainListView> domains = new ArrayList<>();
+        PageResponse<DomainListView> domainsResponse;
+        if (isAdmin)
+            domainsResponse = domainService.findAll(0, -1);
+        else
+            domainsResponse = domainService.findAllByUserNameAllowed(this.userName);
+
+        domains = domainsResponse.getItems();
+        if (domains != null) {
+            DomainListView domainBase = new DomainListView();
+            domainBase.setId(NOT_ID_ITEM_VALUE);
+            domainBase.setName(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            domains.add(0, domainBase);
+        }
+        return domains;
+    }
+
+    @Command
+    @NotifyChange({ "triggers", "segments", "trigger", "segment" })
+    public void selectDomain(@BindingParam("domain") DomainListView domain) {
+        triggers.clear();
+        segments.clear();
+        if (domain != null && !domain.getId().equals(NOT_ID_ITEM_VALUE)) {
+            triggers = getTriggerList(domain.getId());
+        }
+        setTrigger(null);
+        setSegment(null);
+    }
+
+    private List<TriggerListView> getTriggerList(String domainId) {
+        List<TriggerListView> triggers = new ArrayList<>();
+        PageResponse<TriggerListView> triggersResponse = triggerService.findAll(domainId, 0, -1, null);
+        triggers = triggersResponse.getItems();
+        if (triggers != null && !triggers.isEmpty()) {
+            TriggerListView triggerBase = new TriggerListView();
+            triggerBase.setId(NOT_ID_ITEM_VALUE);
+            triggerBase.setName(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            triggers.add(0, triggerBase);
+        }
+        return triggers;
+    }
+
+    @Command
+    @NotifyChange({ "segments", "trigger", "segment" })
+    public void selectTrigger(@BindingParam("trigger") TriggerListView trigger) {
+        segments.clear();
+        if (trigger != null && !trigger.getId().equals(NOT_ID_ITEM_VALUE)) {
+            segments = getSegments(domain.getId(), trigger.getId());
+        }
+        setSegment(null);
+    }
+
+    private List<SegmentListView> getSegments(String domainId, String triggerId) {
+        List<SegmentListView> segments = new ArrayList<>();
+        segments = triggerService.findSegments(domainId, triggerId);
+        if (segments != null && !segments.isEmpty()) {
+            SegmentListView segmentBase = new SegmentListView();
+            segmentBase.setId(NOT_ID_ITEM_VALUE);
+            segmentBase.setDescription("all");
+            segmentBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            segments.add(0, segmentBase);
+        }
+        return segments;
+    }
+
+    private List<UserListView> getUsersList() {
+        List<UserListView> users = new ArrayList<>();
+        if (isAdmin)
+            users = userService.findAll(null);
+        else
+            users = userService.findAllByUserName(userName);
+
+        if (users != null && !users.isEmpty()) {
+            UserListView userBase = new UserListView();
+            userBase.setId(NOT_ID_INT_VALUE);
+            userBase.setUsername(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            users.add(0, userBase);
+        }
+        return users;
     }
 
     public List<CaseListView> getCases() {
@@ -386,6 +490,22 @@ public class CasesViewModel implements Serializable {
         this.sortOrder = sortOrder;
     }
 
+    public UserListView getUserSelected() {
+        return userSelected;
+    }
+
+    public void setUserSelected(UserListView userSelected) {
+        this.userSelected = userSelected;
+    }
+
+    public List<UserListView> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<UserListView> users) {
+        this.users = users;
+    }
+
     public void setDomains(List<DomainListView> domains) {
         this.domains = domains;
     }
@@ -404,80 +524,5 @@ public class CasesViewModel implements Serializable {
 
     public void setSegment(SegmentListView segment) {
         this.segment = segment;
-    }
-
-    private List<String> getStatusOptionsList() {
-        String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
-        return new ArrayList<String>(Arrays.asList(options));
-    }
-
-    public DateConverter getDateConverter() {
-        return dateConverter;
-    }
-
-    private List<DomainListView> getDomainsList() {
-        List<DomainListView> domains = new ArrayList<>();
-        PageResponse<DomainListView> domainsResponse;
-        if (isAdmin)
-            domainsResponse = domainService.findAll(0, -1);
-        else
-            domainsResponse = domainService.findAllByUserNameAllowed(this.userName);
-
-        domains = domainsResponse.getItems();
-        if (domains != null) {
-            DomainListView domainBase = new DomainListView();
-            domainBase.setId(NOT_ID_ITEM_VALUE);
-            domainBase.setName(Labels.getLabel(CASES_ALL_LABEL_KEY));
-            domains.add(0, domainBase);
-        }
-        return domains;
-    }
-
-    @Command
-    @NotifyChange({ "triggers", "segments", "trigger", "segment" })
-    public void selectDomain(@BindingParam("domain") DomainListView domain) {
-        triggers.clear();
-        segments.clear();
-        if (domain != null && !domain.getId().equals(NOT_ID_ITEM_VALUE)) {
-            triggers = getTriggerList(domain.getId());
-        }
-        setTrigger(null);
-        setSegment(null);
-    }
-
-    private List<TriggerListView> getTriggerList(String domainId) {
-        List<TriggerListView> triggers = new ArrayList<>();
-        PageResponse<TriggerListView> triggersResponse = triggerService.findAll(domainId, 0, -1, null);
-        triggers = triggersResponse.getItems();
-        if (triggers != null && !triggers.isEmpty()) {
-            TriggerListView triggerBase = new TriggerListView();
-            triggerBase.setId(NOT_ID_ITEM_VALUE);
-            triggerBase.setName(Labels.getLabel(CASES_ALL_LABEL_KEY));
-            triggers.add(0, triggerBase);
-        }
-        return triggers;
-    }
-
-    @Command
-    @NotifyChange({ "segments", "trigger", "segment" })
-    public void selectTrigger(@BindingParam("trigger") TriggerListView trigger) {
-        segments.clear();
-        if (trigger != null && !trigger.getId().equals(NOT_ID_ITEM_VALUE)) {
-            segments = getSegments(domain.getId(), trigger.getId());
-        }
-        setSegment(null);
-    }
-
-    private List<SegmentListView> getSegments(String domainId, String triggerId) {
-        List<SegmentListView> segments = new ArrayList<>();
-        segments = triggerService.findSegments(domainId, triggerId);
-        if (segments != null && !segments.isEmpty()) {
-            SegmentListView segmentBase = new SegmentListView();
-            segmentBase.setId(NOT_ID_ITEM_VALUE);
-            segmentBase.setDescription("all");
-            segmentBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
-            segments.add(0, segmentBase);
-        }
-        return segments;
     }
 }

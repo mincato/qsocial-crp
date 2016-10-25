@@ -57,10 +57,6 @@
 	margin-left: 5px;
 }
 
-.sidebar .sidebar-title > h4 {
-	font-size: 13px
-}
-
 .sidebar .sidebar-title > i {
 	cursor: pointer;
 }
@@ -69,6 +65,10 @@
 	color: #FFFFFF;
 	display: inline-block;
 	background-color: #64b3ac;
+}
+
+.sidebar .sidebar-subtitle > h4 {
+	display: inline-block;
 }
 
 .sidebar a.disabled {
