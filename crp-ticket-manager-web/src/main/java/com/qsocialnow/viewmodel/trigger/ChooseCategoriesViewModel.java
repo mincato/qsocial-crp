@@ -33,17 +33,17 @@ public class ChooseCategoriesViewModel implements Serializable {
 
     @WireVariable
     private UserSessionService userSessionService;
-    
+
     private boolean saved;
 
     @Command
     public void close(@ContextParam(ContextType.VIEW) Component comp) {
         comp.detach();
         if (saved) {
-	        Map<String, Object> args = new HashMap<>();
-	        args.put("filterCategory", filterCategory);
-	        BindUtils.postGlobalCommand(null, null, "addCategories", args);
-        }    
+            Map<String, Object> args = new HashMap<>();
+            args.put("filterCategory", filterCategory);
+            BindUtils.postGlobalCommand(null, null, "addCategories", args);
+        }
     }
 
     @Init
@@ -60,20 +60,19 @@ public class ChooseCategoriesViewModel implements Serializable {
         String language = userSessionService.getLanguage();
         return category.getNameByLanguage(language);
     }
-    
+
     @Command
     @NotifyChange({ "saved" })
     public void save() {
-    	saved = true;
+        saved = true;
     }
 
-	public boolean isSaved() {
-		return saved;
-	}
+    public boolean isSaved() {
+        return saved;
+    }
 
-	public void setSaved(boolean saved) {
-		this.saved = saved;
-	}
-    
-    
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
+
 }

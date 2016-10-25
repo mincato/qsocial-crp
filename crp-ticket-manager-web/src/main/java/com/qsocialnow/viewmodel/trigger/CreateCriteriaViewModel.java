@@ -388,8 +388,7 @@ public class CreateCriteriaViewModel implements Serializable {
         filter.getCategories().remove(category);
         BindUtils.postNotifyChange(null, null, filter, "categories");
     }
-    
-    
+
     @Command
     public void editCategories(@BindingParam("filter") CategoryFilterView filter,
             @BindingParam("category") Category category) {

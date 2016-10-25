@@ -26,7 +26,7 @@ public class ChooseCaseCategoriesViewModel implements Serializable {
     private static final long serialVersionUID = -7485400424668315566L;
 
     private TagCaseCategorySetView caseCategorySet;
-    
+
     private boolean saved;
 
     @WireVariable
@@ -49,20 +49,19 @@ public class ChooseCaseCategoriesViewModel implements Serializable {
     public TagCaseCategorySetView getCaseCategorySet() {
         return caseCategorySet;
     }
-    
+
     @Command
     @NotifyChange({ "saved" })
     public void save() {
-    	saved = true;
+        saved = true;
     }
 
-	public boolean isSaved() {
-		return saved;
-	}
+    public boolean isSaved() {
+        return saved;
+    }
 
-	public void setSaved(boolean saved) {
-		this.saved = saved;
-	}
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
 
-    
 }

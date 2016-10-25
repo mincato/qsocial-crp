@@ -194,9 +194,7 @@
                         @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.registry.filter.todate}" />
                     </x:div>
                 </n:div>
-                
-                
-                <n:div class="col-md-1">
+                <n:div class="col-md-3">
                     <div zclass="input-group input-group-sm">
                          <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" placeholder="${labels.cases.registry.filter.description}"/>
 	               </div>
