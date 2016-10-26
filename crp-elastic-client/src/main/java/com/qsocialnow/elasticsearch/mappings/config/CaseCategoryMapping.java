@@ -8,7 +8,7 @@ import com.qsocialnow.elasticsearch.mappings.types.config.CaseCategoryType;
 
 public class CaseCategoryMapping implements Mapping<CaseCategoryType, CaseCategory> {
 
-    private static final String TYPE = "caseCategory";
+    public static final String TYPE = "caseCategory";
 
     private static CaseCategoryMapping instance;
 

@@ -66,7 +66,7 @@ public class Subject implements Serializable {
     }
 
     public void setIdentifier(String identifier) {
-    	this.identifier = SubjectIdentifierNormalizer.normalize(identifier);
+        this.identifier = SubjectIdentifierNormalizer.normalize(identifier);
     }
 
     public String getProfileImage() {

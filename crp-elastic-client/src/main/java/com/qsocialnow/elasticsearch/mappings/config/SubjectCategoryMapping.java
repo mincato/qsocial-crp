@@ -8,7 +8,7 @@ import com.qsocialnow.elasticsearch.mappings.types.config.SubjectCategoryType;
 
 public class SubjectCategoryMapping implements Mapping<SubjectCategoryType, SubjectCategory> {
 
-    private static final String TYPE = "subjectCategory";
+    public static final String TYPE = "subjectCategory";
 
     private static SubjectCategoryMapping instance;
 

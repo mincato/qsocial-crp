@@ -1,0 +1,5 @@
+{"properties": 
+    {
+    "idCaseCategorySet": {"type": "string","index": "not_analyzed"}
+    }
+}

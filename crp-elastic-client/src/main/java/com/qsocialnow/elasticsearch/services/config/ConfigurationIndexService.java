@@ -13,6 +13,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.elasticsearch.configuration.Configurator;
+import com.qsocialnow.elasticsearch.mappings.config.CaseCategoryMapping;
+import com.qsocialnow.elasticsearch.mappings.config.DomainMapping;
+import com.qsocialnow.elasticsearch.mappings.config.ResolutionMapping;
+import com.qsocialnow.elasticsearch.mappings.config.SegmentMapping;
+import com.qsocialnow.elasticsearch.mappings.config.SubjectCategoryMapping;
+import com.qsocialnow.elasticsearch.mappings.config.TriggerMapping;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 
@@ -20,7 +26,8 @@ public class ConfigurationIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(ConfigurationIndexService.class);
 
-    private static final String[] MAPPING_TYPES = { "domain", "resolution" };
+    private static final String[] MAPPING_TYPES = { DomainMapping.TYPE, ResolutionMapping.TYPE, SegmentMapping.TYPE,
+            TriggerMapping.TYPE, CaseCategoryMapping.TYPE, SubjectCategoryMapping.TYPE };
 
     private String indexName;
 
