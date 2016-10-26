@@ -932,11 +932,6 @@ TABLE OF CONTENTS
             cursor: pointer;
         }
        
-        /**.sort > span {
-        	display:flex;
-        	align-items: flex-end;
-        }*/
-        
         .sort >span:after {
             font: normal normal normal 14px/1 FontAwesome;
             position: relative;

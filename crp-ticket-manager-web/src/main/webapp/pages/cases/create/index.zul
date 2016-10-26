@@ -8,6 +8,8 @@
 <?link href="/assets/css/header.css" rel="stylesheet"?>
 <?link href="/assets/css/problematics.css" rel="stylesheet"?>
 <?link href="/assets/css/ui.css" rel="stylesheet"?>
+<!-- iCheck -->
+<?link href="/vendor/plugins/form/icheck/skins/square/_all.css" rel="stylesheet"?>
 <?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
 <?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
 <?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
@@ -37,8 +39,20 @@
 	<!-- FOOTER -->
 	<include src="/assets/core/footer.html" />
 	<!-- FOOTER -->
-
+	
 	<!-- REQUIRED SCRIPTS -->
 	<?script src="/vendor/js/required.min.js" type="text/javascript" ?>
 	<?script src="/assets/js/quarca.js" type="text/javascript" ?>
+	<?script src="/vendor/plugins/form/icheck/icheck.min.js" ?>
+	
+	 <script type="text/javascript">
+	 "use strict";
+	 zk.afterMount(function() {
+	  
+	    $(document).ready(function() {
+     $('.green input').iCheck({
+		    checkboxClass: 'icheckbox_square-green',
+		    radioClass: 'iradio_square-green',
+		}); });});
+    </script>
 </zk>
