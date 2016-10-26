@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
@@ -70,7 +71,7 @@ public interface Repository<T> {
     public <E> SearchResponse<E> searchChildMappingWithFilters(int from, int size, String sortField,
             QueryBuilder filters, ChildMapping<T, E> mapping);
 
-    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
+    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField, SortOrder sortOrder,
             BoolQueryBuilder filters, Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping);
