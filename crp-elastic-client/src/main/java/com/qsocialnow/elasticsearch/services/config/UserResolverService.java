@@ -47,7 +47,8 @@ public class UserResolverService {
 
         UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
 
-        SearchResponse<UserResolver> response = repository.searchWithFilters(offset, limit, null, filters, mapping);
+        SearchResponse<UserResolver> response = repository.searchWithFilters(offset, limit, null, null, filters,
+                mapping);
         List<UserResolver> userResolvers = response.getSources();
 
         repository.closeClient();

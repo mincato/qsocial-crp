@@ -41,6 +41,7 @@ router.get('/cases/report', function (req, res) {
 	  var triggerId = req.query.triggerId?req.query.triggerId :null;
 	  var segmentId = req.query.segmentId?req.query.segmentId :null;
 	  
+	  var userSelected = req.query.userSelected?req.query.userSelected :null;
 	  var userName = req.query.userName?req.query.userName :null;
 	  var subject = req.query.subject?req.query.subject :null;
 	  var title = req.query.title?req.query.title :null;
@@ -52,7 +53,7 @@ router.get('/cases/report', function (req, res) {
 	  var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
 
 	  var caseService = javaContext.getBeanSync("caseReportService");
-	  caseService.getReport(domainId,triggerId,segmentId,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName,asyncResponse);
+	  caseService.getReport(domainId,triggerId,segmentId,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName,userSelected,asyncResponse);
 	  
 });
 

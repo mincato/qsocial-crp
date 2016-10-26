@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
@@ -68,7 +69,8 @@ public class TriggerService {
             filters = filters.filter(QueryBuilders.rangeQuery("end")
                     .gte(Long.parseLong(triggerListRequest.getToDate())));
         }
-        SearchResponse<Trigger> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
+        SearchResponse<Trigger> response = repository.searchWithFilters(offset, limit, "name", SortOrder.ASC, filters,
+                mapping);
         List<Trigger> triggers = response.getSources();
 
         repository.closeClient();

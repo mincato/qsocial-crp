@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -47,7 +48,8 @@ public class TeamService {
             filters = filters.must(QueryBuilders.matchQuery("name", name));
         }
 
-        SearchResponse<Team> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
+        SearchResponse<Team> response = repository.searchWithFilters(offset, limit, "name", SortOrder.ASC, filters,
+                mapping);
         List<Team> teams = response.getSources();
 
         repository.closeClient();
@@ -102,7 +104,21 @@ public class TeamService {
             filters = QueryBuilders.boolQuery();
             filters = filters.must(QueryBuilders.matchQuery("users.username", userName));
         }
-        SearchResponse<Team> response = repository.searchWithFilters(null, null, null, filters, mapping);
+        SearchResponse<Team> response = repository.searchWithFilters(null, null, null, null, filters, mapping);
+        List<Team> teams = response.getSources();
+
+        repository.closeClient();
+        return teams;
+    }
+
+    public List<Team> getTeams() {
+        RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
+        Repository<TeamType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
+
+        SearchResponse<Team> response = repository.search(mapping);
         List<Team> teams = response.getSources();
 
         repository.closeClient();

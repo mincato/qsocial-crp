@@ -77,6 +77,27 @@ public class DomainRepository implements ReportRepository {
         return domains;
     }
 
+    public List<DomainListView> findAll() {
+        List<DomainListView> domains = new ArrayList<>();
+
+        try {
+            List<Domain> domainsRepo = domainElasticService.getDomains();
+
+            for (Domain domainRepo : domainsRepo) {
+                DomainListView domainListView = new DomainListView();
+                domainListView.setId(domainRepo.getId());
+                domainListView.setName(domainRepo.getName());
+
+                List<Long> thematics = domainRepo.getThematics();
+                domainListView.setThematicIds(thematics);
+                domains.add(domainListView);
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return domains;
+    }
+
     public List<DomainListView> findAllByName(PageRequest pageRequest, String name) {
         List<DomainListView> domains = new ArrayList<>();
 

@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -88,7 +89,22 @@ public class DomainService {
         repository.initClient();
 
         DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
-        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", null, mapping);
+        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", SortOrder.ASC, null,
+                mapping);
+
+        List<Domain> domains = response.getSources();
+
+        repository.closeClient();
+        return domains;
+    }
+
+    public List<Domain> getDomains() {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+
+        DomainMapMapping mapping = DomainMapMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Domain> response = repository.search(mapping);
 
         List<Domain> domains = response.getSources();
 
@@ -127,7 +143,8 @@ public class DomainService {
             filters = filters.must(QueryBuilders.matchQuery("name", name));
         }
 
-        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
+        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", SortOrder.ASC, filters,
+                mapping);
         List<Domain> domains = response.getSources();
         repository.closeClient();
         return domains;
@@ -175,4 +192,5 @@ public class DomainService {
     public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
         this.indexConfiguration = indexConfiguration;
     }
+
 }
