@@ -37,7 +37,7 @@ public class CaseCategorySetService {
 
         // index document
         CaseCategorySetType documentIndexed = mapping.getDocumentType(caseCategorySet);
-        String idCaseCategorySet = repository.indexMapping(mapping, documentIndexed);
+        String idCaseCategorySet = repository.indexMappingAndRefresh(mapping, documentIndexed);
 
         caseCategorySet.setId(idCaseCategorySet);
         repository.closeClient();

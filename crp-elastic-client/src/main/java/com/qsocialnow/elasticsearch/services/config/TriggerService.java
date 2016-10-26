@@ -36,7 +36,7 @@ public class TriggerService {
         // index document
         TriggerType documentIndexed = mapping.getDocumentType(trigger);
         documentIndexed.setDomainId(domainId);
-        String response = repository.indexMapping(mapping, documentIndexed);
+        String response = repository.indexMappingAndRefresh(mapping, documentIndexed);
         repository.closeClient();
 
         segmentService.indexSegments(response, trigger.getSegments());

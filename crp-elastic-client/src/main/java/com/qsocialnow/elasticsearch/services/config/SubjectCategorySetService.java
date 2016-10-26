@@ -39,7 +39,7 @@ public class SubjectCategorySetService {
 
         // index document
         SubjectCategorySetType documentIndexed = mapping.getDocumentType(subjectCategorySet);
-        String idSubjectCategorySet = repository.indexMapping(mapping, documentIndexed);
+        String idSubjectCategorySet = repository.indexMappingAndRefresh(mapping, documentIndexed);
 
         subjectCategorySet.setId(idSubjectCategorySet);
         repository.closeClient();
