@@ -18,4 +18,5 @@ public interface DomainService {
 
     PageResponse<DomainListView> findAllByName(int pageNumber, int pageSize, String name);
 
+    PageResponse<DomainListView> findAll();
 }

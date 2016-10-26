@@ -109,4 +109,18 @@ public class TeamService {
         return teams;
     }
 
+    public List<Team> getTeams() {
+        RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
+        Repository<TeamType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
+
+        SearchResponse<Team> response = repository.search(mapping);
+        List<Team> teams = response.getSources();
+
+        repository.closeClient();
+        return teams;
+    }
+
 }
