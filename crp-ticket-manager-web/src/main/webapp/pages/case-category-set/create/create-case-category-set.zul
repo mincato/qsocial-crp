@@ -5,8 +5,10 @@
 	validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native"
 	xmlns:ca="client/attribute">
 	<n:div class="row">
-		<n:div id="page-header" class="pane equal">
-			<n:h4>${labels.casecategoryset.create.title}</n:h4>
+		<n:div class="col-sm-12">
+			<n:div id="page-header" class="pane equal">
+				<n:h4>${labels.casecategoryset.create.title}</n:h4>
+			</n:div>
 		</n:div>
 	</n:div>
 
