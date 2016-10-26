@@ -2865,3 +2865,8 @@ button.remove {
 .form-inline .form-group > label {
     margin-right: 5px;
 }
+
+#page-header {
+	display:flex;
+	align-items: center;
+}

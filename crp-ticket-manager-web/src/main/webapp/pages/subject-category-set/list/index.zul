@@ -15,7 +15,7 @@
 <?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
 <?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
 <zk xmlns:n="native">
-	<div class="wrapper wrapper-serie dashboard">
+	<n:div class="wrapper wrapper-serie dashboard">
 		<!-- HEADER -->
 		<include src="/assets/core/header.zul" />
 		<!-- Header elements are fetched via ajax. Go to assets/core/header.html to edit. -->
@@ -35,7 +35,7 @@
 		</div><!-- main -->
 		<!-- MAIN  -->
 
-	</div><!-- wrapper -->
+	</n:div><!-- wrapper -->
 	<!-- FOOTER -->
 	<include src="/assets/core/footer.html" />
 	<!-- FOOTER -->

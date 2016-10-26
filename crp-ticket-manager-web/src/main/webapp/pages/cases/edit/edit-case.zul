@@ -4,7 +4,7 @@
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml"
 	validationMessages="@id('vmsgs')">
 	<n:div class="row">
-        <n:div>
+        <n:div class="col-sm-12">
             <n:div id="page-header" class="pane equal">
                 <n:h4>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h4>
             </n:div>
@@ -42,23 +42,21 @@
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
-            					${labels.cases.details.opendate}
+            					${labels.cases.details.pendingResponse}
             				</n:label>
             				<n:div class="col-sm-9">
             					<n:div sclass="form-control-static">
-            						<label
-            							value="@load(vm.currentCase.caseObject.openDate)  @converter(vm.dateConverter)" />
+            						<label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.caseObject.pendingResponse)))"/>
             					</n:div>
             				</n:div>
             			</n:div>
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
-            					${labels.cases.details.closedate}
+            					${labels.cases.details.priority}
             				</n:label>
             				<n:div class="col-sm-9">
             					<n:div sclass="form-control-static">
-            						<label
-            							value="@load(vm.currentCase.caseObject.closeDate)  @converter(vm.dateConverter)" />
+            						<label value="@load(c:l(c:cat('cases.priority.',vm.currentCase.caseObject.priority)))"></label>
             					</n:div>
             				</n:div>
             			</n:div>
@@ -89,6 +87,63 @@
             			</n:div>
             		</n:div>
             	</n:div>
+            	<n:hr/>
+            	<n:div class="row">
+            		<n:div class="col-sm-6">
+            			<n:div class="form-group">
+            				<n:label class="control-label col-sm-3">
+            					${labels.cases.details.opendate}
+            				</n:label>
+            				<n:div class="col-sm-9">
+            					<n:div sclass="form-control-static">
+            						<label
+            							value="@load(vm.currentCase.caseObject.openDate)  @converter(vm.dateConverter)" />
+            					</n:div>
+            				</n:div>
+            			</n:div>
+            		</n:div>
+            		<n:div class="col-sm-6">
+            			<n:div class="form-group">
+            				<n:label class="control-label col-sm-3">
+            					${labels.cases.details.closedate}
+            				</n:label>
+            				<n:div class="col-sm-9">
+            					<n:div sclass="form-control-static">
+            						<label
+            							value="@load(vm.currentCase.caseObject.closeDate)  @converter(vm.dateConverter)" />
+            					</n:div>
+            				</n:div>
+            			</n:div>
+            		</n:div>
+            	</n:div>
+            	<n:hr/>
+            	<n:div class="row">
+            		<n:div class="col-sm-6">
+            			<n:div class="form-group">
+            				<n:label class="control-label col-sm-3">
+            					${labels.cases.details.source}
+            				</n:label>
+            				<n:div class="col-sm-9">
+            					<n:div sclass="form-control-static">
+            						<span zclass="btn-social-icon btn" sclass="@load(c:cat('btn-',vm.currentCase.source.icon))"><i sclass="@load('fa fa-'.concat(vm.currentCase.source.icon))" /></span>
+            					</n:div>
+            				</n:div>
+            			</n:div>
+            		</n:div>
+            		<n:div class="col-sm-6">
+            			<n:div class="form-group">
+            				<n:label class="control-label col-sm-3">
+            					${labels.cases.details.subject}
+            				</n:label>
+            				<n:div class="col-sm-9">
+            					<n:div sclass="form-control-static">
+									<label visible="@load(not empty vm.currentCase.caseObject.subject)" value="@load(vm.currentCase.caseObject.subject.identifier)"></label>
+            					</n:div>
+            				</n:div>
+            			</n:div>
+            		</n:div>
+            	</n:div>
+            	<n:hr/>
             	<n:div class="row">
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
@@ -134,67 +189,7 @@
 
             		</n:div>
             	</n:div>
-            	<n:div class="row">
-            		<n:div class="col-sm-6">
-            			<n:div class="form-group">
-            				<n:label class="control-label col-sm-3">
-            					${labels.cases.details.pendingResponse}
-            				</n:label>
-            				<n:div class="col-sm-9">
-            					<n:div sclass="form-control-static">
-            						<label value="@load(c:l(c:cat('cases.pendingResponse.',vm.currentCase.caseObject.pendingResponse)))"/>
-            					</n:div>
-            				</n:div>
-            			</n:div>
-            		</n:div>
-            		<n:div class="col-sm-6">
-            			<n:div class="form-group">
-            				<n:label class="control-label col-sm-3">
-            					${labels.cases.details.attachments}
-            				</n:label>
-            				<n:div class="col-sm-9">
-            					<n:div sclass="form-control-static">
-            						<div children="@load(vm.currentCase.caseObject.attachments)">
-										<template name="children">
-											<a onClick="@command('downloadAttachment', attachment=each)">
-												<span>
-													<label class="label label-primary" value="${each}"/>
-												</span>
-											</a>
-										</template>
-									</div>
-            					</n:div>
-            				</n:div>
-            			</n:div>
-
-            		</n:div>
-            	</n:div>
-            	<n:div class="row">
-            		<n:div class="col-sm-6">
-            			<n:div class="form-group">
-            				<n:label class="control-label col-sm-3">
-            					${labels.cases.details.source}
-            				</n:label>
-            				<n:div class="col-sm-9">
-            					<n:div sclass="form-control-static">
-            						<span zclass="btn-social-icon btn" sclass="@load(c:cat('btn-',vm.currentCase.source.icon))"><i sclass="@load('fa fa-'.concat(vm.currentCase.source.icon))" /></span>
-            					</n:div>
-            				</n:div>
-            			</n:div>
-            		</n:div>
-            		<n:div class="col-sm-6">
-            			<n:div class="form-group">
-            				<n:label class="control-label col-sm-3">
-            					${labels.cases.details.subject}
-            				</n:label>
-            				<n:div class="col-sm-9">
-            					<n:div sclass="form-control-static">
-									<label visible="@load(not empty vm.currentCase.caseObject.subject)" value="@load(vm.currentCase.caseObject.subject.identifier)"></label>
-            					</n:div>
-            				</n:div>
-            			</n:div>
-            		</n:div>
-            	</n:div>
+            	<n:hr/>
             	<n:div class="row">
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
@@ -210,16 +205,6 @@
 											</span>
 										</template>
 									</div>
-            					</n:div>
-            				</n:div>
-            			</n:div>
-            			<n:div class="form-group">
-            				<n:label class="control-label col-sm-3">
-            					${labels.cases.details.priority}
-            				</n:label>
-            				<n:div class="col-sm-9">
-            					<n:div sclass="form-control-static">
-            						<label value="@load(c:l(c:cat('cases.priority.',vm.currentCase.caseObject.priority)))"></label>
             					</n:div>
             				</n:div>
             			</n:div>
@@ -242,6 +227,30 @@
             				</n:div>
             			</n:div>
             			
+            		</n:div>
+            	</n:div>
+            	<n:hr/>
+            	<n:div class="row">
+            		<n:div class="col-sm-6">
+            			<n:div class="form-group">
+            				<n:label class="control-label col-sm-3">
+            					${labels.cases.details.attachments}
+            				</n:label>
+            				<n:div class="col-sm-9">
+            					<n:div sclass="form-control-static">
+            						<div children="@load(vm.currentCase.caseObject.attachments)">
+										<template name="children">
+											<a onClick="@command('downloadAttachment', attachment=each)">
+												<span>
+													<label class="label label-primary" value="${each}"/>
+												</span>
+											</a>
+										</template>
+									</div>
+            					</n:div>
+            				</n:div>
+            			</n:div>
+
             		</n:div>
             	</n:div>
             </x:form>

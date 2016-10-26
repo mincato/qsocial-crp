@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import com.qsocialnow.common.model.event.GeoSocialEventLocationMethod;
+import com.qsocialnow.common.util.SubjectIdentifierNormalizer;
 
 public class Subject implements Serializable {
 
@@ -65,13 +66,7 @@ public class Subject implements Serializable {
     }
 
     public void setIdentifier(String identifier) {
-        if (identifier != null) {
-            String[] identifierTokens = identifier.split("\\s+http");
-            if (identifierTokens.length > 0)
-                this.identifier = identifierTokens[0];
-            else
-                this.identifier = identifier;
-        }
+    	this.identifier = SubjectIdentifierNormalizer.normalize(identifier);
     }
 
     public String getProfileImage() {
