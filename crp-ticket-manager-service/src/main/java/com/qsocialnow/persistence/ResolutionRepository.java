@@ -1,5 +1,7 @@
 package com.qsocialnow.persistence;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,7 @@ import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.elasticsearch.services.config.ResolutionService;
 
 @Service
-public class ResolutionRepository {
+public class ResolutionRepository implements ReportRepository {
 
     private Logger log = LoggerFactory.getLogger(ResolutionRepository.class);
 
@@ -49,6 +51,10 @@ public class ResolutionRepository {
             log.error("Unexpected error", e);
         }
         return null;
+    }
+
+    public Map<String, String> findAllReport() {
+        return resolutionElasticService.getAllResolutionsAsMap();
     }
 
 }

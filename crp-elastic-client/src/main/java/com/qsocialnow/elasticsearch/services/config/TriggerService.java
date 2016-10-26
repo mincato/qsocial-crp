@@ -7,10 +7,8 @@ import java.util.Map;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
-import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.Trigger;
-import com.qsocialnow.common.model.config.TriggerReport;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.TriggerMapping;
@@ -38,7 +36,7 @@ public class TriggerService {
         // index document
         TriggerType documentIndexed = mapping.getDocumentType(trigger);
         documentIndexed.setDomainId(domainId);
-        String response = repository.indexMapping(mapping, documentIndexed);
+        String response = repository.indexMappingAndRefresh(mapping, documentIndexed);
         repository.closeClient();
 
         segmentService.indexSegments(response, trigger.getSegments());
@@ -166,6 +164,17 @@ public class TriggerService {
         return response;
     }
 
+    public List<Trigger> getTriggersByIds(List<String> triggerIds) {
+        RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
+        Repository<TriggerType> repository = esfactory.initManager();
+        repository.initClient();
+        TriggerMapping mapping = TriggerMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Trigger> response = repository.queryByIds(mapping, null, triggerIds);
+        List<Trigger> triggers = response.getSources();
+        repository.closeClient();
+        return triggers;
+    }
+
     public void setSegmentService(SegmentService segmentService) {
         this.segmentService = segmentService;
     }
@@ -174,7 +183,7 @@ public class TriggerService {
         this.indexConfiguration = indexConfiguration;
     }
 
-    public Map<String, TriggerReport> getAllTriggersAsMap() {
+    public Map<String, String> getAllTriggersAsMap() {
         RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
@@ -186,15 +195,9 @@ public class TriggerService {
         List<Trigger> triggers = response.getSources();
 
         repository.closeClient();
-        Map<String, TriggerReport> map = new HashMap<String, TriggerReport>();
+        Map<String, String> map = new HashMap<String, String>();
         for (Trigger trigger : triggers) {
-            TriggerReport triggerReport = new TriggerReport();
-            triggerReport.setName(trigger.getName());
-            List<Segment> segments = segmentService.getSegments(trigger.getId());
-            for (Segment segment : segments) {
-                triggerReport.getSegments().put(segment.getId(), segment.getDescription());
-            }
-            map.put(trigger.getId(), triggerReport);
+            map.put(trigger.getId(), trigger.getName());
         }
         return map;
     }

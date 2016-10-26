@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -17,8 +15,6 @@ import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class CaseCategoryService {
-
-    private static final Logger log = LoggerFactory.getLogger(CaseCategoryService.class);
 
     private AWSElasticsearchConfigurationProvider configurator;
 

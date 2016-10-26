@@ -9,19 +9,8 @@ public class TriggerType extends Trigger {
     @JestId
     private String idTrigger;
 
-    private String domainId;
-
     @Override
     public String getId() {
         return this.idTrigger;
     }
-
-    public void setDomainId(String domainId) {
-        this.domainId = domainId;
-    }
-
-    public String getDomainId() {
-        return domainId;
-    }
-
 }

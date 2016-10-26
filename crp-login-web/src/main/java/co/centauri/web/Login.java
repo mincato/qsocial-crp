@@ -39,6 +39,8 @@ public class Login extends HttpServlet {
 	
 	private static final Long ORGANIZATION = 2L;
 	
+	private static final String USER_2046 = "2046";
+	
 	private static final Map<String, Long> organizations;
 
 	private static final Logger LOGGER = Logger.getLogger(Login.class);
@@ -54,6 +56,7 @@ public class Login extends HttpServlet {
 	static {
 		organizations = new HashMap<>();
 		organizations.put("diego", 10l);
+		organizations.put(USER_2046, 2046l);
 	}
 
 	@Override
@@ -81,7 +84,7 @@ public class Login extends HttpServlet {
 		String role = split[0];
 		String locale = split.length > 1 ? split[1] : "";
 		user.setOdatech(ODATECH.compareToIgnoreCase(role) == 0);
-		user.setPrcAdmin(ADMIN.compareToIgnoreCase(role) == 0 || ODATECH.compareToIgnoreCase(role) == 0);
+		user.setPrcAdmin(ADMIN.compareToIgnoreCase(role) == 0 || ODATECH.compareToIgnoreCase(role) == 0 || USER_2046.compareToIgnoreCase(role) == 0);
 		user.setAnalyticsAllowed(ADMIN.compareToIgnoreCase(role) == 0 || ODATECH.compareToIgnoreCase(role) == 0);
 		user.setOrganization(organizations.getOrDefault(username, ORGANIZATION));
 		if (locale.endsWith(LATIN)) {

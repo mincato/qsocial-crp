@@ -15,7 +15,7 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.config.DomainService;
 
 @Service
-public class DomainRepository {
+public class DomainRepository implements ReportRepository {
 
     private Logger log = LoggerFactory.getLogger(DomainRepository.class);
 
@@ -95,6 +95,18 @@ public class DomainRepository {
             }
         } catch (Exception e) {
             log.error("Unexpected error", e);
+        }
+        return domains;
+    }
+
+    public List<DomainListView> findDomainsByIds(List<String> domainsIds) {
+        List<DomainListView> domains = new ArrayList<>();
+        List<Domain> domainsRepo = domainElasticService.getDomainsByIds(domainsIds);
+        for (Domain domainRepo : domainsRepo) {
+            DomainListView domainListView = new DomainListView();
+            domainListView.setId(domainRepo.getId());
+            domainListView.setName(domainRepo.getName());
+            domains.add(domainListView);
         }
         return domains;
     }

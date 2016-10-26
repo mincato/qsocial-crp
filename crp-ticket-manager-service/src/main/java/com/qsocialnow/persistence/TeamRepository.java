@@ -78,11 +78,6 @@ public class TeamRepository {
 
     public List<Team> findTeams(String userName) {
         List<Team> teamsRepo = teamElasticService.findTeamsByUser(userName);
-        if (teamsRepo != null) {
-            for (Team team : teamsRepo) {
-                log.info("retrieving teams: " + team.getName());
-            }
-        }
         return teamsRepo;
     }
 

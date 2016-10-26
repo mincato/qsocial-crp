@@ -10,13 +10,14 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
+import com.qsocialnow.handler.NotificationHandler;
 import com.qsocialnow.services.CaseCategorySetService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -50,9 +51,9 @@ public class CreateCaseCategorySetViewModel implements Serializable {
             return newCategory;
         }).collect(Collectors.toList()));
         newCaseCategorySet = caseCategorySetService.create(newCaseCategorySet);
-        Clients.showNotification(Labels.getLabel("casecategoryset.create.notification.success",
+        NotificationHandler.addNotification(Labels.getLabel("casecategoryset.create.notification.success",
                 new String[] { newCaseCategorySet.getDescription() }));
-        initCaseCategorySet();
+        Executions.getCurrent().sendRedirect("/pages/case-category-set/list/index.zul");
     }
 
     @Command

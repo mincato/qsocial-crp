@@ -8,9 +8,9 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.BaseUserResolver;
@@ -18,6 +18,7 @@ import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.config.UserResolverListView;
+import com.qsocialnow.handler.NotificationHandler;
 import com.qsocialnow.model.ListView;
 import com.qsocialnow.services.TeamService;
 import com.qsocialnow.services.UserResolverService;
@@ -87,10 +88,9 @@ public class CreateTeamViewModel extends EditableTeamViewModel implements Serial
             return user;
         }).collect(Collectors.toList()));
         team = teamService.create(team);
-        Clients.showNotification(Labels.getLabel("team.create.notification.success", new String[] { team.getName() }));
-        initTeam();
-        initUsers();
-        initUsersResolver();
+        NotificationHandler.addNotification(Labels.getLabel("team.create.notification.success",
+                new String[] { team.getName() }));
+        Executions.getCurrent().sendRedirect("/pages/team/list/index.zul");
     }
 
     @Command

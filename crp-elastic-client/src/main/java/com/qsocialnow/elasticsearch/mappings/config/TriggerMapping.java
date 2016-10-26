@@ -73,6 +73,7 @@ public class TriggerMapping implements Mapping<TriggerType, Trigger> {
         trigger.setStatus(documentType.getStatus());
         trigger.setCaseCategoriesSetIds(documentType.getCaseCategoriesSetIds());
         trigger.setSubjectCategoriesSetIds(documentType.getSubjectCategoriesSetIds());
+        trigger.setDomainId(documentType.getDomainId());
         return trigger;
     }
 

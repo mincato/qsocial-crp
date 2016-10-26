@@ -61,6 +61,7 @@ public class SegmentMapping implements Mapping<SegmentType, Segment> {
         segment.setDescription(documentType.getDescription());
         segment.setDetectionCriterias(documentType.getDetectionCriterias());
         segment.setTeam(documentType.getTeam());
+        segment.setTriggerId(documentType.getTriggerId());
         return segment;
     }
 

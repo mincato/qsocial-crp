@@ -22,8 +22,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.qsocialnow.common.model.config.TriggerReport;
-
 public class CaseReportServiceTest {
 
     private static String PATH_FILE_JRXML = "src/test/resources/reports/cases.jrxml";
@@ -43,7 +41,7 @@ public class CaseReportServiceTest {
         JasperReport compiledReport = JasperCompileManager.compileReport(PATH_FILE_JRXML);
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("DOMAINS", new HashMap<String, String>());
-        params.put("TRIGGERS", new HashMap<String, TriggerReport>());
+        params.put("TRIGGERS", new HashMap<String, String>());
         Map<String, String> caseCategories = new HashMap<String, String>();
         caseCategories.put("AVfFSpXRgeHP5kyJ43lW", "case category 1");
         caseCategories.put("AVfFSpXqgeHP5kyJ43lX", "case category 2");

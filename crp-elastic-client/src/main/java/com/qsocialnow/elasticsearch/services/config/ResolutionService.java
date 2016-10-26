@@ -1,6 +1,8 @@
 package com.qsocialnow.elasticsearch.services.config;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -141,6 +143,25 @@ public class ResolutionService {
         }
         repository.closeClient();
 
+    }
+
+    public Map<String, String> getAllResolutionsAsMap() {
+        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
+        Repository<ResolutionType> repository = esfactory.initManager();
+        repository.initClient();
+
+        ResolutionMapping mapping = ResolutionMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Resolution> response = repository.search(mapping);
+
+        List<Resolution> resolutions = response.getSources();
+
+        repository.closeClient();
+        Map<String, String> map = new HashMap<String, String>();
+        for (Resolution resolution : resolutions) {
+            map.put(resolution.getId(), resolution.getDescription());
+        }
+
+        return map;
     }
 
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
