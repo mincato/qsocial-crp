@@ -26,7 +26,7 @@ public class CaseIndexService {
 
     private static final String ALIAS_QUERY_INDEX = "cases_alias";
 
-    private static final String[] MAPPING_TYPES = { "case" ,"actionregistry"};
+    private static final String[] MAPPING_TYPES = { "case", "actionregistry" };
 
     protected static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
