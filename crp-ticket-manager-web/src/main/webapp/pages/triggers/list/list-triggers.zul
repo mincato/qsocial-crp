@@ -1,121 +1,190 @@
 <?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
-    viewModel="@id('vm') @init('com.qsocialnow.viewmodel.trigger.TriggersViewModel')" 
-    validationMessages="@id('vmsgs')"
-    border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml" xmlns:ca="client/attribute">
+	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.trigger.TriggersViewModel')"
+	validationMessages="@id('vmsgs')" border="normal"
+	contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml"
+	xmlns:ca="client/attribute">
 	<n:div class="row">
-	   <n:div class="col-lg-12">
-	       <n:div id="page-header" class="pane equal col-md-12 col-xs-12">
-				<n:div class="col-md-3 col-xs-12">
-    				<n:h4>${labels.trigger.list.title} / ${vm.currentDomain.domain.name} </n:h4>
+		<n:div class="col-lg-12">
+			<n:div id="page-header"
+				class="pane equal col-md-12 col-xs-12">
+				<n:div class="col-sm-6">
+					<n:h4>
+						${labels.trigger.list.title} /
+						${vm.currentDomain.domain.name}
+					</n:h4>
 				</n:div>
-				<n:div class="col-md-1">
-		            <div zclass="input-group input-group-sm">
-			            <selectbox sclass="form-control" model="@load(vm.statusOptions)"
-			                selectedItem="@bind(vm.status)">
-			                <template name="model">
-			                    <label value="${c:l(c:cat('trigger.status.',each))}" />
-			                </template>
-			            </selectbox>
-			         </div>
-	            </n:div>
-	            <n:div class="col-md-2">
-                    <div zclass="input-group input-group-sm">
-                          <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.trigger.list.filter.fromDate}" />
-                    </div>
-                </n:div>
-                
-                <n:div class="col-md-2 " >
-                     <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
-                       <datebox  id="todate" sclass="input-group" format="short" value="@load(vm.toDate) 
+				<n:div class="col-sm-6">
+					<a class="link-button pull-right"
+						href="/pages/triggers/create/index.zul?domain=${vm.domain}">
+						${labels.trigger.create.trigger.action}
+						<i class="fa fa-plus-circle fa-2x"></i>
+					</a>
+				</n:div>
+			</n:div>
+		</n:div>
+	</n:div>
+	<n:div class="row">
+		<n:div class="col-lg-12">
+			<n:div class="pane equal col-md-12 col-xs-12">
+				<n:div class="col-md-2">
+					<div zclass="input-group input-group-sm">
+						<selectbox sclass="form-control"
+							model="@load(vm.statusOptions)"
+							selectedItem="@bind(vm.status)">
+							<template name="model">
+								<label
+									value="${c:l(c:cat('trigger.status.',each))}" />
+							</template>
+						</selectbox>
+					</div>
+				</n:div>
+				<n:div class="col-md-2">
+					<div zclass="input-group input-group-sm">
+						<datebox sclass="input-group" format="short"
+							value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')"
+							placeholder="${labels.trigger.list.filter.fromDate}" />
+					</div>
+				</n:div>
+
+				<n:div class="col-md-2 ">
+					<x:div
+						sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')">
+						<datebox id="todate" sclass="input-group"
+							format="short"
+							value="@load(vm.toDate) 
                         @save(vm.toDate, before='search')
                         @converter('com.qsocialnow.converters.DateInputConverter', endDay = true)
-                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.trigger.list.filter.toDate}" />
-                    </x:div>
-                </n:div>
+                        @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')"
+							placeholder="${labels.trigger.list.filter.toDate}" />
+					</x:div>
+				</n:div>
+				<n:div class="col-md-3">
+					<div zclass="input-group input-group-sm">
+						<textbox zclass="form-control"
+							value="@bind(vm.keyword)"
+							placeholder="${labels.trigger.list.filter.name}" />
+					</div>
+				</n:div>
 				<n:div class="col-md-1">
 					<div zclass="input-group input-group-sm">
-						  <textbox zclass="form-control" value="@bind(vm.keyword)" placeholder="${labels.trigger.list.filter.name}"/>
-			    	</div>
-                </n:div>
-                <n:div class="col-md-1">
-	               <div zclass="input-group input-group-sm">
-                      <span zclass="input-group-btn">
-                          <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
-                      </span>
-                   </div>
-                </n:div>
-                <n:div class="col-md-2 col-xs-4">
-                	<a class="link-button" href="/pages/triggers/create/index.zul?domain=${vm.domain}">${labels.trigger.create.trigger.action} <i class="fa fa-plus-circle fa-2x"></i></a>
-	    		</n:div>
-	       </n:div>
-	   </n:div>
-    </n:div>
+						<span zclass="input-group-btn">
+							<button zclass="btn btn-default"
+								type="button" onClick="@command('search')"
+								iconSclass="z-icon-search">
+							</button>
+						</span>
+					</div>
+				</n:div>
+			</n:div>
+		</n:div>
+	</n:div>
 	<div class="row" visible="@load(empty vm.triggers)">
 		<n:div class="col-lg-12">
-    		<div zclass="pane equal">
-    			<div class="text-center" visible="@load(not vm.filterActive)">
-					${labels.trigger.list.unfilled} <a href="/pages/triggers/create/index.zul?domain=${vm.domain}">${labels.trigger.create.trigger.action}</a>
+			<div zclass="pane equal">
+				<div class="text-center"
+					visible="@load(not vm.filterActive)">
+					${labels.trigger.list.unfilled}
+					<a
+						href="/pages/triggers/create/index.zul?domain=${vm.domain}">
+						${labels.trigger.create.trigger.action}
+					</a>
 				</div>
-				<div class="text-center" visible="@load(vm.filterActive)">
-					${labels.app.pagination.noResultsFound} 
+				<div class="text-center"
+					visible="@load(vm.filterActive)">
+					${labels.app.pagination.noResultsFound}
 				</div>
 			</div>
 		</n:div>
 	</div>
-    
-    <div class="row" visible="@load(not empty vm.triggers)">
-    	<n:div class="col-lg-12">
-    	<div zclass="pane equal">
-		  <div zclass="table-responsive" >
-			<table class="table table-striped table-hover">
-			    <thead>
-					<tr>
-					    <th>${labels.trigger.list.column.name}</th>
-					    <th>${labels.trigger.list.column.description}</th>
-					    <th>${labels.trigger.list.column.status}</th>
-					    <th>${labels.trigger.list.column.startDate}</th>
-					    <th>${labels.trigger.list.column.endDate}</th>
-					    <th>${labels.trigger.list.column.action}</th>
-					</tr>
-			    </thead>
-			    <tbody children="@bind(vm.triggers)">
-			    	<template name="children">
-					<tr>
-                   		<td class="list-text-column">${each.name}</td>
-                   		<td>${each.description}</td>
-                   		<td>${c:l(c:cat('trigger.status.',each.status))}</td>
-                   		<td><label value="@load(each.fromDate) @converter(vm.dateConverter)"/></td>
-                   		<td><label value="@load(each.toDate) @converter(vm.dateConverter)"/></td>
-                   		<td>
-                   			<ul class="list-inline">
-  								<li><a class="btn-list-action" href="/pages/triggers/create/index.zul?domain=${vm.domain}&amp;trigger=${each.id}"><i class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.trigger.edit.action}"></i></a></li>
-							</ul>
-                   		</td>
-               		</tr>
-               		</template>
-				</tbody>
-			</table>
-		  </div>
-		  <div class="text-center" zclass="@bind(vm.moreResults?'more-results':'hidden')">
-				<a style="text-decoration:none" onClick="@command('moreResults')"  >
-				 	${labels.app.pagination.moreResults}
-				</a>
-		  </div>
-		  <n:br />
-		</div>
-	  </n:div>
+
+	<div class="row" visible="@load(not empty vm.triggers)">
+		<n:div class="col-lg-12">
+			<div zclass="pane equal">
+				<div zclass="table-responsive">
+					<table class="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th>
+									${labels.trigger.list.column.name}
+								</th>
+								<th>
+									${labels.trigger.list.column.description}
+								</th>
+								<th>
+									${labels.trigger.list.column.status}
+								</th>
+								<th>
+									${labels.trigger.list.column.startDate}
+								</th>
+								<th>
+									${labels.trigger.list.column.endDate}
+								</th>
+								<th>
+									${labels.trigger.list.column.action}
+								</th>
+							</tr>
+						</thead>
+						<tbody children="@bind(vm.triggers)">
+							<template name="children">
+								<tr>
+									<td class="list-text-column">
+										${each.name}
+									</td>
+									<td>${each.description}</td>
+									<td>
+										${c:l(c:cat('trigger.status.',each.status))}
+									</td>
+									<td>
+										<label
+											value="@load(each.fromDate) @converter(vm.dateConverter)" />
+									</td>
+									<td>
+										<label
+											value="@load(each.toDate) @converter(vm.dateConverter)" />
+									</td>
+									<td>
+										<ul class="list-inline">
+											<li>
+												<a
+													class="btn-list-action"
+													href="/pages/triggers/create/index.zul?domain=${vm.domain}&amp;trigger=${each.id}">
+													<i
+														class="fa fa-pencil-square-o" data-toggle="tooltip"
+														data-placement="top"
+														title="${labels.trigger.edit.action}">
+													</i>
+												</a>
+											</li>
+										</ul>
+									</td>
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</div>
+				<div class="text-center"
+					zclass="@bind(vm.moreResults?'more-results':'hidden')">
+					<a style="text-decoration:none"
+						onClick="@command('moreResults')">
+						${labels.app.pagination.moreResults}
+					</a>
+				</div>
+				<n:br />
+			</div>
+		</n:div>
 	</div>
-	
+
 	<div class="row">
 		<n:div class="col-lg-12">
-			<div zclass="pane equal">		  
-			  <div class="form-group text-center">
-					<button href="/pages/domain/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>
-			  </div>
+			<div zclass="pane equal">
+				<div class="form-group text-center">
+					<button href="/pages/domain/list/index.zul"
+						label="${labels.app.button.back}" zclass="btn btn-default" />
+				</div>
 			</div>
 		</n:div>
 	</div>
-		
+
 </x:div>
