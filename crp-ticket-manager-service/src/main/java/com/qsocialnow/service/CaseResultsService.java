@@ -42,7 +42,7 @@ public class CaseResultsService {
             if (domain != null) {
                 List<Resolution> resolutions = domain.getResolutions();
                 Map<String, String> resolutionById = resolutions.stream().collect(
-                        Collectors.toMap(x -> x.getId().toLowerCase(), x -> x.getDescription()));
+                        Collectors.toMap(x -> x.getId(), x -> x.getDescription()));
                 casesByResolution.stream().forEach(
                         result -> result.setResolution(resolutionById.get(result.getResolution())));
             }
