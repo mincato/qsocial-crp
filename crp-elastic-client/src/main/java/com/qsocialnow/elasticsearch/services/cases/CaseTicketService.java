@@ -152,7 +152,7 @@ public class CaseTicketService extends CaseIndexService {
 
         if (status != null)
             searchValues.put("open", status);
-        
+
         if (userSelected != null)
             searchValues.put("assignee.username", userSelected);
 

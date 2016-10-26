@@ -684,11 +684,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     @Override
     public <E> SearchResponse<E> search(Integer from, Integer size, String sortField, Mapping<T, E> mapping) {
-        return searchWithFilters(from, size, sortField, null, mapping);
+        return searchWithFilters(from, size, sortField, SortOrder.DESC, null, mapping);
     }
 
     @Override
-    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
+    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField, SortOrder sortOrder,
             BoolQueryBuilder filters, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         if (from != null) {
@@ -698,7 +698,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             searchSourceBuilder.size(size);
         }
         if (sortField != null) {
-            searchSourceBuilder.sort(sortField, SortOrder.DESC);
+            searchSourceBuilder.sort(sortField, sortOrder);
         }
         if (filters != null) {
             searchSourceBuilder.query(filters);

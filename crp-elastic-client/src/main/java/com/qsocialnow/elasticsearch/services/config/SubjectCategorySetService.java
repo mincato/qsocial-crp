@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -104,7 +105,7 @@ public class SubjectCategorySetService {
         }
 
         SearchResponse<SubjectCategorySet> response = repository.searchWithFilters(offset, limit, "description",
-                filters, mapping);
+                SortOrder.ASC, filters, mapping);
         List<SubjectCategorySet> subjectCategorySets = response.getSources();
 
         repository.closeClient();
