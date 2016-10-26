@@ -105,7 +105,7 @@ public class ResultsViewModel implements Serializable {
 
     private List<DomainListView> getDomainsList() {
         List<DomainListView> domains = new ArrayList<>();
-        PageResponse<DomainListView> domainsResponse = domainService.findAll(0, -1);
+        PageResponse<DomainListView> domainsResponse = domainService.findAll();
         domains = domainsResponse.getItems();
         return domains;
     }

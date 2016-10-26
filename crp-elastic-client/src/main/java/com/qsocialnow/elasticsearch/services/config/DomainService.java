@@ -96,6 +96,20 @@ public class DomainService {
         return domains;
     }
 
+    public List<Domain> getDomains() {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+
+        DomainMapMapping mapping = DomainMapMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Domain> response = repository.search(mapping);
+
+        List<Domain> domains = response.getSources();
+
+        repository.closeClient();
+        return domains;
+    }
+
     public Map<String, String> getAllDomainsAsMap() {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();
@@ -175,4 +189,5 @@ public class DomainService {
     public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
         this.indexConfiguration = indexConfiguration;
     }
+
 }
