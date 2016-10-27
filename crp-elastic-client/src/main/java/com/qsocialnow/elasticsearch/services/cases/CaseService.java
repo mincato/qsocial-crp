@@ -88,12 +88,6 @@ public class CaseService extends CaseIndexService {
         String indexName = this.getIndex(repository);
         mapping.setIndex(indexName);
 
-        // validete index name
-        boolean isCreated = repository.validateIndex(indexName);
-        // create index
-        if (!isCreated) {
-            repository.createIndex(mapping.getIndex());
-        }
         // index document
         document.setLastModifiedTimestamp(new Date().getTime());
         CaseType documentIndexed = mapping.getDocumentType(document);

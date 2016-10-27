@@ -155,7 +155,7 @@
 			    		<thead>
 							<tr>
 							    <th sclass="@load(vm.sortField eq 'title' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
-							    onClick="@command('sortList' , sortField='titleSort')" >
+							    onClick="@command('sortList' , sortField='title.raw')" >
 									${labels.cases.list.column.title}
 						    	</th>
 					    		<th sclass="@load(vm.sortField eq 'description' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 

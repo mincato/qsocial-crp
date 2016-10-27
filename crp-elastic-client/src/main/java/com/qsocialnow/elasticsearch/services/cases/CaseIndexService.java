@@ -28,6 +28,8 @@ public class CaseIndexService {
 
     private static final String[] MAPPING_TYPES = { "case", "actionregistry" };
 
+    private static final String[] INDEX_FILES = { INDEX_NAME };
+
     protected static AWSElasticsearchConfigurationProvider elasticSearchCaseConfigurator;
 
     public CaseIndexService(AWSElasticsearchConfigurationProvider configurationProvider) {
@@ -42,7 +44,7 @@ public class CaseIndexService {
         boolean isCreated = repository.validateIndex(INDEX_NAME);
         // create index
         if (!isCreated) {
-            repository.createIndex(INDEX_NAME);
+            createIndex(repository, INDEX_NAME);
             createMappings(repository, INDEX_NAME);
         }
     }
@@ -60,6 +62,28 @@ public class CaseIndexService {
 
     public <T> String getQueryIndex() {
         return INDEX_NAME;
+    }
+
+    private <T> void createIndex(Repository<T> repository, String index) {
+        try {
+            InputStream in = getClass().getResourceAsStream("/mappings/" + index + ".json");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
+            log.info("adding mapping: " + jsonObject.toJSONString());
+
+            repository.createIndex(index, jsonObject.toJSONString());
+            reader.close();
+            in.close();
+
+        } catch (FileNotFoundException e) {
+            log.error("Error Mapping File Not found: ", e);
+        } catch (IOException e) {
+            log.error("Error IOException: ", e);
+        } catch (ParseException e) {
+            log.error("Error parsing mapping definition: ", e);
+        }
     }
 
     private <T> void createMappings(Repository<T> repository, String index) {

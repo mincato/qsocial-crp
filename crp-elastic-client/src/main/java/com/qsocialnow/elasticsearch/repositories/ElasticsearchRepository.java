@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -111,9 +112,13 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return awsSigner;
     }
 
-    public void createIndex(String index) {
+    public void createIndex(String index, String jsonSettings) {
         try {
-            client.execute(new CreateIndex.Builder(index).build());
+            CreateIndex.Builder builder = new CreateIndex.Builder(index);
+            if (jsonSettings != null) {
+                builder.settings(jsonSettings).build();
+            }
+            client.execute(builder.build());
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
 
