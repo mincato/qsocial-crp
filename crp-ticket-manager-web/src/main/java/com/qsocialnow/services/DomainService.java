@@ -14,6 +14,9 @@ public interface DomainService {
 
     PageResponse<DomainListView> findAll(int pageNumber, int pageSize);
 
+    PageResponse<DomainListView> findAllByUserNameAllowed(String userName);
+
     PageResponse<DomainListView> findAllByName(int pageNumber, int pageSize, String name);
 
+    PageResponse<DomainListView> findAll();
 }

@@ -52,6 +52,7 @@ public class UserResolverMapping implements Mapping<UserResolverType, UserResolv
         userResolverType.setCredentials(document.getCredentials());
         userResolverType.setIdentifier(document.getIdentifier());
         userResolverType.setSource(document.getSource());
+        userResolverType.setSourceId(document.getSourceId());
         return userResolverType;
     }
 
@@ -63,6 +64,7 @@ public class UserResolverMapping implements Mapping<UserResolverType, UserResolv
         userResolver.setCredentials(documentType.getCredentials());
         userResolver.setIdentifier(documentType.getIdentifier());
         userResolver.setSource(documentType.getSource());
+        userResolver.setSourceId(documentType.getSourceId());
         return userResolver;
     }
 

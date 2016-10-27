@@ -158,6 +158,8 @@ public class Event implements Serializable {
 
     private String originIdCase;
 
+    private String rootCommentId;
+
     public Event() {
 
     }
@@ -688,6 +690,14 @@ public class Event implements Serializable {
 
     public void setOriginIdCase(String originIdCase) {
         this.originIdCase = originIdCase;
+    }
+
+    public String getRootCommentId() {
+        return rootCommentId;
+    }
+
+    public void setRootCommentId(String rootCommentId) {
+        this.rootCommentId = rootCommentId;
     }
 
     @Override

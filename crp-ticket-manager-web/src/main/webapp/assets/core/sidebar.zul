@@ -8,8 +8,22 @@
 				<n:div class="sidebar-title">
 					<i class="fa fa-bullseye"></i>
 					<n:h4>${labels.sidebar.title}</n:h4>
-				</n:div><!-- sidebar-profile -->
+				</n:div>
 				<ul id="sidebar-nav" class="sidebar-nav">
+					<li>
+						<a href="/pages/cases/list/index.zul">
+							<span
+								class="fa fa-file-text-o fa-fw fa-lg">
+							</span>
+							<span>${labels.sidebar.menu.cases}</span>
+						</a>
+					</li>
+				</ul>
+				<n:div class="sidebar-subtitle" if="${sec:isAllGranted('ADMIN')}">
+					<i class="fa fa-cogs"></i>
+					<n:h4>${labels.sidebar.administration.title}</n:h4>
+				</n:div>
+				<ul class="sidebar-nav">
 					<li if="${sec:isAllGranted('ADMIN')}">
 						<a href="/pages/user-resolver/list/index.zul">
 							<span
@@ -28,14 +42,14 @@
 							<span>${labels.sidebar.menu.teams}</span>
 						</a>
 					</li>
-					<li>
-						<a href="/pages/cases/list/index.zul">
-							<span
-								class="fa fa-file-text-o fa-fw fa-lg">
-							</span>
-							<span>${labels.sidebar.menu.cases}</span>
-						</a>
-					</li>
+					<li if="${sec:isAllGranted('ADMIN')}">
+                        <a href="/pages/cases/results/index.zul">
+                            <span
+                                class="fa fa-file-text-o fa-fw fa-lg">
+                            </span>
+                            <span>${labels.sidebar.menu.reports}</span>
+                        </a>
+                    </li>
 					<li if="${sec:isAllGranted('ADMIN')}">
 						<a
 							href="/pages/case-category-set/list/index.zul">

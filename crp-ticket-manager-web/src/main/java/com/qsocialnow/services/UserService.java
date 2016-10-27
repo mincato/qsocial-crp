@@ -9,4 +9,6 @@ public interface UserService {
 
     List<UserListView> findAll(Map<String, String> filters);
 
+    List<UserListView> findAllByUserName(String userName);
+
 }

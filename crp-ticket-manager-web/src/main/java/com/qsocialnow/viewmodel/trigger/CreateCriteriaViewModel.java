@@ -252,6 +252,7 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private void initThematics(Domain domain) {
         if (thematicsOptions.isEmpty()) {
+            thematicsOptions.add(new Thematic());
             List<Thematic> allThematics = thematicService.findAll();
             Stream<Thematic> thematics = allThematics.stream().filter(
                     thematic -> (domain.getThematics().contains(thematic.getId())));
@@ -389,10 +390,20 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     @Command
+    public void editCategories(@BindingParam("filter") CategoryFilterView filter,
+            @BindingParam("category") Category category) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("filterCategory", filter);
+        Executions.createComponents("/pages/triggers/create/choose-categories.zul", null, args);
+        BindUtils.postNotifyChange(null, null, filter, "categories");
+    }
+
+    @Command
     @NotifyChange({ "serieOptions", "categoryGroupOptions", "subSerieOptions" })
     public void selectThematic(@BindingParam("fxFilter") FilterView fxFilter) {
         serieOptions.clear();
-        if (fxFilter.getThematic() != null && serieOptions.isEmpty()) {
+        if (fxFilter.getThematic() != null && fxFilter.getThematic().getId() != null && serieOptions.isEmpty()) {
+            serieOptions.add(new Series());
             serieOptions.addAll(fxFilter.getThematic().getSeries());
         }
         fxFilter.setSerie(null);
@@ -404,12 +415,13 @@ public class CreateCriteriaViewModel implements Serializable {
     @NotifyChange({ "subSerieOptions", "categoryGroupOptions" })
     public void selectSerie(@BindingParam("fxFilter") FilterView fxFilter) {
         subSerieOptions.clear();
-        if (fxFilter.getSerie() != null && subSerieOptions.isEmpty()) {
+        if (fxFilter.getSerie() != null && fxFilter.getSerie().getId() != null && subSerieOptions.isEmpty()) {
+            subSerieOptions.add(new SubSeries());
             subSerieOptions.addAll(fxFilter.getSerie().getSubSeries());
         }
         fxFilter.setSubSerie(null);
         categoryGroupOptions.clear();
-        if (fxFilter.getSerie() != null && categoryGroupOptions.isEmpty()) {
+        if (fxFilter.getSerie() != null && fxFilter.getSerie().getId() != null && categoryGroupOptions.isEmpty()) {
             categoryGroupOptions.addAll(thematicService.findCategoriesBySerieId(fxFilter.getThematic().getId(),
                     fxFilter.getSerie().getId()));
         }
@@ -507,25 +519,28 @@ public class CreateCriteriaViewModel implements Serializable {
         if (serieFilter != null) {
             if (serieFilter.getThematicId() != null) {
                 filterView.setThematic(thematicsOptions.stream()
-                        .filter(thematic -> thematic.getId().equals(serieFilter.getThematicId())).findFirst().get());
+                        .filter(thematic -> serieFilter.getThematicId().equals(thematic.getId())).findFirst().get());
                 if (filterView.getThematic() != null && serieOptions.isEmpty()) {
+                    serieOptions.add(new Series());
                     serieOptions.addAll(filterView.getThematic().getSeries());
                 }
             }
             if (serieFilter.getSerieId() != null) {
                 filterView.setSerie(getSerieOptions().stream()
-                        .filter(serie -> serie.getId().equals(serieFilter.getSerieId())).findFirst().get());
+                        .filter(serie -> serieFilter.getSerieId().equals(serie.getId())).findFirst().get());
                 if (filterView.getSerie() != null && subSerieOptions.isEmpty()) {
+                    subSerieOptions.add(new SubSeries());
                     subSerieOptions.addAll(filterView.getSerie().getSubSeries());
                 }
-                if (filterView.getSerie() != null && categoryGroupOptions.isEmpty()) {
+                if (filterView.getSerie() != null && filterView.getSerie().getId() != null
+                        && categoryGroupOptions.isEmpty()) {
                     categoryGroupOptions.addAll(thematicService.findCategoriesBySerieId(filterView.getThematic()
                             .getId(), filterView.getSerie().getId()));
                 }
             }
             if (serieFilter.getSubSerieId() != null) {
                 filterView.setSubSerie(getSubSerieOptions().stream()
-                        .filter(serie -> serie.getId().equals(serieFilter.getSubSerieId())).findFirst().get());
+                        .filter(serie -> serieFilter.getSubSerieId().equals(serie.getId())).findFirst().get());
             }
         }
     }
@@ -629,7 +644,7 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     private void addSerieFilters(Filter filter) {
-        if (filterView.getThematic() != null) {
+        if (filterView.getThematic() != null && filterView.getThematic().getId() != null) {
             SerieFilter serieFilter = new SerieFilter();
             serieFilter.setThematicId(filterView.getThematic().getId());
             if (filterView.getSerie() != null) {

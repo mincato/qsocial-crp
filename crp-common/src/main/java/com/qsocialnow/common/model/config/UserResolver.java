@@ -8,6 +8,8 @@ public class UserResolver extends BaseUserResolver {
 
     private Boolean active;
 
+    private String sourceId;
+
     public SourceCredentials getCredentials() {
         return credentials;
     }
@@ -22,6 +24,14 @@ public class UserResolver extends BaseUserResolver {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
 }

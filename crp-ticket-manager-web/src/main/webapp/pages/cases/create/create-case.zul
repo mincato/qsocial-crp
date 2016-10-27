@@ -1,18 +1,18 @@
-	<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
+<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CreateCaseViewModel')"
 		validationMessages="@id('vmsgs')" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 		<n:div class="row">
 			<n:div class="col-lg-12">
-				<div zclass="pane equal">
+				<n:div id="page-header" class="pane equal">
 					<n:h4>${labels.cases.create.title}</n:h4>
-				</div>
+				</n:div>
 			</n:div>
 		</n:div>
 	
-		<div class="row">
-			<n:div class="col-lg-12">
-				<div zclass="pane equal">
-					<x:form form="@id('newCase') @load(vm.currentCase) @save(vm.currentCase, before='save')">
+		<n:div class="row">
+		<n:div class="col-lg-12">
+			<n:div class="pane equal">
+					<x:form form="@id('newCase') @load(vm.currentCase) @save(vm.currentCase, before='save')" >
 						<x:div sclass="@load(empty vmsgs[title] ? 'form-group' : 'form-group has-error')">
 						    <n:label class="control-label">${labels.cases.details.title}:</n:label>
 				    		<textbox type="text" class="form-control" id="title" 
@@ -23,21 +23,23 @@
 						</x:div>
 						
 						<x:div sclass="@load(empty vmsgs[description] ? 'form-group' : 'form-group has-error')">
-	                        <n:label class="control-label col-sm-3">${labels.cases.details.description}</n:label>
+	                        <n:label class="control-label">${labels.cases.details.description}</n:label>
 	                        <textbox rows="5" type="text" id="description"
 	                               class="form-control" value="@bind(newCase.newCase.description) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 	                        <x:span sclass="@load(empty vmsgs[description] ? 'hidden' : 'help-block')">
                                 <label value="@load(vmsgs[description])" />
                             </x:span>       
                         </x:div>
-                        <x:div class="form-group">
-	                        <n:label class="control-label col-sm-12">
-	                            ${labels.cases.details.pendingResponse}
-	                    			<checkbox checked="@bind(newCase.newCase.pendingResponse)" />
-                            </n:label>
-						</x:div>
+						<n:div class="form-group">
+							<n:label class="control-label">
+								${labels.cases.details.pendingResponse}
+							</n:label>
+							<n:div class="checkbox green" style="margin-top:0px;">
+									<checkbox checked="@bind(newCase.newCase.pendingResponse)"  />
+							</n:div>
+						</n:div>
 						<div sclass="@load(empty vmsgs[domain] ? 'form-group' : 'form-group has-error')">
-                            <n:label class="control-label col-sm-3">${labels.cases.details.domains}</n:label>
+                            <n:label class="control-label">${labels.cases.details.domains}</n:label>
                             <selectbox id="domain" sclass="form-control" model="@load(vm.domains) "
 				                selectedItem="@bind(newCase.selectedDomain) @validator('com.qsocialnow.validators.LocaleBeanValidator')"
 				                onSelect="@command('onSelectDomain', domain = newCase.selectedDomain)">
@@ -50,7 +52,7 @@
 			    			</x:span>
                         </div>
                         <div sclass="@load(empty vmsgs[trigger] ? 'form-group' : 'form-group has-error')">
-                            <n:label class="control-label col-sm-3">${labels.cases.details.triggers}</n:label>
+                            <n:label class="control-label">${labels.cases.details.triggers}</n:label>
                             <selectbox id="trigger" sclass="form-control" 
 								disabled="@load(newCase.selectedDomain eq null or vm.triggers eq null )"
                              	model="@load(vm.triggers)"
@@ -65,7 +67,7 @@
 			    			</x:span>
                         </div>
                         <div sclass="@load(empty vmsgs[segment] ? 'form-group' : 'form-group has-error')">
-                            <n:label class="control-label col-sm-3">${labels.cases.details.segments}</n:label>
+                            <n:label class="control-label">${labels.cases.details.segments}</n:label>
                             <selectbox id="segment" sclass="form-control" 
                             	model="@load(vm.segments)"
                             	disabled="@load(newCase.selectedTrigger eq null or vm.segments eq null)"	
@@ -84,7 +86,7 @@
                         </div>
                         
 				    </x:form>
-				</div>
-			</n:div>
-		</div>
+				</n:div>
+				</n:div>
+		</n:div>
 	</x:div>

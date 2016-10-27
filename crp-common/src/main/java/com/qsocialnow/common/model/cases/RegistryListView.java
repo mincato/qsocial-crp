@@ -18,6 +18,8 @@ public class RegistryListView implements Serializable {
 
     private Boolean automatic;
 
+    private String deepLink;
+
     public String getId() {
         return id;
     }
@@ -64,6 +66,14 @@ public class RegistryListView implements Serializable {
 
     public void setAutomatic(Boolean automatic) {
         this.automatic = automatic;
+    }
+
+    public String getDeepLink() {
+        return deepLink;
+    }
+
+    public void setDeepLink(String deepLink) {
+        this.deepLink = deepLink;
     }
 
 }

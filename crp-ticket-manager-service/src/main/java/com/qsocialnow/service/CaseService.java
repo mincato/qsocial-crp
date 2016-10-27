@@ -51,14 +51,12 @@ public class CaseService {
     private Map<ActionType, Action> actions;
 
     public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
-            String subject, String title, String description, String pendingResponse, String status,
-            String fromOpenDate, String toOpenDate, String userName) {
+            String domainId, String triggerId, String segmentId, String subject, String title, String pendingResponse,
+            String status, String fromOpenDate, String toOpenDate, String userName, String userSelected) {
         PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
         pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
 
         List<String> teamsToFilter = new ArrayList<String>();
-        log.info("Retriving cases from :" + userName);
-
         List<Team> teams = teamRepository.findTeams(userName);
         if (teams != null) {
             for (Team team : teams) {
@@ -66,8 +64,6 @@ public class CaseService {
                 for (User user : users) {
                     if (user.getUsername().equals(userName)) {
                         if (user.isCoordinator()) {
-                            log.info("User:" + userName + " coordinator: " + user.isCoordinator()
-                                    + " belongs to team :" + team.getId());
                             teamsToFilter.add(team.getId());
                         }
                     }
@@ -75,8 +71,8 @@ public class CaseService {
             }
         }
         log.info("After process teams - trying to retrieve cases from :" + userName);
-        List<CaseListView> cases = repository.findAll(pageRequest, subject, title, description, pendingResponse,
-                status, fromOpenDate, toOpenDate, teamsToFilter, userName);
+        List<CaseListView> cases = repository.findAll(pageRequest, domainId, triggerId, segmentId, subject, title,
+                pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected);
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;

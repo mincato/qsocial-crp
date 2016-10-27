@@ -6,9 +6,9 @@
 		form="@id('fxTrigger') @load(triggerVm.currentTrigger) @save(triggerVm.currentTrigger, before={'save'} ) @validator('com.qsocialnow.validators.TriggerFormValidator')">
 	<n:div class="row">
 		<n:div class="col-lg-12">
-			<div zclass="pane equal">
+			<n:div id="page-header" class="pane equal">
 				<n:h4>${triggerVm.currentDomain.domain.name} / ${labels.trigger.create.title}</n:h4>
-			</div>
+			</n:div>
 		</n:div>
 	</n:div>
 
@@ -111,7 +111,12 @@
 			<x:div class="panel-heading">
 				<x:h4 sclass="@load(empty vmsgs['subjectcategorysets'] ? 'panel-title' : 'panel-title has-error')">
   						<n:a data-toggle="collapse" href="#customerCategoriesTab" class='help-block'>
-        					${labels.trigger.customerCategories}
+  							<n:span class="col-md-4">
+        						${labels.trigger.customerCategories}
+        					</n:span>
+        					<n:span class="has-error text-center">
+								<label value="@bind(vmsgs['subjectcategorysets'])" />
+							</n:span>
         					<i class="more-less fa fa-angle-down pull-right"></i>
     					</n:a>
       			</x:h4>
@@ -129,7 +134,12 @@
 			<x:div class="panel-heading">
 				<x:h4 sclass="@load(empty vmsgs['casecategorysets'] ? 'panel-title' : 'panel-title has-error')">
   					<n:a data-toggle="collapse" href="#caseCategoriesTab" class='help-block'>
-        					${labels.trigger.caseCategories}
+  							<n:span class="col-md-4">
+        						${labels.trigger.caseCategories}
+        					</n:span>
+        					<n:span class="has-error text-center">
+								<label value="@bind(vmsgs['casecategorysets'])" />
+							</n:span>
         					<i class="more-less fa fa-angle-down pull-right"></i>
 					</n:a>
       			</x:h4>
@@ -147,7 +157,12 @@
 			<x:div class="panel-heading">
 				<x:h4 sclass="@load(empty vmsgs['resolutions'] ? 'panel-title' : 'panel-title has-error')">
   					<n:a data-toggle="collapse" href="#resolutionsTab" class='help-block'>
-	    					${labels.trigger.resolutions.title}
+  							<n:span class="col-md-4">
+	    						${labels.trigger.resolutions.title}
+	    					</n:span>
+	    					<n:span class="has-error text-center">
+								<label value="@bind(vmsgs['resolutions'])" />
+							</n:span>
 	    					<i class="more-less fa fa-angle-down pull-right"></i>
 					</n:a>
       			</x:h4>
@@ -165,7 +180,12 @@
 			<x:div class="panel-heading">
 				<x:h4 sclass="@load(empty vmsgs['segments'] ? 'panel-title' : 'panel-title has-error')">
 					<n:a data-toggle="collapse" href="#segmentsTab" class='help-block'>
-        					${labels.trigger.segments.title}
+							<n:span class="col-md-4">
+        						${labels.trigger.segments.title}
+        					</n:span>
+							<n:span class="has-error text-center">
+								<label value="@bind(vmsgs['segments'])" />
+							</n:span>
         					<i class="more-less fa fa-angle-down pull-right"></i>
 					</n:a>
       			</x:h4>
@@ -210,13 +230,8 @@
 							</template>
 						</x:ol>
 					</n:div>
-					<div visible="@load(empty fxTrigger.trigger.segments and empty vmsgs['segments'])">
+					<div visible="@load(empty fxTrigger.trigger.segments)">
 						${labels.trigger.segments.unfilled}
-					</div>
-					<div class="form-group has-error" visible="@load(empty fxTrigger.trigger.segments and not empty vmsgs['segments'])" >
-						<n:span class="help-block">
-							<label value="@bind(vmsgs['segments'])" />
-						</n:span>
 					</div>
       			</x:div>
     		</n:div>
@@ -227,9 +242,14 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<div class="form-group text-center">
+					<div class="form-group has-error" visible="@load(not empty vmsgs)" >
+						<n:span class="help-block">
+							<label value="${labels.trigger.form.invalid}"/>
+						</n:span>
+					</div>
 			    	<button onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
 			    		label="${labels.app.button.save}" zclass="btn btn-success" />
-			    	<button href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.cancel}" zclass="btn btn-default"/>	
+			    	<button href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.back}" zclass="btn btn-default"/>			    		
 				</div>
 			</div>
 		</n:div>

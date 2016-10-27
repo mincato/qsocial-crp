@@ -1,12 +1,16 @@
 package com.qsocialnow.elasticsearch.services.config;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
+import com.qsocialnow.elasticsearch.mappings.config.DomainMapMapping;
 import com.qsocialnow.elasticsearch.mappings.config.DomainMapping;
 import com.qsocialnow.elasticsearch.mappings.types.config.DomainType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
@@ -54,7 +58,7 @@ public class DomainService {
         DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
         DomainType document = mapping.getDocumentType(domain);
 
-        String response = repository.indexMapping(mapping, document);
+        String response = repository.indexMappingAndRefresh(mapping, document);
         repository.closeClient();
 
         resolutionService.indexResolutions(response, domain.getResolutions());
@@ -85,12 +89,46 @@ public class DomainService {
         repository.initClient();
 
         DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
-        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", null, mapping);
+        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", SortOrder.ASC, null,
+                mapping);
 
         List<Domain> domains = response.getSources();
 
         repository.closeClient();
         return domains;
+    }
+
+    public List<Domain> getDomains() {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+
+        DomainMapMapping mapping = DomainMapMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Domain> response = repository.search(mapping);
+
+        List<Domain> domains = response.getSources();
+
+        repository.closeClient();
+        return domains;
+    }
+
+    public Map<String, String> getAllDomainsAsMap() {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+
+        DomainMapMapping mapping = DomainMapMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Domain> response = repository.search(mapping);
+
+        List<Domain> domains = response.getSources();
+
+        repository.closeClient();
+        Map<String, String> map = new HashMap<String, String>();
+        for (Domain domain : domains) {
+            map.put(domain.getId(), domain.getName());
+        }
+
+        return map;
     }
 
     public List<Domain> getDomainsByName(Integer offset, Integer limit, String name) {
@@ -105,7 +143,19 @@ public class DomainService {
             filters = filters.must(QueryBuilders.matchQuery("name", name));
         }
 
-        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", filters, mapping);
+        SearchResponse<Domain> response = repository.searchWithFilters(offset, limit, "name", SortOrder.ASC, filters,
+                mapping);
+        List<Domain> domains = response.getSources();
+        repository.closeClient();
+        return domains;
+    }
+
+    public List<Domain> getDomainsByIds(List<String> domainsIds) {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+        DomainMapping mapping = DomainMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<Domain> response = repository.queryByIds(mapping, null, domainsIds);
         List<Domain> domains = response.getSources();
         repository.closeClient();
         return domains;

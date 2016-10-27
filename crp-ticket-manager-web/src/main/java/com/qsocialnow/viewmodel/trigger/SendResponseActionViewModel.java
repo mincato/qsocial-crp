@@ -59,6 +59,7 @@ public class SendResponseActionViewModel implements Serializable {
     @NotifyChange({ "sendResponseAction", "textMaxlength", "anyTwitterSource" })
     public void show(@BindingParam("segment") SegmentView segment, @BindingParam("action") ActionType action) {
         if (ActionType.REPLY.equals(action) && segment.getTeam() != null) {
+            sendResponseAction = new SendResponseAutomaticActionView();
             Map<String, Object> filters = new HashMap<>();
             filters.put("status", true);
             List<BaseUserResolver> userResolvers = teamService.findUserResolvers(segment.getTeam().getId(), filters);

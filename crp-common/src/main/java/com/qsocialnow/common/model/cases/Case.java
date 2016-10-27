@@ -12,10 +12,12 @@ import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.util.DeepLinkBuilder;
+import com.qsocialnow.common.util.SubjectIdentifierNormalizer;
 
 public class Case implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -2733196579634071076L;
 
     private String id;
 
@@ -104,9 +106,11 @@ public class Case implements Serializable {
         List<ActionRegistry> registries = new ArrayList<>();
         ActionRegistry registry = new ActionRegistry();
         registry.setAction(ActionType.OPEN_CASE.name());
-        registry.setComment(event.getUsuarioOriginal() + " - " + event.getTitulo());
+        String identifier = SubjectIdentifierNormalizer.normalize(event.getUsuarioCreacion());
+        registry.setComment(identifier + " - " + event.getTitulo());
         registry.setAutomatic(true);
         registry.setDate(openDate);
+        registry.setDeepLink(DeepLinkBuilder.build(event));
 
         registry.setEvent(event);
 

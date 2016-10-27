@@ -40,14 +40,14 @@ public class EditDomainViewModel implements Serializable {
     @WireVariable
     private DomainService domainService;
 
-    @WireVariable
-    private ThematicService thematicService;
-
     private DomainView currentDomain;
 
     private List<Thematic> thematics;
 
     private boolean saved;
+
+    @WireVariable
+    private ThematicService thematicService;
 
     public boolean isSaved() {
         return saved;
@@ -69,8 +69,8 @@ public class EditDomainViewModel implements Serializable {
     public void init(@BindingParam("domain") String domain) {
         currentDomain = new DomainView();
         currentDomain.setDomain(domainService.findOne(domain));
-        thematics = thematicService.findAll();
-        currentDomain.setSelectedThematics(thematics.stream()
+        this.thematics = thematicService.findAll();
+        currentDomain.setSelectedThematics(this.thematics.stream()
                 .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))
                 .collect(Collectors.toSet()));
         initResolutions();

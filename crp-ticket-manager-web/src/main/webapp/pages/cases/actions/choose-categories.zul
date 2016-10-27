@@ -4,6 +4,9 @@
 	<n:div class="modal-dialog">
 		<div class="modal-content">
 			<n:div class="modal-header">
+				<n:button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    					<n:span aria-hidden="true">&#x00D7;</n:span>
+				</n:button>
 				<n:h4 class="modal-title">${labels.trigger.criteria.category.select}</n:h4>
 			</n:div>
 			<n:div class="modal-body">
@@ -15,7 +18,7 @@
 	    							<listbox mold="select" sclass="form-control" model="@load(categoryVm.caseCategorySet.categorySet.categories)"
 				 						multiple="true"
 										checkmark="true"
-										selectedItems="@bind(categoryVm.caseCategorySet.categories)">
+										selectedItems="@load(categoryVm.caseCategorySet.categories) @save(categoryVm.caseCategorySet.categories, before='save')">
 										<template name="model">
 											<listitem>
 												<listcell label="${each.description}" />
@@ -29,7 +32,8 @@
 				</div>
 			</n:div>
 			<n:div class="modal-footer">
-				<button ca:data-dismiss="modal" label="${labels.app.button.save}" zclass="btn btn-primary" />
+				<button label="${labels.app.button.save}" zclass="btn btn-primary" onClick="@command('save')" />
+				<button ca:data-dismiss="modal" label="${labels.app.button.cancel}" zclass="btn btn-default" />
 			</n:div>
 		</div>
 	</n:div>

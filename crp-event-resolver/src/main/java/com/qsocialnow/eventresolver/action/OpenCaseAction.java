@@ -24,22 +24,24 @@ public class OpenCaseAction {
 
     public Case openCase(Event inputElement, ExecutionMessageRequest request) {
         log.info("Executing action: " + ActionType.OPEN_CASE.name());
-
-        String sourceId = inputElement.getIdUsuarioOriginal();
+        String sourceId = inputElement.getIdUsuarioCreacion();
         Case newCase = Case.getNewCaseFromEvent(inputElement);
         try {
             Subject subject = findSubject(sourceId);
             if (subject == null) {
                 subject = new Subject();
 
-                log.info("Creating subject: " + sourceId + " identifier:" + inputElement.getUsuarioOriginal()
+                log.info("Creating subject: " + sourceId + " identifier:" + inputElement.getUsuarioCreacion()
                         + " source:" + inputElement.getMedioId());
 
                 subject.setLastAccionDate(new Date()); //
                 subject.setSignedDate(new Date());
-                subject.setProfileImage(inputElement.getProfileImage());
-                subject.setIdentifier(inputElement.getUsuarioOriginal());
+                subject.setIdentifier(inputElement.getUsuarioCreacion());
                 subject.setSourceId(sourceId);
+                subject.setProfileImage(inputElement.getProfileImage());
+                subject.setSourceName(inputElement.getName() != null ? inputElement.getName() : subject.getIdentifier());
+                subject.setLocationMethod(inputElement.getLocationMethod());
+                subject.setLocation(inputElement.getOriginalLocation());
 
                 subject.setSource(inputElement.getMedioId());
 

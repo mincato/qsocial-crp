@@ -92,7 +92,7 @@ public class SendResponseCaseAction implements Action {
                 FacebookFeedEvent facebookFeedEvent = new FacebookFeedEvent(caseObject.getId(),
                         caseObject.getLastPostId(), caseObject.getSubject().getSourceId(), caseObject.getSubject()
                                 .getIdentifier(), postId, lastPostId, postId, caseObject.getIdRootComment(),
-                        userResolver.getIdentifier());
+                        userResolver.getIdentifier(), caseObject.getTriggerEvent().getIdOriginal());
 
                 String facebookEvent = new Gson().toJson(facebookFeedEvent);
 

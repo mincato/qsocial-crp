@@ -1,5 +1,6 @@
 package com.qsocialnow.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.curator.framework.CuratorFramework;
@@ -11,9 +12,15 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
-import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.common.model.config.Segment;
+import com.qsocialnow.common.model.config.Team;
+import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.DomainRepository;
+import com.qsocialnow.persistence.SegmentRepository;
+import com.qsocialnow.persistence.TeamRepository;
+import com.qsocialnow.persistence.TriggerRepository;
 
 @Service
 public class DomainService {
@@ -22,6 +29,15 @@ public class DomainService {
 
     @Autowired
     private DomainRepository domainRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
+
+    @Autowired
+    private SegmentRepository segmentRepository;
+
+    @Autowired
+    private TriggerRepository triggerRepository;
 
     @Autowired
     private CuratorFramework zookeeperClient;
@@ -61,9 +77,39 @@ public class DomainService {
     }
 
     public PageResponse<DomainListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<DomainListView> domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize, null));
-
+        List<DomainListView> domains;
+        if (pageNumber == null && pageSize == null) {
+            domains = domainRepository.findAll();
+        } else {
+            domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize, null));
+        }
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
+        return page;
+    }
+
+    public PageResponse<DomainListView> findAllByUserName(String userName) {
+        log.info("Retrieving domains from userName:" + userName);
+        List<Team> teams = teamRepository.findTeams(userName);
+        List<DomainListView> domains = null;
+
+        if (teams != null && !teams.isEmpty()) {
+            List<Segment> segments = segmentRepository.findSegmentsByTeams(teams);
+            if (segments != null && !segments.isEmpty()) {
+                List<String> triggerIds = new ArrayList<>();
+                for (Segment segment : segments) {
+                    triggerIds.add(segment.getTriggerId());
+                }
+                List<Trigger> triggers = triggerRepository.findTriggersByIds(triggerIds);
+                if (triggers != null && !triggers.isEmpty()) {
+                    List<String> domainsIds = new ArrayList<>();
+                    for (Trigger trigger : triggers) {
+                        domainsIds.add(trigger.getDomainId());
+                    }
+                    domains = domainRepository.findDomainsByIds(domainsIds);
+                }
+            }
+        }
+        PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, 0, -1);
         return page;
     }
 

@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.qsocialnow.common.exception.PermissionException;
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
@@ -52,14 +51,11 @@ public class CaseServiceImpl implements CaseService {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters) {
+
+        String userName = userSessionService.getUsername();
+        boolean isAdmin = userSessionService.isAdmin();
+
         try {
-
-            String userName = userSessionService.getUsername();
-            boolean isAdmin = userSessionService.isAdmin();
-
-            if (userName==null) {
-                throw new PermissionException();
-            }
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);

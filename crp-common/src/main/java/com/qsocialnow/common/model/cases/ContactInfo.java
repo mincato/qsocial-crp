@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.Email;
 
 public class ContactInfo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1700721065915782255L;
 
     private String phone;
 

@@ -1,0 +1,6 @@
+{"properties": 
+    {"idCase": {"type": "string","index": "not_analyzed"},
+    "userName": {"type": "string","index": "not_analyzed"},
+    "deepLink": {"type": "string","index": "not_analyzed"},
+    "action":{"type": "string","index": "not_analyzed"}
+    }}

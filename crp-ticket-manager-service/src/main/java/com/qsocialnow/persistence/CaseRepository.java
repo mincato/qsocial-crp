@@ -2,6 +2,8 @@ package com.qsocialnow.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
 
@@ -23,15 +26,15 @@ public class CaseRepository {
     @Autowired
     private CaseTicketService caseElasticService;
 
-    public List<CaseListView> findAll(PageRequest pageRequest, String subject, String title, String description,
-            String pendingResponse, String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter,
-            String userName) {
+    public List<CaseListView> findAll(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
+            String subject, String title, String pendingResponse, String status, String fromOpenDate,
+            String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
             List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
-                    pageRequest.getSortField(), pageRequest.getSortOrder(), subject, title, description,
-                    pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
+                    pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId, segmentId, subject,
+                    title, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected);
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();
@@ -58,11 +61,31 @@ public class CaseRepository {
         return cases;
     }
 
-    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String title, String description,
-            String pendingResponse, String fromOpenDate, String toOpenDate) {
+    public List<ResultsListView> sumarizeResolvedByResolution(PageRequest pageRequest, String domainId) {
+        List<ResultsListView> results = new ArrayList<>();
+        try {
+            Map<String, Long> resultsRepo = caseElasticService.getCasesCountByResolution(domainId);
+            Set<String> resultKeys = resultsRepo.keySet();
+            for (String key : resultKeys) {
+                ResultsListView resultView = new ResultsListView();
+                resultView.setResolution(key);
+                resultView.setTotal(resultsRepo.get(key));
+                results.add(resultView);
+            }
+
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return results;
+    }
+
+    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
+            String subject, String title, String description, String pendingResponse, String status,
+            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
         JsonObject jsonObject = caseElasticService.getCasesAsJsonObject(pageRequest.getOffset(),
-                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), title, description,
-                pendingResponse, fromOpenDate, toOpenDate);
+                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId,
+                segmentId, subject, title, description, pendingResponse, status, fromOpenDate, toOpenDate,
+                teamsToFilter, userName, userSelected);
         return jsonObject.getAsJsonObject("hits").getAsJsonArray("hits");
     }
 

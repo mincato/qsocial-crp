@@ -240,7 +240,7 @@ public class TwitterDetectorService extends SourceDetectorService {
 
         try {
             Event event = new Event();
-            String mainUserResolver = null;
+            // String mainUserResolver = null;
 
             event.setId(sourceMessageId);
             event.setFecha(new Date());
@@ -255,7 +255,7 @@ public class TwitterDetectorService extends SourceDetectorService {
                 for (int i = 0; i < userMentions.length; i++) {
                     String userMention = userMentions[i];
                     if (conversations.containsKey(userMention)) {
-                        mainUserResolver = userMention;
+                        // mainUserResolver = userMention;
                         break;
                     }
                 }

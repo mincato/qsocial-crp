@@ -13,6 +13,8 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Message;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.util.DeepLinkBuilder;
+import com.qsocialnow.common.util.SubjectIdentifierNormalizer;
 
 @Component("mergeCaseAction")
 public class MergeCaseAction {
@@ -27,9 +29,11 @@ public class MergeCaseAction {
         ActionRegistry registry = new ActionRegistry();
         registry.setAction(ActionType.MERGE_CASE.name());
         registry.setAutomatic(true);
-        registry.setComment(event.getUsuarioOriginal() + " - " + event.getTitulo());
+        String identifier = SubjectIdentifierNormalizer.normalize(event.getUsuarioOriginal());
+        registry.setComment(identifier + " - " + event.getTitulo());
         registry.setDate(new Date().getTime());
         registry.setEvent(event);
+        registry.setDeepLink(DeepLinkBuilder.build(event));
         registries.add(registry);
         Message message = new Message();
         message.setFromResponseDetector(event.isResponseDetected());

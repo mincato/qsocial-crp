@@ -26,6 +26,8 @@ public class ActionRegistryType implements IdentityType {
 
     private ActionType type;
 
+    private String deepLink;
+
     public String getId() {
         return id;
     }
@@ -96,5 +98,13 @@ public class ActionRegistryType implements IdentityType {
 
     public void setType(ActionType type) {
         this.type = type;
+    }
+
+    public String getDeepLink() {
+        return deepLink;
+    }
+
+    public void setDeepLink(String deepLink) {
+        this.deepLink = deepLink;
     }
 }

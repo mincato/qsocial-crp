@@ -27,6 +27,9 @@ public class EventResolverConfig {
     @Value("${app.domains.path}")
     private String domainsPath;
 
+    @Value("${app.user.resolvers.path}")
+    private String userResolversPath;
+
     public String getZookeeperHost() {
         return zookeeperHost;
     }
@@ -53,6 +56,10 @@ public class EventResolverConfig {
 
     public String getEventsQueueConfiguratorZnodePath() {
         return eventsQueueConfiguratorZnodePath;
+    }
+
+    public String getUserResolversPath() {
+        return userResolversPath;
     }
 
 }

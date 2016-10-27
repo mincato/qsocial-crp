@@ -2,6 +2,7 @@ package com.qsocialnow.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +13,13 @@ import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
-import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.model.pagination.PageRequest;
+import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.elasticsearch.services.config.SegmentService;
 import com.qsocialnow.elasticsearch.services.config.TriggerService;
 
 @Service
-public class TriggerRepository {
+public class TriggerRepository implements ReportRepository {
 
     private Logger log = LoggerFactory.getLogger(TriggerRepository.class);
 
@@ -120,6 +121,15 @@ public class TriggerRepository {
             segments.add(segmentListView);
         }
         return segments;
+    }
+
+    public List<Trigger> findTriggersByIds(List<String> triggerIds) {
+        List<Trigger> triggers = triggerElasticService.getTriggersByIds(triggerIds);
+        return triggers;
+    }
+
+    public Map<String, String> findAllReport() {
+        return triggerElasticService.getAllTriggersAsMap();
     }
 
 }

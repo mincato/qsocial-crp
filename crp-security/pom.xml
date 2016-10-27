@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>com.qsocialnow.crp</groupId>
 		<artifactId>case-resolution-platform</artifactId>
-		<version>0.6.0</version>
+		<version>0.6.2</version>
 	</parent>
 	<artifactId>crp-security</artifactId>
-	<name>crp-security</name>
+	<name>CRP Security</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>

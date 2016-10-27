@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -234,8 +235,8 @@ public class CaseService extends CaseIndexService {
             filters = filters.must(QueryBuilders.matchQuery("subject.sourceId", idSubject));
         }
 
-        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp", filters,
-                mapping);
+        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp",
+                SortOrder.DESC, filters, mapping);
 
         List<Case> cases = response.getSources();
 
@@ -260,8 +261,8 @@ public class CaseService extends CaseIndexService {
             filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
         }
 
-        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp", filters,
-                mapping);
+        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp",
+                SortOrder.DESC, filters, mapping);
 
         List<Case> cases = response.getSources();
 
@@ -285,8 +286,8 @@ public class CaseService extends CaseIndexService {
             filters = filters.must(QueryBuilders.matchQuery("domainId", domainId));
         }
 
-        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp", filters,
-                mapping);
+        SearchResponse<Case> response = repository.searchWithFilters(null, null, "lastModifiedTimestamp",
+                SortOrder.DESC, filters, mapping);
 
         List<Case> cases = response.getSources();
 

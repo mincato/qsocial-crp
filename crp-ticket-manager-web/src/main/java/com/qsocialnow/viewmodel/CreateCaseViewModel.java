@@ -57,7 +57,7 @@ public class CreateCaseViewModel implements Serializable {
     }
 
     private void initDomain() {
-        PageResponse<DomainListView> pageResponse = domainService.findAll(0, -1);
+        PageResponse<DomainListView> pageResponse = domainService.findAll();
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.domains.addAll(pageResponse.getItems());
         }

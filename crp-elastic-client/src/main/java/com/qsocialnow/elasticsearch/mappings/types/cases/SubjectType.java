@@ -6,7 +6,7 @@ import io.searchbox.annotations.JestId;
 
 public class SubjectType extends Subject implements IdentityType {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 6792148307388838666L;
 
     @JestId
     private String idSubject;

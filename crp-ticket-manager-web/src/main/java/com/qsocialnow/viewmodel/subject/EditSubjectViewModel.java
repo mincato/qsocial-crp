@@ -2,14 +2,11 @@ package com.qsocialnow.viewmodel.subject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.ContextParam;
@@ -25,11 +22,14 @@ import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Div;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.cases.ContactInfo;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.event.PolygonLocation;
 import com.qsocialnow.services.SubjectCategorySetService;
 import com.qsocialnow.services.SubjectService;
 
@@ -117,11 +117,26 @@ public class EditSubjectViewModel implements Serializable {
     @Command
     public void close(@ContextParam(ContextType.VIEW) Div comp) {
         comp.detach();
-        if (saved) {
-            Map<String, Object> args = new HashMap<String, Object>();
-            args.put("subjectChanged", currentSubject.getSubject());
-            BindUtils.postGlobalCommand(null, null, "changeSubject", args);
+    }
+
+    @Command
+    public String buildLocation(Subject subject) {
+        String location = null;
+        if (subject.getLocationMethod() != null) {
+            switch (subject.getLocationMethod()) {
+                case POLYGON_LOCATION:
+                    PolygonLocation polygon = new GsonBuilder()
+                            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+                            .fromJson(subject.getLocation(), PolygonLocation.class);
+                    location = polygon.getFullName();
+                    break;
+                default:
+                    location = subject.getLocation();
+                    break;
+            }
+
         }
+        return location;
     }
 
 }

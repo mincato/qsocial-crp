@@ -2,9 +2,14 @@ package com.qsocialnow.interceptors;
 
 import java.util.TimeZone;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.log4j.Logger;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.zkoss.util.Locales;
 import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Session;
@@ -15,24 +20,39 @@ import com.qsocialnow.security.UserData;
 
 public class UserConfigurator implements RequestInterceptor {
 
-	@Override
-	public void request(Session session, Object request, Object response) {
+    private static final Logger LOGGER = Logger.getLogger(UserConfigurator.class);
 
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
+    @Override
+    public void request(Session session, Object request, Object response) {
 
-		AuthorizationHelper authHelper = new AuthorizationHelper();
-		boolean userSaved = authHelper.saveUserInSession(httpRequest);
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-		if (userSaved) {
-			HttpSession httpSession = httpRequest.getSession(false);
-			UserData userData = (UserData) httpSession.getAttribute(AuthorizationHelper.USER_SESSION_PARAMETER);
-			if (userData != null && userData.getTimezone() != null) {
-				session.setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(userData.getTimezone()));
+        CuratorFramework loginZookeeper = findZookeeperLogin(httpRequest);
 
-			}
-			if (userData != null && userData.getLanguage() != null) {
-				session.setAttribute(Attributes.PREFERRED_LOCALE, Locales.getLocale(userData.getLanguage()));
-			}
-		}
-	}
+        try {
+            AuthorizationHelper authHelper = new AuthorizationHelper();
+            boolean userSaved = authHelper.saveUserInSession(httpRequest, loginZookeeper);
+
+            if (userSaved) {
+                HttpSession httpSession = httpRequest.getSession(false);
+                UserData userData = (UserData) httpSession.getAttribute(AuthorizationHelper.USER_SESSION_PARAMETER);
+                if (userData != null && userData.getTimezone() != null) {
+                    session.setAttribute(Attributes.PREFERRED_TIME_ZONE, TimeZone.getTimeZone(userData.getTimezone()));
+
+                }
+                if (userData != null && userData.getLanguage() != null) {
+                    session.setAttribute(Attributes.PREFERRED_LOCALE, Locales.getLocale(userData.getLanguage()));
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.error("There was an error configurating the user in the session", e);
+        }
+    }
+
+    private CuratorFramework findZookeeperLogin(HttpServletRequest request) {
+        ServletContext context = request.getServletContext();
+        WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(context);
+        return (CuratorFramework) springContext.getBean("zookeeperLogin");
+    }
+
 }

@@ -68,8 +68,7 @@ public class ChangeSubjectActionViewModel implements Serializable {
             if (currentCase.getCaseObject().getSubject() != null) {
                 SubjectListView subjectListView = new SubjectListView();
                 subjectListView.setId(currentCase.getCaseObject().getSubject().getId());
-                subjectListView.setName(currentCase.getCaseObject().getSubject().getName());
-                subjectListView.setLastName(currentCase.getCaseObject().getSubject().getLastName());
+                subjectListView.setSourceName(currentCase.getCaseObject().getSubject().getSourceName());
                 subjectListView.setIdentifier(currentCase.getCaseObject().getSubject().getIdentifier());
                 this.changeSubjectAction.setSelectedSubject(subjectListView);
             }

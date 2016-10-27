@@ -45,9 +45,9 @@ public class CaseTicketService extends CaseIndexService {
         return caseDocument;
     }
 
-    public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String subject, String title,
-            String description, String pendingResponse, String status, String fromOpenDate, String toOpenDate,
-            List<String> teamsToFilter, String userName) {
+    public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String domainId,
+            String triggerId, String segmentId, String subject, String title, String pendingResponse, String status,
+            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -62,20 +62,29 @@ public class CaseTicketService extends CaseIndexService {
 
         Map<String, String> searchValues = new HashMap<>();
 
+        if (domainId != null)
+            searchValues.put("domainId", domainId);
+
+        if (triggerId != null)
+            searchValues.put("triggerId", triggerId);
+
+        if (segmentId != null)
+            searchValues.put("segmentId", segmentId);
+
         if (subject != null)
             searchValues.put("subject.identifier", subject);
 
         if (title != null)
             searchValues.put("title", title);
 
-        if (description != null)
-            searchValues.put("description", description);
-
         if (pendingResponse != null)
             searchValues.put("pendingResponse", pendingResponse);
 
         if (status != null)
             searchValues.put("open", status);
+
+        if (userSelected != null)
+            searchValues.put("assignee.username", userSelected);
 
         List<ShouldFilter> shouldFilters = null;
 
@@ -102,8 +111,10 @@ public class CaseTicketService extends CaseIndexService {
         return cases;
     }
 
-    public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String title,
-            String description, String pendingResponse, String fromOpenDate, String toOpenDate) {
+    public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String domainId,
+            String triggerId, String segmentId, String subject, String title, String description,
+            String pendingResponse, String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter,
+            String userName, String userSelected) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -112,7 +123,23 @@ public class CaseTicketService extends CaseIndexService {
         CaseMapping mapping = CaseMapping.getInstance();
         log.info("retrieving cases from :" + from + " size" + size + " sorted by;" + sortField);
 
+        RangeFilter rangeFilter = new RangeFilter("openDate", fromOpenDate, toOpenDate);
+        List<RangeFilter> rangeFilters = new ArrayList<>();
+        rangeFilters.add(rangeFilter);
+
         Map<String, String> searchValues = new HashMap<>();
+
+        if (domainId != null)
+            searchValues.put("domainId", domainId);
+
+        if (triggerId != null)
+            searchValues.put("triggerId", triggerId);
+
+        if (segmentId != null)
+            searchValues.put("segmentId", segmentId);
+
+        if (subject != null)
+            searchValues.put("subject.identifier", subject);
 
         if (title != null)
             searchValues.put("title", title);
@@ -123,8 +150,30 @@ public class CaseTicketService extends CaseIndexService {
         if (pendingResponse != null)
             searchValues.put("pendingResponse", pendingResponse);
 
+        if (status != null)
+            searchValues.put("open", status);
+
+        if (userSelected != null)
+            searchValues.put("assignee.username", userSelected);
+
+        List<ShouldFilter> shouldFilters = null;
+
+        if (teamsToFilter == null || (teamsToFilter != null && teamsToFilter.size() == 0)) {
+            if (userName != null) {
+                searchValues.put("assignee.username", userName);
+            }
+        } else {
+            shouldFilters = new ArrayList<>();
+            for (String teamId : teamsToFilter) {
+                ShouldFilter shouldFilter = new ShouldFilter("teamId", teamId);
+                shouldFilters.add(shouldFilter);
+            }
+            ShouldFilter shouldFilter = new ShouldFilter("assignee.username", userName);
+            shouldFilters.add(shouldFilter);
+        }
+
         SearchResult response = repository.queryByFieldsAsJson(mapping, from, size, sortField,
-                Boolean.valueOf(sortOrder), searchValues, "openDate", fromOpenDate, toOpenDate);
+                Boolean.valueOf(sortOrder), searchValues, rangeFilters, shouldFilters);
 
         JsonObject jsonObject = response.getJsonObject();
         repository.closeClient();
@@ -169,5 +218,24 @@ public class CaseTicketService extends CaseIndexService {
         String response = repository.updateMapping(document.getId(), mapping, documentIndexed);
         repository.closeClient();
         return response;
+    }
+
+    public Map<String, Long> getCasesCountByResolution(String domainId) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+        log.info("retrieving cases from :" + domainId);
+
+        Map<String, String> searchValues = new HashMap<>();
+        if (domainId != null)
+            searchValues.put("domainId", domainId);
+
+        SearchResponse<Case> response = repository
+                .queryByFieldsAndAggs(mapping, searchValues, null, null, "resolution");
+        Map<String, Long> results = response.getCountAggregation();
+        repository.closeClient();
+        return results;
     }
 }

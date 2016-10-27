@@ -99,6 +99,24 @@
 											</div>
 										</div>
 									</n:div>
+									<n:div class="form-group">
+										<n:label
+											class="control-label col-sm-2">
+											${labels.subject.sourceName.label}
+										</n:label>
+										<div zclass="col-sm-10 form-control-static">
+											<label value="@load(fx.subject.sourceName)" />
+										</div>
+									</n:div>
+									<n:div class="form-group">
+										<n:label
+											class="control-label col-sm-2">
+											${labels.subject.location.label}
+										</n:label>
+										<div zclass="col-sm-10 form-control-static">
+											<label value="@load(vm.buildLocation(fx.subject))" />
+										</div>
+									</n:div>
 									<x:div
 										sclass="@load(empty vmsgs[name] ? 'form-group' : 'form-group has-error')">
 										<n:label

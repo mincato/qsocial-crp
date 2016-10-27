@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
 import com.qsocialnow.elasticsearch.mappings.Mapping;
@@ -44,6 +45,8 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> findByAlias(String id, Mapping<T, E> mapping);
 
+    public <E> SearchResponse<E> queryByIds(Mapping<T, E> mapping, String sortField, List<String> ids);
+
     public <E> SearchResponse<E> queryByField(Mapping<T, E> mapping, int from, int size, String sortField,
             String serchField, String searchValue);
 
@@ -51,8 +54,12 @@ public interface Repository<T> {
             boolean sortOrder, Map<String, String> fieldValues, List<RangeFilter> rangeFilters,
             List<ShouldFilter> shouldFilters);
 
+    public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> fieldValues,
+            List<RangeFilter> rangeFilters, List<ShouldFilter> shouldFilters, String aggregationField);
+
     public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> fieldValues, String rangeField, String fromValue, String toValue);
+            boolean sortOrder, Map<String, String> fieldValues, List<RangeFilter> rangeFilters,
+            List<ShouldFilter> shouldFilters);
 
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
             Mapping<T, E> mapping);
@@ -64,10 +71,12 @@ public interface Repository<T> {
     public <E> SearchResponse<E> searchChildMappingWithFilters(int from, int size, String sortField,
             QueryBuilder filters, ChildMapping<T, E> mapping);
 
-    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField,
+    public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField, SortOrder sortOrder,
             BoolQueryBuilder filters, Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping);
+
+    public <E> SearchResponse<E> search(Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> search(Integer from, Integer size, String sortField, Mapping<T, E> mapping);
 

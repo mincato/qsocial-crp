@@ -8,7 +8,7 @@ import com.qsocialnow.elasticsearch.mappings.types.config.SegmentType;
 
 public class SegmentMapping implements Mapping<SegmentType, Segment> {
 
-    private static final String TYPE = "segment";
+    public static final String TYPE = "segment";
 
     private static SegmentMapping instance;
 
@@ -61,6 +61,7 @@ public class SegmentMapping implements Mapping<SegmentType, Segment> {
         segment.setDescription(documentType.getDescription());
         segment.setDetectionCriterias(documentType.getDetectionCriterias());
         segment.setTeam(documentType.getTeam());
+        segment.setTriggerId(documentType.getTriggerId());
         return segment;
     }
 
