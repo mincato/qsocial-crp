@@ -5,6 +5,6 @@ import com.odatech.microservices.response.EventsPaginatedResponse;
 
 public interface EventsRetroactiveService {
 
-	EventsPaginatedResponse buildResponse(RealTimeReportBean request) throws Throwable;
+    EventsPaginatedResponse buildResponse(RealTimeReportBean request) throws Throwable;
 
 }

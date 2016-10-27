@@ -6,15 +6,15 @@ import com.odatech.microservices.response.EventsPaginatedResponse;
 
 public class EventsRetroactiveServiceImpl implements EventsRetroactiveService {
 
-	private final EventsPaginatedService eventsPaginatedService;
-	
-	public EventsRetroactiveServiceImpl(EventsPaginatedService eventsPaginatedService) {
-		this.eventsPaginatedService = eventsPaginatedService;
-	}
+    private final EventsPaginatedService eventsPaginatedService;
 
-	@Override
-	public EventsPaginatedResponse buildResponse(RealTimeReportBean request) throws Throwable {
-		return this.eventsPaginatedService.buildResponse(request);
-	}
-	
+    public EventsRetroactiveServiceImpl(EventsPaginatedService eventsPaginatedService) {
+        this.eventsPaginatedService = eventsPaginatedService;
+    }
+
+    @Override
+    public EventsPaginatedResponse buildResponse(RealTimeReportBean request) throws Throwable {
+        return this.eventsPaginatedService.buildResponse(request);
+    }
+
 }

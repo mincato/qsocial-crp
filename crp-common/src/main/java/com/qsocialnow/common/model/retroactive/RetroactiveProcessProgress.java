@@ -8,6 +8,8 @@ public class RetroactiveProcessProgress {
 
     private String errorMessage;
 
+    private String scrollId;
+
     public RetroactiveProcessStatus getStatus() {
         return status;
     }
@@ -30,6 +32,14 @@ public class RetroactiveProcessProgress {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
+    }
+
+    public String getScrollId() {
+        return scrollId;
+    }
+
+    public void setScrollId(String scrollId) {
+        this.scrollId = scrollId;
     }
 
 }

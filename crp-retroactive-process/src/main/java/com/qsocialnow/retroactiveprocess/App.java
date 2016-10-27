@@ -22,9 +22,11 @@ public class App implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(App.class);
 
-	private static final String DEFAULT_ENVIRONMENT = "development";
+    private static final String DEFAULT_ENVIRONMENT = "development";
 
     private ExecutorService appExecutor;
+
+    private ExecutorService processorExecutor;
 
     @Autowired
     private RetroactiveProcessConfig appConfig;
@@ -39,7 +41,7 @@ public class App implements Runnable {
 
     public static void main(String[] args) {
         try {
-        	String env = System.getenv("environment");
+            String env = System.getenv("environment");
             if (env == null) {
                 env = DEFAULT_ENVIRONMENT;
             }
@@ -57,12 +59,15 @@ public class App implements Runnable {
 
         appExecutor = Executors.newSingleThreadExecutor();
         appExecutor.execute(this);
+        processorExecutor = Executors.newSingleThreadExecutor();
+        processorExecutor.execute(retroactiveProcessor);
 
     }
 
     @Override
     public void run() {
         try {
+
             nodeCache = new NodeCache(zookeeperClient, appConfig.getProcessZnodePath());
             addListener();
             nodeCache.start(true);
@@ -79,11 +84,11 @@ public class App implements Runnable {
     private void process(RetroactiveProcessEvent processEvent, boolean tryToResume) {
         switch (processEvent) {
             case START:
-            	if (tryToResume) {
-            		retroactiveProcessor.resume();
-            	} else {
-            		retroactiveProcessor.start();
-            	}
+                if (tryToResume) {
+                    retroactiveProcessor.resume();
+                } else {
+                    retroactiveProcessor.start();
+                }
                 break;
             case STOP:
                 log.info("stoping process");
@@ -100,6 +105,13 @@ public class App implements Runnable {
         try {
             if (nodeCache != null) {
                 nodeCache.close();
+            }
+            if (retroactiveProcessor != null) {
+                retroactiveProcessor.shutdown();
+            }
+            if (processorExecutor != null) {
+                processorExecutor.shutdown();
+                processorExecutor.awaitTermination(10L, TimeUnit.SECONDS);
             }
             if (appExecutor != null) {
                 appExecutor.shutdown();

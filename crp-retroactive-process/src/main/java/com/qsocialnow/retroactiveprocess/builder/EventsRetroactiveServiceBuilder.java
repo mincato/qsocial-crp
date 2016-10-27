@@ -5,6 +5,6 @@ import com.qsocialnow.retroactiveprocess.service.EventsRetroactiveService;
 
 public interface EventsRetroactiveServiceBuilder {
 
-	EventsRetroactiveService build(RealTimeReportBean request);
+    EventsRetroactiveService build(RealTimeReportBean request);
 
 }
