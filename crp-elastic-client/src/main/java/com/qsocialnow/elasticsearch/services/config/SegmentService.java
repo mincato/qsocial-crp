@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Team;
@@ -24,8 +22,6 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 import com.qsocialnow.elasticsearch.repositories.ShouldFilter;
 
 public class SegmentService {
-
-    private static final Logger log = LoggerFactory.getLogger(SegmentService.class);
 
     private AWSElasticsearchConfigurationProvider configurator;
 

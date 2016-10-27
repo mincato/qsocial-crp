@@ -8,7 +8,7 @@ import com.qsocialnow.elasticsearch.mappings.types.config.ResolutionType;
 
 public class ResolutionMapping implements ChildMapping<ResolutionType, Resolution> {
 
-    private static final String TYPE = "resolution";
+    public static final String TYPE = "resolution";
 
     private static ResolutionMapping instance;
 

@@ -81,4 +81,23 @@ public class TeamRepository {
         return teamsRepo;
     }
 
+    public List<TeamListView> findAll() {
+        List<TeamListView> teams = new ArrayList<>();
+
+        try {
+            List<Team> teamsRepo = teamElasticService.getTeams();
+
+            for (Team teamRepo : teamsRepo) {
+                TeamListView teamListView = new TeamListView();
+                teamListView.setId(teamRepo.getId());
+                teamListView.setName(teamRepo.getName());
+
+                teams.add(teamListView);
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return teams;
+    }
+
 }

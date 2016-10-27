@@ -16,6 +16,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.QueryParam;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zk.ui.util.Clients;
@@ -27,6 +28,7 @@ import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
+import com.qsocialnow.handler.NotificationHandler;
 import com.qsocialnow.model.DomainView;
 import com.qsocialnow.model.ListView;
 import com.qsocialnow.model.TriggerCaseCategorySetView;
@@ -317,17 +319,26 @@ public class CreateTriggerViewModel implements Serializable {
             Clients.showNotification(Labels.getLabel("trigger.edit.notification.success"));
         } else {
             triggerService.create(domain, currentTrigger.getTrigger());
-            Clients.showNotification(Labels.getLabel("trigger.create.notification.success"));
-            currentTrigger.setTrigger(new Trigger());
-            currentTrigger.getTrigger().setSegments(new ArrayList<>());
-            currentTrigger.getTrigger().setResolutions(new ArrayList<>());
-            currentTrigger.getTrigger().setCaseCategoriesSetIds(new ArrayList<>());
-            currentTrigger.getTrigger().setSubjectCategoriesSetIds(new ArrayList<>());
-            currentTrigger.setResolutions(new ArrayList<TriggerResolutionView>());
-            currentTrigger.setSubjectCategorySets(new ArrayList<TriggerSubjectCategorySetView>());
-            currentTrigger.setCaseCategorySets(new ArrayList<TriggerCaseCategorySetView>());
-            initCaseCategorySetListView(null);
-            initSubjectCategorySetListView(null);
+
+            NotificationHandler.addNotification(Labels.getLabel("trigger.create.notification.success"));
+            Executions.getCurrent().sendRedirect("/pages/triggers/list/index.zul?domain=" + domain);
+
+            /*
+             * currentTrigger.setTrigger(new Trigger());
+             * currentTrigger.getTrigger().setSegments(new ArrayList<>());
+             * currentTrigger.getTrigger().setResolutions(new ArrayList<>());
+             * currentTrigger.getTrigger().setCaseCategoriesSetIds(new
+             * ArrayList<>());
+             * currentTrigger.getTrigger().setSubjectCategoriesSetIds(new
+             * ArrayList<>()); currentTrigger.setResolutions(new
+             * ArrayList<TriggerResolutionView>());
+             * currentTrigger.setSubjectCategorySets(new
+             * ArrayList<TriggerSubjectCategorySetView>());
+             * currentTrigger.setCaseCategorySets(new
+             * ArrayList<TriggerCaseCategorySetView>());
+             * initCaseCategorySetListView(null);
+             * initSubjectCategorySetListView(null);
+             */
         }
     }
 

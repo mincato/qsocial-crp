@@ -11,7 +11,7 @@ public class DeepLinkBuilder {
 
     public static String build(Event event) {
         if (Media.TWITTER.getValue().equals(event.getMedioId())) {
-            String creationUser = formatCreationUser(event.getUsuarioCreacion());
+            String creationUser = SubjectIdentifierNormalizer.normalize(event.getUsuarioCreacion());
             return MessageFormat.format("https://twitter.com/{0}/status/{1}", creationUser, event.getId());
         }
         if (Media.FACEBOOK.getValue().equals(event.getMedioId())) {
@@ -40,11 +40,4 @@ public class DeepLinkBuilder {
         return null;
     }
 
-    private static String formatCreationUser(String creationUser) {
-        int firstBlankPosition = creationUser.indexOf(" ");
-        if (firstBlankPosition != -1) {
-            return creationUser.substring(0, firstBlankPosition);
-        }
-        return creationUser;
-    }
 }

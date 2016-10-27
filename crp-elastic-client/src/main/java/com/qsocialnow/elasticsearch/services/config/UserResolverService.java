@@ -29,7 +29,7 @@ public class UserResolverService {
 
         // index document
         UserResolverType documentIndexed = mapping.getDocumentType(userResolver);
-        String response = repository.indexMapping(mapping, documentIndexed);
+        String response = repository.indexMappingAndRefresh(mapping, documentIndexed);
         repository.closeClient();
         return response;
     }
@@ -47,7 +47,8 @@ public class UserResolverService {
 
         UserResolverMapping mapping = UserResolverMapping.getInstance(indexConfiguration.getIndexName());
 
-        SearchResponse<UserResolver> response = repository.searchWithFilters(offset, limit, null, filters, mapping);
+        SearchResponse<UserResolver> response = repository.searchWithFilters(offset, limit, null, null, filters,
+                mapping);
         List<UserResolver> userResolvers = response.getSources();
 
         repository.closeClient();

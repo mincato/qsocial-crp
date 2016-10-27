@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.config.Team;
@@ -77,7 +76,7 @@ public class CaseReportService {
 
     public byte[] getReport(String domainId, String triggerId, String segmentId, String subject, String title,
             String description, String pendingResponse, String status, String fromOpenDate, String toOpenDate,
-            String userName) {
+            String userName, String userSelected) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             Map<String, ReportRepository> reportRepositories = new HashMap<>();
@@ -119,7 +118,8 @@ public class CaseReportService {
             }
             time = System.currentTimeMillis();
             JsonArray jsonObject = repository.findAllAsJsonObject(pageRequest, domainId, triggerId, segmentId, subject,
-                    title, description, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName);
+                    title, description, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName,
+                    userSelected);
             System.out.println("tiempo: " + (System.currentTimeMillis() - time));
             InputStream is = new ByteArrayInputStream(jsonObject.toString().getBytes());
             JasperPrint print = this.buildJasperPrint(is, params);

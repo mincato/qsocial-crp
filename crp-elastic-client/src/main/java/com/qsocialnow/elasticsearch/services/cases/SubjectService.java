@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +61,8 @@ public class SubjectService extends CaseIndexService {
         SubjectMapping mapping = SubjectMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
 
-        SearchResponse<Subject> response = repository.searchWithFilters(from, size, "identifier", filters, mapping);
+        SearchResponse<Subject> response = repository.searchWithFilters(from, size, "identifier", SortOrder.ASC,
+                filters, mapping);
 
         List<Subject> subjects = response.getSources();
 

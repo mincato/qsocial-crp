@@ -2857,11 +2857,17 @@ button.remove {
 }
 
 @media (min-width: 768px) {
-	.form-inline .form-group {
+	.form-inline .form-group, .form-inline .form-group:last-child {
 	    margin-left: 10px;
+	    margin-bottom: 5px;
 	}
 }
 
 .form-inline .form-group > label {
     margin-right: 5px;
+}
+
+#page-header {
+	display:flex;
+	align-items: center;
 }

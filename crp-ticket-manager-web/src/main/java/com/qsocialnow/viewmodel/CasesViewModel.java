@@ -255,7 +255,7 @@ public class CasesViewModel implements Serializable {
         List<DomainListView> domains = new ArrayList<>();
         PageResponse<DomainListView> domainsResponse;
         if (isAdmin)
-            domainsResponse = domainService.findAll(0, -1);
+            domainsResponse = domainService.findAll();
         else
             domainsResponse = domainService.findAllByUserNameAllowed(this.userName);
 

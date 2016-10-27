@@ -77,7 +77,12 @@ public class DomainService {
     }
 
     public PageResponse<DomainListView> findAll(Integer pageNumber, Integer pageSize) {
-        List<DomainListView> domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize, null));
+        List<DomainListView> domains;
+        if (pageNumber == null && pageSize == null) {
+            domains = domainRepository.findAll();
+        } else {
+            domains = domainRepository.findAll(new PageRequest(pageNumber, pageSize, null));
+        }
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
         return page;
     }

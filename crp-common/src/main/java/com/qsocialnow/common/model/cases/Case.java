@@ -13,6 +13,7 @@ import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.util.DeepLinkBuilder;
+import com.qsocialnow.common.util.SubjectIdentifierNormalizer;
 
 public class Case implements Serializable {
 
@@ -105,7 +106,8 @@ public class Case implements Serializable {
         List<ActionRegistry> registries = new ArrayList<>();
         ActionRegistry registry = new ActionRegistry();
         registry.setAction(ActionType.OPEN_CASE.name());
-        registry.setComment(event.getUsuarioCreacion() + " - " + event.getTitulo());
+        String identifier = SubjectIdentifierNormalizer.normalize(event.getUsuarioCreacion());
+        registry.setComment(identifier + " - " + event.getTitulo());
         registry.setAutomatic(true);
         registry.setDate(openDate);
         registry.setDeepLink(DeepLinkBuilder.build(event));

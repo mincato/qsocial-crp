@@ -90,10 +90,6 @@ public class CreateTeamViewModel extends EditableTeamViewModel implements Serial
         team = teamService.create(team);
         NotificationHandler.addNotification(Labels.getLabel("team.create.notification.success",
                 new String[] { team.getName() }));
-        initTeam();
-        initUsers();
-        initUsersResolver();
-
         Executions.getCurrent().sendRedirect("/pages/team/list/index.zul");
     }
 
