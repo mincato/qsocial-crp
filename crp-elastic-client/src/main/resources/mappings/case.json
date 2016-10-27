@@ -7,8 +7,7 @@
     "openDate":{"type": "date","index":"not_analyzed"},
     "closeDate":{"type": "date","index":"not_analyzed"},
     "lastModifiedTimestamp":{"type": "date","index":"not_analyzed"},
-    "title":{"type": "string","analyzer": "standard" },
-    "titleSort":{"type": "string","index": "not_analyzed"},
+    "title":{"type": "string","fields":{"raw":{"type":"string","index":"not_analyzed"},"keyword":{"type":"string","analyzer":"insensitive_sort"}}},
     "description":{"type": "string","analyzer": "standard" },
     "resolution":{"type": "string","index":"not_analyzed"}
-    }}
+  }}

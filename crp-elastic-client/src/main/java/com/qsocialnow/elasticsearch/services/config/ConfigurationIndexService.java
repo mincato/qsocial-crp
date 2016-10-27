@@ -45,7 +45,7 @@ public class ConfigurationIndexService {
         boolean isCreated = repository.validateIndex(indexName);
         // create index
         if (!isCreated) {
-            repository.createIndex(indexName);
+            repository.createIndex(indexName, null);
             createMappings(repository, indexName);
         }
     }

@@ -1,0 +1,1 @@
+{"settings":{"analysis":{"analyzer": {"insensitive_sort": {"type":"custom","tokenizer":"standard","filter":["lowercase"]}}}}}
