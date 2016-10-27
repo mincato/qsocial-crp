@@ -29,6 +29,9 @@ public class SendMessageCaseAction implements Action {
         String userResolverId = (String) parameters.get(ActionParameter.USER_RESOLVER);
         UserResolver userResolver = userResolverRepository.findOne(userResolverId);
         String postId = sources.get(userResolver.getSource()).sendMessage(caseObject, userResolver, text);
+        if (caseObject.getIdRootComment() == null)
+            caseObject.setIdRootComment(postId);
+
         caseObject.addMessage(new Message(postId, false));
         parameters.put(ActionParameter.COMMENT, postId + " - " + text);
     }
