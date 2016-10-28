@@ -36,9 +36,7 @@
               "sourceId" : {
                 "type" : "string"
               },
-              "sourceName" : {
-                "type" : "string"
-              }
+              "sourceName" : {"type": "string","index":"analyzed","analyzer": "autocomplete"}
             }
     }
   }}
