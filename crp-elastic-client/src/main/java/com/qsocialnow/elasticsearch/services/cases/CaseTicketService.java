@@ -71,9 +71,6 @@ public class CaseTicketService extends CaseIndexService {
         if (segmentId != null)
             searchValues.put("segmentId", segmentId);
 
-        if (subject != null)
-            searchValues.put("subject.identifier", subject);
-
         if (title != null)
             searchValues.put("title", title);
 
@@ -86,20 +83,26 @@ public class CaseTicketService extends CaseIndexService {
         if (userSelected != null)
             searchValues.put("assignee.username", userSelected);
 
-        List<ShouldFilter> shouldFilters = null;
+        List<ShouldFilter> shouldFilters = new ArrayList<>();
 
         if (teamsToFilter == null || (teamsToFilter != null && teamsToFilter.size() == 0)) {
             if (userName != null) {
                 searchValues.put("assignee.username", userName);
             }
         } else {
-            shouldFilters = new ArrayList<>();
             for (String teamId : teamsToFilter) {
                 ShouldFilter shouldFilter = new ShouldFilter("teamId", teamId);
                 shouldFilters.add(shouldFilter);
             }
             ShouldFilter shouldFilter = new ShouldFilter("assignee.username", userName);
             shouldFilters.add(shouldFilter);
+        }
+
+        if (subject != null) {
+            ShouldFilter shouldFilterSubjetIdentifier = new ShouldFilter("subject.identifier", subject);
+            ShouldFilter shouldFilterSubjetSourceName = new ShouldFilter("subject.sourceName", subject);
+            shouldFilters.add(shouldFilterSubjetIdentifier);
+            shouldFilters.add(shouldFilterSubjetSourceName);
         }
 
         SearchResponse<Case> response = repository.queryByFields(mapping, from, size, sortField,
