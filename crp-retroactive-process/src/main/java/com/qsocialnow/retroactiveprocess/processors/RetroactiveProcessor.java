@@ -80,8 +80,8 @@ public class RetroactiveProcessor implements Runnable {
                 request.setScrollId(retroactiveProcessProgress.getScrollId());
                 EventsRetroactiveService retroactiveService = eventsRetroactiveServiceBuilder.build(request);
                 EventsPaginatedResponse bean = null;
-                do {
-                    try {
+                try {
+                    do {
                         log.info("processing page with scroll id: " + request.getScrollId());
                         bean = retroactiveService.buildResponse(request);
                         if (bean != null && bean.getEvents() != null) {
@@ -96,20 +96,21 @@ public class RetroactiveProcessor implements Runnable {
                             log.info(String.format("Page with scroll id %s processed successfully",
                                     request.getScrollId()));
                             request.setScrollId(bean.getScrollId());
-                            Thread.sleep(30000);
                         }
-                    } catch (Throwable e) {
-                        log.error(
-                                String.format("There was an error processing page with scroll id %s",
-                                        request.getScrollId()), e);
+                    } while (!stop && bean != null && bean.getScrollId() != null);
+                    if (!stopByShutdown) {
+                        if (stop) {
+                            retroactiveProcessProgress.setStatus(RetroactiveProcessStatus.STOP);
+                        } else {
+                            retroactiveProcessProgress.setStatus(RetroactiveProcessStatus.FINISH);
+                        }
+                        updateProgress(retroactiveProcessProgress);
                     }
-                } while (!stop && bean != null && bean.getScrollId() != null);
-                if (!stopByShutdown) {
-                    if (stop) {
-                        retroactiveProcessProgress.setStatus(RetroactiveProcessStatus.STOP);
-                    } else {
-                        retroactiveProcessProgress.setStatus(RetroactiveProcessStatus.FINISH);
-                    }
+                } catch (Throwable e) {
+                    log.error(String.format("There was an error processing page with scroll id %s",
+                            request.getScrollId()), e);
+                    retroactiveProcessProgress.setStatus(RetroactiveProcessStatus.ERROR);
+                    retroactiveProcessProgress.setErrorMessage(e.getMessage());
                     updateProgress(retroactiveProcessProgress);
                 }
             }
@@ -138,7 +139,7 @@ public class RetroactiveProcessor implements Runnable {
             retroactiveProcessProgress = getProgress();
             if (!checkNeedsToResume(retroactiveProcessProgress)) {
                 if (retroactiveProcessProgress != null
-                        && RetroactiveProcessStatus.STOP.equals(retroactiveProcessProgress.getStatus())) {
+                        && RetroactiveProcessStatus.START.equals(retroactiveProcessProgress.getStatus())) {
                     retroactiveProcessProgress = initialProcessProgress();
                 } else {
                     retroactiveProcessProgress = null;
@@ -161,7 +162,8 @@ public class RetroactiveProcessor implements Runnable {
 
     private boolean checkNeedsToResume(RetroactiveProcessProgress retroactiveProcessProgress) {
         if (retroactiveProcessProgress != null
-                && RetroactiveProcessStatus.PROCESSING.equals(retroactiveProcessProgress.getStatus())) {
+                && (RetroactiveProcessStatus.PROCESSING.equals(retroactiveProcessProgress.getStatus()) || RetroactiveProcessStatus.START
+                        .equals(retroactiveProcessProgress.getStatus()))) {
             if (retroactiveProcessProgress.getScrollId() != null
                     || ZERO.equals(retroactiveProcessProgress.getEventsProcessed())) {
                 return true;
@@ -190,9 +192,11 @@ public class RetroactiveProcessor implements Runnable {
     private RetroactiveProcessProgress getProgress() {
         try {
             byte[] progressBytes = zookeeperClient.getData().forPath(appConfig.getProcessProgressZnodePath());
-            return new GsonBuilder().create().fromJson(new String(progressBytes), RetroactiveProcessProgress.class);
+            if (progressBytes != null) {
+                return new GsonBuilder().create().fromJson(new String(progressBytes), RetroactiveProcessProgress.class);
+            }
         } catch (Exception e) {
-            log.error("There was an error retrieving progress");
+            log.error("There was an error retrieving progress", e);
         }
         return null;
     }
@@ -204,6 +208,7 @@ public class RetroactiveProcessor implements Runnable {
             if (ArrayUtils.isNotEmpty(requestBytes)) {
                 request = new GsonBuilder().create().fromJson(new String(requestBytes), RealTimeReportBean.class);
                 request.setScrollExpirationDuration(pagedEventsServiceConfig.getScrollExpirationDuration());
+                request.setMaxResults(pagedEventsServiceConfig.getMaxResults());
             }
         } catch (Exception e) {
             log.error("There was an error building request", e);

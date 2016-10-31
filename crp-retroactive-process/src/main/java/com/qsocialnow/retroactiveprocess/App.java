@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.NodeCache;
 import org.apache.curator.framework.recipes.cache.NodeCacheListener;
@@ -72,7 +73,7 @@ public class App implements Runnable {
             addListener();
             nodeCache.start(true);
             byte[] statusNode = nodeCache.getCurrentData().getData();
-            if (statusNode != null) {
+            if (statusNode != null && ArrayUtils.isNotEmpty(statusNode)) {
                 RetroactiveProcessEvent processEvent = RetroactiveProcessEvent.valueOf(new String(statusNode));
                 process(processEvent, true);
             }

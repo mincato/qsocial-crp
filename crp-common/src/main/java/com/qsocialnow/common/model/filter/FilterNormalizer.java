@@ -1,9 +1,7 @@
-package com.qsocialnow.service;
+package com.qsocialnow.common.model.filter;
 
 import java.util.Arrays;
 import java.util.HashSet;
-
-import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.model.config.AdmUnitFilter;
 import com.qsocialnow.common.model.config.AdminUnit;
@@ -12,7 +10,6 @@ import com.qsocialnow.common.model.config.Filter;
 import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.common.util.StringUtils;
 
-@Component
 public class FilterNormalizer {
 
     public void normalizeFilter(Filter filter) {
@@ -47,7 +44,7 @@ public class FilterNormalizer {
         }
     }
 
-    private void normalizeAdmUnitFilter(AdmUnitFilter admUnitFilter) {
+    public void normalizeAdmUnitFilter(AdmUnitFilter admUnitFilter) {
         AdminUnit adminUnit = admUnitFilter.getAdminUnit();
         fillAdmUnitFilter(admUnitFilter, adminUnit);
         for (BaseAdminUnit baseAdminUnit : adminUnit.getParents()) {

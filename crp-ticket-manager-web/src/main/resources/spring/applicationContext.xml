@@ -58,4 +58,7 @@
  		<constructor-arg value="${zookeeper.login.path}"></constructor-arg>
 	</bean>	
 	
+	<bean id="filterNormalizer" class="com.qsocialnow.common.model.filter.FilterNormalizer">
+	</bean>
+	
 </beans>

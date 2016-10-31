@@ -18,6 +18,7 @@ import com.qsocialnow.common.model.config.Status;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
+import com.qsocialnow.common.model.filter.FilterNormalizer;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.TriggerListRequest;
 import com.qsocialnow.common.model.pagination.PageRequest;
