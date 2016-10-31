@@ -15,7 +15,7 @@
               "id" : {
                 "type" : "string"
               },
-              "identifier" : {"type": "string","index":"analyzed","analyzer": "autocomplete"},
+              "identifier" : {"type": "string","index":"analyzed","analyzer": "autocomplete","search_analyzer": "autocomplete_search","fields":{"raw":{"type":"string","index":"not_analyzed"},"keyword":{"type":"string","analyzer":"insensitive_sort"}}},
               "lastAccionDate" : {
                 "type" : "date",
                 "format" : "strict_date_optional_time||epoch_millis"
@@ -36,7 +36,7 @@
               "sourceId" : {
                 "type" : "string"
               },
-              "sourceName" : {"type": "string","index":"analyzed","analyzer": "autocomplete"}
+              "sourceName" : {"type": "string","index":"analyzed","analyzer": "autocomplete","search_analyzer": "autocomplete_search"}
             }
     }
   }}
