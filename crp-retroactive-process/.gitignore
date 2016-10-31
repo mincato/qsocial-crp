@@ -5,6 +5,7 @@
 
 # Package Files #
 *.jar
+!*paged-events-1.0-SNAPSHOT.jar
 *.war
 *.ear
 
