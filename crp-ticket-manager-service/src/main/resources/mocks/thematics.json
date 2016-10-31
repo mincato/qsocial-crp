@@ -1,188 +1,623 @@
 {
-  "clientOrganizationId": 52,
-  "thematics": [
-    {
-      "id": 1,
-      "nombre": "Preocupaciones",
-      "running": true,
-      "series": [
-        {
-          "id": 1,
-          "nombre": "Buenos Aires",
-          "subSeries": [
-            {
-              "id": 1,
-              "nombre": "Inflacion"
-            },
-            {
-              "id": 2,
-              "nombre": "Inseguridad"
-            },
-            {
-              "id": 3,
-              "nombre": "Economia"
-            },
-            {
-              "id": 4,
-              "nombre": "Metrobus"
-            }
-          ]
-        },
-        {
-          "id": 2,
-          "nombre": "Cordoba",
-          "subSeries": [
-            {
-              "id": 1,
-              "nombre": "Inflacion"
-            },
-            {
-              "id": 2,
-              "nombre": "Inseguridad"
-            },
-            {
-              "id": 3,
-              "nombre": "Economia"
-            }
-          ]
-        },
-        {
-          "id": 3,
-          "nombre": "Santa Fe",
-          "subSeries": [
-            {
-              "id": 1,
-              "nombre": "Inflacion"
-            },
-            {
-              "id": 2,
-              "nombre": "Inseguridad"
-            },
-            {
-              "id": 3,
-              "nombre": "Economia"
-            }
-          ]
-        },
-        {
-          "id": 4,
-          "nombre": "Rosario",
-          "subSeries": [
-            {
-              "id": 1,
-              "nombre": "Inflacion"
-            },
-            {
-              "id": 2,
-              "nombre": "Inseguridad"
-            },
-            {
-              "id": 3,
-              "nombre": "Economia"
-            },
-            {
-              "id": 5,
-              "nombre": "Narcotrafico"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "nombre": "Futbol",
-      "running": true,
-      "series": [
-        {
-          "id": 5,
-          "nombre": "Afa",
-          "subSeries": [
-            {
-              "id": 6,
-              "nombre": "Elecciones"
-            },
-            {
-              "id": 7,
-              "nombre": "Corrupcion"
-            }
-          ]
-        },
-        {
-          "id": 6,
-          "nombre": "Torneo",
-          "subSeries": [
-            {
-              "id": 8,
-              "nombre": "Fixture"
-            },
-            {
-              "id": 9,
-              "nombre": "Estadistica"
-            },
-            {
-              "id": 10,
-              "nombre": "Posiciones"
-            }
-          ]
-        },
-        {
-          "id": 7,
-          "nombre": "Mundial",
-          "subSeries": [
-            {
-              "id": 8,
-              "nombre": "Fixture"
-            },
-            {
-              "id": 9,
-              "nombre": "Estadistica"
-            },
-            {
-              "id": 10,
-              "nombre": "Posiciones"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "nombre": "Politica",
-      "running": true,
-      "series": [
-        {
-          "id": 8,
-          "nombre": "Elecciones",
-          "subSeries": [
-            {
-              "id": 11,
-              "nombre": "Encuestas"
-            },
-            {
-              "id": 12,
-              "nombre": "Votaciones"
-            }
-          ]
-        },
-        {
-          "id": 9,
-          "nombre": "Partidos",
-          "subSeries": [
-            {
-              "id": 13,
-              "nombre": "Pro"
-            },
-            {
-              "id": 14,
-              "nombre": "FPV"
-            },
-            {
-              "id": 15,
-              "nombre": "UCR"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+	"clientOrganizationId": 52,
+	"thematics": [{
+		"id": 1,
+		"nombre": "Preocupaciones",
+		"running": true,
+		"series": [{
+			"id": 1,
+			"nombre": "Buenos Aires",
+			"subSeries": [{
+				"id": 1,
+				"nombre": "Inflacion"
+			},
+			{
+				"id": 2,
+				"nombre": "Inseguridad"
+			},
+			{
+				"id": 3,
+				"nombre": "Economia"
+			},
+			{
+				"id": 4,
+				"nombre": "Metrobus"
+			}]
+		},
+		{
+			"id": 2,
+			"nombre": "Cordoba",
+			"subSeries": [{
+				"id": 1,
+				"nombre": "Inflacion"
+			},
+			{
+				"id": 2,
+				"nombre": "Inseguridad"
+			},
+			{
+				"id": 3,
+				"nombre": "Economia"
+			}]
+		},
+		{
+			"id": 3,
+			"nombre": "Santa Fe",
+			"subSeries": [{
+				"id": 1,
+				"nombre": "Inflacion"
+			},
+			{
+				"id": 2,
+				"nombre": "Inseguridad"
+			},
+			{
+				"id": 3,
+				"nombre": "Economia"
+			}]
+		},
+		{
+			"id": 4,
+			"nombre": "Rosario",
+			"subSeries": [{
+				"id": 1,
+				"nombre": "Inflacion"
+			},
+			{
+				"id": 2,
+				"nombre": "Inseguridad"
+			},
+			{
+				"id": 3,
+				"nombre": "Economia"
+			},
+			{
+				"id": 5,
+				"nombre": "Narcotrafico"
+			}]
+		}]
+	},
+	{
+		"id": 2,
+		"nombre": "Futbol",
+		"running": true,
+		"series": [{
+			"id": 5,
+			"nombre": "Afa",
+			"subSeries": [{
+				"id": 6,
+				"nombre": "Elecciones"
+			},
+			{
+				"id": 7,
+				"nombre": "Corrupcion"
+			}]
+		},
+		{
+			"id": 6,
+			"nombre": "Torneo",
+			"subSeries": [{
+				"id": 8,
+				"nombre": "Fixture"
+			},
+			{
+				"id": 9,
+				"nombre": "Estadistica"
+			},
+			{
+				"id": 10,
+				"nombre": "Posiciones"
+			}]
+		},
+		{
+			"id": 7,
+			"nombre": "Mundial",
+			"subSeries": [{
+				"id": 8,
+				"nombre": "Fixture"
+			},
+			{
+				"id": 9,
+				"nombre": "Estadistica"
+			},
+			{
+				"id": 10,
+				"nombre": "Posiciones"
+			}]
+		}]
+	},
+	{
+		"id": 3,
+		"nombre": "Politica",
+		"running": true,
+		"series": [{
+			"id": 8,
+			"nombre": "Elecciones",
+			"subSeries": [{
+				"id": 11,
+				"nombre": "Encuestas"
+			},
+			{
+				"id": 12,
+				"nombre": "Votaciones"
+			}]
+		},
+		{
+			"id": 9,
+			"nombre": "Partidos",
+			"subSeries": [{
+				"id": 13,
+				"nombre": "Pro"
+			},
+			{
+				"id": 14,
+				"nombre": "FPV"
+			},
+			{
+				"id": 15,
+				"nombre": "UCR"
+			}]
+		}]
+	},
+	{
+		"id": 1240,
+		"nombre": "Qnow Reloaded - 7",
+		"running": true,
+		"series": [{
+			"id": 1439408643327,
+			"nombre": "ANTEL",
+			"subSeries": []
+		},
+		{
+			"id": 1439470498690,
+			"nombre": "TIM",
+			"subSeries": []
+		},
+		{
+			"id": 1439403240956,
+			"nombre": "TELCEL",
+			"subSeries": []
+		},
+		{
+			"id": 1439469456920,
+			"nombre": "ENTEL",
+			"subSeries": []
+		},
+		{
+			"id": 1439408876252,
+			"nombre": "OI",
+			"subSeries": []
+		},
+		{
+			"id": 1439403299207,
+			"nombre": "UNEFON",
+			"subSeries": []
+		},
+		{
+			"id": 1439406706258,
+			"nombre": "PERSONAL",
+			"subSeries": [{
+				"id": 1439472893490,
+				"nombre": "Personal Paraguay"
+			},
+			{
+				"id": 1439472869554,
+				"nombre": "Personal Argentina"
+			}]
+		},
+		{
+			"id": 1439408280945,
+			"nombre": "MOVISTAR",
+			"subSeries": [{
+				"id": 1439408321040,
+				"nombre": "Movistar Venezuela"
+			},
+			{
+				"id": 1439475319720,
+				"nombre": "Movistar Panama"
+			},
+			{
+				"id": 1439475026454,
+				"nombre": "Movistar Guatemala"
+			},
+			{
+				"id": 1439474137579,
+				"nombre": "Movistar El Salvador"
+			},
+			{
+				"id": 1439478919561,
+				"nombre": "Movistar uruguay"
+			},
+			{
+				"id": 1439408470686,
+				"nombre": "Movistar Colombia"
+			},
+			{
+				"id": 1439474994151,
+				"nombre": "Movistar Argentina"
+			},
+			{
+				"id": 1439475369437,
+				"nombre": "Movistar Costa Rica"
+			},
+			{
+				"id": 1439408405934,
+				"nombre": "Movistar Mexico"
+			},
+			{
+				"id": 1439475135429,
+				"nombre": "Movistar Peru"
+			},
+			{
+				"id": 1439474300359,
+				"nombre": "Movistar Nicaragua"
+			},
+			{
+				"id": 1439475172810,
+				"nombre": "Movistar Ecuador"
+			},
+			{
+				"id": 1439408432131,
+				"nombre": "Movistar Chile"
+			}]
+		},
+		{
+			"id": 1439403854165,
+			"nombre": "DIGICEL",
+			"subSeries": [{
+				"id": 1439472599802,
+				"nombre": "Digicel El Salvador"
+			},
+			{
+				"id": 1439472632078,
+				"nombre": "Digicel Panama"
+			}]
+		},
+		{
+			"id": 1439408971353,
+			"nombre": "VIVO",
+			"subSeries": []
+		},
+		{
+			"id": 1439408827063,
+			"nombre": "VOX",
+			"subSeries": []
+		},
+		{
+			"id": 1439480784653,
+			"nombre": "+ MOVIL",
+			"subSeries": []
+		},
+		{
+			"id": 1439471038200,
+			"nombre": "FALABELLA MOVIL",
+			"subSeries": []
+		},
+		{
+			"id": 1439482141048,
+			"nombre": "CNT ",
+			"subSeries": []
+		},
+		{
+			"id": 1451306629266,
+			"nombre": "Messi y empresa",
+			"subSeries": [{
+				"id": 1474265682243,
+				"nombre": "adidas"
+			},
+			{
+				"id": 1474651959596,
+				"nombre": "nike"
+			}]
+		},
+		{
+			"id": 1439470224424,
+			"nombre": "VIRGIN MOBILE ",
+			"subSeries": [{
+				"id": 1439475550860,
+				"nombre": "Virgin Mobile Chile"
+			},
+			{
+				"id": 1439475513115,
+				"nombre": "Virgin Mobile Colombia"
+			}]
+		},
+		{
+			"id": 1439469968406,
+			"nombre": "VTR MOVIL",
+			"subSeries": []
+		},
+		{
+			"id": 1439403448656,
+			"nombre": "TUYO MOVIL",
+			"subSeries": []
+		},
+		{
+			"id": 1439406956455,
+			"nombre": "NEXTEL",
+			"subSeries": [{
+				"id": 1439472992428,
+				"nombre": "Nextel Chile"
+			},
+			{
+				"id": 1439473985868,
+				"nombre": "Nextel Brasil"
+			},
+			{
+				"id": 1439473935052,
+				"nombre": "Nextel Argentina"
+			},
+			{
+				"id": 1439473052352,
+				"nombre": "Movistar Mexico"
+			},
+			{
+				"id": 1439472951096,
+				"nombre": "Nextel Peru"
+			}]
+		},
+		{
+			"id": 1439408556037,
+			"nombre": "BITEL",
+			"subSeries": []
+		},
+		{
+			"id": 1439471106525,
+			"nombre": "UFF MOVIL",
+			"subSeries": []
+		},
+		{
+			"id": 1439472000223,
+			"nombre": "TIGO",
+			"subSeries": [{
+				"id": 1439472044694,
+				"nombre": "Tigo Bolivia "
+			},
+			{
+				"id": 1439472344529,
+				"nombre": "Tigo El Salvador"
+			},
+			{
+				"id": 1439472000222,
+				"nombre": "Tigo Honduras"
+			},
+			{
+				"id": 1439472413666,
+				"nombre": "Tigo Guatemala"
+			},
+			{
+				"id": 1439472117114,
+				"nombre": "Tigo Colombia"
+			},
+			{
+				"id": 1439472184304,
+				"nombre": "Tigo Paraguay"
+			}]
+		},
+		{
+			"id": 1439469184764,
+			"nombre": "MOVILNET",
+			"subSeries": []
+		},
+		{
+			"id": 1475286498416,
+			"nombre": "Boca Juniors",
+			"subSeries": []
+		},
+		{
+			"id": 1439471516537,
+			"nombre": "PORTO SEGURO",
+			"subSeries": []
+		},
+		{
+			"id": 1439407297557,
+			"nombre": "DIGITEL",
+			"subSeries": []
+		},
+		{
+			"id": 1439481453485,
+			"nombre": "ETB",
+			"subSeries": []
+		},
+		{
+			"id": 1439470627489,
+			"nombre": "ALGAR ",
+			"subSeries": []
+		},
+		{
+			"id": 1439402997960,
+			"nombre": "IUSACELL",
+			"subSeries": []
+		},
+		{
+			"id": 1439408769861,
+			"nombre": "WOM",
+			"subSeries": []
+		},
+		{
+			"id": 1439475893262,
+			"nombre": "CLARO",
+			"subSeries": [{
+				"id": 1439476417086,
+				"nombre": "Claro Panama"
+			},
+			{
+				"id": 1439478854385,
+				"nombre": "Claro uruguay"
+			},
+			{
+				"id": 1439475935637,
+				"nombre": "Claro Brasil"
+			},
+			{
+				"id": 1439476519335,
+				"nombre": "Claro Honduras"
+			},
+			{
+				"id": 1439476039888,
+				"nombre": "Claro Ecuador"
+			},
+			{
+				"id": 1439475994552,
+				"nombre": "Claro Chile"
+			},
+			{
+				"id": 1439476452605,
+				"nombre": "Claro Paraguay"
+			},
+			{
+				"id": 1439476192202,
+				"nombre": "Claro Colombia"
+			},
+			{
+				"id": 1439475969494,
+				"nombre": "Claro Argentina"
+			},
+			{
+				"id": 1439476589873,
+				"nombre": "Claro El Salvador"
+			},
+			{
+				"id": 1439476882070,
+				"nombre": "Claro Mexico "
+			},
+			{
+				"id": 1439476332269,
+				"nombre": "Claro Peru"
+			},
+			{
+				"id": 1439476359858,
+				"nombre": "Claro Nicaragua"
+			},
+			{
+				"id": 1439476487733,
+				"nombre": "Claro Costa Rica"
+			},
+			{
+				"id": 1439476382439,
+				"nombre": "Claro Guatemala"
+			}]
+		},
+		{
+			"id": 1439403555222,
+			"nombre": "HONDUTEL",
+			"subSeries": []
+		},
+		{
+			"id": 1474655049924,
+			"nombre": "Fútbol Club Barcelona ",
+			"subSeries": [{
+				"id": 1475238009140,
+				"nombre": "Iniesta"
+			},
+			{
+				"id": 1474655096734,
+				"nombre": "Messi"
+			},
+			{
+				"id": 1474656263371,
+				"nombre": "Neylmar"
+			}]
+		},
+		{
+			"id": 1476932647452,
+			"nombre": "aaaaa",
+			"subSeries": []
+		}]
+	},
+	{
+		"id": 1243,
+		"nombre": "CABA",
+		"running": true,
+		"series": [{
+			"id": 1450814528550,
+			"nombre": "CABA",
+			"subSeries": []
+		}]
+	},
+	{
+		"id": 1244,
+		"nombre": "Provincia de Buenos Aires",
+		"running": true,
+		"series": [{
+			"id": 1450304386714,
+			"nombre": "Provincia Buenos Aires",
+			"subSeries": [{
+				"id": 1450304408574,
+				"nombre": "Educación"
+			}]
+		}]
+	},
+	{
+		"id": 1253,
+		"nombre": "ORGANIZACION GREMIAL",
+		"running": true,
+		"series": [{
+			"id": 1476712347173,
+			"nombre": "ORGANIZACION GREMIAL",
+			"subSeries": []
+		},
+		{
+			"id": 1476711342835,
+			"nombre": "CENTRALES SINDICALES",
+			"subSeries": [{
+				"id": 1476711550345,
+				"nombre": "UOCRA"
+			},
+			{
+				"id": 1476712195835,
+				"nombre": "ASOCIACION BANCARIA"
+			},
+			{
+				"id": 1476712130727,
+				"nombre": "UTA"
+			},
+			{
+				"id": 1476711444205,
+				"nombre": "FAECYS"
+			},
+			{
+				"id": 1476711939023,
+				"nombre": "UTGRHA"
+			},
+			{
+				"id": 1476712086667,
+				"nombre": "SMATA"
+			},
+			{
+				"id": 1476711602704,
+				"nombre": "UPCN"
+			},
+			{
+				"id": 1476712016256,
+				"nombre": "UATRE"
+			},
+			{
+				"id": 1476712255559,
+				"nombre": "CEA DOCENTE"
+			},
+			{
+				"id": 1476711664757,
+				"nombre": "STIA"
+			},
+			{
+				"id": 1476711830922,
+				"nombre": "FATSA"
+			},
+			{
+				"id": 1476711885432,
+				"nombre": "UOM"
+			}]
+		},
+		{
+			"id": 1476712400568,
+			"nombre": "CTA",
+			"subSeries": []
+		},
+		{
+			"id": 1476711194001,
+			"nombre": "SECRETARIOS",
+			"subSeries": []
+		}]
+	}]
 }

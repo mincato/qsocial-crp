@@ -627,7 +627,7 @@ public class CreateCriteriaViewModel implements Serializable {
     }
 
     private void addFollowersFilter(Filter filter) {
-        if (filterView.getFollowersLessThan() != null || filterView.getFollowersLessThan() != null) {
+        if (filterView.getFollowersGreaterThan() != null || filterView.getFollowersLessThan() != null) {
             FollowersFilter followersFilter = new FollowersFilter();
             followersFilter.setMinFollowers(filterView.getFollowersGreaterThan());
             followersFilter.setMaxFollowers(filterView.getFollowersLessThan());

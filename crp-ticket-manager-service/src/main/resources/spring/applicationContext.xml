@@ -136,6 +136,9 @@
 
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">
 	</bean>
+	
+	<bean id="filterNormalizer" class="com.qsocialnow.common.model.filter.FilterNormalizer">
+	</bean>
 
 	<aop:aspectj-autoproxy />
 

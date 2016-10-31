@@ -7,7 +7,8 @@
 		<n:div class="col-sm-12">
 		<n:div id="page-header" class="pane equal">
 			<n:div class="col-sm-6">
-				<n:h4>${labels.team.list.title}</n:h4>
+				<i class="fa fa-sitemap fa-2x"></i>
+    			<n:h4>${labels.team.list.title}</n:h4>
 			</n:div>
 			<n:div class="col-sm-3">
 				<div zclass="input-group input-group-sm">
@@ -38,19 +39,13 @@
 			    <thead>
 					<tr>
 					    <th>${labels.team.list.column.name}</th>
-					    <th>${labels.team.list.column.action}</th>
 					</tr>
 			    </thead>
 			    <tbody children="@bind(vm.teams)">
 			    	<template name="children">
 					<tr>
-						<td class="list-text-column">${each.name}</td>
-						<td>
-                       		<ul class="list-inline">
-  								<li><a class="btn-list-action"><i onClick="@command('openEdit', teamId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.team.edit.action}"></i></a></li>
-  							</ul>
-			           	</td>
-               		</tr>
+						<td class="list-text-column"><a label="@load(each.name)" onClick="@command('openEdit', teamId=each.id)"> </a></td>
+					</tr>
                		</template>
 				</tbody>
 			</table>

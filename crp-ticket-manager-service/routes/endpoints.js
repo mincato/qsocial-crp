@@ -1616,6 +1616,75 @@ router.get('/users', function (req, res) {
   }
 });
 
+router.post('/retroactive', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+
+	}
+
+	prettyJSON(req.body);
+
+	var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	var clazz = java.findClassSync('com.qsocialnow.common.model.retroactive.RetroactiveProcessRequest');
+	var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+
+	var retroactiveService = javaContext.getBeanSync("retroactiveService");
+	retroactiveService.executeNewProcess(request, asyncResponse);
+
+});
+
+router.get('/retroactive', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+
+	}
+
+	var retroactiveService = javaContext.getBeanSync("retroactiveService");
+	retroactiveService.getProcess(asyncResponse);
+
+});
+
+router.delete('/retroactive', function (req, res) {
+
+	function asyncResponse(err,response) {
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+		res.send(null);
+		return;
+	}
+
+	var retroactiveService = javaContext.getBeanSync("retroactiveService");
+	retroactiveService.cancelProcess(asyncResponse);
+
+});
+
 
 
 module.exports = router;

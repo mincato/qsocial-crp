@@ -90,6 +90,17 @@
 							</span>
 						</a>
 					</li>
+					
+					<li if="${sec:isAllGranted('ADMIN')}">
+						<a href="/pages/retroactive/index.zul">
+							<span class="fa fa-history fa-fw fa-lg">
+							</span>
+							<span>
+								${labels.sidebar.menu.retroactive}
+
+							</span>
+						</a>
+					</li>
 				</ul>
 			</n:div>
 		</n:aside>

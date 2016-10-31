@@ -1,93 +1,345 @@
 {
-  "id": 1,
-  "conjuntos": [
-    {
-      "id": 1,
-      "numeroDeOrden": 1,
-      "descripcion": "Sick victims were quarantined and prevented from leaving the city.",
-      "nombre": "Sentimientos",
-      "iconoHabilitado": "http://hhhhold.com/s?1533402",
-      "iconoDesHabilitado": "http://hhhhold.com/s?12511695",
-      "nombrePorIdioma": {
-	      "espaniol": "Sentimientos",
-    	  "english": "Feelings"
-      },
-      "categorias": [
-        {
-          "id": 1,
-          "descripcion": "Superficially frail by 2008, she nevertheless had the stamina and agility to teach her granddaughter the skills of chasing and capturing goannas.",
-          "nombre": "Alegria",
-          "idCategoriaOpuesta": 71,
-          "nombrePorIdioma": {
-      		"espaniol": "Alegria",
-	  		"english": "Happiness"
-		  }
-        },
-        {
-          "id": 2,
-          "descripcion": "A collection of Edwardian buildings in the city's old downtown core were, in their day, the tallest commercial buildings in the British Empire.",
-          "nombre": "Odio",
-          "idCategoriaOpuesta": -74,
-          "nombrePorIdioma": {
-	      	"espaniol": "Odio",
-    	  	"english": "Hate"
-  		  }
-        },
-        {
-          "id": 3,
-          "descripcion": "There they faced the Chicago Bulls, led by shooting guard Michael Jordan, a five-time scoring champion regarded as the finest player of his era.",
-          "nombre": "Incomodo",
-          "idCategoriaOpuesta": -61,
-          "nombrePorIdioma": {
-	        "espaniol": "Incomodo",
-    	    "english": "Uncomfortable"
-      	  }
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "numeroDeOrden": 2,
-      "descripcion": "It is known that the Winchester manuscript is at least two removes from the original Chronicle; as a result, there is no proof that the Chronicle was compiled at Winchester.",
-      "nombre": "Division",
-      "iconoHabilitado": "http://hhhhold.com/s?16057139",
-      "iconoDesHabilitado": "http://hhhhold.com/s?1019902",
-      "nombrePorIdioma": {
-	      "espaniol": "Division",
-    	  "english": "Category"
-      },
-      "categorias": [
-        {
-          "id": 4,
-          "descripcion": "63806°N 8.",
-          "nombre": "Primera",
-          "idCategoriaOpuesta": 59,
-          "nombrePorIdioma": {
-	    	"espaniol": "Primera",
-    	  	"english": "First"
-      	  }
-        },
-        {
-          "id": 5,
-          "descripcion": "It was attended by 19 countries and 300 delegates.",
-          "nombre": "Segunda",
-          "idCategoriaOpuesta": -17,
-          "nombrePorIdioma": {
-	        "espaniol": "Segunda",
-    	    "english": "Second"
-      	  }
-        },
-        {
-          "id": 6,
-          "descripcion": ") In the household of Henry Stafford in 1469, gentle members received 2.",
-          "nombre": "Tercera",
-          "idCategoriaOpuesta": -88,
-          "nombrePorIdioma": {
-	        "espaniol": "Tercera",
-    	    "english": "Third"
-      	  }
-        }
-      ]
-    }
-  ]
+	"id": 1,
+	"conjuntos": [{
+		"id": 1,
+		"numeroDeOrden": 1,
+		"descripcion": "Sick victims were quarantined and prevented from leaving the city.",
+		"nombre": "Sentimientos",
+		"iconoHabilitado": "http://hhhhold.com/s?1533402",
+		"iconoDesHabilitado": "http://hhhhold.com/s?12511695",
+		"nombrePorIdioma": {
+			"espaniol": "Sentimientos",
+			"english": "Feelings"
+		},
+		"categorias": [{
+			"id": 1,
+			"descripcion": "Superficially frail by 2008, she nevertheless had the stamina and agility to teach her granddaughter the skills of chasing and capturing goannas.",
+			"nombre": "Alegria",
+			"idCategoriaOpuesta": 71,
+			"nombrePorIdioma": {
+				"espaniol": "Alegria",
+				"english": "Happiness"
+			}
+		},
+		{
+			"id": 2,
+			"descripcion": "A collection of Edwardian buildings in the city's old downtown core were, in their day, the tallest commercial buildings in the British Empire.",
+			"nombre": "Odio",
+			"idCategoriaOpuesta": -74,
+			"nombrePorIdioma": {
+				"espaniol": "Odio",
+				"english": "Hate"
+			}
+		},
+		{
+			"id": 3,
+			"descripcion": "There they faced the Chicago Bulls, led by shooting guard Michael Jordan, a five-time scoring champion regarded as the finest player of his era.",
+			"nombre": "Incomodo",
+			"idCategoriaOpuesta": -61,
+			"nombrePorIdioma": {
+				"espaniol": "Incomodo",
+				"english": "Uncomfortable"
+			}
+		}]
+	},
+	{
+		"id": 2,
+		"numeroDeOrden": 2,
+		"descripcion": "It is known that the Winchester manuscript is at least two removes from the original Chronicle; as a result, there is no proof that the Chronicle was compiled at Winchester.",
+		"nombre": "Division",
+		"iconoHabilitado": "http://hhhhold.com/s?16057139",
+		"iconoDesHabilitado": "http://hhhhold.com/s?1019902",
+		"nombrePorIdioma": {
+			"espaniol": "Division",
+			"english": "Category"
+		},
+		"categorias": [{
+			"id": 4,
+			"descripcion": "63806°N 8.",
+			"nombre": "Primera",
+			"idCategoriaOpuesta": 59,
+			"nombrePorIdioma": {
+				"espaniol": "Primera",
+				"english": "First"
+			}
+		},
+		{
+			"id": 5,
+			"descripcion": "It was attended by 19 countries and 300 delegates.",
+			"nombre": "Segunda",
+			"idCategoriaOpuesta": -17,
+			"nombrePorIdioma": {
+				"espaniol": "Segunda",
+				"english": "Second"
+			}
+		},
+		{
+			"id": 6,
+			"descripcion": ") In the household of Henry Stafford in 1469, gentle members received 2.",
+			"nombre": "Tercera",
+			"idCategoriaOpuesta": -88,
+			"nombrePorIdioma": {
+				"espaniol": "Tercera",
+				"english": "Third"
+			}
+		}]
+	},
+	{
+		"id": 2,
+		"iconoHabilitado": "https://s3.amazonaws.com/qsocialnow-testing/categorization/icons/imagen-empresa-activo.png",
+		"iconoDesHabilitado": "https://s3.amazonaws.com/qsocialnow-testing/categorization/icons/imagen-empresa-inactivo.png",
+		"categorias": [{
+			"id": 52,
+			"descripcion": "",
+			"idCategoriaOpuesta": 53,
+			"nombre": "Trayectoria",
+			"nombrePorIdioma": {
+				"english": "Career",
+				"espaniol": "Trayectoria",
+				"portugues": "Trajetória"
+			}
+		},
+		{
+			"id": 53,
+			"descripcion": "",
+			"idCategoriaOpuesta": 52,
+			"nombre": "Falta de trayectoria",
+			"nombrePorIdioma": {
+				"english": "Lack of Career",
+				"espaniol": "Falta de trayectoria",
+				"portugues": "Falta de Trajetória"
+			}
+		},
+		{
+			"id": 54,
+			"descripcion": "",
+			"idCategoriaOpuesta": 55,
+			"nombre": "Eficiencia",
+			"nombrePorIdioma": {
+				"english": "Efficiency",
+				"espaniol": "Eficiencia",
+				"portugues": "Eficiência"
+			}
+		},
+		{
+			"id": 55,
+			"descripcion": "",
+			"idCategoriaOpuesta": 54,
+			"nombre": "Ineficiencia",
+			"nombrePorIdioma": {
+				"english": "Inefficiency",
+				"espaniol": "Ineficiencia",
+				"portugues": "Ineficiência"
+			}
+		},
+		{
+			"id": 56,
+			"descripcion": "",
+			"idCategoriaOpuesta": 57,
+			"nombre": "Transparencia",
+			"nombrePorIdioma": {
+				"english": "Transparency",
+				"espaniol": "Transparencia",
+				"portugues": "Transparência"
+			}
+		},
+		{
+			"id": 57,
+			"descripcion": "",
+			"idCategoriaOpuesta": 56,
+			"nombre": "Falta de transparencia",
+			"nombrePorIdioma": {
+				"english": "Lack of Transparency",
+				"espaniol": "Falta de transparencia",
+				"portugues": "Falta de Transparência"
+			}
+		},
+		{
+			"id": 58,
+			"descripcion": "",
+			"idCategoriaOpuesta": 59,
+			"nombre": "Innovación",
+			"nombrePorIdioma": {
+				"english": "Innovation",
+				"espaniol": "Innovación",
+				"portugues": "Inovação"
+			}
+		},
+		{
+			"id": 59,
+			"descripcion": "",
+			"idCategoriaOpuesta": 58,
+			"nombre": "Falta de innovación",
+			"nombrePorIdioma": {
+				"english": "Lack of Innovation",
+				"espaniol": "Falta de innovación",
+				"portugues": "Falta de Inovação"
+			}
+		},
+		{
+			"id": 60,
+			"descripcion": "",
+			"idCategoriaOpuesta": 61,
+			"nombre": "Responsabilidad social",
+			"nombrePorIdioma": {
+				"english": "Social Responsability",
+				"espaniol": "Responsabilidad social",
+				"portugues": "Responsabilidade Social"
+			}
+		},
+		{
+			"id": 61,
+			"descripcion": "",
+			"idCategoriaOpuesta": 60,
+			"nombre": "Indiferencia social",
+			"nombrePorIdioma": {
+				"english": "Social Indifference",
+				"espaniol": "Indiferencia social",
+				"portugues": "Indiferença Sociais"
+			}
+		},
+		{
+			"id": 62,
+			"descripcion": "",
+			"idCategoriaOpuesta": 63,
+			"nombre": "Respeto ambiental",
+			"nombrePorIdioma": {
+				"english": "Environmental Respect",
+				"espaniol": "Respeto ambiental",
+				"portugues": "Respeito Ambiental"
+			}
+		},
+		{
+			"id": 63,
+			"descripcion": "",
+			"idCategoriaOpuesta": 62,
+			"nombre": "Neglicencia ambiental",
+			"nombrePorIdioma": {
+				"english": "Environmental Neglect",
+				"espaniol": "Neglicencia ambiental",
+				"portugues": "Negligência Ambiental"
+			}
+		},
+		{
+			"id": 64,
+			"descripcion": "",
+			"idCategoriaOpuesta": 65,
+			"nombre": "Competitivo",
+			"nombrePorIdioma": {
+				"english": "Competitive",
+				"espaniol": "Competitivo",
+				"portugues": "Competitividade"
+			}
+		},
+		{
+			"id": 65,
+			"descripcion": "",
+			"idCategoriaOpuesta": 64,
+			"nombre": "No competitivo",
+			"nombrePorIdioma": {
+				"english": "Non Competitive",
+				"espaniol": "No competitivo",
+				"portugues": "Sem Competitividade"
+			}
+		},
+		{
+			"id": 66,
+			"descripcion": "",
+			"idCategoriaOpuesta": 67,
+			"nombre": "Emplea",
+			"nombrePorIdioma": {
+				"english": "Employs",
+				"espaniol": "Emplea",
+				"portugues": "Emprega"
+			}
+		},
+		{
+			"id": 67,
+			"descripcion": "",
+			"idCategoriaOpuesta": 66,
+			"nombre": "Desemplea",
+			"nombrePorIdioma": {
+				"english": "Unemployment",
+				"espaniol": "Desemplea",
+				"portugues": "Desemprega"
+			}
+		},
+		{
+			"id": 68,
+			"descripcion": "",
+			"idCategoriaOpuesta": 69,
+			"nombre": "Ganancia bursátil",
+			"nombrePorIdioma": {
+				"english": "Trading Profit",
+				"espaniol": "Ganancia bursátil",
+				"portugues": "Lucro Comercial"
+			}
+		},
+		{
+			"id": 69,
+			"descripcion": "",
+			"idCategoriaOpuesta": 68,
+			"nombre": "Pérdida bursátil",
+			"nombrePorIdioma": {
+				"english": "Trading Loss",
+				"espaniol": "Pérdida bursátil",
+				"portugues": "Perda Comercial"
+			}
+		},
+		{
+			"id": 70,
+			"descripcion": "",
+			"idCategoriaOpuesta": 71,
+			"nombre": "Buena comunicación",
+			"nombrePorIdioma": {
+				"english": "Good Communication",
+				"espaniol": "Buena comunicación",
+				"portugues": "Boa Comunicação"
+			}
+		},
+		{
+			"id": 71,
+			"descripcion": "",
+			"idCategoriaOpuesta": 70,
+			"nombre": "Mala comunicación",
+			"nombrePorIdioma": {
+				"english": "Bad Communication",
+				"espaniol": "Mala comunicación",
+				"portugues": "Falta de Comunicação"
+			}
+		}],
+		"nombre": "Atributos de Empresas",
+		"nombrePorIdioma": {
+			
+		}
+	},
+	{
+		"id": 11,
+		"iconoHabilitado": "https://s3.amazonaws.com/qsocialnow-testing/categorization/icons/genero-activo.png",
+		"iconoDesHabilitado": "https://s3.amazonaws.com/qsocialnow-testing/categorization/icons/genero-inact.png",
+		"categorias": [{
+			"id": 121,
+			"descripcion": "",
+			"nombre": "Femenino",
+			"nombrePorIdioma": {
+				"english": "Female",
+				"espaniol": "Femenino",
+				"portugues": "Feminino"
+			}
+		},
+		{
+			"id": 122,
+			"descripcion": "",
+			"nombre": "Masculino",
+			"nombrePorIdioma": {
+				"english": "Male",
+				"espaniol": "Masculino",
+				"portugues": "Masculino"
+			}
+		}],
+		"nombre": "Gender",
+		"nombrePorIdioma": {
+			
+		}
+	}]
 }

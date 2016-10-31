@@ -6,6 +6,7 @@
     		<n:div class="col-sm-12">
 	       <n:div id="page-header" class="pane equal">
 				<n:div class="col-sm-6">
+					<i class="fa fa-desktop fa-2x"></i>
     				<n:h4>${labels.domain.list.title}</n:h4>
 				</n:div>
 			<n:div class="col-sm-offset-1 col-sm-3">
@@ -40,12 +41,13 @@
 			    <tbody children="@bind(vm.domains)">
 			    	<template name="children">
 					<tr>
-                   		<td class="list-text-column">${each.name}</td>
+                   		<td class="list-text-column">
+                   				<a label="@load(each.name)" onClick="@command('openEdit', domainId=each.id)"> </a>
+	           			</td>
                        	<td>${each.thematicNames}</td>
                        	<td>
                        		<ul class="list-inline">
-  								<li><a class="btn-list-action"><i onClick="@command('openEdit', domainId=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.domain.edit.action}"></i></a></li>
-								<li><a class="btn-list-action" href="/pages/triggers/list/index.zul?domain=${each.id}"><i class="fa fa-list" data-toggle="tooltip" data-placement="top" title="${labels.domain.view.triggers.action}"></i></a></li>
+  								<li><a class="btn-list-action" href="/pages/triggers/list/index.zul?domain=${each.id}"><i class="fa fa-list" data-toggle="tooltip" data-placement="top" title="${labels.domain.view.triggers.action}"></i></a></li>
 							</ul>
 			           	</td>
                		</tr>
