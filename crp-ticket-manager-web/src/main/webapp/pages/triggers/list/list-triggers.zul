@@ -121,16 +121,13 @@
 								<th>
 									${labels.trigger.list.column.endDate}
 								</th>
-								<th>
-									${labels.trigger.list.column.action}
-								</th>
 							</tr>
 						</thead>
 						<tbody children="@bind(vm.triggers)">
 							<template name="children">
 								<tr>
 									<td class="list-text-column">
-										${each.name}
+										<a label="@load(each.name)" href="/pages/triggers/create/index.zul?domain=${vm.domain}&amp;trigger=${each.id}"> </a>
 									</td>
 									<td>${each.description}</td>
 									<td>
@@ -143,21 +140,6 @@
 									<td>
 										<label
 											value="@load(each.toDate) @converter(vm.dateConverter)" />
-									</td>
-									<td>
-										<ul class="list-inline">
-											<li>
-												<a
-													class="btn-list-action"
-													href="/pages/triggers/create/index.zul?domain=${vm.domain}&amp;trigger=${each.id}">
-													<i
-														class="fa fa-pencil-square-o" data-toggle="tooltip"
-														data-placement="top"
-														title="${labels.trigger.edit.action}">
-													</i>
-												</a>
-											</li>
-										</ul>
 									</td>
 								</tr>
 							</template>

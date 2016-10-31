@@ -9,9 +9,9 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.cases.Case;
@@ -19,6 +19,7 @@ import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.handler.NotificationHandler;
 import com.qsocialnow.model.CaseView;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
@@ -97,9 +98,10 @@ public class CreateCaseViewModel implements Serializable {
             newCase.setTeamId(currentCase.getSelectedSegment().getTeamId());
 
         currentCase.setNewCase(caseService.create(newCase));
-        Clients.showNotification(Labels.getLabel("cases.create.notification.success", new String[] { currentCase
-                .getNewCase().getId() }));
-        initCase();
+
+        NotificationHandler.addNotification(Labels.getLabel("cases.create.notification.success",
+                new String[] { currentCase.getNewCase().getTitle() }));
+        Executions.getCurrent().sendRedirect("/pages/cases/list/index.zul");
     }
 
     @Command

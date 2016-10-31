@@ -33,24 +33,6 @@
 						<i class="fa fa-user"></i>
 					</n:a>
 				</li>
-				<li class="header-qreport" data-toggle="tooltip"
-					data-placement="bottom" data-original-title=""
-					title="">
-					<n:a 
-						href="#"
-						class="#">
-						<i class="fa fa-file-text-o"></i>
-					</n:a>
-				</li>
-				<li class="header-map" data-toggle="tooltip"
-					data-placement="bottom" data-original-title=""
-					title="">
-					<n:a 
-						href="#"
-						class="#">
-						<i class="fa fa-globe"></i>
-					</n:a>
-				</li>
 				<li class="header-contact" data-toggle="tooltip"
 					data-placement="bottom" data-original-title=""
 					title="">

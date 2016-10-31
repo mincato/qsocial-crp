@@ -55,9 +55,9 @@
             					${labels.cases.details.priority}
             				</n:label>
             				<n:div class="col-sm-9">
-            					<n:div sclass="form-control-static">
+            					<div sclass="@load(c:cat('form-control-static priority ',c:toLowerCase(vm.currentCase.caseObject.priority)))">
             						<label value="@load(c:l(c:cat('cases.priority.',vm.currentCase.caseObject.priority)))"></label>
-            					</n:div>
+            					</div>
             				</n:div>
             			</n:div>
             			<n:div class="form-group">
