@@ -1,6 +1,6 @@
-{"settings":{"analysis":{
-"filter":{"autocomplete_filter":{"type":"edge_ngram","min_gram": 2,"max_gram": 20}},
-"analyzer":
-{"autocomplete":{"type":"custom","tokenizer": "standard","filter":["lowercase","autocomplete_filter"]},
-"insensitive_sort": {"type":"custom","tokenizer":"standard","filter":["lowercase"]}}
-}}}
+{"settings":{
+        "analysis":{"analyzer":
+                               {"autocomplete":{"type":"custom","tokenizer": "autocomplete","filter":["lowercase"]},
+                                "autocomplete_search": {"tokenizer": "lowercase"},
+                                "insensitive_sort":{"type":"custom","tokenizer":"standard","filter":["lowercase"]}},
+         "tokenizer": {"autocomplete": {"type": "edge_ngram","min_gram": 2,"max_gram": 20}}}}}

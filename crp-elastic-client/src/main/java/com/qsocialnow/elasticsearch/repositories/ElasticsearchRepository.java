@@ -393,7 +393,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (shouldFilters != null && shouldFilters.size() > 0) {
             BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
             for (ShouldFilter shouldFilter : shouldFilters) {
-                QueryBuilder query = QueryBuilders.matchQuery(shouldFilter.getField(), shouldFilter.getValue());
+                QueryBuilder query = QueryBuilders.matchPhraseQuery(shouldFilter.getField(), shouldFilter.getValue());
                 boolShouldQueryBuilder.should(query);
             }
             boolQueryBuilder.filter(boolShouldQueryBuilder);
