@@ -29,9 +29,6 @@ public class MockEventsRetroactiveService implements EventsRetroactiveService {
         final FileSystem fs = FileSystems.newFileSystem(URI.create(array[0]), env);
         try {
             Thread.sleep(10000);
-            if ("1500".equals(request.getScrollId())) {
-                throw new Exception("Error de conexion");
-            }
             final Path baseDir = fs.getPath(array[1]);
 
             final List<Path> entries;

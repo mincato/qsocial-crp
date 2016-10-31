@@ -10,6 +10,7 @@
     		<n:div class="col-sm-12">
 	       		<n:div id="page-header" class="pane equal">
 					<n:div class="col-sm-6">
+						<i class="fa fa-history fa-2x"></i>
     					<n:h4>
 							${labels.retroactive.title}</n:h4>
 					</n:div>

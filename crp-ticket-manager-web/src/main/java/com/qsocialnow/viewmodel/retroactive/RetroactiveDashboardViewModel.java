@@ -257,15 +257,18 @@ public class RetroactiveDashboardViewModel implements Serializable {
     }
 
     private void setRunning() {
-        running = currentProcess == null
-                || RetroactiveProcessStatus.PROCESSING.equals(currentProcess.getProgress().getStatus())
-                || RetroactiveProcessStatus.START.equals(currentProcess.getProgress().getStatus());
+        running = currentProcess.getProgress() != null
+                && (RetroactiveProcessStatus.PROCESSING.equals(currentProcess.getProgress().getStatus()) || RetroactiveProcessStatus.START
+                        .equals(currentProcess.getProgress().getStatus()));
         filters = !running;
     }
 
     public String getProgressLabel() {
-        return Labels.getLabel(String.format("retroactive.status.%s", currentProcess.getProgress().getStatus()),
-                new Long[] { currentProcess.getProgress().getEventsProcessed() });
+        if (currentProcess.getProgress() != null) {
+            return Labels.getLabel(String.format("retroactive.status.%s", currentProcess.getProgress().getStatus()),
+                    new Long[] { currentProcess.getProgress().getEventsProcessed() });
+        }
+        return null;
     }
 
     @Command
