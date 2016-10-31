@@ -199,9 +199,11 @@
                        				<td class="text-center"><label value="@load(each.openDate) @converter(vm.dateConverter)"/></td>
                        				<td class="text-center">${each.subject}</td>
                 				    <td class="text-center">${c:l(c:cat('cases.pendingResponse.',each.pendingResponse))}</td>   
-                       				<td class="text-center">${c:l(c:cat('cases.open.',each.open))}</td>
+                       				<td class="text-center"><label 
+                       					sclass="@load(each.open ? 'label label-case-open' : 'label label-case-close')" 
+                       					value="@load(c:l(c:cat('cases.open.',each.open)))"></label></td>
                        				<td class="text-center">${each.assignee}</td>
-                       				<td sclass="@load(c:cat('text-center priority ',c:toLowerCase(each.priority)))"><span ></span></td>
+                       				<td sclass="@load(c:cat('text-center priority ',c:toLowerCase(each.priority)))"><n:span data-toggle="tooltip" data-placement="top" title="${c:l(c:cat('cases.priority.',each.priority))}" ></n:span></td>
                        			</tr>
                				</template>
 						</tbody>
