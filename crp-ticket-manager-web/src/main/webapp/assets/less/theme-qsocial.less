@@ -1469,32 +1469,31 @@ hr {
 
 /*Priority*/
 
- @priority-hight: red;
+ @priority-high: red;
  @priority-medium: #ea7d24;
  @priority-low: green;
  
-.priority > span {
+.priority > span:before {
 	position: relative;
     display: inline-block;
+    margin-left: 5px;
+  	margin-right: 5px;
 }
        
-.priority.hight > span:before {
+.priority.high > span:before {
 	font: normal normal normal 14px/1 FontAwesome;
     content: "\f176";
-	color: @priority-hight;
+	color: @priority-high;
 }
         
 .priority.medium > span:before {
 	font: normal normal normal 14px/1 FontAwesome;
     content: "\f176";
     color: @priority-medium;
-  	margin-left: 5px;
-  	margin-right: 5px;
 }
         
 .priority.low > span:before {
 	font: normal normal normal 14px/1 FontAwesome;
     content: "\f175";
 	color: @priority-low;
-}
-        
+}       
