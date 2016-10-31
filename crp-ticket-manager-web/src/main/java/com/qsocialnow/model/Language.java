@@ -27,4 +27,13 @@ public enum Language {
     public String getImage() {
         return image;
     }
+
+    public static Language getByValue(String value) {
+        for (Language language : Language.values()) {
+            if (language.getValue().equals(value)) {
+                return language;
+            }
+        }
+        return null;
+    }
 }

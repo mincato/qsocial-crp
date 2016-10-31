@@ -32,4 +32,13 @@ public enum Connotation {
         this.icon = icon;
     }
 
+    public static Connotation getByValue(Short value) {
+        for (Connotation connotation : Connotation.values()) {
+            if (connotation.getValue().equals(value)) {
+                return connotation;
+            }
+        }
+        return null;
+    }
+
 }

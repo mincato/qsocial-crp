@@ -1,0 +1,697 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="container-fluid">
+	<div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.qsocialnow.viewmodel.retroactive.RetroactiveDashboardViewModel')"
+		 form="@id('fxFilter') @load(vm.filter) @save(vm.filter, before='save')  @validator('com.qsocialnow.validators.CriteriaFilterFormValidator')" validationMessages="@id('vmsgs')">
+		<timer id="timer" delay="5000" repeats="true"
+    		onTimer="@command('refresh')" running="@load(vm.running)" />
+		<n:div class="row">
+    		<n:div class="col-sm-12">
+	       		<n:div id="page-header" class="pane equal">
+					<n:div class="col-sm-6">
+						<i class="fa fa-history fa-2x"></i>
+    					<n:h4>
+							${labels.retroactive.title}</n:h4>
+					</n:div>
+               </n:div>
+	      	</n:div>
+		</n:div>
+		<n:div class="row">
+    		<n:div class="col-sm-12">
+	       		<n:div class="pane equal">
+	       			<div visible="@load(vm.currentProcess.progress eq null)">
+	       				<div class="alert alert-info">
+    						<span class="icon"><i class="fa fa-info fa-fw fa-2x"></i></span>
+    							${labels.retroactive.noprocess}
+						</div>
+	       			</div>
+	       			<x:form class="form-horizontal pane" visible="@load(vm.currentProcess.progress ne null)">
+	       				<n:div class="form-group">
+       						<n:label class="control-label col-sm-2">${labels.retroactive.status.title}</n:label>
+			       			<div class="col-sm-10" visible="@load(vm.currentProcess.progress.status eq 'FINISH')">
+			       				<n:div class="form-control-static col-sm-10">
+									<div class="progress">
+										<div zclass="progress-bar progress-bar-success" style="width: 100%">
+											<label value="@load(vm.progressLabel)"/>
+										</div>	
+									</div>
+								</n:div>
+							</div>
+							<div class="col-sm-10" visible="@load(vm.currentProcess.progress.status eq 'PROCESSING' and !vm.cancelling)">
+								<n:div class="form-control-static col-sm-10">
+									<div class="progress">
+										<div zclass="progress-bar progress-bar-striped active" style="width: 100%">
+											<label value="@load(vm.progressLabel)"/>
+										</div>
+									</div>
+								</n:div>
+								<div class="form-control-static col-sm-2">
+									<a class="link-button" onClick="@command('refresh')">
+										<i  class="fa fa-refresh fa-2x"  /> 
+									</a>
+									<a class="link-button" onClick="@command('cancel')">
+										<i  class="fa fa-stop fa-2x"  /> 
+									</a>
+								</div>	
+							</div>
+							<div class="col-sm-10" visible="@load(vm.currentProcess.progress.status eq 'STOP')">
+								<n:div class="form-control-static col-sm-10">
+									<div class="progress">
+										<div zclass="progress-bar progress-bar-warning" style="width: 100%">
+											<label value="@load(vm.progressLabel)"/>
+										</div>
+									</div>
+								</n:div>	
+							</div>
+							<div class="col-sm-10" visible="@load(vm.currentProcess.progress.status eq 'ERROR')">
+								<n:div class="form-control-static col-sm-10">
+									<div class="progress">								
+										<div zclass="progress-bar progress-bar-danger" style="width: 100%">
+											<label value="@load(vm.progressLabel)"/>
+										</div>	
+									</div>
+									<div class="alert alert-danger">
+    									<span class="icon"><i class="fa fa-times fa-fw fa-2x"></i></span>
+										<label value="@load(vm.currentProcess.progress.errorMessage)" />
+									</div>
+								</n:div>
+							</div>
+							<div class="col-sm-10" visible="@load(vm.currentProcess.progress.status eq 'START' and !vm.cancelling)">
+								<n:div class="form-control-static col-sm-10">
+									<div class="progress">
+										<div zclass="progress-bar progress-bar-info progress-bar-striped active" style="width: 100%">
+											<label value="@load(vm.progressLabel)"/>
+										</div>
+									</div>
+								</n:div>
+								<div class="form-control-static col-sm-2">
+									<a class="link-button" onClick="@command('refresh')">
+										<i  class="fa fa-refresh fa-2x"  /> 
+									</a>
+									<a class="link-button" onClick="@command('cancel')">
+										<i  class="fa fa-stop fa-2x"  /> 
+									</a>
+								</div>
+							</div>
+							<div class="col-sm-10" visible="@load(vm.cancelling)">
+								<n:div class="form-control-static col-sm-10">
+									<div class="progress">
+										<div zclass="progress-bar progress-bar-info progress-bar-striped active" style="width: 100%">
+											${labels.retroactive.cancelling}
+										</div>
+									</div>
+								</n:div>
+								<div class="form-control-static col-sm-2">
+									<a class="link-button" onClick="@command('refresh')">
+										<i  class="fa fa-refresh fa-2x"  /> 
+									</a>
+								</div>
+							</div>
+	       				</n:div>
+	       				
+	       				<n:div class="form-group">
+       						<n:label class="control-label col-sm-2">${labels.retroactive.date}</n:label>
+			       			<div class="col-sm-10">
+			       				<n:div sclass="form-control-static">
+									<label value="@load(vm.currentProcess.request.createdDate)  @converter(vm.dateConverter)" />
+								</n:div>
+							</div>
+	       				</n:div>
+	       				<n:div class="form-group">
+       						<n:label class="control-label col-sm-2">${labels.retroactive.username}</n:label>
+			       			<div class="col-sm-10">
+			       				<n:div sclass="form-control-static">
+									<label value="@load(vm.currentProcess.request.username)" />
+								</n:div>
+							</div>
+	       				</n:div>
+	       			</x:form>
+               </n:div>
+	      	</n:div>
+		</n:div>
+	  		<x:div class="panel-group" visible="@load(vm.currentProcess.progress ne null)">
+				<x:div class="panel">
+					<x:div class="panel-heading">
+						<x:h4 class="panel-title">
+  							<n:a data-toggle="collapse" href="#currentRequest" class='help-block'>
+  								<n:span class="col-md-4">
+        							${labels.retroactive.filters.title}
+        						</n:span>
+        						<i class="more-less fa fa-angle-down pull-right"></i>
+    						</n:a>
+      					</x:h4>
+    				</x:div>
+    				<n:div id="currentRequest" class="pane equal panel-collapse collapse">
+      					<x:div class="panel-body">
+							<x:form class="form-horizontal">
+				            	<n:div class="row">
+				            		<n:div class="col-sm-12">
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.medias ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.media}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static" children="@load(vm.currentRequest.medias)">
+													<template name="children">
+														<span zclass="btn-social-icon btn" sclass="@load(c:cat('btn-',each.icon))"><i sclass="@load('fa fa-'.concat(each.icon))" /></span>
+													</template>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.languages ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.language}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static" children="@load(vm.currentRequest.languages)">
+													<template name="children">
+														<checkbox zclass="image-input language" sclass="@load(each.image)" checked="true" disabled="true" />
+													</template>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.eventsFrom ne null)">
+            								<n:label class="control-label col-sm-2">
+            									${labels.retroactive.eventsFrom}
+            								</n:label>
+            								<n:div class="col-sm-10">
+            									<n:div sclass="form-control-static">
+            										<label value="@load(vm.currentRequest.eventsFrom)  @converter(vm.dateConverter)" />
+            									</n:div>
+            								</n:div>
+            							</x:div>
+            							<x:div class="form-group" visible="@load(vm.currentRequest.eventsTo ne null)">
+            								<n:label class="control-label col-sm-2">
+            									${labels.retroactive.eventsTo}
+            								</n:label>
+            								<n:div class="col-sm-10">
+            									<n:div sclass="form-control-static">
+            										<label value="@load(vm.currentRequest.eventsTo)  @converter(vm.dateConverter)" />
+            									</n:div>
+            								</n:div>
+            							</x:div>
+            							<x:div class="form-group" visible="@load(vm.currentRequest.connotations ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.connotation}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static" children="@load(vm.currentRequest.connotations)">
+													<template name="children">
+														<checkbox zclass="icon-input connotation" sclass="@load(each.icon)" checked="true" disabled="true" />
+													</template>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.followers ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.followers}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static">
+				            						<label value="@load(vm.currentRequest.followers.greaterThan)"/>
+				            						<span visible="@load(vm.currentRequest.followers.lessThan ne null)">
+				            						 -  <label value="@load(vm.currentRequest.followers.lessThan)"/>
+				            						</span>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+										<x:div class="form-group" visible="@load(vm.currentRequest.words ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.words}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static">
+				            						<x:ol class="list-group order" children="@bind(vm.currentRequest.words) ">
+														<template name="children" var="filterWord">
+															<n:div class="list-group-item col-xs-12 col-sm-11">
+																<x:div>
+																	<label value="@load(filterWord.tipo)"/>
+																</x:div>
+																<x:div>
+																	<label value="@load(filterWord.palabra)"/>
+																</x:div>
+																<n:div class="col-xs-4 col-sm-3">
+																</n:div>
+															</n:div>
+														</template>
+													</x:ol>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.administrativeUnits ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.administrativeUnits}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static">
+				            						<x:ol class="list-group order" children="@bind(vm.currentRequest.administrativeUnits)">
+														<template name="children">
+															<n:div class="list-group-item col-xs-12 col-sm-11">
+																<n:div>
+																	<label value="@load(vm.createAdmUnitValue(each.adminUnit))"/>
+																</n:div>
+																<n:div>
+																	<label value="@load(vm.createAdmUnitDescription(each.adminUnit))"/>
+																</n:div>
+															</n:div>
+														</template>
+													</x:ol>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.thematic ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.thematic}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static">
+				            						<label value="@load(vm.currentRequest.thematic)"/>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.serie ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.serie}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static">
+				            						<label value="@load(vm.currentRequest.serie)"/>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.subSerie ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.subSerie}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static">
+				            						<label value="@load(vm.currentRequest.subSerie)"/>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+				            			<x:div class="form-group" visible="@load(vm.currentRequest.categories ne null)">
+				            				<n:label class="control-label col-sm-2">
+				            					${labels.retroactive.categories}
+				            				</n:label>
+				            				<n:div class="col-sm-10">
+				            					<x:div sclass="form-control-static">
+													<div children="@load(vm.currentRequest.categories)">
+														<template name="children">
+															<label sclass="label label-info" value="@load(vm.createCategoryName(each))" />
+														</template>
+							    					</div>
+				            					</x:div>
+				            				</n:div>
+				            			</x:div>
+			            			</n:div>
+		            			</n:div>
+				            </x:form>
+      					</x:div>
+    				</n:div>
+				</x:div>
+			</x:div>
+			<n:br/>
+	  		<x:div class="panel-group"  visible="@load(!vm.running)" >
+				<x:div class="panel">
+					<x:div class="panel-heading">
+						<x:h4 class="panel-title">
+  							<n:a data-toggle="collapse" href="#newRequestTab" class='help-block'>
+  								<n:span class="col-md-4">
+        							${labels.retroactive.create.title}
+        						</n:span>
+        						<i class="more-less fa fa-angle-down pull-right"></i>
+    						</n:a>
+      					</x:h4>
+    				</x:div>
+    				<n:div id="newRequestTab" class="pane equal panel-collapse collapse">
+      					<x:div class="panel-body">
+								<div>
+							    	<n:form class="form-horizontal">								
+										<n:div class="form-group">
+											<n:label class="control-label col-sm-2">${labels.trigger.criteria.media}</n:label>
+											<x:div class="col-sm-6 text-center" children="@load(vm.mediaTypes)">
+												<template name="children">
+													<checkbox zclass="icon-input media" sclass="@load(each.media.icon)" checked="@bind(each.checked)" />
+												</template>
+											</x:div>
+											<x:div class="col-sm-4 all icon-input">
+												<checkbox zclass="icon-input all media_select_all" label="${labels.app.select.all}"/>
+											</x:div>
+										</n:div>
+							    	</n:form>
+								    <n:br />
+								    <n:hr />	
+								    <n:form class="form-horizontal">								
+										<n:div class="form-group">
+											<n:label class="control-label col-sm-2">${labels.trigger.criteria.language}</n:label>
+											<x:div class="col-sm-6 text-center" children="@load(vm.languages)">
+												<template name="children">
+													<checkbox zclass="image-input language" sclass="@load(each.language.image)" checked="@bind(each.checked)" />
+												</template>
+											</x:div>
+											<x:div class="col-sm-4 all icon-input">
+												<checkbox zclass="icon-input all language_select_all" label="${labels.app.select.all}"/>
+											</x:div>
+					    				</n:div>
+								    </n:form>
+								    <n:br />
+								    <n:hr />
+								    <n:form class="form-horizontal pane">								
+										<x:div class="@load(empty vmsgs[startdate] ? 'form-group' : 'form-group has-error')">
+											<n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
+											<n:div class="col-sm-10">
+												<datebox id="startdate" sclass="input-group" format="short+short" value="@bind(fxFilter.startDateTime)
+												@validator('com.qsocialnow.validators.RequiredValidator')
+												 @converter('com.qsocialnow.converters.DateInputConverter')" />
+									 		<x:span sclass="@load(empty vmsgs[startdate] ? 'hidden' : 'help-block')">
+					    						<label value="@load(vmsgs[startdate])" />
+											</x:span>
+											</n:div>
+					    				</x:div>
+					    				<x:div sclass="@load(empty vmsgs[enddate] ? 'form-group' : 'form-group has-error')">
+											<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
+											<n:div class="col-sm-10">
+												<datebox id="enddate" sclass="input-group" format="short+short" value="@load(fxFilter.endDateTime) 
+												@save(fxFilter.endDateTime, before='save')
+												@converter('com.qsocialnow.converters.DateInputConverter')
+					                        	@validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate', required=true)" />
+					                        	<x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
+							    						<label value="@load(vmsgs[enddate])" />
+												</x:span>
+											</n:div>
+					    				</x:div>
+								    </n:form>
+								    <n:br />
+								    <n:hr />
+								    <n:form class="form-horizontal">					
+										<n:div class="form-group">
+											<n:label class="control-label col-sm-2">${labels.trigger.criteria.connotation}</n:label>
+											<x:div class="col-sm-6 text-center" children="@load(vm.connotations)">
+												<template name="children">
+													<checkbox zclass="icon-input connotation" sclass="@load(each.connotation.icon)" checked="@bind(each.checked)" />
+												</template>
+											</x:div>
+											<x:div class="col-sm-4 all icon-input">
+												<checkbox zclass="icon-input all connotation_select_all" label="${labels.app.select.all}"/>
+											</x:div>
+					    				</n:div>
+								    </n:form>
+								    <n:br />
+								    <n:hr />
+								    <n:div>
+										<n:label class="control-label col-sm-2 text-right">${labels.trigger.criteria.followers.title}</n:label>
+							    		<n:form class="form-inline text-center">								
+											<n:div class="form-group">
+												<n:label class="control-label">${labels.trigger.criteria.followers.greater}</n:label>
+					    						<longbox class="form-control" constraint="no negative"
+						    						value="@bind(fxFilter.followersGreaterThan)"></longbox>
+											</n:div>
+											<x:div sclass="@load(empty vmsgs[followerslessthan] ? 'form-group' : 'form-group has-error')">
+						    					<n:label class="control-label">${labels.trigger.criteria.followers.less}</n:label>
+					    						<longbox id="followerslessthan" sclass="form-control" constraint="no negative"
+						    						value="@load(fxFilter.followersLessThan)  @save(fxFilter.followersLessThan, before='save')
+					                        		@validator('com.qsocialnow.validators.LongGreaterThanValidator', greater = fxFilter.followersGreaterThan, id = 'followerslessthan')"></longbox>
+					                        	<x:span sclass="@load(empty vmsgs[followerslessthan] ? 'hidden' : 'help-block')">
+							    						<label value="@load(vmsgs[followerslessthan])" />
+												</x:span>	
+					    					</x:div>
+								    	</n:form>
+								    </n:div>
+								    <n:br />
+								    <n:hr />
+								    <n:form class="form-horizontal">
+								    	<x:div class="form-group">
+											<n:label class="control-label col-sm-2 text-right">
+												${labels.trigger.criteria.word.title}
+											</n:label>
+											<n:div class="col-sm-10">
+												<div zclass="pull-right">
+													<a class="link-button" onClick="@command('addFilterWord', fxFilter=fxFilter)">
+														<i class="fa fa-plus-circle fa-2x"></i>
+														${labels.trigger.criteria.add.filter}
+													</a>
+												</div>
+											</n:div>
+										</x:div>
+										<div class="form-group">
+											<n:div class="col-sm-offset-2 ">
+												<x:ol class="list-group order" children="@bind(fxFilter.filterWords) ">
+													<template name="children" var="filterWord">
+														<n:div class="list-group-item col-xs-11 col-sm-11">
+															<x:div 
+												sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+																<listbox id="filterword_type_${filterWordStatus.index}" mold="select" sclass="form-control"
+																	model="@load(vm.wordFilterTypeOptions)" multiple="false" checkmark="true"
+																	selectedItem="@bind(filterWord.type)">
+																	<template name="model">
+																		<listitem>
+																			<listcell
+																			label="${each}" />
+																		</listitem>
+																	</template>
+																</listbox>
+																<x:span
+																	sclass="@load(vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
+																	<label
+																		value="@bind(vmsgs['filterword_type_'.concat(filterWordStatus.index)])" />
+																</x:span>
+															</x:div>
+															<x:div 
+												sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-8 col-sm-3' : 'col-xs-8 col-sm-3 has-error')">
+																<textbox id="filterword_text_${filterWordStatus.index}" type="text" class="form-control" 
+											    					value="@bind(filterWord.inputText)"></textbox>
+											    				<x:span
+																	sclass="@load(vmsgs['filterword_text_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
+																	<label
+																		value="@bind(vmsgs['filterword_text_'.concat(filterWordStatus.index)])" />
+																</x:span>	
+															</x:div>
+															<n:div class="col-xs-4 col-sm-3">
+																<n:div class="pull-right">
+																	<a zclass="btn-row-list"
+																		onClick="@command('removeFilterWord', fxFilter=fxFilter, filter = filterWord)">
+																		<i
+																			class="glyphicon glyphicon-erase fa-lg">
+																		</i>
+																	</a>
+																</n:div>
+															</n:div>
+														</n:div>
+													</template>
+												</x:ol>
+											</n:div>
+										</div>
+								    </n:form>
+								    <n:br />
+								    <n:hr />
+								    <n:form class="form-horizontal">
+								    	<x:div class="form-group">
+											<n:label class="control-label col-sm-2 text-right">
+												${labels.trigger.criteria.admUnit.title}
+											</n:label>
+											<n:div class="col-sm-10">
+												<div zclass="pull-right">
+													<a class="link-button" onClick="@command('addFilterAdmUnit', fxFilter=fxFilter)"
+														disabled="@load(not vm.enableAddAdmUnit)">
+														<i class="fa fa-plus-circle fa-2x"></i>
+														${labels.trigger.criteria.add.filter}
+													</a>
+												</div>
+											</n:div>
+										</x:div>
+										<div class="form-group">
+											<n:div class="col-sm-offset-2 ">
+												<x:ol class="list-group order" children="@bind(fxFilter.admUnitFilters) @template(each.editingStatus ? 'editable' : 'noneditable')">
+													<template name="noneditable" var="filterAdmUnit">
+														<n:div
+															class="list-group-item col-xs-12 col-sm-11">
+															<n:div class="col-xs-6 col-sm-6">
+																<label value="@load(vm.createAdmUnitValue(filterAdmUnit.adminUnit))"/>
+															</n:div>
+															<n:div class="col-xs-2 col-sm-3">
+															</n:div>
+															<n:div class="col-xs-4 col-sm-3">
+																<n:div class="pull-right">
+																	<a zclass="btn-row-list"
+																		onClick="@command('removeAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+																		<i
+																			class="glyphicon glyphicon-erase fa-lg">
+																		</i>
+																	</a>
+																</n:div>
+															</n:div>
+														</n:div>
+													</template>
+													<template name="editable" var="filterAdmUnit">
+														<n:div class="list-group-item col-xs-11 col-sm-11">
+															<x:div 
+																	sclass="@load(empty vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+																<combobox model="@load(vm.adminUnits)" autodrop="true" buttonVisible="false" selectedItem="@bind(filterAdmUnit.adminUnit)">
+					  												<template name="model">
+					    												<comboitem label="@load(vm.createAdmUnitValue(each))" description="@load(vm.createAdmUnitDescription(each))"/>
+					  												</template>
+																</combobox>
+																<x:span
+																	sclass="@load(vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)] ? 'hidden' : 'help-block')">
+																	<label
+																		value="@bind(vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)])" />
+																</x:span>
+															</x:div>
+															<n:div class="col-xs-8 col-sm-3">
+															</n:div>
+															<n:div class="col-xs-4 col-sm-3">
+																<n:div class="pull-right">
+																	<a
+																		sclass="@load(filterAdmUnit.adminUnit eq null ? '' : 'btn-row-list')"
+																		disabled="@load(filterAdmUnit.adminUnit eq null)"
+																		onClick="@command('confirmAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+																		<i class="glyphicon glyphicon-ok fa-lg"></i>
+																	</a>
+																	<a zclass="btn-row-list"
+																		onClick="@command('removeAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+																		<i
+																			class="glyphicon glyphicon-erase fa-lg">
+																		</i>
+																	</a>
+																</n:div>
+															</n:div>
+														</n:div>
+													</template>
+												</x:ol>
+											</n:div>
+										</div>
+								    </n:form>
+								    <n:br />
+								    <n:hr />
+							     	<n:div class="">
+										<n:label class="control-label col-sm-2 text-right">${labels.trigger.criteria.thematics.title}</n:label>
+								    	<n:form class="form-inline text-center">								
+											<x:div sclass="@load(empty vmsgs[thematic] ? 'form-group' : 'form-group has-error')">
+												<n:label class="control-label">${labels.trigger.criteria.thematics.thematic}</n:label>
+						    					<selectbox id="thematic" sclass="form-control" model="@load(vm.thematicsOptions)"
+						    						onSelect="@command('selectThematic', fxFilter=fxFilter)"
+						    						selectedItem="@bind(fxFilter.thematic) @validator('com.qsocialnow.validators.RequiredValidator')"
+						    						>
+													<template name="model">
+														<label value="@load(each.nombre)" />
+													</template>
+												</selectbox>
+												<x:span
+													sclass="@load(vmsgs[thematic] ? 'hidden' : 'help-block')">
+													<label
+														value="@bind(vmsgs[thematic])" />
+													</x:span>
+					    					</x:div>
+					    					<x:div sclass="@load(empty vmsgs[serie] ? 'form-group' : 'form-group has-error')" visible="@load(vm.serieOptions ne null and not empty vm.serieOptions)">
+												<n:label class="control-label">${labels.trigger.criteria.thematics.serie}</n:label>
+						    					<selectbox id="serie" sclass="form-control"  model="@load(vm.serieOptions)"
+						    						onSelect="@command('selectSerie', fxFilter=fxFilter)"
+						    						selectedItem="@bind(fxFilter.serie)  @validator('com.qsocialnow.validators.RequiredValidator')">
+													<template name="model">
+														<label value="@load(each.nombre)" />
+													</template>
+												</selectbox>
+												<x:span sclass="@load(vmsgs[serie] ? 'hidden' : 'help-block')">
+													<label value="@bind(vmsgs[serie])" />
+												</x:span>
+					    					</x:div>
+					    					<x:div sclass="form-group" visible="@load(vm.subSerieOptions ne null and not empty vm.subSerieOptions)">
+												<n:label class="control-label">${labels.trigger.criteria.thematics.subSerie}</n:label>
+						    					<selectbox sclass="form-control" model="@load(vm.subSerieOptions)"
+						    						selectedItem="@bind(fxFilter.subSerie)">
+													<template name="model">
+														<label value="@load(each.nombre)" />
+													</template>
+												</selectbox>
+												<x:span sclass="@load(vmsgs['serie'] ? 'hidden' : 'help-block')">
+													<label value="" />
+												</x:span>
+					    					</x:div>
+									    </n:form>
+								    </n:div>
+								    <n:br />
+								    <x:hr visible="@load(vm.categoryGroupOptions ne null and not empty vm.categoryGroupOptions)" />
+								    <x:form class="form-horizontal" visible="@load(vm.categoryGroupOptions ne null and not empty vm.categoryGroupOptions)">
+								    	<x:div class="form-group">
+											<n:label class="control-label col-sm-2 text-right">
+												${labels.trigger.criteria.category.title}
+											</n:label>
+											<n:div class="col-sm-10">
+												<div zclass="pull-right">
+													<a class="link-button" onClick="@command('addFilterCategory', fxFilter=fxFilter)">
+														<i class="fa fa-plus-circle fa-2x"></i>
+														${labels.trigger.criteria.add.category}
+													</a>
+												</div>
+											</n:div>
+										</x:div>
+										<div class="form-group">
+											<n:div class="col-sm-offset-2">
+												<x:ol class="list-group order" children="@bind(fxFilter.filterCategories)">
+													<template name="children" var="filterCategory">
+														<n:div class="list-group-item col-xs-11 col-sm-11">
+															<x:div sclass="@load(empty vmsgs['filtercategory_'.concat(filterCategoryStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+																<listbox id="filtercategory_${filterCategoryStatus.index}" mold="select" sclass="form-control"
+																	model="@load(vm.categoryGroupOptions)" multiple="false" checkmark="true"
+																	selectedItem="@bind(filterCategory.categoryGroup)"
+																	onSelect="@command('selectGroupCategory', filter=filterCategory)">
+																	<template name="model">
+																		<listitem>
+																			<listcell
+																			label="@load(vm.createCategoryName(each))" />
+																		</listitem>
+																	</template>
+																</listbox>
+																<x:span
+																	sclass="@load(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)] ? 'hidden' : 'help-block')">
+																	<label
+																		value="@bind(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)])" />
+																</x:span>
+															</x:div>
+															<n:div class="col-xs-6 col-sm-3">
+																<div class="form-group" children="@load(filterCategory.categories)">
+																	<template name="children">
+																		<span>
+																			<label value="@load(vm.createCategoryName(each))"/>
+																			<span>
+																				<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', filter=filterCategory, category=each)"/>
+																			</span>
+																		</span>
+																	</template>
+										    					</div>
+															</n:div>
+															<n:div class="col-xs-2 col-sm-1" >
+																<a class="link-button" visible="@load(filterCategory.categories ne null)" onClick="@command('editCategories', fxFilter=fxFilter, filter = filterCategory)">
+																	<i class="fa fa-plus-circle fa-2x"></i>
+																</a>
+															</n:div>
+															<n:div class="col-xs-4 col-sm-2">
+																<n:div class="pull-right">
+																	<a zclass="btn-row-list"
+																		onClick="@command('removeFilterCategory', fxFilter=fxFilter, filter = filterCategory)">
+																		<i
+																			class="glyphicon glyphicon-erase fa-lg">
+																		</i>
+																	</a>
+																</n:div>
+															</n:div>
+														</n:div>
+													</template>
+												</x:ol>
+											</n:div>
+										</div>
+								    </x:form>
+								    <n:br />
+								    <x:hr />
+								    <div class="form-group text-center">
+		    							<button onClick="@command('save')" label="${labels.app.button.execute}" zclass="btn btn-success" />
+									</div>
+								</div>
+      					</x:div>
+    				</n:div>
+				</x:div>
+			</x:div>
+			<n:br/>
+	</div>
+</div>
