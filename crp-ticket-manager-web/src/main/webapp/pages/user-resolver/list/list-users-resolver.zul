@@ -7,7 +7,8 @@
 			<n:div class="col-sm-12">
 		<n:div id="page-header" class="pane equal">
 			<n:div class="col-sm-6">
-				<n:h4>${labels.userresolver.list.title}</n:h4>
+				<i class="fa fa-comments-o fa-2x"></i>
+    			<n:h4>${labels.userresolver.list.title}</n:h4>
 			</n:div>
 			<n:div class="col-sm-3">
 				<div zclass="input-group input-group-sm">
@@ -34,22 +35,17 @@
 					    <th>${labels.userresolver.list.column.source}</th>
 					    <th>${labels.userresolver.list.column.identifier}</th>
 					    <th>${labels.userresolver.list.column.active}</th>
-					    <th>${labels.userresolver.list.column.action}</th>
 					</tr>
 			    </thead>
 			    <tbody children="@bind(vm.usersResolver)">
 			    	<template name="children">
 					<tr>
 						<td><span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.media.icon))"><i sclass="@load('fa fa-'.concat(each.media.icon))" /></span></td>
-						<td class="list-text-column">${each.identifier}</td>
+						<td class="list-text-column">
+							<a label="@load(each.identifier)" class="btn-list-action"  onClick="@command('openEdit', userresolver=each.id)"></a>
+						</td>
 						<td>${c:l(c:cat('userresolver.active.',each.active))}</td>
-						<td>
-                       		<ul class="list-inline">
-  								<li><a class="btn-list-action"><i onClick="@command('openEdit', userresolver=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.userresolver.edit.action}"></i></a></li>
-  								<!-- <li><a class="list-action"><i onClick="@command('openDelete', userresolver=each.id)" class="glyphicon glyphicon-erase" data-toggle="tooltip" data-placement="top" title="${labels.userresolver.delete.action}"></i></a></li> -->
-							</ul>
-			           	</td>
-               		</tr>
+					</tr>
                		</template>
 				</tbody>
 			</table>

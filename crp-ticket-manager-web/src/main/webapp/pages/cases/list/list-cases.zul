@@ -6,6 +6,7 @@
 		<n:div class="col-sm-12">
 		  <n:div id="page-header" class="pane equal">	
 			<n:div class="col-md-6">
+				<i class="fa fa-file-text-o fa-2x"></i>
 				<n:h4>${labels.cases.list.title}</n:h4>
 			</n:div>
 			<n:div class="col-md-6">
@@ -187,26 +188,21 @@
 										${labels.cases.list.column.priority}
                                     
                                 </th>
-					    		<th>${labels.cases.list.column.action}</th>
-							</tr>
+					    	</tr>
 			    		</thead>
 			    		<tbody children="@bind(vm.cases)">
 			    			<template name="children">
 								<tr>
-								    <td class="list-text-column">${each.title}</td>
+								    <td class="list-text-column">
+								    <a label="@load(each.title)" href="/pages/cases/edit/index.zul?case=${each.id}"></a></td>
                        				<td class="text-center">${each.description}</td>
                        				<td class="text-center"><label value="@load(each.openDate) @converter(vm.dateConverter)"/></td>
                        				<td class="text-center">${each.subject}</td>
                 				    <td class="text-center">${c:l(c:cat('cases.pendingResponse.',each.pendingResponse))}</td>   
                        				<td class="text-center">${c:l(c:cat('cases.open.',each.open))}</td>
                        				<td class="text-center">${each.assignee}</td>
-                       				<td class="text-center">${c:l(c:cat('cases.priority.',each.priority))}</td>
-                       				<td>
-                       					<ul class="list-inline">
-  											<li><a class="btn-list-action" href="/pages/cases/edit/index.zul?case=${each.id}"><i class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.cases.list.edit.action}"></i></a></li>
-										</ul>
-                       				</td>
-               					</tr>
+                       				<td sclass="@load(c:cat('text-center priority ',c:toLowerCase(each.priority)))"><span ></span></td>
+                       			</tr>
                				</template>
 						</tbody>
 					</table>
