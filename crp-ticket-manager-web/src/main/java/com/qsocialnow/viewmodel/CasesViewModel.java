@@ -1,5 +1,6 @@
 package com.qsocialnow.viewmodel;
 
+import java.awt.font.TextHitInfo;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -50,6 +51,12 @@ public class CasesViewModel implements Serializable {
 
     private static final String ALL_OPTION_VALUE = "all";
 
+    private static final String HIGH_OPTION_VALUE = "HIGH";
+
+    private static final String MEDIUM_OPTION_VALUE = "MEDIUM";
+
+    private static final String LOW_OPTION_VALUE = "LOW";
+
     private static final long serialVersionUID = 2259179419421396093L;
 
     private static final int PAGE_SIZE_DEFAULT = 15;
@@ -99,6 +106,10 @@ public class CasesViewModel implements Serializable {
 
     private String status;
 
+    private List<String> priorityOptions = new ArrayList<>();
+
+    private String priority;
+
     private List<String> pendingOptions = new ArrayList<>();
 
     private String pendingResponse;
@@ -138,6 +149,7 @@ public class CasesViewModel implements Serializable {
         this.filterActive = false;
         this.pendingOptions = getPendingOptionsList();
         this.statusOptions = getStatusOptionsList();
+        this.priorityOptions = getPriorityOptionsList();
         findCases();
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
@@ -222,6 +234,10 @@ public class CasesViewModel implements Serializable {
             filters.put("status", this.status);
         }
 
+        if (priority != null && !priority.equals(ALL_OPTION_VALUE)) {
+            filters.put("priority", this.priority);
+        }
+
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
         }
@@ -244,6 +260,11 @@ public class CasesViewModel implements Serializable {
 
     private List<String> getStatusOptionsList() {
         String[] options = { ALL_OPTION_VALUE, TRUE_OPTION_VALUE, FALSE_OPTION_VALUE };
+        return new ArrayList<String>(Arrays.asList(options));
+    }
+
+    private List<String> getPriorityOptionsList() {
+        String[] options = { ALL_OPTION_VALUE, HIGH_OPTION_VALUE, MEDIUM_OPTION_VALUE, LOW_OPTION_VALUE };
         return new ArrayList<String>(Arrays.asList(options));
     }
 
@@ -524,5 +545,21 @@ public class CasesViewModel implements Serializable {
 
     public void setSegment(SegmentListView segment) {
         this.segment = segment;
+    }
+
+    public List<String> getPriorityOptions() {
+        return priorityOptions;
+    }
+
+    public void setPriorityOptions(List<String> priorityOptions) {
+        this.priorityOptions = priorityOptions;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 }

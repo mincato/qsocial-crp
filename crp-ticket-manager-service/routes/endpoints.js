@@ -141,11 +141,11 @@ router.get('/cases', function (req, res) {
   var title = req.query.title?req.query.title :null;
   var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
   var status = req.query.status?req.query.status :null;
-  
+  var priority = req.query.priority?req.query.priority :null;
   var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
   var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
 
-  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,domainId,triggerId,segmentId,subject,title,pendingResponse,status,fromOpenDate,toOpenDate,userName,userSelected,asyncResponse);
+  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,domainId,triggerId,segmentId,subject,title,pendingResponse,priority,status,fromOpenDate,toOpenDate,userName,userSelected,asyncResponse);
 
 });
 

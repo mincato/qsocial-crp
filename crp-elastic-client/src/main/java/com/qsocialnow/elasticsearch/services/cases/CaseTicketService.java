@@ -46,8 +46,9 @@ public class CaseTicketService extends CaseIndexService {
     }
 
     public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String domainId,
-            String triggerId, String segmentId, String subject, String title, String pendingResponse, String status,
-            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
+            String triggerId, String segmentId, String subject, String title, String pendingResponse, String priority,
+            String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName,
+            String userSelected) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -79,6 +80,9 @@ public class CaseTicketService extends CaseIndexService {
 
         if (status != null)
             searchValues.put("open", status);
+
+        if (priority != null)
+            searchValues.put("priority", priority);
 
         if (userSelected != null)
             searchValues.put("assignee.username", userSelected);

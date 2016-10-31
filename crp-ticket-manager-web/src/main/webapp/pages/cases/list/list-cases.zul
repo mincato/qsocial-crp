@@ -127,7 +127,20 @@
                                </template>
                            </selectbox>
                     </div>
-                </n:div>                
+                </n:div>
+                
+                <n:div class="form-group">
+                    <n:label class="control-label">${labels.cases.list.filter.priority}</n:label>
+                    <div zclass="input-group input-group-sm">
+                           <selectbox sclass="form-control" model="@load(vm.priorityOptions)"
+                               selectedItem="@bind(vm.priority)">
+                               <template name="model">
+                                   <label value="${c:l(c:cat('cases.priority.',each))}" />
+                               </template>
+                           </selectbox>
+                    </div>
+                </n:div>
+
                 </n:form>
                 </n:div>
                 <n:div class="col-sm-1">
@@ -146,7 +159,11 @@
             </div>
        </n:div>
     </n:div>
-
+    
+    
+    
+    
+    
 	<div class="row">
     	<n:div class="col-lg-12">
     		<div zclass="pane equal">
