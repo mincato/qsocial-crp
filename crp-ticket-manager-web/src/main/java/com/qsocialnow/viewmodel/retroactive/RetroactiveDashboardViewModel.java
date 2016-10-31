@@ -224,8 +224,7 @@ public class RetroactiveDashboardViewModel implements Serializable {
             String[] connotations = currentProcess.getRequest().getConnotations();
             if (ArrayUtils.isNotEmpty(connotations)) {
                 currentRequest.setConnotations(Arrays.stream(connotations)
-                        .map(connotation -> Connotation.getByValue(Short.parseShort(connotation)))
-                        .collect(Collectors.toList()));
+                        .map(connotation -> Connotation.getByName(connotation)).collect(Collectors.toList()));
             }
             RangeRequest range = currentProcess.getRequest().getRange();
             if (range != null) {
@@ -533,8 +532,7 @@ public class RetroactiveDashboardViewModel implements Serializable {
         List<ConnotationView> connotationsPicked = connotations.stream().filter(connotation -> connotation.isChecked())
                 .collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(connotationsPicked) && connotationsPicked.size() < connotations.size()) {
-            String[] options = connotationsPicked.stream()
-                    .map(connotation -> connotation.getConnotation().getValue().toString())
+            String[] options = connotationsPicked.stream().map(connotation -> connotation.getConnotation().getName())
                     .toArray(size -> new String[size]);
             request.setConnotations(options);
         }
@@ -558,7 +556,7 @@ public class RetroactiveDashboardViewModel implements Serializable {
             WordsListFilterBean[] wordList = filterView.getFilterWords().stream().map(filterWord -> {
                 WordsListFilterBean wordFilter = new WordsListFilterBean();
                 wordFilter.setPalabra(filterWord.getInputText());
-                wordFilter.setTipo(filterWord.getType().name());
+                wordFilter.setTipo(filterWord.getType().getName());
                 return wordFilter;
             }).toArray(size -> new WordsListFilterBean[size]);
             cloudsurfer.setWordList(wordList);
