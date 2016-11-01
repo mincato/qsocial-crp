@@ -319,9 +319,9 @@ public class CasesViewModel implements Serializable {
     private List<SubjectCategory> getSubjectCategoriesOptionsList() {
         List<SubjectCategory> categories = new ArrayList<>();
         categories = subjectCategorySetService.findAllCategories();
-        
+
         if (categories != null && !categories.isEmpty()) {
-        	SubjectCategory categoryBase = new SubjectCategory();
+            SubjectCategory categoryBase = new SubjectCategory();
             categoryBase.setId(NOT_ID_ITEM_VALUE);
             categoryBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
             categories.add(0, categoryBase);
