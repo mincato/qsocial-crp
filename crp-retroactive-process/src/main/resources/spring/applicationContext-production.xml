@@ -16,4 +16,11 @@
  	<bean id="eventsRetroactiveServiceBuilder" class="com.qsocialnow.retroactiveprocess.builder.EventsRetroactiveServiceBuilderImpl">
 	</bean>
 	
+	<bean id="awsLambdaClientConfig" class="com.qsocialnow.retroactiveprocess.factories.AWSLambdaClientConfigFactory" factory-method="create">
+ 		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
+ 		<constructor-arg value="${app.aws.lambda.client.config.path}"></constructor-arg>
+	</bean>
+	
+	<bean id="eventsPagedConfigService" class="com.qsocialnow.retroactiveprocess.service.EventsPagedConfigService" />
+	
 </beans>
