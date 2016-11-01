@@ -240,4 +240,19 @@ public class SubjectCategorySetService {
         this.indexConfiguration = indexConfiguration;
     }
 
+    public List<SubjectCategory> findAllCategories() {
+        RepositoryFactory<SubjectCategoryType> esfactory = new RepositoryFactory<SubjectCategoryType>(configurator);
+        Repository<SubjectCategoryType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SubjectCategoryMapping mapping = SubjectCategoryMapping.getInstance(indexConfiguration.getIndexName());
+
+        SearchResponse<SubjectCategory> response = repository.searchWithFilters(null, null, "description",
+                SortOrder.ASC, null, mapping);
+        List<SubjectCategory> subjectCategories = response.getSources();
+
+        repository.closeClient();
+        return subjectCategories;
+    }
+
 }

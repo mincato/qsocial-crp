@@ -108,4 +108,15 @@ public class SubjectCategorySetRepository {
         return subjectCategorySetElasticService.findByIds(subjectCategoriesSetIds);
     }
 
+    public List<SubjectCategory> findAllCategories() {
+        List<SubjectCategory> subjectCategories = new ArrayList<>();
+
+        try {
+            subjectCategories = subjectCategorySetElasticService.findAllCategories();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategories;
+    }
+
 }

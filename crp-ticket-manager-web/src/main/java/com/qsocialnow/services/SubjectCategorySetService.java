@@ -3,6 +3,7 @@ package com.qsocialnow.services;
 import java.util.List;
 import java.util.Map;
 
+import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -19,4 +20,5 @@ public interface SubjectCategorySetService {
 
     List<SubjectCategorySet> findAll();
 
+    List<SubjectCategory> findAllCategories();
 }

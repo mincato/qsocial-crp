@@ -71,4 +71,8 @@ public class CaseCategorySetService {
         return caseCategories;
     }
 
+    public List<CaseCategory> findAllCategories() {
+        return caseCategorySetRepository.findAllCategories();
+    }
+
 }

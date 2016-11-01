@@ -227,4 +227,18 @@ public class CaseCategorySetService {
         this.indexConfiguration = indexConfiguration;
     }
 
+    public List<CaseCategory> findCategories() {
+        RepositoryFactory<CaseCategoryType> esfactory = new RepositoryFactory<CaseCategoryType>(configurator);
+        Repository<CaseCategoryType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseCategoryMapping mapping = CaseCategoryMapping.getInstance(indexConfiguration.getIndexName());
+        SearchResponse<CaseCategory> response = repository.searchWithFilters(null, null, "description", SortOrder.ASC,
+                null, mapping);
+        List<CaseCategory> caseCategories = response.getSources();
+
+        repository.closeClient();
+        return caseCategories;
+    }
+
 }
