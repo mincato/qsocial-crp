@@ -1,0 +1,22 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"     
+    border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
+	<n:div class="row">
+		<n:div class="col-sm-12">
+			<n:div id="page-header" class="pane equal">
+				<n:div class="col-sm-6">
+					<i class="fa fa-globe fa-2x"></i>
+    				<n:h4>A map</n:h4>
+				</n:div>
+			</n:div>
+		</n:div>
+	</n:div>
+	<n:div class="row">
+		<n:div class="col-sm-12">
+			<n:div class="pane equal">
+					<n:div id="map"></n:div>
+			</n:div>
+		</n:div>
+	</n:div>
+</x:div>

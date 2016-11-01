@@ -1,0 +1,65 @@
+<?init class="com.qsocialnow.handler.AjaxAccessDeniedHandler"?>
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
+<?init class="com.qsocialnow.handler.NotificationHandler"?>
+
+<?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
+<?link href="/vendor/bootstrap/bootstrap-social.css" rel="stylesheet"?>
+<?link href="/assets/css/style.css" rel="stylesheet"?>
+<?link href="/assets/css/footer.css" rel="stylesheet"?>
+<?link href="/assets/css/preloader.css" rel="stylesheet"?>
+<?link href="/assets/css/header.css" rel="stylesheet"?>
+<?link href="/assets/css/problematics.css" rel="stylesheet"?>
+<?link href="/assets/css/ui.css" rel="stylesheet"?>
+<?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
+<?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
+<?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
+<?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
+    
+<?link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css' rel='stylesheet'?>
+<?link href='/css/map.css' rel='stylesheet'?>
+
+<zk xmlns:n="native">
+	<div class="wrapper wrapper-serie dashboard">
+		<!-- HEADER -->
+		<include src="/assets/core/header.zul" />
+		<!-- Header elements are fetched via ajax. Go to assets/core/header.html to edit. -->
+		<!-- HEADER -->
+
+		<!-- SIDEBAR -->
+		<include src="/assets/core/sidebar.zul" />
+		<!-- SIDEBAR -->
+
+		<!-- MAIN -->
+		<div class="main">
+			<!-- CONTENT -->
+			<n:div id="content">
+				<include src="show-map.zul" />
+			</n:div><!-- content -->
+			<!-- CONTENT -->
+		</div><!-- main -->
+		<!-- MAIN  -->
+
+	</div><!-- wrapper -->
+	<!-- FOOTER -->
+	<include src="/assets/core/footer.html" />
+	<!-- FOOTER -->
+
+	<!-- REQUIRED SCRIPTS -->
+	<?script src="/vendor/js/required.min.js" type="text/javascript" ?>
+	<?script src="/assets/js/quarca.js" type="text/javascript" ?>
+	<?script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js" type="text/javascript" ?>
+	<script type="text/javascript">
+ 				"use strict";
+ 				zk.afterMount(function() {
+					$(document).ready(function() {
+						mapboxgl.accessToken = 'pk.eyJ1IjoiZWxmcmFzY28iLCJhIjoiY2l1eWlieWFrMDRxdzJ0bW8wNGtsbnlreSJ9.q-IZB3b_RDxmr8FfIw9fdQ';
+						var map = new mapboxgl.Map({
+						    container: 'map', // container id
+						    style: 'mapbox://styles/mapbox/streets-v9', //stylesheet location
+						    center: [-74.50, 40], // starting position
+						    zoom: 9 // starting zoom
+						});
+					});
+				});
+			</script>
+</zk>
