@@ -36,11 +36,11 @@
 	<logger name="org.I0Itec">
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
-	</logger>
+	</logger> -->
 
 	<root>
 		<priority value="INFO" />
 		<appender-ref ref="fileAppender" />
-	</root> -->
+	</root>
 
 </log4j:configuration>
