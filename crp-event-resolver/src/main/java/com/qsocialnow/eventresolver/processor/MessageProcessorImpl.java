@@ -55,7 +55,7 @@ public class MessageProcessorImpl implements MessageProcessor {
                     }
                 }
             } else {
-                LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
+                LOGGER.debug(String.format("Message should not be processed for this domain: %s", domainId));
             }
         } else {
             throw new InvalidDomainException("Error trying to retrieve a domain");
@@ -65,25 +65,25 @@ public class MessageProcessorImpl implements MessageProcessor {
     private boolean isUserResolverEvent(Event inputBeanDocument) {
         boolean isUserResolverEvent = false;
         if (userResolverService.findAllSourceIds().contains(inputBeanDocument.getIdUsuarioCreacion())) {
-            LOGGER.info("The event is from user resolver. So, it is discarded");
+            LOGGER.debug("The event is from user resolver. So, it is discarded");
             isUserResolverEvent = true;
         }
         return isUserResolverEvent;
     }
 
-    private void logMessageNotDetected(Event inputBeanDocument) {
-        LOGGER.info(String.format("Message were not detected to execute an action: %s", inputBeanDocument.getId()));
+    private void logMessageNotDetected(Event inputBeanDocument) {        
         if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug(String.format("Message were not detected to execute an action: %s", inputBeanDocument.getId()));
             LOGGER.debug(String.format("Message: %s", inputBeanDocument));
         }
     }
 
-    private void logProcessingEvent(Event inputBeanDocument, String domainId) {
-        LOGGER.info(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
+    private void logProcessingEvent(Event inputBeanDocument, String domainId) {        
         if (LOGGER.isDebugEnabled()) {
+        	LOGGER.debug(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
             LOGGER.debug(String.format("Message: %s", inputBeanDocument));
-        }
-        LOGGER.info(String.format("Searching for domain: %s", domainId));
+            LOGGER.debug(String.format("Searching for domain: %s", domainId));
+        }        
     }
 
     public void setDomainElasticService(DomainService domainElasticService) {

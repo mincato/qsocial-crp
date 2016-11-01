@@ -47,7 +47,7 @@ public class ExecutionMessageProcessor {
                             try {
                                 Action action = actions.get(automaticActionCriteria.getActionType());
                                 if (action != null) {
-                                    log.info(String.format("Executing action: %s",
+                                    log.debug(String.format("Executing action: %s",
                                             automaticActionCriteria.getActionType()));
                                     caseObject = action.execute(caseObject, automaticActionCriteria.getParameters(),
                                             request);

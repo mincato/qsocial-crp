@@ -15,7 +15,7 @@ public class LanguageDetectionCriteriaFilter implements DetectionCriteriaFilter 
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing language message filter");
+        log.debug("Executing language message filter");
         boolean match = false;
         if (message.getLanguage() != null) {
             String[] languages = filter.getLanguageFilter().getOptions();

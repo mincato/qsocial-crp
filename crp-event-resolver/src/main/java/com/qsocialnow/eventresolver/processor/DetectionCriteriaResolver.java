@@ -23,7 +23,7 @@ public class DetectionCriteriaResolver {
 
     public DetectionCriteria resolve(NormalizedInputBeanDocument normalizedMessage,
             List<DetectionCriteria> detectionCriterias) {
-        log.info("resolving detection criteria...");
+        log.debug("resolving detection criteria...");
         DetectionCriteria detectionCriteria = null;
         if (detectionCriterias != null) {
             boolean match = false;
@@ -40,7 +40,7 @@ public class DetectionCriteriaResolver {
                         }
                     });
                 } else {
-                    log.info(String.format("The deteccion criteria with name %s is not valid this time",
+                    log.debug(String.format("The deteccion criteria with name %s is not valid this time",
                             currentDetectionCriteria.getName()));
                 }
 

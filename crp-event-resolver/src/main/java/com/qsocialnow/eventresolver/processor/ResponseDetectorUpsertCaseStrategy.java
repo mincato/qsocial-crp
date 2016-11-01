@@ -26,24 +26,24 @@ public class ResponseDetectorUpsertCaseStrategy implements UpsertCaseStrategy {
 
     @Override
     public Case upsert(ExecutionMessageRequest request) {
-        log.info("Processing upsert for response detector event");
+        log.debug("Processing upsert for response detector event");
         Case originCase = null;
         Event input = request.getInput();
         if (input.getOriginIdCase() != null) {
-            log.info("Trying to merge case: " + input.getOriginIdCase());
+            log.debug("Trying to merge case: " + input.getOriginIdCase());
             originCase = caseService.findCaseById(input.getOriginIdCase());
             boolean isDuplicated = originCase.getMessages().stream()
                     .anyMatch(message -> message.getId().equals(input.getId()));
             if (isDuplicated) {
-                log.info("The event is duplicated");
+                log.debug("The event is duplicated");
             } else {
                 originCase = mergeAction.mergeCase(input, originCase);
             }
         } else {
-            log.info("Trying to merge case by event: " + input.getOriginIdCase());
+            log.debug("Trying to merge case by event: " + input.getOriginIdCase());
             Case mergeCase = findCaseToMerge(request);
             if (mergeCase != null) {
-                log.info("merging case");
+                log.debug("merging case");
                 originCase = mergeAction.mergeCase(input, mergeCase);
             }
         }

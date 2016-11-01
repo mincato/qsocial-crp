@@ -14,7 +14,7 @@ public class FollowersDetectionCriteriaFilter implements DetectionCriteriaFilter
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing followers message filter");
+        log.debug("Executing followers message filter");
         boolean match = false;
         if (message.getFollowersCount() != null) {
             Long minFollowers = filter.getFollowersFilter().getMinFollowers();

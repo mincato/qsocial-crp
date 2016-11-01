@@ -15,7 +15,7 @@ public class MediaDetectionCriteriaFilter implements DetectionCriteriaFilter {
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing media message filter");
+        log.debug("Executing media message filter");
         boolean match = false;
         if (message.getMedioId() != null) {
             Long[] medias = filter.getMediaFilter().getOptions();

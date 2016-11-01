@@ -22,7 +22,7 @@ public class MergeCaseAction {
     private static final Logger log = LoggerFactory.getLogger(MergeCaseAction.class);
 
     public Case mergeCase(Event event, Case outputElement) {
-        log.info("Starting to merge case: " + outputElement.getId());
+        log.debug("Starting to merge case: " + outputElement.getId());
 
         // Adding a registry
         List<ActionRegistry> registries = new ArrayList<>();
