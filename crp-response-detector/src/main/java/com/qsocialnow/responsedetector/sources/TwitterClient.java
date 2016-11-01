@@ -45,7 +45,7 @@ public class TwitterClient {
 
         if (twitter == null) {
             twitter = TwitterFactory.getSingleton();
-            log.info("Initializing twitter client succesfully");
+            log.debug("Initializing twitter client succesfully");
             twitter.setOAuthConsumer(twitterConfigurator.getOAuthConsumerKey(),
                     twitterConfigurator.getOAuthConsumerSecret());
             AccessToken accessToken = new AccessToken(twitterConfigurator.getOAuthAccessToken(),
@@ -57,22 +57,22 @@ public class TwitterClient {
     public void checkAnyMention(TwitterMessageEvent messageEvent) {
         try {
             List<Status> statuses = twitter.getUserTimeline();
-            log.info("Starting to read user timeline : " + statuses.size() + " trying to mach responses from message: "
+            log.debug("Starting to read user timeline : " + statuses.size() + " trying to mach responses from message: "
                     + messageEvent.getReplyMessageId());
             for (Status status : statuses) {
                 if (String.valueOf(status.getId()).equals(messageEvent.getReplyMessageId())) {
-                    log.info("Finding responses from tweet: " + status.getId() + " retweet count: "
+                    log.debug("Finding responses from tweet: " + status.getId() + " retweet count: "
                             + status.getRetweetCount());
                     List<Status> replies = getResponsesFromTweet(status);
 
                     for (Status statusReply : replies) {
                         User user = statusReply.getUser();
                         if (user != null && messageEvent.getUserId().equals(String.valueOf(user.getId()))) {
-                            log.info("Historical reply detected : " + statusReply.getId() + " Text: "
+                            log.debug("Historical reply detected : " + statusReply.getId() + " Text: "
                                     + statusReply.getText());
 
                             Date createdDate = statusReply.getCreatedAt();
-                            log.info("Creating event to handle automatic response detection");
+                            log.debug("Creating event to handle automatic response detection");
                             sourceService.processEvent(true, createdDate.getTime(),
                                     statusReply.getInReplyToScreenName(), null, String.valueOf(statusReply.getId()),
                                     statusReply.getText(), messageEvent.getReplyMessageId(),
@@ -96,11 +96,11 @@ public class TwitterClient {
         long id = status.getId();
         String screenname = status.getUser().getScreenName();
         Query query = new Query("@" + screenname + " since_id:" + id);
-        log.info("Retriving tweets from " + query.getQuery());
+        log.debug("Retriving tweets from " + query.getQuery());
         QueryResult result;
         try {
             result = twitter.search(query);
-            log.info("results from tweet: " + result.getTweets().size());
+            log.debug("results from tweet: " + result.getTweets().size());
 
             while (result != null) {
                 List<Status> tweets = result.getTweets();
