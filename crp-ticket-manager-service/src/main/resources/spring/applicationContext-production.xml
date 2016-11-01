@@ -21,7 +21,7 @@
 	
 	<bean id="awsLambdaClientConfig" class="com.qsocialnow.config.AWSLambdaClientConfigFactory" factory-method="create">
  		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
- 		<constructor-arg value="${app.elastic.config.configurator.path}"></constructor-arg>
+ 		<constructor-arg value="${app.aws.lambda.client.config.path}"></constructor-arg>
 	</bean>
 	
    	<cache:annotation-driven />

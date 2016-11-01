@@ -78,9 +78,9 @@ public class RetroactiveProcessor implements Runnable {
                 log.info("starting process");
                 long eventsProcessed = retroactiveProcessProgress.getEventsProcessed();
                 request.setScrollId(retroactiveProcessProgress.getScrollId());
-                EventsRetroactiveService retroactiveService = eventsRetroactiveServiceBuilder.build(request);
-                EventsPaginatedResponse bean = null;
                 try {
+                    EventsRetroactiveService retroactiveService = eventsRetroactiveServiceBuilder.build(request);
+                    EventsPaginatedResponse bean = null;
                     do {
                         log.info("processing page with scroll id: " + request.getScrollId());
                         bean = retroactiveService.buildResponse(request);
