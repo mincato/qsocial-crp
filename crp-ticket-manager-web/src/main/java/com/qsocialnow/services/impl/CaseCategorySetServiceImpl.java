@@ -36,6 +36,9 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
     @Value("${caseCategorySet.serviceurl}")
     private String caseCategorySetServiceUrl;
 
+    @Value("${caseCategory.serviceurl}")
+    private String caseCategoryServiceUrl;
+
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
@@ -168,6 +171,30 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
                     });
 
             return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CaseCategory> findAllCategories() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(caseCategoryServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<CaseCategory>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null, new ParameterizedTypeReference<List<CaseCategory>>() {
+                    });
+
+            List<CaseCategory> caseCategories = response.getBody();
+            return caseCategories;
         } catch (Exception e) {
             log.error("There was an error while trying to call CaseCategorySet service", e);
             throw new RuntimeException(e);

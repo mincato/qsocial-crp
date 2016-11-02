@@ -52,7 +52,8 @@ public class CaseService {
 
     public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
             String domainId, String triggerId, String segmentId, String subject, String title, String pendingResponse,
-            String status, String fromOpenDate, String toOpenDate, String userName, String userSelected) {
+            String priority, String status, String fromOpenDate, String toOpenDate, String userName,
+            String userSelected, String caseCategory, String subjectCategory) {
         PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
         pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
 
@@ -72,7 +73,8 @@ public class CaseService {
         }
         log.info("After process teams - trying to retrieve cases from :" + userName);
         List<CaseListView> cases = repository.findAll(pageRequest, domainId, triggerId, segmentId, subject, title,
-                pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected);
+                pendingResponse, priority, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected,
+                caseCategory, subjectCategory);
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;

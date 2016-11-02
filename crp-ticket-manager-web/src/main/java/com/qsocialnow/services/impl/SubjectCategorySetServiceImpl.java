@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -34,6 +35,9 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
 
     @Value("${subjectCategorySet.serviceurl}")
     private String subjectCategorySetServiceUrl;
+
+    @Value("${subjectCategory.serviceurl}")
+    private String subjectCategoryServiceUrl;
 
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
@@ -146,6 +150,30 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
 
             List<SubjectCategorySet> subjectCategorySets = response.getBody();
             return subjectCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SubjectCategory> findAllCategories() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(subjectCategoryServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<SubjectCategory>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategory>>() {
+                    });
+
+            List<SubjectCategory> subjectCategories = response.getBody();
+            return subjectCategories;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
             throw new RuntimeException(e);

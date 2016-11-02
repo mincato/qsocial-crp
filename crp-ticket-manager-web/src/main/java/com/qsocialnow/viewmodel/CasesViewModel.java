@@ -18,20 +18,25 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Filedownload;
 
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.SegmentListView;
+import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.security.LoginConfig;
+import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
+import com.qsocialnow.services.SubjectCategorySetService;
 import com.qsocialnow.services.SubjectService;
 import com.qsocialnow.services.TriggerService;
 import com.qsocialnow.services.UserService;
 import com.qsocialnow.services.UserSessionService;
+import com.qsocialnow.viewmodel.subjectcategoryset.SubjectCategoryView;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
@@ -49,6 +54,12 @@ public class CasesViewModel implements Serializable {
     private static final String TRUE_OPTION_VALUE = "true";
 
     private static final String ALL_OPTION_VALUE = "all";
+
+    private static final String HIGH_OPTION_VALUE = "HIGH";
+
+    private static final String MEDIUM_OPTION_VALUE = "MEDIUM";
+
+    private static final String LOW_OPTION_VALUE = "LOW";
 
     private static final long serialVersionUID = 2259179419421396093L;
 
@@ -99,6 +110,10 @@ public class CasesViewModel implements Serializable {
 
     private String status;
 
+    private List<String> priorityOptions = new ArrayList<>();
+
+    private String priority;
+
     private List<String> pendingOptions = new ArrayList<>();
 
     private String pendingResponse;
@@ -115,6 +130,17 @@ public class CasesViewModel implements Serializable {
 
     private SegmentListView segment;
 
+    // Advance filter
+    private List<String> advancedFilter = new ArrayList<>();
+
+    private List<CaseCategory> caseCategoriesOptions = new ArrayList<>();
+
+    private CaseCategory caseCategory;
+
+    private List<SubjectCategory> subjectCategoriesOptions = new ArrayList<>();
+
+    private SubjectCategory subjectCategory;
+
     @WireVariable
     private UserSessionService userSessionService;
 
@@ -130,6 +156,12 @@ public class CasesViewModel implements Serializable {
     @WireVariable
     private TriggerService triggerService;
 
+    @WireVariable
+    private CaseCategorySetService caseCategorySetService;
+
+    @WireVariable
+    private SubjectCategorySetService subjectCategorySetService;
+
     @Init
     public void init() {
         this.initUserInformation();
@@ -138,6 +170,9 @@ public class CasesViewModel implements Serializable {
         this.filterActive = false;
         this.pendingOptions = getPendingOptionsList();
         this.statusOptions = getStatusOptionsList();
+        this.priorityOptions = getPriorityOptionsList();
+        this.caseCategoriesOptions = getCaseCategoriesOptionsList();
+        this.subjectCategoriesOptions = getSubjectCategoriesOptionsList();
         findCases();
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
@@ -222,6 +257,10 @@ public class CasesViewModel implements Serializable {
             filters.put("status", this.status);
         }
 
+        if (priority != null && !priority.equals(ALL_OPTION_VALUE)) {
+            filters.put("priority", this.priority);
+        }
+
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
         }
@@ -232,6 +271,14 @@ public class CasesViewModel implements Serializable {
 
         if (this.subject != null) {
             filters.put("subject", this.subject);
+        }
+
+        if (this.caseCategory != null && !this.caseCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
+            filters.put("caseCategory", this.caseCategory.getId());
+        }
+
+        if (this.subjectCategory != null && !this.subjectCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
+            filters.put("subjectCategory", this.subjectCategory.getId());
         }
 
         return filters;
@@ -247,8 +294,39 @@ public class CasesViewModel implements Serializable {
         return new ArrayList<String>(Arrays.asList(options));
     }
 
+    private List<String> getPriorityOptionsList() {
+        String[] options = { ALL_OPTION_VALUE, HIGH_OPTION_VALUE, MEDIUM_OPTION_VALUE, LOW_OPTION_VALUE };
+        return new ArrayList<String>(Arrays.asList(options));
+    }
+
+    private List<CaseCategory> getCaseCategoriesOptionsList() {
+        List<CaseCategory> categories = new ArrayList<>();
+        categories = caseCategorySetService.findAllCategories();
+
+        if (categories != null && !categories.isEmpty()) {
+            CaseCategory categoryBase = new CaseCategory();
+            categoryBase.setId(NOT_ID_ITEM_VALUE);
+            categoryBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            categories.add(0, categoryBase);
+        }
+        return categories;
+    }
+
     public DateConverter getDateConverter() {
         return dateConverter;
+    }
+
+    private List<SubjectCategory> getSubjectCategoriesOptionsList() {
+        List<SubjectCategory> categories = new ArrayList<>();
+        categories = subjectCategorySetService.findAllCategories();
+
+        if (categories != null && !categories.isEmpty()) {
+            SubjectCategory categoryBase = new SubjectCategory();
+            categoryBase.setId(NOT_ID_ITEM_VALUE);
+            categoryBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            categories.add(0, categoryBase);
+        }
+        return categories;
     }
 
     private List<DomainListView> getDomainsList() {
@@ -524,5 +602,61 @@ public class CasesViewModel implements Serializable {
 
     public void setSegment(SegmentListView segment) {
         this.segment = segment;
+    }
+
+    public List<String> getPriorityOptions() {
+        return priorityOptions;
+    }
+
+    public void setPriorityOptions(List<String> priorityOptions) {
+        this.priorityOptions = priorityOptions;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public List<String> getAdvancedFilter() {
+        return advancedFilter;
+    }
+
+    public void setAdvancedFilter(List<String> advancedFilter) {
+        this.advancedFilter = advancedFilter;
+    }
+
+    public List<CaseCategory> getCaseCategoriesOptions() {
+        return caseCategoriesOptions;
+    }
+
+    public void setCaseCategoriesOptions(List<CaseCategory> caseCategoriesOptions) {
+        this.caseCategoriesOptions = caseCategoriesOptions;
+    }
+
+    public CaseCategory getCaseCategory() {
+        return caseCategory;
+    }
+
+    public void setCaseCategory(CaseCategory caseCategory) {
+        this.caseCategory = caseCategory;
+    }
+
+    public List<SubjectCategory> getSubjectCategoriesOptions() {
+        return subjectCategoriesOptions;
+    }
+
+    public void setSubjectCategoriesOptions(List<SubjectCategory> subjectCategoriesOptions) {
+        this.subjectCategoriesOptions = subjectCategoriesOptions;
+    }
+
+    public SubjectCategory getSubjectCategory() {
+        return subjectCategory;
+    }
+
+    public void setSubjectCategory(SubjectCategory subjectCategory) {
+        this.subjectCategory = subjectCategory;
     }
 }

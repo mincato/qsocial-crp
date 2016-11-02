@@ -55,13 +55,14 @@ public class CaseServiceTest {
         when(
                 caseRepository.findAll(Mockito.any(PageRequest.class), Mockito.matches("domainId"),
                         Mockito.matches("triggerId"), Mockito.matches("segmentId"), Mockito.matches("subject"),
-                        Mockito.matches("title"), Mockito.matches("true"), Mockito.matches("true"),
-                        Mockito.matches("1476719187665"), Mockito.matches("1476719187665"), Mockito.anyList(),
-                        Mockito.matches("bruceWayne"), Mockito.matches("userSelected"))).thenReturn(expectedCases);
+                        Mockito.matches("title"), Mockito.matches("true"), Mockito.matches("priority"),
+                        Mockito.matches("true"), Mockito.matches("1476719187665"), Mockito.matches("1476719187665"),
+                        Mockito.anyList(), Mockito.matches("bruceWayne"), Mockito.matches("userSelected"),
+                        Mockito.matches("caseCategory"), Mockito.matches("subjectCategory"))).thenReturn(expectedCases);
 
         PageResponse<CaseListView> results = caseService.findAll(0, 0, "title", "true", "domainId", "triggerId",
-                "segmentId", "subject", "title", "true", "true", "1476719187665", "1476719187665", "bruceWayne",
-                "userSelected");
+                "segmentId", "subject", "title", "true", "priority", "true", "1476719187665", "1476719187665",
+                "bruceWayne", "userSelected", "caseCategory", "subjectCategory");
         ReflectionAssert.assertReflectionEquals(expectedPageCases, results);
     }
 }
