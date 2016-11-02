@@ -13,18 +13,13 @@
 		</layout>
 	</appender>
 
-	<logger name="io.searchbox">
+<!-- 	<logger name="io.searchbox">
 		<level value="WARN" />
-		<appender-ref ref="fileAppender" />
-	</logger>
-	
-	<logger name="com.qsocialnow">
-		<level value="DEBUG" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
 	<logger name="com.qsocialnow.elasticsearch">
-		<level value="INFO" />
+		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
@@ -41,7 +36,7 @@
 	<logger name="org.I0Itec">
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
-	</logger>
+	</logger> -->
 
 	<root>
 		<priority value="INFO" />

@@ -22,4 +22,6 @@ public interface CaseCategorySetService {
 
     List<CaseCategory> findCategories(String id);
 
+    List<CaseCategory> findAllCategories();
+
 }

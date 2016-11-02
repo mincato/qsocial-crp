@@ -15,7 +15,7 @@ public class SerieDetectionCriteriaFilter implements DetectionCriteriaFilter {
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing serie message filter");
+        log.debug("Executing serie message filter");
         boolean match = false;
         if (message.getTokenId() != null) {
             match = message.getTokenId().equals(filter.getSerieFilter().getThematicId());

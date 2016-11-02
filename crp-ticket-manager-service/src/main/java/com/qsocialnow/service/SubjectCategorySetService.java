@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -64,6 +65,10 @@ public class SubjectCategorySetService {
 
     public List<SubjectCategorySet> findAll() {
         return subjectCategorySetRepository.findAll();
+    }
+
+    public List<SubjectCategory> findAllCategories() {
+        return subjectCategorySetRepository.findAllCategories();
     }
 
 }

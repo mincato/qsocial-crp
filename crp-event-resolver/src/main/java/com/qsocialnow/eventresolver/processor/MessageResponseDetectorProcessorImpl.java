@@ -41,22 +41,22 @@ public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
                 logMessageNotDetected(inputBeanDocument);
             }
         } else {
-            LOGGER.info(String.format("Message should not be processed for this domain: %s", domainId));
+            LOGGER.debug(String.format("Message should not be processed for this domain: %s", domainId));
         }
     }
 
     private void logMessageNotDetected(Event inputBeanDocument) {
-        LOGGER.info(String.format("Message from Response Detect were not detected to execute an action: %s",
-                inputBeanDocument.getId()));
         if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(String.format("Message from Response Detect were not detected to execute an action: %s",
+                    inputBeanDocument.getId()));
             LOGGER.debug(String.format("Message: %s", inputBeanDocument));
         }
     }
 
     private void logProcessingEvent(Event inputBeanDocument, String domainId) {
-        LOGGER.info(String.format("Processing message from Response Detector using domain %s: %s", domainId,
-                inputBeanDocument.getId()));
         if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(String.format("Processing message from Response Detector using domain %s: %s", domainId,
+                    inputBeanDocument.getId()));
             LOGGER.debug(String.format("Message: %s", inputBeanDocument));
         }
     }

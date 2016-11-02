@@ -18,7 +18,7 @@ public class CategoryDetectionCriteriaFilter implements DetectionCriteriaFilter 
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing category message filter");
+        log.debug("Executing category message filter");
         boolean match = false;
         if (message.getConjuntos() != null) {
             match = filter.getCategoryFilter().stream()

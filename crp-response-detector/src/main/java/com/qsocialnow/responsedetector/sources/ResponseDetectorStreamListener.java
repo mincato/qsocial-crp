@@ -28,7 +28,7 @@ public class ResponseDetectorStreamListener implements UserStreamListener {
 
     @Override
     public void onStatus(Status status) {
-        log.info("onStatus @ screenName: " + status.getUser().getScreenName() + " messageId: " + status.getId()
+        log.debug("onStatus @ screenName: " + status.getUser().getScreenName() + " messageId: " + status.getId()
                 + " id:" + status.getUser().getId() + "name: " + status.getUser().getName() + " original profile: "
                 + status.getUser().getOriginalProfileImageURLHttps() + " profile image: "
                 + status.getUser().getProfileImageURL() + " text: " + status.getText() + " isRetweet: "
@@ -45,7 +45,7 @@ public class ResponseDetectorStreamListener implements UserStreamListener {
             for (int i = 0; i < mentions.length; i++) {
                 UserMentionEntity userMentionEntity = mentions[i];
                 userMentions[i] = userMentionEntity.getScreenName();
-                log.info("User Mentions: " + userMentions[i]);
+                log.debug("User Mentions: " + userMentions[i]);
             }
         }
 
@@ -64,27 +64,27 @@ public class ResponseDetectorStreamListener implements UserStreamListener {
 
     @Override
     public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
-        log.info("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
+        log.debug("Got a status deletion notice id:" + statusDeletionNotice.getStatusId());
     }
 
     @Override
     public void onDeletionNotice(long directMessageId, long userId) {
-        log.info("Got a direct message deletion notice id:" + directMessageId);
+        log.debug("Got a direct message deletion notice id:" + directMessageId);
     }
 
     @Override
     public void onTrackLimitationNotice(int numberOfLimitedStatuses) {
-        log.info("Got a track limitation notice:" + numberOfLimitedStatuses);
+        log.debug("Got a track limitation notice:" + numberOfLimitedStatuses);
     }
 
     @Override
     public void onScrubGeo(long userId, long upToStatusId) {
-        log.info("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
+        log.debug("Got scrub_geo event userId:" + userId + " upToStatusId:" + upToStatusId);
     }
 
     @Override
     public void onStallWarning(StallWarning warning) {
-        log.info("Got stall warning:" + warning);
+        log.debug("Got stall warning:" + warning);
     }
 
     @Override
@@ -94,19 +94,19 @@ public class ResponseDetectorStreamListener implements UserStreamListener {
 
     @Override
     public void onFavorite(User source, User target, Status favoritedStatus) {
-        log.info("onFavorite source:@" + source.getScreenName() + " target:@" + target.getScreenName() + " @"
+        log.debug("onFavorite source:@" + source.getScreenName() + " target:@" + target.getScreenName() + " @"
                 + favoritedStatus.getUser().getScreenName() + " - " + favoritedStatus.getText());
     }
 
     @Override
     public void onUnfavorite(User source, User target, Status unfavoritedStatus) {
-        log.info("onUnFavorite source:@" + source.getScreenName() + " target:@" + target.getScreenName() + " @"
+        log.debug("onUnFavorite source:@" + source.getScreenName() + " target:@" + target.getScreenName() + " @"
                 + unfavoritedStatus.getUser().getScreenName() + " - " + unfavoritedStatus.getText());
     }
 
     @Override
     public void onFollow(User source, User followedUser) {
-        log.info("onFollow source:@" + source.getScreenName() + " target:@" + followedUser.getScreenName());
+        log.debug("onFollow source:@" + source.getScreenName() + " target:@" + followedUser.getScreenName());
     }
 
     @Override
