@@ -47,7 +47,7 @@ public class App implements Runnable {
     }
 
     public void close() {
-        log.info("Starting exit...");
+        log.debug("Starting exit...");
         if (sourceDetectors != null) {
             for (SourceDetectorService sourceDetector : sourceDetectors) {
                 sourceDetector.stop();

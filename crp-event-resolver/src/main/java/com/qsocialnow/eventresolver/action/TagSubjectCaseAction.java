@@ -34,7 +34,7 @@ public class TagSubjectCaseAction implements Action {
             subject.addSubjectCategories(subjectCategories);
             subjectService.update(subject);
         } else {
-            log.info("The case does not have a subject to tag");
+            log.debug("The case does not have a subject to tag");
         }
         return caseObject;
     }

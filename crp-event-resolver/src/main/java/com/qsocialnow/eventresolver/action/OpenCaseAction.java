@@ -23,7 +23,7 @@ public class OpenCaseAction {
     private static final Logger log = LoggerFactory.getLogger(OpenCaseAction.class);
 
     public Case openCase(Event inputElement, ExecutionMessageRequest request) {
-        log.info("Executing action: " + ActionType.OPEN_CASE.name());
+        log.debug("Executing action: " + ActionType.OPEN_CASE.name());
         String sourceId = inputElement.getIdUsuarioCreacion();
         Case newCase = Case.getNewCaseFromEvent(inputElement);
         try {
@@ -31,7 +31,7 @@ public class OpenCaseAction {
             if (subject == null) {
                 subject = new Subject();
 
-                log.info("Creating subject: " + sourceId + " identifier:" + inputElement.getUsuarioCreacion()
+                log.debug("Creating subject: " + sourceId + " identifier:" + inputElement.getUsuarioCreacion()
                         + " source:" + inputElement.getMedioId());
 
                 subject.setLastAccionDate(new Date()); //
@@ -66,7 +66,7 @@ public class OpenCaseAction {
     }
 
     private Subject findSubject(String idOriginUser) {
-        log.info("Retrieving subject: " + idOriginUser);
+        log.debug("Retrieving subject: " + idOriginUser);
         Subject subject = subjectService.findSubjectsByOriginUser(idOriginUser);
         return subject;
     }

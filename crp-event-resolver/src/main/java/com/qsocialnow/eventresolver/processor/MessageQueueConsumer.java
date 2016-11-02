@@ -35,7 +35,7 @@ public class MessageQueueConsumer extends QueueConsumer<Message> {
     @Override
     public void process(Message message) {
         synchronized (documents) {
-            log.info("Adding to process event: " + message.getMessage());
+            log.debug("Adding to process event: " + message.getMessage());
             documents.add(message);
         }
     }
@@ -44,7 +44,7 @@ public class MessageQueueConsumer extends QueueConsumer<Message> {
     public void save() {
         synchronized (documents) {
             if (documents.size() > 0) {
-                log.info("Processing " + documents.size() + " messages after dequeue it");
+                log.debug("Processing " + documents.size() + " messages after dequeue it");
                 for (Message message : documents) {
                     try {
                         messageProcessor.process(message);

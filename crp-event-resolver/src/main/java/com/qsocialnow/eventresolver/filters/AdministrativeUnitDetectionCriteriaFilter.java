@@ -16,7 +16,7 @@ public class AdministrativeUnitDetectionCriteriaFilter implements DetectionCrite
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing administrative unit message filter");
+        log.debug("Executing administrative unit message filter");
         boolean match = false;
         if (messageHasAdmUnit(message)) {
             match = filter.getAdmUnitFilter().stream()
