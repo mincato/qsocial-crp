@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.qsocialnow.elasticsearch.queues.QueueConsumer;
-import com.qsocialnow.elasticsearch.queues.QueueProducer;
+import com.qsocialnow.common.queues.QueueConsumer;
+import com.qsocialnow.common.queues.QueueProducer;
 import com.qsocialnow.eventresolver.exception.InvalidDomainException;
 import com.qsocialnow.kafka.model.Message;
 

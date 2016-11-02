@@ -1,9 +1,9 @@
-package com.qsocialnow.elasticsearch.queues;
+package com.qsocialnow.common.queues;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
+import com.qsocialnow.common.config.QueueConfigurator;
 
 public class QueueServiceFactory {
 
@@ -22,13 +22,13 @@ public class QueueServiceFactory {
         return instance;
     }
 
-    public QueueService getQueueServiceInstance(QueueType queueType, QueueConfigurator configurator) {
-        QueueService service = queueServicesMap.get(queueType.type());
+    public QueueService getQueueServiceInstance(String queueType, QueueConfigurator configurator) {
+        QueueService service = queueServicesMap.get(queueType);
         if (service == null) {
             service = new QueueService(configurator);
-            if (service.initQueue(queueType.type())) {
-                if (service.initFailQueue(queueType.type())) {
-                    queueServicesMap.put(queueType.type(), service);
+            if (service.initQueue(queueType)) {
+                if (service.initFailQueue(queueType)) {
+                    queueServicesMap.put(queueType, service);
                 } else {
                     return null;
                 }
