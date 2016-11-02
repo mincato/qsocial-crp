@@ -24,7 +24,7 @@
 	</logger>	
 
 	<logger name="com.qsocialnow.elasticsearch">
-		<level value="DEBUG" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
