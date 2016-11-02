@@ -36,7 +36,7 @@ public abstract class QueueConsumer<T> extends Thread {
 
     private final String type;
 
-    private static final AtomicInteger consumingItemCount = new AtomicInteger(0);
+    private final AtomicInteger consumingItemCount = new AtomicInteger(0);
 
     public QueueConsumer(final String type) {
         this.type = type;

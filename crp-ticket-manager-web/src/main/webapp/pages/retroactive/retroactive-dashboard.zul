@@ -48,10 +48,10 @@
 								</n:div>
 								<div class="form-control-static col-sm-2">
 									<a class="link-button" onClick="@command('refresh')">
-										<i  class="fa fa-refresh fa-2x"  /> 
+										<n:i  class="fa fa-refresh fa-2x"  data-toggle="tooltip" data-placement="top" title="${labels.retroactive.refresh}"/> 
 									</a>
 									<a class="link-button" onClick="@command('cancel')">
-										<i  class="fa fa-stop fa-2x"  /> 
+										<i  class="fa fa-stop fa-2x"  data-toggle="tooltip" data-placement="top" title="${labels.retroactive.stop}"/> 
 									</a>
 								</div>	
 							</div>
@@ -87,10 +87,10 @@
 								</n:div>
 								<div class="form-control-static col-sm-2">
 									<a class="link-button" onClick="@command('refresh')">
-										<i  class="fa fa-refresh fa-2x"  /> 
+										<n:i  class="fa fa-refresh fa-2x"  data-toggle="tooltip" data-placement="top" title="${labels.retroactive.refresh}" /> 
 									</a>
 									<a class="link-button" onClick="@command('cancel')">
-										<i  class="fa fa-stop fa-2x"  /> 
+										<n:i  class="fa fa-stop fa-2x" data-toggle="tooltip" data-placement="top" title="${labels.retroactive.stop}" /> 
 									</a>
 								</div>
 							</div>
@@ -104,7 +104,7 @@
 								</n:div>
 								<div class="form-control-static col-sm-2">
 									<a class="link-button" onClick="@command('refresh')">
-										<i  class="fa fa-refresh fa-2x"  /> 
+										<n:i  class="fa fa-refresh fa-2x"   data-toggle="tooltip" data-placement="top" title="${labels.retroactive.refresh}"/> 
 									</a>
 								</div>
 							</div>
