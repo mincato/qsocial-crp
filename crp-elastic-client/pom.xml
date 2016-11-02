@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.qsocialnow.crp</groupId>
 		<artifactId>case-resolution-platform</artifactId>
-		<version>0.6.2</version>
+		<version>0.6.3</version>
 	</parent>
 	<artifactId>crp-elastic-client</artifactId>
 	<packaging>jar</packaging>
@@ -34,10 +34,6 @@
 			<id>sonatype</id>
 			<name>Sonatype Groups</name>
 			<url>https://oss.sonatype.org/content/groups/public/</url>
-		</repository>
-		<repository>
-  			<id>github.release.repo</id>
-  			<url>https://raw.github.com/bulldog2011/bulldog-repo/master/repo/releases/</url>
 		</repository>
 	</repositories>
 	<dependencies>
