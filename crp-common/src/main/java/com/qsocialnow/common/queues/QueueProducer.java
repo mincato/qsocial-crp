@@ -1,4 +1,4 @@
-package com.qsocialnow.elasticsearch.queues;
+package com.qsocialnow.common.queues;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

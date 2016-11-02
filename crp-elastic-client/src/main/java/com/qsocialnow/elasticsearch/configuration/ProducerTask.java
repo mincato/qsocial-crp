@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.ActionType;

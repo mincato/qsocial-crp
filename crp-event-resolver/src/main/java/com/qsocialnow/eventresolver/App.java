@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.NodeCache;
 import org.apache.curator.framework.recipes.cache.NodeCacheListener;
@@ -22,10 +23,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
-import com.qsocialnow.elasticsearch.queues.QueueService;
-import com.qsocialnow.elasticsearch.queues.QueueServiceFactory;
-import com.qsocialnow.elasticsearch.queues.QueueType;
+import com.qsocialnow.common.config.QueueConfigurator;
+import com.qsocialnow.common.queues.QueueService;
+import com.qsocialnow.common.queues.QueueServiceFactory;
+import com.qsocialnow.common.queues.QueueType;
 import com.qsocialnow.eventresolver.config.CacheConfig;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
 import com.qsocialnow.eventresolver.processor.EventHandlerProcessor;
@@ -146,8 +147,8 @@ public class App implements Runnable {
 
     private void createEventHandlerProcessor(String domain) {
         try {
-            QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
-                    queueConfig);
+            QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(
+                    StringUtils.join(new String[] { QueueType.EVENTS.type(), domain }, "_"), queueConfig);
 
             EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig, domain),
                     messageProcessor, queueService);
@@ -162,7 +163,8 @@ public class App implements Runnable {
 
     private void createEventHandlerResponseDetectorProcessor() {
         try {
-            QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(QueueType.EVENTS,
+            QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(
+                    StringUtils.join(new String[] { QueueType.EVENTS.type(), RESPONSE_DETECTOR_CONSUMER_NAME }, "_"),
                     queueConfig);
 
             EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig,
