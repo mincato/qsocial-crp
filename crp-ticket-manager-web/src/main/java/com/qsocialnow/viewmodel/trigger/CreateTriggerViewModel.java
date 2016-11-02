@@ -19,7 +19,6 @@ import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.CaseCategorySet;
@@ -313,33 +312,17 @@ public class CreateTriggerViewModel implements Serializable {
                 currentTrigger.getSubjectCategorySets().stream().map(view -> {
                     return view.getSubjectCategorySet().getId();
                 }).collect(Collectors.toList()));
+        String labelToShow = null;
         if (editing) {
             this.currentTrigger.setTrigger(triggerService.update(this.currentDomain.getDomain().getId(),
                     currentTrigger.getTrigger()));
-            Clients.showNotification(Labels.getLabel("trigger.edit.notification.success"));
+            labelToShow = "trigger.edit.notification.success";
         } else {
             triggerService.create(domain, currentTrigger.getTrigger());
-
-            NotificationHandler.addNotification(Labels.getLabel("trigger.create.notification.success"));
-            Executions.getCurrent().sendRedirect("/pages/triggers/list/index.zul?domain=" + domain);
-
-            /*
-             * currentTrigger.setTrigger(new Trigger());
-             * currentTrigger.getTrigger().setSegments(new ArrayList<>());
-             * currentTrigger.getTrigger().setResolutions(new ArrayList<>());
-             * currentTrigger.getTrigger().setCaseCategoriesSetIds(new
-             * ArrayList<>());
-             * currentTrigger.getTrigger().setSubjectCategoriesSetIds(new
-             * ArrayList<>()); currentTrigger.setResolutions(new
-             * ArrayList<TriggerResolutionView>());
-             * currentTrigger.setSubjectCategorySets(new
-             * ArrayList<TriggerSubjectCategorySetView>());
-             * currentTrigger.setCaseCategorySets(new
-             * ArrayList<TriggerCaseCategorySetView>());
-             * initCaseCategorySetListView(null);
-             * initSubjectCategorySetListView(null);
-             */
+            labelToShow = "trigger.create.notification.success";
         }
+        NotificationHandler.addNotification(Labels.getLabel(labelToShow));
+        Executions.getCurrent().sendRedirect("/pages/triggers/list/index.zul?domain=" + domain);
     }
 
     public DomainView getCurrentDomain() {

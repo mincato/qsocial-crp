@@ -32,7 +32,15 @@ public class MockThematicRepository implements ThematicRepository {
 
             @Override
             public int compare(CategoryGroup o1, CategoryGroup o2) {
-                return o1.getNumeroDeOrden().compareTo(o2.getNumeroDeOrden());
+                if (o1.getNumeroDeOrden() != null && o2.getNumeroDeOrden() != null) {
+                    return o1.getNumeroDeOrden().compareTo(o2.getNumeroDeOrden());
+                } else if (o1.getNumeroDeOrden() != null) {
+                    return -1;
+                } else if (o2.getNumeroDeOrden() != null) {
+                    return 1;
+                } else {
+                    return 0;
+                }
             }
 
         });

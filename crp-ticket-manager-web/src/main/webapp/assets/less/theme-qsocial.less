@@ -244,18 +244,13 @@ SIDEBAR
     
     .sidebar-content h4 {
          background-color: lighten(@skin-primary-bg, 5%);
-         color: lighten(@skin-primary-bg, 20%);
+         color: @sidebar-main-color;
     }
     
     .sidebar .sidebar-subtitle {
 		background-color: lighten(@skin-primary-bg, 5%);
-		color: lighten(@skin-primary-bg, 20%);
 	}
 	
-	.sidebar .sidebar-subtitle > i{
-		color: lighten(@skin-primary-bg, 20%);
-	}
-
 /* ----- SIDEBAR/MESSENGER SCROLLPANE ----- */
     .sidebar-container .jspDrag {
         background-color: @sidebar-scrollbar;
@@ -1441,7 +1436,7 @@ CUSTOM
 	color: darken(@body-text, 10%) !important;
 } 
 
-.list-text-column > span {
+.list-text-column > span, .list-text-column > a {
 	color: #f15b29 !important;
 	font-weight: bold !important;
 } 
@@ -1470,3 +1465,44 @@ a:hover {
 hr {
 	border-color: darken(@ui-default, 25%);
 }
+
+
+/*Priority*/
+
+ @priority-high: red;
+ @priority-medium: #ea7d24;
+ @priority-low: green;
+ 
+.priority > span:before {
+	position: relative;
+    display: inline-block;
+    margin-left: 5px;
+  	margin-right: 5px;
+}
+       
+.priority.high > span:before {
+	font: normal normal normal 14px/1 FontAwesome;
+    content: "\f176";
+	color: @priority-high;
+}
+        
+.priority.medium > span:before {
+	font: normal normal normal 14px/1 FontAwesome;
+    content: "\f176";
+    color: @priority-medium;
+}
+        
+.priority.low > span:before {
+	font: normal normal normal 14px/1 FontAwesome;
+    content: "\f175";
+	color: @priority-low;
+}       
+
+.label.label-case-open {
+	background-color: @default;
+}
+
+.label.label-case-close {
+	background-color: #64b3ac;
+}
+

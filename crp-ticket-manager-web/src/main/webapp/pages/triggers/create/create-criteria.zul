@@ -429,10 +429,11 @@
 								children="@bind(fxCriteria.actionCriterias)">
 								<template name="children">
 									<n:div class="list-group-item col-xs-11 col-sm-11">
-										<n:div class="col-xs-12 col-sm-6">
+										<n:div class="col-xs-12 col-sm-3">
 											${c:l(c:cat('cases.actions.',each.actionType))}
 										</n:div>
-										<n:div class="col-xs-8 col-sm-3">
+										<n:div class="col-xs-8 col-sm-6">
+											${each.description}
 										</n:div>
 										<n:div class="col-xs-4 col-sm-3">
 											<n:div class="pull-right">

@@ -46,8 +46,9 @@ public class CaseTicketService extends CaseIndexService {
     }
 
     public List<Case> getCases(int from, int size, String sortField, boolean sortOrder, String domainId,
-            String triggerId, String segmentId, String subject, String title, String pendingResponse, String status,
-            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
+            String triggerId, String segmentId, String subject, String title, String pendingResponse, String priority,
+            String status, String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName,
+            String userSelected, String caseCategory, String subjectCategory) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -71,9 +72,6 @@ public class CaseTicketService extends CaseIndexService {
         if (segmentId != null)
             searchValues.put("segmentId", segmentId);
 
-        if (subject != null)
-            searchValues.put("subject.identifier", subject);
-
         if (title != null)
             searchValues.put("title", title);
 
@@ -83,23 +81,38 @@ public class CaseTicketService extends CaseIndexService {
         if (status != null)
             searchValues.put("open", status);
 
+        if (priority != null)
+            searchValues.put("priority", priority);
+
         if (userSelected != null)
             searchValues.put("assignee.username", userSelected);
 
-        List<ShouldFilter> shouldFilters = null;
+        if (caseCategory != null)
+            searchValues.put("caseCategories", caseCategory);
+
+        if (subjectCategory != null)
+            searchValues.put("subject.subjectCategory", subjectCategory);
+
+        List<ShouldFilter> shouldFilters = new ArrayList<>();
 
         if (teamsToFilter == null || (teamsToFilter != null && teamsToFilter.size() == 0)) {
             if (userName != null) {
                 searchValues.put("assignee.username", userName);
             }
         } else {
-            shouldFilters = new ArrayList<>();
             for (String teamId : teamsToFilter) {
                 ShouldFilter shouldFilter = new ShouldFilter("teamId", teamId);
                 shouldFilters.add(shouldFilter);
             }
             ShouldFilter shouldFilter = new ShouldFilter("assignee.username", userName);
             shouldFilters.add(shouldFilter);
+        }
+
+        if (subject != null) {
+            ShouldFilter shouldFilterSubjetIdentifier = new ShouldFilter("subject.identifier", subject);
+            ShouldFilter shouldFilterSubjetSourceName = new ShouldFilter("subject.sourceName", subject);
+            shouldFilters.add(shouldFilterSubjetIdentifier);
+            shouldFilters.add(shouldFilterSubjetSourceName);
         }
 
         SearchResponse<Case> response = repository.queryByFields(mapping, from, size, sortField,

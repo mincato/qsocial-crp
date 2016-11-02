@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
+<link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" >
 <title>Login</title>
 </head>
 <body class="webkit chrome breeze" style="overflow: visible;">

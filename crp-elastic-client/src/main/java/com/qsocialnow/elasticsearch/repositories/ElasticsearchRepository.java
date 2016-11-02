@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -111,9 +112,13 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return awsSigner;
     }
 
-    public void createIndex(String index) {
+    public void createIndex(String index, String jsonSettings) {
         try {
-            client.execute(new CreateIndex.Builder(index).build());
+            CreateIndex.Builder builder = new CreateIndex.Builder(index);
+            if (jsonSettings != null) {
+                builder.settings(jsonSettings).build();
+            }
+            client.execute(builder.build());
         } catch (IOException e) {
             log.error("Unexpected error: ", e);
 
@@ -385,10 +390,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
         }
 
-        if (shouldFilters != null) {
+        if (shouldFilters != null && shouldFilters.size() > 0) {
             BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
             for (ShouldFilter shouldFilter : shouldFilters) {
-                QueryBuilder query = QueryBuilders.matchQuery(shouldFilter.getField(), shouldFilter.getValue());
+                QueryBuilder query = QueryBuilders.matchPhraseQuery(shouldFilter.getField(), shouldFilter.getValue());
                 boolShouldQueryBuilder.should(query);
             }
             boolQueryBuilder.filter(boolShouldQueryBuilder);

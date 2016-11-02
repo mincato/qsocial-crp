@@ -42,7 +42,9 @@
 								    	<template name="children">
 										<tr>
 					                   		<td><span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.media.icon))"><i sclass="@load('fa fa-'.concat(each.media.icon))" /></span></td>
-											<td class="list-text-column">${each.identifier}</td>
+											<td class="list-text-column">
+												<a label="@load(each.identifier)" onClick="@command('selectSubject', subject=each)" ></a>
+											</td>
 											<td>${each.sourceName}</td>
 					                       	<td>
 					                       		<ul class="list-inline">

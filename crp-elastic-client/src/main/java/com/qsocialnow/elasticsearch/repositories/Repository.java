@@ -19,7 +19,7 @@ public interface Repository<T> {
 
     public void closeClient();
 
-    public void createIndex(String index);
+    public void createIndex(String index, String jsonSettings);
 
     public void createMapping(String index, String type, String jsonMapping);
 

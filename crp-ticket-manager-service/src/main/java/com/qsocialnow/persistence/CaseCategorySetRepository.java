@@ -102,6 +102,16 @@ public class CaseCategorySetRepository {
         return caseCategories;
     }
 
+    public List<CaseCategory> findAllCategories() {
+        List<CaseCategory> caseCategories = new ArrayList<>();
+        try {
+            caseCategories = caseCategorySetElasticService.findCategories();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return caseCategories;
+    }
+
     public List<CaseCategorySet> findCategoriesSets(List<String> caseCategoriesSetIds) {
         List<CaseCategorySet> userResolversRepo = caseCategorySetElasticService.findByIds(caseCategoriesSetIds);
         return userResolversRepo;

@@ -2,6 +2,8 @@ package com.qsocialnow.common.model.config;
 
 import java.util.Map;
 
+import org.apache.commons.collections4.CollectionUtils;
+
 import com.qsocialnow.common.model.cases.ActionParameter;
 
 public class AutomaticActionCriteria {
@@ -45,4 +47,15 @@ public class AutomaticActionCriteria {
     public void setActionType(ActionType actionType) {
         this.actionType = actionType;
     }
+
+    public String getDescription() {
+        if (parameters != null && parameters.containsKey(ActionParameter.COMMENT)) {
+            return (String) parameters.get(ActionParameter.COMMENT);
+        }
+        if (parameters != null && parameters.containsKey(ActionParameter.TEXT)) {
+            return (String) parameters.get(ActionParameter.TEXT);
+        }
+        return "";
+    }
+
 }

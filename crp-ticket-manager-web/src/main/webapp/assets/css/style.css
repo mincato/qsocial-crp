@@ -2871,3 +2871,11 @@ button.remove {
 	display:flex;
 	align-items: center;
 }
+
+#page-header > div > h4 {
+	display: inline-block;
+}
+
+#page-header > div > i {
+	padding-right: 10px;
+}

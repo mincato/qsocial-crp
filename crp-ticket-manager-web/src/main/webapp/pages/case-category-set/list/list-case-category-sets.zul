@@ -7,6 +7,7 @@
 			<n:div class="col-sm-12">
 	       <n:div id="page-header" class="pane equal">
 				<n:div class="col-sm-6">
+					<i class="fa fa-tags fa-2x"></i>
     				<n:h4>${labels.casecategoryset.list.title}</n:h4>
 				</n:div>
 				<n:div class="col-sm-3">
@@ -45,19 +46,13 @@
 			    <thead>
 					<tr>
 					    <th>${labels.casecategoryset.list.column.description}</th>
-					    <th>${labels.casecategoryset.list.column.action}</th>
 					</tr>
 			    </thead>
 			    <tbody children="@bind(vm.caseCategorySets)">
 			    	<template name="children">
 					<tr>
-						<td class="list-text-column">${each.description}</td>
-						<td>
-                       		<ul class="list-inline">
-  								<li><a class="btn-list-action"><i onClick="@command('openEdit', casecategoryset=each.id)" class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="${labels.casecategoryset.edit.action}"></i></a></li>
-  							</ul>
-			           	</td>
-               		</tr>
+						<td class="list-text-column"><a label="@load(each.description)" onClick="@command('openEdit', casecategoryset=each.id)"> </a></td>
+	           		</tr>
                		</template>
 				</tbody>
 			</table>
