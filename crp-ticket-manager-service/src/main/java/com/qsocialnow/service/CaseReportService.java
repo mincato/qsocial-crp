@@ -118,7 +118,8 @@ public class CaseReportService {
             }
             time = System.currentTimeMillis();
             JsonArray jsonObject = repository.findAllAsJsonObject(pageRequest, domainId, triggerId, segmentId, subject,
-                    title, description, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected);
+                    title, description, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName,
+                    userSelected);
             System.out.println("tiempo: " + (System.currentTimeMillis() - time));
             InputStream is = new ByteArrayInputStream(jsonObject.toString().getBytes());
             JasperPrint print = this.buildJasperPrint(is, params);

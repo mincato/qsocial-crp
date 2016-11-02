@@ -53,7 +53,7 @@ public class FacebookSourceStrategy implements SourceStrategy {
                     Comment comment = facebook.getComment(caseObject.getLastPostId(), reading);
                     comment = comment.getParent();
 
-                    log.info("Reading comment in facebook strategy:" + comment);
+                    log.debug("Reading comment in facebook strategy:" + comment);
 
                     if (comment != null) {
                         id = comment.getId();

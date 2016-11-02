@@ -17,6 +17,11 @@
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
+	
+	<logger name="com.qsocialnow">
+		<level value="INFO" />
+		<appender-ref ref="fileAppender" />
+	</logger>	
 
 	<logger name="com.qsocialnow.elasticsearch">
 		<level value="WARN" />

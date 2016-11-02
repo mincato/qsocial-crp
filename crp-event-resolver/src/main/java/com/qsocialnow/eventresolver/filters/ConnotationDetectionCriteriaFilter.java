@@ -15,7 +15,7 @@ public class ConnotationDetectionCriteriaFilter implements DetectionCriteriaFilt
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing connotation message filter");
+        log.debug("Executing connotation message filter");
         boolean match = false;
         if (message.getConnotacion() != null) {
             Short[] connotationOptions = filter.getConnotationFilter().getOptions();

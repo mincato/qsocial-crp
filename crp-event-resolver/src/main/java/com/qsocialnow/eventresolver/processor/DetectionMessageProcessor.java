@@ -48,7 +48,7 @@ public class DetectionMessageProcessor {
                         }
                     }
                 } else {
-                    log.info(String.format("The trigger with name %s is not valid this time", trigger.getName()));
+                    log.debug(String.format("The trigger with name %s is not valid this time", trigger.getName()));
                 }
                 if (found) {
                     triggerDetected = trigger;
