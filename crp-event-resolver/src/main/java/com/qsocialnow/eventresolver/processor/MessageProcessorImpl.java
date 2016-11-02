@@ -71,19 +71,19 @@ public class MessageProcessorImpl implements MessageProcessor {
         return isUserResolverEvent;
     }
 
-    private void logMessageNotDetected(Event inputBeanDocument) {        
+    private void logMessageNotDetected(Event inputBeanDocument) {
         if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug(String.format("Message were not detected to execute an action: %s", inputBeanDocument.getId()));
+            LOGGER.debug(String.format("Message were not detected to execute an action: %s", inputBeanDocument.getId()));
             LOGGER.debug(String.format("Message: %s", inputBeanDocument));
         }
     }
 
-    private void logProcessingEvent(Event inputBeanDocument, String domainId) {        
+    private void logProcessingEvent(Event inputBeanDocument, String domainId) {
         if (LOGGER.isDebugEnabled()) {
-        	LOGGER.debug(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
+            LOGGER.debug(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
             LOGGER.debug(String.format("Message: %s", inputBeanDocument));
             LOGGER.debug(String.format("Searching for domain: %s", domainId));
-        }        
+        }
     }
 
     public void setDomainElasticService(DomainService domainElasticService) {

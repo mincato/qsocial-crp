@@ -122,7 +122,8 @@ public class FacebookDetectorService extends SourceDetectorService {
                         break;
                     }
                     case NODE_REMOVED: {
-                        log.debug("Facebook conversation removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        log.debug("Facebook conversation removed: "
+                                + ZKPaths.getNodeFromPath(event.getData().getPath()));
                         break;
                     }
                     case INITIALIZED: {

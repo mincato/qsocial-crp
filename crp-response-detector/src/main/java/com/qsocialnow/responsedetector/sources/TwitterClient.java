@@ -57,8 +57,8 @@ public class TwitterClient {
     public void checkAnyMention(TwitterMessageEvent messageEvent) {
         try {
             List<Status> statuses = twitter.getUserTimeline();
-            log.debug("Starting to read user timeline : " + statuses.size() + " trying to mach responses from message: "
-                    + messageEvent.getReplyMessageId());
+            log.debug("Starting to read user timeline : " + statuses.size()
+                    + " trying to mach responses from message: " + messageEvent.getReplyMessageId());
             for (Status status : statuses) {
                 if (String.valueOf(status.getId()).equals(messageEvent.getReplyMessageId())) {
                     log.debug("Finding responses from tweet: " + status.getId() + " retweet count: "

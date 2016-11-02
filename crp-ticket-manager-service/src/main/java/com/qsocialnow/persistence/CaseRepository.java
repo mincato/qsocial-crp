@@ -81,7 +81,7 @@ public class CaseRepository {
 
     public JsonArray findAllAsJsonObject(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
             String subject, String title, String description, String pendingResponse, String status,
-            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName,String userSelected) {
+            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
         JsonObject jsonObject = caseElasticService.getCasesAsJsonObject(pageRequest.getOffset(),
                 pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId,
                 segmentId, subject, title, description, pendingResponse, status, fromOpenDate, toOpenDate,
