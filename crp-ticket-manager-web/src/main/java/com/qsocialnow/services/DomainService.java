@@ -10,6 +10,8 @@ public interface DomainService {
 
     Domain findOne(String domain);
 
+    Domain findOneWithActiveResolutions(String domain);
+
     Domain update(Domain currentDomain);
 
     PageResponse<DomainListView> findAll(int pageNumber, int pageSize);

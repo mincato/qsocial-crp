@@ -49,6 +49,12 @@ public class DomainService {
         return domain;
     }
 
+    public Domain findDomainWithActiveResolutions(String id) {
+        Domain domain = findDomain(id);
+        domain.setResolutions(resolutionService.getActiveResolutions(id));
+        return domain;
+    }
+
     public String indexDomain(Domain domain) {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
 

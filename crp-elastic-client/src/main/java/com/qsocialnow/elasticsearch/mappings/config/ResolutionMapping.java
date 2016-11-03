@@ -51,6 +51,7 @@ public class ResolutionMapping implements ChildMapping<ResolutionType, Resolutio
     public ResolutionType getDocumentType(Resolution document) {
         ResolutionType resolutionType = new ResolutionType();
         resolutionType.setDescription(document.getDescription());
+        resolutionType.setActive(document.getActive());
         return resolutionType;
     }
 
@@ -74,6 +75,7 @@ public class ResolutionMapping implements ChildMapping<ResolutionType, Resolutio
         Resolution resolution = new Resolution();
         resolution.setId(documentType.getId());
         resolution.setDescription(documentType.getDescription());
+        resolution.setActive(documentType.getActive());
         return resolution;
     }
 

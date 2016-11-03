@@ -2879,3 +2879,7 @@ button.remove {
 #page-header > div > i {
 	padding-right: 10px;
 }
+
+.strikethrough > span {
+	text-decoration:line-through
+}

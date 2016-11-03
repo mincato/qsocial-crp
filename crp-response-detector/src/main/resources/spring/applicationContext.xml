@@ -43,12 +43,22 @@
 	</bean>
 	
 	<bean id="kafkaProducer" init-method="start" destroy-method="close" class="com.qsocialnow.kafka.producer.Producer">
-		<constructor-arg ref="kafkaConfig" />		
+		<constructor-arg ref="kafkaConfig" />
+		<constructor-arg ref="queueService" />		
 	</bean>
 	
 	<bean id="kafkaConfig" class="com.qsocialnow.responsedetector.factories.KafkaProducerConfigFactory" factory-method="create">
 		<constructor-arg ref="zookeeperCentralClient" />
 		<constructor-arg value="${app.kafka.config.znode.path}" />
+	</bean>
+	
+	<bean id="queueService" class="com.qsocialnow.responsedetector.factories.QueueServiceFactory" factory-method="create">
+		<constructor-arg ref="queueConfig" />
+	</bean>
+	
+	<bean id="queueConfig" class="com.qsocialnow.responsedetector.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+		<constructor-arg ref="zookeeperCentralClient" />
+		<constructor-arg value="${app.events.queue.configurator.path}" />
 	</bean>
 	
 	<util:list id="sourcesDetectors">

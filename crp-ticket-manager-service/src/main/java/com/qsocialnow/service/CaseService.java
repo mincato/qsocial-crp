@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -18,6 +20,7 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.Trigger;
@@ -26,6 +29,7 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
+import com.qsocialnow.persistence.DomainRepository;
 import com.qsocialnow.persistence.TeamRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 import com.qsocialnow.service.action.Action;
@@ -46,6 +50,9 @@ public class CaseService {
 
     @Autowired
     private TriggerRepository triggerRepository;
+
+    @Autowired
+    private DomainRepository domainRepository;
 
     @Resource
     private Map<ActionType, Action> actions;
@@ -146,7 +153,9 @@ public class CaseService {
             if (triggerId != null) {
                 Trigger trigger = triggerRepository.findOne(triggerId);
                 if (trigger != null) {
-                    availableResolutions = trigger.getResolutions();
+                    String domainId = caseObject.getDomainId();
+                    Domain domain = domainRepository.findOneWithActiveResolutions(domainId);
+                    availableResolutions = filterActiveResolutions(trigger.getResolutions(), domain.getResolutions());
                 }
             }
         } else {
@@ -154,6 +163,18 @@ public class CaseService {
             throw new RuntimeException("The case was not found");
         }
         return availableResolutions;
+    }
+
+    private List<Resolution> filterActiveResolutions(List<Resolution> triggerResolutions,
+            List<Resolution> domainResolutions) {
+        return triggerResolutions
+                .stream()
+                .filter(triggerRes -> {
+                    String resolutionId = triggerRes.getId();
+                    Optional<Resolution> domainRes = domainResolutions.stream()
+                            .filter(res -> res.getId().equals(resolutionId)).findFirst();
+                    return domainRes.isPresent();
+                }).collect(Collectors.toList());
     }
 
     public void setRepository(CaseRepository repository) {

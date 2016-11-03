@@ -32,6 +32,9 @@ public class DomainServiceImpl implements DomainService {
     @Value("${domains.serviceurl}")
     private String domainServiceUrl;
 
+    @Value("${domainsWithActiveResolutions.serviceurl}")
+    private String domainsWithActiveResolutionsServiceUrl;
+
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
@@ -54,6 +57,21 @@ public class DomainServiceImpl implements DomainService {
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
                     serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId);
+            Domain domain = restTemplate.getForObject(builder.toUriString(), Domain.class);
+            return domain;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call domain service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Domain findOneWithActiveResolutions(String domainId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(domainsWithActiveResolutionsServiceUrl)).path("/" + domainId);
             Domain domain = restTemplate.getForObject(builder.toUriString(), Domain.class);
             return domain;
         } catch (Exception e) {
