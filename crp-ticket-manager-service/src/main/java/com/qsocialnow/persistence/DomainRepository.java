@@ -56,6 +56,17 @@ public class DomainRepository implements ReportRepository {
         return null;
     }
 
+    public Domain findOneWithActiveResolutions(String domainId) {
+        try {
+            Domain domain = domainElasticService.findDomainWithActiveResolutions(domainId);
+
+            return domain;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
     public List<DomainListView> findAll(PageRequest pageRequest) {
         List<DomainListView> domains = new ArrayList<>();
 
