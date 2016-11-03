@@ -1,6 +1,7 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CasesViewModel')" 
+	form="@id('fxFilter') @load(vm.filter) @validator('com.qsocialnow.validators.CriteriaFilterFormValidator')" validationMessages="@id('vmsgs')"
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
 		<n:div class="col-sm-12">
@@ -197,6 +198,119 @@
                            </selectbox>
                     </div>
                 </n:div>
+                <n:hr/>
+                
+                <n:div class="form-group">
+                    <div zclass="input-group input-group-sm">
+                         <textbox zclass="form-control" value="@bind(vm.text)" placeholder="${labels.cases.list.filter.text}"/>
+                   </div>
+                </n:div>
+                
+                <n:div class="form-group">
+                    <div zclass="input-group input-group-sm">
+                         <textbox zclass="form-control" value="@bind(vm.mentions)" placeholder="${labels.cases.list.filter.mentions}"/>
+                   </div>
+                </n:div>
+                
+                <n:div class="form-group">
+                    <div zclass="input-group input-group-sm">
+                         <textbox zclass="form-control" value="@bind(vm.hashTags)" placeholder="${labels.cases.list.filter.hashTags}"/>
+                   </div>
+                </n:div>
+                
+                <n:div class="form-group">
+                    <div zclass="input-group input-group-sm">
+                         <textbox zclass="form-control" value="@bind(vm.authors)" placeholder="${labels.cases.list.filter.authors}"/>
+                   </div>
+                </n:div>
+                 <n:hr/>  
+                <n:div class="form-group">
+                    <n:label class="control-label">${labels.cases.list.filter.source}</n:label>
+                    <div zclass="input-group input-group-sm">
+                           <selectbox sclass="form-control" model="@load(vm.sourceOptions)"
+                               selectedItem="@bind(vm.source)">
+                               <template name="model">
+                                   <label value="${each.text}" />
+                               </template>
+                           </selectbox>
+                    </div>
+                </n:div>
+                <n:div class="form-group">
+                    <n:label class="control-label">${labels.cases.list.filter.language}</n:label>
+                    <div zclass="input-group input-group-sm">
+                           <selectbox sclass="form-control" model="@load(vm.languageOptions)"
+                               selectedItem="@bind(vm.language)">
+                               <template name="model">
+                                   <label value="${each.text}" />
+                               </template>
+                           </selectbox>
+                    </div>
+                </n:div>
+                <n:div class="form-group">
+                    <n:label class="control-label">${labels.cases.list.filter.greater}</n:label>
+                    <longbox class="form-control" constraint="no negative" placeholder="${labels.cases.list.filter.followers}"
+                        value="@bind(fxFilter.followersGreaterThan)"></longbox>
+                </n:div>
+                <x:div sclass="@load(empty vmsgs[followerslessthan] ? 'form-group' : 'form-group has-error')">
+                    <n:label class="control-label">${labels.cases.list.filter.less}</n:label>
+                    <longbox id="followerslessthan" sclass="form-control" constraint="no negative" placeholder="${labels.cases.list.filter.followers}"
+                        value="@load(fxFilter.followersLessThan)
+                        @validator('com.qsocialnow.validators.LongGreaterThanValidator', greater = fxFilter.followersGreaterThan, id = 'followerslessthan')"></longbox>
+                    <x:span sclass="@load(empty vmsgs[followerslessthan] ? 'hidden' : 'help-block')">
+                            <label value="@load(vmsgs[followerslessthan])" />
+                    </x:span>   
+                </x:div>
+                
+                                   
+               <n:div class="form-group">
+                   <n:label class="control-label">${labels.cases.list.filter.connotation}</n:label>
+                   <div zclass="input-group input-group-sm">
+                           <selectbox sclass="form-control" model="@load(vm.connotationOptions)"
+                               selectedItem="@bind(vm.connotation)">
+                               <template name="model">
+                                   <label value="${each.text}" />
+                               </template>
+                           </selectbox>
+                    </div>
+               </n:div>
+                <n:hr/>  
+                <n:div class="form-group">
+                    <n:form class="form-inline text-center">                                
+                        <n:div class="form-group">
+                            <n:label class="control-label">${labels.trigger.criteria.thematics.thematic}</n:label>
+                            <selectbox sclass="form-control" model="@load(vm.thematicsOptions)"
+                                onSelect="@command('selectThematic', fxFilter=fxFilter)"
+                                selectedItem="@bind(fxFilter.thematic)">
+                                <template name="model">
+                                    <label value="@load(each.nombre)" />
+                                </template>
+                            </selectbox>
+                        </n:div>
+                        <x:div class="form-group" visible="@load(vm.serieOptions ne null and not empty vm.serieOptions)">
+                            <n:label class="control-label">${labels.trigger.criteria.thematics.serie}</n:label>
+                            <selectbox sclass="form-control"  model="@load(vm.serieOptions)"
+                                onSelect="@command('selectSerie', fxFilter=fxFilter)"
+                                selectedItem="@bind(fxFilter.serie)">
+                                <template name="model">
+                                    <label value="@load(each.nombre)" />
+                                </template>
+                            </selectbox>
+                        </x:div>
+                        <x:div class="form-group" visible="@load(vm.subSerieOptions ne null and not empty vm.subSerieOptions)">
+                            <n:label class="control-label">${labels.trigger.criteria.thematics.subSerie}</n:label>
+                            <selectbox sclass="form-control" model="@load(vm.subSerieOptions)"
+                                selectedItem="@bind(fxFilter.subSerie)">
+                                <template name="model">
+                                    <label value="@load(each.nombre)" />
+                                </template>
+                            </selectbox>
+                        </x:div>
+                    </n:form>
+                </n:div>
+                 <n:hr/>
+                
+                
+                
 		    </x:form>
 		   </x:div>
 	      </n:div>

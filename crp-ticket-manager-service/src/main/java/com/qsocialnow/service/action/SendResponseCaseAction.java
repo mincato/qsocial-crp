@@ -90,8 +90,10 @@ public class SendResponseCaseAction implements Action {
             if (FilterConstants.MEDIA_FACEBOOK.equals(userResolver.getSource())) {
                 String clientFacebookUsersZnodePath = MessageFormat.format(facebookUsersZnodePath, appClient);
                 FacebookFeedEvent facebookFeedEvent = new FacebookFeedEvent(caseObject.getId(),
-                        caseObject.getLastPostId(), caseObject.getSubject().getSourceId(), caseObject.getSubject()
-                                .getIdentifier(), postId, lastPostId, postId, caseObject.getIdRootComment(),
+                        caseObject.getLastPostId(), caseObject.getSubject().getSourceId(),
+                        caseObject.getSubject().getIdentifier(), 
+                        postId, lastPostId, 
+                        caseObject.getIdRootComment(),
                         userResolver.getIdentifier(), caseObject.getTriggerEvent().getIdOriginal());
 
                 String facebookEvent = new Gson().toJson(facebookFeedEvent);
