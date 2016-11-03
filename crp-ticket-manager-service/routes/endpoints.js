@@ -405,6 +405,33 @@ router.get('/domains/:id', function (req, res) {
 
 });
 
+router.get('/domainsWithActiveResolutions/:id', function (req, res) {
+
+  function asyncResponse(err,responseDomain) {
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(responseDomain !== null) {
+      try {
+        res.set('Content-Type','application/json');
+        res.send(gson.toJsonSync(responseDomain));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+
+  var domainId = req.params.id;
+
+  var domainService = javaContext.getBeanSync("domainService");
+  domainService.findOneWithActiveResolutions(domainId, asyncResponse);
+
+});
+
 router.put('/domains/:id/trigger', function (req, res) {
 
   function asyncResponse(err,responseTrigger) {

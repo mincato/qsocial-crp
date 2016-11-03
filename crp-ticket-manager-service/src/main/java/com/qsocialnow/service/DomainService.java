@@ -63,6 +63,11 @@ public class DomainService {
         return domain;
     }
 
+    public Domain findOneWithActiveResolutions(String domainId) {
+        Domain domain = domainRepository.findOneWithActiveResolutions(domainId);
+        return domain;
+    }
+
     public Domain update(String domainId, Domain domain) {
         Domain domainSaved = null;
         try {
