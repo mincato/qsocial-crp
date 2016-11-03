@@ -86,6 +86,8 @@ public class Producer {
 
                         }
                     });
+                } else {
+                	log.debug("The record has been sent successfully");
                 }
             }
         });

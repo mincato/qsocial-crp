@@ -27,9 +27,9 @@ public class QueueProducer<T> extends Thread {
 
     private int totalMaxDeadItemCounts;
 
-    private static final AtomicInteger producingItemCount = new AtomicInteger(0);
+    private final AtomicInteger producingItemCount = new AtomicInteger(0);
 
-    private static final AtomicInteger producingDeadItemCount = new AtomicInteger(0);
+    private final AtomicInteger producingDeadItemCount = new AtomicInteger(0);
 
     private boolean stop = false;
 
