@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class CaseListView implements Serializable {
 
-    private static final long serialVersionUID = 4923657399304973277L;
+    private static final long serialVersionUID = 6036361785847616703L;
 
     private String id;
 

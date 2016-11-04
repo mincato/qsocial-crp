@@ -6,8 +6,11 @@
 	<n:div class="row">
         <n:div class="col-sm-12">
             <n:div id="page-header" class="pane equal">
-                <n:h4>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h4>
-            </n:div>
+            	<n:div class="col-sm-12">
+					<a style="color:#fff" zclass="btn-social-icon btn" sclass="@load(c:cat('btn-',vm.currentCase.source.icon))" href="${vm.currentCase.openCaseDeepLinkUrl}" target="_blank"><i sclass="@load('fa fa-'.concat(vm.currentCase.source.icon))" /></a>
+	    			<n:h4>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h4>
+				</n:div>
+		    </n:div>
         </n:div>
     </n:div>	
 
@@ -72,19 +75,18 @@
             					</n:div>
             				</n:div>
             			</n:div>
-            			<n:div class="form-group">
+            			<div zclass="form-group" visible="@load(not empty vm.currentCase.caseObject.assignee)">
             				<n:label class="control-label col-sm-3">
             					${labels.cases.details.assignee}
             				</n:label>
             				<n:div class="col-sm-9">
             					<n:div sclass="form-control-static">
             						<label
-            							visible="@load(not empty vm.currentCase.caseObject.assignee)"
             							value="@load(vm.currentCase.caseObject.assignee.username)">
             						</label>
             					</n:div>
             				</n:div>
-            			</n:div>
+            			</div>
             		</n:div>
             	</n:div>
             	<n:hr/>
@@ -102,7 +104,7 @@
             				</n:div>
             			</n:div>
             		</n:div>
-            		<n:div class="col-sm-6">
+            		<div zclass="col-sm-6" visible="@load(not empty vm.currentCase.caseObject.closeDate)">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
             					${labels.cases.details.closedate}
@@ -114,7 +116,7 @@
             					</n:div>
             				</n:div>
             			</n:div>
-            		</n:div>
+            		</div>
             	</n:div>
             	<n:hr/>
             	<n:div class="row">
@@ -130,21 +132,21 @@
             				</n:div>
             			</n:div>
             		</n:div>
-            		<n:div class="col-sm-6">
+            		<div zclass="col-sm-6" visible="@load(not empty vm.currentCase.caseObject.subject and not empty vm.currentCase.caseObject.subject.identifier)">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
             					${labels.cases.details.subject}
             				</n:label>
             				<n:div class="col-sm-9">
             					<n:div sclass="form-control-static">
-									<label visible="@load(not empty vm.currentCase.caseObject.subject)" value="@load(vm.currentCase.caseObject.subject.identifier)"></label>
+									<label value="@load(vm.currentCase.caseObject.subject.identifier)"></label>
             					</n:div>
             				</n:div>
             			</n:div>
-            		</n:div>
+            		</div>
             	</n:div>
-            	<n:hr/>
-            	<n:div class="row">
+            	<x:hr sclass="@load(empty vm.currentCase.caseCategoriesSet ? 'hidden':'')"/>
+            	<div zclass="row" visible="@load(not empty vm.currentCase.caseCategoriesSet)">
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
@@ -188,9 +190,9 @@
             			</n:div>
 
             		</n:div>
-            	</n:div>
-            	<n:hr/>
-            	<n:div class="row">
+            	</div>
+            	<x:hr sclass="@load(empty vm.currentCase.subjectCategoriesSet ? 'hidden':'')"/>
+            	<div class="row" visible="@load(not empty vm.currentCase.subjectCategoriesSet)">
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
@@ -228,9 +230,9 @@
             			</n:div>
             			
             		</n:div>
-            	</n:div>
-            	<n:hr/>
-            	<n:div class="row">
+            	</div>
+            	<x:hr sclass="@load(empty vm.currentCase.caseObject.attachments ? 'hidden':'')"/>
+            	<div zclass="row" visible="@load(not empty vm.currentCase.caseObject.attachments)">
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
@@ -252,7 +254,7 @@
             			</n:div>
 
             		</n:div>
-            	</n:div>
+            	</div>
             </x:form>
 
         </div>

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class TriggerListView implements Serializable {
 
-    private static final long serialVersionUID = 4923657399304973277L;
+    private static final long serialVersionUID = -7932475153277827429L;
 
     private String id;
 

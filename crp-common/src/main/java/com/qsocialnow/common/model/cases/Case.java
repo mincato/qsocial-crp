@@ -149,7 +149,6 @@ public class Case implements Serializable {
             actionsAllowed.add(ActionType.TAG_CASE);
             actionsAllowed.add(ActionType.CLOSE);
             actionsAllowed.add(ActionType.REGISTER_COMMENT);
-            actionsAllowed.add(ActionType.MODIFY);
             if (!this.getPendingResponse())
                 actionsAllowed.add(ActionType.PENDING_RESPONSE);
 

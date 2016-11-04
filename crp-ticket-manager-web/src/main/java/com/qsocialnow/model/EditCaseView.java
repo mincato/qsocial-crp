@@ -42,6 +42,8 @@ public class EditCaseView {
 
     private Media source;
 
+    private String openCaseDeepLinkUrl = null;
+
     public void setCaseObject(Case caseObject) {
         this.caseObject = caseObject;
     }
@@ -144,6 +146,14 @@ public class EditCaseView {
 
     public void setSubjectCategoriesSet(List<SubjectCategorySet> subjectCategoriesSet) {
         this.subjectCategoriesSet = subjectCategoriesSet;
+    }
+
+    public String getOpenCaseDeepLinkUrl() {
+        return openCaseDeepLinkUrl;
+    }
+
+    public void setOpenCaseDeepLinkUrl(String openCaseDeepLinkUrl) {
+        this.openCaseDeepLinkUrl = openCaseDeepLinkUrl;
     }
 
 }
