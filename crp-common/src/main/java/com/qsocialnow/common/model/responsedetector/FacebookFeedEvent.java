@@ -21,8 +21,9 @@ public class FacebookFeedEvent {
     private final String originalId;
 
     public FacebookFeedEvent(final String caseId, final String eventId, final String userId, final String userName,
-            final String replyMessageId, final String messageId, final String commentId, final String rootCommentId,
-            final String userPageId, final String originalId) {
+            final String messageId, final String commentId,
+
+            final String rootCommentId, final String userPageId, final String originalId) {
         this.caseId = caseId;
         this.eventId = eventId;
         this.userId = userId;
