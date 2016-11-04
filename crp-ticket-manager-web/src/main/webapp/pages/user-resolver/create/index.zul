@@ -51,18 +51,17 @@
 	<?script src="/vendor/plugins/form/switchery/switchery.min.js"?>
 
 
-		 <script type="text/javascript">
-	 "use strict";
-	 zk.afterMount(function() {
-		 // SWITCH
-		 
-		// Classes
-	    $(document).ready(function() {
-			var success = document.querySelector('.switch-success > input');
-			// Colors
-			var switchery = new Switchery(success, { color: '#16a085' });
-			
-	    });
+	<script type="text/javascript">
+		 "use strict";
+		 zk.afterMount(function() {
+			 // SWITCH
+			 
+			// Classes
+		    $(document).ready(function() {
+				var success = document.querySelector('.switch-success > input');
+				// Colors
+				var switchery = new Switchery(success, { color: '#16a085' });			
+		    });
 		});
 	</script>
 	<!-- Form Plugins -->

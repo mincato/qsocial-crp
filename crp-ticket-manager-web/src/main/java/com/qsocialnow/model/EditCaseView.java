@@ -157,7 +157,7 @@ public class EditCaseView {
     public void setAllTriggerCategories(List<CaseCategorySet> allTriggerCategories) {
         this.allTriggerCategories = allTriggerCategories;
     }
-    
+
     public String getOpenCaseDeepLinkUrl() {
         return openCaseDeepLinkUrl;
     }
