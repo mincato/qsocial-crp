@@ -20,6 +20,8 @@ public interface CaseCategorySetService {
 
     List<CaseCategorySet> findAll();
 
+    List<CaseCategorySet> findAllActive();
+
     List<CaseCategory> findCategories(String id);
 
     List<CaseCategory> findAllCategories();

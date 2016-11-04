@@ -16,18 +16,20 @@
 				<template name="noneditable">
 					<n:div
 						class="list-group-item col-xs-12 col-sm-11">
-						<n:div class="col-xs-6 col-sm-6">
+						<x:div sclass="@load(each.categorySet.active ? 'col-xs-6 col-sm-6' : 'col-xs-6 col-sm-6 strikethrough')"
+							data-toggle="tooltip" data-placement="left" title="@load(each.categorySet.active ? '' : c:l('cases.casecategoryset.disabled'))">
 							${each.categorySet.description}
-						</n:div>
+						</x:div>
 						<n:div class="col-xs-2 col-sm-3">
 							<div class="form-group col-sm-10" children="@load(each.categories)">
 								<template name="children" var="category">
-									<span>
+									<x:span data-toggle="tooltip" data-placement="top" title="@load(category.active ? '' : c:l('cases.casecategory.disabled'))"
+										sclass="@load(category.active ? '' : 'strikethrough')">
 										<label value="${category.description}"/>
 										<span>
 											<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', category = category, categorySetIndex = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)"/>
 										</span>
-									</span>
+									</x:span>
 								</template>
 	    					</div>
 	    					<n:div class="col-sm-2">
@@ -107,7 +109,7 @@
 			</x:ul>
 		</n:div>
 	</div>
-	<div visible="@load(empty fxTagCaseAction.categorySets and empty vmsgs['categorySets']))">
+	<div visible="@load(empty fxTagCaseAction.categorySets and empty vmsgs['categorySets'])">
 		${labels.cases.actions.tag.categories.unfilled}
 	</div>
 	<div class="form-group has-error" visible="@load(empty fxTagCaseAction.categorySets and not empty vmsgs['categorySets'])" >

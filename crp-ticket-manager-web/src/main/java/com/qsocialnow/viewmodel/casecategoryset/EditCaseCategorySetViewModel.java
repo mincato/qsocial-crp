@@ -64,8 +64,14 @@ public class EditCaseCategorySetViewModel implements Serializable {
             CaseCategory category = new CaseCategory();
             category.setId(categoryView.getId());
             category.setDescription(categoryView.getDescription());
+            if (currentCaseCategorySet.getActive()) {
+                category.setActive(currentCaseCategorySet.getActive());
+            } else {
+                category.setActive(false);
+            }
             return category;
         }).collect(Collectors.toList()));
+        caseCategorySet.setActive(currentCaseCategorySet.getActive());
         caseCategorySet = caseCategorySetService.update(caseCategorySet);
         Clients.showNotification(Labels.getLabel("casecategoryset.edit.notification.success",
                 new String[] { caseCategorySet.getDescription() }));

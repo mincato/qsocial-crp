@@ -40,6 +40,8 @@ public class EditCaseView {
 
     private List<Subject> subjectOptions;
 
+    private List<CaseCategorySet> allTriggerCategories;
+
     private Media source;
 
     public void setCaseObject(Case caseObject) {
@@ -146,4 +148,11 @@ public class EditCaseView {
         this.subjectCategoriesSet = subjectCategoriesSet;
     }
 
+    public List<CaseCategorySet> getAllTriggerCategories() {
+        return allTriggerCategories;
+    }
+
+    public void setAllTriggerCategories(List<CaseCategorySet> allTriggerCategories) {
+        this.allTriggerCategories = allTriggerCategories;
+    }
 }

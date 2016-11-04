@@ -6,6 +6,8 @@ public class CaseCategory {
 
     private String description;
 
+    private boolean active = true;
+
     public String getId() {
         return id;
     }
@@ -20,5 +22,13 @@ public class CaseCategory {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public boolean getActive() {
+        return active;
     }
 }

@@ -35,7 +35,6 @@ import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.ActionRegistryService;
-import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.FileService;
 import com.qsocialnow.services.TriggerService;
@@ -57,9 +56,6 @@ public class EditCaseViewModel implements Serializable {
 
     @WireVariable
     private ActionRegistryService actionRegistryService;
-
-    @WireVariable
-    private CaseCategorySetService caseCategorySetService;
 
     @WireVariable
     private FileService fileService;
@@ -123,8 +119,14 @@ public class EditCaseViewModel implements Serializable {
 
     private void initCaseCategories() {
         if (currentCase.getTriggerCategories() == null) {
-            currentCase.setTriggerCategories(triggerService.findCategories(currentCase.getCaseObject().getDomainId(),
-                    currentCase.getCaseObject().getTriggerId()));
+
+            List<CaseCategorySet> allTriggerCategories = triggerService.findCategories(currentCase.getCaseObject()
+                    .getDomainId(), currentCase.getCaseObject().getTriggerId());
+            currentCase.setAllTriggerCategories(allTriggerCategories);
+
+            List<CaseCategorySet> onlyActiveTriggerCategories = allTriggerCategories.stream()
+                    .filter(set -> set.getActive()).collect(Collectors.toList());
+            currentCase.setTriggerCategories(onlyActiveTriggerCategories);
         }
         initCaseCategoriesSet();
         initCategories();
@@ -135,7 +137,7 @@ public class EditCaseViewModel implements Serializable {
         List<CaseCategorySet> categoriesSet;
         Set<String> caseCategoriesSet = currentCase.getCaseObject().getCaseCategoriesSet();
         if (CollectionUtils.isNotEmpty(caseCategoriesSet)) {
-            categoriesSet = currentCase.getTriggerCategories().stream()
+            categoriesSet = currentCase.getAllTriggerCategories().stream()
                     .filter(caseCategorySet -> caseCategoriesSet.contains(caseCategorySet.getId()))
                     .collect(Collectors.toList());
 
@@ -150,7 +152,7 @@ public class EditCaseViewModel implements Serializable {
         List<CaseCategory> categories;
         Set<String> caseCategories = currentCase.getCaseObject().getCaseCategories();
         if (CollectionUtils.isNotEmpty(caseCategories)) {
-            Stream<CaseCategory> caseCategoriesStream = currentCase.getTriggerCategories().stream()
+            Stream<CaseCategory> caseCategoriesStream = currentCase.getAllTriggerCategories().stream()
                     .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
             categories = caseCategoriesStream.filter(caseCategory -> caseCategories.contains(caseCategory.getId()))
                     .collect(Collectors.toList());

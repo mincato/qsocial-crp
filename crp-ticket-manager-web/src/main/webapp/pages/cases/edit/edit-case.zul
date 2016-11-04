@@ -152,16 +152,16 @@
             				</n:label>
             				<n:div class="col-sm-9">
             					<n:div sclass="form-control-static">
-            						<div
-            							children="@load(vm.currentCase.caseCategoriesSet)">
+            						<x:div children="@load(vm.currentCase.caseCategoriesSet)">
             							<template name="children">
-            								<span>
+            								<x:span data-toggle="tooltip" data-placement="top"
+            									title="@load(each.active ? '' : c:l('cases.casecategoryset.disabled'))">
             									<label
-            										sclass="label label-info"
+            										sclass="@load(each.active ? 'label label-info' : 'label label-inactive')"
             										value="${each.description}" />
-            								</span>
+            								</x:span>
             							</template>
-            						</div>
+            						</x:div>
             					</n:div>
             				</n:div>
             			</n:div>
@@ -176,11 +176,12 @@
             						<div
             							children="@load(vm.currentCase.caseCategories)">
             							<template name="children">
-            								<span>
-            									<label
-            										sclass="label label-info"
+            								<x:span data-toggle="tooltip" data-placement="top"
+            									title="@load(each.active ? '' : c:l('cases.casecategory.disabled'))">
+            									<label 
+            										sclass="@load(each.active ? 'label label-info' : 'label label-inactive')"
             										value="${each.description}" />
-            								</span>
+            								</x:span>
             							</template>
             						</div>
             					</n:div>

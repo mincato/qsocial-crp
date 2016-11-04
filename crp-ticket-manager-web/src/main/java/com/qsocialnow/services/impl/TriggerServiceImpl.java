@@ -192,6 +192,25 @@ public class TriggerServiceImpl implements TriggerService {
     }
 
     @Override
+    public List<CaseCategorySet> findActiveCategories(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/caseCategoriesActive");
+
+            ResponseEntity<List<CaseCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<CaseCategorySet>>() {
+                    });
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<SubjectCategorySet> findSubjectCategories(String domainId, String triggerId) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();

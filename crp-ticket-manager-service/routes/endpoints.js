@@ -552,6 +552,33 @@ router.get('/domains/:id/trigger/:triggerId/caseCategories', function (req, res)
 	  triggerService.findCaseCategories(domainId, triggerId, asyncResponse);
 });
 
+router.get('/domains/:id/trigger/:triggerId/caseCategoriesActive', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  var triggerId = req.params.triggerId;
+	  
+	  triggerService.findCaseCategoriesActive(domainId, triggerId, asyncResponse);
+});
+
 router.get('/domains/:id/trigger/:triggerId/subjectCategories', function (req, res) {
 
 	  function asyncResponse(err,response) {
@@ -1204,6 +1231,29 @@ router.get('/caseCategorySets/all', function (req, res) {
   caseCategorySetService.findAll(asyncResponse);
 });
 
+router.get('/caseCategorySetsActive/all', function (req, res) {
+
+    function asyncResponse(err,response) {
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(response !== null) {
+      try {
+        res.set('Content-Type', 'application/json');
+        res.send(gson.toJsonSync(response));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+  
+  var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+  caseCategorySetService.findAllActive(asyncResponse);
+});
 
 router.get('/caseCategorySets/:id', function (req, res) {
 

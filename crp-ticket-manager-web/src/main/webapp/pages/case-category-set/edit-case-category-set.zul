@@ -40,6 +40,15 @@
 											</x:span>
 										</x:div>
 									</x:div>
+									<x:div class="form-group">
+										<n:label class="control-label col-sm-2">
+											${labels.casecategoryset.active.label}
+										</n:label>
+										<x:div class="col-sm-10">
+											<checkbox checked="@bind(fx.active)" />
+										</x:div>
+									</x:div>					
+									
 									<n:br />
 									<include
 										src="/pages/case-category-set/edit-categories.zul" />

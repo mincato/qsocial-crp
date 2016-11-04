@@ -106,6 +106,24 @@ public class CaseCategorySetService {
         return caseCategorySets;
     }
 
+    public List<CaseCategorySet> findAllActive() {
+
+        RepositoryFactory<CaseCategorySetType> esfactory = new RepositoryFactory<CaseCategorySetType>(configurator);
+        Repository<CaseCategorySetType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
+
+        SearchResponse<CaseCategorySet> response = repository.searchWithFilters(filters, mapping);
+        List<CaseCategorySet> caseCategorySets = response.getSources();
+
+        repository.closeClient();
+        return caseCategorySets;
+    }
+
     public CaseCategorySet findOne(String caseCategorySetId) {
         RepositoryFactory<CaseCategorySetType> esfactory = new RepositoryFactory<CaseCategorySetType>(configurator);
         Repository<CaseCategorySetType> repository = esfactory.initManager();
@@ -214,6 +232,25 @@ public class CaseCategorySetService {
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
+
+        SearchResponse<CaseCategorySet> response = repository.searchWithFilters(filters, mapping);
+
+        List<CaseCategorySet> caseCategorySets = response.getSources();
+
+        repository.closeClient();
+        return caseCategorySets;
+    }
+
+    public List<CaseCategorySet> findActiveByIds(List<String> ids) {
+        RepositoryFactory<CaseCategorySetType> esfactory = new RepositoryFactory<CaseCategorySetType>(configurator);
+        Repository<CaseCategorySetType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseCategorySetMapping mapping = CaseCategorySetMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.idsQuery(mapping.getType()).ids(ids));
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
 
         SearchResponse<CaseCategorySet> response = repository.searchWithFilters(filters, mapping);
 

@@ -95,6 +95,7 @@ public class CaseCategorySetsViewModel implements Serializable {
             if (caseCategorySetOptional.isPresent()) {
                 CaseCategorySetListView caseCategorySetListView = caseCategorySetOptional.get();
                 caseCategorySetListView.setDescription(caseCategorySetChanged.getDescription());
+                caseCategorySetListView.setActive(caseCategorySetChanged.getActive());
             }
         }
     }

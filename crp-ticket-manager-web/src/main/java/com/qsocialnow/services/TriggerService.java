@@ -27,5 +27,7 @@ public interface TriggerService {
 
     List<CaseCategorySet> findCategories(String domainId, String triggerId);
 
+    List<CaseCategorySet> findActiveCategories(String domainId, String triggerId);
+
     List<SubjectCategorySet> findSubjectCategories(String domainId, String triggerId);
 }

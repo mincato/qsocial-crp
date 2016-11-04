@@ -35,6 +35,10 @@ public class CaseCategorySetService {
         return caseCategorySetRepository.findAll();
     }
 
+    public List<CaseCategorySet> findAllActive() {
+        return caseCategorySetRepository.findAllActive();
+    }
+
     public CaseCategorySet findOne(String caseCategorySetId) {
         CaseCategorySet caseCategorySet = caseCategorySetRepository.findOne(caseCategorySetId);
         return caseCategorySet;

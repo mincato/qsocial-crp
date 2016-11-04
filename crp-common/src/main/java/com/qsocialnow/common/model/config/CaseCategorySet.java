@@ -12,6 +12,8 @@ public class CaseCategorySet {
 
     private List<CaseCategory> categories;
 
+    private boolean active = true;
+
     public String getId() {
         return id;
     }
@@ -34,6 +36,14 @@ public class CaseCategorySet {
 
     public void setCategories(List<CaseCategory> categories) {
         this.categories = categories;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override
