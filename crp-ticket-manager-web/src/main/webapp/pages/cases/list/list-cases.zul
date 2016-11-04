@@ -325,7 +325,7 @@
 			    		<thead>
 							<tr>
 							    <th sclass="@load(vm.sortField eq 'title' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
-							    onClick="@command('sortList' , sortField='title.raw')" >
+							    onClick="@command('sortList' , sortField='title.keyword')" >
 									${labels.cases.list.column.title}
 						    	</th>
 					    		<th sclass="@load(vm.sortField eq 'description' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
@@ -337,7 +337,7 @@
                                                 ${labels.cases.list.column.openDate}
                                  </th>
 					    		<th sclass="@load(vm.sortField eq 'subject.identifier' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')"
-					    			onClick="@command('sortList' , sortField='subject.identifier.raw')" >
+					    			onClick="@command('sortList' , sortField='subject.identifier.keyword')" >
 										${labels.cases.list.column.subject}
 					    		  </th>
 					    		 <th style="width:40px" sclass="@load(vm.sortField eq 'pendingResponse' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')"
