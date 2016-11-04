@@ -1,8 +1,6 @@
 package com.qsocialnow.common.model.cases;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
 
 import com.qsocialnow.common.model.config.Media;
 

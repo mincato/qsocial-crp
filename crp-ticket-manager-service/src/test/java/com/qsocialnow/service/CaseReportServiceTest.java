@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -40,6 +42,7 @@ public class CaseReportServiceTest {
         JasperCompileManager.compileReportToFile(PATH_FILE_JRXML, PATH_FILE_JASPER);
         JasperReport compiledReport = JasperCompileManager.compileReport(PATH_FILE_JRXML);
         Map<String, Object> params = new HashMap<String, Object>();
+        params.put(JRParameter.REPORT_LOCALE, new Locale("es"));
         params.put("DOMAINS", new HashMap<String, String>());
         params.put("TRIGGERS", new HashMap<String, String>());
         Map<String, String> caseCategories = new HashMap<String, String>();

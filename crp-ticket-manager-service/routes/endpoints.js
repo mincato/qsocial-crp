@@ -51,9 +51,11 @@ router.get('/cases/report', function (req, res) {
 	  
 	  var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
 	  var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
+	  
+	  var language = req.query.language?req.query.language :null;
 
 	  var caseService = javaContext.getBeanSync("caseReportService");
-	  caseService.getReport(domainId,triggerId,segmentId,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName,userSelected,asyncResponse);
+	  caseService.getReport(domainId,triggerId,segmentId,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName, userSelected, language, asyncResponse);
 	  
 });
 
@@ -77,8 +79,9 @@ router.get('/cases/results/report', function (req, res) {
 
 	  }
 	  var domainId = req.query.domainId?req.query.domainId :null;
+	  var language = req.query.language?req.query.language :null;
 	  var caseService = javaContext.getBeanSync("caseReportService");
-	  caseService.getCasesByResolutionReport(domainId,asyncResponse);
+	  caseService.getCasesByResolutionReport(domainId,language,asyncResponse);
 	  
 });
 
@@ -402,6 +405,33 @@ router.get('/domains/:id', function (req, res) {
 
   var domainService = javaContext.getBeanSync("domainService");
   domainService.findOne(domainId, asyncResponse);
+
+});
+
+router.get('/domainsWithActiveResolutions/:id', function (req, res) {
+
+  function asyncResponse(err,responseDomain) {
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(responseDomain !== null) {
+      try {
+        res.set('Content-Type','application/json');
+        res.send(gson.toJsonSync(responseDomain));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+
+  var domainId = req.params.id;
+
+  var domainService = javaContext.getBeanSync("domainService");
+  domainService.findOneWithActiveResolutions(domainId, asyncResponse);
 
 });
 

@@ -280,7 +280,7 @@ public class CasesViewModel implements Serializable {
 
     @Command
     public void download() {
-        byte[] data = caseService.getReport(getFilters());
+        byte[] data = caseService.getReport(getFilters(), userSessionService.getLanguage());
         Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
     }
 

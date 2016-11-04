@@ -21,6 +21,7 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ResultsService;
+import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class ResultsViewModel implements Serializable {
@@ -51,6 +52,9 @@ public class ResultsViewModel implements Serializable {
     private List<DomainListView> domains = new ArrayList<>();
 
     private DomainListView domain;
+
+    @WireVariable
+    private UserSessionService userSessionService;
 
     @Init
     public void init() {
@@ -99,7 +103,7 @@ public class ResultsViewModel implements Serializable {
 
     @Command
     public void download() {
-        byte[] data = resultsService.getReport(getFilters());
+        byte[] data = resultsService.getReport(getFilters(), userSessionService.getLanguage());
         Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
     }
 

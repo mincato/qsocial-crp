@@ -51,7 +51,9 @@
 							${labels.userresolver.active.label}
 						</n:label>
 						<x:div class="col-sm-10">
-							<checkbox checked="@bind(fx.userResolver.active)" />
+							<n:div class="form-switch form-control-static">
+								<checkbox zclass="switch-success" checked="@bind(fx.userResolver.active)"   /> 
+							</n:div>
 						</x:div>
 					</x:div>
 					<div sclass="@load(vm.authorized eq null || vm.authorized ? 'form-group' : 'form-group has-error')" visible="@load(not empty fx.source and fx.userResolver.credentials eq null)">

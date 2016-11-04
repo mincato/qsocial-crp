@@ -68,7 +68,7 @@ public class EditDomainViewModel implements Serializable {
     @Init
     public void init(@BindingParam("domain") String domain) {
         currentDomain = new DomainView();
-        currentDomain.setDomain(domainService.findOne(domain));
+        currentDomain.setDomain(domainService.findOneWithActiveResolutions(domain));
         this.thematics = thematicService.findAll();
         currentDomain.setSelectedThematics(this.thematics.stream()
                 .filter(thematic -> currentDomain.getDomain().getThematics().contains(thematic.getId()))

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class RegistryListView implements Serializable {
 
-    private static final long serialVersionUID = 4923657399304973277L;
+    private static final long serialVersionUID = 9136979763891611520L;
 
     private String id;
 

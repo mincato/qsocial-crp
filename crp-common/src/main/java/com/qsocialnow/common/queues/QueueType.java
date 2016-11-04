@@ -1,4 +1,4 @@
-package com.qsocialnow.elasticsearch.queues;
+package com.qsocialnow.common.queues;
 
 public enum QueueType {
     CASES("cases"), EVENTS("events");

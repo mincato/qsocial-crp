@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class ResultsListView implements Serializable {
 
-    private static final long serialVersionUID = 4923657399304973277L;
+    private static final long serialVersionUID = -5415986092028442773L;
 
     private String resolution;
 

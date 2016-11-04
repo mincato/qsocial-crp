@@ -2876,6 +2876,10 @@ button.remove {
 	display: inline-block;
 }
 
-#page-header > div > i {
+#page-header > div > i,#page-header > div > span > i  {
 	padding-right: 10px;
+}
+
+.strikethrough > span {
+	text-decoration:line-through
 }

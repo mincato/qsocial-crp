@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.qsocialnow.crp</groupId>
 		<artifactId>case-resolution-platform</artifactId>
-		<version>0.6.2</version>
+		<version>0.6.3</version>
 	</parent>
 	<artifactId>crp-common</artifactId>
 	<packaging>jar</packaging>
@@ -27,9 +27,17 @@
 		<gson-version>2.7</gson-version>
 		
 		<twitter4j.version>4.0.4</twitter4j.version>
-		<facebook4j.version>2.4.7</facebook4j.version>
+		<facebook4j.version>2.4.8</facebook4j.version>
 		<jackson.version>2.6.4</jackson.version>
+		<bigqueue.version>0.7.0</bigqueue.version>
 	</properties>
+	
+	<repositories>
+		<repository>
+  			<id>github.release.repo</id>
+  			<url>https://raw.github.com/bulldog2011/bulldog-repo/master/repo/releases/</url>
+		</repository>
+	</repositories>
 
 	<dependencies>
 
@@ -102,6 +110,13 @@
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 			<version>${jackson.version}</version>
+		</dependency>
+		
+		<!-- Big Queue -->
+		<dependency>
+  			<groupId>com.leansoft</groupId>
+  			<artifactId>bigqueue</artifactId>
+  			<version>${bigqueue.version}</version>
 		</dependency>
 
 	</dependencies>
