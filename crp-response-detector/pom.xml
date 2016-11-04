@@ -31,7 +31,6 @@
 		<spring.version>4.3.2.RELEASE</spring.version>
 		<curator.version>2.9.1</curator.version>
 		<twitter4j.version>4.0.4</twitter4j.version>
-		<facebook4j.version>2.4.6</facebook4j.version>
 	</properties>
 
 	<dependencies>
@@ -80,12 +79,6 @@
             <version>${twitter4j.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.facebook4j</groupId>
-            <artifactId>facebook4j-core</artifactId>
-            <version>${facebook4j.version}</version>
-       </dependency>
-       
 		<!-- Logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
