@@ -115,10 +115,22 @@ public class EditCaseViewModel implements Serializable {
         this.action = ALL_VALUES;
         findCase(this.caseId);
         findRegistriesBy();
+        initOpenCaseDeepLinkUrl();
+
         initCaseCategories();
         initCategoriesForSubject();
         this.actionOptions = getAllowedActionsByCase();
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
+    }
+
+    private void initOpenCaseDeepLinkUrl() {
+        if (!CollectionUtils.isEmpty(registries)) {
+            for (int i = 0; i < registries.size(); i++) {
+                if (ActionType.OPEN_CASE.name().equals(registries.get(i).getAction())) {
+                    currentCase.setOpenCaseDeepLinkUrl(registries.get(i).getDeepLink());
+                }
+            }
+        }
     }
 
     private void initCaseCategories() {

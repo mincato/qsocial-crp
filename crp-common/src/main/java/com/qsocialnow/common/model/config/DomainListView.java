@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class DomainListView implements Serializable {
 
-    private static final long serialVersionUID = 4923657399304973277L;
+    private static final long serialVersionUID = 934475061381107999L;
 
     private String id;
 

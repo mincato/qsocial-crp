@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class SegmentListView implements Serializable {
 
-    private static final long serialVersionUID = 4923657399304973277L;
+    private static final long serialVersionUID = 2248712249646839694L;
 
     private String id;
 

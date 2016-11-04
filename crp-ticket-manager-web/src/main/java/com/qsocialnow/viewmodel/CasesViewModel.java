@@ -36,7 +36,6 @@ import com.qsocialnow.services.SubjectService;
 import com.qsocialnow.services.TriggerService;
 import com.qsocialnow.services.UserService;
 import com.qsocialnow.services.UserSessionService;
-import com.qsocialnow.viewmodel.subjectcategoryset.SubjectCategoryView;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
@@ -223,7 +222,7 @@ public class CasesViewModel implements Serializable {
 
     @Command
     public void download() {
-        byte[] data = caseService.getReport(getFilters());
+        byte[] data = caseService.getReport(getFilters(), userSessionService.getLanguage());
         Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
     }
 
