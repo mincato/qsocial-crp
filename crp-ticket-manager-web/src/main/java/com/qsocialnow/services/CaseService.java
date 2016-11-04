@@ -1,6 +1,7 @@
 package com.qsocialnow.services;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.qsocialnow.common.model.cases.ActionRequest;
@@ -22,6 +23,6 @@ public interface CaseService {
 
     Case create(Case newCase);
 
-    byte[] getReport(Map<String, String> filters);
+    byte[] getReport(Map<String, String> filters, String language);
 
 }

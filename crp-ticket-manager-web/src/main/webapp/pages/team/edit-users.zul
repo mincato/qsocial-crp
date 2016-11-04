@@ -40,7 +40,7 @@
 							${each.user.username}
 						</n:div>
 						<n:div class="col-xs-2 col-sm-3">
-							<x:span
+							<x:span data-toggle="tooltip" data-placement="top" title="${labels.team.coordinator.tooltip}"
 								sclass="@load(each.coordinator ? 'block' : 'hidden')">
 								<i class="fa fa-user fa-2x" />
 							</x:span>

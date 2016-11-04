@@ -10,6 +10,6 @@ public interface ResultsService {
 
     PageResponse<ResultsListView> sumarizeAll(PageRequest pageRequest, Map<String, String> filters);
 
-    byte[] getReport(Map<String, String> filters);
+    byte[] getReport(Map<String, String> filters, String language);
 
 }

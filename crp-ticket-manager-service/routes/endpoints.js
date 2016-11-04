@@ -51,9 +51,11 @@ router.get('/cases/report', function (req, res) {
 	  
 	  var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
 	  var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
+	  
+	  var language = req.query.language?req.query.language :null;
 
 	  var caseService = javaContext.getBeanSync("caseReportService");
-	  caseService.getReport(domainId,triggerId,segmentId,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName,userSelected,asyncResponse);
+	  caseService.getReport(domainId,triggerId,segmentId,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName, userSelected, language, asyncResponse);
 	  
 });
 
@@ -77,8 +79,9 @@ router.get('/cases/results/report', function (req, res) {
 
 	  }
 	  var domainId = req.query.domainId?req.query.domainId :null;
+	  var language = req.query.language?req.query.language :null;
 	  var caseService = javaContext.getBeanSync("caseReportService");
-	  caseService.getCasesByResolutionReport(domainId,asyncResponse);
+	  caseService.getCasesByResolutionReport(domainId,language,asyncResponse);
 	  
 });
 

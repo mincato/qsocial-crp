@@ -70,7 +70,7 @@ public class ResultsServiceImpl implements ResultsService {
     }
 
     @Override
-    public byte[] getReport(Map<String, String> filters) {
+    public byte[] getReport(Map<String, String> filters, String language) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
@@ -83,7 +83,9 @@ public class ResultsServiceImpl implements ResultsService {
                     builder.queryParam(filter.getKey(), filter.getValue());
                 }
             }
-
+            if (language != null) {
+                builder.queryParam("language", language);
+            }
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
             byte[] data = restTemplate.getForObject(builder.toUriString(), byte[].class);
