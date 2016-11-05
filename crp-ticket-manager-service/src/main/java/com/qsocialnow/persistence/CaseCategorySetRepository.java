@@ -71,6 +71,17 @@ public class CaseCategorySetRepository {
         return caseCategorySet;
     }
 
+    public CaseCategorySet findOneWithActiveCategories(String caseCategorySetId) {
+        CaseCategorySet caseCategorySet = null;
+
+        try {
+            caseCategorySet = caseCategorySetElasticService.findOneWithActiveCategories(caseCategorySetId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return caseCategorySet;
+    }
+
     public CaseCategorySet update(CaseCategorySet caseCategorySet) {
         try {
             String id = caseCategorySetElasticService.updateCaseCategorySet(caseCategorySet);

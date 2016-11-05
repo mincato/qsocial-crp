@@ -50,7 +50,7 @@ public class EditCaseCategorySetViewModel implements Serializable {
     }
 
     private void initCaseCategorySet(String caseCategorySetId) {
-        CaseCategorySet caseCategorySet = caseCategorySetService.findOne(caseCategorySetId);
+        CaseCategorySet caseCategorySet = caseCategorySetService.findOneWithActiveCategories(caseCategorySetId);
         currentCaseCategorySet = new CaseCategorySetView(caseCategorySet);
     }
 
@@ -64,11 +64,7 @@ public class EditCaseCategorySetViewModel implements Serializable {
             CaseCategory category = new CaseCategory();
             category.setId(categoryView.getId());
             category.setDescription(categoryView.getDescription());
-            if (currentCaseCategorySet.getActive()) {
-                category.setActive(currentCaseCategorySet.getActive());
-            } else {
-                category.setActive(false);
-            }
+            category.setActive(categoryView.getActive());
             return category;
         }).collect(Collectors.toList()));
         caseCategorySet.setActive(currentCaseCategorySet.getActive());

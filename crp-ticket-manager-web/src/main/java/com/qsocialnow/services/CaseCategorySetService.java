@@ -14,6 +14,8 @@ public interface CaseCategorySetService {
 
     CaseCategorySet findOne(String caseCategorySetId);
 
+    CaseCategorySet findOneWithActiveCategories(String caseCategorySetId);
+
     CaseCategorySet update(CaseCategorySet currentCaseCategorySet);
 
     PageResponse<CaseCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
