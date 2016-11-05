@@ -135,4 +135,9 @@ public class CaseCategorySetRepository {
         return userResolversRepo;
     }
 
+    public List<CaseCategorySet> findByIds(List<String> categoriesIds) {
+        List<CaseCategorySet> result = caseCategorySetElasticService.findByIds(categoriesIds);
+        return result;
+    }
+
 }

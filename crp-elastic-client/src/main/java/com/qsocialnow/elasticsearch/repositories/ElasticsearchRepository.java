@@ -325,8 +325,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public <E> SearchResponse<E> queryByIds(Mapping<T, E> mapping, String sortField, List<String> ids) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        if (sortField != null)
+        if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
 
         searchSourceBuilder.query(QueryBuilders.idsQuery(mapping.getType()).addIds(ids));
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex()).build();
@@ -337,11 +339,15 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             String searchField, String searchValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        if (size > 0)
+        if (size > 0) {
             searchSourceBuilder.from(from).size(size);
+        } else {
+            searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
+        }
 
-        if (sortField != null)
+        if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
 
         searchSourceBuilder.query(QueryBuilders.matchQuery(searchField, searchValue));
 
@@ -355,10 +361,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             List<ShouldFilter> shouldFilters) {
 
         SortOrder sortOrderValue;
-        if (sortOrder)
+        if (sortOrder) {
             sortOrderValue = SortOrder.ASC;
-        else
+        } else {
             sortOrderValue = SortOrder.DESC;
+        }
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size);
