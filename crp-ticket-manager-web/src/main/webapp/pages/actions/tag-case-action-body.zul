@@ -74,12 +74,13 @@
 						<n:div class="col-xs-2 col-sm-3">
 							<div class="form-group col-sm-10" children="@load(each.categories)">
 								<template name="children" var="category">
-									<span>
+									<x:span data-toggle="tooltip" data-placement="top" title="@load(category.active ? '' : c:l('cases.casecategory.disabled'))"
+										sclass="@load(category.active ? '' : 'strikethrough')">
 										<label value="${category.description}"/>
 										<span>
 											<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', category = category, categorySetIndex = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)"/>
 										</span>
-									</span>
+									</x:span>
 								</template>
 	    					</div>
 	    					<n:div class="col-sm-2">
