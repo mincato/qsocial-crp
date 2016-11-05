@@ -29,8 +29,10 @@ import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Media;
+import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
+import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.model.EditCaseView;
@@ -38,6 +40,8 @@ import com.qsocialnow.services.ActionRegistryService;
 import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.FileService;
+import com.qsocialnow.services.ResolutionService;
+import com.qsocialnow.services.TeamService;
 import com.qsocialnow.services.TriggerService;
 import com.qsocialnow.services.UserSessionService;
 import com.qsocialnow.util.DeleteOnCloseInputStream;
@@ -60,6 +64,12 @@ public class EditCaseViewModel implements Serializable {
 
     @WireVariable
     private CaseCategorySetService caseCategorySetService;
+
+    @WireVariable
+    private ResolutionService resolutionService;
+
+    @WireVariable
+    private TeamService teamService;
 
     @WireVariable
     private FileService fileService;
@@ -116,11 +126,32 @@ public class EditCaseViewModel implements Serializable {
         findCase(this.caseId);
         findRegistriesBy();
         initOpenCaseDeepLinkUrl();
-
+        initResolution();
         initCaseCategories();
         initCategoriesForSubject();
+        initTeam();
         this.actionOptions = getAllowedActionsByCase();
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
+    }
+
+    private void initResolution() {
+        if (currentCase.getCaseObject().getResolution() != null) {
+            Resolution resolution = resolutionService.findOne(currentCase.getCaseObject().getDomainId(), currentCase
+                    .getCaseObject().getResolution());
+            if (resolution != null) {
+                currentCase.setResolutionDescription(resolution.getDescription());
+            }
+        }
+    }
+
+    private void initTeam() {
+        if (currentCase.getCaseObject().getTeamId() != null) {
+            Team team = teamService.findOne(currentCase.getCaseObject().getTeamId());
+            if (team != null) {
+                currentCase.setTeamDescription(team.getName());
+            }
+
+        }
     }
 
     private void initOpenCaseDeepLinkUrl() {

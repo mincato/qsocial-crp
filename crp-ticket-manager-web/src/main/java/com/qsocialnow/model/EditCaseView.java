@@ -44,6 +44,10 @@ public class EditCaseView {
 
     private String openCaseDeepLinkUrl = null;
 
+    private String teamDescription = null;
+
+    private String resolutionDescription = null;
+
     public void setCaseObject(Case caseObject) {
         this.caseObject = caseObject;
     }
@@ -154,6 +158,22 @@ public class EditCaseView {
 
     public void setOpenCaseDeepLinkUrl(String openCaseDeepLinkUrl) {
         this.openCaseDeepLinkUrl = openCaseDeepLinkUrl;
+    }
+
+    public String getTeamDescription() {
+        return teamDescription;
+    }
+
+    public void setTeamDescription(String teamDescription) {
+        this.teamDescription = teamDescription;
+    }
+
+    public String getResolutionDescription() {
+        return resolutionDescription;
+    }
+
+    public void setResolutionDescription(String resolutionDescription) {
+        this.resolutionDescription = resolutionDescription;
     }
 
 }

@@ -57,4 +57,14 @@ public class ResolutionRepository implements ReportRepository {
         return resolutionElasticService.getAllResolutionsAsMap();
     }
 
+    public Resolution findOne(String domainId, String resolutionId) {
+        try {
+            Resolution resolution = resolutionElasticService.findResolution(domainId, resolutionId);
+            return resolution;
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return null;
+    }
+
 }
