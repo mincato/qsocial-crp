@@ -42,6 +42,8 @@ public class EditCaseView {
 
     private List<CaseCategorySet> allTriggerCategories;
 
+    private List<CaseCategory> disassociatedCategories;
+
     private Media source;
 
     private String openCaseDeepLinkUrl = null;
@@ -164,5 +166,13 @@ public class EditCaseView {
 
     public void setOpenCaseDeepLinkUrl(String openCaseDeepLinkUrl) {
         this.openCaseDeepLinkUrl = openCaseDeepLinkUrl;
+    }
+
+    public List<CaseCategory> getDisassociatedCategories() {
+        return disassociatedCategories;
+    }
+
+    public void setDisassociatedCategories(List<CaseCategory> disassociatedCategories) {
+        this.disassociatedCategories = disassociatedCategories;
     }
 }

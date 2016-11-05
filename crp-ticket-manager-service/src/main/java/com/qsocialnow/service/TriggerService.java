@@ -133,8 +133,6 @@ public class TriggerService {
 
     public List<CaseCategorySet> findCaseCategoriesActive(String domainId, String triggerId) {
 
-        System.out.println("==============================================================================");
-
         List<CaseCategorySet> caseCategoriesSet = new ArrayList<>();
         try {
             Trigger trigger = triggerRepository.findOne(triggerId);

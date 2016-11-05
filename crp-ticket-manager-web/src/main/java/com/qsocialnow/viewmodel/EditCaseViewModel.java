@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -35,6 +36,7 @@ import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.ActionRegistryService;
+import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.FileService;
 import com.qsocialnow.services.TriggerService;
@@ -53,6 +55,9 @@ public class EditCaseViewModel implements Serializable {
 
     @WireVariable
     private TriggerService triggerService;
+
+    @WireVariable
+    private CaseCategorySetService caseCategorySetService;
 
     @WireVariable
     private ActionRegistryService actionRegistryService;
@@ -146,18 +151,41 @@ public class EditCaseViewModel implements Serializable {
     }
 
     private void initCaseCategoriesSet() {
-        List<CaseCategorySet> categoriesSet;
+        List<CaseCategorySet> categoriesSet = new ArrayList<>();
         Set<String> caseCategoriesSet = currentCase.getCaseObject().getCaseCategoriesSet();
-        if (CollectionUtils.isNotEmpty(caseCategoriesSet)) {
-            categoriesSet = currentCase.getAllTriggerCategories().stream()
-                    .filter(caseCategorySet -> caseCategoriesSet.contains(caseCategorySet.getId()))
-                    .collect(Collectors.toList());
 
-        } else {
-            categoriesSet = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(caseCategoriesSet)) {
+            List<String> disassociatedIds = new ArrayList<>();
+
+            for (String setId : caseCategoriesSet) {
+                List<CaseCategorySet> allTriggerSets = currentCase.getAllTriggerCategories();
+                Optional<CaseCategorySet> set = allTriggerSets.stream().filter(s -> s.getId().equals(setId))
+                        .findFirst();
+                if (set.isPresent()) {
+                    categoriesSet.add(set.get());
+                } else {
+                    disassociatedIds.add(setId);
+                }
+            }
+
+            if (CollectionUtils.isEmpty(disassociatedIds)) {
+                currentCase.setDisassociatedCategories(new ArrayList<>());
+            } else {
+                List<CaseCategorySet> disassociatedSets = caseCategorySetService.findByIds(disassociatedIds);
+                categoriesSet.addAll(disassociatedSets.stream().map(s -> {
+                    s.setActive(false);
+                    return s;
+                }).collect(Collectors.toList()));
+
+                List<CaseCategory> disassociatedCategories = disassociatedSets.stream()
+                        .map(CaseCategorySet::getCategories).flatMap(l -> l.stream()).collect(Collectors.toList());
+                currentCase.setDisassociatedCategories(disassociatedCategories.stream().map(c -> {
+                    c.setActive(false);
+                    return c;
+                }).collect(Collectors.toList()));
+            }
         }
         currentCase.setCaseCategoriesSet(categoriesSet);
-
     }
 
     private void initCategories() {
@@ -168,6 +196,7 @@ public class EditCaseViewModel implements Serializable {
                     .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
             categories = caseCategoriesStream.filter(caseCategory -> caseCategories.contains(caseCategory.getId()))
                     .collect(Collectors.toList());
+            categories.addAll(currentCase.getDisassociatedCategories());
         } else {
             categories = new ArrayList<>();
         }
