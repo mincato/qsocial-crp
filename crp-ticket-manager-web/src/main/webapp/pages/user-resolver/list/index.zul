@@ -46,14 +46,14 @@
 	<?script src="/vendor/plugins/form/switchery/switchery.min.js"?>
 	
 	<script type="text/javascript">
-	 "use strict";
-	 
-	 function initSwitch() {
-		var success = document.querySelector('.switch-success > input');
-		// Colors
-		var switchery = new Switchery(success, { color: '#16a085' });
-		console.log(success);
-	}
+		"use strict";
+		 
+		function initSwitch() {
+			var success = document.querySelector('.switch-success > input');
+			// Colors
+			var switchery = new Switchery(success, { color: '#16a085' });
+			console.log(success);
+		}
 	</script>
 	
 </zk>

@@ -39,9 +39,11 @@
 							${labels.casecategoryset.active.label}
 						</n:label>
 						<x:div class="col-sm-10">
-							<checkbox checked="@bind(fx.active)" />
+							<n:div class="form-switch form-control-static">
+								<checkbox zclass="switch-success" checked="@bind(fx.active)" /> 
+							</n:div>
 						</x:div>
-					</x:div>					
+					</x:div>
 					<n:br />
 					<include
 						src="/pages/case-category-set/edit-categories.zul" />

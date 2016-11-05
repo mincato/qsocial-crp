@@ -37,6 +37,7 @@ public class CreateCaseCategorySetViewModel implements Serializable {
 
     private void initCaseCategorySet() {
         currentCaseCategorySet = new CaseCategorySetView();
+        currentCaseCategorySet.setActive(true);
         currentCaseCategorySet.setCategories(new ArrayList<CaseCategoryView>());
     }
 
