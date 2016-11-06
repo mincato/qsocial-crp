@@ -195,6 +195,7 @@ public class SubjectCategorySetService {
 
         SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance(indexConfiguration.getIndexName());
         SubjectCategorySetType documentIndexed = mapping.getDocumentType(subjectCategorySet);
+
         String response = repository.updateMapping(subjectCategorySet.getId(), mapping, documentIndexed);
         repository.closeClient();
 

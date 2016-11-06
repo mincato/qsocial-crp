@@ -8,6 +8,14 @@ public class SubjectCategorySetListView {
 
     private boolean active = true;
 
+    public static SubjectCategorySetListView create(SubjectCategorySet set) {
+        SubjectCategorySetListView subjectCategorySetListView = new SubjectCategorySetListView();
+        subjectCategorySetListView.setId(set.getId());
+        subjectCategorySetListView.setDescription(set.getDescription());
+        subjectCategorySetListView.setActive(set.isActive());
+        return subjectCategorySetListView;
+    }
+
     public String getId() {
         return id;
     }

@@ -98,6 +98,7 @@ public class SubjectCategorySetsViewModel implements Serializable {
             if (subjectCategorySetOptional.isPresent()) {
                 SubjectCategorySetListView subjectCategorySetListView = subjectCategorySetOptional.get();
                 subjectCategorySetListView.setDescription(subjectCategorySetChanged.getDescription());
+                subjectCategorySetListView.setActive(subjectCategorySetChanged.isActive());
             }
         }
     }

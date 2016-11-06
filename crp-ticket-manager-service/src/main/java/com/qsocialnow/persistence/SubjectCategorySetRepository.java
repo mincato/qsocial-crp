@@ -32,9 +32,8 @@ public class SubjectCategorySetRepository {
                     name);
 
             for (SubjectCategorySet subjectCategorySet : subjectCategorySetsRepo) {
-                SubjectCategorySetListView subjectCategorySetListView = new SubjectCategorySetListView();
-                subjectCategorySetListView.setId(subjectCategorySet.getId());
-                subjectCategorySetListView.setDescription(subjectCategorySet.getDescription());
+                SubjectCategorySetListView subjectCategorySetListView = SubjectCategorySetListView
+                        .create(subjectCategorySet);
                 subjectCategorySets.add(subjectCategorySetListView);
             }
         } catch (Exception e) {
@@ -50,6 +49,7 @@ public class SubjectCategorySetRepository {
 
             SubjectCategorySet newSubjectCategorySet = new SubjectCategorySet();
             newSubjectCategorySet.setDescription(subjectCategorySet.getDescription());
+            newSubjectCategorySet.setActive(subjectCategorySet.isActive());
             newSubjectCategorySet = subjectCategorySetElasticService.indexSubjectCategorySet(newSubjectCategorySet,
                     subjectCategories);
             return newSubjectCategorySet;

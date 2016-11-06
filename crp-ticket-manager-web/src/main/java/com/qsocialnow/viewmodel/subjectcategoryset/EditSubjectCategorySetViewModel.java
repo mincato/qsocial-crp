@@ -62,8 +62,10 @@ public class EditSubjectCategorySetViewModel implements Serializable {
             SubjectCategory category = new SubjectCategory();
             category.setId(categoryView.getId());
             category.setDescription(categoryView.getDescription());
+            category.setActive(categoryView.isActive());
             return category;
         }).collect(Collectors.toList()));
+        subjectCategorySet.setActive(currentSubjectCategorySet.isActive());
         subjectCategorySet = subjectCategorySetService.update(subjectCategorySet);
         Clients.showNotification(Labels.getLabel("subjectcategoryset.edit.notification.success",
                 new String[] { subjectCategorySet.getDescription() }));

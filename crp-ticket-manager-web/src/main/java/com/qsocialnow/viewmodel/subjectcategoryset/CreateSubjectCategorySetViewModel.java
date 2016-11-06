@@ -48,8 +48,10 @@ public class CreateSubjectCategorySetViewModel implements Serializable {
         newSubjectCategorySet.setCategories(currentSubjectCategorySet.getCategories().stream().map(category -> {
             SubjectCategory newCategory = new SubjectCategory();
             newCategory.setDescription(category.getDescription());
+            newCategory.setActive(category.isActive());
             return newCategory;
         }).collect(Collectors.toList()));
+        newSubjectCategorySet.setActive(currentSubjectCategorySet.isActive());
         newSubjectCategorySet = subjectCategorySetService.create(newSubjectCategorySet);
         NotificationHandler.addNotification(Labels.getLabel("subjectcategoryset.create.notification.success",
                 new String[] { newSubjectCategorySet.getDescription() }));
