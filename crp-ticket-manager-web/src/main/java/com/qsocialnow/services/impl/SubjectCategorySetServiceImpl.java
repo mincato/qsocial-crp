@@ -3,6 +3,7 @@ package com.qsocialnow.services.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,9 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
 
     @Value("${subjectCategory.serviceurl}")
     private String subjectCategoryServiceUrl;
+
+    @Value("${subjectCategorySetActive.serviceurl}")
+    private String subjectCategorySetActiveServiceUrl;
 
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
@@ -157,6 +161,30 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
     }
 
     @Override
+    public List<SubjectCategorySet> findAllActive() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(subjectCategorySetActiveServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<SubjectCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategorySet>>() {
+                    });
+
+            List<SubjectCategorySet> subjectCategorySets = response.getBody();
+            return subjectCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<SubjectCategory> findAllCategories() {
         try {
             HttpHeaders headers = new HttpHeaders();
@@ -176,6 +204,32 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
             return subjectCategories;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SubjectCategorySet> findByIds(List<String> ids) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(subjectCategorySetServiceUrl));
+
+            String idsParameter = StringUtils.join(ids, ",");
+            builder.queryParam("ids", idsParameter);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<SubjectCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategorySet>>() {
+                    });
+
+            List<SubjectCategorySet> caseCategorySets = response.getBody();
+            return caseCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
             throw new RuntimeException(e);
         }
     }

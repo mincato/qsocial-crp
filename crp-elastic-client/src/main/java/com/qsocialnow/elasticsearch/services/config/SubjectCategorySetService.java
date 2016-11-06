@@ -112,6 +112,25 @@ public class SubjectCategorySetService {
         return subjectCategorySets;
     }
 
+    public List<SubjectCategorySet> findAllActive() {
+
+        RepositoryFactory<SubjectCategorySetType> esfactory = new RepositoryFactory<SubjectCategorySetType>(
+                configurator);
+        Repository<SubjectCategorySetType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
+
+        SearchResponse<SubjectCategorySet> response = repository.searchWithFilters(filters, mapping);
+        List<SubjectCategorySet> subjectCategorySets = response.getSources();
+
+        repository.closeClient();
+        return subjectCategorySets;
+    }
+
     public SubjectCategorySet findOne(String subjectCategorySetId) {
         RepositoryFactory<SubjectCategorySetType> esfactory = new RepositoryFactory<SubjectCategorySetType>(
                 configurator);

@@ -20,5 +20,9 @@ public interface SubjectCategorySetService {
 
     List<SubjectCategorySet> findAll();
 
+    List<SubjectCategorySet> findByIds(List<String> ids);
+
+    List<SubjectCategorySet> findAllActive();
+
     List<SubjectCategory> findAllCategories();
 }

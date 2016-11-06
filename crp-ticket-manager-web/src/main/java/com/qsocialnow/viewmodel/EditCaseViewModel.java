@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.zkoss.bind.BindUtils;
@@ -27,11 +23,7 @@ import org.zkoss.zul.Filedownload;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.config.CaseCategory;
-import com.qsocialnow.common.model.config.CaseCategorySet;
 import com.qsocialnow.common.model.config.Media;
-import com.qsocialnow.common.model.config.SubjectCategory;
-import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.model.EditCaseView;
@@ -39,9 +31,12 @@ import com.qsocialnow.services.ActionRegistryService;
 import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.FileService;
+import com.qsocialnow.services.SubjectCategorySetService;
 import com.qsocialnow.services.TriggerService;
 import com.qsocialnow.services.UserSessionService;
 import com.qsocialnow.util.DeleteOnCloseInputStream;
+import com.qsocialnow.viewmodel.factory.EditCaseCaseCategoriesFactory;
+import com.qsocialnow.viewmodel.factory.EditCaseSubjectCategoriesFactory;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class EditCaseViewModel implements Serializable {
@@ -58,6 +53,9 @@ public class EditCaseViewModel implements Serializable {
 
     @WireVariable
     private CaseCategorySetService caseCategorySetService;
+
+    @WireVariable
+    private SubjectCategorySetService subjectCategorySetService;
 
     @WireVariable
     private ActionRegistryService actionRegistryService;
@@ -124,6 +122,20 @@ public class EditCaseViewModel implements Serializable {
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
 
+    private void initCaseCategories() {
+        EditCaseCaseCategoriesFactory factory = new EditCaseCaseCategoriesFactory();
+        factory.setCaseCategorySetService(caseCategorySetService);
+        factory.setTriggerService(triggerService);
+        factory.init(currentCase);
+    }
+
+    private void initCategoriesForSubject() {
+        EditCaseSubjectCategoriesFactory factory = new EditCaseSubjectCategoriesFactory();
+        factory.setCategorySetService(subjectCategorySetService);
+        factory.setTriggerService(triggerService);
+        factory.init(currentCase);
+    }
+
     private void initOpenCaseDeepLinkUrl() {
         if (!CollectionUtils.isEmpty(registries)) {
             for (int i = 0; i < registries.size(); i++) {
@@ -134,134 +146,45 @@ public class EditCaseViewModel implements Serializable {
         }
     }
 
-    private void initCaseCategories() {
-        if (currentCase.getTriggerCategories() == null) {
-
-            List<CaseCategorySet> allTriggerCategories = triggerService.findCategories(currentCase.getCaseObject()
-                    .getDomainId(), currentCase.getCaseObject().getTriggerId());
-            currentCase.setAllTriggerCategories(allTriggerCategories);
-
-            List<CaseCategorySet> onlyActiveTriggerCategories = allTriggerCategories.stream()
-                    .filter(set -> set.isActive()).collect(Collectors.toList());
-            currentCase.setTriggerCategories(onlyActiveTriggerCategories);
-        }
-        initCaseCategoriesSet();
-        initCategories();
-
-    }
-
-    private void initCaseCategoriesSet() {
-        List<CaseCategorySet> categoriesSet = new ArrayList<>();
-        Set<String> caseCategoriesSet = currentCase.getCaseObject().getCaseCategoriesSet();
-
-        if (CollectionUtils.isNotEmpty(caseCategoriesSet)) {
-            List<String> disassociatedIds = new ArrayList<>();
-
-            for (String setId : caseCategoriesSet) {
-                List<CaseCategorySet> allTriggerSets = currentCase.getAllTriggerCategories();
-                Optional<CaseCategorySet> set = allTriggerSets.stream().filter(s -> s.getId().equals(setId))
-                        .findFirst();
-                if (set.isPresent()) {
-                    categoriesSet.add(set.get());
-                } else {
-                    disassociatedIds.add(setId);
-                }
-            }
-
-            if (CollectionUtils.isEmpty(disassociatedIds)) {
-                currentCase.setDisassociatedCategories(new ArrayList<>());
-            } else {
-                List<CaseCategorySet> disassociatedSets = caseCategorySetService.findByIds(disassociatedIds);
-                categoriesSet.addAll(disassociatedSets.stream().map(s -> {
-                    s.setActive(false);
-                    return s;
-                }).collect(Collectors.toList()));
-
-                List<CaseCategory> disassociatedCategories = disassociatedSets.stream()
-                        .map(CaseCategorySet::getCategories).flatMap(l -> l.stream()).collect(Collectors.toList());
-                currentCase.setDisassociatedCategories(disassociatedCategories.stream().map(c -> {
-                    c.setActive(false);
-                    return c;
-                }).collect(Collectors.toList()));
-            }
-        }
-
-        categoriesSet = deactivateAllCategoriesFromDeactivatedSets(categoriesSet);
-
-        currentCase.setCaseCategoriesSet(categoriesSet);
-    }
-
-    private List<CaseCategorySet> deactivateAllCategoriesFromDeactivatedSets(List<CaseCategorySet> sets) {
-        return sets.stream().map(s -> {
-            if (!s.isActive()) {
-                s.getCategories().stream().forEach(c -> c.setActive(false));
-            }
-            return s;
-        }).collect(Collectors.toList());
-    }
-
-    private void initCategories() {
-        List<CaseCategory> categories;
-        Set<String> caseCategories = currentCase.getCaseObject().getCaseCategories();
-        if (CollectionUtils.isNotEmpty(caseCategories)) {
-            Stream<CaseCategory> caseCategoriesStream = currentCase.getAllTriggerCategories().stream()
-                    .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
-            categories = caseCategoriesStream.filter(caseCategory -> caseCategories.contains(caseCategory.getId()))
-                    .collect(Collectors.toList());
-            categories.addAll(currentCase.getDisassociatedCategories());
-        } else {
-            categories = new ArrayList<>();
-        }
-        currentCase.setCaseCategories(categories);
-    }
-
-    private void initCategoriesForSubject() {
-        if (currentCase.getTriggerSubjectCategories() == null) {
-            currentCase.setTriggerSubjectCategories(triggerService.findSubjectCategories(currentCase.getCaseObject()
-                    .getDomainId(), currentCase.getCaseObject().getTriggerId()));
-        }
-        initSubjectCategoriesSet();
-        initSubjectCategories();
-
-    }
-
-    private void initSubjectCategoriesSet() {
-        List<SubjectCategorySet> categoriesSet;
-        if (currentCase.getCaseObject().getSubject() != null) {
-            Set<String> subjectCategoriesSet = currentCase.getCaseObject().getSubject().getSubjectCategorySet();
-            if (CollectionUtils.isNotEmpty(subjectCategoriesSet)) {
-                categoriesSet = currentCase.getTriggerSubjectCategories().stream()
-                        .filter(subjectCategorySet -> subjectCategoriesSet.contains(subjectCategorySet.getId()))
-                        .collect(Collectors.toList());
-
-            } else {
-                categoriesSet = new ArrayList<>();
-            }
-        } else {
-            categoriesSet = new ArrayList<>();
-        }
-        currentCase.setSubjectCategoriesSet(categoriesSet);
-
-    }
-
-    private void initSubjectCategories() {
-        List<SubjectCategory> categories;
-        if (currentCase.getCaseObject().getSubject() != null) {
-            Set<String> subjectCategories = currentCase.getCaseObject().getSubject().getSubjectCategory();
-            if (CollectionUtils.isNotEmpty(subjectCategories)) {
-                Stream<SubjectCategory> subjectCategoriesStream = currentCase.getTriggerSubjectCategories().stream()
-                        .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
-                categories = subjectCategoriesStream.filter(
-                        subjectCategory -> subjectCategories.contains(subjectCategory.getId())).collect(
-                        Collectors.toList());
-            } else {
-                categories = new ArrayList<>();
-            }
-        } else {
-            categories = new ArrayList<>();
-        }
-        currentCase.setSubjectCategories(categories);
-    }
+    /*
+     * private void initCategoriesForSubject() { if
+     * (currentCase.getTriggerSubjectCategories() == null) {
+     * currentCase.setTriggerSubjectCategories
+     * (triggerService.findSubjectCategories(currentCase.getCaseObject()
+     * .getDomainId(), currentCase.getCaseObject().getTriggerId())); }
+     * initSubjectCategoriesSet(); initSubjectCategories();
+     * 
+     * }
+     * 
+     * private void initSubjectCategoriesSet() { List<SubjectCategorySet>
+     * categoriesSet; if (currentCase.getCaseObject().getSubject() != null) {
+     * Set<String> subjectCategoriesSet =
+     * currentCase.getCaseObject().getSubject().getSubjectCategorySet(); if
+     * (CollectionUtils.isNotEmpty(subjectCategoriesSet)) { categoriesSet =
+     * currentCase.getTriggerSubjectCategories().stream()
+     * .filter(subjectCategorySet ->
+     * subjectCategoriesSet.contains(subjectCategorySet.getId()))
+     * .collect(Collectors.toList());
+     * 
+     * } else { categoriesSet = new ArrayList<>(); } } else { categoriesSet =
+     * new ArrayList<>(); } currentCase.setSubjectCategoriesSet(categoriesSet);
+     * 
+     * }
+     * 
+     * private void initSubjectCategories() { List<SubjectCategory> categories;
+     * if (currentCase.getCaseObject().getSubject() != null) { Set<String>
+     * subjectCategories =
+     * currentCase.getCaseObject().getSubject().getSubjectCategory(); if
+     * (CollectionUtils.isNotEmpty(subjectCategories)) { Stream<SubjectCategory>
+     * subjectCategoriesStream =
+     * currentCase.getTriggerSubjectCategories().stream() .map(categorySet ->
+     * categorySet.getCategories()).flatMap(l -> l.stream()); categories =
+     * subjectCategoriesStream.filter( subjectCategory ->
+     * subjectCategories.contains(subjectCategory.getId())).collect(
+     * Collectors.toList()); } else { categories = new ArrayList<>(); } } else {
+     * categories = new ArrayList<>(); }
+     * currentCase.setSubjectCategories(categories); }
+     */
 
     @Command
     @NotifyChange({ "registries", "moreResults" })

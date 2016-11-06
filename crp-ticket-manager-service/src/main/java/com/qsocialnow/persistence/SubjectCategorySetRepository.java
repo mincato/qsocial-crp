@@ -93,6 +93,17 @@ public class SubjectCategorySetRepository {
         return subjectCategorySets;
     }
 
+    public List<SubjectCategorySet> findAllActive() {
+        List<SubjectCategorySet> subjectCategorySets = new ArrayList<>();
+
+        try {
+            subjectCategorySets = subjectCategorySetElasticService.findAllActive();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategorySets;
+    }
+
     public List<SubjectCategory> findCategories(String subjectCategorySetId) {
         List<SubjectCategory> subjectCategories = new ArrayList<>();
 
@@ -119,4 +130,9 @@ public class SubjectCategorySetRepository {
         return subjectCategories;
     }
 
+    public List<SubjectCategorySet> findByIds(List<String> categoriesIds) {
+        List<SubjectCategorySet> result = subjectCategorySetElasticService.findByIds(categoriesIds);
+        return result;
+    }
+    
 }

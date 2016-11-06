@@ -1203,16 +1203,16 @@ router.get('/caseCategorySets', function (req, res) {
     
 	var ids = req.query.ids ? req.query.ids : null;
   
+	var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");
+	
 	if (ids === null) {
 		var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
 		var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
 		var name = req.query.name ? req.query.name : null;
-	    
-		var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+		
 		caseCategorySetService.findAll(pageNumber, pageSize, name,asyncResponse);
 		
 	} else {
-		var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");
 		caseCategorySetService.findByIds(ids, asyncResponse);
 	}  
 });
@@ -1439,13 +1439,21 @@ router.get('/subjectCategorySets', function (req, res) {
     }
 
   }
-  
-  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
-  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-  var name = req.query.name ? req.query.name : null;
     
+  var ids = req.query.ids ? req.query.ids : null;
+	
   var subjectCategorySetService = javaContext.getBeanSync("subjectCategorySetService");
-  subjectCategorySetService.findAll(pageNumber, pageSize, name,asyncResponse);
+  
+  if (ids === null) {
+    var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
+    var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+    var name = req.query.name ? req.query.name : null;
+    
+    subjectCategorySetService.findAll(pageNumber, pageSize, name,asyncResponse);
+		
+  } else {
+    subjectCategorySetService.findByIds(ids, asyncResponse);
+  }
 });
 
 router.get('/subjectCategorySets/all', function (req, res) {
@@ -1469,6 +1477,29 @@ router.get('/subjectCategorySets/all', function (req, res) {
   var subjectCategorySetService = javaContext.getBeanSync("subjectCategorySetService");
   subjectCategorySetService.findAll(asyncResponse);
 });
+
+router.get('/subjectCategorySetsActive/all', function (req, res) {
+    function asyncResponse(err,response) {
+    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+    if(response !== null) {
+      try {
+        res.set('Content-Type', 'application/json');
+        res.send(gson.toJsonSync(response));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+  var subjectCategorySetService = javaContext.getBeanSync("subjectCategorySetService");
+  subjectCategorySetService.findAllActive(asyncResponse);
+});
+
 
 router.get('/subjectCategorySets/:id', function (req, res) {
 
