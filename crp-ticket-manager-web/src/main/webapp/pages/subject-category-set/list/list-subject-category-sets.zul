@@ -53,12 +53,14 @@
 			    <thead>
 					<tr>
 					    <th>${labels.subjectcategoryset.list.column.description}</th>
+					    <th>${labels.subjectcategoryset.list.column.active}</th>
 					</tr>
 			    </thead>
 			    <tbody children="@bind(vm.subjectCategorySets)">
 			    	<template name="children">
 					<tr>
 						<td class="list-text-column"><a label="@load(each.description)" onClick="@command('openEdit', subjectcategoryset=each.id)"> </a></td>
+						<td>${c:l(c:cat('subjectcategoryset.active.',each.active))}</td>
 					</tr>
                		</template>
 				</tbody>

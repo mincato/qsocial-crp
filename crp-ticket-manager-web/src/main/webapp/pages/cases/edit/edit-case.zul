@@ -229,9 +229,12 @@
             					<n:div sclass="form-control-static">
             						<div children="@load(vm.currentCase.subjectCategoriesSet)">
 										<template name="children">
-											<span>
-												<label sclass="label label-info" value="${each.description}"/>
-											</span>
+            								<x:span data-toggle="tooltip" data-placement="top"
+            									title="@load(each.active ? '' : c:l('cases.subjectcategoryset.disabled'))">
+            									<label
+            										sclass="@load(each.active ? 'label label-info' : 'label label-inactive')"
+            										value="${each.description}" />
+            								</x:span>
 										</template>
 									</div>
             					</n:div>
@@ -247,9 +250,12 @@
             					<n:div sclass="form-control-static">
 									<div children="@load(vm.currentCase.subjectCategories)">
 										<template name="children">
-											<span>
-												<label sclass="label label-info" value="${each.description}"/>
-											</span>
+            								<x:span data-toggle="tooltip" data-placement="top"
+            									title="@load(each.active ? '' : c:l('cases.subjectcategory.disabled'))">
+            									<label 
+            										sclass="@load(each.active ? 'label label-info' : 'label label-inactive')"
+            										value="${each.description}" />
+            								</x:span>
 										</template>
 									</div>
 								</n:div>

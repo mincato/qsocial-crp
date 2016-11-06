@@ -34,7 +34,7 @@ public class CaseCategorySetRepository {
                 CaseCategorySetListView caseCategorySetListView = new CaseCategorySetListView();
                 caseCategorySetListView.setId(caseCategorySet.getId());
                 caseCategorySetListView.setDescription(caseCategorySet.getDescription());
-                caseCategorySetListView.setActive(caseCategorySet.getActive());
+                caseCategorySetListView.setActive(caseCategorySet.isActive());
                 caseCategorySets.add(caseCategorySetListView);
             }
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class CaseCategorySetRepository {
 
             CaseCategorySet newCaseCategorySet = new CaseCategorySet();
             newCaseCategorySet.setDescription(caseCategorySet.getDescription());
-            newCaseCategorySet.setActive(caseCategorySet.getActive());
+            newCaseCategorySet.setActive(caseCategorySet.isActive());
             newCaseCategorySet = caseCategorySetElasticService.indexCaseCategorySet(newCaseCategorySet, caseCategories);
             return newCaseCategorySet;
 

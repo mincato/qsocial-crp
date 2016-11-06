@@ -222,7 +222,7 @@ public class CreateTriggerViewModel implements Serializable {
 
     private void initSubjectCategorySetListView(List<TriggerSubjectCategorySetView> triggerSubjectCategorySets) {
         subjectCategorySetListView = new ListView<SubjectCategorySet>();
-        subjectCategorySetListView.setList(subjectCategorySetService.findAll());
+        subjectCategorySetListView.setList(subjectCategorySetService.findAllActive());
         subjectCategorySetListView.setFilteredList(new ArrayList<SubjectCategorySet>());
         if (triggerSubjectCategorySets != null) {
             subjectCategorySetListView

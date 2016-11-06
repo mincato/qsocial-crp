@@ -27,7 +27,7 @@ public class CaseCategorySetView {
         super();
         this.id = caseCategorySet.getId();
         this.description = caseCategorySet.getDescription();
-        this.active = caseCategorySet.getActive();
+        this.active = caseCategorySet.isActive();
         if (caseCategorySet.getCategories() != null && caseCategorySet.getCategories().size() > 0) {
             this.setCategories(caseCategorySet.getCategories().stream().map(category -> {
                 return new CaseCategoryView(category);

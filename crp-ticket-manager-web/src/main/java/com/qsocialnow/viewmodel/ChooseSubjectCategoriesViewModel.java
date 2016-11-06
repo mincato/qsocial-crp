@@ -1,6 +1,8 @@
 package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -14,6 +16,7 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.model.TagSubjectCategorySetView;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -25,6 +28,8 @@ public class ChooseSubjectCategoriesViewModel implements Serializable {
 
     private TagSubjectCategorySetView subjectCategorySet;
 
+    private List<SubjectCategory> activeCategories;
+
     private boolean saved;
 
     @Command
@@ -35,6 +40,8 @@ public class ChooseSubjectCategoriesViewModel implements Serializable {
     @Init
     public void init(@BindingParam("subjectCategorySet") TagSubjectCategorySetView subjectCategorySet) {
         this.subjectCategorySet = subjectCategorySet;
+        this.activeCategories = subjectCategorySet.getCategorySet().getCategories().stream().filter(c -> c.isActive())
+                .collect(Collectors.toList());
     }
 
     public TagSubjectCategorySetView getSubjectCategorySet() {
@@ -53,6 +60,14 @@ public class ChooseSubjectCategoriesViewModel implements Serializable {
 
     public void setSaved(boolean saved) {
         this.saved = saved;
+    }
+
+    public List<SubjectCategory> getActiveCategories() {
+        return activeCategories;
+    }
+
+    public void setActiveCategories(List<SubjectCategory> activeCategories) {
+        this.activeCategories = activeCategories;
     }
 
 }
