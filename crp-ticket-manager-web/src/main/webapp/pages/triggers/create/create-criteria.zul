@@ -99,10 +99,11 @@
 						<n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
 						<n:div class="col-sm-10">
 							<n:div class="col-sm-3">
-								<datebox sclass="input-group" format="short" value="@bind(fxFilter.startDateTime)  @converter(adminVm.dateConverter)" />
+								<datebox sclass="input-group" format="short" value="@bind(fxFilter.startDateTime) @converter(adminVm.dateConverter)" 
+									onChange="@command('initFilterStartTime', fxFilter = fxFilter)" />
 							</n:div>
 							<n:div class="col-sm-2">
-								 <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.startTime)  @converter(adminVm.timeConverter)"></timebox>
+								 <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.startTime) @converter(adminVm.dateConverter)"></timebox>
 							</n:div>
 						</n:div>
     				</n:div>
@@ -110,19 +111,19 @@
 						<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
 						<n:div class="col-sm-10">
 							<n:div class="col-sm-3">
-								<datebox id="enddate" sclass="input-group" format="short" value="@load(fxFilter.endDateTime) 
+								<datebox id="enddate" sclass="input-group" format="short" 
+								onChange="@command('initFilterEndTime', fxFilter = fxFilter)"
+								value="@load(fxFilter.endDateTime)
 								@save(fxFilter.endDateTime, before='save')
 								@converter(adminVm.dateConverter)
-	                        	@validator('com.qsocialnow.validators.ToDateTimeValidator', fromDate = fxFilter.startDateTime, fromTime = fxFilter.startTime, toTime = fxFilter.endTime, label = 'trigger.criteria.enddate.validation', id='enddate')" />
+								@validator('com.qsocialnow.validators.ToDateTimeValidator', fromDate = fxFilter.startDateTime, fromTime = fxFilter.startTime, toTime = fxFilter.endTime, label = 'trigger.criteria.enddate.validation', id='enddate')" />
 	                        	<x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
 			    						<label value="@load(vmsgs[enddate])" />
 								</x:span>
 							</n:div>
 							<n:div class="col-sm-2">
-								 <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.endTime)
-								@converter(adminVm.timeConverter)"></timebox>
+								 <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.endTime) @converter(adminVm.dateConverter)"></timebox>
 							</n:div>
-
 						</n:div>
     				</x:div>
 			    </n:form>
