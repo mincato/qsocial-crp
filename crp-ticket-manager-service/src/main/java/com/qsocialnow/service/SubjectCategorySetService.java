@@ -65,7 +65,7 @@ public class SubjectCategorySetService {
         }
         return subjectCategorySetSaved;
     }
-    
+
     public List<SubjectCategorySet> findByIds(String ids) {
         if (StringUtils.isBlank(ids)) {
             return new ArrayList<>();

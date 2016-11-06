@@ -134,5 +134,5 @@ public class SubjectCategorySetRepository {
         List<SubjectCategorySet> result = subjectCategorySetElasticService.findByIds(categoriesIds);
         return result;
     }
-    
+
 }

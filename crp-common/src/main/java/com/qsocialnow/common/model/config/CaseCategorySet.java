@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-public class CaseCategorySet {
+public class CaseCategorySet implements Type {
 
     private String id;
 
@@ -14,18 +14,22 @@ public class CaseCategorySet {
 
     private boolean active = true;
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -38,10 +42,12 @@ public class CaseCategorySet {
         this.categories = categories;
     }
 
+    @Override
     public boolean isActive() {
         return active;
     }
 
+    @Override
     public void setActive(boolean active) {
         this.active = active;
     }

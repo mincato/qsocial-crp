@@ -1,120 +1,87 @@
 package com.qsocialnow.viewmodel.factory;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.apache.commons.collections4.CollectionUtils;
 
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.services.SubjectCategorySetService;
-import com.qsocialnow.services.TriggerService;
 
-public class EditCaseSubjectCategoriesFactory {
+public class EditCaseSubjectCategoriesFactory extends EditCaseCategoriesFactory<SubjectCategorySet, SubjectCategory> {
 
-    private TriggerService triggerService;
+    private SubjectCategorySetService subjectCategorySetService;
 
-    private SubjectCategorySetService categorySetService;
-
-    public void init(EditCaseView currentCase) {
-        if (currentCase.getTriggerSubjectCategories() == null) {
-
-            List<SubjectCategorySet> allTriggerCategories = triggerService.findSubjectCategories(currentCase
-                    .getCaseObject().getDomainId(), currentCase.getCaseObject().getTriggerId());
-            currentCase.setAllTriggerSubjectCategories(allTriggerCategories);
-
-            List<SubjectCategorySet> onlyActiveTriggerCategories = allTriggerCategories.stream()
-                    .filter(set -> set.isActive()).collect(Collectors.toList());
-            currentCase.setTriggerSubjectCategories(onlyActiveTriggerCategories);
-        }
-        initCategoriesSet(currentCase);
-        initCategories(currentCase);
-
+    @Override
+    protected List<SubjectCategorySet> getTriggerSetsFromCurrentCase(EditCaseView currentCase) {
+        return currentCase.getTriggerSubjectCategories();
     }
 
-    private void initCategoriesSet(EditCaseView currentCase) {
-        List<SubjectCategorySet> categoriesSet = new ArrayList<>();
-        Set<String> setIds = currentCase.getCaseObject().getSubject().getSubjectCategorySet();
-
-        if (CollectionUtils.isNotEmpty(setIds)) {
-            List<String> disassociatedIds = new ArrayList<>();
-
-            for (String setId : setIds) {
-                List<SubjectCategorySet> allTriggerSets = currentCase.getAllTriggerSubjectCategories();
-                Optional<SubjectCategorySet> set = allTriggerSets.stream().filter(s -> s.getId().equals(setId))
-                        .findFirst();
-                if (set.isPresent()) {
-                    categoriesSet.add(set.get());
-                } else {
-                    disassociatedIds.add(setId);
-                }
-            }
-
-            if (CollectionUtils.isEmpty(disassociatedIds)) {
-                currentCase.setDisassociatedSubjectCategories(new ArrayList<>());
-            } else {
-                List<SubjectCategorySet> disassociatedSets = categorySetService.findByIds(disassociatedIds);
-                categoriesSet.addAll(disassociatedSets.stream().map(s -> {
-                    s.setActive(false);
-                    return s;
-                }).collect(Collectors.toList()));
-
-                List<SubjectCategory> disassociatedCategories = disassociatedSets.stream()
-                        .map(SubjectCategorySet::getCategories).flatMap(l -> l.stream()).collect(Collectors.toList());
-                currentCase.setDisassociatedSubjectCategories(disassociatedCategories.stream().map(c -> {
-                    c.setActive(false);
-                    return c;
-                }).collect(Collectors.toList()));
-            }
-        }
-
-        categoriesSet = deactivateAllCategoriesFromDeactivatedSets(categoriesSet);
-
-        currentCase.setSubjectCategoriesSet(categoriesSet);
+    @Override
+    protected List<SubjectCategorySet> getTriggerSetsFromTriggerService(String domainId, String triggerId) {
+        return triggerService.findSubjectCategories(domainId, triggerId);
     }
 
-    private List<SubjectCategorySet> deactivateAllCategoriesFromDeactivatedSets(List<SubjectCategorySet> sets) {
-        return sets.stream().map(s -> {
-            if (!s.isActive()) {
-                s.getCategories().stream().forEach(c -> c.setActive(false));
-            }
-            return s;
-        }).collect(Collectors.toList());
+    @Override
+    protected void setAllTriggerSetsInCurrentCase(EditCaseView currentCase, List<SubjectCategorySet> sets) {
+        currentCase.setAllTriggerSubjectCategories(sets);
     }
 
-    private void initCategories(EditCaseView currentCase) {
-        List<SubjectCategory> categories;
-        Set<String> setIds = currentCase.getCaseObject().getSubject().getSubjectCategory();
-        if (CollectionUtils.isNotEmpty(setIds)) {
-            Stream<SubjectCategory> categoriesStream = currentCase.getAllTriggerSubjectCategories().stream()
-                    .map(categorySet -> categorySet.getCategories()).flatMap(l -> l.stream());
-            categories = categoriesStream.filter(cat -> setIds.contains(cat.getId())).collect(Collectors.toList());
-            categories.addAll(currentCase.getDisassociatedSubjectCategories());
-        } else {
-            categories = new ArrayList<>();
-        }
+    @Override
+    protected void setTriggerSetsInCurrentCase(EditCaseView currentCase, List<SubjectCategorySet> sets) {
+        currentCase.setTriggerSubjectCategories(sets);
+    }
+
+    @Override
+    protected Set<String> getSetIdsFromCurrentCase(EditCaseView currentCase) {
+        return currentCase.getCaseObject().getSubject().getSubjectCategorySet();
+    }
+
+    @Override
+    protected void setDissasociatedCategoriesInCurrentCase(EditCaseView currentCase, List<SubjectCategory> categories) {
+        currentCase.setDisassociatedSubjectCategories(categories);
+    }
+
+    @Override
+    protected List<SubjectCategorySet> getDissasociatedSetsFromService(List<String> ids) {
+        return subjectCategorySetService.findByIds(ids);
+    }
+
+    @Override
+    protected List<SubjectCategory> getCategoriesFromSet(SubjectCategorySet set) {
+        return set.getCategories();
+    }
+
+    @Override
+    protected void setSetsInCurrentCase(EditCaseView currentCase, List<SubjectCategorySet> sets) {
+        currentCase.setSubjectCategoriesSet(sets);
+    }
+
+    @Override
+    protected Set<String> getCategoriesIdsFromCurrentCase(EditCaseView currentCase) {
+        return currentCase.getCaseObject().getSubject().getSubjectCategory();
+    }
+
+    @Override
+    protected List<SubjectCategory> getDissasociatedCategoriesFromCurrentCase(EditCaseView currentCase) {
+        return currentCase.getDisassociatedSubjectCategories();
+    }
+
+    @Override
+    protected void setCategoriesInCurrentCase(EditCaseView currentCase, List<SubjectCategory> categories) {
         currentCase.setSubjectCategories(categories);
     }
 
-    public SubjectCategorySetService getCategorySetService() {
-        return categorySetService;
+    @Override
+    protected List<SubjectCategorySet> getAllTriggerSetsFromCurrentCase(EditCaseView currentCase) {
+        return currentCase.getAllTriggerSubjectCategories();
     }
 
-    public void setCategorySetService(SubjectCategorySetService categorySetService) {
-        this.categorySetService = categorySetService;
+    public SubjectCategorySetService getSubjectCategorySetService() {
+        return subjectCategorySetService;
     }
 
-    public TriggerService getTriggerService() {
-        return triggerService;
+    public void setSubjectCategorySetService(SubjectCategorySetService subjectCategorySetService) {
+        this.subjectCategorySetService = subjectCategorySetService;
     }
-
-    public void setTriggerService(TriggerService triggerService) {
-        this.triggerService = triggerService;
-    }
-
 }
