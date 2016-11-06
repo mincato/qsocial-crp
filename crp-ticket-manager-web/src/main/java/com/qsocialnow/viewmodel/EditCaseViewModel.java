@@ -185,7 +185,19 @@ public class EditCaseViewModel implements Serializable {
                 }).collect(Collectors.toList()));
             }
         }
+
+        categoriesSet = deactivateAllCategoriesFromDeactivatedSets(categoriesSet);
+
         currentCase.setCaseCategoriesSet(categoriesSet);
+    }
+
+    private List<CaseCategorySet> deactivateAllCategoriesFromDeactivatedSets(List<CaseCategorySet> sets) {
+        return sets.stream().map(s -> {
+            if (!s.getActive()) {
+                s.getCategories().stream().forEach(c -> c.setActive(false));
+            }
+            return s;
+        }).collect(Collectors.toList());
     }
 
     private void initCategories() {

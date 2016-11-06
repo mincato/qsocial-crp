@@ -40,6 +40,9 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
     @Value("${caseCategorySetActive.serviceurl}")
     private String caseCategorySetActiveServiceUrl;
 
+    @Value("${caseCategorySetWithActiveCategories.serviceurl}")
+    private String caseCategorySetWithActiveCategoriesServiceUrl;
+
     @Value("${caseCategory.serviceurl}")
     private String caseCategoryServiceUrl;
 
@@ -68,6 +71,27 @@ public class CaseCategorySetServiceImpl implements CaseCategorySetService {
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
                     serviceUrlResolver.resolveUrl(caseCategorySetServiceUrl)).path("/" + caseCategorySetId);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            CaseCategorySet caseCategorySetSelected = restTemplate.getForObject(builder.toUriString(),
+                    CaseCategorySet.class);
+
+            return caseCategorySetSelected;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public CaseCategorySet findOneWithActiveCategories(String caseCategorySetId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(caseCategorySetWithActiveCategoriesServiceUrl)).path(
+                    "/" + caseCategorySetId);
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             CaseCategorySet caseCategorySetSelected = restTemplate.getForObject(builder.toUriString(),

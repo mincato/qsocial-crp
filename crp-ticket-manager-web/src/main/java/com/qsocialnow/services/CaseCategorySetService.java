@@ -14,6 +14,8 @@ public interface CaseCategorySetService {
 
     CaseCategorySet findOne(String caseCategorySetId);
 
+    CaseCategorySet findOneWithActiveCategories(String caseCategorySetId);
+
     CaseCategorySet update(CaseCategorySet currentCaseCategorySet);
 
     PageResponse<CaseCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
@@ -24,7 +26,7 @@ public interface CaseCategorySetService {
 
     List<CaseCategorySet> findByIds(List<String> ids);
 
-    List<CaseCategory> findCategories(String id);
+    List<CaseCategory> findCategories(String setId);
 
     List<CaseCategory> findAllCategories();
 

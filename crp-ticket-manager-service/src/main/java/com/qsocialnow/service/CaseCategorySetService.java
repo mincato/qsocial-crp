@@ -47,6 +47,11 @@ public class CaseCategorySetService {
         return caseCategorySet;
     }
 
+    public CaseCategorySet findOneWithActiveCategories(String caseCategorySetId) {
+        CaseCategorySet caseCategorySet = caseCategorySetRepository.findOneWithActiveCategories(caseCategorySetId);
+        return caseCategorySet;
+    }
+
     public CaseCategorySet createCaseCategorySet(CaseCategorySet caseCategorySet) {
         CaseCategorySet caseCategorySetSaved = null;
         try {
