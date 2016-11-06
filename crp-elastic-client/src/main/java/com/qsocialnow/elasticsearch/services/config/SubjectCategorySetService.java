@@ -2,12 +2,11 @@ package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
@@ -21,8 +20,6 @@ import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 
 public class SubjectCategorySetService {
-
-    private static final Logger log = LoggerFactory.getLogger(SubjectCategorySetService.class);
 
     private AWSElasticsearchConfigurationProvider configurator;
 
@@ -52,14 +49,15 @@ public class SubjectCategorySetService {
         Repository<SubjectCategoryType> repositorySubjectCategory = esSubjectCategoryfactory.initManager();
         repositorySubjectCategory.initClient();
 
-        SubjectCategoryMapping mappingCaseCategory = SubjectCategoryMapping.getInstance(indexConfiguration
+        SubjectCategoryMapping mappingSubjectCategory = SubjectCategoryMapping.getInstance(indexConfiguration
                 .getIndexName());
 
         for (SubjectCategory subjectCategory : subjectCategories) {
-            SubjectCategoryType documentSubjectCategoryIndexed = mappingCaseCategory.getDocumentType(subjectCategory);
+            SubjectCategoryType documentSubjectCategoryIndexed = mappingSubjectCategory
+                    .getDocumentType(subjectCategory);
             documentSubjectCategoryIndexed.setIdSubjectCategorySet(idSubjectCategorySet);
 
-            String response = repositorySubjectCategory.indexMapping(mappingCaseCategory,
+            String response = repositorySubjectCategory.indexMapping(mappingSubjectCategory,
                     documentSubjectCategoryIndexed);
             subjectCategory.setId(response);
             indexedSubjectCategories.add(subjectCategory);
@@ -69,7 +67,7 @@ public class SubjectCategorySetService {
         return subjectCategorySet;
     }
 
-    public List<SubjectCategory> indexCaseCategories(String idSubjectCategorySet,
+    public List<SubjectCategory> indexSubjectCategories(String idSubjectCategorySet,
             List<SubjectCategory> subjectCategories) {
         RepositoryFactory<SubjectCategoryType> esfactory = new RepositoryFactory<SubjectCategoryType>(configurator);
 
@@ -219,6 +217,12 @@ public class SubjectCategorySetService {
         repository.closeClient();
 
         // subject categories
+        updateCategories(subjectCategorySet.getId(), toUpdateCategories);
+        return response;
+    }
+
+    private void updateCategories(String setId, List<SubjectCategory> categoriesToUpdate) {
+
         RepositoryFactory<SubjectCategoryType> esSubjectCategoryfactory = new RepositoryFactory<SubjectCategoryType>(
                 configurator);
         Repository<SubjectCategoryType> repositorySubjectCategory = esSubjectCategoryfactory.initManager();
@@ -226,34 +230,45 @@ public class SubjectCategorySetService {
 
         SubjectCategoryMapping mappingSubjectCategory = SubjectCategoryMapping.getInstance(indexConfiguration
                 .getIndexName());
-        SearchResponse<SubjectCategory> responseCaseCategories = repositorySubjectCategory.queryByField(
-                mappingSubjectCategory, 0, -1, "description", "idSubjectCategorySet", subjectCategorySet.getId());
+        SearchResponse<SubjectCategory> responseSubjectCategories = repositorySubjectCategory.queryByField(
+                mappingSubjectCategory, 0, -1, "description", "idSubjectCategorySet", setId);
 
-        List<SubjectCategory> categories = responseCaseCategories.getSources();
+        List<SubjectCategory> categoriesFromRepo = responseSubjectCategories.getSources();
 
-        for (SubjectCategory subjectCategory : categories) {
-            boolean isUpdated = false;
-            for (SubjectCategory toUpdatedSubjectCategory : toUpdateCategories) {
-                if (subjectCategory.getId().equals(toUpdatedSubjectCategory.getId())) {
-                    isUpdated = true;
-                    break;
-                }
-            }
-            if (!isUpdated) {
-                repositorySubjectCategory.removeMapping(subjectCategory.getId(), mappingSubjectCategory);
-                log.info("SubjectCategory from ES needs to be removed:" + subjectCategory.getId());
-            }
-        }
+        List<SubjectCategory> categories = activateAllCategoriesToUpdate(categoriesToUpdate);
 
-        for (SubjectCategory subjectCategory : toUpdateCategories) {
-            SubjectCategoryType documentSubjectCategoryIndexed = mappingSubjectCategory
-                    .getDocumentType(subjectCategory);
-            documentSubjectCategoryIndexed.setIdSubjectCategorySet(subjectCategorySet.getId());
-            repositorySubjectCategory.updateMapping(subjectCategory.getId(), mappingSubjectCategory,
-                    documentSubjectCategoryIndexed);
-        }
-        repositorySubjectCategory.initClient();
-        return response;
+        categories.addAll(deactivateAllRemovedCategories(categoriesToUpdate, categoriesFromRepo));
+
+        categories.stream().forEach(
+                cat -> {
+                    SubjectCategoryType documentSubjectCategoryIndexed = mappingSubjectCategory.getDocumentType(cat);
+                    documentSubjectCategoryIndexed.setIdSubjectCategorySet(setId);
+                    repositorySubjectCategory.updateMapping(cat.getId(), mappingSubjectCategory,
+                            documentSubjectCategoryIndexed);
+                });
+
+        repositorySubjectCategory.closeClient();
+    }
+
+    private List<SubjectCategory> activateAllCategoriesToUpdate(List<SubjectCategory> categoriesToUpdate) {
+        List<SubjectCategory> categories = categoriesToUpdate.stream().map(updCat -> {
+            updCat.setActive(true);
+            return updCat;
+        }).collect(Collectors.toList());
+        return categories;
+    }
+
+    private List<SubjectCategory> deactivateAllRemovedCategories(List<SubjectCategory> categoriesToUpdate,
+            List<SubjectCategory> categoriesFromRepo) {
+        return categoriesFromRepo.stream().map(repoCat -> {
+            repoCat.setActive(categoryIsPresentInList(repoCat, categoriesToUpdate));
+            return repoCat;
+        }).filter(repoCat -> !repoCat.isActive()).collect(Collectors.toList());
+    }
+
+    private boolean categoryIsPresentInList(SubjectCategory category, List<SubjectCategory> list) {
+        return list.stream().filter(c -> c.getId() != null && c.getId().equals(category.getId())).findFirst()
+                .isPresent();
     }
 
     public void setIndexConfiguration(ConfigurationIndexService indexConfiguration) {
