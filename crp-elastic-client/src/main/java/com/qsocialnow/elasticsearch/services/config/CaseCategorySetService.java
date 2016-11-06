@@ -261,7 +261,7 @@ public class CaseCategorySetService {
         return categoriesFromRepo.stream().map(repoCat -> {
             repoCat.setActive(categoryIsPresentInList(repoCat, categoriesToUpdate));
             return repoCat;
-        }).filter(repoCat -> !repoCat.getActive()).collect(Collectors.toList());
+        }).filter(repoCat -> !repoCat.isActive()).collect(Collectors.toList());
     }
 
     private boolean categoryIsPresentInList(CaseCategory category, List<CaseCategory> list) {

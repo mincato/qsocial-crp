@@ -28,7 +28,7 @@ public class CaseCategory {
         this.active = active;
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 }

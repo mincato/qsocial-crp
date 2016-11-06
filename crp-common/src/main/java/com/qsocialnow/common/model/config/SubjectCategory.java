@@ -6,6 +6,8 @@ public class SubjectCategory {
 
     private String description;
 
+    private boolean active = true;
+
     public String getId() {
         return id;
     }
@@ -20,5 +22,13 @@ public class SubjectCategory {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

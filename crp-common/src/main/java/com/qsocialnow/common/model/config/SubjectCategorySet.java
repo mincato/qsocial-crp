@@ -12,6 +12,8 @@ public class SubjectCategorySet {
 
     private List<SubjectCategory> categories;
 
+    private boolean active = true;
+
     public String getId() {
         return id;
     }
@@ -34,6 +36,14 @@ public class SubjectCategorySet {
 
     public void setCategories(List<SubjectCategory> categories) {
         this.categories = categories;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

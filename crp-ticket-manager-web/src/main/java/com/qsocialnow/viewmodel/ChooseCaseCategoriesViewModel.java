@@ -49,7 +49,7 @@ public class ChooseCaseCategoriesViewModel implements Serializable {
             caseCategorySet.getCategorySet().setCategories(
                     caseCategorySetService.findCategories(caseCategorySet.getCategorySet().getId()));
         }
-        this.activeCategories = caseCategorySet.getCategorySet().getCategories().stream().filter(c -> c.getActive())
+        this.activeCategories = caseCategorySet.getCategorySet().getCategories().stream().filter(c -> c.isActive())
                 .collect(Collectors.toList());
     }
 

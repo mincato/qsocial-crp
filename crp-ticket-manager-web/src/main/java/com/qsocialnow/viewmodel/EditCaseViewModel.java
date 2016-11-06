@@ -142,7 +142,7 @@ public class EditCaseViewModel implements Serializable {
             currentCase.setAllTriggerCategories(allTriggerCategories);
 
             List<CaseCategorySet> onlyActiveTriggerCategories = allTriggerCategories.stream()
-                    .filter(set -> set.getActive()).collect(Collectors.toList());
+                    .filter(set -> set.isActive()).collect(Collectors.toList());
             currentCase.setTriggerCategories(onlyActiveTriggerCategories);
         }
         initCaseCategoriesSet();
@@ -193,7 +193,7 @@ public class EditCaseViewModel implements Serializable {
 
     private List<CaseCategorySet> deactivateAllCategoriesFromDeactivatedSets(List<CaseCategorySet> sets) {
         return sets.stream().map(s -> {
-            if (!s.getActive()) {
+            if (!s.isActive()) {
                 s.getCategories().stream().forEach(c -> c.setActive(false));
             }
             return s;

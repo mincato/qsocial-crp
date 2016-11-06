@@ -38,7 +38,7 @@ public class CaseCategorySet {
         this.categories = categories;
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 

@@ -21,7 +21,7 @@ public class CaseCategoryView {
         super();
         this.id = category.getId();
         this.description = category.getDescription();
-        this.active = category.getActive();
+        this.active = category.isActive();
     }
 
     public String getId() {
