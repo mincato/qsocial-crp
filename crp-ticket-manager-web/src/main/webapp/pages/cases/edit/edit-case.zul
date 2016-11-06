@@ -116,9 +116,9 @@
             			</n:div>
             		</div>
             	</n:div>
-            	<n:hr/>
-            	<n:div class="row">
-            		<n:div class="col-sm-6">
+            	<x:hr sclass="@load(empty vm.currentCase.source and empty vm.currentCase.caseObject.subject ? 'hidden':'')"/>
+            	<div zclass="row" visible="@load(not empty vm.currentCase.source or not empty vm.currentCase.caseObject.subject)">
+            		<div zclass="col-sm-6" visible="@load(not empty vm.currentCase.source)">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
             					${labels.cases.details.source}
@@ -129,7 +129,7 @@
             					</n:div>
             				</n:div>
             			</n:div>
-            		</n:div>
+            		</div>
             		<div zclass="col-sm-6" visible="@load(not empty vm.currentCase.caseObject.subject and not empty vm.currentCase.caseObject.subject.identifier)">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
@@ -142,7 +142,7 @@
             				</n:div>
             			</n:div>
             		</div>
-            	</n:div>
+            	</div>
             	<x:hr sclass="@load(empty vm.currentCase.teamDescription and empty vm.currentCase.caseObject.assignee ? 'hidden':'')"/>
             	<div class="row">
             		<n:div class="col-sm-6">
