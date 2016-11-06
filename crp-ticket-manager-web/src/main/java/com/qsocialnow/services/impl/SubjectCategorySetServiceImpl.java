@@ -43,6 +43,9 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
     @Value("${subjectCategorySetActive.serviceurl}")
     private String subjectCategorySetActiveServiceUrl;
 
+    @Value("${subjectCategorySetWithActiveCategories.serviceurl}")
+    private String subjectCategorySetWithActiveCategoriesServiceUrl;
+
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
@@ -76,6 +79,27 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
             return subjectCategorySetSelected;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public SubjectCategorySet findOneWithActiveCategories(String caseCategorySetId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(subjectCategorySetWithActiveCategoriesServiceUrl)).path(
+                    "/" + caseCategorySetId);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            SubjectCategorySet subjectCategorySetSelected = restTemplate.getForObject(builder.toUriString(),
+                    SubjectCategorySet.class);
+
+            return subjectCategorySetSelected;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
             throw new RuntimeException(e);
         }
     }

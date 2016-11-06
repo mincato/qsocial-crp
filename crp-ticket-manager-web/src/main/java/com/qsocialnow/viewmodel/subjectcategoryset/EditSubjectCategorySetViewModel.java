@@ -48,7 +48,8 @@ public class EditSubjectCategorySetViewModel implements Serializable {
     }
 
     private void initSubjectCategorySet(String subjectCategorySetId) {
-        SubjectCategorySet subjectCategorySet = subjectCategorySetService.findOne(subjectCategorySetId);
+        SubjectCategorySet subjectCategorySet = subjectCategorySetService
+                .findOneWithActiveCategories(subjectCategorySetId);
         currentSubjectCategorySet = new SubjectCategorySetView(subjectCategorySet);
     }
 

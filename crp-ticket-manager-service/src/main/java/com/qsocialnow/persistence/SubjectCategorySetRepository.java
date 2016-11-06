@@ -71,6 +71,17 @@ public class SubjectCategorySetRepository {
         return subjectCategorySet;
     }
 
+    public SubjectCategorySet findOneWithActiveCategories(String subjectCategorySetId) {
+        SubjectCategorySet subjectCategorySet = null;
+
+        try {
+            subjectCategorySet = subjectCategorySetElasticService.findOneWithActiveCategories(subjectCategorySetId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategorySet;
+    }
+
     public SubjectCategorySet update(SubjectCategorySet subjectCategorySet) {
         try {
             String id = subjectCategorySetElasticService.updateSubjectCategorySet(subjectCategorySet);

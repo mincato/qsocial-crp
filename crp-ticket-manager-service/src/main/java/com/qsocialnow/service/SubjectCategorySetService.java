@@ -39,6 +39,12 @@ public class SubjectCategorySetService {
         return subjectCategorySet;
     }
 
+    public SubjectCategorySet findOneWithActiveCategories(String subjectCategorySetId) {
+        SubjectCategorySet subjectCategorySet = subjectCategorySetRepository
+                .findOneWithActiveCategories(subjectCategorySetId);
+        return subjectCategorySet;
+    }
+
     public SubjectCategorySet createSubjectCategorySet(SubjectCategorySet subjectCategorySet) {
         SubjectCategorySet subjectCategorySetSaved = null;
         try {

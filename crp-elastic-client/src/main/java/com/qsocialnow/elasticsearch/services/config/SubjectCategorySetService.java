@@ -160,6 +160,41 @@ public class SubjectCategorySetService {
         return subjectCategorySet;
     }
 
+    public SubjectCategorySet findOneWithActiveCategories(String subjectCategorySetId) {
+        RepositoryFactory<SubjectCategorySetType> esfactory = new RepositoryFactory<SubjectCategorySetType>(
+                configurator);
+        Repository<SubjectCategorySetType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SubjectCategorySetMapping mapping = SubjectCategorySetMapping.getInstance(indexConfiguration.getIndexName());
+
+        SearchResponse<SubjectCategorySet> response = repository.find(subjectCategorySetId, mapping);
+
+        SubjectCategorySet subjectCategorySet = response.getSource();
+        repository.closeClient();
+
+        RepositoryFactory<SubjectCategoryType> esSubjectCategoryfactory = new RepositoryFactory<SubjectCategoryType>(
+                configurator);
+
+        Repository<SubjectCategoryType> repositorySubjectCategory = esSubjectCategoryfactory.initManager();
+        repositorySubjectCategory.initClient();
+        SubjectCategoryMapping subjectCategoryMapping = SubjectCategoryMapping.getInstance(indexConfiguration
+                .getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
+        filters = filters.must(QueryBuilders.matchQuery("idSubjectCategorySet", subjectCategorySetId));
+
+        SearchResponse<SubjectCategory> responseSubjectCategories = repositorySubjectCategory.searchWithFilters(
+                "description", SortOrder.ASC, filters, subjectCategoryMapping);
+
+        List<SubjectCategory> categories = responseSubjectCategories.getSources();
+        subjectCategorySet.setCategories(categories);
+
+        repositorySubjectCategory.closeClient();
+        return subjectCategorySet;
+    }
+
     public List<SubjectCategory> findCategories(String subjectCategorySetId) {
         RepositoryFactory<SubjectCategoryType> esSubjectCategoryfactory = new RepositoryFactory<SubjectCategoryType>(
                 configurator);

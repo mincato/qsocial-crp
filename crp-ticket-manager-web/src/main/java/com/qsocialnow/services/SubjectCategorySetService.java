@@ -14,6 +14,8 @@ public interface SubjectCategorySetService {
 
     SubjectCategorySet findOne(String subjectCategorySetId);
 
+    SubjectCategorySet findOneWithActiveCategories(String subjectCategorySetId);
+
     SubjectCategorySet update(SubjectCategorySet currentSubjectCategorySet);
 
     PageResponse<SubjectCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
