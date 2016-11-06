@@ -30,7 +30,6 @@ import com.qsocialnow.model.EditCaseView;
 import com.qsocialnow.model.ListView;
 import com.qsocialnow.model.TagCaseActionView;
 import com.qsocialnow.model.TagCaseCategorySetView;
-import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -40,9 +39,6 @@ public class TagCaseActionViewModel implements Serializable {
 
     @WireVariable
     private CaseService caseService;
-
-    @WireVariable
-    private CaseCategorySetService caseCategorySetService;
 
     private String caseId;
 

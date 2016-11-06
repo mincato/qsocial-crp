@@ -192,7 +192,6 @@ public class ResolutionService {
             Resolution resolution = oldResolutions.stream().filter(res -> res.getId().equals(resolutionToRemove))
                     .findFirst().get();
             deactivateResolution(domainId, resolution, repository);
-            // amp deleteResolution(domainId, resolutionsToRemove, repository);
         }
         repository.closeClient();
 

@@ -6,6 +6,8 @@ public class CaseCategorySetListView {
 
     private String description;
 
+    private boolean active;
+
     public String getId() {
         return id;
     }
@@ -20,6 +22,14 @@ public class CaseCategorySetListView {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

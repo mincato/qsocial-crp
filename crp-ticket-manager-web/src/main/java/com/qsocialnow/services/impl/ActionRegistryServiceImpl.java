@@ -55,7 +55,6 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public PageResponse<RegistryListView> findRegistriesBy(int pageNumber, int pageSize, String caseId, String keyword,
             String action, String user, Long fromDate, Long toDate) {

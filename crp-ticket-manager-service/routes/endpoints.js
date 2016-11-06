@@ -555,6 +555,33 @@ router.get('/domains/:id/trigger/:triggerId/caseCategories', function (req, res)
 	  triggerService.findCaseCategories(domainId, triggerId, asyncResponse);
 });
 
+router.get('/domains/:id/trigger/:triggerId/caseCategoriesActive', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  var triggerId = req.params.triggerId;
+	  
+	  triggerService.findCaseCategoriesActive(domainId, triggerId, asyncResponse);
+});
+
 router.get('/domains/:id/trigger/:triggerId/subjectCategories', function (req, res) {
 
 	  function asyncResponse(err,response) {
@@ -1183,30 +1210,37 @@ router.put('/teams/:id', function (req, res) {
 
 router.get('/caseCategorySets', function (req, res) {
 
-	    function asyncResponse(err,response) {
-	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
-	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+		if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
 
-	    if(response !== null) {
-	      try {
-	        res.set('Content-Type', 'application/json');
-	        res.send(gson.toJsonSync(response));
-	      } catch(ex) {
-	        res.status(500).json(ex.cause.getMessageSync());
-	      }
-	    } else {
-	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
-	    }
-
-	  }
-	  
-	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
-	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-	  var name = req.query.name ? req.query.name : null;
+		if(response !== null) {
+			try {
+				res.set('Content-Type', 'application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+	}
+    
+	var ids = req.query.ids ? req.query.ids : null;
+  
+	if (ids === null) {
+		var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
+		var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+		var name = req.query.name ? req.query.name : null;
 	    
-	  var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
-	  caseCategorySetService.findAll(pageNumber, pageSize, name,asyncResponse);
+		var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+		caseCategorySetService.findAll(pageNumber, pageSize, name,asyncResponse);
+		
+	} else {
+		var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");
+		caseCategorySetService.findByIds(ids, asyncResponse);
+	}  
 });
 
 router.get('/caseCategorySets/all', function (req, res) {
@@ -1233,6 +1267,28 @@ router.get('/caseCategorySets/all', function (req, res) {
   caseCategorySetService.findAll(asyncResponse);
 });
 
+router.get('/caseCategorySetsActive/all', function (req, res) {
+
+    function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+	
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+	
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+    }
+  
+	var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
+	caseCategorySetService.findAllActive(asyncResponse);
+});
 
 router.get('/caseCategorySets/:id', function (req, res) {
 
@@ -1259,7 +1315,7 @@ router.get('/caseCategorySets/:id', function (req, res) {
 	  caseCategorySetService.findOne(caseCategorySetId, asyncResponse);
 });
 
-router.get('/caseCategorySets/:id/categories', function (req, res) {
+router.get('/caseCategorySetsWithActiveCategories/:id', function (req, res) {
 
 	  function asyncResponse(err,response) {
 	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
@@ -1281,9 +1337,31 @@ router.get('/caseCategorySets/:id/categories', function (req, res) {
 	  
 	  var caseCategorySetId = req.params.id;	
 	  var caseCategorySetService = javaContext.getBeanSync("caseCategorySetService");	  
-	  caseCategorySetService.findCategories(caseCategorySetId, asyncResponse);
+	  caseCategorySetService.findOneWithActiveCategories(caseCategorySetId, asyncResponse);
 });
 
+router.get('/caseCategorySets/:id/categories', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  
+
+});
 
 router.put('/caseCategorySets/:id', function (req, res) {
 
@@ -1344,6 +1422,7 @@ router.post('/caseCategorySets', function (req, res) {
 	caseCategorySetService.createCaseCategorySet(caseCategorySet, asyncResponse);
 
 });
+
 
 router.get('/caseCategories/all', function (req, res) {
     function asyncResponse(err,response) {

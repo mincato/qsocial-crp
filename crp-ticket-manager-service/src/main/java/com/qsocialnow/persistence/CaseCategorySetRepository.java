@@ -34,6 +34,7 @@ public class CaseCategorySetRepository {
                 CaseCategorySetListView caseCategorySetListView = new CaseCategorySetListView();
                 caseCategorySetListView.setId(caseCategorySet.getId());
                 caseCategorySetListView.setDescription(caseCategorySet.getDescription());
+                caseCategorySetListView.setActive(caseCategorySet.getActive());
                 caseCategorySets.add(caseCategorySetListView);
             }
         } catch (Exception e) {
@@ -49,6 +50,7 @@ public class CaseCategorySetRepository {
 
             CaseCategorySet newCaseCategorySet = new CaseCategorySet();
             newCaseCategorySet.setDescription(caseCategorySet.getDescription());
+            newCaseCategorySet.setActive(caseCategorySet.getActive());
             newCaseCategorySet = caseCategorySetElasticService.indexCaseCategorySet(newCaseCategorySet, caseCategories);
             return newCaseCategorySet;
 
@@ -63,6 +65,17 @@ public class CaseCategorySetRepository {
 
         try {
             caseCategorySet = caseCategorySetElasticService.findOne(caseCategorySetId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return caseCategorySet;
+    }
+
+    public CaseCategorySet findOneWithActiveCategories(String caseCategorySetId) {
+        CaseCategorySet caseCategorySet = null;
+
+        try {
+            caseCategorySet = caseCategorySetElasticService.findOneWithActiveCategories(caseCategorySetId);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
@@ -85,6 +98,17 @@ public class CaseCategorySetRepository {
 
         try {
             caseCategorySets = caseCategorySetElasticService.findAll(null, null, null);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return caseCategorySets;
+    }
+
+    public List<CaseCategorySet> findAllActive() {
+        List<CaseCategorySet> caseCategorySets = new ArrayList<>();
+
+        try {
+            caseCategorySets = caseCategorySetElasticService.findAllActive();
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
@@ -116,4 +140,15 @@ public class CaseCategorySetRepository {
         List<CaseCategorySet> userResolversRepo = caseCategorySetElasticService.findByIds(caseCategoriesSetIds);
         return userResolversRepo;
     }
+
+    public List<CaseCategorySet> findCategoriesSetsActive(List<String> caseCategoriesSetIds) {
+        List<CaseCategorySet> userResolversRepo = caseCategorySetElasticService.findActiveByIds(caseCategoriesSetIds);
+        return userResolversRepo;
+    }
+
+    public List<CaseCategorySet> findByIds(List<String> categoriesIds) {
+        List<CaseCategorySet> result = caseCategorySetElasticService.findByIds(categoriesIds);
+        return result;
+    }
+
 }

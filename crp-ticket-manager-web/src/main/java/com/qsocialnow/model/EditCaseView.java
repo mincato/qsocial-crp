@@ -40,6 +40,10 @@ public class EditCaseView {
 
     private List<Subject> subjectOptions;
 
+    private List<CaseCategorySet> allTriggerCategories;
+
+    private List<CaseCategory> disassociatedCategories;
+
     private Media source;
 
     private String openCaseDeepLinkUrl = null;
@@ -152,12 +156,28 @@ public class EditCaseView {
         this.subjectCategoriesSet = subjectCategoriesSet;
     }
 
+    public List<CaseCategorySet> getAllTriggerCategories() {
+        return allTriggerCategories;
+    }
+
+    public void setAllTriggerCategories(List<CaseCategorySet> allTriggerCategories) {
+        this.allTriggerCategories = allTriggerCategories;
+    }
+
     public String getOpenCaseDeepLinkUrl() {
         return openCaseDeepLinkUrl;
     }
 
     public void setOpenCaseDeepLinkUrl(String openCaseDeepLinkUrl) {
         this.openCaseDeepLinkUrl = openCaseDeepLinkUrl;
+    }
+
+    public List<CaseCategory> getDisassociatedCategories() {
+        return disassociatedCategories;
+    }
+
+    public void setDisassociatedCategories(List<CaseCategory> disassociatedCategories) {
+        this.disassociatedCategories = disassociatedCategories;
     }
 
     public String getTeamDescription() {

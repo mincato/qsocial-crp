@@ -19,9 +19,9 @@ import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.filter.FilterNormalizer;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.TriggerListRequest;
-import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.CaseCategorySetRepository;
 import com.qsocialnow.persistence.SubjectCategorySetRepository;
 import com.qsocialnow.persistence.TriggerRepository;
@@ -120,6 +120,25 @@ public class TriggerService {
             Trigger trigger = triggerRepository.findOne(triggerId);
             if (CollectionUtils.isNotEmpty(trigger.getCaseCategoriesSetIds())) {
                 caseCategoriesSet = caseCategorySetRepository.findCategoriesSets(trigger.getCaseCategoriesSetIds());
+                caseCategoriesSet.stream().forEach(caseCategorySet -> {
+                    caseCategorySet.setCategories(caseCategorySetRepository.findCategories(caseCategorySet.getId()));
+                });
+            }
+        } catch (Exception e) {
+            log.error("There was an error getting subject categories");
+            throw new RuntimeException(e.getMessage());
+        }
+        return caseCategoriesSet;
+    }
+
+    public List<CaseCategorySet> findCaseCategoriesActive(String domainId, String triggerId) {
+
+        List<CaseCategorySet> caseCategoriesSet = new ArrayList<>();
+        try {
+            Trigger trigger = triggerRepository.findOne(triggerId);
+            if (CollectionUtils.isNotEmpty(trigger.getCaseCategoriesSetIds())) {
+                caseCategoriesSet = caseCategorySetRepository.findCategoriesSetsActive(trigger
+                        .getCaseCategoriesSetIds());
                 caseCategoriesSet.stream().forEach(caseCategorySet -> {
                     caseCategorySet.setCategories(caseCategorySetRepository.findCategories(caseCategorySet.getId()));
                 });
