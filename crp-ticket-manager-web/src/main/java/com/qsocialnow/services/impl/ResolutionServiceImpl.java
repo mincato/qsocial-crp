@@ -97,4 +97,19 @@ public class ResolutionServiceImpl implements ResolutionService {
         }
     }
 
+    public Resolution findOne(String domainId, String resolutionId) {
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/resolutions/").path(resolutionId);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            Resolution resolution = restTemplate.getForObject(builder.toUriString(), Resolution.class);
+            return resolution;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call resolution service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }

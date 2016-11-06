@@ -14,6 +14,10 @@ public class FilterView {
 
     private Long endDateTime;
 
+    private Long startTime;
+
+    private Long endTime;
+
     private Long followersGreaterThan;
 
     private Long followersLessThan;
@@ -50,6 +54,22 @@ public class FilterView {
 
     public void setEndDateTime(Long endDateTime) {
         this.endDateTime = endDateTime;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
     }
 
     public Long getFollowersGreaterThan() {
