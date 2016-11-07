@@ -30,4 +30,6 @@ public interface TriggerService {
     List<CaseCategorySet> findActiveCategories(String domainId, String triggerId);
 
     List<SubjectCategorySet> findSubjectCategories(String domainId, String triggerId);
+
+    List<TriggerListView> findAllActive(String domainId);
 }

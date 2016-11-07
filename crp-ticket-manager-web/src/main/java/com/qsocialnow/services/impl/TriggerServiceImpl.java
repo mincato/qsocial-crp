@@ -96,6 +96,29 @@ public class TriggerServiceImpl implements TriggerService {
     }
 
     @Override
+    public List<TriggerListView> findAllActive(String domainId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/triggerActive");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<TriggerListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<TriggerListView>>() {
+                    });
+
+            List<TriggerListView> triggers = response.getBody();
+            return triggers;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call domain service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Trigger findOne(String domainId, String triggerId) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();

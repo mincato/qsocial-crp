@@ -78,6 +78,11 @@ public class TriggerService {
         return page;
     }
 
+    public List<TriggerListView> findAllActive(String domainId) {
+        List<TriggerListView> triggers = triggerRepository.findAllActive(domainId);
+        return triggers;
+    }
+
     public Trigger findOne(String domainId, String triggerId) {
         Trigger trigger = triggerRepository.findWithSegments(triggerId);
         return trigger;

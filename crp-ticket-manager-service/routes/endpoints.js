@@ -525,6 +525,32 @@ router.get('/domains/:id/trigger', function (req, res) {
 	  triggerService.findAll(domainId, pageNumber, pageSize, name, status, fromDate, toDate, asyncResponse);
 });
 
+router.get('/domains/:id/triggerActive', function (req, res) {
+
+	  function asyncResponse(err,responseTriggers) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(responseTriggers !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(responseTriggers));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  
+	  triggerService.findAllActive(domainId, asyncResponse);
+});
+
 router.get('/domains/:id/trigger/:triggerId', function (req, res) {
 
 	  function asyncResponse(err,response) {
