@@ -47,10 +47,11 @@ public class SubjectCategoryMapping implements Mapping<SubjectCategoryType, Subj
 
     @Override
     public SubjectCategoryType getDocumentType(SubjectCategory document) {
-        SubjectCategoryType SubjectCategoryType = new SubjectCategoryType();
-        SubjectCategoryType.setId(document.getId());
-        SubjectCategoryType.setDescription(document.getDescription());
-        return SubjectCategoryType;
+        SubjectCategoryType subjectCategoryType = new SubjectCategoryType();
+        subjectCategoryType.setId(document.getId());
+        subjectCategoryType.setDescription(document.getDescription());
+        subjectCategoryType.setActive(document.isActive());
+        return subjectCategoryType;
     }
 
     @Override
@@ -58,6 +59,7 @@ public class SubjectCategoryMapping implements Mapping<SubjectCategoryType, Subj
         SubjectCategory subjectCategory = new SubjectCategory();
         subjectCategory.setId(documentType.getId());
         subjectCategory.setDescription(documentType.getDescription());
+        subjectCategory.setActive(documentType.isActive());
         return subjectCategory;
     }
 }

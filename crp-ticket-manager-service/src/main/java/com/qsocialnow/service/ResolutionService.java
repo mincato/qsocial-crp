@@ -48,4 +48,13 @@ public class ResolutionService {
         }
     }
 
+    public Resolution findOne(String domainId, String resolutionId) {
+        try {
+            return resolutionRepository.findOne(domainId, resolutionId);
+        } catch (Exception e) {
+            log.error("There was an error getting resolution: " + resolutionId, e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
 }

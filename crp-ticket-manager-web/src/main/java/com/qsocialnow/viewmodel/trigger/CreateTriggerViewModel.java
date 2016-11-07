@@ -199,7 +199,7 @@ public class CreateTriggerViewModel implements Serializable {
 
     private void initCaseCategorySetListView(List<TriggerCaseCategorySetView> triggerCaseCategorySets) {
         caseCategorySetListView = new ListView<CaseCategorySet>();
-        caseCategorySetListView.setList(caseCategorySetService.findAll());
+        caseCategorySetListView.setList(caseCategorySetService.findAllActive());
         caseCategorySetListView.setFilteredList(new ArrayList<CaseCategorySet>());
         if (triggerCaseCategorySets != null) {
             caseCategorySetListView.getFilteredList().addAll(
@@ -222,7 +222,7 @@ public class CreateTriggerViewModel implements Serializable {
 
     private void initSubjectCategorySetListView(List<TriggerSubjectCategorySetView> triggerSubjectCategorySets) {
         subjectCategorySetListView = new ListView<SubjectCategorySet>();
-        subjectCategorySetListView.setList(subjectCategorySetService.findAll());
+        subjectCategorySetListView.setList(subjectCategorySetService.findAllActive());
         subjectCategorySetListView.setFilteredList(new ArrayList<SubjectCategorySet>());
         if (triggerSubjectCategorySets != null) {
             subjectCategorySetListView

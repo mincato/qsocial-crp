@@ -42,7 +42,8 @@
 					<tr>
 						<td><span zclass="btn btn-social-icon" sclass="@load(c:cat('btn-',each.media.icon))"><i sclass="@load('fa fa-'.concat(each.media.icon))" /></span></td>
 						<td class="list-text-column">
-							<a label="@load(each.identifier)" class="btn-list-action"  onClick="@command('openEdit', userresolver=each.id)"></a>
+							<a label="@load(each.identifier)" class="btn-list-action"
+								onClick="@command('openEdit', userresolver=each.id)"></a>
 						</td>
 						<td>${c:l(c:cat('userresolver.active.',each.active))}</td>
 					</tr>

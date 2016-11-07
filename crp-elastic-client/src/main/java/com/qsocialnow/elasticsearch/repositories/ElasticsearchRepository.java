@@ -325,8 +325,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public <E> SearchResponse<E> queryByIds(Mapping<T, E> mapping, String sortField, List<String> ids) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        if (sortField != null)
+        if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
 
         searchSourceBuilder.query(QueryBuilders.idsQuery(mapping.getType()).addIds(ids));
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex()).build();
@@ -337,11 +339,15 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             String searchField, String searchValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        if (size > 0)
+        if (size > 0) {
             searchSourceBuilder.from(from).size(size);
+        } else {
+            searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
+        }
 
-        if (sortField != null)
+        if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
 
         searchSourceBuilder.query(QueryBuilders.matchQuery(searchField, searchValue));
 
@@ -355,10 +361,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             List<ShouldFilter> shouldFilters) {
 
         SortOrder sortOrderValue;
-        if (sortOrder)
+        if (sortOrder) {
             sortOrderValue = SortOrder.ASC;
-        else
+        } else {
             sortOrderValue = SortOrder.DESC;
+        }
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size);
@@ -731,9 +738,46 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (from != null) {
             searchSourceBuilder.from(from);
         }
-        if (size != null) {
+        if (size == null) {
+            searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
+        } else {
             searchSourceBuilder.size(size);
         }
+        if (sortField != null) {
+            searchSourceBuilder.sort(sortField, sortOrder);
+        }
+        if (filters != null) {
+            searchSourceBuilder.query(filters);
+        }
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RepositoryException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @SuppressWarnings({ "deprecation", "unchecked" })
+    @Override
+    public <E> SearchResponse<E> searchWithFilters(String sortField, SortOrder sortOrder, BoolQueryBuilder filters,
+            Mapping<T, E> mapping) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
         if (sortField != null) {
             searchSourceBuilder.sort(sortField, sortOrder);
         }

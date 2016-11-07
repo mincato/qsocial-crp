@@ -15,6 +15,8 @@ public class CaseCategorySetView {
     @NotBlank(message = "app.field.empty.validation")
     private String description;
 
+    private boolean active;
+
     private List<CaseCategoryView> categories;
 
     public CaseCategorySetView() {
@@ -25,6 +27,7 @@ public class CaseCategorySetView {
         super();
         this.id = caseCategorySet.getId();
         this.description = caseCategorySet.getDescription();
+        this.active = caseCategorySet.isActive();
         if (caseCategorySet.getCategories() != null && caseCategorySet.getCategories().size() > 0) {
             this.setCategories(caseCategorySet.getCategories().stream().map(category -> {
                 return new CaseCategoryView(category);
@@ -48,6 +51,14 @@ public class CaseCategorySetView {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public List<CaseCategoryView> getCategories() {

@@ -47,18 +47,19 @@ public class TriggerRepository implements ReportRepository {
         try {
             List<Trigger> triggersRepo = triggerElasticService.getTriggers(domainId, pageRequest.getOffset(),
                     pageRequest.getLimit(), triggerListRequest);
+            copyTriggerRepoToTriggerListView(triggers, triggersRepo);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return triggers;
+    }
 
-            for (Trigger triggerRepo : triggersRepo) {
-                TriggerListView triggerListView = new TriggerListView();
-                triggerListView.setId(triggerRepo.getId());
-                triggerListView.setName(triggerRepo.getName());
-                triggerListView.setDescription(triggerRepo.getDescription());
-                triggerListView.setStatus(triggerRepo.getStatus());
-                triggerListView.setFromDate(triggerRepo.getInit());
-                triggerListView.setToDate(triggerRepo.getEnd());
-                triggerListView.setSegments(triggerRepo.getSegments());
-                triggers.add(triggerListView);
-            }
+    public List<TriggerListView> findAllActive(String domainId) {
+        List<TriggerListView> triggers = new ArrayList<>();
+
+        try {
+            List<Trigger> triggersRepo = triggerElasticService.getActiveTriggers(domainId);
+            copyTriggerRepoToTriggerListView(triggers, triggersRepo);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
@@ -132,4 +133,17 @@ public class TriggerRepository implements ReportRepository {
         return triggerElasticService.getAllTriggersAsMap();
     }
 
+    private void copyTriggerRepoToTriggerListView(List<TriggerListView> triggers, List<Trigger> triggersRepo) {
+        for (Trigger triggerRepo : triggersRepo) {
+            TriggerListView triggerListView = new TriggerListView();
+            triggerListView.setId(triggerRepo.getId());
+            triggerListView.setName(triggerRepo.getName());
+            triggerListView.setDescription(triggerRepo.getDescription());
+            triggerListView.setStatus(triggerRepo.getStatus());
+            triggerListView.setFromDate(triggerRepo.getInit());
+            triggerListView.setToDate(triggerRepo.getEnd());
+            triggerListView.setSegments(triggerRepo.getSegments());
+            triggers.add(triggerListView);
+        }
+    }
 }

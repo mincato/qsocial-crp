@@ -14,11 +14,17 @@ public interface SubjectCategorySetService {
 
     SubjectCategorySet findOne(String subjectCategorySetId);
 
+    SubjectCategorySet findOneWithActiveCategories(String subjectCategorySetId);
+
     SubjectCategorySet update(SubjectCategorySet currentSubjectCategorySet);
 
     PageResponse<SubjectCategorySetListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
 
     List<SubjectCategorySet> findAll();
+
+    List<SubjectCategorySet> findByIds(List<String> ids);
+
+    List<SubjectCategorySet> findAllActive();
 
     List<SubjectCategory> findAllCategories();
 }

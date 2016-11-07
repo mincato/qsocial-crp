@@ -11,6 +11,8 @@ public class SubjectCategoryView {
     @NotBlank(message = "app.field.empty.validation")
     private String description;
 
+    private boolean active = true;
+
     public SubjectCategoryView() {
         super();
     }
@@ -35,5 +37,13 @@ public class SubjectCategoryView {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

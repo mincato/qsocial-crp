@@ -24,6 +24,15 @@
 						    				<label value="@load(vmsgs[name])" />
 						    			</x:span>
 									</x:div>
+									
+									<x:div class="form-group">
+										<n:label class="control-label">
+											${labels.domain.active.label}
+										</n:label>
+										<n:div class="form-switch form-control-static">
+											<checkbox zclass="switch-success" checked="@bind(domain.domain.active)" /> 
+										</n:div>
+									</x:div>									
 								
 									<x:div class="form-group" sclass="@load(empty vmsgs[thematics] ? 'form-group' : 'form-group has-error')">
 										<n:label class="control-label">${labels.domain.thematics.$}:</n:label>

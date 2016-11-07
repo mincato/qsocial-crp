@@ -128,6 +128,22 @@ public class ResolutionService {
         return resolutions;
     }
 
+    public Resolution findResolution(String domainId, String resolutionId) {
+        RepositoryFactory<ResolutionType> esfactory = new RepositoryFactory<ResolutionType>(configurator);
+        Repository<ResolutionType> repository = esfactory.initManager();
+        repository.initClient();
+        ResolutionMapping mapping = ResolutionMapping.getInstance(indexConfiguration.getIndexName());
+        mapping.setIdParent(domainId);
+        QueryBuilder filters = QueryBuilders.matchQuery("_id", resolutionId);
+        SearchResponse<Resolution> response = repository.searchChildMappingWithFilters(filters, mapping);
+
+        List<Resolution> resolutions = response.getSources();
+        if (!CollectionUtils.isEmpty(resolutions)) {
+            return resolutions.get(0);
+        }
+        return null;
+    }
+
     private List<Resolution> getActiveResolutions(String domainId, Repository<ResolutionType> repository) {
         ResolutionMapping mapping = ResolutionMapping.getInstance(indexConfiguration.getIndexName());
         mapping.setIdParent(domainId);
@@ -176,7 +192,6 @@ public class ResolutionService {
             Resolution resolution = oldResolutions.stream().filter(res -> res.getId().equals(resolutionToRemove))
                     .findFirst().get();
             deactivateResolution(domainId, resolution, repository);
-            // amp deleteResolution(domainId, resolutionsToRemove, repository);
         }
         repository.closeClient();
 

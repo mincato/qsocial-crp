@@ -15,7 +15,7 @@
 						<div zclass="pane equal">
 						    <n:form class="form-inline text-center">								
 								<n:div class="form-group">
-	    							<listbox mold="select" sclass="form-control" model="@load(categoryVm.subjectCategorySet.categorySet.categories)"
+	    							<listbox mold="select" sclass="form-control" model="@load(categoryVm.activeCategories)"
 				 						multiple="true"
 										checkmark="true"
 										selectedItems="@load(categoryVm.subjectCategorySet.categories) @save(categoryVm.subjectCategorySet.categories, before='save')">

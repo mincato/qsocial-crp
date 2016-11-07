@@ -118,6 +118,24 @@ public class DomainService {
         return domains;
     }
 
+    public List<Domain> getActiveDomains() {
+        RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
+        Repository<DomainType> repository = esfactory.initManager();
+        repository.initClient();
+
+        DomainMapMapping mapping = DomainMapMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
+
+        SearchResponse<Domain> response = repository.searchWithFilters(filters, mapping);
+
+        List<Domain> domains = response.getSources();
+
+        repository.closeClient();
+        return domains;
+    }
+
     public Map<String, String> getAllDomainsAsMap() {
         RepositoryFactory<DomainType> esfactory = new RepositoryFactory<DomainType>(configurator);
         Repository<DomainType> repository = esfactory.initManager();

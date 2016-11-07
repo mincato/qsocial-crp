@@ -6,7 +6,7 @@ public class UserResolver extends BaseUserResolver {
 
     private SourceCredentials credentials;
 
-    private Boolean active;
+    private boolean active;
 
     private String sourceId;
 
@@ -18,11 +18,11 @@ public class UserResolver extends BaseUserResolver {
         this.credentials = credentials;
     }
 
-    public Boolean getActive() {
+    public boolean getActive() {
         return active;
     }
 
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
