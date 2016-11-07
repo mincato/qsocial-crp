@@ -13,6 +13,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
@@ -20,9 +21,14 @@ import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.ListModelList;
 
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.config.AdminUnit;
+import com.qsocialnow.common.model.config.BaseAdminUnit;
 import com.qsocialnow.common.model.config.CaseCategory;
+import com.qsocialnow.common.model.config.Category;
+import com.qsocialnow.common.model.config.CategoryGroup;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.Media;
+import com.qsocialnow.common.model.config.NameByLanguage;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.Series;
 import com.qsocialnow.common.model.config.SubSeries;
@@ -30,14 +36,20 @@ import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
+import com.qsocialnow.common.model.config.WordFilter;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
-import com.qsocialnow.model.BaseOptionElement;
+import com.qsocialnow.model.AdmUnitFilterView;
+import com.qsocialnow.model.CategoryFilterView;
 import com.qsocialnow.model.Connotation;
+import com.qsocialnow.model.ConnotationView;
 import com.qsocialnow.model.FilterView;
 import com.qsocialnow.model.Language;
+import com.qsocialnow.model.LanguageView;
+import com.qsocialnow.model.MediaView;
 import com.qsocialnow.security.LoginConfig;
+import com.qsocialnow.services.AutocompleteService;
 import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
@@ -50,8 +62,6 @@ import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
-
-    private static final String CASES_LIST_FILTER_LABEL = "cases.list.filter.";
 
     private static final String NOT_ID_ITEM_VALUE = "NOT_ID";
 
@@ -154,32 +164,24 @@ public class CasesViewModel implements Serializable {
     private SubjectCategory subjectCategory;
 
     private FilterView filterView;
+    
+    private List<MediaView> mediaTypes;
 
-    private List<BaseOptionElement> sourceOptions;
+    private List<LanguageView> languages;
 
-    private BaseOptionElement source;
-
-    private List<BaseOptionElement> languageOptions;
-
-    private BaseOptionElement language;
-
-    private List<BaseOptionElement> connotationOptions;
-
-    private BaseOptionElement connotation;
-
+    private List<ConnotationView> connotations;
+    
+    private boolean enableAddAdmUnit = true;
+    
     private ListModelList<Thematic> thematicsOptions = new ListModelList<>();
 
     private ListModelList<Series> serieOptions = new ListModelList<>();
 
     private ListModelList<SubSeries> subSerieOptions = new ListModelList<>();
-
-    private String text;
-
-    private String mentions;
-
-    private String hashTags;
-
-    private String authors;
+    
+    private List<CategoryGroup> categoryGroupOptions = new ArrayList<>();
+    
+    private AutocompleteListModel<AdminUnit> adminUnits;
 
     @WireVariable
     private UserSessionService userSessionService;
@@ -204,7 +206,10 @@ public class CasesViewModel implements Serializable {
 
     @WireVariable
     private ThematicService thematicService;
-
+    
+    @WireVariable
+    private AutocompleteService<AdminUnit> adminUnitsAutocompleteService;
+    
     @Init
     public void init() {
         this.initUserInformation();
@@ -217,9 +222,12 @@ public class CasesViewModel implements Serializable {
         this.priorityOptions = getPriorityOptionsList();
         this.caseCategoriesOptions = getCaseCategoriesOptionsList();
         this.subjectCategoriesOptions = getSubjectCategoriesOptionsList();
-        this.sourceOptions = getSourceOptionsList();
-        this.languageOptions = getLanguageOptionsList();
-        this.connotationOptions = getConnotationOptionsList();
+        categoryGroupOptions.clear();
+        initMediaTypesOptions();
+        initLanguages();
+        initConnotations();
+        this.adminUnits = new AutocompleteListModel<AdminUnit>(adminUnitsAutocompleteService,
+                userSessionService.getLanguage());
         this.thematicsOptions = getThematicsOptionsList();
 
         findCases();
@@ -285,7 +293,7 @@ public class CasesViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "serieOptions", "subSerieOptions" })
+    @NotifyChange({ "serieOptions","categoryGroupOptions", "subSerieOptions" })
     public void selectThematic(@BindingParam("fxFilter") FilterView fxFilter) {
         serieOptions.clear();
         if (fxFilter.getThematic() != null && fxFilter.getThematic().getId() != null && serieOptions.isEmpty()) {
@@ -293,12 +301,18 @@ public class CasesViewModel implements Serializable {
             serieOptions.addAll(fxFilter.getThematic().getSeries());
         }
         fxFilter.setSerie(null);
-        selectSerie(fxFilter);
-        BindUtils.postNotifyChange(null, null, fxFilter, "serie");
+        categoryGroupOptions.clear();
+        if (fxFilter.getSerie() != null && fxFilter.getSerie().getId() != null && categoryGroupOptions.isEmpty()) {
+            categoryGroupOptions.addAll(thematicService.findCategoriesBySerieId(fxFilter.getThematic().getId(),
+                    fxFilter.getSerie().getId()));
+        }
+        fxFilter.getFilterCategories().clear();
+        BindUtils.postNotifyChange(null, null, fxFilter, "subSerie");
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
     }
 
     @Command
-    @NotifyChange({ "subSerieOptions" })
+    @NotifyChange({ "subSerieOptions", "categoryGroupOptions" })
     public void selectSerie(@BindingParam("fxFilter") FilterView fxFilter) {
         subSerieOptions.clear();
         if (fxFilter.getSerie() != null && fxFilter.getSerie().getId() != null && subSerieOptions.isEmpty()) {
@@ -306,10 +320,123 @@ public class CasesViewModel implements Serializable {
             subSerieOptions.addAll(fxFilter.getSerie().getSubSeries());
         }
         fxFilter.setSubSerie(null);
+        categoryGroupOptions.clear();
+        if (fxFilter.getSerie() != null && fxFilter.getSerie().getId() != null && categoryGroupOptions.isEmpty()) {
+            categoryGroupOptions.addAll(thematicService.findCategoriesBySerieId(fxFilter.getThematic().getId(),
+                    fxFilter.getSerie().getId()));
+        }
         BindUtils.postNotifyChange(null, null, fxFilter, "subSerie");
         BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
     }
+    
+    @Command
+    public void addFilterWord(@BindingParam("fxFilter") FilterView fxFilter) {
+        fxFilter.getFilterWords().add(new WordFilter());
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterWords");
+    }
+    
+    @Command
+    @NotifyChange("enableAddAdmUnit")
+    public void addFilterAdmUnit(@BindingParam("fxFilter") FilterView fxFilter) {
+        AdmUnitFilterView admUnitFilter = new AdmUnitFilterView();
+        admUnitFilter.setEditingStatus(true);
+        fxFilter.getAdmUnitFilters().add(admUnitFilter);
+        this.enableAddAdmUnit = false;
+        BindUtils.postNotifyChange(null, null, fxFilter, "admUnitFilters");
+    }
 
+    @Command
+    @NotifyChange("enableAddAdmUnit")
+    public void confirmAdmUnit(@BindingParam("index") int idx, @BindingParam("fxFilter") FilterView fxFilter) {
+        AdmUnitFilterView admUnit = fxFilter.getAdmUnitFilters().get(idx);
+        admUnit.setEditingStatus(Boolean.FALSE);
+        this.enableAddAdmUnit = true;
+        BindUtils.postNotifyChange(null, null, fxFilter, "admUnitFilters");
+    }
+
+    @Command
+    @NotifyChange("enableAddAdmUnit")
+    public void removeAdmUnit(@BindingParam("index") int idx, @BindingParam("fxFilter") FilterView fxFilter) {
+        fxFilter.getAdmUnitFilters().remove(idx);
+        this.enableAddAdmUnit = true;
+        BindUtils.postNotifyChange(null, null, fxFilter, "admUnitFilters");
+    }
+
+    @Command
+    public String createAdmUnitValue(AdminUnit adminUnit) {
+        StringBuilder sb = new StringBuilder();
+        addAdmUnitText(sb, adminUnit);
+        return sb.toString();
+    }
+
+    @Command
+    public String createAdmUnitDescription(AdminUnit adminUnit) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < adminUnit.getParents().size(); i++) {
+            BaseAdminUnit baseAdminUnit = adminUnit.getParents().get(i);
+            if (i > 0 && i < adminUnit.getParents().size() - 1) {
+                sb.append(" - ");
+            }
+            addAdmUnitText(sb, baseAdminUnit);
+        }
+        return sb.toString();
+    }
+    
+    @Command
+    public void selectGroupCategory(@BindingParam("filter") CategoryFilterView filterCategory) {
+        filterCategory.getCategoryOptions().clear();
+        filterCategory.setCategories(null);
+        if (filterCategory.getCategoryGroup() != null && filterCategory.getCategoryOptions().isEmpty()) {
+            filterCategory.getCategoryOptions().addAll(filterCategory.getCategoryGroup().getCategorias());
+        }
+        Map<String, Object> args = new HashMap<>();
+        args.put("filterCategory", filterCategory);
+        Executions.createComponents("/pages/triggers/create/choose-categories.zul", null, args);
+        BindUtils.postNotifyChange(null, null, filterCategory, "categories");
+    }
+    
+    @Command
+    public String createCategoryName(NameByLanguage category) {
+        String language = userSessionService.getLanguage();
+        return category.getNameByLanguage(language);
+    }
+    
+    @Command
+    public void addFilterCategory(@BindingParam("fxFilter") FilterView fxFilter) {
+        fxFilter.getFilterCategories().add(new CategoryFilterView());
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
+    }
+
+    @Command
+    public void removeFilterCategory(@BindingParam("fxFilter") FilterView fxFilter,
+            @BindingParam("filter") CategoryFilterView filter) {
+        fxFilter.getFilterCategories().remove(filter);
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
+    }
+
+    @Command
+    public void removeCategory(@BindingParam("filter") CategoryFilterView filter,
+            @BindingParam("category") Category category) {
+        filter.getCategories().remove(category);
+        BindUtils.postNotifyChange(null, null, filter, "categories");
+    }
+
+    @Command
+    public void editCategories(@BindingParam("filter") CategoryFilterView filter,
+            @BindingParam("category") Category category) {
+        Map<String, Object> args = new HashMap<>();
+        args.put("filterCategory", filter);
+        Executions.createComponents("/pages/triggers/create/choose-categories.zul", null, args);
+        BindUtils.postNotifyChange(null, null, filter, "categories");
+    }
+    
+    private void addAdmUnitText(StringBuilder sb, BaseAdminUnit adminUnit) {
+        sb.append(adminUnit.getTranslation());
+        sb.append("(");
+        sb.append(Labels.getLabel("trigger.criteria.admUnit.value." + adminUnit.getType().name()));
+        sb.append(")");
+    }
+    
     private Map<String, String> getFilters() {
         Map<String, String> filters = new HashMap<String, String>();
         if (this.title != null && !this.title.isEmpty()) {
@@ -493,55 +620,34 @@ public class CasesViewModel implements Serializable {
         return users;
     }
 
-    private List<BaseOptionElement> getSourceOptionsList() {
-        List<BaseOptionElement> options = new ArrayList<>();
-        for (Media media : Media.values()) {
-            BaseOptionElement option = new BaseOptionElement();
-            option.setId(String.valueOf(media.getValue()));
-            option.setText(media.getName());
-            options.add(option);
-        }
-        if (!options.isEmpty()) {
-            BaseOptionElement option = new BaseOptionElement();
-            option.setId(NOT_ID_ITEM_VALUE);
-            option.setText(Labels.getLabel(CASES_ALL_LABEL_KEY));
-            options.add(0, option);
-        }
-        return options;
+    private void initMediaTypesOptions() {
+    	 mediaTypes = new ArrayList<>();
+         for (Media media : Media.values()) {
+             MediaView mediaView = new MediaView();
+             mediaView.setMedia(media);
+             mediaView.setChecked(false);
+             mediaTypes.add(mediaView);
+         }
     }
 
-    private List<BaseOptionElement> getLanguageOptionsList() {
-        List<BaseOptionElement> options = new ArrayList<>();
+    private void initLanguages() {
+        languages = new ArrayList<>();
         for (Language language : Language.values()) {
-            BaseOptionElement option = new BaseOptionElement();
-            option.setId(String.valueOf(language.getValue()));
-            option.setText(Labels.getLabel(CASES_LIST_FILTER_LABEL + language.getImage()));
-            options.add(option);
+            LanguageView languageView = new LanguageView();
+            languageView.setLanguage(language);
+            languageView.setChecked(false);
+            languages.add(languageView);
         }
-        if (!options.isEmpty()) {
-            BaseOptionElement option = new BaseOptionElement();
-            option.setId(NOT_ID_ITEM_VALUE);
-            option.setText(Labels.getLabel(CASES_ALL_LABEL_KEY));
-            options.add(0, option);
-        }
-        return options;
     }
-
-    private List<BaseOptionElement> getConnotationOptionsList() {
-        List<BaseOptionElement> options = new ArrayList<>();
+    
+    private void initConnotations() {
+        connotations = new ArrayList<>();
         for (Connotation connotation : Connotation.values()) {
-            BaseOptionElement option = new BaseOptionElement();
-            option.setId(String.valueOf(connotation.getValue()));
-            option.setText(Labels.getLabel(CASES_LIST_FILTER_LABEL + connotation.getName()));
-            options.add(option);
+            ConnotationView connotationView = new ConnotationView();
+            connotationView.setConnotation(connotation);
+            connotationView.setChecked(false);
+            connotations.add(connotationView);
         }
-        if (!options.isEmpty()) {
-            BaseOptionElement option = new BaseOptionElement();
-            option.setId(NOT_ID_ITEM_VALUE);
-            option.setText(Labels.getLabel(CASES_ALL_LABEL_KEY));
-            options.add(0, option);
-        }
-        return options;
     }
 
     public List<CaseListView> getCases() {
@@ -781,7 +887,11 @@ public class CasesViewModel implements Serializable {
         this.subjectCategory = subjectCategory;
     }
 
-    public FilterView getFilter() {
+    public List<CategoryGroup> getCategoryGroupOptions() {
+		return categoryGroupOptions;
+	}
+
+	public FilterView getFilter() {
         return filterView;
     }
 
@@ -789,43 +899,23 @@ public class CasesViewModel implements Serializable {
         this.filterView = filterView;
     }
 
-    public List<BaseOptionElement> getSourceOptions() {
-        return sourceOptions;
-    }
+    public List<MediaView> getMediaTypes() {
+		return mediaTypes;
+	}
 
-    public BaseOptionElement getSource() {
-        return source;
-    }
+    public List<LanguageView> getLanguages() {
+		return languages;
+	}
 
-    public void setSource(BaseOptionElement source) {
-        this.source = source;
-    }
+	public List<ConnotationView> getConnotations() {
+		return connotations;
+	}
 
-    public BaseOptionElement getLanguage() {
-        return language;
-    }
+    public boolean isEnableAddAdmUnit() {
+		return enableAddAdmUnit;
+	}
 
-    public void setLanguage(BaseOptionElement language) {
-        this.language = language;
-    }
-
-    public List<BaseOptionElement> getLanguageOptions() {
-        return languageOptions;
-    }
-
-    public BaseOptionElement getConnotation() {
-        return connotation;
-    }
-
-    public void setConnotation(BaseOptionElement connotation) {
-        this.connotation = connotation;
-    }
-
-    public List<BaseOptionElement> getConnotationOptions() {
-        return connotationOptions;
-    }
-
-    public ListModelList<Thematic> getThematicsOptions() {
+	public ListModelList<Thematic> getThematicsOptions() {
         return thematicsOptions;
     }
 
@@ -836,36 +926,9 @@ public class CasesViewModel implements Serializable {
     public ListModelList<SubSeries> getSubSerieOptions() {
         return subSerieOptions;
     }
-
-    public String getText() {
-        return text;
+    
+    public AutocompleteListModel<AdminUnit> getAdminUnits() {
+        return adminUnits;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public String getMentions() {
-        return mentions;
-    }
-
-    public void setMentions(String mentions) {
-        this.mentions = mentions;
-    }
-
-    public String getHashTags() {
-        return hashTags;
-    }
-
-    public void setHashTags(String hashTags) {
-        this.hashTags = hashTags;
-    }
-
-    public String getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(String authors) {
-        this.authors = authors;
-    }
 }
