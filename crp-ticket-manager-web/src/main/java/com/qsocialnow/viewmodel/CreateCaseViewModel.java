@@ -75,7 +75,7 @@ public class CreateCaseViewModel implements Serializable {
     @NotifyChange("segments")
     public void onSelectTrigger(@BindingParam("domain") DomainListView domain,
             @BindingParam("trigger") TriggerListView trigger) {
-        this.segments = triggerService.findSegments(domain.getId(), trigger.getId());
+        this.segments = triggerService.findActiveSegments(domain.getId(), trigger.getId());
     }
 
     @Command

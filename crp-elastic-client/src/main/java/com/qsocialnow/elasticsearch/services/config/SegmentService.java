@@ -78,11 +78,34 @@ public class SegmentService {
         return segments;
     }
 
+    public List<Segment> getActiveSegments(String triggerId) {
+        RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
+        Repository<SegmentType> repository = esfactory.initManager();
+        repository.initClient();
+
+        List<Segment> segments = getActiveSegments(triggerId, repository);
+
+        repository.closeClient();
+        return segments;
+    }
+
     private List<Segment> getSegments(String triggerId, Repository<SegmentType> repository) {
         SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
 
         BoolQueryBuilder filters = QueryBuilders.boolQuery();
         filters = filters.must(QueryBuilders.matchQuery("triggerId", triggerId));
+        SearchResponse<Segment> response = repository.searchWithFilters(filters, mapping);
+
+        List<Segment> segments = response.getSources();
+        return segments;
+    }
+
+    private List<Segment> getActiveSegments(String triggerId, Repository<SegmentType> repository) {
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("triggerId", triggerId));
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
         SearchResponse<Segment> response = repository.searchWithFilters(filters, mapping);
 
         List<Segment> segments = response.getSources();
@@ -127,27 +150,32 @@ public class SegmentService {
                 }
             }
         }
-        for (String segmentsToRemove : oldSegmentIds) {
-            deleteSegment(segmentsToRemove, repository);
+        for (String segmentToRemove : oldSegmentIds) {
+            Segment segment = oldSegments.stream().filter(seg -> seg.getId().equals(segmentToRemove)).findFirst().get();
+            deactivateSegment(triggerId, segment, repository);
         }
         repository.closeClient();
-
     }
 
-    private void deleteSegment(String segmentId, Repository<SegmentType> repository) {
+    private String deactivateSegment(String triggerId, Segment segment, Repository<SegmentType> repository) {
         SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
-        repository.removeMapping(segmentId, mapping);
+
+        segment.setActive(false);
+        SegmentType documentIndexed = mapping.getDocumentType(segment);
+
+        documentIndexed.setTriggerId(triggerId);
+        String response = repository.updateMapping(segment.getId(), mapping, documentIndexed);
+
+        return response;
     }
 
     private String updateSegment(String triggerId, Segment segment, Repository<SegmentType> repository) {
         SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
 
-        // index document
         SegmentType documentIndexed = mapping.getDocumentType(segment);
         documentIndexed.setTriggerId(triggerId);
         String response = repository.updateMapping(segment.getId(), mapping, documentIndexed);
         return response;
-
     }
 
     public Map<String, String> getAllSegmentsAsMap() {

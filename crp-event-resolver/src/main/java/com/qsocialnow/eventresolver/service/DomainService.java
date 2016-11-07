@@ -25,7 +25,7 @@ public class DomainService {
             LOGGER.info("======== Recovering Domain from Configuration Storage ========");
         }
 
-        return domainElasticService.findDomainWithActiveTriggers(domainId);
+        return domainElasticService.findDomainWithActiveTriggersAndActiveSegments(domainId);
     }
 
 }

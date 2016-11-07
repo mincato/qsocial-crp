@@ -88,6 +88,17 @@ public class TriggerRepository implements ReportRepository {
         return trigger;
     }
 
+    public Trigger findWithActiveSegments(String triggerId) {
+        Trigger trigger = null;
+
+        try {
+            trigger = triggerElasticService.findTriggerWithActiveSegments(triggerId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return trigger;
+    }
+
     public Trigger update(String domainId, Trigger trigger) {
         try {
             String id = triggerElasticService.updateTrigger(domainId, trigger);
@@ -114,13 +125,15 @@ public class TriggerRepository implements ReportRepository {
         List<SegmentListView> segments = new ArrayList<>();
         List<Segment> segmentsRepo = segmentElasticService.getSegments(triggerId);
 
-        for (Segment segmentRepo : segmentsRepo) {
-            SegmentListView segmentListView = new SegmentListView();
-            segmentListView.setId(segmentRepo.getId());
-            segmentListView.setDescription(segmentRepo.getDescription());
-            segmentListView.setTeamId(segmentRepo.getTeam());
-            segments.add(segmentListView);
-        }
+        copySegmentRepoToSegmentListView(segments, segmentsRepo);
+        return segments;
+    }
+
+    public List<SegmentListView> findActiveSegments(String triggerId) {
+        List<SegmentListView> segments = new ArrayList<>();
+        List<Segment> segmentsRepo = segmentElasticService.getActiveSegments(triggerId);
+
+        copySegmentRepoToSegmentListView(segments, segmentsRepo);
         return segments;
     }
 
@@ -144,6 +157,17 @@ public class TriggerRepository implements ReportRepository {
             triggerListView.setToDate(triggerRepo.getEnd());
             triggerListView.setSegments(triggerRepo.getSegments());
             triggers.add(triggerListView);
+        }
+    }
+
+    private void copySegmentRepoToSegmentListView(List<SegmentListView> segments, List<Segment> segmentsRepo) {
+        for (Segment segmentRepo : segmentsRepo) {
+            SegmentListView segmentListView = new SegmentListView();
+            segmentListView.setId(segmentRepo.getId());
+            segmentListView.setDescription(segmentRepo.getDescription());
+            segmentListView.setTeamId(segmentRepo.getTeam());
+            segmentListView.setActive(segmentRepo.isActive());
+            segments.add(segmentListView);
         }
     }
 }

@@ -19,11 +19,15 @@ public interface TriggerService {
 
     Trigger findOne(String domainId, String triggerId);
 
+    Trigger findOneWithActiveSegments(String domainId, String triggerId);
+
     Trigger update(String domainId, Trigger trigger);
 
     Segment findSegment(String domainId, String triggerId, String segmentId);
 
     List<SegmentListView> findSegments(String domainId, String triggerId);
+
+    List<SegmentListView> findActiveSegments(String domainId, String triggerId);
 
     List<CaseCategorySet> findCategories(String domainId, String triggerId);
 
