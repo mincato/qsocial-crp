@@ -99,6 +99,24 @@ public class TriggerService {
     }
 
     public List<Trigger> getActiveTriggers(String domainId) {
+        List<Trigger> triggers = getActiveTriggersFromDomain(domainId);
+        for (Trigger trigger : triggers) {
+            trigger.setSegments(segmentService.getSegments(trigger.getId()));
+        }
+        return triggers;
+
+    }
+
+    public List<Trigger> getActiveTriggersWithActiveSegments(String domainId) {
+        List<Trigger> triggers = getActiveTriggersFromDomain(domainId);
+        for (Trigger trigger : triggers) {
+            trigger.setSegments(segmentService.getActiveSegments(trigger.getId()));
+        }
+        return triggers;
+
+    }
+
+    private List<Trigger> getActiveTriggersFromDomain(String domainId) {
         RepositoryFactory<TriggerType> esfactory = new RepositoryFactory<TriggerType>(configurator);
         Repository<TriggerType> repository = esfactory.initManager();
         repository.initClient();
@@ -113,11 +131,7 @@ public class TriggerService {
         List<Trigger> triggers = response.getSources();
 
         repository.closeClient();
-        for (Trigger trigger : triggers) {
-            trigger.setSegments(segmentService.getSegments(trigger.getId()));
-        }
         return triggers;
-
     }
 
     public Trigger findOne(String triggerId) {
@@ -139,6 +153,14 @@ public class TriggerService {
         Trigger trigger = findOne(triggerId);
         if (trigger != null) {
             trigger.setSegments(segmentService.getSegments(triggerId));
+        }
+        return trigger;
+    }
+
+    public Trigger findTriggerWithActiveSegments(String triggerId) {
+        Trigger trigger = findOne(triggerId);
+        if (trigger != null) {
+            trigger.setSegments(segmentService.getActiveSegments(triggerId));
         }
         return trigger;
     }

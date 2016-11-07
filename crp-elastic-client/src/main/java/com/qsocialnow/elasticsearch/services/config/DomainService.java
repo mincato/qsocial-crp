@@ -201,6 +201,14 @@ public class DomainService {
         return domain;
     }
 
+    public Domain findDomainWithActiveTriggersAndActiveSegments(String domainId) {
+        Domain domain = findDomain(domainId);
+        if (domain != null) {
+            domain.setTriggers(triggerService.getActiveTriggersWithActiveSegments(domainId));
+        }
+        return domain;
+    }
+
     public void setTriggerService(TriggerService triggerService) {
         this.triggerService = triggerService;
     }

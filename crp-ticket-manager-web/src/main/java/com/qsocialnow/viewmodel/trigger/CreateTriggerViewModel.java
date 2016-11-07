@@ -248,7 +248,7 @@ public class CreateTriggerViewModel implements Serializable {
         currentTrigger = new TriggerView();
         if (triggerId != null) {
             editing = true;
-            currentTrigger.setTrigger(triggerService.findOne(domain, triggerId));
+            currentTrigger.setTrigger(triggerService.findOneWithActiveSegments(domain, triggerId));
             fillActiveResolutionsFlags(currentTrigger.getTrigger().getResolutions(), currentDomain.getDomain()
                     .getResolutions());
             currentTrigger.setResolutions(currentTrigger.getTrigger().getResolutions().stream().map(resolution -> {
