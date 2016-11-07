@@ -1,8 +1,10 @@
 package com.qsocialnow.viewmodel.factory;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.model.EditCaseView;
@@ -34,7 +36,11 @@ public class EditCaseSubjectCategoriesFactory extends EditCaseCategoriesFactory<
 
     @Override
     protected Set<String> getSetIdsFromCurrentCase(EditCaseView currentCase) {
-        return currentCase.getCaseObject().getSubject().getSubjectCategorySet();
+        Subject subject = currentCase.getCaseObject().getSubject();
+        if (subject == null) {
+            return new HashSet<>();
+        }
+        return subject.getSubjectCategorySet();
     }
 
     @Override
@@ -59,7 +65,11 @@ public class EditCaseSubjectCategoriesFactory extends EditCaseCategoriesFactory<
 
     @Override
     protected Set<String> getCategoriesIdsFromCurrentCase(EditCaseView currentCase) {
-        return currentCase.getCaseObject().getSubject().getSubjectCategory();
+        Subject subject = currentCase.getCaseObject().getSubject();
+        if (subject == null) {
+            return new HashSet<>();
+        }
+        return subject.getSubjectCategory();
     }
 
     @Override

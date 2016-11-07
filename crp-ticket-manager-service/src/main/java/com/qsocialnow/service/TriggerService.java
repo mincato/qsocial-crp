@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class TriggerService {
                 });
             });
             triggerSaved = triggerRepository.save(domainId, trigger);
-            zookeeperClient.setData().forPath(domainsPath.concat(domainId));
+            updateZookeeperNode(domainId);
         } catch (Exception e) {
             log.error("There was an error creating trigger: " + trigger.getName(), e);
             throw new RuntimeException(e.getMessage());
@@ -106,7 +107,7 @@ public class TriggerService {
             });
             trigger.setId(triggerId);
             triggerSaved = triggerRepository.update(domainId, trigger);
-            zookeeperClient.setData().forPath(domainsPath.concat(domainId));
+            updateZookeeperNode(domainId);
         } catch (Exception e) {
             log.error("There was an error updating trigger: " + trigger.getDescription(), e);
             throw new RuntimeException(e.getMessage());
@@ -168,6 +169,14 @@ public class TriggerService {
             throw new RuntimeException(e.getMessage());
         }
         return subjectCategoriesSet;
+    }
+
+    private void updateZookeeperNode(String domainId) throws Exception {
+        String path = domainsPath.concat(domainId);
+        Stat stat = zookeeperClient.checkExists().forPath(path);
+        if (stat != null) {
+            zookeeperClient.setData().forPath(path);
+        }
     }
 
 }

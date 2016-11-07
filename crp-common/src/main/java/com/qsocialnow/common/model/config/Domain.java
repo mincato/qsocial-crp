@@ -18,6 +18,8 @@ public class Domain {
 
     private List<Resolution> resolutions;
 
+    private boolean active = true;
+
     public Domain() {
         triggers = new ArrayList<>();
     }
@@ -64,5 +66,13 @@ public class Domain {
 
     public void setResolutions(List<Resolution> resolutions) {
         this.resolutions = resolutions;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

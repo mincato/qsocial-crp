@@ -53,15 +53,12 @@ public class CreateCaseViewModel implements Serializable {
 
     @Init
     public void init() {
-        initDomain();
+        initDomains();
         initCase();
     }
 
-    private void initDomain() {
-        PageResponse<DomainListView> pageResponse = domainService.findAll();
-        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
-            this.domains.addAll(pageResponse.getItems());
-        }
+    private void initDomains() {
+        this.domains = domainService.findAllActive();
     }
 
     private void initCase() {
