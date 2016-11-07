@@ -21,6 +21,8 @@ public class DomainListView implements Serializable {
 
     private List<Long> thematicIds;
 
+    private boolean active = true;
+
     public String getId() {
         return id;
     }
@@ -60,6 +62,14 @@ public class DomainListView implements Serializable {
 
     public void setThematicIds(List<Long> thematicIds) {
         this.thematicIds = thematicIds;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

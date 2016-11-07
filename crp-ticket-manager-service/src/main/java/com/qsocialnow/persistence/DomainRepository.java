@@ -77,6 +77,7 @@ public class DomainRepository implements ReportRepository {
                 DomainListView domainListView = new DomainListView();
                 domainListView.setId(domainRepo.getId());
                 domainListView.setName(domainRepo.getName());
+                domainListView.setActive(domainRepo.isActive());
 
                 List<Long> thematics = domainRepo.getThematics();
                 domainListView.setThematicIds(thematics);
@@ -98,6 +99,7 @@ public class DomainRepository implements ReportRepository {
                 DomainListView domainListView = new DomainListView();
                 domainListView.setId(domainRepo.getId());
                 domainListView.setName(domainRepo.getName());
+                domainListView.setActive(domainRepo.isActive());
 
                 List<Long> thematics = domainRepo.getThematics();
                 domainListView.setThematicIds(thematics);
@@ -120,6 +122,7 @@ public class DomainRepository implements ReportRepository {
                 DomainListView domainListView = new DomainListView();
                 domainListView.setId(domainRepo.getId());
                 domainListView.setName(domainRepo.getName());
+                domainListView.setActive(domainRepo.isActive());
 
                 List<Long> thematics = domainRepo.getThematics();
                 domainListView.setThematicIds(thematics);
@@ -138,6 +141,7 @@ public class DomainRepository implements ReportRepository {
             DomainListView domainListView = new DomainListView();
             domainListView.setId(domainRepo.getId());
             domainListView.setName(domainRepo.getName());
+            domainListView.setActive(domainRepo.isActive());
             domains.add(domainListView);
         }
         return domains;
