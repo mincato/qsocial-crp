@@ -50,6 +50,7 @@ public class SubjectCategorySetMapping implements Mapping<SubjectCategorySetType
         SubjectCategorySetType subjectCategorySetType = new SubjectCategorySetType();
         subjectCategorySetType.setId(document.getId());
         subjectCategorySetType.setDescription(document.getDescription());
+        subjectCategorySetType.setActive(document.isActive());
         return subjectCategorySetType;
     }
 
@@ -58,6 +59,7 @@ public class SubjectCategorySetMapping implements Mapping<SubjectCategorySetType
         SubjectCategorySet subjectCategorySet = new SubjectCategorySet();
         subjectCategorySet.setId(documentType.getId());
         subjectCategorySet.setDescription(documentType.getDescription());
+        subjectCategorySet.setActive(documentType.isActive());
         return subjectCategorySet;
     }
 

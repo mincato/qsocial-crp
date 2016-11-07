@@ -14,7 +14,7 @@ public class PeriodDetectionCriteriaFilter implements DetectionCriteriaFilter {
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing period message filter");
+        log.debug("Executing period message filter");
         boolean match = false;
         if (message.getTimestamp() != null) {
             Long startDate = filter.getPeriodFilter().getStartDateTime();

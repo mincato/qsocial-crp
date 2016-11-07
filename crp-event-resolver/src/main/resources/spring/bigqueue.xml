@@ -19,7 +19,7 @@
      <bean id="queueConfiguratorWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
 		<constructor-arg value="queueConfigurator" />
 		<constructor-arg>
-			<value type="java.lang.Class">com.qsocialnow.elasticsearch.configuration.QueueConfigurator</value>
+			<value type="java.lang.Class">com.qsocialnow.common.config.QueueConfigurator</value>
 		</constructor-arg>
 	</bean>
     
@@ -32,7 +32,7 @@
 	 <bean id="queueConfigWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
 		<constructor-arg value="queueConfig" />
 		<constructor-arg>
-			<value type="java.lang.Class">com.qsocialnow.elasticsearch.configuration.QueueConfigurator</value>
+			<value type="java.lang.Class">com.qsocialnow.common.config.QueueConfigurator</value>
 		</constructor-arg>
 	</bean>
 	

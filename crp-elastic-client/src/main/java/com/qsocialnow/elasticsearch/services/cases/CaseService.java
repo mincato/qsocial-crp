@@ -11,19 +11,19 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.model.cases.ActionRegistry;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.queues.QueueProducer;
+import com.qsocialnow.common.queues.QueueService;
+import com.qsocialnow.common.queues.QueueServiceFactory;
+import com.qsocialnow.common.queues.QueueType;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
-import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
 import com.qsocialnow.elasticsearch.mappings.cases.ActionRegistryMapping;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.ActionRegistryType;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
 import com.qsocialnow.elasticsearch.mappings.types.cases.IdentityType;
-import com.qsocialnow.elasticsearch.queues.QueueProducer;
-import com.qsocialnow.elasticsearch.queues.QueueService;
-import com.qsocialnow.elasticsearch.queues.QueueServiceFactory;
-import com.qsocialnow.elasticsearch.queues.QueueType;
 import com.qsocialnow.elasticsearch.repositories.IndexResponse;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
@@ -60,17 +60,17 @@ public class CaseService extends CaseIndexService {
 
     private void initQueues() {
         QueueServiceFactory queueServiceFactory = QueueServiceFactory.getInstance();
-        queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES, caseQueueConfigurator);
+        queueService = queueServiceFactory.getQueueServiceInstance(QueueType.CASES.type(), caseQueueConfigurator);
 
         if (queueService != null) {
-            producer = new QueueProducer<Case>(QueueType.CASES.type());
-            consumer = new CaseConsumer(QueueType.CASES.type(), this);
+            producer = new QueueProducer<Case>(queueService.getType());
+            consumer = new CaseConsumer(queueService.getType(), this);
             producer.addConsumer(consumer);
 
             queueService.startProducerConsumer(producer, consumer);
 
-            failProducer = new QueueProducer<Case>(QueueType.CASES.type());
-            failConsumer = new CaseConsumer(QueueType.CASES.type(), this);
+            failProducer = new QueueProducer<Case>(queueService.getType());
+            failConsumer = new CaseConsumer(queueService.getType(), this);
             failProducer.addConsumer(failConsumer);
 
             queueService.startFailProducerConsumer(failProducer, failConsumer);

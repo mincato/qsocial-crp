@@ -3,15 +3,18 @@ package com.qsocialnow.viewmodel.trigger;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -21,6 +24,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.ToClientCommand;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
@@ -63,6 +67,7 @@ import com.qsocialnow.model.TriggerView;
 import com.qsocialnow.services.AutocompleteService;
 import com.qsocialnow.services.ThematicService;
 import com.qsocialnow.services.UserSessionService;
+import com.qsocialnow.util.DateTimeBoxComponent;
 import com.qsocialnow.viewmodel.AutocompleteListModel;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -567,11 +572,22 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private void fillDateRangeFilter(FilterView filterView, PeriodFilter periodFilter) {
         if (periodFilter != null) {
+            TimeZone timeZone = getTimeZone();
             if (periodFilter.getStartDateTime() != null) {
-                filterView.setStartDateTime(periodFilter.getStartDateTime());
+                Calendar cal = Calendar.getInstance(timeZone);
+                cal.setTimeInMillis(periodFilter.getStartDateTime());
+                Calendar calDate = Calendar.getInstance(timeZone);
+                calDate = DateUtils.truncate(cal, Calendar.DATE);
+                filterView.setStartDateTime(calDate.getTimeInMillis());
+                filterView.setStartTime(DateTimeBoxComponent.extractTime(timeZone, cal));
             }
             if (periodFilter.getEndDateTime() != null) {
-                filterView.setEndDateTime(periodFilter.getEndDateTime());
+                Calendar cal = Calendar.getInstance(timeZone);
+                cal.setTimeInMillis(periodFilter.getEndDateTime());
+                Calendar calDate = Calendar.getInstance(timeZone);
+                calDate = DateUtils.truncate(cal, Calendar.DATE);
+                filterView.setEndDateTime(calDate.getTimeInMillis());
+                filterView.setEndTime(DateTimeBoxComponent.extractTime(timeZone, cal));
             }
         }
     }
@@ -602,16 +618,23 @@ public class CreateCriteriaViewModel implements Serializable {
 
     private void addDateRangeFilter(Filter filter) {
         if (filterView.getStartDateTime() != null || filterView.getEndDateTime() != null) {
+            TimeZone timeZone = getTimeZone();
             PeriodFilter periodFilter = new PeriodFilter();
             if (filterView.getStartDateTime() != null) {
-                periodFilter.setStartDateTime(filterView.getStartDateTime());
+                periodFilter.setStartDateTime(DateTimeBoxComponent.mergeDate(filterView.getStartDateTime(),
+                        filterView.getStartTime(), timeZone));
             }
             if (filterView.getEndDateTime() != null) {
-                periodFilter.setEndDateTime(filterView.getEndDateTime());
+                periodFilter.setEndDateTime(DateTimeBoxComponent.mergeDate(filterView.getEndDateTime(),
+                        filterView.getEndTime(), timeZone));
             }
             filter.setPeriodFilter(periodFilter);
         }
 
+    }
+
+    private TimeZone getTimeZone() {
+        return (TimeZone) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_TIME_ZONE);
     }
 
     private void addConnotationFilter(Filter filter) {
@@ -683,6 +706,24 @@ public class CreateCriteriaViewModel implements Serializable {
                     .collect(Collectors.toList()));
         }
 
+    }
+
+    @Command
+    public void initFilterEndTime(@BindingParam("fxFilter") FilterView fxFilter) {
+        if (fxFilter.getEndTime() == null) {
+            TimeZone timeZone = getTimeZone();
+            fxFilter.setEndTime(DateTimeBoxComponent.truncateTimeToday(timeZone));
+            BindUtils.postNotifyChange(null, null, fxFilter, "endTime");
+        }
+    }
+
+    @Command
+    public void initFilterStartTime(@BindingParam("fxFilter") FilterView fxFilter) {
+        if (fxFilter.getStartTime() == null) {
+            TimeZone timeZone = getTimeZone();
+            fxFilter.setStartTime(DateTimeBoxComponent.truncateTimeToday(timeZone));
+            BindUtils.postNotifyChange(null, null, fxFilter, "startTime");
+        }
     }
 
 }

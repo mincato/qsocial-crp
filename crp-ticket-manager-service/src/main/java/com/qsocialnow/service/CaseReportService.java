@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ import com.qsocialnow.persistence.TeamRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -74,11 +77,15 @@ public class CaseReportService {
     @Autowired
     private SegmentRepository segmentRepository;
 
+    private static final String RESOURCE_BUNDLE_FILE_NAME = "reports";
+
     public byte[] getReport(String domainId, String triggerId, String segmentId, String subject, String title,
             String description, String pendingResponse, String status, String fromOpenDate, String toOpenDate,
-            String userName, String userSelected) {
+            String userName, String userSelected, String language) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, new Locale(language));
+            params.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
             Map<String, ReportRepository> reportRepositories = new HashMap<>();
             List<String> keys = Arrays.asList("DOMAINS", "TRIGGERS", "SEGMENTS", "CASE_CATEGORIES",
                     "SUBJECT_CATEGORIES", "RESOLUTIONS");
@@ -153,11 +160,15 @@ public class CaseReportService {
         return print;
     }
 
-    public byte[] getCasesByResolutionReport(String domainId) {
+    public byte[] getCasesByResolutionReport(String domainId, String language) {
         try {
+            Map<String, Object> params = new HashMap<String, Object>();
             PageResponse<ResultsListView> page = caseResultsService.getResults(domainId);
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, new Locale(language));
+            params.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
+
             InputStream reportStream = this.getClass().getResourceAsStream("/reports/cases_by_resolution.jasper");
-            JasperPrint print = JasperFillManager.fillReport(reportStream, null,
+            JasperPrint print = JasperFillManager.fillReport(reportStream, params,
                     new JRBeanCollectionDataSource(page.getItems()));
             byte[] data = exportPrintToExcel(print);
             return data;

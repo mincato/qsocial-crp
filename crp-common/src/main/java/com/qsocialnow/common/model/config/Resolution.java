@@ -10,6 +10,8 @@ public class Resolution {
     @NotBlank(message = "app.field.empty.validation")
     private String description;
 
+    private boolean active = true;
+
     public String getId() {
         return id;
     }
@@ -24,6 +26,14 @@ public class Resolution {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

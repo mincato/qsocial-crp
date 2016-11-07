@@ -1,4 +1,4 @@
-package com.qsocialnow.elasticsearch.queues;
+package com.qsocialnow.common.queues;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

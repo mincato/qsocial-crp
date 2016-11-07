@@ -19,6 +19,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
@@ -83,6 +84,7 @@ public class SubjectCategorySetsViewModel implements Serializable {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("subjectcategoryset", subjectCategorySetId);
         Executions.createComponents("/pages/subject-category-set/edit-subject-category-set.zul", null, arg);
+        Clients.evalJavaScript("initSwitch()");
     }
 
     @GlobalCommand
@@ -96,6 +98,7 @@ public class SubjectCategorySetsViewModel implements Serializable {
             if (subjectCategorySetOptional.isPresent()) {
                 SubjectCategorySetListView subjectCategorySetListView = subjectCategorySetOptional.get();
                 subjectCategorySetListView.setDescription(subjectCategorySetChanged.getDescription());
+                subjectCategorySetListView.setActive(subjectCategorySetChanged.isActive());
             }
         }
     }

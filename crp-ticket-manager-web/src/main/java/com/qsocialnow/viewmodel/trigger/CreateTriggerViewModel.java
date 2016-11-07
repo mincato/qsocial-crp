@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.zkoss.bind.BindUtils;
@@ -188,7 +189,7 @@ public class CreateTriggerViewModel implements Serializable {
     public void init(@QueryParam("domain") String domain, @QueryParam("trigger") String triggerId) {
         this.domain = domain;
         currentDomain = new DomainView();
-        currentDomain.setDomain(domainService.findOne(this.domain));
+        currentDomain.setDomain(domainService.findOneWithActiveResolutions(this.domain));
         initTrigger(domain, triggerId);
         initResolutionListView(currentTrigger.getResolutions(), currentDomain.getDomain().getResolutions());
         initCaseCategorySetListView(currentTrigger.getCaseCategorySets());
@@ -198,7 +199,7 @@ public class CreateTriggerViewModel implements Serializable {
 
     private void initCaseCategorySetListView(List<TriggerCaseCategorySetView> triggerCaseCategorySets) {
         caseCategorySetListView = new ListView<CaseCategorySet>();
-        caseCategorySetListView.setList(caseCategorySetService.findAll());
+        caseCategorySetListView.setList(caseCategorySetService.findAllActive());
         caseCategorySetListView.setFilteredList(new ArrayList<CaseCategorySet>());
         if (triggerCaseCategorySets != null) {
             caseCategorySetListView.getFilteredList().addAll(
@@ -221,7 +222,7 @@ public class CreateTriggerViewModel implements Serializable {
 
     private void initSubjectCategorySetListView(List<TriggerSubjectCategorySetView> triggerSubjectCategorySets) {
         subjectCategorySetListView = new ListView<SubjectCategorySet>();
-        subjectCategorySetListView.setList(subjectCategorySetService.findAll());
+        subjectCategorySetListView.setList(subjectCategorySetService.findAllActive());
         subjectCategorySetListView.setFilteredList(new ArrayList<SubjectCategorySet>());
         if (triggerSubjectCategorySets != null) {
             subjectCategorySetListView
@@ -248,6 +249,8 @@ public class CreateTriggerViewModel implements Serializable {
         if (triggerId != null) {
             editing = true;
             currentTrigger.setTrigger(triggerService.findOne(domain, triggerId));
+            fillActiveResolutionsFlags(currentTrigger.getTrigger().getResolutions(), currentDomain.getDomain()
+                    .getResolutions());
             currentTrigger.setResolutions(currentTrigger.getTrigger().getResolutions().stream().map(resolution -> {
                 TriggerResolutionView triggerResolutionView = new TriggerResolutionView();
                 triggerResolutionView.setResolution(resolution);
@@ -282,6 +285,17 @@ public class CreateTriggerViewModel implements Serializable {
             currentTrigger.setCaseCategorySets(new ArrayList<>());
             currentTrigger.setSubjectCategorySets(new ArrayList<>());
         }
+    }
+
+    private void fillActiveResolutionsFlags(List<Resolution> triggerResolutions, List<Resolution> domainResolutions) {
+        triggerResolutions.stream().forEach(
+                triggerRes -> {
+                    String resolutionId = triggerRes.getId();
+                    Optional<Resolution> domainRes = domainResolutions.stream()
+                            .filter(res -> res.getId().equals(resolutionId)).findFirst();
+                    boolean active = domainRes.isPresent();
+                    triggerRes.setActive(active);
+                });
     }
 
     private void initResolutionListView(List<TriggerResolutionView> triggerResolutions,

@@ -3,7 +3,7 @@ package com.qsocialnow.eventresolver.factories;
 import org.apache.curator.framework.CuratorFramework;
 
 import com.google.gson.GsonBuilder;
-import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
+import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.eventresolver.config.ConfigWatcher;
 
 public class BigQueueConfiguratorFactory {

@@ -1,7 +1,10 @@
 package com.qsocialnow.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +38,17 @@ public class CaseCategorySetService {
         return caseCategorySetRepository.findAll();
     }
 
+    public List<CaseCategorySet> findAllActive() {
+        return caseCategorySetRepository.findAllActive();
+    }
+
     public CaseCategorySet findOne(String caseCategorySetId) {
         CaseCategorySet caseCategorySet = caseCategorySetRepository.findOne(caseCategorySetId);
+        return caseCategorySet;
+    }
+
+    public CaseCategorySet findOneWithActiveCategories(String caseCategorySetId) {
+        CaseCategorySet caseCategorySet = caseCategorySetRepository.findOneWithActiveCategories(caseCategorySetId);
         return caseCategorySet;
     }
 
@@ -71,4 +83,21 @@ public class CaseCategorySetService {
         return caseCategories;
     }
 
+    public List<CaseCategory> findAllCategories() {
+        return caseCategorySetRepository.findAllCategories();
+    }
+
+    public List<CaseCategorySet> findByIds(String ids) {
+        if (StringUtils.isBlank(ids)) {
+            return new ArrayList<>();
+        }
+        List<String> categoriesIds = Arrays.asList(ids.split(","));
+        List<CaseCategorySet> sets = caseCategorySetRepository.findByIds(categoriesIds);
+
+        sets.stream().forEach(set -> {
+            set.setCategories(caseCategorySetRepository.findCategories(set.getId()));
+        });
+
+        return sets;
+    }
 }

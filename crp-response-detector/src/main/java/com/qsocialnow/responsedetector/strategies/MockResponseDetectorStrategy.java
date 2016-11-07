@@ -19,7 +19,7 @@ public class MockResponseDetectorStrategy implements ResponseDetectorStrategy {
 
     @Override
     public List<Event> findEvents() {
-        log.info("Running mock response detector strategy...");
+        log.debug("Running mock response detector strategy...");
         Event event1 = null;
         Event event2 = null;
         GsonBuilder gsonBuilder = new GsonBuilder();

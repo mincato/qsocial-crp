@@ -55,7 +55,7 @@ public class TwitterOauthService implements OauthService {
             twitter = twitterFactory.getInstance();
             requestToken = twitter.getOAuthRequestToken(twitterConfig.getCallbackUrl());
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(requestToken.getAuthorizationURL())
-                    .queryParam("force_login", "true").queryParam("screen_name", "diego");
+                    .queryParam("force_login", "true");
             return builder.toUriString();
         } catch (Exception e) {
             log.error("There was an error trying to get authorization url for twitter", e);

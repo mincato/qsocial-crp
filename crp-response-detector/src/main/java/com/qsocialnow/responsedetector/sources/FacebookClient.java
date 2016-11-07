@@ -87,7 +87,7 @@ public class FacebookClient {
                         String idCommentToTrack = sourceService.getReplyIdToTrack(commentId);
                         String userToTrack = sourceService.getUserIdToTrack(commentId);
 
-                        log.info("Retrieving :" + comments.length() + " comments from rootReply:" + commentId);
+                        log.debug("Retrieving :" + comments.length() + " comments from rootReply:" + commentId);
 
                         if (comments != null && comments.length() == 1) {
                             startToTrackComment = true;
@@ -98,12 +98,12 @@ public class FacebookClient {
                             JSONObject jsonComment = comments.getJSONObject(i);
                             Comment comment = DataObjectFactory.createComment(jsonComment.toString());
 
-                            log.info("Comment: " + comment.getId() + " from:" + comment.getFrom().getName()
+                            log.debug("Comment: " + comment.getId() + " from:" + comment.getFrom().getName()
                                     + " parent: " + comment.getParent() + " message:" + comment.getMessage());
 
                             if (startToTrackComment) {
                                 if (comment.getFrom().getId().equals(userToTrack)) {
-                                    log.info("Finding user:" + userToTrack + " and comment:" + comment.getId()
+                                    log.debug("Finding user:" + userToTrack + " and comment:" + comment.getId()
                                             + "from conversation rootReply:" + commentId);
                                     Date createdTime = comment.getCreatedTime();
                                     sourceService.processEvent(true, createdTime.getTime(), null, null,
@@ -116,7 +116,7 @@ public class FacebookClient {
                             }
                             if (!startToTrackComment && comment.getId().equals(idCommentToTrack)) {
                                 startToTrackComment = true;
-                                log.info("Init to Track comment from response: " + commentId);
+                                log.debug("Init to Track comment from response: " + commentId);
                             }
                         }
                     }

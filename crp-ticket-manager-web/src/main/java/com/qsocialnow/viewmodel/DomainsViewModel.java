@@ -16,6 +16,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Domain;
@@ -92,6 +93,7 @@ public class DomainsViewModel implements Serializable {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("domain", domainId);
         Executions.createComponents("/pages/domain/edit-domain.zul", null, arg);
+        Clients.evalJavaScript("initSwitch()");
     }
 
     @GlobalCommand
@@ -103,6 +105,7 @@ public class DomainsViewModel implements Serializable {
             if (domainOptional.isPresent()) {
                 DomainListView domainListView = domainOptional.get();
                 domainListView.setName(domainChanged.getName());
+                domainListView.setActive(domainChanged.isActive());
                 domainListView.setThematics(findThematicsByDomain(domainChanged));
             }
         }

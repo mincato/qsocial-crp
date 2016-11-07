@@ -99,6 +99,7 @@ public class DomainMapping implements Mapping<DomainType, Domain> {
         }
         domainType.setName(document.getName());
         domainType.setThematics(document.getThematics());
+        domainType.setActive(document.isActive());
         return domainType;
     }
 
@@ -108,6 +109,7 @@ public class DomainMapping implements Mapping<DomainType, Domain> {
         domain.setId(documentType.getId());
         domain.setName(documentType.getName());
         domain.setThematics(documentType.getThematics());
+        domain.setActive(documentType.isActive());
         return domain;
     }
 

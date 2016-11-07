@@ -83,7 +83,7 @@ public class TwitterDetectorService extends SourceDetectorService {
                         String nodeAdded = ZKPaths.getNodeFromPath(event.getData().getPath());
                         String nodePath = event.getData().getPath();
 
-                        log.info("Adding node:" + nodeAdded + " from path: " + event.getData().getPath());
+                        log.debug("Adding node:" + nodeAdded + " from path: " + event.getData().getPath());
                         /*
                          * if (event.getData() != null) { String
                          * userResolverNode =
@@ -99,7 +99,7 @@ public class TwitterDetectorService extends SourceDetectorService {
                          */
                         if (event.getData().getData() != null) {
                             String nodeValue = new String(event.getData().getData());
-                            log.info("Adding node value:-" + nodeValue + "-");
+                            log.debug("Adding node value:-" + nodeValue + "-");
                             if (nodeValue.equals("NEW")) {
                                 addUserResolverTrack(nodeAdded);
                             } else {
@@ -116,19 +116,19 @@ public class TwitterDetectorService extends SourceDetectorService {
                                         }
                                     }
                                 } else {
-                                    log.info("Not Adding node with empty value ");
+                                    log.debug("Not Adding node with empty value ");
                                 }
                             }
                         } else {
-                            log.info("Not Adding node value");
+                            log.debug("Not Adding node value");
                         }
                         break;
                     }
                     case INITIALIZED: {
-                        log.info("Twitter node starting to init ...");
+                        log.debug("Twitter node starting to init ...");
                         ChildData initialChildData = event.getData();
                         if (initialChildData != null) {
-                            log.info("Adding Init Twitter node:" + initialChildData.getPath() + " "
+                            log.debug("Adding Init Twitter node:" + initialChildData.getPath() + " "
                                     + initialChildData.getData());
                         }
                         /*
@@ -140,7 +140,7 @@ public class TwitterDetectorService extends SourceDetectorService {
                          * ArrayList<String>(); for (ChildData childData :
                          * initialData) { String userResolverToFilter =
                          * ZKPaths.getNodeFromPath(childData.getPath());
-                         * log.info
+                         * log.debug
                          * ("User Resolver - Message added at Init process: " +
                          * userResolverToFilter);
                          * conversations.put(userResolverToFilter, null);
@@ -160,13 +160,13 @@ public class TwitterDetectorService extends SourceDetectorService {
                         break;
                     }
                     case NODE_UPDATED: {
-                        log.info("Twitter conversation TreeNode changed: "
+                        log.debug("Twitter conversation TreeNode changed: "
                                 + ZKPaths.getNodeFromPath(event.getData().getPath()) + ", value: "
                                 + new String(event.getData().getData()));
                         break;
                     }
                     case NODE_REMOVED: {
-                        log.info("Twitter conversation removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        log.debug("Twitter conversation removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
                         break;
                     }
                     default:
@@ -179,7 +179,7 @@ public class TwitterDetectorService extends SourceDetectorService {
 
     private void addUserResolverTrack(String userResolverToFilter) {
         try {
-            log.info("Adding UserResolver:" + userResolverToFilter);
+            log.debug("Adding UserResolver:" + userResolverToFilter);
             twitterStreamClient.addTrackFilter(userResolverToFilter);
         } catch (Exception e) {
             log.error("There was an error adding new User Resolver to track :" + userResolverToFilter, e);
@@ -189,7 +189,7 @@ public class TwitterDetectorService extends SourceDetectorService {
     private void addTwitterMessage(String replyMessageId, String nodePath, TwitterMessageEvent twitterMessageEvent) {
         try {
             if (startListening) {
-                log.info("Adding message conversation :" + replyMessageId + " from Case:"
+                log.debug("Adding message conversation :" + replyMessageId + " from Case:"
                         + twitterMessageEvent.getCaseId());
 
                 nodePaths.put(replyMessageId, nodePath);
@@ -225,7 +225,7 @@ public class TwitterDetectorService extends SourceDetectorService {
     public void removeSourceConversation(String conversation) {
         try {
             String nodePath = nodePaths.get(conversation);
-            log.info("Removing twitter node after detect response: " + nodePath);
+            log.debug("Removing twitter node after detect response: " + nodePath);
             conversations.remove(conversation);
             zookeeperClient.delete().forPath(nodePath);
         } catch (Exception e) {
@@ -280,7 +280,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             event.setResponseDetected(true);
             event.setFechaCreacion(new Date());
             eventProcessor.process(event);
-            log.info("Creating event to handle automatic response detection");
+            log.debug("Creating event to handle automatic response detection");
         } catch (Exception e) {
             log.error("Error trying to register event :" + e);
         }

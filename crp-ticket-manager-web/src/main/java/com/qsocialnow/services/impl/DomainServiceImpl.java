@@ -1,5 +1,7 @@
 package com.qsocialnow.services.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,12 @@ public class DomainServiceImpl implements DomainService {
     @Value("${domains.serviceurl}")
     private String domainServiceUrl;
 
+    @Value("${domainsActive.serviceurl}")
+    private String domainActiveServiceUrl;
+
+    @Value("${domainsWithActiveResolutions.serviceurl}")
+    private String domainsWithActiveResolutionsServiceUrl;
+
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
@@ -54,6 +62,21 @@ public class DomainServiceImpl implements DomainService {
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
                     serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId);
+            Domain domain = restTemplate.getForObject(builder.toUriString(), Domain.class);
+            return domain;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call domain service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Domain findOneWithActiveResolutions(String domainId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(domainsWithActiveResolutionsServiceUrl)).path("/" + domainId);
             Domain domain = restTemplate.getForObject(builder.toUriString(), Domain.class);
             return domain;
         } catch (Exception e) {
@@ -123,6 +146,28 @@ public class DomainServiceImpl implements DomainService {
                     });
 
             PageResponse<DomainListView> domains = response.getBody();
+            return domains;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call domain service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<DomainListView> findAllActive() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(domainActiveServiceUrl));
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<DomainListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<DomainListView>>() {
+                    });
+
+            List<DomainListView> domains = response.getBody();
             return domains;
         } catch (Exception e) {
             log.error("There was an error while trying to call domain service", e);

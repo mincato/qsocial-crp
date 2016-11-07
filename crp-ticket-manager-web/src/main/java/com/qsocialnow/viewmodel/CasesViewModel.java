@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -16,25 +17,41 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Filedownload;
+import org.zkoss.zul.ListModelList;
 
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.config.CaseCategory;
 import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.SegmentListView;
+import com.qsocialnow.common.model.config.Series;
+import com.qsocialnow.common.model.config.SubSeries;
+import com.qsocialnow.common.model.config.SubjectCategory;
+import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
+import com.qsocialnow.model.BaseOptionElement;
+import com.qsocialnow.model.Connotation;
+import com.qsocialnow.model.FilterView;
+import com.qsocialnow.model.Language;
 import com.qsocialnow.security.LoginConfig;
+import com.qsocialnow.services.CaseCategorySetService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
+import com.qsocialnow.services.SubjectCategorySetService;
 import com.qsocialnow.services.SubjectService;
+import com.qsocialnow.services.ThematicService;
 import com.qsocialnow.services.TriggerService;
 import com.qsocialnow.services.UserService;
 import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
+
+    private static final String CASES_LIST_FILTER_LABEL = "cases.list.filter.";
 
     private static final String NOT_ID_ITEM_VALUE = "NOT_ID";
 
@@ -49,6 +66,12 @@ public class CasesViewModel implements Serializable {
     private static final String TRUE_OPTION_VALUE = "true";
 
     private static final String ALL_OPTION_VALUE = "all";
+
+    private static final String HIGH_OPTION_VALUE = "HIGH";
+
+    private static final String MEDIUM_OPTION_VALUE = "MEDIUM";
+
+    private static final String LOW_OPTION_VALUE = "LOW";
 
     private static final long serialVersionUID = 2259179419421396093L;
 
@@ -99,6 +122,10 @@ public class CasesViewModel implements Serializable {
 
     private String status;
 
+    private List<String> priorityOptions = new ArrayList<>();
+
+    private String priority;
+
     private List<String> pendingOptions = new ArrayList<>();
 
     private String pendingResponse;
@@ -115,6 +142,45 @@ public class CasesViewModel implements Serializable {
 
     private SegmentListView segment;
 
+    // Advance filter
+    private List<String> advancedFilter = new ArrayList<>();
+
+    private List<CaseCategory> caseCategoriesOptions = new ArrayList<>();
+
+    private CaseCategory caseCategory;
+
+    private List<SubjectCategory> subjectCategoriesOptions = new ArrayList<>();
+
+    private SubjectCategory subjectCategory;
+
+    private FilterView filterView;
+
+    private List<BaseOptionElement> sourceOptions;
+
+    private BaseOptionElement source;
+
+    private List<BaseOptionElement> languageOptions;
+
+    private BaseOptionElement language;
+
+    private List<BaseOptionElement> connotationOptions;
+
+    private BaseOptionElement connotation;
+
+    private ListModelList<Thematic> thematicsOptions = new ListModelList<>();
+
+    private ListModelList<Series> serieOptions = new ListModelList<>();
+
+    private ListModelList<SubSeries> subSerieOptions = new ListModelList<>();
+
+    private String text;
+
+    private String mentions;
+
+    private String hashTags;
+
+    private String authors;
+
     @WireVariable
     private UserSessionService userSessionService;
 
@@ -130,16 +196,42 @@ public class CasesViewModel implements Serializable {
     @WireVariable
     private TriggerService triggerService;
 
+    @WireVariable
+    private CaseCategorySetService caseCategorySetService;
+
+    @WireVariable
+    private SubjectCategorySetService subjectCategorySetService;
+
+    @WireVariable
+    private ThematicService thematicService;
+
     @Init
     public void init() {
         this.initUserInformation();
         this.domains = getDomainsList();
         this.users = getUsersList();
         this.filterActive = false;
+        this.filterView = new FilterView();
         this.pendingOptions = getPendingOptionsList();
         this.statusOptions = getStatusOptionsList();
+        this.priorityOptions = getPriorityOptionsList();
+        this.caseCategoriesOptions = getCaseCategoriesOptionsList();
+        this.subjectCategoriesOptions = getSubjectCategoriesOptionsList();
+        this.sourceOptions = getSourceOptionsList();
+        this.languageOptions = getLanguageOptionsList();
+        this.connotationOptions = getConnotationOptionsList();
+        this.thematicsOptions = getThematicsOptionsList();
+
         findCases();
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
+    }
+
+    private ListModelList<Thematic> getThematicsOptionsList() {
+        ListModelList<Thematic> thematicsOptions = new ListModelList<>();
+        thematicsOptions.add(new Thematic());
+        List<Thematic> allThematics = thematicService.findAll();
+        thematicsOptions.addAll(allThematics);
+        return thematicsOptions;
     }
 
     private void initUserInformation() {
@@ -188,8 +280,34 @@ public class CasesViewModel implements Serializable {
 
     @Command
     public void download() {
-        byte[] data = caseService.getReport(getFilters());
+        byte[] data = caseService.getReport(getFilters(), userSessionService.getLanguage());
         Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
+    }
+
+    @Command
+    @NotifyChange({ "serieOptions", "subSerieOptions" })
+    public void selectThematic(@BindingParam("fxFilter") FilterView fxFilter) {
+        serieOptions.clear();
+        if (fxFilter.getThematic() != null && fxFilter.getThematic().getId() != null && serieOptions.isEmpty()) {
+            serieOptions.add(new Series());
+            serieOptions.addAll(fxFilter.getThematic().getSeries());
+        }
+        fxFilter.setSerie(null);
+        selectSerie(fxFilter);
+        BindUtils.postNotifyChange(null, null, fxFilter, "serie");
+    }
+
+    @Command
+    @NotifyChange({ "subSerieOptions" })
+    public void selectSerie(@BindingParam("fxFilter") FilterView fxFilter) {
+        subSerieOptions.clear();
+        if (fxFilter.getSerie() != null && fxFilter.getSerie().getId() != null && subSerieOptions.isEmpty()) {
+            subSerieOptions.add(new SubSeries());
+            subSerieOptions.addAll(fxFilter.getSerie().getSubSeries());
+        }
+        fxFilter.setSubSerie(null);
+        BindUtils.postNotifyChange(null, null, fxFilter, "subSerie");
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterCategories");
     }
 
     private Map<String, String> getFilters() {
@@ -222,6 +340,10 @@ public class CasesViewModel implements Serializable {
             filters.put("status", this.status);
         }
 
+        if (priority != null && !priority.equals(ALL_OPTION_VALUE)) {
+            filters.put("priority", this.priority);
+        }
+
         if (this.fromDate != null) {
             filters.put("fromOpenDate", String.valueOf(this.fromDate));
         }
@@ -232,6 +354,14 @@ public class CasesViewModel implements Serializable {
 
         if (this.subject != null) {
             filters.put("subject", this.subject);
+        }
+
+        if (this.caseCategory != null && !this.caseCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
+            filters.put("caseCategory", this.caseCategory.getId());
+        }
+
+        if (this.subjectCategory != null && !this.subjectCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
+            filters.put("subjectCategory", this.subjectCategory.getId());
         }
 
         return filters;
@@ -247,8 +377,39 @@ public class CasesViewModel implements Serializable {
         return new ArrayList<String>(Arrays.asList(options));
     }
 
+    private List<String> getPriorityOptionsList() {
+        String[] options = { ALL_OPTION_VALUE, HIGH_OPTION_VALUE, MEDIUM_OPTION_VALUE, LOW_OPTION_VALUE };
+        return new ArrayList<String>(Arrays.asList(options));
+    }
+
+    private List<CaseCategory> getCaseCategoriesOptionsList() {
+        List<CaseCategory> categories = new ArrayList<>();
+        categories = caseCategorySetService.findAllCategories();
+
+        if (categories != null && !categories.isEmpty()) {
+            CaseCategory categoryBase = new CaseCategory();
+            categoryBase.setId(NOT_ID_ITEM_VALUE);
+            categoryBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            categories.add(0, categoryBase);
+        }
+        return categories;
+    }
+
     public DateConverter getDateConverter() {
         return dateConverter;
+    }
+
+    private List<SubjectCategory> getSubjectCategoriesOptionsList() {
+        List<SubjectCategory> categories = new ArrayList<>();
+        categories = subjectCategorySetService.findAllCategories();
+
+        if (categories != null && !categories.isEmpty()) {
+            SubjectCategory categoryBase = new SubjectCategory();
+            categoryBase.setId(NOT_ID_ITEM_VALUE);
+            categoryBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            categories.add(0, categoryBase);
+        }
+        return categories;
     }
 
     private List<DomainListView> getDomainsList() {
@@ -310,7 +471,6 @@ public class CasesViewModel implements Serializable {
         if (segments != null && !segments.isEmpty()) {
             SegmentListView segmentBase = new SegmentListView();
             segmentBase.setId(NOT_ID_ITEM_VALUE);
-            segmentBase.setDescription("all");
             segmentBase.setDescription(Labels.getLabel(CASES_ALL_LABEL_KEY));
             segments.add(0, segmentBase);
         }
@@ -331,6 +491,57 @@ public class CasesViewModel implements Serializable {
             users.add(0, userBase);
         }
         return users;
+    }
+
+    private List<BaseOptionElement> getSourceOptionsList() {
+        List<BaseOptionElement> options = new ArrayList<>();
+        for (Media media : Media.values()) {
+            BaseOptionElement option = new BaseOptionElement();
+            option.setId(String.valueOf(media.getValue()));
+            option.setText(media.getName());
+            options.add(option);
+        }
+        if (!options.isEmpty()) {
+            BaseOptionElement option = new BaseOptionElement();
+            option.setId(NOT_ID_ITEM_VALUE);
+            option.setText(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            options.add(0, option);
+        }
+        return options;
+    }
+
+    private List<BaseOptionElement> getLanguageOptionsList() {
+        List<BaseOptionElement> options = new ArrayList<>();
+        for (Language language : Language.values()) {
+            BaseOptionElement option = new BaseOptionElement();
+            option.setId(String.valueOf(language.getValue()));
+            option.setText(Labels.getLabel(CASES_LIST_FILTER_LABEL + language.getImage()));
+            options.add(option);
+        }
+        if (!options.isEmpty()) {
+            BaseOptionElement option = new BaseOptionElement();
+            option.setId(NOT_ID_ITEM_VALUE);
+            option.setText(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            options.add(0, option);
+        }
+        return options;
+    }
+
+    private List<BaseOptionElement> getConnotationOptionsList() {
+        List<BaseOptionElement> options = new ArrayList<>();
+        for (Connotation connotation : Connotation.values()) {
+            BaseOptionElement option = new BaseOptionElement();
+            option.setId(String.valueOf(connotation.getValue()));
+            option.setText(Labels.getLabel(CASES_LIST_FILTER_LABEL + connotation.getName()));
+            options.add(option);
+        }
+        if (!options.isEmpty()) {
+            BaseOptionElement option = new BaseOptionElement();
+            option.setId(NOT_ID_ITEM_VALUE);
+            option.setText(Labels.getLabel(CASES_ALL_LABEL_KEY));
+            options.add(0, option);
+        }
+        return options;
     }
 
     public List<CaseListView> getCases() {
@@ -524,5 +735,137 @@ public class CasesViewModel implements Serializable {
 
     public void setSegment(SegmentListView segment) {
         this.segment = segment;
+    }
+
+    public List<String> getPriorityOptions() {
+        return priorityOptions;
+    }
+
+    public String getPriority() {
+        return priority;
+    }
+
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
+
+    public List<String> getAdvancedFilter() {
+        return advancedFilter;
+    }
+
+    public void setAdvancedFilter(List<String> advancedFilter) {
+        this.advancedFilter = advancedFilter;
+    }
+
+    public List<CaseCategory> getCaseCategoriesOptions() {
+        return caseCategoriesOptions;
+    }
+
+    public CaseCategory getCaseCategory() {
+        return caseCategory;
+    }
+
+    public void setCaseCategory(CaseCategory caseCategory) {
+        this.caseCategory = caseCategory;
+    }
+
+    public List<SubjectCategory> getSubjectCategoriesOptions() {
+        return subjectCategoriesOptions;
+    }
+
+    public SubjectCategory getSubjectCategory() {
+        return subjectCategory;
+    }
+
+    public void setSubjectCategory(SubjectCategory subjectCategory) {
+        this.subjectCategory = subjectCategory;
+    }
+
+    public FilterView getFilter() {
+        return filterView;
+    }
+
+    public void setFilter(FilterView filterView) {
+        this.filterView = filterView;
+    }
+
+    public List<BaseOptionElement> getSourceOptions() {
+        return sourceOptions;
+    }
+
+    public BaseOptionElement getSource() {
+        return source;
+    }
+
+    public void setSource(BaseOptionElement source) {
+        this.source = source;
+    }
+
+    public BaseOptionElement getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(BaseOptionElement language) {
+        this.language = language;
+    }
+
+    public List<BaseOptionElement> getLanguageOptions() {
+        return languageOptions;
+    }
+
+    public BaseOptionElement getConnotation() {
+        return connotation;
+    }
+
+    public void setConnotation(BaseOptionElement connotation) {
+        this.connotation = connotation;
+    }
+
+    public List<BaseOptionElement> getConnotationOptions() {
+        return connotationOptions;
+    }
+
+    public ListModelList<Thematic> getThematicsOptions() {
+        return thematicsOptions;
+    }
+
+    public ListModelList<Series> getSerieOptions() {
+        return serieOptions;
+    }
+
+    public ListModelList<SubSeries> getSubSerieOptions() {
+        return subSerieOptions;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getMentions() {
+        return mentions;
+    }
+
+    public void setMentions(String mentions) {
+        this.mentions = mentions;
+    }
+
+    public String getHashTags() {
+        return hashTags;
+    }
+
+    public void setHashTags(String hashTags) {
+        this.hashTags = hashTags;
+    }
+
+    public String getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(String authors) {
+        this.authors = authors;
     }
 }

@@ -40,7 +40,21 @@ public class EditCaseView {
 
     private List<Subject> subjectOptions;
 
+    private List<CaseCategorySet> allTriggerCategories;
+
+    private List<CaseCategory> disassociatedCategories;
+
+    private List<SubjectCategorySet> allTriggerSubjectCategories;
+
+    private List<SubjectCategory> disassociatedSubjectCategories;
+
     private Media source;
+
+    private String openCaseDeepLinkUrl = null;
+
+    private String teamDescription = null;
+
+    private String resolutionDescription = null;
 
     public void setCaseObject(Case caseObject) {
         this.caseObject = caseObject;
@@ -146,4 +160,59 @@ public class EditCaseView {
         this.subjectCategoriesSet = subjectCategoriesSet;
     }
 
+    public List<CaseCategorySet> getAllTriggerCategories() {
+        return allTriggerCategories;
+    }
+
+    public void setAllTriggerCategories(List<CaseCategorySet> allTriggerCategories) {
+        this.allTriggerCategories = allTriggerCategories;
+    }
+
+    public String getOpenCaseDeepLinkUrl() {
+        return openCaseDeepLinkUrl;
+    }
+
+    public void setOpenCaseDeepLinkUrl(String openCaseDeepLinkUrl) {
+        this.openCaseDeepLinkUrl = openCaseDeepLinkUrl;
+    }
+
+    public List<CaseCategory> getDisassociatedCategories() {
+        return disassociatedCategories;
+    }
+
+    public void setDisassociatedCategories(List<CaseCategory> disassociatedCategories) {
+        this.disassociatedCategories = disassociatedCategories;
+    }
+
+    public String getTeamDescription() {
+        return teamDescription;
+    }
+
+    public void setTeamDescription(String teamDescription) {
+        this.teamDescription = teamDescription;
+    }
+
+    public String getResolutionDescription() {
+        return resolutionDescription;
+    }
+
+    public void setResolutionDescription(String resolutionDescription) {
+        this.resolutionDescription = resolutionDescription;
+    }
+
+    public List<SubjectCategorySet> getAllTriggerSubjectCategories() {
+        return allTriggerSubjectCategories;
+    }
+
+    public void setAllTriggerSubjectCategories(List<SubjectCategorySet> allTriggerSubjectCategories) {
+        this.allTriggerSubjectCategories = allTriggerSubjectCategories;
+    }
+
+    public List<SubjectCategory> getDisassociatedSubjectCategories() {
+        return disassociatedSubjectCategories;
+    }
+
+    public void setDisassociatedSubjectCategories(List<SubjectCategory> disassociatedSubjectCategories) {
+        this.disassociatedSubjectCategories = disassociatedSubjectCategories;
+    }
 }

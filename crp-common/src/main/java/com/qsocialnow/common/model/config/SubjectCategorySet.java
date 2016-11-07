@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-public class SubjectCategorySet {
+public class SubjectCategorySet implements Type {
 
     private String id;
 
@@ -12,18 +12,24 @@ public class SubjectCategorySet {
 
     private List<SubjectCategory> categories;
 
+    private boolean active = true;
+
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -34,6 +40,16 @@ public class SubjectCategorySet {
 
     public void setCategories(List<SubjectCategory> categories) {
         this.categories = categories;
+    }
+
+    @Override
+    public boolean isActive() {
+        return active;
+    }
+
+    @Override
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

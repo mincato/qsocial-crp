@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.qsocialnow.crp</groupId>
     <artifactId>case-resolution-platform</artifactId>
-    <version>0.6.2</version>
+    <version>0.6.3</version>
   </parent>
   
   <artifactId>crp-retroactive-process</artifactId>
@@ -41,6 +41,7 @@
 		<curator.version>2.9.1</curator.version>
 		<elasticsearch.version>1.6.2</elasticsearch.version>
 		<paged-events.version>1.0-SNAPSHOT</paged-events.version>
+		<aws-java-sdk>1.11.38</aws-java-sdk>
 	</properties>
   
   <dependencies>
@@ -153,6 +154,13 @@
 			<groupId>com.odatech.microservices</groupId>
 			<artifactId>paged-events</artifactId>
 			<version>${paged-events.version}</version>
+		</dependency>
+		
+		<!-- AWS -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-lambda</artifactId>
+			<version>${aws-java-sdk}</version>
 		</dependency>
 
 	</dependencies>

@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.qsocialnow.elasticsearch.queues.QueueConsumer;
-import com.qsocialnow.elasticsearch.queues.QueueProducer;
+import com.qsocialnow.common.queues.QueueConsumer;
+import com.qsocialnow.common.queues.QueueProducer;
 import com.qsocialnow.eventresolver.exception.InvalidDomainException;
 import com.qsocialnow.kafka.model.Message;
 
@@ -35,7 +35,7 @@ public class MessageQueueConsumer extends QueueConsumer<Message> {
     @Override
     public void process(Message message) {
         synchronized (documents) {
-            log.info("Adding to process event: " + message.getMessage());
+            log.debug("Adding to process event: " + message.getMessage());
             documents.add(message);
         }
     }
@@ -44,7 +44,7 @@ public class MessageQueueConsumer extends QueueConsumer<Message> {
     public void save() {
         synchronized (documents) {
             if (documents.size() > 0) {
-                log.info("Processing " + documents.size() + " messages after dequeue it");
+                log.debug("Processing " + documents.size() + " messages after dequeue it");
                 for (Message message : documents) {
                     try {
                         messageProcessor.process(message);

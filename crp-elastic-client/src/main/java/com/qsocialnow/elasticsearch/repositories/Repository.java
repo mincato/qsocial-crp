@@ -71,8 +71,13 @@ public interface Repository<T> {
     public <E> SearchResponse<E> searchChildMappingWithFilters(int from, int size, String sortField,
             QueryBuilder filters, ChildMapping<T, E> mapping);
 
+    public <E> SearchResponse<E> searchChildMappingWithFilters(QueryBuilder filters, ChildMapping<T, E> mapping);
+
     public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField, SortOrder sortOrder,
             BoolQueryBuilder filters, Mapping<T, E> mapping);
+
+    public <E> SearchResponse<E> searchWithFilters(String sortField, SortOrder sortOrder, BoolQueryBuilder filters,
+            Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping);
 

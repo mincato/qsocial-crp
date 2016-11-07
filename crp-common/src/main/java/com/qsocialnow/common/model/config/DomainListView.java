@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class DomainListView implements Serializable {
 
-    private static final long serialVersionUID = 4923657399304973277L;
+    private static final long serialVersionUID = 934475061381107999L;
 
     private String id;
 
@@ -20,6 +20,8 @@ public class DomainListView implements Serializable {
     private String thematicNames;
 
     private List<Long> thematicIds;
+
+    private boolean active = true;
 
     public String getId() {
         return id;
@@ -60,6 +62,14 @@ public class DomainListView implements Serializable {
 
     public void setThematicIds(List<Long> thematicIds) {
         this.thematicIds = thematicIds;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

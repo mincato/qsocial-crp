@@ -3,6 +3,7 @@ package com.qsocialnow.services.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.SubjectCategorySetListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -34,6 +36,15 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
 
     @Value("${subjectCategorySet.serviceurl}")
     private String subjectCategorySetServiceUrl;
+
+    @Value("${subjectCategory.serviceurl}")
+    private String subjectCategoryServiceUrl;
+
+    @Value("${subjectCategorySetActive.serviceurl}")
+    private String subjectCategorySetActiveServiceUrl;
+
+    @Value("${subjectCategorySetWithActiveCategories.serviceurl}")
+    private String subjectCategorySetWithActiveCategoriesServiceUrl;
 
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
@@ -68,6 +79,27 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
             return subjectCategorySetSelected;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public SubjectCategorySet findOneWithActiveCategories(String caseCategorySetId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(subjectCategorySetWithActiveCategoriesServiceUrl)).path(
+                    "/" + caseCategorySetId);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            SubjectCategorySet subjectCategorySetSelected = restTemplate.getForObject(builder.toUriString(),
+                    SubjectCategorySet.class);
+
+            return subjectCategorySetSelected;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
             throw new RuntimeException(e);
         }
     }
@@ -148,6 +180,80 @@ public class SubjectCategorySetServiceImpl implements SubjectCategorySetService 
             return subjectCategorySets;
         } catch (Exception e) {
             log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SubjectCategorySet> findAllActive() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(subjectCategorySetActiveServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<SubjectCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategorySet>>() {
+                    });
+
+            List<SubjectCategorySet> subjectCategorySets = response.getBody();
+            return subjectCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SubjectCategory> findAllCategories() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(subjectCategoryServiceUrl)).path("/all");
+            ;
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<SubjectCategory>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategory>>() {
+                    });
+
+            List<SubjectCategory> subjectCategories = response.getBody();
+            return subjectCategories;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call SubjectCategorySet service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SubjectCategorySet> findByIds(List<String> ids) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(subjectCategorySetServiceUrl));
+
+            String idsParameter = StringUtils.join(ids, ",");
+            builder.queryParam("ids", idsParameter);
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            ResponseEntity<List<SubjectCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SubjectCategorySet>>() {
+                    });
+
+            List<SubjectCategorySet> caseCategorySets = response.getBody();
+            return caseCategorySets;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call CaseCategorySet service", e);
             throw new RuntimeException(e);
         }
     }

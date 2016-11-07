@@ -1,4 +1,4 @@
-package com.qsocialnow.elasticsearch.queues;
+package com.qsocialnow.common.queues;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -10,23 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import com.leansoft.bigqueue.BigQueueImpl;
 import com.leansoft.bigqueue.IBigQueue;
-import com.qsocialnow.elasticsearch.configuration.QueueConfigurator;
+import com.qsocialnow.common.config.QueueConfigurator;
 
 public class QueueService {
-
-    private static final int TOTAL_ITEM_COUNTS = 200;
-
-    private static final int TOTAL_FAIL_ITEM_COUNTS = 400;
-
-    private static final int TOTAL_MAX_DEAD_ITEM_COUNTS = 1200;
-
-    private static final int DELAY = 10;
-
-    private static final int FAIL_DELAY = 10;
-
-    private static final int INITIAL_DELAY = 30;
-
-    private static final String DEAD_LETTER_QUEUE_DIR = "/deadLetterQueue";
 
     private static final Logger log = LoggerFactory.getLogger(QueueService.class);
 
@@ -50,13 +36,16 @@ public class QueueService {
 
     private String type;
 
+    private QueueConfigurator queueConfiguration;
+
     // private static QueueService instance;
 
     QueueService(QueueConfigurator queueConfiguration) {
+        this.queueConfiguration = queueConfiguration;
         this.baseDir = queueConfiguration.getBaseDir();
         this.queueDir = this.baseDir + queueConfiguration.getQueueDir();
         this.queueFailDir = this.baseDir + queueConfiguration.getErrorQueueDir();
-        this.deadLetterQueueDir = this.queueFailDir + DEAD_LETTER_QUEUE_DIR;
+        this.deadLetterQueueDir = this.queueFailDir + queueConfiguration.getDeadLetterQueueDir();
     }
 
     public boolean initQueue(String type) {
@@ -97,13 +86,13 @@ public class QueueService {
     public <T> void startProducerConsumer(QueueProducer<T> producer, QueueConsumer<T> consumer) {
         serviceProducerConsumer = Executors.newFixedThreadPool(2);
 
-        consumer.setDelay(DELAY);
-        consumer.setInitialDelay(INITIAL_DELAY);
-        consumer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
+        consumer.setDelay(queueConfiguration.getDelay());
+        consumer.setInitialDelay(queueConfiguration.getInitialDelay());
+        consumer.setTotalItemCounts(queueConfiguration.getTotalItemCounts());
         consumer.setQueue(bigQueue);
         log.info("Starting consumer queue for type :" + this.type);
         producer.setQueue(bigQueue);
-        producer.setTotalItemCounts(TOTAL_ITEM_COUNTS);
+        producer.setTotalItemCounts(queueConfiguration.getTotalItemCounts());
         log.info("Starting producer queue for type :" + this.type);
         serviceProducerConsumer.execute(consumer);
         serviceProducerConsumer.execute(producer);
@@ -111,13 +100,13 @@ public class QueueService {
 
     public <T> void startFailProducerConsumer(QueueProducer<T> producer, QueueConsumer<T> consumer) {
         serviceFailProducerConsumer = Executors.newFixedThreadPool(2);
-        consumer.setDelay(FAIL_DELAY);
-        consumer.setInitialDelay(INITIAL_DELAY);
-        consumer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
+        consumer.setDelay(queueConfiguration.getDelay());
+        consumer.setInitialDelay(queueConfiguration.getInitialDelay());
+        consumer.setTotalItemCounts(queueConfiguration.getTotalItemCounts());
         consumer.setQueue(bigQueueFail);
         producer.setQueue(bigQueueFail);
-        producer.setTotalItemCounts(TOTAL_FAIL_ITEM_COUNTS);
-        producer.setTotalMaxDeadItemCounts(TOTAL_MAX_DEAD_ITEM_COUNTS);
+        producer.setTotalItemCounts(queueConfiguration.getTotalItemCounts());
+        producer.setTotalMaxDeadItemCounts(queueConfiguration.getTotalMaxDeadItemCounts());
         producer.setDeadLetterQueue(deadLetterQueue);
         log.info("Starting fail consumer queue for type :" + this.type);
         serviceFailProducerConsumer.execute(consumer);
@@ -139,5 +128,9 @@ public class QueueService {
             log.error("Unexpected error trying to shutdown queue service. Cause", e);
         }
 
+    }
+
+    public String getType() {
+        return type;
     }
 }

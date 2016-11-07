@@ -4,10 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.exception.RepositoryException;
-import com.qsocialnow.elasticsearch.queues.QueueConsumer;
-import com.qsocialnow.elasticsearch.queues.QueueProducer;
-import com.qsocialnow.elasticsearch.queues.QueueService;
-import com.qsocialnow.elasticsearch.queues.QueueType;
+import com.qsocialnow.common.queues.QueueConsumer;
+import com.qsocialnow.common.queues.QueueProducer;
+import com.qsocialnow.common.queues.QueueService;
+import com.qsocialnow.common.queues.QueueType;
 import com.qsocialnow.eventresolver.exception.InvalidDomainException;
 import com.qsocialnow.kafka.consumer.Consumer;
 import com.qsocialnow.kafka.model.Message;
@@ -56,8 +56,8 @@ public class EventHandlerProcessor implements Runnable {
     private void initQueueService() {
         if (queueService != null) {
             if (queueProducer == null) {
-                queueProducer = new QueueProducer<Message>(QueueType.EVENTS.type());
-                queueConsumer = new MessageQueueConsumer(QueueType.EVENTS.type(), messageProcessor, queueProducer);
+                queueProducer = new QueueProducer<Message>(queueService.getType());
+                queueConsumer = new MessageQueueConsumer(queueService.getType(), messageProcessor, queueProducer);
                 queueProducer.addConsumer(queueConsumer);
                 queueService.startFailProducerConsumer(queueProducer, queueConsumer);
             }

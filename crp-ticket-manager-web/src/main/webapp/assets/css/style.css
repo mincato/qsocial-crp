@@ -2648,7 +2648,7 @@ ul.thematic {
 	border-top-right-radius: 0;
 	border-bottom-right-radius: 0;
  }
- 
+
  .z-datebox-button { 
     padding: 6px 12px;
     font-size: 14px;
@@ -2669,6 +2669,51 @@ ul.thematic {
  
 .input-group.z-datebox-popup {
 	position: absolute;
+}
+
+.timebox > .z-timebox-input { 
+    width: 100%;
+    margin-bottom: 0;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #555;
+    vertical-align: middle;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+ }
+
+ .timebox > .z-timebox-button { 
+    padding: 6px 12px;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 1;
+    text-align: center;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 1%;
+    white-space: nowrap;
+    vertical-align: middle;
+    display: table-cell;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    border-left: 0;
+ }
+
+.timebox > .z-timebox-button > a {
+	height: 16px;
+	background: transparent;
+}
+
+.timebox > .z-timebox-button > .z-timebox-separator {
+	 visibility: hidden;	
 }
 
 .icon-input label:before {
@@ -2876,6 +2921,10 @@ button.remove {
 	display: inline-block;
 }
 
-#page-header > div > i {
+#page-header > div > i,#page-header > div > span > i  {
 	padding-right: 10px;
+}
+
+.strikethrough > span {
+	text-decoration:line-through
 }

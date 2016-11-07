@@ -22,6 +22,6 @@ public interface CaseService {
 
     Case create(Case newCase);
 
-    byte[] getReport(Map<String, String> filters);
+    byte[] getReport(Map<String, String> filters, String language);
 
 }

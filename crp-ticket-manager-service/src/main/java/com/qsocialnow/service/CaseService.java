@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -18,6 +20,7 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.config.ActionType;
+import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.Trigger;
@@ -26,6 +29,7 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
+import com.qsocialnow.persistence.DomainRepository;
 import com.qsocialnow.persistence.TeamRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 import com.qsocialnow.service.action.Action;
@@ -47,12 +51,16 @@ public class CaseService {
     @Autowired
     private TriggerRepository triggerRepository;
 
+    @Autowired
+    private DomainRepository domainRepository;
+
     @Resource
     private Map<ActionType, Action> actions;
 
     public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
             String domainId, String triggerId, String segmentId, String subject, String title, String pendingResponse,
-            String status, String fromOpenDate, String toOpenDate, String userName, String userSelected) {
+            String priority, String status, String fromOpenDate, String toOpenDate, String userName,
+            String userSelected, String caseCategory, String subjectCategory) {
         PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
         pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
 
@@ -72,7 +80,8 @@ public class CaseService {
         }
         log.info("After process teams - trying to retrieve cases from :" + userName);
         List<CaseListView> cases = repository.findAll(pageRequest, domainId, triggerId, segmentId, subject, title,
-                pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected);
+                pendingResponse, priority, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected,
+                caseCategory, subjectCategory);
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;
@@ -144,7 +153,9 @@ public class CaseService {
             if (triggerId != null) {
                 Trigger trigger = triggerRepository.findOne(triggerId);
                 if (trigger != null) {
-                    availableResolutions = trigger.getResolutions();
+                    String domainId = caseObject.getDomainId();
+                    Domain domain = domainRepository.findOneWithActiveResolutions(domainId);
+                    availableResolutions = filterActiveResolutions(trigger.getResolutions(), domain.getResolutions());
                 }
             }
         } else {
@@ -152,6 +163,18 @@ public class CaseService {
             throw new RuntimeException("The case was not found");
         }
         return availableResolutions;
+    }
+
+    private List<Resolution> filterActiveResolutions(List<Resolution> triggerResolutions,
+            List<Resolution> domainResolutions) {
+        return triggerResolutions
+                .stream()
+                .filter(triggerRes -> {
+                    String resolutionId = triggerRes.getId();
+                    Optional<Resolution> domainRes = domainResolutions.stream()
+                            .filter(res -> res.getId().equals(resolutionId)).findFirst();
+                    return domainRes.isPresent();
+                }).collect(Collectors.toList());
     }
 
     public void setRepository(CaseRepository repository) {

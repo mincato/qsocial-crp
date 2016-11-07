@@ -24,7 +24,7 @@ public class WordDetectionCriteriaFilter implements DetectionCriteriaFilter {
 
     @Override
     public boolean match(NormalizedInputBeanDocument message, Filter filter) {
-        log.info("Executing word message filter");
+        log.debug("Executing word message filter");
         boolean match = false;
         if (messageHasWords(message)) {
             match = filter.getWordFilters().stream()

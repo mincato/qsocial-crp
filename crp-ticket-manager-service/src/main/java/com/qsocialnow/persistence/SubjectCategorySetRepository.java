@@ -32,9 +32,8 @@ public class SubjectCategorySetRepository {
                     name);
 
             for (SubjectCategorySet subjectCategorySet : subjectCategorySetsRepo) {
-                SubjectCategorySetListView subjectCategorySetListView = new SubjectCategorySetListView();
-                subjectCategorySetListView.setId(subjectCategorySet.getId());
-                subjectCategorySetListView.setDescription(subjectCategorySet.getDescription());
+                SubjectCategorySetListView subjectCategorySetListView = SubjectCategorySetListView
+                        .create(subjectCategorySet);
                 subjectCategorySets.add(subjectCategorySetListView);
             }
         } catch (Exception e) {
@@ -50,6 +49,7 @@ public class SubjectCategorySetRepository {
 
             SubjectCategorySet newSubjectCategorySet = new SubjectCategorySet();
             newSubjectCategorySet.setDescription(subjectCategorySet.getDescription());
+            newSubjectCategorySet.setActive(subjectCategorySet.isActive());
             newSubjectCategorySet = subjectCategorySetElasticService.indexSubjectCategorySet(newSubjectCategorySet,
                     subjectCategories);
             return newSubjectCategorySet;
@@ -65,6 +65,17 @@ public class SubjectCategorySetRepository {
 
         try {
             subjectCategorySet = subjectCategorySetElasticService.findOne(subjectCategorySetId);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategorySet;
+    }
+
+    public SubjectCategorySet findOneWithActiveCategories(String subjectCategorySetId) {
+        SubjectCategorySet subjectCategorySet = null;
+
+        try {
+            subjectCategorySet = subjectCategorySetElasticService.findOneWithActiveCategories(subjectCategorySetId);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
@@ -93,6 +104,17 @@ public class SubjectCategorySetRepository {
         return subjectCategorySets;
     }
 
+    public List<SubjectCategorySet> findAllActive() {
+        List<SubjectCategorySet> subjectCategorySets = new ArrayList<>();
+
+        try {
+            subjectCategorySets = subjectCategorySetElasticService.findAllActive();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategorySets;
+    }
+
     public List<SubjectCategory> findCategories(String subjectCategorySetId) {
         List<SubjectCategory> subjectCategories = new ArrayList<>();
 
@@ -106,6 +128,22 @@ public class SubjectCategorySetRepository {
 
     public List<SubjectCategorySet> findCategoriesSets(List<String> subjectCategoriesSetIds) {
         return subjectCategorySetElasticService.findByIds(subjectCategoriesSetIds);
+    }
+
+    public List<SubjectCategory> findAllCategories() {
+        List<SubjectCategory> subjectCategories = new ArrayList<>();
+
+        try {
+            subjectCategories = subjectCategorySetElasticService.findAllCategories();
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjectCategories;
+    }
+
+    public List<SubjectCategorySet> findByIds(List<String> categoriesIds) {
+        List<SubjectCategorySet> result = subjectCategorySetElasticService.findByIds(categoriesIds);
+        return result;
     }
 
 }

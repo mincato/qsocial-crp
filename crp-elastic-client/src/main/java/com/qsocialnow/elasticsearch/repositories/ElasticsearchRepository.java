@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
-import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -326,8 +325,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public <E> SearchResponse<E> queryByIds(Mapping<T, E> mapping, String sortField, List<String> ids) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        if (sortField != null)
+        if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
 
         searchSourceBuilder.query(QueryBuilders.idsQuery(mapping.getType()).addIds(ids));
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex()).build();
@@ -338,11 +339,15 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             String searchField, String searchValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        if (size > 0)
+        if (size > 0) {
             searchSourceBuilder.from(from).size(size);
+        } else {
+            searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
+        }
 
-        if (sortField != null)
+        if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
 
         searchSourceBuilder.query(QueryBuilders.matchQuery(searchField, searchValue));
 
@@ -356,10 +361,11 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             List<ShouldFilter> shouldFilters) {
 
         SortOrder sortOrderValue;
-        if (sortOrder)
+        if (sortOrder) {
             sortOrderValue = SortOrder.ASC;
-        else
+        } else {
             sortOrderValue = SortOrder.DESC;
+        }
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size);
@@ -497,7 +503,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return executeSearch(search);
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
             Mapping<T, E> mapping) {
         SortOrder sortOrderEnum = sortOrder ? SortOrder.ASC : SortOrder.DESC;
@@ -573,7 +578,6 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
-    @SuppressWarnings({ "unchecked", "deprecation" })
     private SearchResult executeSearch(Search search) {
         SearchResult result = null;
         try {
@@ -658,6 +662,40 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @SuppressWarnings({ "unchecked", "deprecation" })
+    public <E> SearchResponse<E> searchChildMappingWithFilters(QueryBuilder filters, ChildMapping<T, E> mapping) {
+
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE).query(
+                QueryBuilders
+                        .boolQuery()
+                        .must(filters)
+                        .must(QueryBuilders.hasParentQuery(mapping.getParentType(),
+                                QueryBuilders.termQuery("_id", mapping.getIdParent()))));
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RepositoryException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @SuppressWarnings({ "deprecation", "unchecked" })
     @Override
     public <E> SearchResponse<E> searchChildMapping(ChildMapping<T, E> mapping) {
 
@@ -692,6 +730,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return searchWithFilters(from, size, sortField, SortOrder.DESC, null, mapping);
     }
 
+    @SuppressWarnings({ "deprecation", "unchecked" })
     @Override
     public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField, SortOrder sortOrder,
             BoolQueryBuilder filters, Mapping<T, E> mapping) {
@@ -699,7 +738,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (from != null) {
             searchSourceBuilder.from(from);
         }
-        if (size != null) {
+        if (size == null) {
+            searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
+        } else {
             searchSourceBuilder.size(size);
         }
         if (sortField != null) {
@@ -731,6 +772,42 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @SuppressWarnings({ "deprecation", "unchecked" })
+    @Override
+    public <E> SearchResponse<E> searchWithFilters(String sortField, SortOrder sortOrder, BoolQueryBuilder filters,
+            Mapping<T, E> mapping) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
+        if (sortField != null) {
+            searchSourceBuilder.sort(sortField, sortOrder);
+        }
+        if (filters != null) {
+            searchSourceBuilder.query(filters);
+        }
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RepositoryException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @SuppressWarnings({ "deprecation", "unchecked" })
     @Override
     public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
@@ -759,6 +836,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         return response;
     }
 
+    @SuppressWarnings({ "deprecation", "unchecked" })
     @Override
     public <E> SearchResponse<E> search(Mapping<T, E> mapping) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();

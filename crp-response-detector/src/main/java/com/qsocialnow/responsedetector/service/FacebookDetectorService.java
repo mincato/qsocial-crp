@@ -91,10 +91,10 @@ public class FacebookDetectorService extends SourceDetectorService {
                         String nodeAdded = ZKPaths.getNodeFromPath(event.getData().getPath());
                         String nodePath = event.getData().getPath();
 
-                        log.info("Adding node:" + nodeAdded + " from path: " + event.getData().getPath());
+                        log.debug("Adding node:" + nodeAdded + " from path: " + event.getData().getPath());
                         if (event.getData().getData() != null) {
                             String nodeValue = new String(event.getData().getData());
-                            log.info("Adding node value:-" + nodeValue + "-");
+                            log.debug("Adding node value:-" + nodeValue + "-");
                             if (nodeValue.equals("NEW")) {
                                 addUserResolverTrack(nodeAdded);
                             } else {
@@ -107,29 +107,30 @@ public class FacebookDetectorService extends SourceDetectorService {
                                         addFacebookFeedEvent(nodeAdded, nodePath, facebookFeedEvent);
                                     }
                                 } else {
-                                    log.info("Not Adding node with empty value ");
+                                    log.debug("Not Adding node with empty value ");
                                 }
                             }
                         } else {
-                            log.info("Not Adding node value");
+                            log.debug("Not Adding node value");
                         }
                         break;
                     }
                     case NODE_UPDATED: {
-                        log.info("Facebook conversation TreeNode changed: "
+                        log.debug("Facebook conversation TreeNode changed: "
                                 + ZKPaths.getNodeFromPath(event.getData().getPath()) + ", value: "
                                 + new String(event.getData().getData()));
                         break;
                     }
                     case NODE_REMOVED: {
-                        log.info("Facebook conversation removed: " + ZKPaths.getNodeFromPath(event.getData().getPath()));
+                        log.debug("Facebook conversation removed: "
+                                + ZKPaths.getNodeFromPath(event.getData().getPath()));
                         break;
                     }
                     case INITIALIZED: {
                         break;
                     }
                     default:
-                        log.info("Other event: " + event.getType().name());
+                        log.debug("Other event: " + event.getType().name());
                 }
             }
 
@@ -139,7 +140,7 @@ public class FacebookDetectorService extends SourceDetectorService {
 
     private void addUserResolverTrack(String userResolverToFilter) {
         try {
-            log.info("Adding UserResolver:" + userResolverToFilter);
+            log.debug("Adding UserResolver:" + userResolverToFilter);
         } catch (Exception e) {
             log.error("There was an error adding new User Resolver to track :" + userResolverToFilter, e);
         }
@@ -148,7 +149,7 @@ public class FacebookDetectorService extends SourceDetectorService {
     private void addFacebookFeedEvent(String commentId, String commentPath, FacebookFeedEvent facebookFeedEvent) {
         try {
 
-            log.info("Adding message conversation from comment :" + facebookFeedEvent.getRootCommentId()
+            log.debug("Adding message conversation from comment :" + facebookFeedEvent.getRootCommentId()
                     + " from Case:" + facebookFeedEvent.getCaseId());
 
             nodePaths.put(facebookFeedEvent.getRootCommentId(), commentPath);
@@ -177,7 +178,7 @@ public class FacebookDetectorService extends SourceDetectorService {
     public void removeSourceConversation(String conversation) {
         try {
             String nodePath = nodePaths.get(conversation);
-            log.info("Removing node after detect response: " + nodePath);
+            log.debug("Removing node after detect response: " + nodePath);
             conversations.remove(conversation);
             zookeeperClient.delete().forPath(nodePath);
         } catch (Exception e) {
@@ -186,7 +187,7 @@ public class FacebookDetectorService extends SourceDetectorService {
     }
 
     private void startFeedConsumer() {
-        log.info("Starting Feed Consumer to check new comments from existing posts");
+        log.debug("Starting Feed Consumer to check new comments from existing posts");
         executor.scheduleWithFixedDelay(facebookFeedConsumer, 10, 10, TimeUnit.SECONDS);
     }
 
@@ -207,7 +208,7 @@ public class FacebookDetectorService extends SourceDetectorService {
             event.setNormalizeMessage(messageText);
 
             if (isResponseFromMessage) {
-                log.info("Adding facebookevent information into event");
+                log.debug("Adding facebookevent information into event");
                 FacebookFeedEvent conversationsByCommentId = conversations.get(commentId);
                 if (conversationsByCommentId != null) {
                     event.setIdPadre(conversationsByCommentId.getEventId());
@@ -223,7 +224,7 @@ public class FacebookDetectorService extends SourceDetectorService {
             event.setResponseDetected(true);
             event.setFechaCreacion(new Date());
             eventProcessor.process(event);
-            log.info("Creating event to handle automatic response detection");
+            log.debug("Creating event to handle automatic response detection");
         } catch (Exception e) {
             log.error("Error trying to register event :" + e);
         }
