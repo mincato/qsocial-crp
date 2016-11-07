@@ -72,17 +72,7 @@ public class DomainRepository implements ReportRepository {
 
         try {
             List<Domain> domainsRepo = domainElasticService.getDomains(pageRequest.getOffset(), pageRequest.getLimit());
-
-            for (Domain domainRepo : domainsRepo) {
-                DomainListView domainListView = new DomainListView();
-                domainListView.setId(domainRepo.getId());
-                domainListView.setName(domainRepo.getName());
-                domainListView.setActive(domainRepo.isActive());
-
-                List<Long> thematics = domainRepo.getThematics();
-                domainListView.setThematicIds(thematics);
-                domains.add(domainListView);
-            }
+            copyDomainsRepoToDomainListViews(domains, domainsRepo);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
@@ -94,17 +84,19 @@ public class DomainRepository implements ReportRepository {
 
         try {
             List<Domain> domainsRepo = domainElasticService.getDomains();
+            copyDomainsRepoToDomainListViews(domains, domainsRepo);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return domains;
+    }
 
-            for (Domain domainRepo : domainsRepo) {
-                DomainListView domainListView = new DomainListView();
-                domainListView.setId(domainRepo.getId());
-                domainListView.setName(domainRepo.getName());
-                domainListView.setActive(domainRepo.isActive());
+    public List<DomainListView> findAllActive() {
+        List<DomainListView> domains = new ArrayList<>();
 
-                List<Long> thematics = domainRepo.getThematics();
-                domainListView.setThematicIds(thematics);
-                domains.add(domainListView);
-            }
+        try {
+            List<Domain> domainsRepo = domainElasticService.getActiveDomains();
+            copyDomainsRepoToDomainListViews(domains, domainsRepo);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
@@ -118,16 +110,7 @@ public class DomainRepository implements ReportRepository {
             List<Domain> domainsRepo = domainElasticService.getDomainsByName(pageRequest.getOffset(),
                     pageRequest.getLimit(), name);
 
-            for (Domain domainRepo : domainsRepo) {
-                DomainListView domainListView = new DomainListView();
-                domainListView.setId(domainRepo.getId());
-                domainListView.setName(domainRepo.getName());
-                domainListView.setActive(domainRepo.isActive());
-
-                List<Long> thematics = domainRepo.getThematics();
-                domainListView.setThematicIds(thematics);
-                domains.add(domainListView);
-            }
+            copyDomainsRepoToDomainListViews(domains, domainsRepo);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
@@ -136,6 +119,28 @@ public class DomainRepository implements ReportRepository {
 
     public List<DomainListView> findDomainsByIds(List<String> domainsIds) {
         List<DomainListView> domains = new ArrayList<>();
+        copyDomainsRepoToDomainListViewsWithoutThematics(domainsIds, domains);
+        return domains;
+    }
+
+    public Map<String, String> findAllReport() {
+        return domainElasticService.getAllDomainsAsMap();
+    }
+
+    private void copyDomainsRepoToDomainListViews(List<DomainListView> domains, List<Domain> domainsRepo) {
+        for (Domain domainRepo : domainsRepo) {
+            DomainListView domainListView = new DomainListView();
+            domainListView.setId(domainRepo.getId());
+            domainListView.setName(domainRepo.getName());
+            domainListView.setActive(domainRepo.isActive());
+
+            List<Long> thematics = domainRepo.getThematics();
+            domainListView.setThematicIds(thematics);
+            domains.add(domainListView);
+        }
+    }
+
+    private void copyDomainsRepoToDomainListViewsWithoutThematics(List<String> domainsIds, List<DomainListView> domains) {
         List<Domain> domainsRepo = domainElasticService.getDomainsByIds(domainsIds);
         for (Domain domainRepo : domainsRepo) {
             DomainListView domainListView = new DomainListView();
@@ -144,11 +149,6 @@ public class DomainRepository implements ReportRepository {
             domainListView.setActive(domainRepo.isActive());
             domains.add(domainListView);
         }
-        return domains;
-    }
-
-    public Map<String, String> findAllReport() {
-        return domainElasticService.getAllDomainsAsMap();
     }
 
 }

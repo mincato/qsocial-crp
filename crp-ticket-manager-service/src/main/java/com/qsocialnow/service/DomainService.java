@@ -110,6 +110,11 @@ public class DomainService {
         return page;
     }
 
+    public List<DomainListView> findAllActive() {
+        List<DomainListView> domains = domainRepository.findAllActive();
+        return domains;
+    }
+
     public PageResponse<DomainListView> findAllByUserName(String userName) {
         log.info("Retrieving domains from userName:" + userName);
         List<Team> teams = teamRepository.findTeams(userName);

@@ -350,6 +350,30 @@ router.get('/domains', function (req, res) {
 	  }
 });
 
+router.get('/domainsActive', function (req, res) {
+
+	  function asyncResponse(err,responseDomains) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(responseDomains !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(responseDomains));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var domainService = javaContext.getBeanSync("domainService");
+	  domainService.findAllActive(asyncResponse);
+});
+
 router.post('/domains', function (req, res) {
 
   function asyncResponse(err,responseDomain) {
