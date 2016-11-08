@@ -43,12 +43,4 @@
     	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}" value-ref="facebookSourceStrategy"/>
 	</util:map>
 	
-	<bean id="twitterSourceStrategy" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
-        <property name="twitterConfig" ref="twitterConfig"></property>
-    </bean>
-    
-    <bean id="facebookSourceStrategy" class="com.qsocialnow.common.services.strategies.FacebookSourceStrategy">
-        <property name="facebookConfig" ref="facebookConfig"></property>
-    </bean>
-	
 </beans>

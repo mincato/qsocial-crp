@@ -27,6 +27,8 @@ public class ActionRegistry implements Serializable {
 
     private String deepLink;
 
+    private ActionRegistryStatus status;
+
     public String getId() {
         return id;
     }
@@ -97,5 +99,13 @@ public class ActionRegistry implements Serializable {
 
     public void setDeepLink(String deepLink) {
         this.deepLink = deepLink;
+    }
+
+    public void setStatus(ActionRegistryStatus status) {
+        this.status = status;
+    }
+
+    public ActionRegistryStatus getStatus() {
+        return status;
     }
 }

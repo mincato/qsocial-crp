@@ -17,13 +17,14 @@ public class ChangeSubjectCaseAction implements Action {
     private SubjectRepository subjectRepository;
 
     @Override
-    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public AsyncAction execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         String subjectId = (String) parameters.get(ActionParameter.SUBJECT);
         Subject subject = subjectRepository.findOne(subjectId);
         Subject oldSubject = caseObject.getSubject();
         caseObject.setSubject(subject);
         caseObject.setSource(subject.getSource());
         parameters.put(ActionParameter.COMMENT, buildComment(oldSubject, subject));
+        return null;
     }
 
     private String buildComment(Subject oldSubject, Subject subject) {

@@ -1508,3 +1508,45 @@ hr {
 	background-color: #64b3ac;
 }
 
+/*Action registry status*/
+
+ @registry-status-sending: #ea7d24;
+ @registry-status-sent: green;
+ @registry-status-error: red;
+ 
+.registry-status > span:before {
+	position: relative;
+    display: inline-block;
+    margin-left: 5px;
+  	margin-right: 5px;
+}
+       
+.registry-status.sending > span:before {
+	font: normal normal normal 18px/1 FontAwesome;
+    content: "\f110";
+	color: @registry-status-sending;
+	-webkit-animation: fa-spin 1s infinite steps(8);
+	animation: fa-spin 1s infinite steps(8)
+}
+        
+.registry-status.sent > span:before {
+	font: normal normal normal 18px/1 FontAwesome;
+    content: "\f05d";
+    color: @registry-status-sent;
+}
+        
+.registry-status.error > span:before {
+	font: normal normal normal 18px/1 FontAwesome;
+    content: "\f05c";
+	color: @registry-status-error;
+}       
+
+.label.label-case-open {
+	background-color: @default;
+}
+
+.label.label-case-close {
+	background-color: #64b3ac;
+}
+
+
