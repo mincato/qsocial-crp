@@ -104,6 +104,7 @@ public class App implements Runnable {
                 @Override
                 public void nodeChanged() throws Exception {
                     cacheManager.getCache(CacheConfig.USER_RESOLVERS_SOURCE_IDS_CACHE).clear();
+                    cacheManager.getCache(CacheConfig.USER_RESOLVERS_CACHE).clear();
                 }
             });
             userResolversNodeCache.start(true);
