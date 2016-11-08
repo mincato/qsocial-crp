@@ -81,19 +81,39 @@ public class UserResolverRepository {
             List<UserResolver> userResolversRepo = userResolverElasticService.getUserResolvers(offset, limit,
                     identifier);
 
-            for (UserResolver userResolverRepo : userResolversRepo) {
-                UserResolverListView userResolverListView = new UserResolverListView();
-                userResolverListView.setId(userResolverRepo.getId());
-                userResolverListView.setIdentifier(userResolverRepo.getIdentifier());
-                userResolverListView.setActive(userResolverRepo.isActive());
-                userResolverListView.setSource(userResolverRepo.getSource());
-
-                userResolvers.add(userResolverListView);
-            }
+            copyUserResolverRepoToUserResolverListView(userResolvers, userResolversRepo);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
         return userResolvers;
+    }
+
+    public List<UserResolverListView> findAllActive(PageRequest pageRequest, String identifier) {
+        List<UserResolverListView> userResolvers = new ArrayList<>();
+
+        try {
+            Integer offset = pageRequest != null ? pageRequest.getOffset() : null;
+            Integer limit = pageRequest != null ? pageRequest.getLimit() : null;
+            List<UserResolver> userResolversRepo = userResolverElasticService.getActiveUserResolvers(offset, limit,
+                    identifier);
+
+            copyUserResolverRepoToUserResolverListView(userResolvers, userResolversRepo);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return userResolvers;
+    }
+
+    private void copyUserResolverRepoToUserResolverListView(List<UserResolverListView> userResolvers,
+            List<UserResolver> userResolversRepo) {
+        for (UserResolver userResolverRepo : userResolversRepo) {
+            UserResolverListView userResolverListView = new UserResolverListView();
+            userResolverListView.setId(userResolverRepo.getId());
+            userResolverListView.setIdentifier(userResolverRepo.getIdentifier());
+            userResolverListView.setActive(userResolverRepo.isActive());
+            userResolverListView.setSource(userResolverRepo.getSource());
+            userResolvers.add(userResolverListView);
+        }
     }
 
     public UserResolver findOne(String userResolverId) {

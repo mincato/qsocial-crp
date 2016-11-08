@@ -56,7 +56,7 @@ public class CreateTeamViewModel extends EditableTeamViewModel implements Serial
 
     private void initUsersResolver() {
         setUserResolverListView(new ListView<UserResolverListView>());
-        getUserResolverListView().setList(userResolverService.findAll(null));
+        getUserResolverListView().setList(userResolverService.findAllActive());
         getUserResolverListView().setFilteredList(new ArrayList<UserResolverListView>());
         getUserResolverListView().getFilteredList().addAll(getUserResolverListView().getList());
     }
