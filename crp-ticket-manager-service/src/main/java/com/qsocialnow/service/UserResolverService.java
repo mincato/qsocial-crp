@@ -58,6 +58,11 @@ public class UserResolverService {
         return userResolvers;
     }
 
+    public List<UserResolverListView> findAllActive() {
+        List<UserResolverListView> userResolvers = userResolverRepository.findAllActive(null, null);
+        return userResolvers;
+    }
+
     public UserResolver findOne(String userResolverId) {
         UserResolver userResolver = userResolverRepository.findOne(userResolverId);
         return userResolver;

@@ -108,6 +108,7 @@
 	<bean id="teamElasticService" class="com.qsocialnow.elasticsearch.services.config.TeamService">
 		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
+		<property name="userResolverService" ref="userResolverElasticService"></property>
 	</bean>
     
     <bean id="caseCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.CaseCategorySetService">

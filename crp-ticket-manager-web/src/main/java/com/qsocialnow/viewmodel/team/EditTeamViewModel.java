@@ -79,7 +79,7 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
 
     private void initUsersResolver(List<TeamUserResolverView> currentUsersResolver) {
         setUserResolverListView(new ListView<UserResolverListView>());
-        getUserResolverListView().setList(userResolverService.findAll(null));
+        getUserResolverListView().setList(userResolverService.findAllActive());
         getUserResolverListView().setFilteredList(new ArrayList<UserResolverListView>());
         getUserResolverListView().getFilteredList().addAll(
                 getUserResolverListView().getList().stream().filter(user -> {
@@ -101,6 +101,7 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
             teamUserResolver.getUser().setId(userResolver.getId());
             teamUserResolver.getUser().setIdentifier(userResolver.getIdentifier());
             teamUserResolver.getUser().setSource(userResolver.getSource());
+            teamUserResolver.getUser().setActive(userResolver.isActive());
             return teamUserResolver;
         }).collect(Collectors.toList()));
         currentTeam.setUsers(currentTeam.getTeam().getUsers().stream().map(user -> {

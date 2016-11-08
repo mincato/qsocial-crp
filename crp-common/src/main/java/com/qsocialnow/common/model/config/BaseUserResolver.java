@@ -15,6 +15,8 @@ public class BaseUserResolver implements Serializable {
     @NotBlank(message = "app.field.empty.validation")
     private String identifier;
 
+    private boolean active = true;
+
     public BaseUserResolver() {
     }
 
@@ -48,4 +50,11 @@ public class BaseUserResolver implements Serializable {
         this.source = source;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

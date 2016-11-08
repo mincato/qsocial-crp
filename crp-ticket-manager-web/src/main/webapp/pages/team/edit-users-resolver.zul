@@ -35,11 +35,12 @@
 			<x:ol id="usersresolver" class="list-group order"
 				children="@bind(fx.usersResolver)  @template(each.editingStatus ? 'editable' : 'noneditable')">
 				<template name="noneditable">
-					<n:div
-						class="list-group-item col-xs-12 col-sm-11">
-						<n:div class="col-xs-8 col-sm-7">
+					<n:div class="list-group-item col-xs-12 col-sm-11">
+						<x:div sclass="@load(each.user.active ? 'col-xs-8 col-sm-7' : 'col-xs-8 col-sm-7 strikethrough')"
+							data-toggle="tooltip" data-placement="top"
+							title="@load(each.user.active ? '' : c:l('labels.team.usersresolver.disabled'))">
 							${each.user.identifier}
-						</n:div>
+						</x:div>
 						<n:div
 							class="col-xs-4 col-sm-offset-3 col-sm-2">
 							<n:div class="pull-right">
