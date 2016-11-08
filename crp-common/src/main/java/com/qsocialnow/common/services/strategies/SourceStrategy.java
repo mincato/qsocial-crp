@@ -5,8 +5,8 @@ import com.qsocialnow.common.model.config.UserResolver;
 
 public interface SourceStrategy {
 
-    String sendResponse(Case caseObject, UserResolver userResolver, String text);
+    String sendResponse(Case caseObject, UserResolver userResolver, String text, String actionRegistryId);
 
-    String sendMessage(Case caseObject, UserResolver userResolver, String text);
+    String sendMessage(Case caseObject, UserResolver userResolver, String text, String actionRegistryId);
 
 }

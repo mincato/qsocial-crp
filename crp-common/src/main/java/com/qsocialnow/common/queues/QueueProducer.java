@@ -23,7 +23,7 @@ public class QueueProducer<T> extends Thread {
 
     private List<QueueConsumer<T>> consumers;
 
-    private int totalItemCounts;
+    private Integer totalItemCounts;
 
     private int totalMaxDeadItemCounts;
 
@@ -48,7 +48,7 @@ public class QueueProducer<T> extends Thread {
             bigQueue.enqueue(item);
             producingItemCount.incrementAndGet();
             log.debug("Adding item " + producingItemCount.get() + " type: " + this.type + " into the queue");
-            if (producingItemCount.get() >= getTotalItemCounts()) {
+            if (getTotalItemCounts() != null && producingItemCount.get() >= getTotalItemCounts()) {
                 this.notifyConsumers();
                 producingItemCount.set(0);
             }
@@ -138,11 +138,11 @@ public class QueueProducer<T> extends Thread {
         return item;
     }
 
-    public int getTotalItemCounts() {
+    public Integer getTotalItemCounts() {
         return totalItemCounts;
     }
 
-    public void setTotalItemCounts(int totalItemCounts) {
+    public void setTotalItemCounts(Integer totalItemCounts) {
         this.totalItemCounts = totalItemCounts;
     }
 

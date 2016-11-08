@@ -14,11 +14,12 @@ public class TagCaseAction implements Action {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public AsyncAction execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         List<String> caseCategoriesSet = (List<String>) parameters.get(ActionParameter.CATEGORIES_SET);
         caseObject.setCaseCategoriesSet(new HashSet<>(caseCategoriesSet));
         List<String> caseCategories = (List<String>) parameters.get(ActionParameter.CATEGORIES);
         caseObject.setCaseCategories(new HashSet<>(caseCategories));
+        return null;
     }
 
 }

@@ -61,6 +61,7 @@ public class ActionRegistryMapping implements DynamicMapping, Mapping<ActionRegi
         actionRegistryType.setType(document.getType());
         actionRegistryType.setUserName(document.getUserName());
         actionRegistryType.setDeepLink(document.getDeepLink());
+        actionRegistryType.setStatus(document.getStatus());
         return actionRegistryType;
     }
 
@@ -76,6 +77,7 @@ public class ActionRegistryMapping implements DynamicMapping, Mapping<ActionRegi
         actionRegistry.setType(documentType.getType());
         actionRegistry.setUserName(documentType.getUserName());
         actionRegistry.setDeepLink(documentType.getDeepLink());
+        actionRegistry.setStatus(documentType.getStatus());
         return actionRegistry;
     }
 

@@ -23,7 +23,8 @@ public class ActionRegistryRepository {
     private ActionRegistryService registryService;
 
     public void create(String caseId, ActionRegistry actionRegistry) {
-        registryService.indexRegistry(caseId, actionRegistry);
+        String id = registryService.indexRegistry(caseId, actionRegistry);
+        actionRegistry.setId(id);
         log.info("Saving action registry: " + new GsonBuilder().create().toJson(actionRegistry));
     }
 
@@ -49,6 +50,7 @@ public class ActionRegistryRepository {
                     registryListView.setDescription(registry.getComment());
                     registryListView.setDate(registry.getDate());
                     registryListView.setDeepLink(registry.getDeepLink());
+                    registryListView.setStatus(registry.getStatus());
                     registriesView.add(registryListView);
                 }
             }
@@ -79,6 +81,7 @@ public class ActionRegistryRepository {
                     registryListView.setDescription(registry.getComment());
                     registryListView.setDate(registry.getDate());
                     registryListView.setDeepLink(registry.getDeepLink());
+                    registryListView.setStatus(registry.getStatus());
                     registriesView.add(registryListView);
                 }
             }
@@ -86,6 +89,15 @@ public class ActionRegistryRepository {
             log.error("Unexpected error", e);
         }
         return registriesView;
+    }
+
+    public ActionRegistry findOne(String actionRegistryId) {
+        return registryService.findOne(actionRegistryId);
+    }
+
+    public void update(String caseId, ActionRegistry actionRegistry) {
+        registryService.update(caseId, actionRegistry);
+
     }
 
 }
