@@ -40,14 +40,7 @@ public class TeamRepository {
             Integer offset = pageRequest != null ? pageRequest.getOffset() : null;
             Integer limit = pageRequest != null ? pageRequest.getLimit() : null;
             List<Team> teamsRepo = teamElasticService.getTeams(offset, limit, name);
-
-            for (Team teamRepo : teamsRepo) {
-                TeamListView teamListView = new TeamListView();
-                teamListView.setId(teamRepo.getId());
-                teamListView.setName(teamRepo.getName());
-
-                teams.add(teamListView);
-            }
+            copyTeamRepoToTeamListView(teams, teamsRepo);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
@@ -86,18 +79,21 @@ public class TeamRepository {
 
         try {
             List<Team> teamsRepo = teamElasticService.getTeams();
-
-            for (Team teamRepo : teamsRepo) {
-                TeamListView teamListView = new TeamListView();
-                teamListView.setId(teamRepo.getId());
-                teamListView.setName(teamRepo.getName());
-
-                teams.add(teamListView);
-            }
+            copyTeamRepoToTeamListView(teams, teamsRepo);
         } catch (Exception e) {
             log.error("Unexpected error", e);
         }
         return teams;
+    }
+
+    private void copyTeamRepoToTeamListView(List<TeamListView> teams, List<Team> teamsRepo) {
+        for (Team teamRepo : teamsRepo) {
+            TeamListView teamListView = new TeamListView();
+            teamListView.setId(teamRepo.getId());
+            teamListView.setName(teamRepo.getName());
+            teamListView.setActive(teamRepo.isActive());
+            teams.add(teamListView);
+        }
     }
 
 }

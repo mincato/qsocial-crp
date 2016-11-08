@@ -34,6 +34,7 @@ public class TeamService {
 
         // index document
         TeamType documentIndexed = mapping.getDocumentType(team);
+
         String response = repository.indexMappingAndRefresh(mapping, documentIndexed);
         repository.closeClient();
         return response;

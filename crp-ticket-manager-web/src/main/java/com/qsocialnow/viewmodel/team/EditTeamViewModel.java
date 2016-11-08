@@ -120,6 +120,7 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
         Team team = new Team();
         team.setId(currentTeam.getTeam().getId());
         team.setName(currentTeam.getTeam().getName());
+        team.setActive(currentTeam.getTeam().isActive());
         team.setUserResolvers(currentTeam.getUsersResolver().stream().map(userResolver -> {
             BaseUserResolver teamUserResolver = new BaseUserResolver();
             teamUserResolver.setId(userResolver.getUser().getId());
