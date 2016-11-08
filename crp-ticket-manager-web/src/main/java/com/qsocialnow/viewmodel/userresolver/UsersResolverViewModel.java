@@ -125,7 +125,7 @@ public class UsersResolverViewModel implements Serializable {
                 UserResolverListView userResolverListView = userResolverOptional.get();
                 userResolverListView.setSource(userResolverChanged.getSource());
                 userResolverListView.setIdentifier(userResolverChanged.getIdentifier());
-                userResolverListView.setActive(userResolverChanged.getActive());
+                userResolverListView.setActive(userResolverChanged.isActive());
             }
         }
     }

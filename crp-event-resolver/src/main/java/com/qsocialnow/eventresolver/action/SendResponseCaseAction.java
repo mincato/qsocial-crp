@@ -40,8 +40,10 @@ public class SendResponseCaseAction implements Action {
                     .map(tuple -> tuple.get(1)).findFirst();
             if (userResolverIdOptional.isPresent()) {
                 UserResolver userResolver = userResolverService.findOne(userResolverIdOptional.get());
-                sources.get(caseObject.getSource()).sendResponse(caseObject, userResolver, text, null);
-                parameters.put(ActionParameter.COMMENT, text);
+                if (userResolver.isActive()) {
+                    sources.get(caseObject.getSource()).sendResponse(caseObject, userResolver, text, null);
+                    parameters.put(ActionParameter.COMMENT, text);
+                }
             } else {
                 log.warn("There is no user resolver defined to send message for source: " + caseObject.getSource());
             }
