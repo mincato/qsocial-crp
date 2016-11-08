@@ -1,4 +1,4 @@
-package com.qsocialnow.common.model.retroactive;
+package com.qsocialnow.common.model.filter;
 
 public class RangeRequest {
 

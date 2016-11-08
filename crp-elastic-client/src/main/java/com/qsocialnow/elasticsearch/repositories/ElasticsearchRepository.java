@@ -508,6 +508,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         SortOrder sortOrderEnum = sortOrder ? SortOrder.ASC : SortOrder.DESC;
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderEnum).query(QueryBuilders.matchAllQuery());
+        log.info(searchSourceBuilder.toString());
         Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
         return executeSearch(mapping, search);
     }

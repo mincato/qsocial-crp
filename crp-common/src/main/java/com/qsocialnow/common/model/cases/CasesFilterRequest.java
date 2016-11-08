@@ -1,18 +1,40 @@
-package com.qsocialnow.common.model.retroactive;
+package com.qsocialnow.common.model.cases;
 
 import java.util.List;
 
 import com.qsocialnow.common.model.config.Category;
-import com.qsocialnow.common.model.config.CategoryGroup;
 import com.qsocialnow.common.model.filter.AdministrativeUnitsFilter;
 import com.qsocialnow.common.model.filter.RangeRequest;
 import com.qsocialnow.common.model.filter.WordsFilterRequestBean;
+import com.qsocialnow.common.model.pagination.PageRequest;
 
-public class RetroactiveProcessRequest {
+public class CasesFilterRequest {
 
-    private String idRealTimeProduct;
+	private boolean filterActive;
+	
+	private PageRequest pageRequest;
+	
+	private Long fromDate;
 
-    private Long tokenId;
+    private Long toDate;
+
+    private String title;
+
+    private String description;
+
+    private String subject;
+
+    private String userName;
+
+    private boolean isAdmin;
+    
+    private String status;
+
+    private String priority;
+
+    private String pendingResponse;
+	
+	private Long tokenId;
 
     private String serieName;
 
@@ -54,7 +76,103 @@ public class RetroactiveProcessRequest {
 
     private List<Category> categoriesFilter;
 
-    public Long getTokenId() {
+    public PageRequest getPageRequest() {
+		return pageRequest;
+	}
+
+	public void setPageRequest(PageRequest pageRequest) {
+		this.pageRequest = pageRequest;
+	}
+
+	public boolean isFilterActive() {
+		return filterActive;
+	}
+
+	public void setFilterActive(boolean filterActive) {
+		this.filterActive = filterActive;
+	}
+
+	public Long getFromDate() {
+		return fromDate;
+	}
+
+	public void setFromDate(Long fromDate) {
+		this.fromDate = fromDate;
+	}
+
+	public Long getToDate() {
+		return toDate;
+	}
+
+	public void setToDate(Long toDate) {
+		this.toDate = toDate;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getPriority() {
+		return priority;
+	}
+
+	public void setPriority(String priority) {
+		this.priority = priority;
+	}
+
+	public String getPendingResponse() {
+		return pendingResponse;
+	}
+
+	public void setPendingResponse(String pendingResponse) {
+		this.pendingResponse = pendingResponse;
+	}
+
+	public Long getTokenId() {
         return tokenId;
     }
 
@@ -156,14 +274,6 @@ public class RetroactiveProcessRequest {
 
     public void setCategories(Long[] categories) {
         this.categories = categories;
-    }
-
-    public String getIdRealTimeProduct() {
-        return idRealTimeProduct;
-    }
-
-    public void setIdRealTimeProduct(String idRealTimeProduct) {
-        this.idRealTimeProduct = idRealTimeProduct;
     }
 
     public RangeRequest getRange() {

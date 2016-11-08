@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
@@ -123,6 +124,23 @@ public class CaseTicketService extends CaseIndexService {
         repository.closeClient();
         return cases;
     }
+    
+	public List<Case> getCasesByFilters(CasesFilterRequest filterRequest) {
+
+		RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+		Repository<CaseType> repository = esfactory.initManager();
+		repository.initClient();
+
+		CaseMapping mapping = CaseMapping.getInstance();
+		SearchResponse<Case> response = repository.queryMatchAll(filterRequest.getPageRequest().getOffset(),
+				filterRequest.getPageRequest().getPageSize(), filterRequest.getPageRequest().getSortField(),
+				filterRequest.getPageRequest().getSortOrder(), mapping);
+
+		List<Case> cases = response.getSources();
+
+		repository.closeClient();
+		return cases;
+	}
 
     public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String domainId,
             String triggerId, String segmentId, String subject, String title, String description,

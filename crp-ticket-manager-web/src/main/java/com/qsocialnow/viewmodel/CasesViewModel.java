@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
@@ -21,6 +23,7 @@ import org.zkoss.zul.Filedownload;
 import org.zkoss.zul.ListModelList;
 
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.config.AdminUnit;
 import com.qsocialnow.common.model.config.BaseAdminUnit;
 import com.qsocialnow.common.model.config.CaseCategory;
@@ -37,6 +40,7 @@ import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.config.WordFilter;
+import com.qsocialnow.common.model.config.WordFilterType;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
@@ -183,6 +187,8 @@ public class CasesViewModel implements Serializable {
     
     private AutocompleteListModel<AdminUnit> adminUnits;
 
+    private Set<WordFilterType> wordFilterTypeOptions;
+
     @WireVariable
     private UserSessionService userSessionService;
 
@@ -223,6 +229,7 @@ public class CasesViewModel implements Serializable {
         this.caseCategoriesOptions = getCaseCategoriesOptionsList();
         this.subjectCategoriesOptions = getSubjectCategoriesOptionsList();
         categoryGroupOptions.clear();
+        wordFilterTypeOptions = Arrays.stream(WordFilterType.values()).collect(Collectors.toSet());
         initMediaTypesOptions();
         initLanguages();
         initConnotations();
@@ -264,7 +271,7 @@ public class CasesViewModel implements Serializable {
         this.findCases();
     }
 
-    private PageResponse<CaseListView> findCases() {
+    private PageResponse<CaseListView> findCasesGet() {
         PageRequest pageRequest = new PageRequest(activePage, pageSize, sortField);
         pageRequest.setSortOrder(this.sortOrder);
         PageResponse<CaseListView> pageResponse = caseService.findAll(pageRequest, filterActive ? getFilters() : null);
@@ -276,6 +283,23 @@ public class CasesViewModel implements Serializable {
         }
         return pageResponse;
     }
+    
+    private PageResponse<CaseListView> findCases() {
+        CasesFilterRequest filterRequest = new CasesFilterRequest();
+    	PageRequest pageRequest = new PageRequest(activePage, pageSize, sortField);
+        pageRequest.setSortOrder(this.sortOrder);
+        filterRequest.setPageRequest(pageRequest);
+        
+        PageResponse<CaseListView> pageResponse = caseService.findAll(filterRequest);
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.cases.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
+        return pageResponse;
+    }
+    
 
     @Command
     @NotifyChange({ "cases", "moreResults", "filterActive" })
@@ -429,7 +453,14 @@ public class CasesViewModel implements Serializable {
         Executions.createComponents("/pages/triggers/create/choose-categories.zul", null, args);
         BindUtils.postNotifyChange(null, null, filter, "categories");
     }
-    
+
+    @Command
+    public void removeFilterWord(@BindingParam("fxFilter") FilterView fxFilter,
+            @BindingParam("filter") WordFilter filter) {
+        fxFilter.getFilterWords().remove(filter);
+        BindUtils.postNotifyChange(null, null, fxFilter, "filterWords");
+    }
+
     private void addAdmUnitText(StringBuilder sb, BaseAdminUnit adminUnit) {
         sb.append(adminUnit.getTranslation());
         sb.append("(");
@@ -930,5 +961,9 @@ public class CasesViewModel implements Serializable {
     public AutocompleteListModel<AdminUnit> getAdminUnits() {
         return adminUnits;
     }
+
+	public Set<WordFilterType> getWordFilterTypeOptions() {
+		return wordFilterTypeOptions;
+	}
 
 }

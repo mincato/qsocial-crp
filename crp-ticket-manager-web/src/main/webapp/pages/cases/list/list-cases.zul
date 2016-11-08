@@ -237,24 +237,34 @@
                     <x:div class="@load(empty vmsgs[startdate] ? 'form-group' : 'form-group has-error')">
                         <n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
                         <n:div class="col-sm-10">
-                            <datebox id="startdate" sclass="input-group" format="short+short" value="@bind(fxFilter.startDateTime)
-                            @validator('com.qsocialnow.validators.RequiredValidator')
-                             @converter('com.qsocialnow.converters.DateInputConverter')" />
-                        <x:span sclass="@load(empty vmsgs[startdate] ? 'hidden' : 'help-block')">
-                            <label value="@load(vmsgs[startdate])" />
-                        </x:span>
-                        </n:div>
+                            <n:div class="col-sm-3"> 
+	                            <datebox id="startdate" sclass="input-group" format="short" value="@bind(fxFilter.startDateTime)
+	                            @validator('com.qsocialnow.validators.RequiredValidator')
+	                             @converter('com.qsocialnow.converters.DateInputConverter')" />
+		                        <x:span sclass="@load(empty vmsgs[startdate] ? 'hidden' : 'help-block')">
+		                            <label value="@load(vmsgs[startdate])" />
+		                        </x:span>
+                           </n:div>
+	                       <n:div class="col-sm-2">
+	                            <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.startTime) @converter('com.qsocialnow.converters.DateInputConverter')"></timebox>
+	                       </n:div>
+	                  </n:div>
                     </x:div>
                     <x:div sclass="@load(empty vmsgs[enddate] ? 'form-group' : 'form-group has-error')">
                         <n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
                         <n:div class="col-sm-10">
-                            <datebox id="enddate" sclass="input-group" format="short+short" value="@load(fxFilter.endDateTime) 
-                            @save(fxFilter.endDateTime, before='save')
-                            @converter('com.qsocialnow.converters.DateInputConverter')
-                            @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate', required=true)" />
-                            <x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
-                                    <label value="@load(vmsgs[enddate])" />
-                            </x:span>
+                           <n:div class="col-sm-3">
+	                            <datebox id="enddate" sclass="input-group" format="short+short" value="@load(fxFilter.endDateTime) 
+	                            @save(fxFilter.endDateTime, before='save')
+	                            @converter('com.qsocialnow.converters.DateInputConverter')
+	                            @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate', required=true)" />
+	                            <x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
+	                                    <label value="@load(vmsgs[enddate])" />
+	                            </x:span>
+                           </n:div>
+                           <n:div class="col-sm-2">
+                                 <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.endTime) @converter('com.qsocialnow.converters.DateInputConverter')"></timebox>
+                           </n:div>
                         </n:div>
                     </x:div>
                 </n:form>
