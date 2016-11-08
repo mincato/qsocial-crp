@@ -1,5 +1,12 @@
 package com.qsocialnow.common.config;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import com.qsocialnow.common.model.cases.ErrorType;
+
 public class FacebookConfig {
 
     private final String OAuthAppId;
@@ -11,6 +18,12 @@ public class FacebookConfig {
     private final String OAuthPermissions;
 
     private final String callbackUrl;
+
+    private Set<Integer> retryErrorCodes = new HashSet<>();
+
+    private Set<Integer> retryStatusCodes = new HashSet<>();
+
+    private Map<Integer, ErrorType> errorMapping = new HashMap<Integer, ErrorType>();
 
     public FacebookConfig(final String OAuthAppId, final String OAuthAppSecret, final String OAuthAccessToken,
             final String OAuthPermissions, final String callbackUrl) {
@@ -39,6 +52,18 @@ public class FacebookConfig {
 
     public String getOAuthPermissions() {
         return OAuthPermissions;
+    }
+
+    public Map<Integer, ErrorType> getErrorMapping() {
+        return errorMapping;
+    }
+
+    public Set<Integer> getRetryErrorCodes() {
+        return retryErrorCodes;
+    }
+
+    public Set<Integer> getRetryStatusCodes() {
+        return retryStatusCodes;
     }
 
 }

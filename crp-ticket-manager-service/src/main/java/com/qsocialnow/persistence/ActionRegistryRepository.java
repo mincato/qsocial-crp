@@ -51,6 +51,7 @@ public class ActionRegistryRepository {
                     registryListView.setDate(registry.getDate());
                     registryListView.setDeepLink(registry.getDeepLink());
                     registryListView.setStatus(registry.getStatus());
+                    registryListView.setErrorType(registry.getErrorType());
                     registriesView.add(registryListView);
                 }
             }
@@ -82,6 +83,7 @@ public class ActionRegistryRepository {
                     registryListView.setDate(registry.getDate());
                     registryListView.setDeepLink(registry.getDeepLink());
                     registryListView.setStatus(registry.getStatus());
+                    registryListView.setErrorType(registry.getErrorType());
                     registriesView.add(registryListView);
                 }
             }

@@ -1,12 +1,16 @@
 package com.qsocialnow.common.services.strategies;
 
+import com.qsocialnow.common.model.cases.ErrorType;
+
 public class SourceMessageResponse {
 
     private SourceMessageRequest request;
 
     private String postId;
 
-    private Exception error;
+    private ErrorType errorType;
+
+    private String sourceErrorMessage;
 
     public SourceMessageRequest getRequest() {
         return request;
@@ -24,12 +28,19 @@ public class SourceMessageResponse {
         this.postId = postId;
     }
 
-    public void setError(Exception error) {
-        this.error = error;
+    public ErrorType getErrorType() {
+        return errorType;
     }
 
-    public Exception getError() {
-        return error;
+    public void setErrorType(ErrorType errorType) {
+        this.errorType = errorType;
     }
 
+    public void setSourceErrorMessage(String sourceErrorMessage) {
+        this.sourceErrorMessage = sourceErrorMessage;
+    }
+
+    public String getSourceErrorMessage() {
+        return sourceErrorMessage;
+    }
 }

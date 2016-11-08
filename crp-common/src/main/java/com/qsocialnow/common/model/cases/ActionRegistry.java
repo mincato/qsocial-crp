@@ -29,6 +29,10 @@ public class ActionRegistry implements Serializable {
 
     private ActionRegistryStatus status;
 
+    private ErrorType errorType;
+
+    private String errorMessage;
+
     public String getId() {
         return id;
     }
@@ -107,5 +111,21 @@ public class ActionRegistry implements Serializable {
 
     public ActionRegistryStatus getStatus() {
         return status;
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(ErrorType errorType) {
+        this.errorType = errorType;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }

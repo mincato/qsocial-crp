@@ -18,6 +18,7 @@ import com.qsocialnow.common.config.FacebookConfig;
 import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.exception.SourceException;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.ErrorType;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.SourceCredentials;
@@ -175,14 +176,17 @@ public class FacebookSourceStrategy implements SourceStrategy, AsyncTask<SourceM
             }
         } catch (FacebookException e) {
             log.error("There was an error trying to send response via facebook", e);
-            if (4 == e.getErrorCode()) {
+            if (facebookConfig.getRetryErrorCodes().contains(e.getErrorCode())
+                    || facebookConfig.getRetryStatusCodes().contains(e.getStatusCode())) {
                 QueueConsumer<SourceMessageRequest> queueConsumer = queueConsumers.get(request.getUserResolver()
                         .getIdentifier());
                 queueConsumer.changeInitialDelay(queueConfig.getFailDelay());
                 queueProducers.get(request.getUserResolver().getIdentifier()).addItem(request);
                 return null;
             } else {
-                sourceMessageResponse.setError(new SourceException(e.getErrorMessage(), e));
+                sourceMessageResponse.setErrorType(facebookConfig.getErrorMapping().getOrDefault(e.getErrorCode(),
+                        ErrorType.UNKNOWN));
+                sourceMessageResponse.setSourceErrorMessage(e.getMessage());
                 return sourceMessageResponse;
             }
         }
