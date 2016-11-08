@@ -2,7 +2,9 @@ package com.qsocialnow.common.services.strategies;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -17,8 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.config.TwitterConfig;
-import com.qsocialnow.common.exception.SourceException;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.ErrorType;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.SourceCredentials;
@@ -156,14 +158,18 @@ public class TwitterSourceStrategy implements SourceStrategy, AsyncTask<SourceMe
             return sourceMessageResponse;
         } catch (TwitterException e) {
             log.error("There was an error trying to send response via twitter", e);
-            if (185 == e.getErrorCode()) {
+
+            if (twitterConfig.getRetryErrorCodes().contains(e.getErrorCode())
+                    || twitterConfig.getRetryStatusCodes().contains(e.getStatusCode())) {
                 QueueConsumer<SourceMessageRequest> queueConsumer = queueConsumers.get(request.getUserResolver()
                         .getIdentifier());
                 queueConsumer.changeInitialDelay(queueConfig.getFailDelay());
                 queueProducers.get(request.getUserResolver().getIdentifier()).addItem(request);
                 return null;
             } else {
-                sourceMessageResponse.setError(new SourceException(e.getErrorMessage(), e));
+                sourceMessageResponse.setErrorType(twitterConfig.getErrorMapping().getOrDefault(e.getErrorCode(),
+                        ErrorType.UNKNOWN));
+                sourceMessageResponse.setSourceErrorMessage(e.getMessage());
                 return sourceMessageResponse;
             }
         }
@@ -212,8 +218,8 @@ public class TwitterSourceStrategy implements SourceStrategy, AsyncTask<SourceMe
         twitterSourceStrategy.setQueueConfig(queueConfigurator);
         try {
 
-            TwitterConfig twitterConfig = new TwitterConfig("bTkf1etGHTOA1OHJaY7l7L8n6",
-                    "fxdQ74V7EnTgecEVTvdm5jmJRaIhoTGo4B3t76ZohMSt2cxTBD", "");
+            TwitterConfig twitterConfig = new TwitterConfig("PsRTsDvl2oDUvjmk5Uz56uTBy",
+                    "ng3xPXulo9HRJqv19eCq2qokWceaxV4aiKWZj7erWFIhGx4pvw", "");
             twitterSourceStrategy.setTwitterConfig(twitterConfig);
             twitterSourceStrategy.setTwitterUsersZnodePath("/PRC/10/twitter/users");
             CuratorFramework zookeeperClient = CuratorFrameworkFactory.newClient("54.200.37.81:2181",
@@ -229,7 +235,6 @@ public class TwitterSourceStrategy implements SourceStrategy, AsyncTask<SourceMe
                 }
 
             });
-            twitterSourceStrategy.start();
 
             ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
             configurationBuilder.setOAuthConsumerKey(twitterConfig.getOAuthConsumerKey());
@@ -242,10 +247,18 @@ public class TwitterSourceStrategy implements SourceStrategy, AsyncTask<SourceMe
             UserResolver userResolver = new UserResolver();
             userResolver.setIdentifier("centaurico_bot3");
             SourceCredentials credentials = new SourceCredentials();
-            credentials.setToken("780138552084553729-6YGk6FFNAnVC8cCmMEs7r9skWPnNo78");
-            credentials.setSecretToken("RGgv9ry8FAHKNK6mpldVL3Fs7BLmIhShD4yKU7g7tJLcC");
+            credentials.setToken("776855442475585536-ngNF9O22Y6vzZERS8QZzC7QqgGlmXTF");
+            credentials.setSecretToken("glIwmGp1fgxiA2uDMgme7ymM2bv43uwd7rHHF49tmBKhE");
             userResolver.setCredentials(credentials);
-            System.in.read();
+            IntStream.range(0, 1000).forEach(nbr -> {
+                SourceMessageRequest sourceMessageRequest = new SourceMessageRequest();
+                sourceMessageRequest.setSubjectIdentifier(caseObject.getSubject().getIdentifier());
+                sourceMessageRequest.setText(RandomStringUtils.randomAlphabetic(10));
+                sourceMessageRequest.setUserResolver(userResolver);
+                sourceMessageRequest.setAction(ActionType.SEND_MESSAGE);
+                sourceMessageRequest.setCaseId(caseObject.getId());
+                twitterSourceStrategy.execute(sourceMessageRequest);
+            });
         } finally {
             twitterSourceStrategy.stop();
         }

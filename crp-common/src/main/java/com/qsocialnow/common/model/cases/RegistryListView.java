@@ -22,6 +22,8 @@ public class RegistryListView implements Serializable {
 
     private ActionRegistryStatus status;
 
+    private ErrorType errorType;
+
     public String getId() {
         return id;
     }
@@ -84,6 +86,14 @@ public class RegistryListView implements Serializable {
 
     public void setStatus(ActionRegistryStatus status) {
         this.status = status;
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(ErrorType errorType) {
+        this.errorType = errorType;
     }
 
 }

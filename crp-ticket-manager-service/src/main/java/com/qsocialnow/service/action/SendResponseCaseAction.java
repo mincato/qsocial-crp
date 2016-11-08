@@ -113,7 +113,7 @@ public class SendResponseCaseAction implements AsyncAction, SourceMessagePostPro
     @Override
     public void process(SourceMessageResponse response) {
         ActionRegistryStatus status;
-        if (response.getError() == null) {
+        if (response.getErrorType() == null) {
             Case caseObject = caseRepository.findOne(response.getRequest().getCaseId());
             if (caseObject.getIdRootComment() == null)
                 caseObject.setIdRootComment(response.getPostId());
@@ -130,6 +130,8 @@ public class SendResponseCaseAction implements AsyncAction, SourceMessagePostPro
             status = ActionRegistryStatus.ERROR;
         }
         ActionRegistry actionRegistry = actionRegistryRepository.findOne(response.getRequest().getActionRegistryId());
+        actionRegistry.setErrorType(response.getErrorType());
+        actionRegistry.setErrorMessage(response.getSourceErrorMessage());
         actionRegistry.setStatus(status);
         actionRegistryRepository.update(response.getRequest().getCaseId(), actionRegistry);
 

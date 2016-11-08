@@ -15,12 +15,15 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.QueryParam;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Filedownload;
 
+import com.qsocialnow.common.model.cases.ActionRegistryStatus;
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.ErrorType;
 import com.qsocialnow.common.model.cases.RegistryListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Media;
@@ -257,6 +260,22 @@ public class EditCaseViewModel implements Serializable {
     public void downloadAttachment(@BindingParam("attachment") String attachment) throws Exception {
         File file = fileService.download(attachment, currentCase.getCaseObject());
         Filedownload.save(new DeleteOnCloseInputStream(file), null, attachment);
+    }
+
+    @Command
+    public String createRegistryStatusMessage(RegistryListView registry) {
+        if (registry.getStatus() != null) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("cases.registry.status.");
+            sb.append(registry.getStatus().name());
+            if (ActionRegistryStatus.ERROR.equals(registry.getStatus())) {
+                ErrorType errorType = registry.getErrorType() != null ? registry.getErrorType() : ErrorType.UNKNOWN;
+                sb.append(".");
+                sb.append(errorType.name());
+            }
+            return Labels.getLabel(sb.toString());
+        }
+        return "";
     }
 
     private PageResponse<RegistryListView> findRegistriesBy() {
