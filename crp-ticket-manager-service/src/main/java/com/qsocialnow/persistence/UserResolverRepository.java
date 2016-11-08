@@ -85,7 +85,7 @@ public class UserResolverRepository {
                 UserResolverListView userResolverListView = new UserResolverListView();
                 userResolverListView.setId(userResolverRepo.getId());
                 userResolverListView.setIdentifier(userResolverRepo.getIdentifier());
-                userResolverListView.setActive(userResolverRepo.getActive());
+                userResolverListView.setActive(userResolverRepo.isActive());
                 userResolverListView.setSource(userResolverRepo.getSource());
 
                 userResolvers.add(userResolverListView);

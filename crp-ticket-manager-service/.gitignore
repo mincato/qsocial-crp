@@ -17,3 +17,5 @@ target/
 .project
 .settings/
 logs/
+npm-debug.log
+

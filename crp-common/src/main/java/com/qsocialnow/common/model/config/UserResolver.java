@@ -18,7 +18,7 @@ public class UserResolver extends BaseUserResolver {
         this.credentials = credentials;
     }
 
-    public boolean getActive() {
+    public boolean isActive() {
         return active;
     }
 

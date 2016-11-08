@@ -68,6 +68,7 @@ public class UserResolverService {
         try {
             userResolver.setId(userResolverId);
             userResolverSaved = userResolverRepository.update(userResolver);
+            zookeeperClient.setData().forPath(userResolversPath);
         } catch (Exception e) {
             log.error("There was an error updating user resolver: " + userResolver.getIdentifier(), e);
             throw new RuntimeException(e.getMessage());
