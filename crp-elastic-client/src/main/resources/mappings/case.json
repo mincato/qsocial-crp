@@ -36,6 +36,7 @@
               "language" : {"type" : "string","index":"not_analyzed"},
               "likeCount" : {"type" : "long"},
               "medioId" : {"type" : "long"},
+              "connotacion" : {"type" : "short"},
               "menciones" : {"type" : "string"},
               "normalizeMessage" : {"type" : "string"},
               "noticiaStatus" : {"type" :"long" },

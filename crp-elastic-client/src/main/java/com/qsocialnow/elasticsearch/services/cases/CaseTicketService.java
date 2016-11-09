@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
+import com.qsocialnow.common.model.filter.FollowersCountRange;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
@@ -249,6 +250,34 @@ public class CaseTicketService extends CaseIndexService {
                     termFilters.add(new TermFieldFilter("triggerEvent.language", filterRequest.getLanguages()[0]));
                 }
             }
+
+            if (filterRequest.getTimeFrom() != null) {
+                if (filterRequest.getTimeFrom() != null || filterRequest.getTimeTo() != null) {
+                    RangeFilter rangeFilter = new RangeFilter("triggerEvent.fecha", String.valueOf(filterRequest
+                            .getTimeFrom()), String.valueOf(filterRequest.getTimeTo()));
+                    rangeFilters.add(rangeFilter);
+                }
+            }
+
+            if (filterRequest.getConnotations() != null && filterRequest.getConnotations().length > 0) {
+                if (filterRequest.getConnotations().length > 1) {
+                    ShouldConditionsFilter conditionFilterCon = new ShouldConditionsFilter();
+                    String[] connotations = filterRequest.getConnotations();
+                    for (String connotation : connotations) {
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.connotacion", connotation);
+                        conditionFilterCon.addShouldCondition(shouldFilter);
+                    }
+                    shouldConditionsFilters.add(conditionFilterCon);
+                } else {
+                    termFilters
+                            .add(new TermFieldFilter("triggerEvent.connotacion", filterRequest.getConnotations()[0]));
+                }
+            }
+            RangeFilter followerRange = getFollowersRange(filterRequest);
+            if (followerRange != null) {
+                rangeFilters.add(followerRange);
+            }
+
             response = repository.queryByFields(mapping, filterRequest.getPageRequest().getOffset(), filterRequest
                     .getPageRequest().getPageSize(), filterRequest.getPageRequest().getSortField(), filterRequest
                     .getPageRequest().getSortOrder(), searchValues, termFilters, rangeFilters, shouldConditionsFilters);
@@ -256,6 +285,19 @@ public class CaseTicketService extends CaseIndexService {
         List<Case> cases = response.getSources();
         repository.closeClient();
         return cases;
+    }
+
+    private RangeFilter getFollowersRange(CasesFilterRequest filterRequest) {
+        RangeFilter rangeFilter = null;
+        if (filterRequest.getRange() != null && filterRequest.getRange().getFollowersCount() != null) {
+            FollowersCountRange followerRange = filterRequest.getRange().getFollowersCount();
+
+            if (followerRange.getGreaterThan() != null || followerRange.getLessThan() != null) {
+                rangeFilter = new RangeFilter("triggerEvent.followersCount", String.valueOf(followerRange
+                        .getGreaterThan()), String.valueOf(followerRange.getLessThan()));
+            }
+        }
+        return rangeFilter;
     }
 
     public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String domainId,

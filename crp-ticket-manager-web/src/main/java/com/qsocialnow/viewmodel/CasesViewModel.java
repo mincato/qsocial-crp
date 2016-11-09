@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -17,6 +18,7 @@ import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
@@ -43,6 +45,13 @@ import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.config.WordFilter;
 import com.qsocialnow.common.model.config.WordFilterType;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilter;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilterBean;
+import com.qsocialnow.common.model.filter.FilterNormalizer;
+import com.qsocialnow.common.model.filter.FollowersCountRange;
+import com.qsocialnow.common.model.filter.RangeRequest;
+import com.qsocialnow.common.model.filter.WordsFilterRequestBean;
+import com.qsocialnow.common.model.filter.WordsListFilterBean;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.retroactive.RetroactiveProcessRequest;
@@ -66,6 +75,7 @@ import com.qsocialnow.services.ThematicService;
 import com.qsocialnow.services.TriggerService;
 import com.qsocialnow.services.UserService;
 import com.qsocialnow.services.UserSessionService;
+import com.qsocialnow.util.DateTimeBoxComponent;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CasesViewModel implements Serializable {
@@ -219,6 +229,9 @@ public class CasesViewModel implements Serializable {
     @WireVariable
     private AutocompleteService<AdminUnit> adminUnitsAutocompleteService;
 
+    @WireVariable
+    private FilterNormalizer filterNormalizer;
+
     @Init
     public void init() {
         this.initUserInformation();
@@ -294,7 +307,7 @@ public class CasesViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "cases", "moreResults", "filterActive" })
+    @NotifyChange({ "cases", "moreResults", "filter", "filterActive" })
     public void search() {
         this.filterActive = true;
         this.setDefaultPage();
@@ -453,6 +466,24 @@ public class CasesViewModel implements Serializable {
         BindUtils.postNotifyChange(null, null, fxFilter, "filterWords");
     }
 
+    @Command
+    public void initFilterEndTime(@BindingParam("fxFilter") FilterView fxFilter) {
+        if (fxFilter.getEndTime() == null) {
+            TimeZone timeZone = getTimeZone();
+            fxFilter.setEndTime(DateTimeBoxComponent.truncateTimeToday(timeZone));
+            BindUtils.postNotifyChange(null, null, fxFilter, "endTime");
+        }
+    }
+
+    @Command
+    public void initFilterStartTime(@BindingParam("fxFilter") FilterView fxFilter) {
+        if (fxFilter.getStartTime() == null) {
+            TimeZone timeZone = getTimeZone();
+            fxFilter.setStartTime(DateTimeBoxComponent.truncateTimeToday(timeZone));
+            BindUtils.postNotifyChange(null, null, fxFilter, "startTime");
+        }
+    }
+
     private void addAdmUnitText(StringBuilder sb, BaseAdminUnit adminUnit) {
         sb.append(adminUnit.getTranslation());
         sb.append("(");
@@ -517,6 +548,14 @@ public class CasesViewModel implements Serializable {
         }
         addMediaFilter(filterRequest);
         addLanguageFilter(filterRequest);
+        addDateRangeFilter(filterRequest);
+        addConnotationFilter(filterRequest);
+        addFollowersFilter(filterRequest);
+        addWordFilters(filterRequest);
+        addSerieFilters(filterRequest);
+        addCategoriesFilters(filterRequest);
+        addAdmUnitFilters(filterRequest);
+
     }
 
     private void addMediaFilter(CasesFilterRequest request) {
@@ -537,6 +576,116 @@ public class CasesViewModel implements Serializable {
                     .toArray(size -> new String[size]);
             request.setLanguages(options);
         }
+    }
+
+    private void addDateRangeFilter(CasesFilterRequest request) {
+        if (filterView.getStartDateTime() != null || filterView.getEndDateTime() != null) {
+            TimeZone timeZone = getTimeZone();
+            if (filterView.getStartDateTime() != null) {
+                request.setTimeFrom(DateTimeBoxComponent.mergeDate(filterView.getStartDateTime(),
+                        filterView.getStartTime(), timeZone));
+            }
+            if (filterView.getEndDateTime() != null) {
+                request.setTimeTo(DateTimeBoxComponent.mergeDate(filterView.getEndDateTime(), filterView.getEndTime(),
+                        timeZone));
+            }
+        }
+    }
+
+    private TimeZone getTimeZone() {
+        return (TimeZone) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_TIME_ZONE);
+    }
+
+    private void addConnotationFilter(CasesFilterRequest request) {
+        List<ConnotationView> connotationsPicked = connotations.stream().filter(connotation -> connotation.isChecked())
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(connotationsPicked) && connotationsPicked.size() < connotations.size()) {
+            String[] options = connotationsPicked.stream()
+                    .map(connotation -> String.valueOf(connotation.getConnotation().getValue()))
+                    .toArray(size -> new String[size]);
+            request.setConnotations(options);
+        }
+    }
+
+    private void addFollowersFilter(CasesFilterRequest request) {
+        if (filterView.getFollowersGreaterThan() != null || filterView.getFollowersLessThan() != null) {
+            RangeRequest rangeRequest = new RangeRequest();
+            FollowersCountRange followersCount = new FollowersCountRange();
+            followersCount.setGt(filterView.getFollowersGreaterThan());
+            followersCount.setLt(filterView.getFollowersLessThan());
+            rangeRequest.setFollowersCount(followersCount);
+            request.setRange(rangeRequest);
+        }
+    }
+
+    private void addWordFilters(CasesFilterRequest request) {
+        if (CollectionUtils.isNotEmpty(filterView.getFilterWords())) {
+            WordsFilterRequestBean cloudsurfer = new WordsFilterRequestBean();
+            WordsListFilterBean[] wordList = filterView.getFilterWords().stream().map(filterWord -> {
+                WordsListFilterBean wordFilter = new WordsListFilterBean();
+                wordFilter.setPalabra(filterWord.getInputText());
+                wordFilter.setTipo(filterWord.getType().getName());
+                return wordFilter;
+            }).toArray(size -> new WordsListFilterBean[size]);
+            cloudsurfer.setWordList(wordList);
+            request.setCloudsurfer(cloudsurfer);
+        }
+    }
+
+    private void addSerieFilters(CasesFilterRequest request) {
+        if (filterView.getThematic() != null && filterView.getThematic().getId() != null) {
+            request.setTokenId(filterView.getThematic().getId());
+            // request.setIdRealTimeProduct(filterView.getThematic().getNombre());
+            if (filterView.getSerie() != null) {
+                request.setSerieId(filterView.getSerie().getId());
+                request.setSerieName(filterView.getSerie().getNombre());
+            }
+            if (filterView.getSubSerie() != null) {
+                request.setSubSerieId(filterView.getSubSerie().getId());
+                request.setSubSerieName(filterView.getSubSerie().getNombre());
+            } else {
+                request.setSubSeriesDefined(filterView.getSerie().getSubSeries().stream().map(SubSeries::getId)
+                        .toArray(size -> new Long[size]));
+            }
+        }
+    }
+
+    private void addCategoriesFilters(CasesFilterRequest request) {
+        if (CollectionUtils.isNotEmpty(filterView.getFilterCategories())) {
+            Long[] categories = filterView.getFilterCategories().stream()
+                    .map(filterCategory -> filterCategory.getCategories()).flatMap(list -> list.stream())
+                    .map(category -> category.getId()).toArray(size -> new Long[size]);
+            request.setCategories(categories);
+            request.setCategoriesFilter(filterView.getFilterCategories().stream()
+                    .map(filterCategory -> filterCategory.getCategories()).flatMap(list -> list.stream())
+                    .collect(Collectors.toList()));
+        }
+    }
+
+    private void addAdmUnitFilters(CasesFilterRequest request) {
+        if (CollectionUtils.isNotEmpty(filterView.getAdmUnitFilters())) {
+            AdministrativeUnitsFilterBean[] administrativeUnitsFilterBeans = filterView
+                    .getAdmUnitFilters()
+                    .stream()
+                    .map(admUnitFilter -> {
+                        filterNormalizer.normalizeAdmUnitFilter(admUnitFilter);
+                        AdministrativeUnitsFilterBean administrativeUnitsFilterBean = new AdministrativeUnitsFilterBean();
+                        administrativeUnitsFilterBean.setAdm1(admUnitFilter.getAdm1());
+                        administrativeUnitsFilterBean.setAdm2(admUnitFilter.getAdm2());
+                        administrativeUnitsFilterBean.setAdm3(admUnitFilter.getAdm3());
+                        administrativeUnitsFilterBean.setAdm4(admUnitFilter.getAdm4());
+                        administrativeUnitsFilterBean.setContinent(admUnitFilter.getContinent());
+                        administrativeUnitsFilterBean.setCountry(admUnitFilter.getCountry());
+                        administrativeUnitsFilterBean.setCity(admUnitFilter.getCity());
+                        administrativeUnitsFilterBean.setNeighborhood(admUnitFilter.getNeighborhood());
+                        administrativeUnitsFilterBean.setAdminUnit(admUnitFilter.getAdminUnit());
+                        return administrativeUnitsFilterBean;
+                    }).toArray(size -> new AdministrativeUnitsFilterBean[size]);
+            AdministrativeUnitsFilter administrativeUnitsFilter = new AdministrativeUnitsFilter();
+            administrativeUnitsFilter.setAdministrativeUnitsFilterBeans(administrativeUnitsFilterBeans);
+            request.setAdministrativeUnitsFilter(administrativeUnitsFilter);
+        }
+
     }
 
     private Map<String, String> getFilters() {
@@ -994,10 +1143,6 @@ public class CasesViewModel implements Serializable {
 
     public FilterView getFilter() {
         return filterView;
-    }
-
-    public void setFilter(FilterView filterView) {
-        this.filterView = filterView;
     }
 
     public List<MediaView> getMediaTypes() {

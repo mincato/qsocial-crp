@@ -1,7 +1,7 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CasesViewModel')" 
-	form="@id('fxFilter') @load(vm.filter) @validator('com.qsocialnow.validators.CriteriaFilterFormValidator')" validationMessages="@id('vmsgs')"
+	form="@id('fxFilter') @load(vm.filter) @save(vm.filter, before='search') @validator('com.qsocialnow.validators.CriteriaFilterFormValidator')" validationMessages="@id('vmsgs')"
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
 		<n:div class="col-sm-12">
@@ -201,7 +201,7 @@
 		        </n:form>
 		        <n:br />
                 <n:hr/>
-                <n:form class="form-horizontal">                                
+                <n:form class="form-horizontal">
                     <n:div class="form-group">
                         <n:label class="control-label col-sm-2">${labels.cases.list.filter.source}</n:label>
                         <x:div class="col-sm-6 text-center" children="@load(vm.mediaTypes)">
@@ -238,9 +238,9 @@
                         <n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
                         <n:div class="col-sm-10">
                             <n:div class="col-sm-3"> 
-	                            <datebox id="startdate" sclass="input-group" format="short" value="@bind(fxFilter.startDateTime)
-	                            @validator('com.qsocialnow.validators.RequiredValidator')
-	                             @converter('com.qsocialnow.converters.DateInputConverter')" />
+	                            <datebox id="startdate" sclass="input-group" format="short" 
+	                            onChange="@command('initFilterStartTime', fxFilter = fxFilter)"
+	                            value="@bind(fxFilter.startDateTime) @converter('com.qsocialnow.converters.DateInputConverter')" />
 		                        <x:span sclass="@load(empty vmsgs[startdate] ? 'hidden' : 'help-block')">
 		                            <label value="@load(vmsgs[startdate])" />
 		                        </x:span>
@@ -254,10 +254,12 @@
                         <n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
                         <n:div class="col-sm-10">
                            <n:div class="col-sm-3">
-	                            <datebox id="enddate" sclass="input-group" format="short+short" value="@load(fxFilter.endDateTime) 
-	                            @save(fxFilter.endDateTime, before='save')
+	                            <datebox id="enddate" sclass="input-group" format="short" 
+	                            onChange="@command('initFilterEndTime', fxFilter = fxFilter)"
+	                            value="@load(fxFilter.endDateTime) 
+	                            @save(fxFilter.endDateTime, before='search')
 	                            @converter('com.qsocialnow.converters.DateInputConverter')
-	                            @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate', required=true)" />
+	                            @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate', required=false)" />
 	                            <x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
 	                                    <label value="@load(vmsgs[enddate])" />
 	                            </x:span>
@@ -296,7 +298,7 @@
                          <x:div sclass="@load(empty vmsgs[followerslessthan] ? 'form-group' : 'form-group has-error')">
                              <n:label class="control-label">${labels.cases.list.filter.less}</n:label>
                              <longbox id="followerslessthan" sclass="form-control" constraint="no negative"
-                                 value="@load(fxFilter.followersLessThan)  @save(fxFilter.followersLessThan, before='save')
+                                 value="@load(fxFilter.followersLessThan)  @save(fxFilter.followersLessThan, before='search')
                                  @validator('com.qsocialnow.validators.LongGreaterThanValidator', greater = fxFilter.followersGreaterThan, id = 'followerslessthan')"></longbox>
                              <x:span sclass="@load(empty vmsgs[followerslessthan] ? 'hidden' : 'help-block')">
                                      <label value="@load(vmsgs[followerslessthan])" />
@@ -459,7 +461,7 @@
                            <n:label class="control-label">${labels.trigger.criteria.thematics.thematic}</n:label>
                            <selectbox id="thematic" sclass="form-control" model="@load(vm.thematicsOptions)"
                                onSelect="@command('selectThematic', fxFilter=fxFilter)"
-                               selectedItem="@bind(fxFilter.thematic) @validator('com.qsocialnow.validators.RequiredValidator')"
+                               selectedItem="@bind(fxFilter.thematic)"
                                >
                                <template name="model">
                                    <label value="@load(each.nombre)" />
@@ -475,7 +477,7 @@
                            <n:label class="control-label">${labels.trigger.criteria.thematics.serie}</n:label>
                            <selectbox id="serie" sclass="form-control"  model="@load(vm.serieOptions)"
                                onSelect="@command('selectSerie', fxFilter=fxFilter)"
-                               selectedItem="@bind(fxFilter.serie)  @validator('com.qsocialnow.validators.RequiredValidator')">
+                               selectedItem="@bind(fxFilter.serie)">
                                <template name="model">
                                    <label value="@load(each.nombre)" />
                                </template>
