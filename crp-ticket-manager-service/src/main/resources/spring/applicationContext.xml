@@ -161,6 +161,7 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_SUBJECT}" value-ref="changeSubjectCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_SUBJECT}" value-ref="tagSubjectCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_PRIORITY}" value-ref="changePriorityCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).MODIFY_SUBJECT}" value-ref="modifySubjectCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">

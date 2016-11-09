@@ -1,0 +1,6 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('modifySubjectActionVm') @init('com.qsocialnow.viewmodel.ModifySubjectActionViewModel')"
+		validationMessages="@id('vmsgs')">
+</div>
