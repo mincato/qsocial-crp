@@ -184,4 +184,22 @@ public class TeamServiceImpl implements TeamService {
         }
     }
 
+    @Override
+    public List<String> findAllActiveIdsByTeam(String teamId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(teamServiceUrl)).path("/" + teamId)
+                    .path("/segmentsActive");
+
+            ResponseEntity<List<String>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET, null,
+                    new ParameterizedTypeReference<List<String>>() {
+                    });
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call team service", e);
+            throw new RuntimeException(e);
+        }
+    }
 }

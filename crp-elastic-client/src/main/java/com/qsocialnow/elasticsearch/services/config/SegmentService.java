@@ -133,6 +133,25 @@ public class SegmentService {
         return segments;
     }
 
+    public List<String> getActiveIdsByTeam(String teamId) {
+
+        RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
+        Repository<SegmentType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+
+        filters = filters.must(QueryBuilders.matchQuery("team", teamId));
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
+
+        SearchResponse<Segment> response = repository.searchWithFilters(filters, mapping);
+
+        List<Segment> segments = response.getSources();
+        return segments.stream().map(Segment::getId).collect(Collectors.toList());
+    }
+
     public void updateSegments(String triggerId, List<Segment> newSegments) {
         RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
         Repository<SegmentType> repository = esfactory.initManager();

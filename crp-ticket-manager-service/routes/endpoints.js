@@ -2050,6 +2050,29 @@ router.delete('/retroactive', function (req, res) {
 
 });
 
+router.get('/teams/:id/segmentsActive', function (req, res) {
 
+	  function asyncResponse(err,responseTriggers) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(responseTriggers !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(responseTriggers));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var teamId = req.params.id;
+	  var segmentService = javaContext.getBeanSync("segmentService");
+	  segmentService.findAllActiveIdsByTeam(teamId, asyncResponse);
+});
 
 module.exports = router;

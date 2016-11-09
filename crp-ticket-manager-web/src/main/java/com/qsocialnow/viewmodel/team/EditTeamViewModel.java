@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -54,6 +55,8 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
     private TeamView currentTeam;
 
     private boolean saved;
+
+    private boolean chooseNewTeamVisible = false;
 
     @Init
     public void init(@BindingParam("team") String team) {
@@ -115,30 +118,45 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
     }
 
     @Command
-    @NotifyChange({ "currentTeam", "saved" })
+    @NotifyChange({ "currentTeam", "saved", "chooseNewTeamVisible" })
     public void save() {
-        Team team = new Team();
-        team.setId(currentTeam.getTeam().getId());
-        team.setName(currentTeam.getTeam().getName());
-        team.setActive(currentTeam.getTeam().isActive());
-        team.setUserResolvers(currentTeam.getUsersResolver().stream().map(userResolver -> {
-            BaseUserResolver teamUserResolver = new BaseUserResolver();
-            teamUserResolver.setId(userResolver.getUser().getId());
-            teamUserResolver.setIdentifier(userResolver.getUser().getIdentifier());
-            teamUserResolver.setSource(userResolver.getUser().getSource());
-            return teamUserResolver;
-        }).collect(Collectors.toList()));
-        team.setUsers(currentTeam.getUsers().stream().map(userView -> {
-            User user = new User();
-            user.setCoordinator(userView.isCoordinator());
-            user.setUsername(userView.getUser().getUsername());
-            user.setId(userView.getUser().getId());
-            return user;
-        }).collect(Collectors.toList()));
-        teamService.update(team);
-        Clients.showNotification(Labels.getLabel("team.edit.notification.success", new String[] { currentTeam.getTeam()
-                .getName() }));
-        saved = true;
+        if (mustChooseNewTeam()) {
+            chooseNewTeamVisible = true;
+
+            System.out.println("Elegir EQUIPOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo");
+
+        } else {
+            Team team = new Team();
+            team.setId(currentTeam.getTeam().getId());
+            team.setName(currentTeam.getTeam().getName());
+            team.setActive(currentTeam.getTeam().isActive());
+            team.setUserResolvers(currentTeam.getUsersResolver().stream().map(userResolver -> {
+                BaseUserResolver teamUserResolver = new BaseUserResolver();
+                teamUserResolver.setId(userResolver.getUser().getId());
+                teamUserResolver.setIdentifier(userResolver.getUser().getIdentifier());
+                teamUserResolver.setSource(userResolver.getUser().getSource());
+                return teamUserResolver;
+            }).collect(Collectors.toList()));
+            team.setUsers(currentTeam.getUsers().stream().map(userView -> {
+                User user = new User();
+                user.setCoordinator(userView.isCoordinator());
+                user.setUsername(userView.getUser().getUsername());
+                user.setId(userView.getUser().getId());
+                return user;
+            }).collect(Collectors.toList()));
+            teamService.update(team);
+            Clients.showNotification(Labels.getLabel("team.edit.notification.success", new String[] { currentTeam
+                    .getTeam().getName() }));
+            saved = true;
+        }
+    }
+
+    private boolean mustChooseNewTeam() {
+        if (currentTeam.getTeam().isActive()) {
+            return false;
+        }
+        List<String> segmentsIds = teamService.findAllActiveIdsByTeam(currentTeam.getTeam().getId());
+        return CollectionUtils.isNotEmpty(segmentsIds);
     }
 
     public boolean isSaved() {
@@ -163,4 +181,11 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
         }
     }
 
+    public boolean isChooseNewTeamVisible() {
+        return chooseNewTeamVisible;
+    }
+
+    public void setChooseNewTeamVisible(boolean chooseNewTeamVisible) {
+        this.chooseNewTeamVisible = chooseNewTeamVisible;
+    }
 }

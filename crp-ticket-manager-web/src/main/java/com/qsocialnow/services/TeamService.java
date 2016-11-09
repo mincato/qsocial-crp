@@ -25,4 +25,6 @@ public interface TeamService {
 
     List<User> findUsers(String teamId);
 
+    List<String> findAllActiveIdsByTeam(String teamId);
+
 }

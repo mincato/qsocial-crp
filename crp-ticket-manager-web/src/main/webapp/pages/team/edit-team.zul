@@ -56,6 +56,14 @@
 									<n:br />
 									<include
 										src="/pages/team/edit-users-resolver.zul" />
+										
+									<div visible="@load(vm.chooseNewTeamVisible)">
+										<div class="form-group has-error">
+											<n:span class="help-block">
+												<label value="${labels.trigger.form.invalid} --> ELEGIR EQUIPOOOOOOOOO"/>
+											</n:span>
+										</div>
+									</div>										
 								</x:form>
 							</div>
 						</n:div>
