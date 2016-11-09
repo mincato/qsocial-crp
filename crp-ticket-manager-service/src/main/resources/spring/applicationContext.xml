@@ -162,6 +162,7 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_SUBJECT}" value-ref="tagSubjectCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_PRIORITY}" value-ref="changePriorityCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).MODIFY_SUBJECT}" value-ref="modifySubjectCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REGISTER_SUBJECT_REPLY}" value-ref="registerSubjectReplyCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">
@@ -181,7 +182,13 @@
     <bean id="sourceCommonService" init-method="start" destroy-method="stop" class="com.qsocialnow.common.services.SourceService">
         <property name="zookeeperClient" ref="zookeeperClient"></property>
         <property name="blockedSourcesZnodePath" value="${app.blocked.sources.path}"></property>
+        <property name="automaticSources" ref="automaticSources" />
     </bean>
+    
+    <util:list id="automaticSources">
+    	<value>#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}</value>
+    	<value>#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}</value>
+    </util:list>
     
     <util:map id="postProcessActions">
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>

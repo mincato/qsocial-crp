@@ -11,7 +11,9 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
+import com.qsocialnow.common.model.config.Source;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.services.SourceService;
 import com.qsocialnow.common.util.DeepLinkBuilder;
 import com.qsocialnow.common.util.SubjectIdentifierNormalizer;
 
@@ -69,7 +71,10 @@ public class Case implements Serializable {
 
     private String idRootComment;
 
+    // TODO remover (utilizar caseSource)
     private Long source;
+
+    private Source caseSource;
 
     private BaseUser assignee;
 
@@ -85,7 +90,7 @@ public class Case implements Serializable {
 
     }
 
-    public static Case getNewCaseFromEvent(Event event) {
+    public static Case getNewCaseFromEvent(Event event, SourceService sourceService) {
         Case newCase = new Case();
         newCase.setOpen(true);
 
@@ -97,6 +102,7 @@ public class Case implements Serializable {
         newCase.setPendingResponse(true);
         newCase.setLastPostId(event.getId());
         newCase.setSource(event.getMedioId());
+        newCase.setCaseSource(sourceService.getSource(event.getMedioId()));
         Message message = new Message();
         message.setId(event.getId());
         message.setFromResponseDetector(event.isResponseDetected());
@@ -157,6 +163,9 @@ public class Case implements Serializable {
                 actionsAllowed.add(ActionType.SEND_MESSAGE);
                 actionsAllowed.add(ActionType.TAG_SUBJECT);
                 actionsAllowed.add(ActionType.MODIFY_SUBJECT);
+            }
+            if (this.getCaseSource() != null && this.getCaseSource().isManual()) {
+                actionsAllowed.add(ActionType.REGISTER_SUBJECT_REPLY);
             }
             actionsAllowed.add(ActionType.CHANGE_SUBJECT);
             actionsAllowed.add(ActionType.ASSIGN);
@@ -415,6 +424,14 @@ public class Case implements Serializable {
 
     public void setPriority(Priority priority) {
         this.priority = priority;
+    }
+
+    public Source getCaseSource() {
+        return caseSource;
+    }
+
+    public void setCaseSource(Source caseSource) {
+        this.caseSource = caseSource;
     }
 
 }
