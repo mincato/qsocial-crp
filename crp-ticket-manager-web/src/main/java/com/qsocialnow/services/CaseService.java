@@ -24,4 +24,6 @@ public interface CaseService {
 
     byte[] getReport(Map<String, String> filters, String language);
 
+    String findGeoJson();
+
 }

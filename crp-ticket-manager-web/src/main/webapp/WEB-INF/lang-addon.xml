@@ -55,4 +55,5 @@
 		<component-name>select</component-name>
 		<component-class>org.zkoss.zhtml.Select</component-class>
 	</component>
+	
 </language-addon>

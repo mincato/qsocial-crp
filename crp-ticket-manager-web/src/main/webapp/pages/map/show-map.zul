@@ -1,7 +1,7 @@
 <?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
-<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"     
-    border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
+<x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"   viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CasesMapDashboardViewModel')"   
+    border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml" xmlns:ca="client/attribute">
 	<n:div class="row">
 		<n:div class="col-sm-12">
 			<n:div id="page-header" class="pane equal">
@@ -15,8 +15,9 @@
 	<n:div class="row">
 		<n:div class="col-sm-12">
 			<n:div class="pane equal">
-					<n:div id="map"></n:div>
+					<div id="map" ca:data-zmapbox=""  style="height:400px;"></div>	
 			</n:div>
+			<button onClick="@command('update')" >Update</button>
 		</n:div>
 	</n:div>
 </x:div>

@@ -1,10 +1,13 @@
 package com.qsocialnow.services.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -195,6 +198,16 @@ public class CaseServiceImpl implements CaseService {
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String findGeoJson() {
+        try {
+            InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/geo.json");
+            return IOUtils.toString(systemResourceAsStream, "UTF-8");
+        } catch (IOException ex) {
+            return null;
         }
     }
 
