@@ -104,8 +104,8 @@ public class CaseService {
             }
         }
         log.info("After process teams - trying to retrieve cases from :" + filterRequest.getUserName());
+        filterRequest.setTeamsToFilter(teamsToFilter);
         List<CaseListView> cases = repository.findAll(filterRequest);
-
 		PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, filterRequest.getPageRequest().getPageNumber(),
 				filterRequest.getPageRequest().getPageSize());
 		return page;

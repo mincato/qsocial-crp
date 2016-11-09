@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.util.Strings;
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
@@ -274,7 +275,7 @@ public class CasesViewModel implements Serializable {
     private PageResponse<CaseListView> findCasesGet() {
         PageRequest pageRequest = new PageRequest(activePage, pageSize, sortField);
         pageRequest.setSortOrder(this.sortOrder);
-        PageResponse<CaseListView> pageResponse = caseService.findAll(pageRequest, filterActive ? getFilters() : null);
+        PageResponse<CaseListView> pageResponse = caseService.findAll(pageRequest, null);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.cases.addAll(pageResponse.getItems());
             this.moreResults = true;
@@ -289,7 +290,9 @@ public class CasesViewModel implements Serializable {
     	PageRequest pageRequest = new PageRequest(activePage, pageSize, sortField);
         pageRequest.setSortOrder(this.sortOrder);
         filterRequest.setPageRequest(pageRequest);
-        
+        filterRequest.setFilterActive(filterActive);
+        setFilters(filterRequest);
+
         PageResponse<CaseListView> pageResponse = caseService.findAll(filterRequest);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.cases.addAll(pageResponse.getItems());
@@ -468,9 +471,64 @@ public class CasesViewModel implements Serializable {
         sb.append(")");
     }
     
+    private void setFilters(CasesFilterRequest filterRequest) {
+
+    	if (Strings.isNotEmpty(this.title)) {
+        	filterRequest.setTitle(this.title);
+        }
+
+        if (this.domain != null && !this.domain.getId().equals(NOT_ID_ITEM_VALUE)) {
+        	filterRequest.setDomain(this.domain.getId());
+        }
+
+        if (this.trigger != null && !this.trigger.getId().equals(NOT_ID_ITEM_VALUE)) {
+        	filterRequest.setTrigger(this.trigger.getId());
+        }
+
+        if (this.segment != null && !this.segment.getId().equals(NOT_ID_ITEM_VALUE)) {
+        	filterRequest.setSegment(this.segment.getId());
+        }
+
+        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE)) {
+        	filterRequest.setPendingResponse(this.pendingResponse);
+        }
+
+        if (userSelected != null && !userSelected.getId().equals(NOT_ID_INT_VALUE)) {
+        	filterRequest.setUserName(this.userSelected.getUsername());
+        }
+
+        if (status != null && !status.equals(ALL_OPTION_VALUE)) {
+        	filterRequest.setStatus(this.status);
+        }
+
+        if (priority != null && !priority.equals(ALL_OPTION_VALUE)) {
+        	filterRequest.setPriority(this.priority);
+        }
+
+        if (this.fromDate != null) {
+        	filterRequest.setFromDate(this.fromDate);
+        }
+
+        if (this.toDate != null) {
+        	filterRequest.setToDate(this.toDate);
+        }
+
+        if (Strings.isNotEmpty(this.subject)) {
+            filterRequest.setSubject(this.subject);
+        }
+
+        if (this.caseCategory != null && !this.caseCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
+            filterRequest.setCaseCategory(this.caseCategory.getId());
+        }
+
+        if (this.subjectCategory != null && !this.subjectCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
+        	filterRequest.setSubjectCategory(this.subjectCategory.getId());
+        }
+    }
+    
     private Map<String, String> getFilters() {
         Map<String, String> filters = new HashMap<String, String>();
-        if (this.title != null && !this.title.isEmpty()) {
+        if (Strings.isNotEmpty(this.title)) {
             filters.put("title", this.title);
         }
 
@@ -510,7 +568,7 @@ public class CasesViewModel implements Serializable {
             filters.put("toOpenDate", String.valueOf(this.toDate));
         }
 
-        if (this.subject != null) {
+        if (Strings.isNotEmpty(this.subject)) {
             filters.put("subject", this.subject);
         }
 
@@ -521,10 +579,9 @@ public class CasesViewModel implements Serializable {
         if (this.subjectCategory != null && !this.subjectCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
             filters.put("subjectCategory", this.subjectCategory.getId());
         }
-
         return filters;
     }
-
+    
     private void setDefaultPage() {
         this.pageSize = PAGE_SIZE_DEFAULT;
         this.activePage = ACTIVE_PAGE_DEFAULT;

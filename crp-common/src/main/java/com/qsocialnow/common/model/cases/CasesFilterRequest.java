@@ -14,6 +14,12 @@ public class CasesFilterRequest {
 	
 	private PageRequest pageRequest;
 	
+	private String domain;
+	
+	private String trigger;
+	
+	private String segment;	
+	
 	private Long fromDate;
 
     private Long toDate;
@@ -25,6 +31,8 @@ public class CasesFilterRequest {
     private String subject;
 
     private String userName;
+    
+    private List<String> teamsToFilter;
 
     private boolean isAdmin;
     
@@ -33,6 +41,10 @@ public class CasesFilterRequest {
     private String priority;
 
     private String pendingResponse;
+    
+    private String caseCategory;
+    
+    private String subjectCategory;
 	
 	private Long tokenId;
 
@@ -82,6 +94,30 @@ public class CasesFilterRequest {
 
 	public void setPageRequest(PageRequest pageRequest) {
 		this.pageRequest = pageRequest;
+	}
+
+	public String getDomain() {
+		return domain;
+	}
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
+
+	public String getTrigger() {
+		return trigger;
+	}
+
+	public void setTrigger(String trigger) {
+		this.trigger = trigger;
+	}
+
+	public String getSegment() {
+		return segment;
+	}
+
+	public void setSegment(String segment) {
+		this.segment = segment;
 	}
 
 	public boolean isFilterActive() {
@@ -140,6 +176,14 @@ public class CasesFilterRequest {
 		this.userName = userName;
 	}
 
+	public List<String> getTeamsToFilter() {
+		return teamsToFilter;
+	}
+
+	public void setTeamsToFilter(List<String> teamsToFilter) {
+		this.teamsToFilter = teamsToFilter;
+	}
+
 	public boolean isAdmin() {
 		return isAdmin;
 	}
@@ -170,6 +214,22 @@ public class CasesFilterRequest {
 
 	public void setPendingResponse(String pendingResponse) {
 		this.pendingResponse = pendingResponse;
+	}
+
+	public String getCaseCategory() {
+		return caseCategory;
+	}
+
+	public void setCaseCategory(String caseCategory) {
+		this.caseCategory = caseCategory;
+	}
+
+	public String getSubjectCategory() {
+		return subjectCategory;
+	}
+
+	public void setSubjectCategory(String subjectCategory) {
+		this.subjectCategory = subjectCategory;
 	}
 
 	public Long getTokenId() {

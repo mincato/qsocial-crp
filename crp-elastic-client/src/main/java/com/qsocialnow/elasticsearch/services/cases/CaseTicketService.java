@@ -20,6 +20,7 @@ import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 import com.qsocialnow.elasticsearch.repositories.ShouldFilter;
+import com.qsocialnow.elasticsearch.repositories.TermFieldFilter;
 
 import io.searchbox.core.SearchResult;
 
@@ -117,7 +118,7 @@ public class CaseTicketService extends CaseIndexService {
         }
 
         SearchResponse<Case> response = repository.queryByFields(mapping, from, size, sortField,
-                Boolean.valueOf(sortOrder), searchValues, rangeFilters, shouldFilters);
+                Boolean.valueOf(sortOrder), searchValues,null, rangeFilters, shouldFilters);
 
         List<Case> cases = response.getSources();
 
@@ -130,14 +131,88 @@ public class CaseTicketService extends CaseIndexService {
 		RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
 		Repository<CaseType> repository = esfactory.initManager();
 		repository.initClient();
-
 		CaseMapping mapping = CaseMapping.getInstance();
-		SearchResponse<Case> response = repository.queryMatchAll(filterRequest.getPageRequest().getOffset(),
-				filterRequest.getPageRequest().getPageSize(), filterRequest.getPageRequest().getSortField(),
-				filterRequest.getPageRequest().getSortOrder(), mapping);
+		
+		SearchResponse<Case> response;
+		if(!filterRequest.isFilterActive()){
+			response = repository.queryMatchAll(filterRequest.getPageRequest().getOffset(),
+					filterRequest.getPageRequest().getPageSize(), filterRequest.getPageRequest().getSortField(),
+					filterRequest.getPageRequest().getSortOrder(), mapping);
+		}
+		else{
+			String fromValue = null;
+			if(filterRequest.getFromDate()!=null){
+				fromValue = String.valueOf(filterRequest.getFromDate());
+			}
+			String toValue = null;
+			if(filterRequest.getToDate()!=null){
+				toValue = String.valueOf(filterRequest.getToDate());
+			}
+			
+			List<RangeFilter> rangeFilters = new ArrayList<>();
+			if(fromValue!=null || toValue!=null){
+				RangeFilter rangeFilter = new RangeFilter("openDate",fromValue,toValue);
+		        rangeFilters.add(rangeFilter);
+			}
 
+	        Map<String, String> searchValues = new HashMap<>();
+	        if (filterRequest.getTitle() != null)
+	            searchValues.put("title", filterRequest.getTitle());
+
+	        if (filterRequest.getUserName() != null)
+	            searchValues.put("assignee.username", filterRequest.getUserName());
+
+	        if (filterRequest.getCaseCategory() != null)
+	            searchValues.put("caseCategories", filterRequest.getCaseCategory());
+
+	        if (filterRequest.getSubjectCategory() != null)
+	            searchValues.put("subject.subjectCategory", filterRequest.getSubjectCategory());
+
+	        List<TermFieldFilter> termFilters = new ArrayList<>();
+			if (filterRequest.getDomain() != null)
+				termFilters.add(new TermFieldFilter("domainId", filterRequest.getDomain()));
+
+			if (filterRequest.getTrigger() != null)
+				termFilters.add(new TermFieldFilter("triggerId", filterRequest.getTrigger()));
+
+			if (filterRequest.getSegment() != null)
+				termFilters.add(new TermFieldFilter("segmentId", filterRequest.getSegment()));
+
+			if (filterRequest.getPendingResponse() != null)
+				termFilters.add(new TermFieldFilter("pendingResponse", filterRequest.getPendingResponse()));
+
+			if (filterRequest.getStatus() != null)
+				termFilters.add(new TermFieldFilter("open", filterRequest.getStatus()));
+
+			if (filterRequest.getPriority() != null)
+				termFilters.add(new TermFieldFilter("priority", filterRequest.getPriority()));	        
+
+	        List<ShouldFilter> shouldFilters = new ArrayList<>();
+	        List<String> teamsToFilter = filterRequest.getTeamsToFilter();
+	        if (teamsToFilter == null || (teamsToFilter != null && teamsToFilter.size() == 0)) {
+	            if (filterRequest.getUsername() != null) {
+	                searchValues.put("assignee.username", filterRequest.getUsername());
+	            }
+	        } else {
+	            for (String teamId : teamsToFilter) {
+	                ShouldFilter shouldFilter = new ShouldFilter("teamId", teamId);
+	                shouldFilters.add(shouldFilter);
+	            }
+	            ShouldFilter shouldFilter = new ShouldFilter("assignee.username", filterRequest.getUsername());
+	            shouldFilters.add(shouldFilter);
+	        }
+
+	        if (filterRequest.getSubject() != null) {
+	            ShouldFilter shouldFilterSubjetIdentifier = new ShouldFilter("subject.identifier", filterRequest.getSubject());
+	            ShouldFilter shouldFilterSubjetSourceName = new ShouldFilter("subject.sourceName", filterRequest.getSubject());
+	            shouldFilters.add(shouldFilterSubjetIdentifier);
+	            shouldFilters.add(shouldFilterSubjetSourceName);
+	        }
+
+	        response = repository.queryByFields(mapping, filterRequest.getPageRequest().getOffset(), filterRequest.getPageRequest().getPageSize(), filterRequest.getPageRequest().getSortField(),
+	        		filterRequest.getPageRequest().getSortOrder(), searchValues,termFilters,rangeFilters, shouldFilters);
+		}
 		List<Case> cases = response.getSources();
-
 		repository.closeClient();
 		return cases;
 	}

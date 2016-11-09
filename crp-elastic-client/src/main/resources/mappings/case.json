@@ -10,7 +10,8 @@
     "title":{"type": "string","fields":{"raw":{"type":"string","index":"not_analyzed"},"keyword":{"type":"string","analyzer":"insensitive_sort"}}},
     "description":{"type": "string","analyzer": "standard" },
     "resolution":{"type": "string","index":"not_analyzed"},
-     "triggerEvent" : {
+    "priority" : {"type" : "string","index":"not_analyzed"},
+    "triggerEvent" : {
         "properties" : {
               "connotacion" : {"type" : "long","index": "not_analyzed"},
               "esLike" : {"type" : "boolean" },

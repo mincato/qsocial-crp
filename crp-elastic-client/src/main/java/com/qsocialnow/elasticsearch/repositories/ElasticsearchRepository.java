@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.queries.TermFilter;
+import org.apache.lucene.search.TermQuery;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -18,6 +21,8 @@ import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -357,7 +362,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> searchValues, List<RangeFilter> rangeFilters,
+            boolean sortOrder, Map<String, String> searchValues,List<TermFieldFilter> termFilters, List<RangeFilter> rangeFilters,
             List<ShouldFilter> shouldFilters) {
 
         SortOrder sortOrderValue;
@@ -381,6 +386,12 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
         } else {
             boolQueryBuilder.must(QueryBuilders.matchAllQuery());
+        }
+        
+        if(termFilters!=null){
+        	for (TermFieldFilter termField : termFilters) {
+				boolQueryBuilder.filter(QueryBuilders.termQuery(termField.getField(), termField.getValue()));
+			}
         }
 
         if (rangeFilters != null) {
@@ -507,7 +518,12 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             Mapping<T, E> mapping) {
         SortOrder sortOrderEnum = sortOrder ? SortOrder.ASC : SortOrder.DESC;
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderEnum).query(QueryBuilders.matchAllQuery());
+        
+        SortBuilder sortBuilder = SortBuilders.fieldSort(sortField);
+        sortBuilder.order(sortOrderEnum);
+        sortBuilder.missing("_last");
+
+        searchSourceBuilder.from(from).size(size).sort(sortBuilder).query(QueryBuilders.matchAllQuery());
         log.info(searchSourceBuilder.toString());
         Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
         return executeSearch(mapping, search);

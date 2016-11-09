@@ -102,7 +102,7 @@ public class SegmentService {
                 shouldFilters.add(shouldFilter);
             }
         }
-        SearchResponse<Segment> response = repository.queryByFields(mapping, 0, -1, null, false, null, null,
+        SearchResponse<Segment> response = repository.queryByFields(mapping, 0, -1, null, false, null,null,null,
                 shouldFilters);
 
         List<Segment> segments = response.getSources();
