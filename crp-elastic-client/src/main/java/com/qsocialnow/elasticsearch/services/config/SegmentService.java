@@ -19,6 +19,7 @@ import com.qsocialnow.elasticsearch.mappings.types.config.SegmentType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
 import com.qsocialnow.elasticsearch.repositories.SearchResponse;
+import com.qsocialnow.elasticsearch.repositories.ShouldConditionsFilter;
 import com.qsocialnow.elasticsearch.repositories.ShouldFilter;
 
 public class SegmentService {
@@ -118,15 +119,18 @@ public class SegmentService {
         repository.initClient();
         SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
 
-        List<ShouldFilter> shouldFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsFilters = new ArrayList<>();
+
+        ShouldConditionsFilter shouldConditionsTeamFilter = new ShouldConditionsFilter();
         if (teams != null) {
             for (Team team : teams) {
                 ShouldFilter shouldFilter = new ShouldFilter("team", team.getId());
-                shouldFilters.add(shouldFilter);
+                shouldConditionsTeamFilter.addShouldCondition(shouldFilter);
             }
+            shouldConditionsFilters.add(shouldConditionsTeamFilter);
         }
-        SearchResponse<Segment> response = repository.queryByFields(mapping, 0, -1, null, false, null, null,
-                shouldFilters);
+        SearchResponse<Segment> response = repository.queryByFields(mapping, 0, -1, null, false, null, null, null,
+                shouldConditionsFilters);
 
         List<Segment> segments = response.getSources();
         repository.closeClient();

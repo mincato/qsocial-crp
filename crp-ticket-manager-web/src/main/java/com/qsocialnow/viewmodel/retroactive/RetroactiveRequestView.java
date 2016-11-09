@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.qsocialnow.common.model.config.Category;
 import com.qsocialnow.common.model.config.Media;
-import com.qsocialnow.common.model.retroactive.AdministrativeUnitsFilterBean;
-import com.qsocialnow.common.model.retroactive.FollowersCountRange;
-import com.qsocialnow.common.model.retroactive.WordsListFilterBean;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilterBean;
+import com.qsocialnow.common.model.filter.FollowersCountRange;
+import com.qsocialnow.common.model.filter.WordsListFilterBean;
 import com.qsocialnow.model.Connotation;
 import com.qsocialnow.model.Language;
 

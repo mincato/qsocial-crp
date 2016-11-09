@@ -91,7 +91,7 @@ public class ActionRegistryService extends CaseIndexService {
         rangeFilters.add(rangeFilter);
 
         SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", true,
-                searchValues, rangeFilters, null);
+                searchValues, null, rangeFilters, null);
         List<ActionRegistry> registries = response.getSources();
 
         repository.closeClient();

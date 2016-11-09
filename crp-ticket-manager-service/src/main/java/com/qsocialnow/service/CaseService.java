@@ -20,6 +20,7 @@ import com.qsocialnow.common.model.cases.ActionRegistryStatus;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Resolution;
@@ -86,6 +87,29 @@ public class CaseService {
                 caseCategory, subjectCategory);
 
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
+        return page;
+    }
+
+    public PageResponse<CaseListView> findAllByFilters(CasesFilterRequest filterRequest) {
+        List<String> teamsToFilter = new ArrayList<String>();
+        List<Team> teams = teamRepository.findTeams(filterRequest.getUserName());
+        if (teams != null) {
+            for (Team team : teams) {
+                List<User> users = team.getUsers();
+                for (User user : users) {
+                    if (user.getUsername().equals(filterRequest.getUserName())) {
+                        if (user.isCoordinator()) {
+                            teamsToFilter.add(team.getId());
+                        }
+                    }
+                }
+            }
+        }
+        log.info("After process teams - trying to retrieve cases from :" + filterRequest.getUserName());
+        filterRequest.setTeamsToFilter(teamsToFilter);
+        List<CaseListView> cases = repository.findAll(filterRequest);
+        PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, filterRequest.getPageRequest()
+                .getPageNumber(), filterRequest.getPageRequest().getPageSize());
         return page;
     }
 
