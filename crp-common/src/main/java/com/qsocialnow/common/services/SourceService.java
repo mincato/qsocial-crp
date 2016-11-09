@@ -13,6 +13,8 @@ import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.qsocialnow.common.model.config.Source;
+
 public class SourceService {
 
     private static final Logger log = LoggerFactory.getLogger(SourceService.class);
@@ -22,6 +24,8 @@ public class SourceService {
     private PathChildrenCache blockedSourcesNodeCache;
 
     private String blockedSourcesZnodePath;
+
+    private List<Long> automaticSources;
 
     public void start() throws Exception {
         blockedSourcesNodeCache = new PathChildrenCache(zookeeperClient, blockedSourcesZnodePath, false);
@@ -58,11 +62,23 @@ public class SourceService {
 
     }
 
+    public Source getSource(Long sourceId) {
+        Source source = new Source();
+        source.setId(sourceId);
+        source.setManual(!automaticSources.contains(sourceId));
+        return source;
+
+    }
+
     public void setZookeeperClient(CuratorFramework zookeeperClient) {
         this.zookeeperClient = zookeeperClient;
     }
 
     public void setBlockedSourcesZnodePath(String blockedSourcesZnodePath) {
         this.blockedSourcesZnodePath = blockedSourcesZnodePath;
+    }
+
+    public void setAutomaticSources(List<Long> automaticSources) {
+        this.automaticSources = automaticSources;
     }
 }

@@ -46,6 +46,12 @@
 	<bean id="sourceService" class="com.qsocialnow.common.services.SourceService">
         <property name="zookeeperClient" ref="zookeeperClient"></property>
         <property name="blockedSourcesZnodePath" value="${app.blocked.sources.path}"></property>
+        <property name="automaticSources" ref="automaticSources" />
     </bean>
+    
+    <util:list id="automaticSources">
+    	<value>#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}</value>
+    	<value>#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}</value>
+    </util:list>
 	
 </beans>

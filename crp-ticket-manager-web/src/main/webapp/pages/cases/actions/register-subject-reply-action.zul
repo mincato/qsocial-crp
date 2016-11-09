@@ -1,0 +1,19 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div class="pane equal" xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+		apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('registerSubjectReplyActionVm') @init('com.qsocialnow.viewmodel.RegisterSubjectReplyActionViewModel')"
+		validationMessages="@id('vmsgs')">
+	<x:form form="@id('fxRegisterSubjectReplyAction') @load(registerSubjectReplyActionVm.registerSubjectReplyAction) @save(registerSubjectReplyActionVm.registerSubjectReplyAction, before='execute')">
+		<x:div sclass="@load(empty vmsgs[text] ? 'form-group' : 'form-group has-error')">
+		    <n:label class="control-label">${labels.cases.actions.response.text}:</n:label>
+    		<textbox type="text" id="text" class="form-control" rows="5" 
+    			value="@bind(fxRegisterSubjectReplyAction.text) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
+			<x:span sclass="@load(empty vmsgs[text] ? 'hidden' : 'help-block')">
+				<label value="@load(vmsgs[text])" />
+			</x:span>
+		</x:div>
+		<div class="form-group text-center">
+	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
+		</div>
+	</x:form>
+</div>
