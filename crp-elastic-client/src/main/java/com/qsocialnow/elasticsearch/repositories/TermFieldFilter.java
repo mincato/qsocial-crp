@@ -12,10 +12,10 @@ public class TermFieldFilter {
     }
 
     public String getField() {
-		return field;
-	}
+        return field;
+    }
 
-	public String getValue() {
-		return value;
-	}
+    public String getValue() {
+        return value;
+    }
 }

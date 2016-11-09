@@ -63,7 +63,7 @@ public class CaseRepository {
         }
         return cases;
     }
-    
+
     public List<CaseListView> findAll(CasesFilterRequest filterRequest) {
         List<CaseListView> cases = new ArrayList<>();
 
@@ -94,9 +94,7 @@ public class CaseRepository {
         }
         return cases;
     }
-    
-    
-    
+
     public List<ResultsListView> sumarizeResolvedByResolution(PageRequest pageRequest, String domainId) {
         List<ResultsListView> results = new ArrayList<>();
         try {

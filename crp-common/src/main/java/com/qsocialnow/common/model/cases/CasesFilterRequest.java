@@ -10,17 +10,17 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 
 public class CasesFilterRequest {
 
-	private boolean filterActive;
-	
-	private PageRequest pageRequest;
-	
-	private String domain;
-	
-	private String trigger;
-	
-	private String segment;	
-	
-	private Long fromDate;
+    private boolean filterActive;
+
+    private PageRequest pageRequest;
+
+    private String domain;
+
+    private String trigger;
+
+    private String segment;
+
+    private Long fromDate;
 
     private Long toDate;
 
@@ -31,22 +31,24 @@ public class CasesFilterRequest {
     private String subject;
 
     private String userName;
-    
+
+    private String userSelected;
+
     private List<String> teamsToFilter;
 
     private boolean isAdmin;
-    
+
     private String status;
 
     private String priority;
 
     private String pendingResponse;
-    
+
     private String caseCategory;
-    
+
     private String subjectCategory;
-	
-	private Long tokenId;
+
+    private Long tokenId;
 
     private String serieName;
 
@@ -89,150 +91,158 @@ public class CasesFilterRequest {
     private List<Category> categoriesFilter;
 
     public PageRequest getPageRequest() {
-		return pageRequest;
-	}
+        return pageRequest;
+    }
 
-	public void setPageRequest(PageRequest pageRequest) {
-		this.pageRequest = pageRequest;
-	}
+    public void setPageRequest(PageRequest pageRequest) {
+        this.pageRequest = pageRequest;
+    }
 
-	public String getDomain() {
-		return domain;
-	}
+    public String getDomain() {
+        return domain;
+    }
 
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
 
-	public String getTrigger() {
-		return trigger;
-	}
+    public String getTrigger() {
+        return trigger;
+    }
 
-	public void setTrigger(String trigger) {
-		this.trigger = trigger;
-	}
+    public void setTrigger(String trigger) {
+        this.trigger = trigger;
+    }
 
-	public String getSegment() {
-		return segment;
-	}
+    public String getSegment() {
+        return segment;
+    }
 
-	public void setSegment(String segment) {
-		this.segment = segment;
-	}
+    public void setSegment(String segment) {
+        this.segment = segment;
+    }
 
-	public boolean isFilterActive() {
-		return filterActive;
-	}
+    public boolean isFilterActive() {
+        return filterActive;
+    }
 
-	public void setFilterActive(boolean filterActive) {
-		this.filterActive = filterActive;
-	}
+    public void setFilterActive(boolean filterActive) {
+        this.filterActive = filterActive;
+    }
 
-	public Long getFromDate() {
-		return fromDate;
-	}
+    public Long getFromDate() {
+        return fromDate;
+    }
 
-	public void setFromDate(Long fromDate) {
-		this.fromDate = fromDate;
-	}
+    public void setFromDate(Long fromDate) {
+        this.fromDate = fromDate;
+    }
 
-	public Long getToDate() {
-		return toDate;
-	}
+    public Long getToDate() {
+        return toDate;
+    }
 
-	public void setToDate(Long toDate) {
-		this.toDate = toDate;
-	}
+    public void setToDate(Long toDate) {
+        this.toDate = toDate;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getSubject() {
-		return subject;
-	}
+    public String getSubject() {
+        return subject;
+    }
 
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public List<String> getTeamsToFilter() {
-		return teamsToFilter;
-	}
+    public String getUserSelected() {
+        return userSelected;
+    }
 
-	public void setTeamsToFilter(List<String> teamsToFilter) {
-		this.teamsToFilter = teamsToFilter;
-	}
+    public void setUserSelected(String userSelected) {
+        this.userSelected = userSelected;
+    }
 
-	public boolean isAdmin() {
-		return isAdmin;
-	}
+    public List<String> getTeamsToFilter() {
+        return teamsToFilter;
+    }
 
-	public void setAdmin(boolean isAdmin) {
-		this.isAdmin = isAdmin;
-	}
+    public void setTeamsToFilter(List<String> teamsToFilter) {
+        this.teamsToFilter = teamsToFilter;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public boolean isAdmin() {
+        return isAdmin;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
-	public String getPriority() {
-		return priority;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setPriority(String priority) {
-		this.priority = priority;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public String getPendingResponse() {
-		return pendingResponse;
-	}
+    public String getPriority() {
+        return priority;
+    }
 
-	public void setPendingResponse(String pendingResponse) {
-		this.pendingResponse = pendingResponse;
-	}
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
 
-	public String getCaseCategory() {
-		return caseCategory;
-	}
+    public String getPendingResponse() {
+        return pendingResponse;
+    }
 
-	public void setCaseCategory(String caseCategory) {
-		this.caseCategory = caseCategory;
-	}
+    public void setPendingResponse(String pendingResponse) {
+        this.pendingResponse = pendingResponse;
+    }
 
-	public String getSubjectCategory() {
-		return subjectCategory;
-	}
+    public String getCaseCategory() {
+        return caseCategory;
+    }
 
-	public void setSubjectCategory(String subjectCategory) {
-		this.subjectCategory = subjectCategory;
-	}
+    public void setCaseCategory(String caseCategory) {
+        this.caseCategory = caseCategory;
+    }
 
-	public Long getTokenId() {
+    public String getSubjectCategory() {
+        return subjectCategory;
+    }
+
+    public void setSubjectCategory(String subjectCategory) {
+        this.subjectCategory = subjectCategory;
+    }
+
+    public Long getTokenId() {
         return tokenId;
     }
 

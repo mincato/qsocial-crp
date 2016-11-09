@@ -14,8 +14,8 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 public interface CaseService {
 
     PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters);
-    
-    PageResponse<CaseListView> findAll(CasesFilterRequest filterRequest); 
+
+    PageResponse<CaseListView> findAll(CasesFilterRequest filterRequest);
 
     Case findById(String caseId);
 

@@ -11,6 +11,13 @@
     "description":{"type": "string","analyzer": "standard" },
     "resolution":{"type": "string","index":"not_analyzed"},
     "priority" : {"type" : "string","index":"not_analyzed"},
+    "caseCategories" : {"type" : "string","index":"not_analyzed"},
+    "assignee" : {
+        "properties" : {
+              "id" : {"type" : "long"},
+              "username" : {"type" : "string","index":"not_analyzed"}
+            }
+    },
     "triggerEvent" : {
         "properties" : {
               "connotacion" : {"type" : "long","index": "not_analyzed"},
@@ -26,7 +33,7 @@
               "idUsuarioCreacion" : {"type" : "string","index":"not_analyzed"},
               "idUsuarioOriginal" : {"type" : "string","index":"not_analyzed"},
               "idUsuarioReproduccion" : {"type" : "string","index":"not_analyzed"},
-              "language" : {"type" : "string"},
+              "language" : {"type" : "string","index":"not_analyzed"},
               "likeCount" : {"type" : "long"},
               "medioId" : {"type" : "long"},
               "menciones" : {"type" : "string"},
@@ -99,6 +106,7 @@
               "sourceId" : {
                 "type" : "string"
               },
+              "subjectCategory" : {"type" : "string","index":"not_analyzed"},
               "sourceName" : {"type": "string","index":"analyzed","analyzer": "autocomplete","search_analyzer": "autocomplete_search"}
             }
     }

@@ -89,9 +89,9 @@ public class CaseService {
         PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
         return page;
     }
-    
-    public PageResponse<CaseListView> findAllByFilters(CasesFilterRequest filterRequest){
-    	List<String> teamsToFilter = new ArrayList<String>();
+
+    public PageResponse<CaseListView> findAllByFilters(CasesFilterRequest filterRequest) {
+        List<String> teamsToFilter = new ArrayList<String>();
         List<Team> teams = teamRepository.findTeams(filterRequest.getUserName());
         if (teams != null) {
             for (Team team : teams) {
@@ -108,9 +108,9 @@ public class CaseService {
         log.info("After process teams - trying to retrieve cases from :" + filterRequest.getUserName());
         filterRequest.setTeamsToFilter(teamsToFilter);
         List<CaseListView> cases = repository.findAll(filterRequest);
-		PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, filterRequest.getPageRequest().getPageNumber(),
-				filterRequest.getPageRequest().getPageSize());
-		return page;
+        PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, filterRequest.getPageRequest()
+                .getPageNumber(), filterRequest.getPageRequest().getPageSize());
+        return page;
     }
 
     public Case findOne(String caseId) {

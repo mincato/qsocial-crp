@@ -51,8 +51,8 @@ public interface Repository<T> {
             String serchField, String searchValue);
 
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> fieldValues,List<TermFieldFilter> termFilters,List<RangeFilter> rangeFilters,
-            List<ShouldFilter> shouldFilters);
+            boolean sortOrder, Map<String, String> fieldValues, List<TermFieldFilter> termFilters,
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters);
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> fieldValues,
             List<RangeFilter> rangeFilters, List<ShouldFilter> shouldFilters, String aggregationField);
