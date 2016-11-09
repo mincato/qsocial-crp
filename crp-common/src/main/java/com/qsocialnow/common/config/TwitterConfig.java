@@ -19,6 +19,8 @@ public class TwitterConfig {
 
     private Set<Integer> retryStatusCodes = new HashSet<>();
 
+    private Set<Integer> blockErrorCodes = new HashSet<>();
+
     private Map<Integer, ErrorType> errorMapping = new HashMap<Integer, ErrorType>();
 
     public TwitterConfig(final String OAuthConsumerKey, final String OAuthConsumerSecret, final String callbackUrl) {
@@ -49,6 +51,14 @@ public class TwitterConfig {
 
     public Map<Integer, ErrorType> getErrorMapping() {
         return errorMapping;
+    }
+
+    public Set<Integer> getBlockErrorCodes() {
+        return blockErrorCodes;
+    }
+
+    public void setBlockErrorCodes(Set<Integer> blockErrorCodes) {
+        this.blockErrorCodes = blockErrorCodes;
     }
 
 }

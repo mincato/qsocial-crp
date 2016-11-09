@@ -38,7 +38,7 @@ public class SendResponseActionViewModel implements Serializable {
 
     private SendResponseAutomaticActionView sendResponseAction;
 
-    private Integer textMaxlength = 0;
+    private Map<Media, List<BaseUserResolver>> userResolversBySource;
 
     private boolean anyTwitterSource = false;
 
@@ -55,6 +55,11 @@ public class SendResponseActionViewModel implements Serializable {
         this.sendResponseAction = sendResponseAction;
     }
 
+    @Command
+    public List<BaseUserResolver> getUserResolversBySource(Media media) {
+        return userResolversBySource.get(media);
+    }
+
     @GlobalCommand
     @NotifyChange({ "sendResponseAction", "textMaxlength", "anyTwitterSource" })
     public void show(@BindingParam("segment") SegmentView segment, @BindingParam("action") ActionType action) {
@@ -63,19 +68,17 @@ public class SendResponseActionViewModel implements Serializable {
             Map<String, Object> filters = new HashMap<>();
             filters.put("status", true);
             List<BaseUserResolver> userResolvers = teamService.findUserResolvers(segment.getTeam().getId(), filters);
-            Map<Media, List<BaseUserResolver>> userResolversByMedia = userResolvers.stream().collect(
+            userResolversBySource = userResolvers.stream().collect(
                     Collectors.groupingBy(userResolver -> Media.getByValue(userResolver.getSource())));
-            List<UserResolverBySource> userResolversBySource = userResolversByMedia.entrySet().stream().map(entry -> {
+            List<UserResolverBySource> userResolversView = userResolversBySource.entrySet().stream().map(entry -> {
                 UserResolverBySource userResolverBySource = new UserResolverBySource();
                 userResolverBySource.setSource(entry.getKey());
-                userResolverBySource.setUserResolverOptions(entry.getValue());
-                userResolverBySource.setSelectedUserResolver(userResolverBySource.getUserResolverOptions().get(0));
+                userResolverBySource.setSelectedUserResolver(entry.getValue().get(0));
                 return userResolverBySource;
             }).collect(Collectors.toList());
-            this.sendResponseAction.getUserResolvers().addAll(userResolversBySource);
+            this.sendResponseAction.getUserResolvers().addAll(userResolversView);
             if (this.sendResponseAction.getUserResolvers().stream()
                     .anyMatch(userResolver -> Media.TWITTER.equals(userResolver.getSource()))) {
-                this.textMaxlength = Media.TWITTER.getMaxlength();
                 this.anyTwitterSource = true;
             }
         }
@@ -100,14 +103,6 @@ public class SendResponseActionViewModel implements Serializable {
         HashMap<String, Object> args = new HashMap<>();
         args.put("actionCriteria", actionCriteria);
         BindUtils.postGlobalCommand(null, null, "saveActionCriteria", args);
-    }
-
-    public Integer getTextMaxlength() {
-        return textMaxlength;
-    }
-
-    public void setTextMaxlength(Integer textMaxlength) {
-        this.textMaxlength = textMaxlength;
     }
 
     public boolean isAnyTwitterSource() {

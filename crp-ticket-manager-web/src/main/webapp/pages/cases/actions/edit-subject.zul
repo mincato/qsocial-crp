@@ -1,9 +1,8 @@
-<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
 	<div sclass="modal fade" ca:data-modal=""
 		ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
 		apply="org.zkoss.bind.BindComposer"
-		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.subject.EditSubjectViewModel', subject=arg.subject)"
+		viewModel="@id('vm') @init('com.qsocialnow.viewmodel.EditSubjectViewModel', subject=arg.subject)"
 		validationMessages="@id('vmsgs')">
 		<n:div class="modal-dialog">
 			<x:div class="modal-content"
