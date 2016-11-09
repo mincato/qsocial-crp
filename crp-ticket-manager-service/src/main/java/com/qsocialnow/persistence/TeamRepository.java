@@ -86,6 +86,18 @@ public class TeamRepository {
         return teams;
     }
 
+    public List<TeamListView> findAllActive() {
+        List<TeamListView> teams = new ArrayList<>();
+
+        try {
+            List<Team> teamsRepo = teamElasticService.getActiveTeams();
+            copyTeamRepoToTeamListView(teams, teamsRepo);
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return teams;
+    }
+
     private void copyTeamRepoToTeamListView(List<TeamListView> teams, List<Team> teamsRepo) {
         for (Team teamRepo : teamsRepo) {
             TeamListView teamListView = new TeamListView();

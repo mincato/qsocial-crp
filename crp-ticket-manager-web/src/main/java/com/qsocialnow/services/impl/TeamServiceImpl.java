@@ -37,6 +37,9 @@ public class TeamServiceImpl implements TeamService {
     @Value("${team.serviceurl}")
     private String teamServiceUrl;
 
+    @Value("${teamActive.serviceurl}")
+    private String teamActiveServiceUrl;
+
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
@@ -142,6 +145,28 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
+    public List<TeamListView> findAllActive() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(teamActiveServiceUrl));
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<TeamListView>> response = restTemplate.exchange(builder.toUriString(), HttpMethod.GET,
+                    null, new ParameterizedTypeReference<List<TeamListView>>() {
+                    });
+
+            List<TeamListView> teams = response.getBody();
+            return teams;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call team service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<BaseUserResolver> findUserResolvers(String teamId, Map<String, Object> filters) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -197,6 +222,25 @@ public class TeamServiceImpl implements TeamService {
                     new ParameterizedTypeReference<List<String>>() {
                     });
             return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call team service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void reassign(String oldTeamId, String newTeamId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(teamServiceUrl)).path("/" + oldTeamId)
+                    .path("/reassignSegment/" + newTeamId);
+
+            restTemplate.exchange(builder.toUriString(), HttpMethod.POST, null,
+                    new ParameterizedTypeReference<String>() {
+                    });
+
         } catch (Exception e) {
             log.error("There was an error while trying to call team service", e);
             throw new RuntimeException(e);

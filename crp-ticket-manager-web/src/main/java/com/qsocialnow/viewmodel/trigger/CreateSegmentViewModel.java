@@ -55,7 +55,7 @@ public class CreateSegmentViewModel implements Serializable {
     public void init() {
         this.currentSegment = new SegmentView();
         this.currentSegment.setSegment(new Segment());
-        this.teamOptions = teamService.findAll();
+        this.teamOptions = teamService.findAllActive();
     }
 
     @GlobalCommand

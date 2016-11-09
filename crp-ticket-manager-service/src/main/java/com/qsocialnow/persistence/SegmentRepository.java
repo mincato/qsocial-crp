@@ -29,4 +29,8 @@ public class SegmentRepository implements ReportRepository {
         List<String> segmentIds = segmentElasticService.getActiveIdsByTeam(teamId);
         return segmentIds;
     }
+
+    public void reassignNewTeam(String oldTeamId, String newTeamId) {
+        segmentElasticService.reassignNewTeam(oldTeamId, newTeamId);
+    }
 }

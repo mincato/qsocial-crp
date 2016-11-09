@@ -18,6 +18,11 @@ public class SegmentService {
         return segmentsIds;
     }
 
+    public String reassignNewTeam(String oldTeamId, String newTeamId) {
+        segmentRepository.reassignNewTeam(oldTeamId, newTeamId);
+        return newTeamId;
+    }
+
     public SegmentRepository getSegmentRepository() {
         return segmentRepository;
     }

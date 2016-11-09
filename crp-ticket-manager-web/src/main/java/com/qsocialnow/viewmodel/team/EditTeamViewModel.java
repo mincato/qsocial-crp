@@ -26,6 +26,7 @@ import org.zkoss.zul.Div;
 
 import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
+import com.qsocialnow.common.model.config.TeamListView;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.config.UserResolverListView;
@@ -57,6 +58,12 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
     private boolean saved;
 
     private boolean chooseNewTeamVisible = false;
+
+    private List<TeamListView> teamOptions;
+
+    private TeamListView newTeam;
+
+    private List<String> relatedSegmentsIds;
 
     @Init
     public void init(@BindingParam("team") String team) {
@@ -118,45 +125,60 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
     }
 
     @Command
-    @NotifyChange({ "currentTeam", "saved", "chooseNewTeamVisible" })
+    @NotifyChange({ "currentTeam", "saved", "chooseNewTeamVisible", "teamOptions" })
     public void save() {
         if (mustChooseNewTeam()) {
-            chooseNewTeamVisible = true;
-
-            System.out.println("Elegir EQUIPOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo");
-
+            if (chooseNewTeamVisible) {
+                if (newTeam != null && CollectionUtils.isNotEmpty(this.relatedSegmentsIds)) {
+                    teamService.reassign(currentTeam.getTeam().getId(), newTeam.getId());
+                    executeSave();
+                }
+            } else {
+                chooseNewTeamVisible = true;
+                this.teamOptions = teamService.findAllActive();
+                removeCurrentTeam();
+            }
         } else {
-            Team team = new Team();
-            team.setId(currentTeam.getTeam().getId());
-            team.setName(currentTeam.getTeam().getName());
-            team.setActive(currentTeam.getTeam().isActive());
-            team.setUserResolvers(currentTeam.getUsersResolver().stream().map(userResolver -> {
-                BaseUserResolver teamUserResolver = new BaseUserResolver();
-                teamUserResolver.setId(userResolver.getUser().getId());
-                teamUserResolver.setIdentifier(userResolver.getUser().getIdentifier());
-                teamUserResolver.setSource(userResolver.getUser().getSource());
-                return teamUserResolver;
-            }).collect(Collectors.toList()));
-            team.setUsers(currentTeam.getUsers().stream().map(userView -> {
-                User user = new User();
-                user.setCoordinator(userView.isCoordinator());
-                user.setUsername(userView.getUser().getUsername());
-                user.setId(userView.getUser().getId());
-                return user;
-            }).collect(Collectors.toList()));
-            teamService.update(team);
-            Clients.showNotification(Labels.getLabel("team.edit.notification.success", new String[] { currentTeam
-                    .getTeam().getName() }));
-            saved = true;
+            executeSave();
         }
+    }
+
+    private void removeCurrentTeam() {
+        this.teamOptions = this.teamOptions.stream().filter(t -> !t.getId().equals(currentTeam.getTeam().getId()))
+                .collect(Collectors.toList());
+    }
+
+    private void executeSave() {
+        Team team = new Team();
+        team.setId(currentTeam.getTeam().getId());
+        team.setName(currentTeam.getTeam().getName());
+        team.setActive(currentTeam.getTeam().isActive());
+        team.setUserResolvers(currentTeam.getUsersResolver().stream().map(userResolver -> {
+            BaseUserResolver teamUserResolver = new BaseUserResolver();
+            teamUserResolver.setId(userResolver.getUser().getId());
+            teamUserResolver.setIdentifier(userResolver.getUser().getIdentifier());
+            teamUserResolver.setSource(userResolver.getUser().getSource());
+            return teamUserResolver;
+        }).collect(Collectors.toList()));
+        team.setUsers(currentTeam.getUsers().stream().map(userView -> {
+            User user = new User();
+            user.setCoordinator(userView.isCoordinator());
+            user.setUsername(userView.getUser().getUsername());
+            user.setId(userView.getUser().getId());
+            return user;
+        }).collect(Collectors.toList()));
+        teamService.update(team);
+        Clients.showNotification(Labels.getLabel("team.edit.notification.success", new String[] { currentTeam.getTeam()
+                .getName() }));
+        saved = true;
     }
 
     private boolean mustChooseNewTeam() {
         if (currentTeam.getTeam().isActive()) {
             return false;
         }
-        List<String> segmentsIds = teamService.findAllActiveIdsByTeam(currentTeam.getTeam().getId());
-        return CollectionUtils.isNotEmpty(segmentsIds);
+        this.relatedSegmentsIds = teamService.findAllActiveIdsByTeam(currentTeam.getTeam().getId());
+        return CollectionUtils.isNotEmpty(this.relatedSegmentsIds);
     }
 
     public boolean isSaved() {
@@ -187,5 +209,21 @@ public class EditTeamViewModel extends EditableTeamViewModel implements Serializ
 
     public void setChooseNewTeamVisible(boolean chooseNewTeamVisible) {
         this.chooseNewTeamVisible = chooseNewTeamVisible;
+    }
+
+    public List<TeamListView> getTeamOptions() {
+        return teamOptions;
+    }
+
+    public void setTeamOptions(List<TeamListView> teamOptions) {
+        this.teamOptions = teamOptions;
+    }
+
+    public TeamListView getNewTeam() {
+        return newTeam;
+    }
+
+    public void setNewTeam(TeamListView newTeam) {
+        this.newTeam = newTeam;
     }
 }

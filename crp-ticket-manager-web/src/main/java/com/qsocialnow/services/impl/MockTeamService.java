@@ -85,4 +85,13 @@ public class MockTeamService implements TeamService {
         return new ArrayList<>();
     }
 
+    @Override
+    public List<TeamListView> findAllActive() {
+        return findAll();
+    }
+
+    @Override
+    public void reassign(String oldTeamId, String newTeamId) {
+    }
+
 }

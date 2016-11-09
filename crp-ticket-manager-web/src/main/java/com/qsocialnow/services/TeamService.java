@@ -21,10 +21,14 @@ public interface TeamService {
 
     List<TeamListView> findAll();
 
+    List<TeamListView> findAllActive();
+
     List<BaseUserResolver> findUserResolvers(String teamId, Map<String, Object> filters);
 
     List<User> findUsers(String teamId);
 
     List<String> findAllActiveIdsByTeam(String teamId);
+
+    void reassign(String oldTeamId, String newTeamId);
 
 }

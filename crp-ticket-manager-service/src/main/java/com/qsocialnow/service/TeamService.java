@@ -64,6 +64,16 @@ public class TeamService {
         }
     }
 
+    public List<TeamListView> findAllActive() {
+        try {
+            List<TeamListView> teams = teamRepository.findAllActive();
+            return teams;
+        } catch (Throwable e) {
+            log.error("There was an error finding teams", e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public Team findOne(String teamId) {
         Team team = teamRepository.findOne(teamId);
         return team;

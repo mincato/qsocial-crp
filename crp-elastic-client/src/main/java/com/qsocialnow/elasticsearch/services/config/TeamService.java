@@ -142,6 +142,23 @@ public class TeamService {
         return teams;
     }
 
+    public List<Team> getActiveTeams() {
+        RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
+        Repository<TeamType> repository = esfactory.initManager();
+        repository.initClient();
+
+        TeamMapping mapping = TeamMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
+
+        SearchResponse<Team> response = repository.searchWithFilters(filters, mapping);
+        List<Team> teams = response.getSources();
+
+        repository.closeClient();
+        return teams;
+    }
+
     public void setUserResolverService(UserResolverService userResolverService) {
         this.userResolverService = userResolverService;
     }
