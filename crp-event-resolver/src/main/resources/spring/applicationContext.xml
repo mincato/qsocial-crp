@@ -43,4 +43,9 @@
     	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}" value-ref="facebookSourceStrategy"/>
 	</util:map>
 	
+	<bean id="sourceService" class="com.qsocialnow.common.services.SourceService">
+        <property name="zookeeperClient" ref="zookeeperClient"></property>
+        <property name="blockedSourcesZnodePath" value="${app.blocked.sources.path}"></property>
+    </bean>
+	
 </beans>
