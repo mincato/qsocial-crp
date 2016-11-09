@@ -136,6 +136,23 @@ public class TriggerServiceImpl implements TriggerService {
     }
 
     @Override
+    public Trigger findOneWithActiveSegments(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/triggerWithActiveSegments/" + triggerId);
+
+            Trigger trigger = restTemplate.getForObject(builder.toUriString(), Trigger.class);
+            return trigger;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Trigger update(String domainId, Trigger trigger) {
         try {
 
@@ -184,6 +201,25 @@ public class TriggerServiceImpl implements TriggerService {
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
                     .path("/trigger/" + triggerId).path("/segments");
+
+            ResponseEntity<List<SegmentListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SegmentListView>>() {
+                    });
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<SegmentListView> findActiveSegments(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/segmentsActive");
 
             ResponseEntity<List<SegmentListView>> response = restTemplate.exchange(builder.toUriString(),
                     HttpMethod.GET, null, new ParameterizedTypeReference<List<SegmentListView>>() {

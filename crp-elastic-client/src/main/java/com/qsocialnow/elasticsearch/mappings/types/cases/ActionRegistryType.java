@@ -1,5 +1,7 @@
 package com.qsocialnow.elasticsearch.mappings.types.cases;
 
+import com.qsocialnow.common.model.cases.ActionRegistryStatus;
+import com.qsocialnow.common.model.cases.ErrorType;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.event.Event;
 
@@ -27,6 +29,12 @@ public class ActionRegistryType implements IdentityType {
     private ActionType type;
 
     private String deepLink;
+
+    private ActionRegistryStatus status;
+
+    private ErrorType errorType;
+
+    private String errorMessage;
 
     public String getId() {
         return id;
@@ -106,5 +114,29 @@ public class ActionRegistryType implements IdentityType {
 
     public void setDeepLink(String deepLink) {
         this.deepLink = deepLink;
+    }
+
+    public ActionRegistryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ActionRegistryStatus status) {
+        this.status = status;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(ErrorType errorType) {
+        this.errorType = errorType;
     }
 }

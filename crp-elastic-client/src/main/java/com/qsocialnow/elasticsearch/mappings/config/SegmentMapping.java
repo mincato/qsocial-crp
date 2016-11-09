@@ -51,6 +51,7 @@ public class SegmentMapping implements Mapping<SegmentType, Segment> {
         segmentType.setDescription(document.getDescription());
         segmentType.setDetectionCriterias(document.getDetectionCriterias());
         segmentType.setTeam(document.getTeam());
+        segmentType.setActive(document.isActive());
         return segmentType;
     }
 
@@ -62,6 +63,7 @@ public class SegmentMapping implements Mapping<SegmentType, Segment> {
         segment.setDetectionCriterias(documentType.getDetectionCriterias());
         segment.setTeam(documentType.getTeam());
         segment.setTriggerId(documentType.getTriggerId());
+        segment.setActive(documentType.isActive());
         return segment;
     }
 

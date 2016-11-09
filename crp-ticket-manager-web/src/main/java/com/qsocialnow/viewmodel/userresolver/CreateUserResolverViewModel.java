@@ -87,7 +87,7 @@ public class CreateUserResolverViewModel implements Serializable {
 
             userResolver.setSource(currentUserResolver.getSource().getValue());
             userResolver.setIdentifier(currentUserResolver.getUserResolver().getIdentifier());
-            userResolver.setActive(currentUserResolver.getUserResolver().getActive());
+            userResolver.setActive(currentUserResolver.getUserResolver().isActive());
             userResolver.setCredentials(currentUserResolver.getUserResolver().getCredentials());
             userResolver.setSourceId(currentUserResolver.getUserResolver().getSourceId());
             userResolver = userResolverService.create(userResolver);

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRegistry;
+import com.qsocialnow.common.model.cases.ActionRegistryStatus;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
@@ -34,6 +35,7 @@ import com.qsocialnow.persistence.DomainRepository;
 import com.qsocialnow.persistence.TeamRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 import com.qsocialnow.service.action.Action;
+import com.qsocialnow.service.action.AsyncAction;
 
 @Service
 public class CaseService {
@@ -144,7 +146,7 @@ public class CaseService {
             if (caseObject != null) {
                 Action action = actions.get(actionRequest.getActionType());
                 if (action != null) {
-                    action.execute(caseObject, actionRequest.getParameters());
+                    AsyncAction asyncAction = action.execute(caseObject, actionRequest.getParameters());
                     boolean updated = repository.update(caseObject);
                     if (!updated) {
                         log.error("There was an error trying to update the case");
@@ -152,6 +154,9 @@ public class CaseService {
                     }
                     ActionRegistry actionRegistry = createActionRegistry(actionRequest);
                     actionRegistryRepository.create(caseId, actionRegistry);
+                    if (asyncAction != null) {
+                        asyncAction.postProcess(caseObject, actionRequest.getParameters(), actionRegistry);
+                    }
                 } else {
                     log.warn("The action does not exist");
                     throw new RuntimeException("The action does not exist");
@@ -222,6 +227,10 @@ public class CaseService {
             Object comment = actionRequest.getParameters().get(ActionParameter.COMMENT);
             if (comment != null) {
                 actionRegistry.setComment((String) comment);
+            }
+            Object status = actionRequest.getParameters().get(ActionParameter.ACTION_REGISTRY_STATUS);
+            if (status != null) {
+                actionRegistry.setStatus((ActionRegistryStatus) status);
             }
         }
         return actionRegistry;

@@ -372,7 +372,12 @@
 									<td visible="@load(each.automatic)">${labels.cases.registry.automatic.user}</td>
 									<td visible="@load(not each.automatic)">${each.user}</td>
 									<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
-									<td visible="@load(each.deepLink eq null)">${each.description}</td>
+									<td visible="@load(each.deepLink eq null)">
+										${each.description}
+										<span sclass="@load(c:cat('registry-status registry-status-',c:toLowerCase(each.status)))" visible="@load(each.status ne null)">
+											<x:span data-toggle="tooltip" data-placement="top" title="@load(vm.createRegistryStatusMessage(each))" ></x:span>
+										</span>
+									</td>
                        				<td visible="@load(each.deepLink ne null)"><a href="${each.deepLink}" target="_blank">${each.description}</a></td>
                        				<td><label value="@load(each.date) @converter(vm.dateConverter)"/></td>
                        				<td></td>

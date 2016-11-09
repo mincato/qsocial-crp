@@ -15,10 +15,11 @@ public class AttachFileCaseAction implements Action {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public AsyncAction execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         List<String> files = (List<String>) parameters.get(ActionParameter.FILES);
         caseObject.setAttachments(new HashSet<>(files));
         parameters.put(ActionParameter.COMMENT, StringUtils.join(files, ", "));
+        return null;
     }
 
 }

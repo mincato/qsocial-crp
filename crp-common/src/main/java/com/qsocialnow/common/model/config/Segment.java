@@ -18,6 +18,8 @@ public class Segment {
 
     private String triggerId;
 
+    private boolean active = true;
+
     public Segment() {
         this.detectionCriterias = new ArrayList<>();
     }
@@ -60,5 +62,13 @@ public class Segment {
 
     public void setDetectionCriterias(List<DetectionCriteria> detectionCriterias) {
         this.detectionCriterias = detectionCriterias;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

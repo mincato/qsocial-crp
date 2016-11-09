@@ -211,7 +211,6 @@ public class FacebookDetectorService extends SourceDetectorService {
                 log.debug("Adding facebookevent information into event");
                 FacebookFeedEvent conversationsByCommentId = conversations.get(commentId);
                 if (conversationsByCommentId != null) {
-                    event.setIdPadre(conversationsByCommentId.getEventId());
                     event.setOriginIdCase(conversationsByCommentId.getCaseId());
                     event.setIdOriginal(conversationsByCommentId.getOriginalId());
                     event.setRootCommentId(conversationsByCommentId.getRootCommentId());

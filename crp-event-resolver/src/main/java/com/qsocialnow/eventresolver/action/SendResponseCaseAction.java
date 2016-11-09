@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.Case;
-import com.qsocialnow.common.model.cases.Message;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.services.strategies.SourceStrategy;
 import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
@@ -41,9 +40,10 @@ public class SendResponseCaseAction implements Action {
                     .map(tuple -> tuple.get(1)).findFirst();
             if (userResolverIdOptional.isPresent()) {
                 UserResolver userResolver = userResolverService.findOne(userResolverIdOptional.get());
-                String postId = sources.get(caseObject.getSource()).sendResponse(caseObject, userResolver, text);
-                caseObject.addMessage(new Message(postId, false));
-                parameters.put(ActionParameter.COMMENT, postId + " - " + text);
+                if (userResolver.isActive()) {
+                    sources.get(caseObject.getSource()).sendResponse(caseObject, userResolver, text, null);
+                    parameters.put(ActionParameter.COMMENT, text);
+                }
             } else {
                 log.warn("There is no user resolver defined to send message for source: " + caseObject.getSource());
             }

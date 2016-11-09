@@ -605,6 +605,33 @@ router.get('/domains/:id/trigger/:triggerId', function (req, res) {
 	  triggerService.findOne(domainId, triggerId, asyncResponse);
 });
 
+router.get('/domains/:id/triggerWithActiveSegments/:triggerId', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  var triggerId = req.params.triggerId;
+	  
+	  triggerService.findOneWithActiveSegments(domainId, triggerId, asyncResponse);
+});
+
 router.get('/domains/:id/trigger/:triggerId/caseCategories', function (req, res) {
 
 	  function asyncResponse(err,response) {
@@ -713,6 +740,32 @@ router.get('/domains/:id/trigger/:triggerId/segments', function (req, res) {
 	  triggerService.findSegments(domainId, triggerId, asyncResponse);
 });
 
+router.get('/domains/:id/trigger/:triggerId/segmentsActive', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+
+	  var triggerService = javaContext.getBeanSync("triggerService");
+	  var domainId = req.params.id;
+	  var triggerId = req.params.triggerId;
+	  
+	  triggerService.findActiveSegments(domainId, triggerId, asyncResponse);
+});
 
 router.get('/domains/:id/trigger/:triggerId/segment/:segmentId', function (req, res) {
 
@@ -946,6 +999,30 @@ router.get('/userResolver', function (req, res) {
 	  
 	  var userResolverService = javaContext.getBeanSync("userResolverService");
 	  userResolverService.findAll(asyncResponse);
+});
+
+router.get('/userResolverActive', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  
+	  var userResolverService = javaContext.getBeanSync("userResolverService");
+	  userResolverService.findAllActive(asyncResponse);
 });
 
 router.get('/userResolver/list', function (req, res) {

@@ -12,6 +12,8 @@ public class SegmentListView implements Serializable {
 
     private String teamId;
 
+    private boolean active = true;
+
     public String getId() {
         return id;
     }
@@ -34,5 +36,13 @@ public class SegmentListView implements Serializable {
 
     public void setTeamId(String teamId) {
         this.teamId = teamId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

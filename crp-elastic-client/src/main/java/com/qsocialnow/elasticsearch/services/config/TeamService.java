@@ -1,11 +1,13 @@
 package com.qsocialnow.elasticsearch.services.config;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
+import com.qsocialnow.common.model.config.BaseUserResolver;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.TeamMapping;
@@ -19,6 +21,8 @@ public class TeamService {
     private AWSElasticsearchConfigurationProvider configurator;
 
     private ConfigurationIndexService indexConfiguration;
+
+    private UserResolverService userResolverService;
 
     public String indexTeam(Team team) {
         RepositoryFactory<TeamType> esfactory = new RepositoryFactory<TeamType>(configurator);
@@ -67,8 +71,20 @@ public class TeamService {
 
         Team team = response.getSource();
 
+        fillUpdatedUserResolvers(team);
+
         repository.closeClient();
         return team;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    private void fillUpdatedUserResolvers(Team team) {
+        List<BaseUserResolver> userResolvers = team.getUserResolvers();
+        if (userResolvers != null) {
+            List<String> ids = userResolvers.stream().map(u -> u.getId()).collect(Collectors.toList());
+            List updatedUserResolvers = userResolverService.findByIds(ids);
+            team.setUserResolvers(updatedUserResolvers);
+        }
     }
 
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
@@ -125,4 +141,11 @@ public class TeamService {
         return teams;
     }
 
+    public void setUserResolverService(UserResolverService userResolverService) {
+        this.userResolverService = userResolverService;
+    }
+
+    public UserResolverService getUserResolverService() {
+        return userResolverService;
+    }
 }

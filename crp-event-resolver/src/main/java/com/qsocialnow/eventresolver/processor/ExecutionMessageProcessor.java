@@ -74,6 +74,7 @@ public class ExecutionMessageProcessor {
         actionRegistry.setType(automaticActionCriteria.getActionType());
         actionRegistry.setDate(new Date().getTime());
         actionRegistry.setAction(automaticActionCriteria.getActionType().name());
+        actionRegistry.setAutomatic(true);
         if (automaticActionCriteria.getParameters() != null) {
             Object comment = automaticActionCriteria.getParameters().get(ActionParameter.COMMENT);
             if (comment != null) {

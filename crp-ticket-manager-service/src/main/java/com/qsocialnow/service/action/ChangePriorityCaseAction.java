@@ -12,12 +12,13 @@ import com.qsocialnow.common.model.cases.Priority;
 public class ChangePriorityCaseAction implements Action {
 
     @Override
-    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public AsyncAction execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         String priorityParameter = (String) parameters.get(ActionParameter.PRIORITY);
         Priority priority = Priority.valueOf(priorityParameter);
         Priority oldPriority = caseObject.getPriority();
         caseObject.setPriority(priority);
         parameters.put(ActionParameter.COMMENT, buildComment(oldPriority, priority));
+        return null;
     }
 
     private String buildComment(Priority oldPriority, Priority priority) {

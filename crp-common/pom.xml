@@ -30,6 +30,7 @@
 		<facebook4j.version>2.4.8</facebook4j.version>
 		<jackson.version>2.6.4</jackson.version>
 		<bigqueue.version>0.7.0</bigqueue.version>
+		<curator.version>2.9.1</curator.version>
 	</properties>
 	
 	<repositories>
@@ -117,6 +118,13 @@
   			<groupId>com.leansoft</groupId>
   			<artifactId>bigqueue</artifactId>
   			<version>${bigqueue.version}</version>
+		</dependency>
+		
+		<!-- Curator -->
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>${curator.version}</version>
 		</dependency>
 
 	</dependencies>
