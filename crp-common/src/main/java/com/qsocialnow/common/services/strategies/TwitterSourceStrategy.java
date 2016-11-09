@@ -30,6 +30,8 @@ import com.qsocialnow.common.queues.QueueProducer;
 import com.qsocialnow.common.queues.QueueService;
 import com.qsocialnow.common.queues.QueueServiceFactory;
 import com.qsocialnow.common.queues.QueueType;
+import com.qsocialnow.common.services.SourceService;
+import com.qsocialnow.common.util.FilterConstants;
 
 import twitter4j.Status;
 import twitter4j.StatusUpdate;
@@ -60,6 +62,8 @@ public class TwitterSourceStrategy implements SourceStrategy, AsyncTask<SourceMe
     private QueueConfigurator queueConfig;
 
     private SourceMessagePostProcess postProcess;
+
+    private SourceService sourceService;
 
     public TwitterSourceStrategy() {
         queueServices = new HashMap<>();
@@ -167,6 +171,9 @@ public class TwitterSourceStrategy implements SourceStrategy, AsyncTask<SourceMe
                 queueProducers.get(request.getUserResolver().getIdentifier()).addItem(request);
                 return null;
             } else {
+                if (twitterConfig.getBlockErrorCodes().contains(e.getErrorCode())) {
+                    sourceService.blockSource(FilterConstants.MEDIA_TWITTER);
+                }
                 sourceMessageResponse.setErrorType(twitterConfig.getErrorMapping().getOrDefault(e.getErrorCode(),
                         ErrorType.UNKNOWN));
                 sourceMessageResponse.setSourceErrorMessage(e.getMessage());
@@ -209,6 +216,10 @@ public class TwitterSourceStrategy implements SourceStrategy, AsyncTask<SourceMe
 
     public void setQueueConfig(QueueConfigurator queueConfig) {
         this.queueConfig = queueConfig;
+    }
+
+    public void setSourceService(SourceService sourceService) {
+        this.sourceService = sourceService;
     }
 
     public static void main(String[] args) throws Exception {
