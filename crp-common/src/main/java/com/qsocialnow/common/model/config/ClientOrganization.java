@@ -1,5 +1,8 @@
 package com.qsocialnow.common.model.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientOrganization {
 
     private Long id;
