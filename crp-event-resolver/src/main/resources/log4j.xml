@@ -13,32 +13,32 @@
 		</layout>
 	</appender>
 
-	<logger name="io.searchbox">
+	<logger name="io.searchbox" additivity="false">
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 	
-	<logger name="com.qsocialnow">
-		<level value="INFO" />
+	<logger name="com.qsocialnow" additivity="false">
+		<level value="DEBUG" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
-	<logger name="com.qsocialnow.elasticsearch">
+	<logger name="com.qsocialnow.elasticsearch" additivity="false">
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
-	<logger name="kafka">
+	<logger name="kafka" additivity="false">
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
-	<logger name="org.apache">
+	<logger name="org.apache" additivity="false">
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
-	<logger name="org.I0Itec">
+	<logger name="org.I0Itec" additivity="false">
 		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
