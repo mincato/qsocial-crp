@@ -38,6 +38,7 @@
               "medioId" : {"type" : "long"},
               "connotacion" : {"type" : "short"},
               "menciones" : {"type" : "string"},
+              "categorias" : {"type" : "long"},
               "normalizeMessage" : {"type" : "string"},
               "noticiaStatus" : {"type" :"long" },
               "odaCategorizada" : {
@@ -70,9 +71,7 @@
               "titulo" : {
                 "type" : "string"
               },
-              "tokenId" : {
-                "type" : "long"
-              },
+              "tokenId" : {"type" : "long"},
               "usuarioCreacion" : {
                 "type" : "string"
               },

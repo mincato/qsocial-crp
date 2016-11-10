@@ -417,7 +417,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
         }
         searchSourceBuilder.query(boolQueryBuilder);
-        log.info("Query: " + searchSourceBuilder.toString());
+        log.debug("Query: " + searchSourceBuilder.toString());
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
