@@ -14,7 +14,7 @@
 	</appender>
 
 	<logger name="io.searchbox" additivity="false">
-		<level value="WARN" />		
+		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 	
