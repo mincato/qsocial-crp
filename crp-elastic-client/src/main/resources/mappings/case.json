@@ -41,43 +41,19 @@
               "categorias" : {"type" : "long"},
               "normalizeMessage" : {"type" : "string"},
               "noticiaStatus" : {"type" :"long" },
-              "odaCategorizada" : {
-                "type" : "long"
-              },
-              "reproduccionesCount" : {
-                "type" : "long"
-              },
-              "responseDetected" : {
-                "type" : "boolean"
-              },
-              "seriesId" : {
-                "type" : "long"
-              },
-              "sistemaOrigenExterno" : {
-                "type" : "string"
-              },
-              "subSeriesId" : {
-                "type" : "long"
-              },
-              "texto" : {
-                "type" : "string"
-              },
-              "timestamp" : {
-                "type" : "long"
-              },
-              "tipoDeMedio" : {
-                "type" : "string"
-              },
-              "titulo" : {
-                "type" : "string"
-              },
+              "odaCategorizada" : {"type" : "long"},
+              "reproduccionesCount" : {"type" : "long"},
+              "responseDetected" : {"type" : "boolean"},
+              "seriesId" : {"type" : "long"},
+              "sistemaOrigenExterno" : {"type" : "string"},
+              "subSeriesId" : {"type" : "long"},
+              "texto" : {"type" : "string" ,"analyzer":"oda_stopwords"},
+              "timestamp" : {"type" : "long"},
+              "tipoDeMedio" : {"type" : "string"},
+              "titulo" : {"type" : "string"},
               "tokenId" : {"type" : "long"},
-              "usuarioCreacion" : {
-                "type" : "string"
-              },
-              "usuarioOriginal" : {
-                "type" : "string"
-              }
+              "usuarioCreacion" : {"type" : "string"},
+              "usuarioOriginal" : {"type" : "string"}
         }
      },
     "subject" : {

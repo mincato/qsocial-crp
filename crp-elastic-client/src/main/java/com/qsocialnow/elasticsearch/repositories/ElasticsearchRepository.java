@@ -11,7 +11,9 @@ import java.util.stream.Collectors;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
+import org.apache.lucene.queryparser.xml.FilterBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
@@ -360,7 +362,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
             boolean sortOrder, Map<String, String> searchValues, List<TermFieldFilter> termFilters,
-            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldConditionsFilters) {
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldConditionsFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters) {
 
         SortOrder sortOrderValue;
         if (sortOrder) {
@@ -387,7 +390,17 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         if (termFilters != null) {
             for (TermFieldFilter termField : termFilters) {
-                boolQueryBuilder.filter(QueryBuilders.termQuery(termField.getField(), termField.getValue()));
+                if (!termField.isNeedSplit()) {
+                    boolQueryBuilder.filter(QueryBuilders.termQuery(termField.getField(), termField.getValue()));
+                } else {
+                    String[] terms = termField.getValue().split("\\,");
+                    BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
+                    for (String term : terms) {
+                        QueryBuilder query = QueryBuilders.termQuery(termField.getField(), term);
+                        boolFilterQueryBuilder.must(query);
+                    }
+                    boolQueryBuilder.filter(boolFilterQueryBuilder);
+                }
             }
         }
 
@@ -407,6 +420,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (shouldConditionsFilters != null && shouldConditionsFilters.size() > 0) {
             for (ShouldConditionsFilter shouldConditionFilter : shouldConditionsFilters) {
                 BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+
                 List<ShouldFilter> shouldFilters = shouldConditionFilter.getConditions();
                 for (ShouldFilter shouldFilter : shouldFilters) {
                     QueryBuilder query = QueryBuilders.matchPhraseQuery(shouldFilter.getField(),
@@ -417,8 +431,28 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
         }
         searchSourceBuilder.query(boolQueryBuilder);
-        log.debug("Query: " + searchSourceBuilder.toString());
 
+        if (shouldTermsConditionsFilters != null && shouldTermsConditionsFilters.size() > 0) {
+            for (ShouldConditionsFilter shouldTermsConditionFilter : shouldTermsConditionsFilters) {
+
+                BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+                List<ShouldFilter> shouldFilters = shouldTermsConditionFilter.getConditions();
+
+                for (ShouldFilter shouldFilter : shouldFilters) {
+                    String[] terms = shouldFilter.getValue().split("\\,");
+                    BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
+                    for (String term : terms) {
+                        QueryBuilder query = QueryBuilders.termQuery(shouldFilter.getField(), term);
+                        boolFilterQueryBuilder.must(query);
+                    }
+                    boolShouldQueryBuilder.should(boolFilterQueryBuilder);
+                }
+                boolQueryBuilder.filter(boolShouldQueryBuilder);
+            }
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        log.info("Query: " + searchSourceBuilder.toString());
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
         return executeSearch(mapping, search);

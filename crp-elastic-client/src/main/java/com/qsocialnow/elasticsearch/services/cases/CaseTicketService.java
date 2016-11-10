@@ -12,7 +12,9 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
+import com.qsocialnow.common.model.config.WordFilterType;
 import com.qsocialnow.common.model.filter.FollowersCountRange;
+import com.qsocialnow.common.model.filter.WordsListFilterBean;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.cases.CaseMapping;
 import com.qsocialnow.elasticsearch.mappings.types.cases.CaseType;
@@ -124,7 +126,7 @@ public class CaseTicketService extends CaseIndexService {
         }
 
         SearchResponse<Case> response = repository.queryByFields(mapping, from, size, sortField,
-                Boolean.valueOf(sortOrder), searchValues, null, rangeFilters, shouldConditionsFilters);
+                Boolean.valueOf(sortOrder), searchValues, null, rangeFilters, shouldConditionsFilters, null);
 
         List<Case> cases = response.getSources();
 
@@ -259,6 +261,27 @@ public class CaseTicketService extends CaseIndexService {
                 }
             }
 
+            // adding text terms filter
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters = new ArrayList<>();
+            if (filterRequest.getCloudsurfer() != null && filterRequest.getCloudsurfer().getWordList() != null) {
+                WordsListFilterBean[] wordsList = filterRequest.getCloudsurfer().getWordList();
+                List<String> textsList = getTextWords(wordsList);
+                if (textsList != null && textsList.size() > 0) {
+                    if (textsList.size() > 1) {
+                        ShouldConditionsFilter conditionTermFilterText = new ShouldConditionsFilter();
+                        for (String textWord : textsList) {
+                            ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto", textWord);
+                            conditionTermFilterText.addShouldCondition(shouldFilter);
+                        }
+                        shouldTermsConditionsFilters.add(conditionTermFilterText);
+                    } else {
+                        TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto", textsList.get(0));
+                        termFilter.setNeedSplit(true);
+                        termFilters.add(termFilter);
+                    }
+                }
+            }
+
             if (filterRequest.getConnotations() != null && filterRequest.getConnotations().length > 0) {
                 if (filterRequest.getConnotations().length > 1) {
                     ShouldConditionsFilter conditionFilterCon = new ShouldConditionsFilter();
@@ -267,7 +290,7 @@ public class CaseTicketService extends CaseIndexService {
                         ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.connotacion", connotation);
                         conditionFilterCon.addShouldCondition(shouldFilter);
                     }
-                    shouldConditionsFilters.add(conditionFilterCon);
+                    shouldTermsConditionsFilters.add(conditionFilterCon);
                 } else {
                     termFilters
                             .add(new TermFieldFilter("triggerEvent.connotacion", filterRequest.getConnotations()[0]));
@@ -289,7 +312,7 @@ public class CaseTicketService extends CaseIndexService {
                                 String.valueOf(category));
                         conditionFilterCategory.addShouldCondition(shouldFilter);
                     }
-                    shouldConditionsFilters.add(conditionFilterCategory);
+                    shouldTermsConditionsFilters.add(conditionFilterCategory);
                 } else {
                     termFilters.add(new TermFieldFilter("triggerEvent.categorias", String.valueOf(filterRequest
                             .getCategories()[0])));
@@ -298,7 +321,8 @@ public class CaseTicketService extends CaseIndexService {
 
             response = repository.queryByFields(mapping, filterRequest.getPageRequest().getOffset(), filterRequest
                     .getPageRequest().getPageSize(), filterRequest.getPageRequest().getSortField(), filterRequest
-                    .getPageRequest().getSortOrder(), searchValues, termFilters, rangeFilters, shouldConditionsFilters);
+                    .getPageRequest().getSortOrder(), searchValues, termFilters, rangeFilters, shouldConditionsFilters,
+                    shouldTermsConditionsFilters);
         }
         List<Case> cases = response.getSources();
         repository.closeClient();
@@ -316,6 +340,16 @@ public class CaseTicketService extends CaseIndexService {
             }
         }
         return rangeFilter;
+    }
+
+    private List<String> getTextWords(WordsListFilterBean[] wordsList) {
+        List<String> textWords = new ArrayList<>();
+        for (WordsListFilterBean wordsListFilter : wordsList) {
+            if (wordsListFilter.getTipo().equals(WordFilterType.TEXT.getName())) {
+                textWords.add(wordsListFilter.getPalabra());
+            }
+        }
+        return textWords;
     }
 
     public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String domainId,
