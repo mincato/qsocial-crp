@@ -52,8 +52,9 @@
               "tipoDeMedio" : {"type" : "string"},
               "titulo" : {"type" : "string"},
               "tokenId" : {"type" : "long"},
-              "usuarioCreacion" : {"type" : "string"},
-              "usuarioOriginal" : {"type" : "string"}
+              "usuarioCreacion" : {"type" : "string","index":"not_analyzed","fields":{"raw":{"type":"string","analyzer":"lowercase_term"}}},
+              "usuarioOriginal" : {"type" : "string","index":"not_analyzed","fields":{"raw":{"type":"string","analyzer":"lowercase_term"}}},
+              "usuarioReproduccion" : {"type" : "string","index":"not_analyzed","fields":{"raw":{"type":"string","analyzer":"lowercase_term"}}}
         }
      },
     "subject" : {

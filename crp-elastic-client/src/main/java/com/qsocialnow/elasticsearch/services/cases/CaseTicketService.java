@@ -1,10 +1,13 @@
 package com.qsocialnow.elasticsearch.services.cases;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,8 @@ import io.searchbox.core.SearchResult;
 public class CaseTicketService extends CaseIndexService {
 
     private static final Logger log = LoggerFactory.getLogger(CaseTicketService.class);
+
+    private static final String AUTHOR_REGEX = "{0} http.*|{0}";
 
     public CaseTicketService(AWSElasticsearchConfigurationProvider configurationProvider) {
         super(configurationProvider);
@@ -126,7 +131,7 @@ public class CaseTicketService extends CaseIndexService {
         }
 
         SearchResponse<Case> response = repository.queryByFields(mapping, from, size, sortField,
-                Boolean.valueOf(sortOrder), searchValues, null, rangeFilters, shouldConditionsFilters, null);
+                Boolean.valueOf(sortOrder), searchValues, null, rangeFilters, shouldConditionsFilters, null, null);
 
         List<Case> cases = response.getSources();
 
@@ -263,21 +268,43 @@ public class CaseTicketService extends CaseIndexService {
 
             // adding text terms filter
             List<ShouldConditionsFilter> shouldTermsConditionsFilters = new ArrayList<>();
+            List<ShouldConditionsFilter> shouldConditionsRegexpFilters = new ArrayList<>();
             if (filterRequest.getCloudsurfer() != null && filterRequest.getCloudsurfer().getWordList() != null) {
                 WordsListFilterBean[] wordsList = filterRequest.getCloudsurfer().getWordList();
-                List<String> textsList = getTextWords(wordsList);
-                if (textsList != null && textsList.size() > 0) {
+                // text
+                List<WordsListFilterBean> textsList = getTextWords(wordsList);
+                if (textsList != null && !textsList.isEmpty()) {
                     if (textsList.size() > 1) {
                         ShouldConditionsFilter conditionTermFilterText = new ShouldConditionsFilter();
-                        for (String textWord : textsList) {
-                            ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto", textWord);
+                        for (WordsListFilterBean textWord : textsList) {
+                            ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto", textWord.getPalabra());
                             conditionTermFilterText.addShouldCondition(shouldFilter);
                         }
                         shouldTermsConditionsFilters.add(conditionTermFilterText);
                     } else {
-                        TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto", textsList.get(0));
+                        TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto", textsList.get(0)
+                                .getPalabra());
                         termFilter.setNeedSplit(true);
                         termFilters.add(termFilter);
+                    }
+                }
+                // authors
+                List<WordsListFilterBean> authorsList = getAuthorsWords(wordsList);
+                if (authorsList != null && !authorsList.isEmpty()) {
+                    for (WordsListFilterBean wordsListFilterBean : authorsList) {
+                        String[] authors = wordsListFilterBean.getPalabra().split("\\,");
+                        ShouldConditionsFilter authorsFilterLang = new ShouldConditionsFilter();
+                        for (String author : authors) {
+                            String regex = MessageFormat.format(AUTHOR_REGEX, author.trim().toLowerCase());
+                            ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.usuarioCreacion.raw", regex);
+                            authorsFilterLang.addShouldCondition(shouldFilter);
+                        }
+                        for (String author : authors) {
+                            String regex = MessageFormat.format(AUTHOR_REGEX, author.trim().toLowerCase());
+                            ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.usuarioReproduccion.raw", regex);
+                            authorsFilterLang.addShouldCondition(shouldFilter);
+                        }
+                        shouldConditionsRegexpFilters.add(authorsFilterLang);
                     }
                 }
             }
@@ -322,7 +349,7 @@ public class CaseTicketService extends CaseIndexService {
             response = repository.queryByFields(mapping, filterRequest.getPageRequest().getOffset(), filterRequest
                     .getPageRequest().getPageSize(), filterRequest.getPageRequest().getSortField(), filterRequest
                     .getPageRequest().getSortOrder(), searchValues, termFilters, rangeFilters, shouldConditionsFilters,
-                    shouldTermsConditionsFilters);
+                    shouldTermsConditionsFilters, shouldConditionsRegexpFilters);
         }
         List<Case> cases = response.getSources();
         repository.closeClient();
@@ -342,14 +369,18 @@ public class CaseTicketService extends CaseIndexService {
         return rangeFilter;
     }
 
-    private List<String> getTextWords(WordsListFilterBean[] wordsList) {
-        List<String> textWords = new ArrayList<>();
-        for (WordsListFilterBean wordsListFilter : wordsList) {
-            if (wordsListFilter.getTipo().equals(WordFilterType.TEXT.getName())) {
-                textWords.add(wordsListFilter.getPalabra());
-            }
-        }
-        return textWords;
+    private List<WordsListFilterBean> getTextWords(WordsListFilterBean[] wordsList) {
+        List<WordsListFilterBean> words = Arrays.asList(wordsList);
+        List<WordsListFilterBean> resultTextWords = words.stream()
+                .filter(word -> WordFilterType.TEXT.getName().equals(word.getTipo())).collect(Collectors.toList());
+        return resultTextWords;
+    }
+
+    private List<WordsListFilterBean> getAuthorsWords(WordsListFilterBean[] wordsList) {
+        List<WordsListFilterBean> words = Arrays.asList(wordsList);
+        List<WordsListFilterBean> resultTextWords = words.stream()
+                .filter(word -> WordFilterType.AUTHOR.getName().equals(word.getTipo())).collect(Collectors.toList());
+        return resultTextWords;
     }
 
     public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String domainId,
