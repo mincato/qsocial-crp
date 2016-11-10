@@ -6,6 +6,8 @@ public class TermFieldFilter {
 
     private final String value;
 
+    private boolean needSplit;
+
     public TermFieldFilter(final String field, final String value) {
         this.field = field;
         this.value = value;
@@ -17,5 +19,13 @@ public class TermFieldFilter {
 
     public String getValue() {
         return value;
+    }
+
+    public boolean isNeedSplit() {
+        return needSplit;
+    }
+
+    public void setNeedSplit(boolean needSplit) {
+        this.needSplit = needSplit;
     }
 }

@@ -134,7 +134,7 @@ public class SegmentService {
             shouldConditionsFilters.add(shouldConditionsTeamFilter);
         }
         SearchResponse<Segment> response = repository.queryByFields(mapping, 0, -1, null, false, null, null, null,
-                shouldConditionsFilters);
+                shouldConditionsFilters, null);
 
         List<Segment> segments = response.getSources();
         repository.closeClient();
