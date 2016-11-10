@@ -20,6 +20,7 @@
         <property name="queueConfig" ref="twitterQueueConfig"></property>
         <property name="zookeeperClient" ref="zookeeperClient"></property>
         <property name="twitterUsersZnodePath" value="${app.twitter.users.path}"></property>
+        <property name="sourceService" ref="sourceService"></property>
     </bean>
     
    	<bean id="twitterQueueConfig" class="com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">

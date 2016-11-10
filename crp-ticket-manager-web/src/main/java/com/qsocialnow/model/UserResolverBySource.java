@@ -1,7 +1,5 @@
 package com.qsocialnow.model;
 
-import java.util.List;
-
 import javax.validation.constraints.NotNull;
 
 import com.qsocialnow.common.model.config.BaseUserResolver;
@@ -13,8 +11,6 @@ public class UserResolverBySource {
 
     @NotNull(message = "app.userResolver.null.validation")
     private BaseUserResolver selectedUserResolver;
-
-    private List<BaseUserResolver> userResolverOptions;
 
     public Media getSource() {
         return source;
@@ -30,14 +26,6 @@ public class UserResolverBySource {
 
     public void setSelectedUserResolver(BaseUserResolver selectedUserResolver) {
         this.selectedUserResolver = selectedUserResolver;
-    }
-
-    public List<BaseUserResolver> getUserResolverOptions() {
-        return userResolverOptions;
-    }
-
-    public void setUserResolverOptions(List<BaseUserResolver> userResolverOptions) {
-        this.userResolverOptions = userResolverOptions;
     }
 
 }

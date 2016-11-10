@@ -9,5 +9,5 @@
                                {"autocomplete":{"type":"custom","tokenizer": "autocomplete","filter":["lowercase"]},
                                 "autocomplete_search": {"tokenizer": "lowercase"},
                                 "oda_stopwords": {"type" : "custom","tokenizer": "standard","filter":  [ "lowercase", "asciifolding","oda_stop","point_stop","digits_stop","remove_empty" ]},
-                                "insensitive_sort":{"type":"custom","tokenizer":"keyword","filter":["lowercase"]}},
+                                "insensitive_sort":{"type":"custom","tokenizer":"keyword","filter":["lowercase","trim"]}},
                 "tokenizer": {"autocomplete": {"type": "edge_ngram","min_gram": 2,"max_gram": 20}}}}}

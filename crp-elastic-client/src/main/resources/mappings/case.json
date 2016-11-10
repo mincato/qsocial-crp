@@ -10,7 +10,15 @@
     "title":{"type": "string","fields":{"raw":{"type":"string","index":"not_analyzed"},"keyword":{"type":"string","analyzer":"insensitive_sort"}}},
     "description":{"type": "string","analyzer": "standard" },
     "resolution":{"type": "string","index":"not_analyzed"},
-     "triggerEvent" : {
+    "priority" : {"type" : "string","index":"not_analyzed"},
+    "caseCategories" : {"type" : "string","index":"not_analyzed"},
+    "assignee" : {
+        "properties" : {
+              "id" : {"type" : "long"},
+              "username" : {"type" : "string","index":"not_analyzed"}
+            }
+    },
+    "triggerEvent" : {
         "properties" : {
               "connotacion" : {"type" : "long","index": "not_analyzed"},
               "esLike" : {"type" : "boolean" },
@@ -20,19 +28,19 @@
               "fecha" : {"type" : "date","format" : "strict_date_optional_time||epoch_millis"},
               "fechaCreacion" : {"type" : "date","format" : "strict_date_optional_time||epoch_millis"},
               "followersCount" : {"type" : "long"},
-              "id" : {"type" : "string"},
-              "idOriginal" : {"type" : "string"},
-              "idUsuarioCreacion" : {"type" : "string"},
-              "idUsuarioOriginal" : {"type" : "string"},
-              "idUsuarioReproduccion" : {"type" : "string"},
-              "language" : {"type" : "string"},
+              "id" : {"type" : "string","index":"not_analyzed"},
+              "idOriginal" : {"type" : "string","index":"not_analyzed"},
+              "idUsuarioCreacion" : {"type" : "string","index":"not_analyzed"},
+              "idUsuarioOriginal" : {"type" : "string","index":"not_analyzed"},
+              "idUsuarioReproduccion" : {"type" : "string","index":"not_analyzed"},
+              "language" : {"type" : "string","index":"not_analyzed"},
               "likeCount" : {"type" : "long"},
               "medioId" : {"type" : "long"},
+              "connotacion" : {"type" : "short"},
               "menciones" : {"type" : "string"},
+              "categorias" : {"type" : "long"},
               "normalizeMessage" : {"type" : "string"},
-              "noticiaStatus" : {
-                "type" : "long"
-              },
+              "noticiaStatus" : {"type" :"long" },
               "odaCategorizada" : {
                 "type" : "long"
               },
@@ -63,9 +71,7 @@
               "titulo" : {
                 "type" : "string"
               },
-              "tokenId" : {
-                "type" : "long"
-              },
+              "tokenId" : {"type" : "long"},
               "usuarioCreacion" : {
                 "type" : "string"
               },
@@ -100,6 +106,7 @@
               "sourceId" : {
                 "type" : "string"
               },
+              "subjectCategory" : {"type" : "string","index":"not_analyzed"},
               "sourceName" : {"type": "string","index":"analyzed","analyzer": "autocomplete","search_analyzer": "autocomplete_search"}
             }
     }

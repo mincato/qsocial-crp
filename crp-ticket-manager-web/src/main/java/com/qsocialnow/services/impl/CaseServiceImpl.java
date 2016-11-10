@@ -25,6 +25,7 @@ import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -86,6 +87,27 @@ public class CaseServiceImpl implements CaseService {
             return cases;
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @Override
+    public PageResponse<CaseListView> findAll(CasesFilterRequest filterRequest) {
+        try {
+            String userName = userSessionService.getUsername();
+            boolean isAdmin = userSessionService.isAdmin();
+            // user
+            if (!isAdmin) {
+                filterRequest.setUserName(userName);
+            }
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            PageResponse<CaseListView> cases = restTemplate.postForObject(serviceUrlResolver.resolveUrl(caseServiceUrl)
+                    + "/list", filterRequest, PageResponse.class);
+            return cases;
+
+        } catch (Exception e) {
+            log.error("There was an error while trying to call retroactive service", e);
             throw new RuntimeException(e);
         }
     }

@@ -11,6 +11,7 @@ import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.services.SourceService;
 import com.qsocialnow.elasticsearch.services.cases.SubjectService;
 import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
 
@@ -20,12 +21,15 @@ public class OpenCaseAction {
     @Autowired
     private SubjectService subjectService;
 
+    @Autowired
+    private SourceService sourceService;
+
     private static final Logger log = LoggerFactory.getLogger(OpenCaseAction.class);
 
     public Case openCase(Event inputElement, ExecutionMessageRequest request) {
         log.debug("Executing action: " + ActionType.OPEN_CASE.name());
         String sourceId = inputElement.getIdUsuarioCreacion();
-        Case newCase = Case.getNewCaseFromEvent(inputElement);
+        Case newCase = Case.getNewCaseFromEvent(inputElement, sourceService);
         try {
             Subject subject = findSubject(sourceId);
             if (subject == null) {

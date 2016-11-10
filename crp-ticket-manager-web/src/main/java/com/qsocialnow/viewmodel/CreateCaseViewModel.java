@@ -17,6 +17,7 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.SegmentListView;
+import com.qsocialnow.common.model.config.Source;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.handler.NotificationHandler;
 import com.qsocialnow.model.CaseView;
@@ -85,6 +86,9 @@ public class CreateCaseViewModel implements Serializable {
         newCase.setDomainId(currentCase.getSelectedDomain().getId());
         newCase.setTriggerId(currentCase.getSelectedTrigger().getId());
         newCase.setSegmentId(currentCase.getSelectedSegment().getId());
+        Source source = new Source();
+        source.setManual(true);
+        newCase.setCaseSource(source);
 
         if (currentCase.getSelectedSegment() != null)
             newCase.setTeamId(currentCase.getSelectedSegment().getTeamId());
