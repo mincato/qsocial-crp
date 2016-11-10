@@ -273,25 +273,26 @@ public class CaseTicketService extends CaseIndexService {
                             .add(new TermFieldFilter("triggerEvent.connotacion", filterRequest.getConnotations()[0]));
                 }
             }
-            //adding followers filter
+            // adding followers filter
             RangeFilter followerRange = getFollowersRange(filterRequest);
             if (followerRange != null) {
                 rangeFilters.add(followerRange);
             }
 
-            //adding categories filter
+            // adding categories filter
             if (filterRequest.getCategories() != null && filterRequest.getCategories().length > 0) {
                 if (filterRequest.getCategories().length > 1) {
                     ShouldConditionsFilter conditionFilterCategory = new ShouldConditionsFilter();
                     Long[] categories = filterRequest.getCategories();
                     for (Long category : categories) {
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.categorias", String.valueOf(category));
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.categorias",
+                                String.valueOf(category));
                         conditionFilterCategory.addShouldCondition(shouldFilter);
                     }
                     shouldConditionsFilters.add(conditionFilterCategory);
                 } else {
-                    termFilters
-                        .add(new TermFieldFilter("triggerEvent.categorias", String.valueOf(filterRequest.getCategories()[0])));
+                    termFilters.add(new TermFieldFilter("triggerEvent.categorias", String.valueOf(filterRequest
+                            .getCategories()[0])));
                 }
             }
 
@@ -316,11 +317,6 @@ public class CaseTicketService extends CaseIndexService {
         }
         return rangeFilter;
     }
-    
-    
-    
-    
-    
 
     public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder, String domainId,
             String triggerId, String segmentId, String subject, String title, String description,
