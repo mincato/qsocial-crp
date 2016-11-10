@@ -2101,7 +2101,6 @@ router.delete('/retroactive', function (req, res) {
 
 });
 
-<<<<<<< HEAD
 router.get('/teams/:id/segmentsActive', function (req, res) {
 
 	  function asyncResponse(err,responseTriggers) {
@@ -2127,31 +2126,6 @@ router.get('/teams/:id/segmentsActive', function (req, res) {
 	  segmentService.findAllActiveIdsByTeam(teamId, asyncResponse);
 });
 
-router.get('/sources/blocked', function (req, res) {
-
-	function asyncResponse(err,response) {
-		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
-
-		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
-
-		if(response !== null) {
-			try {
-				res.set('Content-Type','application/json');
-				res.send(gson.toJsonSync(response));
-			} catch(ex) {
-				res.status(500).json(ex.cause.getMessageSync());
-			}
-		} else {
-			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
-		}
-
-	}
-
-	var sourceService = javaContext.getBeanSync("sourceService");
-	sourceService.getBlockedSources(asyncResponse);
-
-});
-
 router.post('/teams/:oldId/reassignSegment/:newId', function (req, res) {
 
 	function asyncResponse(err,response) {
@@ -2175,6 +2149,32 @@ router.post('/teams/:oldId/reassignSegment/:newId', function (req, res) {
     var newTeamId = req.params.newId;
     var segmentService = javaContext.getBeanSync("segmentService");
     segmentService.reassignNewTeam(oldTeamId, newTeamId, asyncResponse);
+});
+
+
+router.get('/sources/blocked', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+
+	}
+
+	var sourceService = javaContext.getBeanSync("sourceService");
+	sourceService.getBlockedSources(asyncResponse);
+
 });
 
 
