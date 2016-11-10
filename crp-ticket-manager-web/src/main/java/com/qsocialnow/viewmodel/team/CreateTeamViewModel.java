@@ -73,6 +73,7 @@ public class CreateTeamViewModel extends EditableTeamViewModel implements Serial
     public void save() {
         Team team = new Team();
         team.setName(currentTeam.getTeam().getName());
+        team.setActive(currentTeam.getTeam().isActive());
         team.setUserResolvers(currentTeam.getUsersResolver().stream().map(userResolver -> {
             BaseUserResolver teamUserResolver = new BaseUserResolver();
             teamUserResolver.setId(userResolver.getUser().getId());

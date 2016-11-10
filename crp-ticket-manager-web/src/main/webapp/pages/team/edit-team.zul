@@ -40,12 +40,41 @@
 											</x:span>
 										</x:div>
 									</x:div>
+									<x:div class="form-group">
+										<n:label class="control-label col-sm-2">
+											${labels.team.active.label}
+										</n:label>
+										<x:div class="col-sm-10">
+											<n:div class="form-switch form-control-static">
+												<checkbox zclass="switch-success" checked="@bind(fx.team.active)"   /> 
+											</n:div>
+										</x:div>
+									</x:div>									
 									<n:br />
 									<include
 										src="/pages/team/edit-users.zul" />
 									<n:br />
 									<include
 										src="/pages/team/edit-users-resolver.zul" />
+										
+									<div visible="@load(vm.chooseNewTeamVisible)" class="form-group has-error">
+										<x:div sclass="@load(empty vmsgs[team] ? '' : 'has-error')">
+											<n:span class="help-block">
+												<label value="${labels.team.choosenew}"/>
+											</n:span>
+											<n:div class="col-sm-11">
+												<selectbox sclass="form-control" model="@load(vm.teamOptions)" id="team"
+													selectedItem="@bind(vm.newTeam) @validator('com.qsocialnow.validators.LocaleBeanValidator')">
+									    			<template name="model">
+														<label value="${each.name}" />
+													</template>
+												</selectbox>
+												<x:span sclass="@load(empty vmsgs[team] ? 'hidden' : 'help-block')">
+								    				<label value="@load(vmsgs[team])" />
+								    			</x:span>
+											</n:div>
+										</x:div>
+									</div>										
 								</x:form>
 							</div>
 						</n:div>

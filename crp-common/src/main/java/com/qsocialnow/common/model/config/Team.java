@@ -15,6 +15,8 @@ public class Team {
 
     private List<BaseUserResolver> userResolvers;
 
+    private boolean active = true;
+
     public String getId() {
         return id;
     }
@@ -47,4 +49,11 @@ public class Team {
         this.userResolvers = userResolvers;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
