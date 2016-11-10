@@ -17,6 +17,20 @@
 		</n:div>
 		<n:div class="navbar-collapse collapse" id="header">
 			<ul class="nav navbar-nav navbar-right">
+				<x:form class="navbar-form navbar-left" if="${sec:isOdatech()}">
+			
+					<x:div class="form-group">
+		                <div zclass="input-group input-group-sm">
+		                       <selectbox sclass="form-control" model="@load(vm.organizations)"
+		                           selectedItem="@bind(vm.organization)"
+		                           onSelect="@command('selectOrganization',organization = vm.organization)">
+		                           <template name="model">
+		                               <label value="${each.nombre}" />
+		                           </template>
+		                       </selectbox>
+		                 </div>
+		        	</x:div>
+		        </x:form>
 				<li class="header-qnews" data-toggle="tooltip"
 					data-placement="bottom" data-original-title="${labels.app.header.tooltip.analysis}"
 					title="" if="${sec:isAnalyticsAllowed()}">

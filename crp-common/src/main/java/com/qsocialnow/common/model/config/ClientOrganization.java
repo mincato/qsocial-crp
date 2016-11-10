@@ -1,10 +1,13 @@
 package com.qsocialnow.common.model.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ClientOrganization {
 
     private Long id;
 
-    private String name;
+    private String nombre;
 
     public Long getId() {
         return id;
@@ -14,12 +17,12 @@ public class ClientOrganization {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
 }
