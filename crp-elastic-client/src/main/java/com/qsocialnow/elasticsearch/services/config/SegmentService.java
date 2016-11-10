@@ -189,7 +189,6 @@ public class SegmentService {
             SegmentType type = mapping.getDocumentType(segment);
             type.setId(segment.getId());
             type.setTriggerId(segment.getTriggerId());
-            System.out.println("TRIGGERRRR ====> " + type.getTriggerId());
             return type;
         }).collect(Collectors.toList());
 
