@@ -25,7 +25,7 @@
 		                           selectedItem="@bind(vm.organization)"
 		                           onSelect="@command('selectOrganization',organization = vm.organization)">
 		                           <template name="model">
-		                               <label value="${each.nombre}" />
+		                               <label value="${each.name}" />
 		                           </template>
 		                       </selectbox>
 		                 </div>

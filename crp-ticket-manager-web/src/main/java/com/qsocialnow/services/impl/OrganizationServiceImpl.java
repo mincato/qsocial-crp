@@ -17,8 +17,8 @@ import com.qsocialnow.services.OrganizationService;
 public class OrganizationServiceImpl implements OrganizationService {
 
     private static final String CURRENT_ORGANIZATION = "currentOrganization";
-    
-	@Autowired
+
+    @Autowired
     private OrganizationRepository organizationRepository;
 
     @Override
