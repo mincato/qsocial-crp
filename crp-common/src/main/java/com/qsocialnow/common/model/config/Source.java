@@ -1,15 +1,14 @@
 package com.qsocialnow.common.model.config;
 
-public class Source {
+import java.io.Serializable;
+
+public class Source implements Serializable {
+
+    private static final long serialVersionUID = -8628077581501373670L;
 
     private Long id;
 
     private boolean manual;
-
-    public Source() {
-        this.id = id;
-        this.manual = manual;
-    }
 
     public Long getId() {
         return id;
