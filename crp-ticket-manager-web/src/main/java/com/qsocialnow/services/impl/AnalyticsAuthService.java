@@ -13,7 +13,6 @@ import org.zkoss.zk.ui.Executions;
 
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.config.AnalyticsConfig;
-import com.qsocialnow.security.LoginConfig;
 import com.qsocialnow.security.ShortTokenEntry;
 import com.qsocialnow.security.UserActivityData;
 import com.qsocialnow.services.UserSessionService;
@@ -27,9 +26,6 @@ public class AnalyticsAuthService {
     private AnalyticsConfig analyticsConfig;
 
     @Autowired
-    private LoginConfig loginConfig;
-
-    @Autowired
     private CuratorFramework zookeeperLogin;
 
     @Autowired
@@ -38,7 +34,7 @@ public class AnalyticsAuthService {
     private final static String ZOOKEEPER_PATH_TOKENS = "/tokens/{0}";
     private final static String ZOOKEEPER_PATH_SESSIONS = "/sessions/{0}";
 
-    private final static String URL_PATTERN = "{0}?token={1}";
+    private final static String URL_PATTERN = "{0}?_token={1}";
 
     public void redirectAnalyticsHome() {
         String shortToken = UUID.randomUUID().toString();
