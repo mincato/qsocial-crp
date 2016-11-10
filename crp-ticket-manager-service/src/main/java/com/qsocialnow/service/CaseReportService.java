@@ -2,6 +2,7 @@ package com.qsocialnow.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
@@ -17,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
+import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.User;
@@ -79,55 +83,39 @@ public class CaseReportService {
 
     private static final String RESOURCE_BUNDLE_FILE_NAME = "reports";
 
-    public byte[] getReport(String domainId, String triggerId, String segmentId, String subject, String title,
-            String description, String pendingResponse, String status, String fromOpenDate, String toOpenDate,
-            String userName, String userSelected, String language) {
+    public byte[] getReport(CasesFilterRequestReport filterRequestReport) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, new Locale(language));
+            Locale locale = new Locale(filterRequestReport.getLanguage());
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
             params.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
-            Map<String, ReportRepository> reportRepositories = new HashMap<>();
-            List<String> keys = Arrays.asList("DOMAINS", "TRIGGERS", "SEGMENTS", "CASE_CATEGORIES",
-                    "SUBJECT_CATEGORIES", "RESOLUTIONS");
-            reportRepositories.put("DOMAINS", domainRepository);
-            reportRepositories.put("TRIGGERS", triggerRepository);
-            reportRepositories.put("SEGMENTS", segmentRepository);
-            reportRepositories.put("CASE_CATEGORIES", caseCategoryRepository);
-            reportRepositories.put("SUBJECT_CATEGORIES", subjectCategoryRepository);
-            reportRepositories.put("RESOLUTIONS", resolutionRepository);
-            long time = System.currentTimeMillis();
-            keys.stream().parallel().forEach(key -> {
-                params.put(key, reportRepositories.get(key).findAllReport());
-            });
-            System.out.println("tiempo: " + (System.currentTimeMillis() - time));
+            DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale);
+            TimeZone timeZone = filterRequestReport.getTimeZone() != null ? TimeZone.getTimeZone(filterRequestReport
+                    .getTimeZone()) : TimeZone.getDefault();
+            formatter.setTimeZone(timeZone);
+            params.put("DATE_FORMATTER", formatter);
+            addReportMaps(params);
 
             PageRequest pageRequest = new PageRequest(0, REPORT_SIZE, "openDate");
             pageRequest.setSortOrder(false);
 
+            CasesFilterRequest filterRequest = filterRequestReport.getFilterRequest();
             List<String> teamsToFilter = new ArrayList<String>();
-            log.info("Retriving cases from :" + userName);
-            time = System.currentTimeMillis();
-            List<Team> teams = teamRepository.findTeams(userName);
-            System.out.println("tiempo: " + (System.currentTimeMillis() - time));
+            List<Team> teams = teamRepository.findTeams(filterRequest.getUserName());
             if (teams != null) {
                 for (Team team : teams) {
                     List<User> users = team.getUsers();
                     for (User user : users) {
-                        if (user.getUsername().equals(userName)) {
+                        if (user.getUsername().equals(filterRequest.getUserName())) {
                             if (user.isCoordinator()) {
-                                log.info("User:" + userName + " coordinator: " + user.isCoordinator()
-                                        + " belongs to team :" + team.getId());
                                 teamsToFilter.add(team.getId());
                             }
                         }
                     }
                 }
             }
-            time = System.currentTimeMillis();
-            JsonArray jsonObject = repository.findAllAsJsonObject(pageRequest, domainId, triggerId, segmentId, subject,
-                    title, description, pendingResponse, status, fromOpenDate, toOpenDate, teamsToFilter, userName,
-                    userSelected);
-            System.out.println("tiempo: " + (System.currentTimeMillis() - time));
+            filterRequest.setTeamsToFilter(teamsToFilter);
+            JsonArray jsonObject = repository.findAllAsJsonObject(pageRequest, filterRequest);
             InputStream is = new ByteArrayInputStream(jsonObject.toString().getBytes());
             JasperPrint print = this.buildJasperPrint(is, params);
             byte[] data = exportPrintToExcel(print);
@@ -136,6 +124,21 @@ public class CaseReportService {
             log.error("error", e);
         }
         return null;
+    }
+
+    private void addReportMaps(Map<String, Object> params) {
+        Map<String, ReportRepository> reportRepositories = new HashMap<>();
+        List<String> keys = Arrays.asList("DOMAINS", "TRIGGERS", "SEGMENTS", "CASE_CATEGORIES", "SUBJECT_CATEGORIES",
+                "RESOLUTIONS");
+        reportRepositories.put("DOMAINS", domainRepository);
+        reportRepositories.put("TRIGGERS", triggerRepository);
+        reportRepositories.put("SEGMENTS", segmentRepository);
+        reportRepositories.put("CASE_CATEGORIES", caseCategoryRepository);
+        reportRepositories.put("SUBJECT_CATEGORIES", subjectCategoryRepository);
+        reportRepositories.put("RESOLUTIONS", resolutionRepository);
+        keys.stream().parallel().forEach(key -> {
+            params.put(key, reportRepositories.get(key).findAllReport());
+        });
     }
 
     private byte[] exportPrintToExcel(JasperPrint print) throws JRException {

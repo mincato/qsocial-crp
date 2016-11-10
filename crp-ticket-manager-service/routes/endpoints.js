@@ -17,46 +17,33 @@ function prettyJSON(obj) {
     console.log(JSON.stringify(obj, null, 8));
 }
 
-router.get('/cases/report', function (req, res) {
+router.post('/cases/report', function (req, res) {
 	  function asyncResponse(err,response) {
-	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
-
-	    if(response !== null) {
-	      try {
-	    	  res.writeHead(200, {
-	    	        'Content-Type': 'application/vnd.ms-excel',
-	    	        'Content-Length': response.length
-	    	    });
-	    	    res.end(new Buffer(response, 'binary'))
-	      } catch(ex) {
-	        res.status(500).json(ex.cause.getMessageSync());
-	      }
-	    } else {
-	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
-	    }
+		  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+		    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+	
+		    if(response !== null) {
+		      try {
+		    	  res.writeHead(200, {
+		    	        'Content-Type': 'application/vnd.ms-excel',
+		    	        'Content-Length': response.length
+		    	    });
+		    	    res.end(new Buffer(response, 'binary'))
+		      } catch(ex) {
+		        res.status(500).json(ex.cause.getMessageSync());
+		      }
+		    } else {
+		      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		    }
 
 	  }
-	  var domainId = req.query.domainId?req.query.domainId :null;
-	  
-	  var triggerId = req.query.triggerId?req.query.triggerId :null;
-	  var segmentId = req.query.segmentId?req.query.segmentId :null;
-	  
-	  var userSelected = req.query.userSelected?req.query.userSelected :null;
-	  var userName = req.query.userName?req.query.userName :null;
-	  var subject = req.query.subject?req.query.subject :null;
-	  var title = req.query.title?req.query.title :null;
-	  var description = req.query.description?req.query.description :null;
-	  var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
-	  var status = req.query.status?req.query.status :null;
-	  
-	  var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
-	  var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
-	  
-	  var language = req.query.language?req.query.language :null;
+	  prettyJSON(req.body);
+	  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.CasesFilterRequestReport');
+	  var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
 
-	  var caseService = javaContext.getBeanSync("caseReportService");
-	  caseService.getReport(domainId,triggerId,segmentId,subject,title,description,pendingResponse,status,fromOpenDate,toOpenDate,userName, userSelected, language, asyncResponse);
-	  
+	  var caseReportService = javaContext.getBeanSync("caseReportService");
+	  caseReportService.getReport(request, asyncResponse);
 });
 
 router.get('/cases/results/report', function (req, res) {
@@ -106,53 +93,6 @@ router.get('/cases/results', function (req, res) {
 	  var domainId = req.query.domainId?req.query.domainId :null;
 	  var caseService = javaContext.getBeanSync("caseResultsService");
 	  caseService.getResults(domainId,asyncResponse);
-});
-
-router.get('/cases', function (req, res) {
-
-  function asyncResponse(err,responseCases) {
-    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
-
-    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
-
-    if(responseCases !== null) {
-      try {
-        res.set('Content-Type', 'application/json');
-        res.send(gson.toJsonSync(responseCases));
-      } catch(ex) {
-    	res.status(500).json(ex.cause.getMessageSync());
-      }
-    } else {
-      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
-    }
-
-  }
-
-  var caseService = javaContext.getBeanSync("caseService");
-  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
-  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-  var sortField = req.query.sortField ? req.query.sortField : null;
-  var sortOrder = req.query.sortOrder?req.query.sortOrder :null;
-  var domainId = req.query.domainId?req.query.domainId :null;
-  
-  var triggerId = req.query.triggerId?req.query.triggerId :null;
-  var segmentId = req.query.segmentId?req.query.segmentId :null;
-  
-  var userName = req.query.userName?req.query.userName :null;
-  var userSelected = req.query.userSelected?req.query.userSelected :null;
-  var subject = req.query.subject?req.query.subject :null;
-  var title = req.query.title?req.query.title :null;
-  var pendingResponse = req.query.pendingResponse?req.query.pendingResponse :null;
-  var status = req.query.status?req.query.status :null;
-  var priority = req.query.priority?req.query.priority :null;
-  var fromOpenDate = req.query.fromOpenDate?req.query.fromOpenDate :null;
-  var toOpenDate = req.query.toOpenDate?req.query.toOpenDate :null;
-  
-  var caseCategoryId = req.query.caseCategory?req.query.caseCategory :null;
-  var subjectCategoryId = req.query.subjectCategory?req.query.subjectCategory :null;
-
-  caseService.findAll(pageNumber, pageSize,sortField,sortOrder,domainId,triggerId,segmentId,subject,title,pendingResponse,priority,status,fromOpenDate,toOpenDate,userName,userSelected,caseCategoryId,subjectCategoryId,asyncResponse);
-
 });
 
 router.post('/cases/list', function (req, res) {

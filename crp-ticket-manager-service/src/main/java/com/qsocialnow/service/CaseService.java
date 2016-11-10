@@ -60,36 +60,6 @@ public class CaseService {
     @Resource
     private Map<ActionType, Action> actions;
 
-    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
-            String domainId, String triggerId, String segmentId, String subject, String title, String pendingResponse,
-            String priority, String status, String fromOpenDate, String toOpenDate, String userName,
-            String userSelected, String caseCategory, String subjectCategory) {
-        PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
-        pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
-
-        List<String> teamsToFilter = new ArrayList<String>();
-        List<Team> teams = teamRepository.findTeams(userName);
-        if (teams != null) {
-            for (Team team : teams) {
-                List<User> users = team.getUsers();
-                for (User user : users) {
-                    if (user.getUsername().equals(userName)) {
-                        if (user.isCoordinator()) {
-                            teamsToFilter.add(team.getId());
-                        }
-                    }
-                }
-            }
-        }
-        log.info("After process teams - trying to retrieve cases from :" + userName);
-        List<CaseListView> cases = repository.findAll(pageRequest, domainId, triggerId, segmentId, subject, title,
-                pendingResponse, priority, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected,
-                caseCategory, subjectCategory);
-
-        PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
-        return page;
-    }
-
     public PageResponse<CaseListView> findAllByFilters(CasesFilterRequest filterRequest) {
         List<String> teamsToFilter = new ArrayList<String>();
         List<Team> teams = teamRepository.findTeams(filterRequest.getUserName());

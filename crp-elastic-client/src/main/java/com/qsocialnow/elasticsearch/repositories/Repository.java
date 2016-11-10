@@ -59,10 +59,14 @@ public interface Repository<T> {
             List<RangeFilter> rangeFilters, List<ShouldFilter> shouldFilters, String aggregationField);
 
     public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> fieldValues, List<RangeFilter> rangeFilters,
-            List<ShouldFilter> shouldFilters);
+            boolean sortOrder, Map<String, String> fieldValues, List<TermFieldFilter> termFilters,
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters);
 
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
+            Mapping<T, E> mapping);
+
+    public <E> SearchResult queryMatchAllAsJson(int from, int size, String sortField, boolean sortOrder,
             Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping);
