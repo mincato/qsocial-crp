@@ -23,7 +23,7 @@
     </appender>	
 
 	<logger name="io.searchbox" additivity="false">
-		<level value="WARN" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 	
@@ -38,17 +38,17 @@
 	</logger>
 
 	<logger name="kafka" additivity="false">
-		<level value="WARN" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
 	<logger name="org.apache" additivity="false">
-		<level value="WARN" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
 	<logger name="org.I0Itec" additivity="false">
-		<level value="WARN" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 	
