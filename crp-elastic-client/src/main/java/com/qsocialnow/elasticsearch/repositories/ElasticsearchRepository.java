@@ -366,7 +366,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
             boolean sortOrder, Map<String, String> searchValues, List<TermFieldFilter> termFilters,
             List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldConditionsFilters,
-            List<ShouldConditionsFilter> shouldTermsConditionsFilters) {
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
+            List<ShouldConditionsFilter> shouldConditionsByRegexpFilters) {
 
         SortOrder sortOrderValue;
         if (sortOrder) {
@@ -420,7 +421,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
         }
 
-        if (shouldConditionsFilters != null && shouldConditionsFilters.size() > 0) {
+        if (shouldConditionsFilters != null && !shouldConditionsFilters.isEmpty()) {
             for (ShouldConditionsFilter shouldConditionFilter : shouldConditionsFilters) {
                 BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
 
@@ -428,6 +429,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 for (ShouldFilter shouldFilter : shouldFilters) {
                     QueryBuilder query = QueryBuilders.matchPhraseQuery(shouldFilter.getField(),
                             shouldFilter.getValue());
+
                     boolShouldQueryBuilder.should(query);
                 }
                 boolQueryBuilder.filter(boolShouldQueryBuilder);
@@ -435,7 +437,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         }
         searchSourceBuilder.query(boolQueryBuilder);
 
-        if (shouldTermsConditionsFilters != null && shouldTermsConditionsFilters.size() > 0) {
+        if (shouldTermsConditionsFilters != null && !shouldTermsConditionsFilters.isEmpty()) {
             for (ShouldConditionsFilter shouldTermsConditionFilter : shouldTermsConditionsFilters) {
 
                 BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
@@ -445,10 +447,25 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                     String[] terms = shouldFilter.getValue().split("\\,");
                     BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
                     for (String term : terms) {
-                        QueryBuilder query = QueryBuilders.termQuery(shouldFilter.getField(), term);
+                        QueryBuilder query = QueryBuilders.termQuery(shouldFilter.getField(), term.trim());
                         boolFilterQueryBuilder.must(query);
                     }
                     boolShouldQueryBuilder.should(boolFilterQueryBuilder);
+                }
+                boolQueryBuilder.filter(boolShouldQueryBuilder);
+            }
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        if (shouldConditionsByRegexpFilters != null && !shouldConditionsByRegexpFilters.isEmpty()) {
+            for (ShouldConditionsFilter shouldConditionFilter : shouldConditionsByRegexpFilters) {
+                BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+
+                List<ShouldFilter> shouldFilters = shouldConditionFilter.getConditions();
+                for (ShouldFilter shouldFilter : shouldFilters) {
+                    QueryBuilder query = QueryBuilders.regexpQuery(shouldFilter.getField(), shouldFilter.getValue());
+
+                    boolShouldQueryBuilder.should(query);
                 }
                 boolQueryBuilder.filter(boolShouldQueryBuilder);
             }
