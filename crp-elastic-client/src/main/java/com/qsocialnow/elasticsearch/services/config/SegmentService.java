@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
@@ -15,6 +16,7 @@ import com.qsocialnow.common.model.config.Segment;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.mappings.config.SegmentMapping;
+import com.qsocialnow.elasticsearch.mappings.types.cases.IdentityType;
 import com.qsocialnow.elasticsearch.mappings.types.config.SegmentType;
 import com.qsocialnow.elasticsearch.repositories.Repository;
 import com.qsocialnow.elasticsearch.repositories.RepositoryFactory;
@@ -27,6 +29,8 @@ public class SegmentService {
     private AWSElasticsearchConfigurationProvider configurator;
 
     private ConfigurationIndexService indexConfiguration;
+
+    private static final Logger LOGGER = Logger.getLogger(SegmentService.class);
 
     public void indexSegments(String triggerId, List<Segment> segments) {
         RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
@@ -135,6 +139,66 @@ public class SegmentService {
         List<Segment> segments = response.getSources();
         repository.closeClient();
         return segments;
+    }
+
+    public List<String> getActiveIdsByTeam(String teamId) {
+        List<Segment> segments = getActiveSegmentsByTeam(teamId);
+        return segments.stream().map(Segment::getId).collect(Collectors.toList());
+    }
+
+    private List<Segment> getActiveSegmentsByTeam(String teamId) {
+        RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
+        Repository<SegmentType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+
+        filters = filters.must(QueryBuilders.matchQuery("team", teamId));
+        filters = filters.must(QueryBuilders.matchQuery("active", true));
+
+        SearchResponse<Segment> response = repository.searchWithFilters(filters, mapping);
+
+        repository.closeClient();
+
+        List<Segment> segments = response.getSources();
+        return segments;
+    }
+
+    public void reassignNewTeam(String oldTeamId, String newTeamId) {
+        List<Segment> segments = getActiveSegmentsByTeam(oldTeamId);
+
+        LOGGER.info("=====> Segments to update: " + segments.size());
+
+        List<Segment> segmentsReassignated = segments.stream().map(s -> {
+            s.setTeam(newTeamId);
+            return s;
+        }).collect(Collectors.toList());
+
+        LOGGER.info("Old Team ID: " + oldTeamId);
+        LOGGER.info("New Team ID: " + newTeamId);
+
+        bulkUpdate(segmentsReassignated);
+    }
+
+    private void bulkUpdate(List<Segment> segments) {
+        RepositoryFactory<SegmentType> esfactory = new RepositoryFactory<SegmentType>(configurator);
+        Repository<SegmentType> repository = esfactory.initManager();
+        repository.initClient();
+
+        SegmentMapping mapping = SegmentMapping.getInstance(indexConfiguration.getIndexName());
+
+        List<IdentityType> documentsTypes = segments.stream().map(segment -> {
+            SegmentType type = mapping.getDocumentType(segment);
+            type.setId(segment.getId());
+            type.setTriggerId(segment.getTriggerId());
+            return type;
+        }).collect(Collectors.toList());
+
+        repository.bulkOperation(mapping, documentsTypes);
+
+        repository.closeClient();
     }
 
     public void updateSegments(String triggerId, List<Segment> newSegments) {

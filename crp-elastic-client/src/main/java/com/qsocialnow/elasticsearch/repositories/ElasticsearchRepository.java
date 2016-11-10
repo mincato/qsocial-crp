@@ -217,9 +217,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         List<Index> modelList = new ArrayList<Index>();
         // TODO:index by alias
         for (IdentityType identity : documents) {
+
             Index indexDocument;
             if (identity.getId() != null) {
-                log.info("Updating case: " + identity.getId());
+                log.info("Updating Document: " + identity.getId());
                 indexDocument = new Index.Builder(identity).index(mapping.getIndex()).type(mapping.getType())
                         .id(identity.getId()).build();
             } else {
@@ -242,8 +243,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 response.setFailedItems(result.getFailedItems());
             }
         } catch (IOException e) {
+            e.printStackTrace();
             log.error("Unexpected error: ", e);
         }
+
         return response;
     }
 

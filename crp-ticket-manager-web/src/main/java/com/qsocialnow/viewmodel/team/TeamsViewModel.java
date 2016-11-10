@@ -19,6 +19,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.Team;
@@ -121,6 +122,7 @@ public class TeamsViewModel implements Serializable {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("team", teamId);
         Executions.createComponents("/pages/team/edit-team.zul", null, arg);
+        Clients.evalJavaScript("initSwitch()");
     }
 
     @GlobalCommand
@@ -132,6 +134,7 @@ public class TeamsViewModel implements Serializable {
             if (teamOptional.isPresent()) {
                 TeamListView teamListView = teamOptional.get();
                 teamListView.setName(teamChanged.getName());
+                teamListView.setActive(teamChanged.isActive());
             }
         }
     }

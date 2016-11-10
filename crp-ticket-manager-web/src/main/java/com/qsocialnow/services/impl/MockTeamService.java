@@ -67,20 +67,31 @@ public class MockTeamService implements TeamService {
 
     @Override
     public List<TeamListView> findAll() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<BaseUserResolver> findUserResolvers(String teamId, Map<String, Object> filters) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public List<User> findUsers(String teamId) {
-        // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public List<String> findAllActiveIdsByTeam(String teamId) {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<TeamListView> findAllActive() {
+        return findAll();
+    }
+
+    @Override
+    public void reassign(String oldTeamId, String newTeamId) {
     }
 
 }

@@ -33,6 +33,16 @@
 							</x:span>
 						</x:div>
 					</x:div>
+					<x:div class="form-group">
+						<n:label class="control-label col-sm-2">
+							${labels.team.active.label}
+						</n:label>
+						<x:div class="col-sm-10">
+							<n:div class="form-switch form-control-static">
+								<checkbox zclass="switch-success" checked="@bind(fx.team.active)"   /> 
+							</n:div>
+						</x:div>
+					</x:div>
 					<include src="/pages/team/edit-users.zul"/>
 					<include src="/pages/team/edit-users-resolver.zul"/>
 					<n:br />
