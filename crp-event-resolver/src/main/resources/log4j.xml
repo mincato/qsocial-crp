@@ -28,7 +28,7 @@
 	</logger>
 	
 	<logger name="com.qsocialnow" additivity="false">
-		<level value="DEBUG" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
