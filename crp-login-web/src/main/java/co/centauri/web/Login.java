@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
 
 	private static final Logger LOGGER = Logger.getLogger(Login.class);
 
-	private static final String URL_PATTERN = "{0}://{1}:{2}/{3}?token={4}";
+	private static final String URL_PATTERN = "{0}://{1}:{2}/{3}?_token={4}";
 
 	private TokenHandler tokenHandler;
 
