@@ -65,6 +65,7 @@ public class CaseRepository {
             Set<String> resultKeys = resultsRepo.keySet();
             for (String key : resultKeys) {
                 ResultsListView resultView = new ResultsListView();
+                resultView.setIdResolution(key);
                 resultView.setResolution(key);
                 resultView.setTotal(resultsRepo.get(key));
                 results.add(resultView);
@@ -105,6 +106,24 @@ public class CaseRepository {
     public boolean update(Case caseObject) {
         String id = caseElasticService.update(caseObject);
         return id != null;
+    }
+
+    public List<ResultsListView> sumarizeResolutionByUser(String resolutionId, String domain) {
+        List<ResultsListView> results = new ArrayList<>();
+        try {
+            Map<String, Long> resultsRepo = caseElasticService.getResolutionsByAssigned(domain, resolutionId);
+            Set<String> resultKeys = resultsRepo.keySet();
+            for (String key : resultKeys) {
+                ResultsListView resultView = new ResultsListView();
+                resultView.setAssigned(key);
+                resultView.setTotal(resultsRepo.get(key));
+                results.add(resultView);
+            }
+
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return results;
     }
 
 }

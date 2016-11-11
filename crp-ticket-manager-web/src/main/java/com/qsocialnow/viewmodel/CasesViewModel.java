@@ -54,7 +54,6 @@ import com.qsocialnow.common.model.filter.WordsFilterRequestBean;
 import com.qsocialnow.common.model.filter.WordsListFilterBean;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.model.retroactive.RetroactiveProcessRequest;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.model.AdmUnitFilterView;
 import com.qsocialnow.model.CategoryFilterView;

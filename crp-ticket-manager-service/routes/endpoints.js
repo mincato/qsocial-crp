@@ -46,7 +46,7 @@ router.post('/cases/report', function (req, res) {
 	  caseReportService.getReport(request, asyncResponse);
 });
 
-router.get('/cases/results/report', function (req, res) {
+router.get('/cases/resolutions/report', function (req, res) {
 	  function asyncResponse(err,response) {
 	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -72,28 +72,59 @@ router.get('/cases/results/report', function (req, res) {
 	  
 });
 
-router.get('/cases/results', function (req, res) {
-	function asyncResponse(err,response) {
+router.post('/cases/resolutions', function (req, res) {
+	  function asyncResponse(err,responseCases) {
 	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
 	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
-	    if(response !== null) {
+	    if(responseCases !== null) {
 	      try {
-	        res.set('Content-Type', 'application/json');
-	        res.send(gson.toJsonSync(response));
+	        res.set('Content-Type','application/json');
+	        res.send(gson.toJsonSync(responseCases));
 	      } catch(ex) {
-	    	res.status(500).json(ex.cause.getMessageSync());
+	        res.status(500).json(ex.cause.getMessageSync());
 	      }
 	    } else {
 	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
 	    }
-
 	  }
-	  var domainId = req.query.domainId?req.query.domainId :null;
+	  prettyJSON(req.body);
+	  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.CasesFilterRequest');
+	  var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+
 	  var caseService = javaContext.getBeanSync("caseResultsService");
-	  caseService.getResults(domainId,asyncResponse);
+	  caseService.getResults(request, asyncResponse);
 });
+
+router.post('/cases/resolutions/:id', function (req, res) {
+	  function asyncResponse(err,responseCases) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(responseCases !== null) {
+	      try {
+	        res.set('Content-Type','application/json');
+	        res.send(gson.toJsonSync(responseCases));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+	  }
+	  prettyJSON(req.body);
+	  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.CasesFilterRequest');
+	  var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+	  var resolutionsId = req.params.id;
+	  var caseService = javaContext.getBeanSync("caseResultsService");
+	  caseService.getResolutionsByUser(resolutionsId,request, asyncResponse);
+});
+
+
 
 router.post('/cases/list', function (req, res) {
   function asyncResponse(err,responseCases) {
