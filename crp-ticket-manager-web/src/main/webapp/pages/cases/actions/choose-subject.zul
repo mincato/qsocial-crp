@@ -18,7 +18,7 @@
 								<div zclass="input-group input-group-sm">
 									  <textbox zclass="form-control" value="@bind(subjectVm.keyword)" onOK="@command('search')" />
 										<span zclass="input-group-btn">
-										    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+										    <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
 										</span>
 						    	</div>
 			                </n:div>
