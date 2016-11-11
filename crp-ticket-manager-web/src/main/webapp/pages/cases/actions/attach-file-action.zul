@@ -20,8 +20,8 @@
 			</x:span>
 		</div>
 		<div class="form-group text-center">
-			<button zclass="btn btn-default" label="${labels.cases.actions.attach.browse}" upload="true,maxsize=-1,multiple=true,native" onUpload="@command('upload', files=event.medias, fxAttachFileAction = fxAttachFileAction)" />
-	    	<button onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
+			<button autodisable="self" zclass="btn btn-default" label="${labels.cases.actions.attach.browse}" upload="true,maxsize=-1,multiple=true,native" onUpload="@command('upload', files=event.medias, fxAttachFileAction = fxAttachFileAction)" />
+	    	<button autodisable="self" onClick="@command('execute')" label="${labels.app.button.execute}" zclass="btn btn-success" />
 		</div>
 	</x:form>
 </div>

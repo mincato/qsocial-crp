@@ -6,7 +6,7 @@
 	<x:form form="@id('fxTagSubjectAction') @load(tagSubjectActionVm.tagSubjectAction) @save(tagSubjectActionVm.tagSubjectAction, before='execute')">
 		<include src="/pages/actions/tag-subject-action-body.zul"/>
 		<div class="form-group text-center">
-	    	<button onClick="@command('execute')" disabled="@load(not tagSubjectActionVm.categorySetListView.enabledAdd and not empty tagSubjectActionVm.categorySetListView.filteredList)" label="${labels.app.button.execute}" zclass="btn btn-success" />
+	    	<button autodisable="self" onClick="@command('execute')" disabled="@load(not tagSubjectActionVm.categorySetListView.enabledAdd and not empty tagSubjectActionVm.categorySetListView.filteredList)" label="${labels.app.button.execute}" zclass="btn btn-success" />
 		</div>
 	</x:form>
 </div>
