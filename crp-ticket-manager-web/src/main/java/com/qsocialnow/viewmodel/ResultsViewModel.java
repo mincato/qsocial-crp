@@ -18,6 +18,7 @@ import org.zkoss.zul.Filedownload;
 
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
+import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.DomainListView;
@@ -152,7 +153,13 @@ public class ResultsViewModel implements Serializable {
 
     @Command
     public void download() {
-        byte[] data = resultsService.getReport(null, userSessionService.getLanguage());
+        CasesFilterRequest filterRequest = new CasesFilterRequest();
+        filterRequest.setFilterActive(filterActive);
+        setFilters(filterRequest);
+        CasesFilterRequestReport filterRequestReport = new CasesFilterRequestReport();
+        filterRequestReport.setFilterRequest(filterRequest);
+        filterRequestReport.setLanguage(userSessionService.getLanguage());
+        byte[] data = resultsService.getReport(filterRequestReport);
         Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
     }
 

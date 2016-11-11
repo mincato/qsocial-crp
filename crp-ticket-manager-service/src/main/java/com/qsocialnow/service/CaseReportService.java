@@ -85,6 +85,10 @@ public class CaseReportService {
 
     private static final String RESOURCE_BUNDLE_FILE_NAME = "reports";
 
+    private static final String JASPER_CASES_REPORT_PATH = "/reports/cases.jasper";
+
+    private static final String JASPER_CASES_BY_RESOLUTION_REPORT_PATH = "/reports/cases_by_resolution.jasper";
+
     public byte[] getReport(CasesFilterRequestReport filterRequestReport) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
@@ -160,17 +164,18 @@ public class CaseReportService {
     }
 
     private JasperPrint buildJasperPrint(InputStream stream, Map<String, Object> params) throws JRException {
-        InputStream reportStream = this.getClass().getResourceAsStream("/reports/cases.jasper");
+        InputStream reportStream = this.getClass().getResourceAsStream(JASPER_CASES_REPORT_PATH);
         JasperPrint print = JasperFillManager.fillReport(reportStream, params, new JsonDataSource(stream));
         return print;
     }
 
-    public byte[] getCasesByResolutionReport(String domainId, String language) {
+    public byte[] getCasesByResolutionReport(CasesFilterRequestReport filterRequestReport) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(null, domainId);
+            List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(null, filterRequestReport
+                    .getFilterRequest().getDomain());
             if (casesByResolution != null && casesByResolution.size() > 0) {
-                Domain domain = domainRepository.findOne(domainId);
+                Domain domain = domainRepository.findOne(filterRequestReport.getFilterRequest().getDomain());
                 if (domain != null) {
                     List<Resolution> resolutions = domain.getResolutions();
                     Map<String, String> resolutionById = resolutions.stream().collect(
@@ -179,10 +184,12 @@ public class CaseReportService {
                             result -> result.setResolution(resolutionById.get(result.getResolution())));
                 }
             }
-            ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, new Locale(language));
+            Locale locale = filterRequestReport.getLanguage() != null ? new Locale(filterRequestReport.getLanguage())
+                    : Locale.getDefault();
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
             params.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 
-            InputStream reportStream = this.getClass().getResourceAsStream("/reports/cases_by_resolution.jasper");
+            InputStream reportStream = this.getClass().getResourceAsStream(JASPER_CASES_BY_RESOLUTION_REPORT_PATH);
             JasperPrint print = JasperFillManager.fillReport(reportStream, params, new JRBeanCollectionDataSource(
                     casesByResolution));
             byte[] data = exportPrintToExcel(print);
