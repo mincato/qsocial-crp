@@ -42,7 +42,7 @@
 				</n:div>
 				<n:div class="col-md-2">
 					<div zclass="input-group input-group-sm">
-						<datebox sclass="input-group" format="short"
+						<datebox sclass="input-group" format="medium"
 							value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')"
 							placeholder="${labels.trigger.list.filter.fromDate}" />
 					</div>
@@ -52,7 +52,7 @@
 					<x:div
 						sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')">
 						<datebox id="todate" sclass="input-group"
-							format="short"
+							format="medium"
 							value="@load(vm.toDate) 
                         @save(vm.toDate, before='search')
                         @converter('com.qsocialnow.converters.DateInputConverter', endDay = true)

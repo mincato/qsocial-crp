@@ -362,7 +362,7 @@
 											<n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
 											<n:div class="col-sm-10">
 												<n:div class="col-sm-3">
-														<datebox id="startdate" sclass="input-group" format="short" value="@bind(fxFilter.startDateTime)
+														<datebox id="startdate" sclass="input-group" format="medium" value="@bind(fxFilter.startDateTime)
 														@validator('com.qsocialnow.validators.RequiredValidator')
 														 @converter('com.qsocialnow.converters.DateInputConverter')" 
 														 onChange="@command('initFilterStartTime', fxFilter = fxFilter)"/>
@@ -379,7 +379,7 @@
 											<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
 											<n:div class="col-sm-10">
 												<n:div class="col-sm-3">
-													<datebox id="enddate" sclass="input-group" format="short" 
+													<datebox id="enddate" sclass="input-group" format="medium" 
 													onChange="@command('initFilterEndTime', fxFilter = fxFilter)"
 													value="@load(fxFilter.endDateTime) 
 													@save(fxFilter.endDateTime, before='save')

@@ -50,7 +50,7 @@
 						</n:label>
 						<n:div class="col-sm-9">
 							<datebox id="startDate" sclass="input-group"
-								format="short"
+								format="medium"
 								value="@bind(fxTrigger.trigger.init) @converter(adminVm.dateConverter) @validator('com.qsocialnow.validators.LocaleBeanValidator')" />
 							<x:span
 								sclass="@load(empty vmsgs[startDate] ? 'hidden' : 'help-block')">
@@ -78,7 +78,7 @@
 						</n:label>
 						<n:div class="col-sm-9">
 							<datebox id="endDate" sclass="input-group"
-								format="short"
+								format="medium"
 								value="@load(fxTrigger.trigger.end) @converter(adminVm.dateConverter, endDay = true) @save(fxTrigger.trigger.end, before='save')  @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxTrigger.trigger.init, label='trigger.enddate.validation', id = 'endDate', required = true)"  />
 							<x:span
 								sclass="@load(empty vmsgs[endDate] ? 'hidden' : 'help-block')">
