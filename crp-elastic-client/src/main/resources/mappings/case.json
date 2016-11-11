@@ -48,6 +48,8 @@
               "sistemaOrigenExterno" : {"type" : "string"},
               "subSeriesId" : {"type" : "long"},
               "texto" : {"type" : "string" ,"analyzer":"oda_stopwords"},
+              "hashTags" : {"type" : "string","analyzer":"oda_stopwords"},
+              "menciones" : {"type" : "string","analyzer":"oda_stopwords"},
               "timestamp" : {"type" : "long"},
               "tipoDeMedio" : {"type" : "string"},
               "titulo" : {"type" : "string"},
