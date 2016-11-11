@@ -111,101 +111,99 @@ public class ResponseDetectorStreamListener implements UserStreamListener {
 
     @Override
     public void onUnfollow(User source, User followedUser) {
-        System.out.println("onFollow source:@" + source.getScreenName() + " target:@" + followedUser.getScreenName());
+        log.debug("onFollow source:@" + source.getScreenName() + " target:@" + followedUser.getScreenName());
     }
 
     @Override
     public void onDirectMessage(DirectMessage directMessage) {
-        System.out.println("onDirectMessage text:" + directMessage.getText());
+        log.debug("onDirectMessage text:" + directMessage.getText());
     }
 
     @Override
     public void onUserListMemberAddition(User addedMember, User listOwner, UserList list) {
-        System.out.println("onUserListMemberAddition added member:@" + addedMember.getScreenName() + " listOwner:@"
+        log.debug("onUserListMemberAddition added member:@" + addedMember.getScreenName() + " listOwner:@"
                 + listOwner.getScreenName() + " list:" + list.getName());
     }
 
     @Override
     public void onUserListMemberDeletion(User deletedMember, User listOwner, UserList list) {
-        System.out.println("onUserListMemberDeleted deleted member:@" + deletedMember.getScreenName() + " listOwner:@"
+        log.debug("onUserListMemberDeleted deleted member:@" + deletedMember.getScreenName() + " listOwner:@"
                 + listOwner.getScreenName() + " list:" + list.getName());
     }
 
     @Override
     public void onUserListSubscription(User subscriber, User listOwner, UserList list) {
-        System.out.println("onUserListSubscribed subscriber:@" + subscriber.getScreenName() + " listOwner:@"
+        log.debug("onUserListSubscribed subscriber:@" + subscriber.getScreenName() + " listOwner:@"
                 + listOwner.getScreenName() + " list:" + list.getName());
     }
 
     @Override
     public void onUserListUnsubscription(User subscriber, User listOwner, UserList list) {
-        System.out.println("onUserListUnsubscribed subscriber:@" + subscriber.getScreenName() + " listOwner:@"
+        log.debug("onUserListUnsubscribed subscriber:@" + subscriber.getScreenName() + " listOwner:@"
                 + listOwner.getScreenName() + " list:" + list.getName());
     }
 
     @Override
     public void onUserListCreation(User listOwner, UserList list) {
-        System.out.println("onUserListCreated  listOwner:@" + listOwner.getScreenName() + " list:" + list.getName());
+        log.debug("onUserListCreated  listOwner:@" + listOwner.getScreenName() + " list:" + list.getName());
     }
 
     @Override
     public void onUserListUpdate(User listOwner, UserList list) {
-        System.out.println("onUserListUpdated  listOwner:@" + listOwner.getScreenName() + " list:" + list.getName());
+        log.debug("onUserListUpdated  listOwner:@" + listOwner.getScreenName() + " list:" + list.getName());
     }
 
     @Override
     public void onUserListDeletion(User listOwner, UserList list) {
-        System.out.println("onUserListDestroyed  listOwner:@" + listOwner.getScreenName() + " list:" + list.getName());
+        log.debug("onUserListDestroyed  listOwner:@" + listOwner.getScreenName() + " list:" + list.getName());
     }
 
     @Override
     public void onUserProfileUpdate(User updatedUser) {
-        System.out.println("onUserProfileUpdated user:@" + updatedUser.getScreenName());
+        log.debug("onUserProfileUpdated user:@" + updatedUser.getScreenName());
     }
 
     @Override
     public void onUserDeletion(long deletedUser) {
-        System.out.println("onUserDeletion user:@" + deletedUser);
+        log.debug("onUserDeletion user:@" + deletedUser);
     }
 
     @Override
     public void onUserSuspension(long suspendedUser) {
-        System.out.println("onUserSuspension user:@" + suspendedUser);
+        log.debug("onUserSuspension user:@" + suspendedUser);
     }
 
     @Override
     public void onBlock(User source, User blockedUser) {
-        System.out.println("onBlock source:@" + source.getScreenName() + " target:@" + blockedUser.getScreenName());
+        log.debug("onBlock source:@" + source.getScreenName() + " target:@" + blockedUser.getScreenName());
     }
 
     @Override
     public void onUnblock(User source, User unblockedUser) {
-        System.out.println("onUnblock source:@" + source.getScreenName() + " target:@" + unblockedUser.getScreenName());
+        log.debug("onUnblock source:@" + source.getScreenName() + " target:@" + unblockedUser.getScreenName());
     }
 
     @Override
     public void onRetweetedRetweet(User source, User target, Status retweetedStatus) {
-        System.out.println("onRetweetedRetweet source:@" + source.getScreenName() + " target:@"
-                + target.getScreenName() + retweetedStatus.getUser().getScreenName() + " - "
-                + retweetedStatus.getText());
+        log.debug("onRetweetedRetweet source:@" + source.getScreenName() + " target:@" + target.getScreenName()
+                + retweetedStatus.getUser().getScreenName() + " - " + retweetedStatus.getText());
     }
 
     @Override
     public void onFavoritedRetweet(User source, User target, Status favoritedRetweet) {
-        System.out.println("onFavroitedRetweet source:@" + source.getScreenName() + " target:@"
-                + target.getScreenName() + favoritedRetweet.getUser().getScreenName() + " - "
-                + favoritedRetweet.getText());
+        log.debug("onFavroitedRetweet source:@" + source.getScreenName() + " target:@" + target.getScreenName()
+                + favoritedRetweet.getUser().getScreenName() + " - " + favoritedRetweet.getText());
     }
 
     @Override
     public void onQuotedTweet(User source, User target, Status quotingTweet) {
-        System.out.println("onQuotedTweet" + source.getScreenName() + " target:@" + target.getScreenName()
+        log.debug("onQuotedTweet" + source.getScreenName() + " target:@" + target.getScreenName()
                 + quotingTweet.getUser().getScreenName() + " - " + quotingTweet.getText());
     }
 
     @Override
     public void onException(Exception ex) {
         ex.printStackTrace();
-        System.out.println("onException:" + ex.getMessage());
+        log.debug("onException:" + ex.getMessage());
     }
 }

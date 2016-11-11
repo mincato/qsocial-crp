@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
@@ -22,10 +23,11 @@ import com.google.gson.JsonArray;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
+import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageRequest;
-import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.CaseCategoryRepository;
 import com.qsocialnow.persistence.CaseRepository;
 import com.qsocialnow.persistence.DomainRepository;
@@ -166,13 +168,23 @@ public class CaseReportService {
     public byte[] getCasesByResolutionReport(String domainId, String language) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            PageResponse<ResultsListView> page = caseResultsService.getResults(domainId);
+            List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(null, domainId);
+            if (casesByResolution != null && casesByResolution.size() > 0) {
+                Domain domain = domainRepository.findOne(domainId);
+                if (domain != null) {
+                    List<Resolution> resolutions = domain.getResolutions();
+                    Map<String, String> resolutionById = resolutions.stream().collect(
+                            Collectors.toMap(x -> x.getId(), x -> x.getDescription()));
+                    casesByResolution.stream().forEach(
+                            result -> result.setResolution(resolutionById.get(result.getResolution())));
+                }
+            }
             ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, new Locale(language));
             params.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 
             InputStream reportStream = this.getClass().getResourceAsStream("/reports/cases_by_resolution.jasper");
-            JasperPrint print = JasperFillManager.fillReport(reportStream, params,
-                    new JRBeanCollectionDataSource(page.getItems()));
+            JasperPrint print = JasperFillManager.fillReport(reportStream, params, new JRBeanCollectionDataSource(
+                    casesByResolution));
             byte[] data = exportPrintToExcel(print);
             return data;
         } catch (Exception e) {

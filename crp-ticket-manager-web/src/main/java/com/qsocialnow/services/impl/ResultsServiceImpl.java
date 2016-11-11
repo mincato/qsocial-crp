@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
@@ -36,31 +37,13 @@ public class ResultsServiceImpl implements ResultsService {
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    @Override
-    public PageResponse<ResultsListView> sumarizeAll(PageRequest pageRequest, Map<String, String> filters) {
+    @SuppressWarnings({ "unchecked" })
+    public PageResponse<ResultsListView> sumarizeAll(CasesFilterRequest filterRequest) {
         try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            PageResponse<ResultsListView> results = restTemplate.postForObject(
+                    serviceUrlResolver.resolveUrl(caseServiceUrl) + "/resolutions", filterRequest, PageResponse.class);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-
-            UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/results")
-                    .queryParam("pageNumber", pageRequest.getPageNumber())
-                    .queryParam("pageSize", pageRequest.getPageSize())
-                    .queryParam("sortField", pageRequest.getSortField())
-                    .queryParam("sortOrder", pageRequest.getSortOrder());
-
-            if (filters != null) {
-                for (Map.Entry<String, String> filter : filters.entrySet()) {
-                    builder.queryParam(filter.getKey(), filter.getValue());
-                }
-            }
-
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<PageResponse> response = restTemplate
-                    .getForEntity(builder.toUriString(), PageResponse.class);
-            PageResponse<ResultsListView> results = response.getBody();
             return results;
 
         } catch (Exception e) {
@@ -76,7 +59,7 @@ public class ResultsServiceImpl implements ResultsService {
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/results/report");
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/resolutions/report");
 
             if (filters != null) {
                 for (Map.Entry<String, String> filter : filters.entrySet()) {
@@ -93,6 +76,23 @@ public class ResultsServiceImpl implements ResultsService {
             return data;
         } catch (Exception e) {
             log.error("There was an error while trying to call results report service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @SuppressWarnings({ "unchecked" })
+    public PageResponse<ResultsListView> sumarizeResolutionByUser(CasesFilterRequest filterRequest) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            PageResponse<ResultsListView> results = restTemplate.postForObject(
+                    serviceUrlResolver.resolveUrl(caseServiceUrl) + "/resolutions/" + filterRequest.getIdResolution(),
+                    filterRequest, PageResponse.class);
+
+            return results;
+
+        } catch (Exception e) {
+            log.error("There was an error while trying to call sumarize all service", e);
             throw new RuntimeException(e);
         }
     }

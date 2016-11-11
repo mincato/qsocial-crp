@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Domain;
@@ -34,11 +35,13 @@ public class CaseResultsService {
     @Resource
     private Map<ActionType, Action> actions;
 
-    public PageResponse<ResultsListView> getResults(String domainId) {
-        log.info("Trying to retrieve cases from :" + domainId);
-        List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(null, domainId);
+    public PageResponse<ResultsListView> getResults(CasesFilterRequest filterRequest) {
+
+        log.info("Trying to retrieve cases from :" + filterRequest.getDomain());
+        List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(null,
+                filterRequest.getDomain());
         if (casesByResolution != null && casesByResolution.size() > 0) {
-            Domain domain = domainRepository.findOne(domainId);
+            Domain domain = domainRepository.findOne(filterRequest.getDomain());
             if (domain != null) {
                 List<Resolution> resolutions = domain.getResolutions();
                 Map<String, String> resolutionById = resolutions.stream().collect(
@@ -47,6 +50,14 @@ public class CaseResultsService {
                         result -> result.setResolution(resolutionById.get(result.getResolution())));
             }
         }
+        PageResponse<ResultsListView> page = new PageResponse<ResultsListView>(casesByResolution, null, null);
+        return page;
+    }
+
+    public PageResponse<ResultsListView> getResolutionsByUser(String idResolution, CasesFilterRequest filterRequest) {
+        log.info("Trying to retrieve cases from :" + filterRequest.getDomain());
+        List<ResultsListView> casesByResolution = repository.sumarizeResolutionByUser(idResolution,
+                filterRequest.getDomain());
         PageResponse<ResultsListView> page = new PageResponse<ResultsListView>(casesByResolution, null, null);
         return page;
     }
