@@ -320,8 +320,6 @@ public class CaseTicketService extends CaseIndexService {
         }
 
     }
-	
-
 
     private RangeFilter getFollowersRange(CasesFilterRequest filterRequest) {
         RangeFilter rangeFilter = null;
