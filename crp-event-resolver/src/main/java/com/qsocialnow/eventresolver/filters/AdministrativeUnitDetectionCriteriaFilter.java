@@ -37,13 +37,13 @@ public class AdministrativeUnitDetectionCriteriaFilter implements DetectionCrite
     }
 
     private boolean equalsAttribute(Long messageAttribute, Long filterAttribute) {
-    	if (filterAttribute == null) {
-    		return true;
-    	}
-    	if (messageAttribute == null) {
-    		return false;
-    	}
-    	return filterAttribute.equals(messageAttribute);
+        if (filterAttribute == null) {
+            return true;
+        }
+        if (messageAttribute == null) {
+            return false;
+        }
+        return filterAttribute.equals(messageAttribute);
     }
 
     private boolean messageHasAdmUnit(NormalizedInputBeanDocument message) {
