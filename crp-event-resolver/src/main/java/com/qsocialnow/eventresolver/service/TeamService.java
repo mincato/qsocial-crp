@@ -5,9 +5,9 @@ import javax.annotation.PreDestroy;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
-import org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode;
 import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +19,12 @@ import org.springframework.stereotype.Component;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.eventresolver.config.CacheConfig;
 import com.qsocialnow.eventresolver.config.EventResolverConfig;
+import com.qsocialnow.eventresolver.processor.MessageProcessorImpl;
 
 @Component
 public class TeamService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TeamService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageProcessorImpl.class);
 
     private PathChildrenCache pathChildrenCache;
 
