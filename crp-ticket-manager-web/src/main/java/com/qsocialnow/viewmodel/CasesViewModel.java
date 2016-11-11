@@ -317,7 +317,13 @@ public class CasesViewModel implements Serializable {
 
     @Command
     public void download() {
-        byte[] data = caseService.getReport(getFilters(), userSessionService.getLanguage());
+        CasesFilterRequest filterRequest = new CasesFilterRequest();
+        filterRequest.setFilterActive(filterActive);
+        setFilters(filterRequest);
+        setAdvancedFilters(filterRequest);
+
+        byte[] data = caseService.getReport(filterRequest, userSessionService.getLanguage(),
+                userSessionService.getTimeZone());
         Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
     }
 
@@ -686,62 +692,6 @@ public class CasesViewModel implements Serializable {
             request.setAdministrativeUnitsFilter(administrativeUnitsFilter);
         }
 
-    }
-
-    private Map<String, String> getFilters() {
-        Map<String, String> filters = new HashMap<String, String>();
-        if (Strings.isNotEmpty(this.title)) {
-            filters.put("title", this.title);
-        }
-
-        if (this.domain != null && !this.domain.getId().equals(NOT_ID_ITEM_VALUE)) {
-            filters.put("domainId", this.domain.getId());
-        }
-
-        if (this.trigger != null && !this.trigger.getId().equals(NOT_ID_ITEM_VALUE)) {
-            filters.put("triggerId", this.trigger.getId());
-        }
-
-        if (this.segment != null && !this.segment.getId().equals(NOT_ID_ITEM_VALUE)) {
-            filters.put("segmentId", this.segment.getId());
-        }
-
-        if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE)) {
-            filters.put("pendingResponse", this.pendingResponse);
-        }
-
-        if (userSelected != null && !userSelected.getId().equals(NOT_ID_INT_VALUE)) {
-            filters.put("userSelected", this.userSelected.getUsername());
-        }
-
-        if (status != null && !status.equals(ALL_OPTION_VALUE)) {
-            filters.put("status", this.status);
-        }
-
-        if (priority != null && !priority.equals(ALL_OPTION_VALUE)) {
-            filters.put("priority", this.priority);
-        }
-
-        if (this.fromDate != null) {
-            filters.put("fromOpenDate", String.valueOf(this.fromDate));
-        }
-
-        if (this.toDate != null) {
-            filters.put("toOpenDate", String.valueOf(this.toDate));
-        }
-
-        if (Strings.isNotEmpty(this.subject)) {
-            filters.put("subject", this.subject);
-        }
-
-        if (this.caseCategory != null && !this.caseCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
-            filters.put("caseCategory", this.caseCategory.getId());
-        }
-
-        if (this.subjectCategory != null && !this.subjectCategory.getId().equals(NOT_ID_ITEM_VALUE)) {
-            filters.put("subjectCategory", this.subjectCategory.getId());
-        }
-        return filters;
     }
 
     private void setDefaultPage() {

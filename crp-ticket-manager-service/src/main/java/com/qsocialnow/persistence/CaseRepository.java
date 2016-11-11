@@ -27,43 +27,6 @@ public class CaseRepository {
     @Autowired
     private CaseTicketService caseElasticService;
 
-    public List<CaseListView> findAll(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
-            String subject, String title, String pendingResponse, String priority, String status, String fromOpenDate,
-            String toOpenDate, List<String> teamsToFilter, String userName, String userSelected, String caseCategory,
-            String subjectCategory) {
-        List<CaseListView> cases = new ArrayList<>();
-
-        try {
-            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
-                    pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId, segmentId, subject,
-                    title, pendingResponse, priority, status, fromOpenDate, toOpenDate, teamsToFilter, userName,
-                    userSelected, caseCategory, subjectCategory);
-
-            for (Case caseRepo : casesRepo) {
-                CaseListView caseListView = new CaseListView();
-                caseListView.setId(caseRepo.getId());
-                caseListView.setTitle(caseRepo.getTitle());
-                caseListView.setDescription(caseRepo.getDescription());
-                if (caseRepo.getSubject() != null) {
-                    caseListView.setSubject(caseRepo.getSubject().getIdentifier());
-                }
-                caseListView.setOpenDate(caseRepo.getOpenDate());
-                caseListView.setPendingResponse(caseRepo.getPendingResponse());
-                caseListView.setOpen(caseRepo.getOpen());
-                if (caseRepo.getAssignee() != null) {
-                    caseListView.setAssignee(caseRepo.getAssignee().getUsername());
-                }
-                if (caseRepo.getPriority() != null) {
-                    caseListView.setPriority(caseRepo.getPriority().name());
-                }
-                cases.add(caseListView);
-            }
-        } catch (Exception e) {
-            log.error("Unexpected error", e);
-        }
-        return cases;
-    }
-
     public List<CaseListView> findAll(CasesFilterRequest filterRequest) {
         List<CaseListView> cases = new ArrayList<>();
 
@@ -113,13 +76,9 @@ public class CaseRepository {
         return results;
     }
 
-    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
-            String subject, String title, String description, String pendingResponse, String status,
-            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
+    public JsonArray findAllAsJsonObject(PageRequest pageRequest, CasesFilterRequest filterRequest) {
         JsonObject jsonObject = caseElasticService.getCasesAsJsonObject(pageRequest.getOffset(),
-                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId,
-                segmentId, subject, title, description, pendingResponse, status, fromOpenDate, toOpenDate,
-                teamsToFilter, userName, userSelected);
+                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), filterRequest);
         return jsonObject.getAsJsonObject("hits").getAsJsonArray("hits");
     }
 
