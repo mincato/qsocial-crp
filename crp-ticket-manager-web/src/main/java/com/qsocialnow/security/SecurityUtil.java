@@ -32,4 +32,9 @@ public class SecurityUtil {
         return userSessionService.isAnalyticsAllowed();
     }
 
+    public static boolean isOdatech() {
+        UserSessionService userSessionService = new UserSessionService();
+        return userSessionService.isOdatech();
+    }
+
 }
