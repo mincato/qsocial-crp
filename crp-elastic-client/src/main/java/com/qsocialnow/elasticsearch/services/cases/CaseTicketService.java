@@ -55,8 +55,8 @@ public class CaseTicketService extends CaseIndexService {
         repository.closeClient();
         return caseDocument;
     }
-	
-	public List<Case> getCasesByFilters(CasesFilterRequest filterRequest) {
+
+    public List<Case> getCasesByFilters(CasesFilterRequest filterRequest) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
@@ -87,7 +87,7 @@ public class CaseTicketService extends CaseIndexService {
         return cases;
     }
 
-	private void configureFilters(CasesFilterRequest filterRequest, Map<String, String> searchValues,
+    private void configureFilters(CasesFilterRequest filterRequest, Map<String, String> searchValues,
             List<TermFieldFilter> termFilters, List<RangeFilter> rangeFilters,
             List<ShouldConditionsFilter> shouldConditionsFilters,
             List<ShouldConditionsFilter> shouldTermsConditionsFilters,
@@ -241,46 +241,45 @@ public class CaseTicketService extends CaseIndexService {
                     shouldConditionsRegexpFilters.add(authorsFilterLang);
                 }
             }
-			
-			// mentions
+
+            // mentions
             List<WordsListFilterBean> mentionsList = getWordsByType(wordsList, WordFilterType.MENTION);
-                if (mentionsList != null && !mentionsList.isEmpty()) {
-                    if (mentionsList.size() > 1) {
-                        ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
-                        for (WordsListFilterBean textWord : mentionsList) {
-                            String mentions = textWord.getPalabra().replaceAll("@", "");
-                            ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.menciones", mentions);
-                            hashTermsFilterText.addShouldCondition(shouldFilter);
-                        }
-                        shouldTermsConditionsFilters.add(hashTermsFilterText);
-                    } else {
-                        String mentions = mentionsList.get(0).getPalabra().replaceAll("@", "");
-                        TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.menciones", mentions);
-                        termFilter.setNeedSplit(true);
-                        termFilters.add(termFilter);
+            if (mentionsList != null && !mentionsList.isEmpty()) {
+                if (mentionsList.size() > 1) {
+                    ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
+                    for (WordsListFilterBean textWord : mentionsList) {
+                        String mentions = textWord.getPalabra().replaceAll("@", "");
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.menciones", mentions);
+                        hashTermsFilterText.addShouldCondition(shouldFilter);
                     }
+                    shouldTermsConditionsFilters.add(hashTermsFilterText);
+                } else {
+                    String mentions = mentionsList.get(0).getPalabra().replaceAll("@", "");
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.menciones", mentions);
+                    termFilter.setNeedSplit(true);
+                    termFilters.add(termFilter);
                 }
+            }
 
-                // hashtags
+            // hashtags
             List<WordsListFilterBean> hashTagsList = getWordsByType(wordsList, WordFilterType.HASHTAG);
-                if (hashTagsList != null && !hashTagsList.isEmpty()) {
-                    if (hashTagsList.size() > 1) {
-                        ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
-                        for (WordsListFilterBean textWord : hashTagsList) {
-                            String hashTags = textWord.getPalabra().replaceAll("#", "");
-                            ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.hashTags", hashTags);
-                            hashTermsFilterText.addShouldCondition(shouldFilter);
-                        }
-                        shouldTermsConditionsFilters.add(hashTermsFilterText);
-                    } else {
-                        String hashTags = hashTagsList.get(0).getPalabra().replaceAll("#", "");
-                        TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.hashTags", hashTags);
-                        termFilter.setNeedSplit(true);
-                        termFilters.add(termFilter);
+            if (hashTagsList != null && !hashTagsList.isEmpty()) {
+                if (hashTagsList.size() > 1) {
+                    ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
+                    for (WordsListFilterBean textWord : hashTagsList) {
+                        String hashTags = textWord.getPalabra().replaceAll("#", "");
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.hashTags", hashTags);
+                        hashTermsFilterText.addShouldCondition(shouldFilter);
                     }
-
+                    shouldTermsConditionsFilters.add(hashTermsFilterText);
+                } else {
+                    String hashTags = hashTagsList.get(0).getPalabra().replaceAll("#", "");
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.hashTags", hashTags);
+                    termFilter.setNeedSplit(true);
+                    termFilters.add(termFilter);
                 }
-			
+
+            }
 
         }
 
@@ -334,14 +333,14 @@ public class CaseTicketService extends CaseIndexService {
         return rangeFilter;
     }
 
-   private List<WordsListFilterBean> getWordsByType(WordsListFilterBean[] wordsList, WordFilterType type) {
+    private List<WordsListFilterBean> getWordsByType(WordsListFilterBean[] wordsList, WordFilterType type) {
         List<WordsListFilterBean> words = Arrays.asList(wordsList);
         List<WordsListFilterBean> resultTextWords = words.stream()
                 .filter(word -> type.getName().equals(word.getTipo())).collect(Collectors.toList());
         return resultTextWords;
     }
 
-   public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder,
+    public JsonObject getCasesAsJsonObject(int from, int size, String sortField, boolean sortOrder,
             CasesFilterRequest filterRequest) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
@@ -372,7 +371,6 @@ public class CaseTicketService extends CaseIndexService {
         repository.closeClient();
         return jsonObject;
     }
-
 
     public String indexCase(Case document) {
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);

@@ -1,7 +1,6 @@
 package com.qsocialnow.services.impl;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,15 +10,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
+import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
-import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.ResultsService;
@@ -53,7 +51,7 @@ public class ResultsServiceImpl implements ResultsService {
     }
 
     @Override
-    public byte[] getReport(Map<String, String> filters, String language) {
+    public byte[] getReport(CasesFilterRequestReport filterRequestReport) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
@@ -61,17 +59,9 @@ public class ResultsServiceImpl implements ResultsService {
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
                     serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/resolutions/report");
 
-            if (filters != null) {
-                for (Map.Entry<String, String> filter : filters.entrySet()) {
-                    builder.queryParam(filter.getKey(), filter.getValue());
-                }
-            }
-            if (language != null) {
-                builder.queryParam("language", language);
-            }
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
-            byte[] data = restTemplate.getForObject(builder.toUriString(), byte[].class);
+            byte[] data = restTemplate.postForObject(builder.toUriString(), filterRequestReport, byte[].class);
 
             return data;
         } catch (Exception e) {
