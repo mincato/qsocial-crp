@@ -35,7 +35,7 @@ public class TriggersViewModel implements Serializable {
 
     private static final int ACTIVE_PAGE_DEFAULT = 0;
 
-    private static final String SELECT_ALL = "title";
+    private static final String SELECT_ALL = "selectall";
 
     private int pageSize = PAGE_SIZE_DEFAULT;
     private int activePage = ACTIVE_PAGE_DEFAULT;
@@ -80,7 +80,6 @@ public class TriggersViewModel implements Serializable {
         this.statusOptions = Arrays.asList(Status.values()).stream().map(status -> status.name())
                 .collect(Collectors.toList());
         this.statusOptions.add(0, SELECT_ALL);
-        this.status = SELECT_ALL;
         findTriggers(this.domain);
     }
 
