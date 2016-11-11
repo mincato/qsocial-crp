@@ -38,8 +38,6 @@ import com.qsocialnow.kafka.consumer.Consumer;
 @Component
 public class App implements Runnable {
 
-    private static final String RESPONSE_DETECTOR_CONSUMER_NAME = "RESPONSE_DETECTOR_CONSUMER";
-
     private static final Logger log = LoggerFactory.getLogger(App.class);
 
     @Autowired
@@ -104,6 +102,7 @@ public class App implements Runnable {
                 @Override
                 public void nodeChanged() throws Exception {
                     cacheManager.getCache(CacheConfig.USER_RESOLVERS_SOURCE_IDS_CACHE).clear();
+                    cacheManager.getCache(CacheConfig.USER_RESOLVERS_CACHE).clear();
                 }
             });
             userResolversNodeCache.start(true);
@@ -164,17 +163,18 @@ public class App implements Runnable {
     private void createEventHandlerResponseDetectorProcessor() {
         try {
             QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(
-                    StringUtils.join(new String[] { QueueType.EVENTS.type(), RESPONSE_DETECTOR_CONSUMER_NAME }, "_"),
+                    StringUtils.join(
+                            new String[] { QueueType.EVENTS.type(), Consumers.RESPONSE_DETECTOR_CONSUMER_NAME }, "_"),
                     queueConfig);
 
             EventHandlerProcessor eventHandlerProcessor = new EventHandlerProcessor(new Consumer(kafkaConfig,
-                    RESPONSE_DETECTOR_CONSUMER_NAME), messageResponseDetectorProcessor, queueService);
+                    Consumers.RESPONSE_DETECTOR_CONSUMER_NAME), messageResponseDetectorProcessor, queueService);
 
-            eventHandlerProcessors.put(RESPONSE_DETECTOR_CONSUMER_NAME, eventHandlerProcessor);
+            eventHandlerProcessors.put(Consumers.RESPONSE_DETECTOR_CONSUMER_NAME, eventHandlerProcessor);
             eventHandlerExecutor.execute(eventHandlerProcessor);
         } catch (Exception e) {
             log.error("There was an error creating the event handler processor for domain: "
-                    + RESPONSE_DETECTOR_CONSUMER_NAME, e);
+                    + Consumers.RESPONSE_DETECTOR_CONSUMER_NAME, e);
         }
     }
 

@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.elasticsearch.services.cases.CaseTicketService;
@@ -26,17 +27,11 @@ public class CaseRepository {
     @Autowired
     private CaseTicketService caseElasticService;
 
-    public List<CaseListView> findAll(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
-            String subject, String title, String pendingResponse, String priority, String status, String fromOpenDate,
-            String toOpenDate, List<String> teamsToFilter, String userName, String userSelected, String caseCategory,
-            String subjectCategory) {
+    public List<CaseListView> findAll(CasesFilterRequest filterRequest) {
         List<CaseListView> cases = new ArrayList<>();
 
         try {
-            List<Case> casesRepo = caseElasticService.getCases(pageRequest.getOffset(), pageRequest.getLimit(),
-                    pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId, segmentId, subject,
-                    title, pendingResponse, priority, status, fromOpenDate, toOpenDate, teamsToFilter, userName,
-                    userSelected, caseCategory, subjectCategory);
+            List<Case> casesRepo = caseElasticService.getCasesByFilters(filterRequest);
 
             for (Case caseRepo : casesRepo) {
                 CaseListView caseListView = new CaseListView();
@@ -81,13 +76,9 @@ public class CaseRepository {
         return results;
     }
 
-    public JsonArray findAllAsJsonObject(PageRequest pageRequest, String domainId, String triggerId, String segmentId,
-            String subject, String title, String description, String pendingResponse, String status,
-            String fromOpenDate, String toOpenDate, List<String> teamsToFilter, String userName, String userSelected) {
+    public JsonArray findAllAsJsonObject(PageRequest pageRequest, CasesFilterRequest filterRequest) {
         JsonObject jsonObject = caseElasticService.getCasesAsJsonObject(pageRequest.getOffset(),
-                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), domainId, triggerId,
-                segmentId, subject, title, description, pendingResponse, status, fromOpenDate, toOpenDate,
-                teamsToFilter, userName, userSelected);
+                pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), filterRequest);
         return jsonObject.getAsJsonObject("hits").getAsJsonArray("hits");
     }
 

@@ -39,12 +39,14 @@
 			    <thead>
 					<tr>
 					    <th>${labels.team.list.column.name}</th>
+					    <th>${labels.team.list.column.active}</th>
 					</tr>
 			    </thead>
 			    <tbody children="@bind(vm.teams)">
 			    	<template name="children">
 					<tr>
 						<td class="list-text-column"><a label="@load(each.name)" onClick="@command('openEdit', teamId=each.id)"> </a></td>
+						<td>${c:l(c:cat('team.active.',each.active))}</td>
 					</tr>
                		</template>
 				</tbody>

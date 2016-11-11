@@ -2,7 +2,6 @@
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
 
-	<!-- FILE: Appender for RequestInfo log -->
 	<appender name="fileAppender" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="file" value="logs/console.out" />
 		<param name="DatePattern" value="'.'yyyy-MM-dd" />
@@ -12,36 +11,51 @@
 				value="[%d{dd/MM/yyyy HH:mm:ss}] [%t] [%p] [%c]:%L - %m%n" />
 		</layout>
 	</appender>
+	
+    <!-- FILE: Appender for Events log -->
+    <appender name="eventAppender" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="logs/events.log" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <param name="append" value="true" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%d{dd/MM/yyyy HH:mm:ss}] %m%n%n" />
+        </layout>
+    </appender>	
 
-	<logger name="io.searchbox">
-		<level value="WARN" />
+	<logger name="io.searchbox" additivity="false">
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 	
-	<logger name="com.qsocialnow">
+	<logger name="com.qsocialnow" additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
-	<logger name="com.qsocialnow.elasticsearch">
+	<logger name="com.qsocialnow.elasticsearch" additivity="false">
 		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
-	<logger name="kafka">
-		<level value="WARN" />
+	<logger name="kafka" additivity="false">
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
-	<logger name="org.apache">
-		<level value="WARN" />
+	<logger name="org.apache" additivity="false">
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
-	<logger name="org.I0Itec">
-		<level value="WARN" />
+	<logger name="org.I0Itec" additivity="false">
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
+	
+    <logger name="eventLogger" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="eventAppender" />
+    </logger>	
 
 	<root>
 		<priority value="INFO" />

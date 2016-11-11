@@ -91,7 +91,7 @@ public class ActionRegistryService extends CaseIndexService {
         rangeFilters.add(rangeFilter);
 
         SearchResponse<ActionRegistry> response = repository.queryByFields(mapping, from, size, "action", true,
-                searchValues, rangeFilters, null);
+                searchValues, null, rangeFilters, null, null, null);
         List<ActionRegistry> registries = response.getSources();
 
         repository.closeClient();
@@ -118,5 +118,43 @@ public class ActionRegistryService extends CaseIndexService {
 
         repository.closeClient();
         return registries;
+    }
+
+    public ActionRegistry findOne(String actionRegistryId) {
+        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
+                elasticSearchCaseConfigurator);
+        Repository<ActionRegistryType> repository = esfactory.initManager();
+        repository.initClient();
+
+        ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
+        mapping.setIndex(this.getQueryIndex());
+        SearchResponse<ActionRegistry> response = repository.findByAlias(actionRegistryId, mapping);
+
+        ActionRegistry actionRegistryDocument = response.getSource();
+        repository.closeClient();
+        return actionRegistryDocument;
+    }
+
+    public String update(String caseId, ActionRegistry actionRegistry) {
+        RepositoryFactory<ActionRegistryType> esfactory = new RepositoryFactory<ActionRegistryType>(
+                elasticSearchCaseConfigurator);
+        Repository<ActionRegistryType> repository = esfactory.initManager();
+        repository.initClient();
+
+        ActionRegistryMapping mapping = ActionRegistryMapping.getInstance();
+
+        String indexName = this.getQueryIndex();
+        mapping.setIndex(indexName);
+
+        // searching to retrieve index value
+        SearchResponse<ActionRegistry> indexResponse = repository.findByAlias(actionRegistry.getId(), mapping);
+        mapping.setIndex(indexResponse.getIndex());
+
+        // index document
+        ActionRegistryType documentIndexed = mapping.getDocumentType(actionRegistry);
+        documentIndexed.setIdCase(caseId);
+        String response = repository.updateMapping(actionRegistry.getId(), mapping, documentIndexed);
+        repository.closeClient();
+        return response;
     }
 }

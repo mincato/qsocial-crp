@@ -92,6 +92,16 @@
    			<version>${spring.version}</version>
   		</dependency>
   		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+   			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+   			<version>${spring.version}</version>
+		</dependency>
+  		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>2.2.2</version>
@@ -145,7 +155,7 @@
 		
 	</dependencies>
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>qaction</finalName>
 		
 		<plugins>
 			<!-- Run with Jetty -->
@@ -154,6 +164,12 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>8.1.16.v20140903</version>
 				<configuration>
+				 	<systemProperties>
+            			<systemProperty>
+            				<name>spring.profiles.active</name>
+            				<value>development</value>
+        				</systemProperty>
+        			</systemProperties>
 					  <webAppConfig>
                                 <contextPath>/${project.artifactId}</contextPath>
                                 <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>

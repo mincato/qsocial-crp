@@ -30,7 +30,7 @@ public class QueueConfigurator implements RefreshableConfig<QueueConfigurator> {
 
     private int initialDelay = INITIAL_DELAY;
 
-    private int totalItemCounts = TOTAL_ITEM_COUNTS;
+    private Integer totalItemCounts;
 
     private int totalFailItemCounts = TOTAL_FAIL_ITEM_COUNTS;
 
@@ -74,7 +74,7 @@ public class QueueConfigurator implements RefreshableConfig<QueueConfigurator> {
         return totalFailItemCounts;
     }
 
-    public int getTotalItemCounts() {
+    public Integer getTotalItemCounts() {
         return totalItemCounts;
     }
 

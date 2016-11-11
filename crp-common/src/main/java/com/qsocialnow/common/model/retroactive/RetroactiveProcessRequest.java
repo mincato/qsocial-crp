@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.qsocialnow.common.model.config.Category;
 import com.qsocialnow.common.model.config.CategoryGroup;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilter;
+import com.qsocialnow.common.model.filter.RangeRequest;
+import com.qsocialnow.common.model.filter.WordsFilterRequestBean;
 
 public class RetroactiveProcessRequest {
 

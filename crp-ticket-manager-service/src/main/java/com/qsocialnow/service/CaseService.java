@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRegistry;
+import com.qsocialnow.common.model.cases.ActionRegistryStatus;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Domain;
 import com.qsocialnow.common.model.config.Resolution;
@@ -33,6 +35,7 @@ import com.qsocialnow.persistence.DomainRepository;
 import com.qsocialnow.persistence.TeamRepository;
 import com.qsocialnow.persistence.TriggerRepository;
 import com.qsocialnow.service.action.Action;
+import com.qsocialnow.service.action.AsyncAction;
 
 @Service
 public class CaseService {
@@ -57,20 +60,14 @@ public class CaseService {
     @Resource
     private Map<ActionType, Action> actions;
 
-    public PageResponse<CaseListView> findAll(Integer pageNumber, Integer pageSize, String sortField, String sortOrder,
-            String domainId, String triggerId, String segmentId, String subject, String title, String pendingResponse,
-            String priority, String status, String fromOpenDate, String toOpenDate, String userName,
-            String userSelected, String caseCategory, String subjectCategory) {
-        PageRequest pageRequest = new PageRequest(pageNumber, pageSize, sortField);
-        pageRequest.setSortOrder(Boolean.parseBoolean(sortOrder));
-
+    public PageResponse<CaseListView> findAllByFilters(CasesFilterRequest filterRequest) {
         List<String> teamsToFilter = new ArrayList<String>();
-        List<Team> teams = teamRepository.findTeams(userName);
+        List<Team> teams = teamRepository.findTeams(filterRequest.getUserName());
         if (teams != null) {
             for (Team team : teams) {
                 List<User> users = team.getUsers();
                 for (User user : users) {
-                    if (user.getUsername().equals(userName)) {
+                    if (user.getUsername().equals(filterRequest.getUserName())) {
                         if (user.isCoordinator()) {
                             teamsToFilter.add(team.getId());
                         }
@@ -78,12 +75,10 @@ public class CaseService {
                 }
             }
         }
-        log.info("After process teams - trying to retrieve cases from :" + userName);
-        List<CaseListView> cases = repository.findAll(pageRequest, domainId, triggerId, segmentId, subject, title,
-                pendingResponse, priority, status, fromOpenDate, toOpenDate, teamsToFilter, userName, userSelected,
-                caseCategory, subjectCategory);
-
-        PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, pageNumber, pageSize);
+        filterRequest.setTeamsToFilter(teamsToFilter);
+        List<CaseListView> cases = repository.findAll(filterRequest);
+        PageResponse<CaseListView> page = new PageResponse<CaseListView>(cases, filterRequest.getPageRequest()
+                .getPageNumber(), filterRequest.getPageRequest().getPageSize());
         return page;
     }
 
@@ -120,7 +115,7 @@ public class CaseService {
             if (caseObject != null) {
                 Action action = actions.get(actionRequest.getActionType());
                 if (action != null) {
-                    action.execute(caseObject, actionRequest.getParameters());
+                    AsyncAction asyncAction = action.execute(caseObject, actionRequest.getParameters());
                     boolean updated = repository.update(caseObject);
                     if (!updated) {
                         log.error("There was an error trying to update the case");
@@ -128,6 +123,9 @@ public class CaseService {
                     }
                     ActionRegistry actionRegistry = createActionRegistry(actionRequest);
                     actionRegistryRepository.create(caseId, actionRegistry);
+                    if (asyncAction != null) {
+                        asyncAction.postProcess(caseObject, actionRequest.getParameters(), actionRegistry);
+                    }
                 } else {
                     log.warn("The action does not exist");
                     throw new RuntimeException("The action does not exist");
@@ -198,6 +196,10 @@ public class CaseService {
             Object comment = actionRequest.getParameters().get(ActionParameter.COMMENT);
             if (comment != null) {
                 actionRegistry.setComment((String) comment);
+            }
+            Object status = actionRequest.getParameters().get(ActionParameter.ACTION_REGISTRY_STATUS);
+            if (status != null) {
+                actionRegistry.setStatus((ActionRegistryStatus) status);
             }
         }
         return actionRegistry;

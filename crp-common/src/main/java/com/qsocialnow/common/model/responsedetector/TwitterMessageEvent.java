@@ -4,18 +4,15 @@ public class TwitterMessageEvent {
 
     private final String caseId;
 
-    private final String eventId;
-
     private final String userId;
 
     private final String replyMessageId;
 
     private final String messageId;
 
-    public TwitterMessageEvent(final String caseId, final String eventId, final String userId,
-            final String replyMessageId, final String messageId) {
+    public TwitterMessageEvent(final String caseId, final String userId, final String replyMessageId,
+            final String messageId) {
         this.caseId = caseId;
-        this.eventId = eventId;
         this.userId = userId;
         this.replyMessageId = replyMessageId;
         this.messageId = messageId;
@@ -23,10 +20,6 @@ public class TwitterMessageEvent {
 
     public String getCaseId() {
         return caseId;
-    }
-
-    public String getEventId() {
-        return eventId;
     }
 
     public String getUserId() {
@@ -43,8 +36,7 @@ public class TwitterMessageEvent {
 
     @Override
     public int hashCode() {
-        return caseId.hashCode() + eventId.hashCode() + userId.hashCode() + replyMessageId.hashCode()
-                + messageId.hashCode();
+        return caseId.hashCode() + userId.hashCode() + replyMessageId.hashCode() + messageId.hashCode();
     }
 
     @Override
@@ -59,9 +51,6 @@ public class TwitterMessageEvent {
             return false;
 
         TwitterMessageEvent other = (TwitterMessageEvent) obj;
-
-        if (!eventId.equals(other.eventId))
-            return false;
 
         if (!caseId.equals(other.caseId))
             return false;

@@ -24,6 +24,7 @@
     	<entry key="#{T(com.qsocialnow.eventresolver.config.CacheEnum).DOMAINS_CACHE}" value="${app.cache.domains.config.path}"/>
     	<entry key="#{T(com.qsocialnow.eventresolver.config.CacheEnum).USER_RESOLVERS_CACHE}" value="${app.cache.userResolvers.config.path}"/>
     	<entry key="#{T(com.qsocialnow.eventresolver.config.CacheEnum).USER_RESOLVERS_SOURCE_IDS_CACHE}" value="${app.cache.userResolvers.source.ids.config.path}"/>
+    	<entry key="#{T(com.qsocialnow.eventresolver.config.CacheEnum).TEAMS_CACHE}" value="${app.cache.teams.config.path}"/>
 	</util:map>
 	
 </beans>

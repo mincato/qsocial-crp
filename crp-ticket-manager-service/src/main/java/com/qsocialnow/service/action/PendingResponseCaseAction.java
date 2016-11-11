@@ -11,8 +11,9 @@ import com.qsocialnow.common.model.cases.Case;
 public class PendingResponseCaseAction implements Action {
 
     @Override
-    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public AsyncAction execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         caseObject.setPendingResponse(true);
+        return null;
     }
 
 }

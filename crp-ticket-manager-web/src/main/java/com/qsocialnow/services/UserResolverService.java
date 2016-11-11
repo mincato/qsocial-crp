@@ -19,6 +19,8 @@ public interface UserResolverService {
 
     List<UserResolverListView> findAll(Map<String, String> filters);
 
+    List<UserResolverListView> findAllActive();
+
     void delete(String id);
 
 }

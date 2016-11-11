@@ -108,6 +108,15 @@ public class Producer {
     public void close() {
         if (producer != null)
             producer.close();
+        if (queueConsumer != null) {
+            queueConsumer.stopConsumer();
+        }
+        if (queueProducer != null) {
+            queueProducer.stopProducer();
+        }
+        if (queueService != null) {
+            queueService.shutdownQueueService();
+        }
         if (queueExecutor != null) {
             queueExecutor.shutdown();
         }

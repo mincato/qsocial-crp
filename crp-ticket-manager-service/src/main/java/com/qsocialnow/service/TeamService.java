@@ -3,9 +3,12 @@ package com.qsocialnow.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.config.Team;
@@ -27,6 +30,12 @@ public class TeamService {
 
     @Autowired
     private UserResolverRepository userResolverRepository;
+
+    @Autowired
+    private CuratorFramework zookeeperClient;
+
+    @Value("${app.teams.path}")
+    private String teamsPath;
 
     public Team createTeam(Team team) {
         Team teamSaved = null;
@@ -64,6 +73,16 @@ public class TeamService {
         }
     }
 
+    public List<TeamListView> findAllActive() {
+        try {
+            List<TeamListView> teams = teamRepository.findAllActive();
+            return teams;
+        } catch (Throwable e) {
+            log.error("There was an error finding teams", e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public Team findOne(String teamId) {
         Team team = teamRepository.findOne(teamId);
         return team;
@@ -74,11 +93,23 @@ public class TeamService {
         try {
             team.setId(teamId);
             teamSaved = teamRepository.update(team);
+            updateZookeeperTeamNode(teamId);
         } catch (Exception e) {
             log.error("There was an error updating team: " + team.getName(), e);
             throw new RuntimeException(e.getMessage());
         }
         return teamSaved;
+    }
+
+    private void updateZookeeperTeamNode(String teamId) throws Exception {
+        String path = teamsPath.concat(teamId);
+        Stat stat = zookeeperClient.checkExists().forPath(path);
+        if (stat == null) {
+            zookeeperClient.create().forPath(path);
+        } else {
+            zookeeperClient.setData().forPath(path);
+        }
+
     }
 
     public List<UserResolver> findUserResolvers(String teamId, Boolean status, String sourceInput) {

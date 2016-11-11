@@ -36,14 +36,14 @@ public class AdministrativeUnitDetectionCriteriaFilter implements DetectionCrite
                 && equalsAttribute(message.getNeighborhood(), admUnitFilter.getNeighborhood());
     }
 
-    private boolean equalsAttribute(Long filterAttribute, Long messageAttribute) {
-        boolean areEquals;
-        if (filterAttribute != null) {
-            areEquals = filterAttribute.equals(messageAttribute);
-        } else {
-            areEquals = messageAttribute == null;
+    private boolean equalsAttribute(Long messageAttribute, Long filterAttribute) {
+        if (filterAttribute == null) {
+            return true;
         }
-        return areEquals;
+        if (messageAttribute == null) {
+            return false;
+        }
+        return filterAttribute.equals(messageAttribute);
     }
 
     private boolean messageHasAdmUnit(NormalizedInputBeanDocument message) {

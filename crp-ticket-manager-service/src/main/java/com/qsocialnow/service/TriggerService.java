@@ -88,6 +88,11 @@ public class TriggerService {
         return trigger;
     }
 
+    public Trigger findOneWithActiveSegments(String domainId, String triggerId) {
+        Trigger trigger = triggerRepository.findWithActiveSegments(triggerId);
+        return trigger;
+    }
+
     public Segment findSegment(String domainId, String triggerId, String segmentId) {
         Segment segment = triggerRepository.findSegment(segmentId);
         return segment;
@@ -96,6 +101,15 @@ public class TriggerService {
     public List<SegmentListView> findSegments(String domainId, String triggerId) {
         try {
             return triggerRepository.findSegments(triggerId);
+        } catch (Exception e) {
+            log.error("There was an error finding segments");
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public List<SegmentListView> findActiveSegments(String domainId, String triggerId) {
+        try {
+            return triggerRepository.findActiveSegments(triggerId);
         } catch (Exception e) {
             log.error("There was an error finding segments");
             throw new RuntimeException(e.getMessage());

@@ -11,6 +11,7 @@ public class SessionHandler {
     private LoginConfig loginConfig;
 
     public void logout() {
+        Executions.getCurrent().getSession().invalidate();
         Executions.sendRedirect(loginConfig.getLoginUrl());
     }
 }

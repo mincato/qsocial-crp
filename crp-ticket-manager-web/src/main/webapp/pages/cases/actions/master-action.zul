@@ -48,4 +48,10 @@
 	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'CHANGE_PRIORITY')">
 		<include src="/pages/cases/actions/change-priority-action.zul"/>
 	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'MODIFY_SUBJECT')">
+		<include src="/pages/cases/actions/modify-subject-action.zul"/>
+	</div>
+	<div visible="@load(vm.selectedAction ne null and vm.selectedAction eq 'REGISTER_SUBJECT_REPLY')">
+		<include src="/pages/cases/actions/register-subject-reply-action.zul"/>
+	</div>
 </div>

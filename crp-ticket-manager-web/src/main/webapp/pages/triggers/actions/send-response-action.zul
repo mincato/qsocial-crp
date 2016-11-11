@@ -9,7 +9,7 @@
 			<x:div sclass="@load(empty vmsgs[responseText] ? 'form-group' : 'form-group has-error')">
 				<x:label sclass="@load(sendResponseActionVm.anyTwitterSource ? 'hidden': 'control-label')" >${labels.trigger.actions.response.text}:</x:label>
 				<x:label sclass="@load(sendResponseActionVm.anyTwitterSource ? 'control-label' : 'hidden')">${labels.trigger.actions.response.twitter.warning}:</x:label>
-				<textbox id="responseText" type="text" class="form-control" maxlength="@load(sendResponseActionVm.textMaxlength)"
+				<textbox id="responseText" type="text" class="form-control" 
 	    			value="@bind(fxSendResponseAction.text) @validator('com.qsocialnow.validators.LocaleBeanValidator')"></textbox>
 	    		<x:span sclass="@load(empty vmsgs[responseText] ? 'hidden' : 'help-block')">
 					<label value="@load(vmsgs[responseText])" />
@@ -30,7 +30,7 @@
 					</div>
 					<div sclass="form-group">
 						<n:label class="control-label">${labels.cases.actions.response.userResolver}:</n:label>
-						<selectbox sclass="form-control" model="@load(each.userResolverOptions)"
+						<selectbox sclass="form-control" model="@load(sendResponseActionVm.getUserResolversBySource(each.source))"
 							selectedItem="@bind(each.selectedUserResolver)">
 						    <template name="model">
 								<label value="${each.identifier}" />

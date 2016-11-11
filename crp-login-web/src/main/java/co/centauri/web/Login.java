@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
 
 	private static final Logger LOGGER = Logger.getLogger(Login.class);
 
-	private static final String URL_PATTERN = "{0}://{1}:{2}/{3}?token={4}";
+	private static final String URL_PATTERN = "{0}://{1}:{2}/{3}?_token={4}";
 
 	private TokenHandler tokenHandler;
 
@@ -109,7 +109,7 @@ public class Login extends HttpServlet {
 		String scheme = request.getScheme();
 		String serverName = request.getServerName();
 		String serverPort = Integer.valueOf(request.getServerPort()).toString();
-		String contextPath = "crp-ticket-manager-web";
+		String contextPath = "qaction";
 
 		return MessageFormat.format(URL_PATTERN, scheme, serverName, serverPort, contextPath, shortToken);
 	}

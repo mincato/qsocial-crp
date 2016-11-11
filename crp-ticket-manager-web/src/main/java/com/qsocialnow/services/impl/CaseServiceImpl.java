@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -28,8 +27,9 @@ import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
+import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.config.Resolution;
-import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
 import com.qsocialnow.services.CaseService;
@@ -51,44 +51,23 @@ public class CaseServiceImpl implements CaseService {
     @Autowired
     private UserSessionService userSessionService;
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     @Override
-    public PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters) {
-
-        String userName = userSessionService.getUsername();
-        boolean isAdmin = userSessionService.isAdmin();
-
+    public PageResponse<CaseListView> findAll(CasesFilterRequest filterRequest) {
         try {
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-
-            UriComponentsBuilder builder = UriComponentsBuilder
-                    .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl))
-                    .queryParam("pageNumber", pageRequest.getPageNumber())
-                    .queryParam("pageSize", pageRequest.getPageSize())
-                    .queryParam("sortField", pageRequest.getSortField())
-                    .queryParam("sortOrder", pageRequest.getSortOrder());
-
-            if (filters != null) {
-                for (Map.Entry<String, String> filter : filters.entrySet()) {
-                    builder.queryParam(filter.getKey(), filter.getValue());
-                }
-            }
-
+            String userName = userSessionService.getUsername();
+            boolean isAdmin = userSessionService.isAdmin();
             // user
             if (!isAdmin) {
-                builder.queryParam("userName", userName);
+                filterRequest.setUserName(userName);
             }
-
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<PageResponse> response = restTemplate
-                    .getForEntity(builder.toUriString(), PageResponse.class);
-
-            PageResponse<CaseListView> cases = response.getBody();
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            PageResponse<CaseListView> cases = restTemplate.postForObject(serviceUrlResolver.resolveUrl(caseServiceUrl)
+                    + "/list", filterRequest, PageResponse.class);
             return cases;
+
         } catch (Exception e) {
-            log.error("There was an error while trying to call case service", e);
+            log.error("There was an error while trying to call retroactive service", e);
             throw new RuntimeException(e);
         }
     }
@@ -176,29 +155,34 @@ public class CaseServiceImpl implements CaseService {
     }
 
     @Override
-    public byte[] getReport(Map<String, String> filters, String language) {
+    public byte[] getReport(CasesFilterRequest filterRequest, String language, String timeZone) {
         try {
+            String userName = userSessionService.getUsername();
+            boolean isAdmin = userSessionService.isAdmin();
+            // user
+            if (!isAdmin) {
+                filterRequest.setUserName(userName);
+            }
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
                     serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/report");
 
-            if (filters != null) {
-                for (Map.Entry<String, String> filter : filters.entrySet()) {
-                    builder.queryParam(filter.getKey(), filter.getValue());
-                }
-            }
-            builder.queryParam("language", language);
+            CasesFilterRequestReport filterRequestReport = new CasesFilterRequestReport();
+            filterRequestReport.setFilterRequest(filterRequest);
+            filterRequestReport.setLanguage(language);
+            filterRequestReport.setTimeZone(timeZone);
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
-            byte[] data = restTemplate.getForObject(builder.toUriString(), byte[].class);
-
+            byte[] data = restTemplate.postForObject(builder.toUriString(), filterRequestReport, byte[].class);
             return data;
+
         } catch (Exception e) {
             log.error("There was an error while trying to call case service", e);
             throw new RuntimeException(e);
         }
+
     }
 
     @Override

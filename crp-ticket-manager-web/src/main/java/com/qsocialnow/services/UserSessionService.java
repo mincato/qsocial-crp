@@ -76,4 +76,12 @@ public class UserSessionService {
         return null;
     }
 
+    public boolean isOdatech() {
+        UserData userData = getUserData();
+        if (userData == null) {
+            throw new AuthorizationException();
+        }
+        return userData.isOdatech();
+    }
+
 }
