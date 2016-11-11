@@ -95,6 +95,31 @@ router.get('/cases/results', function (req, res) {
 	  caseService.getResults(domainId,asyncResponse);
 });
 
+router.get('/cases/map', function (req, res) {
+	function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	    	res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
+	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+	  
+	  var caseMapService = javaContext.getBeanSync("caseMapService");
+	  caseMapService.getGeoJson(pageNumber, pageSize, asyncResponse);
+});
+
 router.post('/cases/list', function (req, res) {
   function asyncResponse(err,responseCases) {
     var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();

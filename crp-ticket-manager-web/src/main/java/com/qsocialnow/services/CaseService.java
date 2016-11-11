@@ -23,6 +23,6 @@ public interface CaseService {
 
     byte[] getReport(CasesFilterRequest filterRequest, String language, String timeZone);
 
-    String findGeoJson();
+    String calculateGeoJson(int pageNumber, int pageSize);
 
 }

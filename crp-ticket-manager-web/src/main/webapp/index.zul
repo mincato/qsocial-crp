@@ -1,9 +1,7 @@
 <?init class="com.qsocialnow.handler.AjaxAccessDeniedHandler"?>
-<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
 <?init class="com.qsocialnow.handler.NotificationHandler"?>
 
 <?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
-<?link href="/vendor/bootstrap/bootstrap-social.css" rel="stylesheet"?>
 <?link href="/assets/css/style.css" rel="stylesheet"?>
 <?link href="/assets/css/footer.css" rel="stylesheet"?>
 <?link href="/assets/css/preloader.css" rel="stylesheet"?>
@@ -14,9 +12,9 @@
 <?link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
 <?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
 <?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
-
 <zk xmlns:n="native">
 	<div class="wrapper wrapper-serie dashboard">
+
 		<!-- HEADER -->
 		<include src="/assets/core/header.zul" />
 		<!-- Header elements are fetched via ajax. Go to assets/core/header.html to edit. -->
@@ -30,7 +28,12 @@
 		<div class="main">
 			<!-- CONTENT -->
 			<n:div id="content">
-				<include src="/pages/map/show-map.zul" />
+				<include src="/pages/cases/list/list-cases.zul" />
+				<x:div viewModel="@id('vm') @init('com.qsocialnow.viewmodel.HomeViewModel')" xmlns:x="xhtml">
+					<vbox vflex="1" hflex="1" align="center" pack="center" spacing="20px" >
+						<label value="Version: ${vm.applicationVersion.version} - Build: ${vm.applicationVersion.build} - Branch: ${vm.applicationVersion.branch}" sclass="head1"/>
+					</vbox>
+				</x:div>				
 			</n:div><!-- content -->
 			<!-- CONTENT -->
 		</div><!-- main -->
@@ -40,9 +43,7 @@
 	<!-- FOOTER -->
 	<include src="/assets/core/footer.html" />
 	<!-- FOOTER -->
-
 	<!-- REQUIRED SCRIPTS -->
 	<?script src="/vendor/js/required.min.js" type="text/javascript" ?>
 	<?script src="/assets/js/quarca.js" type="text/javascript" ?>
-	
 </zk>

@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.CaseLocationView;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
@@ -106,5 +107,29 @@ public class CaseRepository {
         String id = caseElasticService.update(caseObject);
         return id != null;
     }
+
+	public List<CaseLocationView> findCasesLocations(PageRequest pageRequest) {
+		 List<CaseLocationView> cases = new ArrayList<>();
+
+	        try {
+	        	CasesFilterRequest filterRequest = new CasesFilterRequest();
+	        	filterRequest.setPageRequest(pageRequest);
+	        	List<Case> casesRepo = caseElasticService.getCasesByFilters(filterRequest);
+
+	            for (Case caseRepo : casesRepo) {
+	            	if (caseRepo.getTriggerEvent() != null) {
+		                CaseLocationView caseView = new CaseLocationView();
+		                caseView.setId(caseRepo.getId());
+		                caseView.setLocation(caseRepo.getTriggerEvent().getLocation() != null ? caseRepo.getTriggerEvent().getLocation() : null);
+		                caseView.setLocationMethod(caseRepo.getTriggerEvent().getLocationMethod() != null ? caseRepo.getTriggerEvent().getLocationMethod() : null );
+		                caseView.setOriginalLocation(caseRepo.getTriggerEvent().getOriginalLocation() != null ? caseRepo.getTriggerEvent().getOriginalLocation() : null);
+		                cases.add(caseView);
+	            	}
+	            }
+	        } catch (Exception e) {
+	            log.error("Unexpected error", e);
+	        }
+	        return cases;
+	}
 
 }

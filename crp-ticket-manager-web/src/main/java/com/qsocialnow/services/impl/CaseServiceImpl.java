@@ -1,12 +1,9 @@
 package com.qsocialnow.services.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
@@ -186,13 +184,18 @@ public class CaseServiceImpl implements CaseService {
     }
 
     @Override
-    public String findGeoJson() {
-        try {
-            InputStream systemResourceAsStream = getClass().getResourceAsStream("/mocks/geo.json");
-            return IOUtils.toString(systemResourceAsStream, "UTF-8");
-        } catch (IOException ex) {
-            return null;
-        }
+    public String calculateGeoJson(int pageNumber, int pageSize) {
+       try {
+    		 UriComponentsBuilder builder = UriComponentsBuilder
+    	                .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/map").queryParam("pageNumber", pageNumber)
+                        .queryParam("pageSize", pageSize);
+    	     RestTemplate restTemplate = RestTemplateFactory.createRestTemplate(); 
+    	     String geoJson = restTemplate.getForObject(builder.toUriString(), String.class);
+             return geoJson.toString();
+         } catch (Exception e) {
+             log.error("There was an error while trying to call retroactive service", e);
+             throw new RuntimeException(e);
+         }
     }
 
 }

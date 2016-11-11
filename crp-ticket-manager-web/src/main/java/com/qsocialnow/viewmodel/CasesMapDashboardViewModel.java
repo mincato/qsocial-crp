@@ -104,7 +104,7 @@ public class CasesMapDashboardViewModel implements Serializable {
     @Command
     @NotifyChange("geoJson")
     public void update() {
-        geoJson = caseService.findGeoJson();
+        geoJson = caseService.calculateGeoJson(0, 1000);
     }
 
     public String getGeoJson() {
