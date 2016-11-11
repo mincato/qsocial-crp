@@ -109,7 +109,7 @@ public class Login extends HttpServlet {
 		String scheme = request.getScheme();
 		String serverName = request.getServerName();
 		String serverPort = Integer.valueOf(request.getServerPort()).toString();
-		String contextPath = "crp-ticket-manager-web";
+		String contextPath = "qaction";
 
 		return MessageFormat.format(URL_PATTERN, scheme, serverName, serverPort, contextPath, shortToken);
 	}
