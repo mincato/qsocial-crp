@@ -66,8 +66,8 @@
 					</div>
   				</n:div>
   				<div class="modal-footer">
-  					<button disabled="@load(!empty vmsgs[thematics] or !empty vmsgs[name])" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
-  					<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.cancel}"/>
+  					<button autodisable="self" disabled="@load(!empty vmsgs[thematics] or !empty vmsgs[name])" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
+  					<button autodisable="self" zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.cancel}"/>
   				</div>
 			</x:div>
 		</n:div>

@@ -334,7 +334,7 @@
 	            <n:div class="col-md-1">
 	               <div zclass="input-group input-group-sm">
                       <span zclass="input-group-btn">
-                          <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+                          <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
                       </span>
                    </div>
                 </n:div>
@@ -388,7 +388,7 @@
 				</div>
 				
 				<div class="text-center" zclass="@bind(vm.moreResults? 'more-results':'hidden')">
-					<a style="text-decoration:none" onClick="@command('moreResults')"  >
+					<a autodisable="self" style="text-decoration:none" onClick="@command('moreResults')"  >
 			 			${labels.app.pagination.moreResults}
 					</a>
 				</div>
@@ -400,7 +400,7 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<div class="form-group text-center">
-					<button href="/pages/cases/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>	
+					<button autodisable="self" href="/pages/cases/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>	
 				</div>
 			</div>
 		</n:div>

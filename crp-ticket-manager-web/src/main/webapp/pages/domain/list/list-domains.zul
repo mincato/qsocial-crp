@@ -14,7 +14,7 @@
 				<div zclass="input-group input-group-sm">
 					  <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" />
 						<span zclass="input-group-btn">
-						    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+						    <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
 						</span>
 		    	</div>
                </n:div>
@@ -59,7 +59,7 @@
 			</table>
 		  </div>
 			<div class="text-center" zclass="@bind(vm.moreResults?'more-results':'hidden')">
-				<a style="text-decoration:none" onClick="@command('moreResults')"  >
+				<a autodisable="self" style="text-decoration:none" onClick="@command('moreResults')"  >
 				 	${labels.app.pagination.moreResults}
 				</a>
 			</div>

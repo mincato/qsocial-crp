@@ -49,9 +49,9 @@
 						src="/pages/subject-category-set/edit-categories.zul" />
 					<n:br />
 					<div class="form-group text-center">
-						<button onClick="@command('save')"
+						<button autodisable="self" onClick="@command('save')"
 							label="${labels.app.button.save}" zclass="btn btn-success" />
-						<button href="/pages/subject-category-set/list/index.zul"
+						<button autodisable="self" href="/pages/subject-category-set/list/index.zul"
 							label="${labels.app.button.back}" zclass="btn btn-default"/>
 					</div>
 				</x:form>

@@ -34,8 +34,8 @@
 				</div>
 			</n:div>
 			<n:div class="modal-footer">
-				<button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
-				<button ca:data-dismiss="modal" label="${labels.app.button.cancel}" zclass="btn btn-default" />
+				<button autodisable="self" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-primary" />
+				<button autodisable="self" ca:data-dismiss="modal" label="${labels.app.button.cancel}" zclass="btn btn-default" />
 			</n:div>
 		</div>
 	</n:div>

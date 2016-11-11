@@ -27,7 +27,7 @@
 										sclass="@load(category.active ? '' : 'strikethrough')">
 										<label value="${category.description}"/>
 										<span>
-											<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', category = category, categorySetIndex = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)"/>
+											<button autodisable="self" type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', category = category, categorySetIndex = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)"/>
 										</span>
 									</x:span>
 								</template>
@@ -78,7 +78,7 @@
 										sclass="@load(category.active ? '' : 'strikethrough')">
 										<label value="${category.description}"/>
 										<span>
-											<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', category = category, categorySetIndex = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)"/>
+											<button autodisable="self" type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', category = category, categorySetIndex = forEachStatus.index, fxTagCaseAction = fxTagCaseAction)"/>
 										</span>
 									</x:span>
 								</template>
