@@ -423,7 +423,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                     String[] terms = termField.getValue().split("\\,");
                     BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
                     for (String term : terms) {
-                        QueryBuilder query = QueryBuilders.termQuery(termField.getField(), term);
+                        QueryBuilder query = QueryBuilders.termQuery(termField.getField(), term.trim());
                         boolFilterQueryBuilder.must(query);
                     }
                     boolQueryBuilder.filter(boolFilterQueryBuilder);
