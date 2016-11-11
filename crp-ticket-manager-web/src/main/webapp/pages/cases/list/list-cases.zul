@@ -94,12 +94,12 @@
                 </n:div>
                 <n:div class="form-group">
                     <div zclass="input-group input-group-sm">
-                          <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
+                          <datebox sclass="input-group" format="medium" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
                     </div>
                 </n:div>
                 <n:div class="form-group">
                    <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
-                       <datebox id="todate" sclass="input-group" format="short" value="@load(vm.toDate) @save(vm.toDate, before='search') @converter('com.qsocialnow.converters.DateInputConverter', endDay = true) @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.list.filter.todate}" />
+                       <datebox id="todate" sclass="input-group" format="medium" value="@load(vm.toDate) @save(vm.toDate, before='search') @converter('com.qsocialnow.converters.DateInputConverter', endDay = true) @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.list.filter.todate}" />
                     </x:div>
                 </n:div>
                 <n:div class="form-group">
@@ -238,7 +238,7 @@
                         <n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
                         <n:div class="col-sm-10">
                             <n:div class="col-sm-3"> 
-	                            <datebox id="startdate" sclass="input-group" format="short" 
+	                            <datebox id="startdate" sclass="input-group" format="medium" 
 	                            onChange="@command('initFilterStartTime', fxFilter = fxFilter)"
 	                            value="@bind(fxFilter.startDateTime) @converter('com.qsocialnow.converters.DateInputConverter')" />
 		                        <x:span sclass="@load(empty vmsgs[startdate] ? 'hidden' : 'help-block')">
@@ -254,7 +254,7 @@
                         <n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
                         <n:div class="col-sm-10">
                            <n:div class="col-sm-3">
-	                            <datebox id="enddate" sclass="input-group" format="short" 
+	                            <datebox id="enddate" sclass="input-group" format="medium" 
 	                            onChange="@command('initFilterEndTime', fxFilter = fxFilter)"
 	                            value="@load(fxFilter.endDateTime) 
 	                            @save(fxFilter.endDateTime, before='search')
