@@ -30,6 +30,9 @@ public class EventResolverConfig {
     @Value("${app.user.resolvers.path}")
     private String userResolversPath;
 
+    @Value("${app.teams.path}")
+    private String teamsPath;
+
     public String getZookeeperHost() {
         return zookeeperHost;
     }
@@ -60,6 +63,14 @@ public class EventResolverConfig {
 
     public String getUserResolversPath() {
         return userResolversPath;
+    }
+
+    public String getTeamsPath() {
+        return teamsPath;
+    }
+
+    public void setTeamsPath(String teamsPath) {
+        this.teamsPath = teamsPath;
     }
 
 }
