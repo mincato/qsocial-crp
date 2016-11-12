@@ -18,9 +18,9 @@
 				</n:div>
 				<include src="/pages/subject/edit-subject-body.zul"/>
 				<div class="modal-footer">
-					<button onClick="@command('save')"
+					<button autodisable="self" onClick="@command('save')"
 						label="${labels.app.button.save}" zclass="btn btn-primary" />
-					<button zclass="btn" sclass="btn-default"
+					<button autodisable="self" zclass="btn" sclass="btn-default"
 						ca:data-dismiss="modal" label="${labels.app.button.cancel}" />
 				</div>
 			</x:div>

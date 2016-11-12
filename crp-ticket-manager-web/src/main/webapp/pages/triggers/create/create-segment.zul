@@ -108,8 +108,8 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<div class="form-group text-center">
-			    	<button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
-			    	<button onClick="@command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
+			    	<button autodisable="self" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
+			    	<button autodisable="self" onClick="@command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
 				</div>
 			</div>
 		</n:div>

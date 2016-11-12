@@ -39,6 +39,12 @@
  		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
 	</bean>
+
+	<bean id="teamElasticService" class="com.qsocialnow.elasticsearch.services.config.TeamService">
+		<property name="indexConfiguration" ref="configurationIndexService"></property>
+		<property name="configurator" ref="elasticDomainConfig"></property>
+		<property name="userResolverService" ref="userResolverElasticService"></property>
+	</bean>
    
 	<bean id="triggerElasticService" class="com.qsocialnow.elasticsearch.services.config.TriggerService">
 		<property name="indexConfiguration" ref="configurationIndexService"></property>

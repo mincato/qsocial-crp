@@ -155,7 +155,7 @@
 		
 	</dependencies>
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>qaction</finalName>
 		
 		<plugins>
 			<!-- Run with Jetty -->
