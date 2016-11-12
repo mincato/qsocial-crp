@@ -88,6 +88,8 @@ public class CasesFilterRequest {
 
     private String username;
 
+    private String idResolution;
+
     private List<Category> categoriesFilter;
 
     public PageRequest getPageRequest() {
@@ -408,6 +410,14 @@ public class CasesFilterRequest {
 
     public void setCategoriesFilter(List<Category> categoriesFilter) {
         this.categoriesFilter = categoriesFilter;
+    }
+
+    public String getIdResolution() {
+        return idResolution;
+    }
+
+    public void setIdResolution(String idResolution) {
+        this.idResolution = idResolution;
     }
 
 }

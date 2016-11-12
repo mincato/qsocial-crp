@@ -59,13 +59,14 @@ public class CaseRepository {
         return cases;
     }
 
-    public List<ResultsListView> sumarizeResolvedByResolution(PageRequest pageRequest, String domainId) {
+    public List<ResultsListView> sumarizeResolvedByResolution(CasesFilterRequest filterRequest) {
         List<ResultsListView> results = new ArrayList<>();
         try {
-            Map<String, Long> resultsRepo = caseElasticService.getCasesCountByResolution(domainId);
+            Map<String, Long> resultsRepo = caseElasticService.getCasesCountByResolution(filterRequest);
             Set<String> resultKeys = resultsRepo.keySet();
             for (String key : resultKeys) {
                 ResultsListView resultView = new ResultsListView();
+                resultView.setIdResolution(key);
                 resultView.setResolution(key);
                 resultView.setTotal(resultsRepo.get(key));
                 results.add(resultView);
@@ -131,5 +132,23 @@ public class CaseRepository {
 	        }
 	        return cases;
 	}
+
+	public List<ResultsListView> sumarizeResolutionByUser(CasesFilterRequest filterRequest) {
+        List<ResultsListView> results = new ArrayList<>();
+        try {
+            Map<String, Long> resultsRepo = caseElasticService.getResolutionsByAssigned(filterRequest);
+            Set<String> resultKeys = resultsRepo.keySet();
+            for (String key : resultKeys) {
+                ResultsListView resultView = new ResultsListView();
+                resultView.setAssigned(key);
+                resultView.setTotal(resultsRepo.get(key));
+                results.add(resultView);
+            }
+
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return results;
+    }
 
 }

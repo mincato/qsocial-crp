@@ -496,16 +496,51 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> searchValues,
-            List<RangeFilter> rangeFilters, List<ShouldFilter> shouldFilters, String fieldAggregation) {
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
+            List<TermFieldFilter> termFilters, String fieldAggregation) {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        for (String searchField : searchValues.keySet()) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+
+        if (searchValues != null) {
+            for (String searchField : searchValues.keySet()) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+            }
+        } else {
+            boolQueryBuilder.must(QueryBuilders.matchAllQuery());
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        if (termFilters != null) {
+            for (TermFieldFilter termField : termFilters) {
+                if (!termField.isNeedSplit()) {
+                    boolQueryBuilder.filter(QueryBuilders.termQuery(termField.getField(), termField.getValue()));
+                } else {
+                    String[] terms = termField.getValue().split("\\,");
+                    BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
+                    for (String term : terms) {
+                        QueryBuilder query = QueryBuilders.termQuery(termField.getField(), term.trim());
+                        boolFilterQueryBuilder.must(query);
+                    }
+                    boolQueryBuilder.filter(boolFilterQueryBuilder);
+                }
+            }
         }
 
-        searchSourceBuilder.query(boolQueryBuilder);
+        if (rangeFilters != null) {
+            for (RangeFilter rangeFilter : rangeFilters) {
+                if (rangeFilter.getRangeField() != null) {
+                    RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeFilter.getRangeField());
+                    if (rangeFilter.getRangeFrom() != null)
+                        range.gte(rangeFilter.getRangeFrom());
+                    if (rangeFilter.getRangeTo() != null)
+                        range.lte(rangeFilter.getRangeTo());
+                    boolQueryBuilder.filter(range);
+                }
+            }
+        }
+
         AbstractAggregationBuilder aggregation = AggregationBuilders.terms(RESULTS_AGG_NAME).field(fieldAggregation);
         searchSourceBuilder.aggregation(aggregation);
         log.info("Query: " + searchSourceBuilder.toString());

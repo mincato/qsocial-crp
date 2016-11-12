@@ -81,11 +81,11 @@
 					</div>
 				</n:div>
 				<div class="modal-footer">
-					<button
+					<button autodisable="self"
 						onClick="@command('save')" label="${labels.app.button.save}"
 						disabled="@load(not vm.userListView.enabledAdd or not vm.userResolverListView.enabledAdd)"
 						zclass="btn btn-primary" />
-					<button zclass="btn" sclass="btn-default"
+					<button autodisable="self" zclass="btn" sclass="btn-default"
 						ca:data-dismiss="modal" label="${labels.app.button.cancel}" />
 				</div>
 			</x:div>

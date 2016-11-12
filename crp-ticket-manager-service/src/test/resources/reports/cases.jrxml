@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2016-11-10T20:08:13 -->
+<!-- 2016-11-11T20:45:05 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cases" pageWidth="1008" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="1008" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="reports" isIgnorePagination="true" uuid="1616061c-2862-49eb-b8b1-e5e646f45f54">
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
@@ -72,7 +72,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.opendate.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.opendate.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="106" y="30" width="100" height="30" uuid="47f722c3-2f45-44ce-997b-c85ecb7588da"/>
@@ -80,7 +80,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.title.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.title.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="206" y="30" width="80" height="30" uuid="a864be06-1fe0-40c0-a08f-466fa2bc8f25"/>
@@ -88,7 +88,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.subject.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.subject.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="286" y="30" width="60" height="30" uuid="a69a6706-bbc6-4e29-a362-e4552cf06a8a"/>
@@ -96,7 +96,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.state.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.state.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="406" y="30" width="60" height="30" uuid="ca0328be-ac8a-4a1b-946b-a8e45179a5af"/>
@@ -104,7 +104,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.assignee.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.assignee.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="946" y="30" width="62" height="30" uuid="6526d4df-8fcf-42d0-b180-d629fd98947e">
@@ -114,7 +114,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.categoryCase.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.categoryCase.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="886" y="30" width="60" height="30" uuid="78d50036-385e-4cb5-bfe3-e2e6fa386a10"/>
@@ -122,7 +122,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.categorySubject.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.categorySubject.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="816" y="30" width="70" height="30" uuid="347098e6-8842-4d8c-9842-d9aee0344922"/>
@@ -130,7 +130,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.lastComment.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.lastComment.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="756" y="30" width="60" height="30" uuid="4aacf173-ab5c-40c2-bf83-7489f6eae050"/>
@@ -138,7 +138,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.domain.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.domain.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="666" y="30" width="90" height="30" uuid="38e29c26-1bce-4750-9c8c-2d2d2a0656d5"/>
@@ -146,7 +146,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.segment.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.segment.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="586" y="30" width="80" height="30" uuid="0b9ac771-fe41-40ed-bd18-8f3a2bd32f37"/>
@@ -154,7 +154,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.trigger.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.trigger.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="516" y="30" width="70" height="30" uuid="614f2f3c-d17d-4ca2-843a-9303d82a27e5"/>
@@ -162,7 +162,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.pendingClientAction.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.pendingClientAction.column}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="466" y="30" width="50" height="30" uuid="e03f279b-b6d0-44d2-9efc-21bfefa47687">
@@ -172,7 +172,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.pendingResponse.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.pendingResponse.column}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>
@@ -187,7 +187,7 @@
 					<pen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$R{case.resolution.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.resolution.column}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>

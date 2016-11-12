@@ -7,6 +7,7 @@ import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.converters.DateInputConverter;
@@ -55,6 +56,7 @@ public class CreateTriggerAdminViewModel implements Serializable {
         createTrigger = true;
         createSegment = false;
         createCriteria = false;
+        Clients.scrollTo(0, 0);
     }
 
     @GlobalCommand
@@ -64,6 +66,7 @@ public class CreateTriggerAdminViewModel implements Serializable {
         createSegment = false;
         createCriteria = false;
         createAction = false;
+        Clients.scrollTo(0, 0);
     }
 
     @GlobalCommand
@@ -73,6 +76,7 @@ public class CreateTriggerAdminViewModel implements Serializable {
         createSegment = true;
         createCriteria = false;
         createAction = false;
+        Clients.scrollTo(0, 0);
     }
 
     @GlobalCommand
@@ -82,6 +86,7 @@ public class CreateTriggerAdminViewModel implements Serializable {
         createSegment = false;
         createCriteria = true;
         createAction = false;
+        Clients.scrollTo(0, 0);
     }
 
     @GlobalCommand
@@ -91,6 +96,7 @@ public class CreateTriggerAdminViewModel implements Serializable {
         createSegment = false;
         createCriteria = false;
         createAction = true;
+        Clients.scrollTo(0, 0);
     }
 
 }

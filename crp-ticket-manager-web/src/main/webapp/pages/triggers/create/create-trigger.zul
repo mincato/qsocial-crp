@@ -50,7 +50,7 @@
 						</n:label>
 						<n:div class="col-sm-9">
 							<datebox id="startDate" sclass="input-group"
-								format="short"
+								format="medium"
 								value="@bind(fxTrigger.trigger.init) @converter(adminVm.dateConverter) @validator('com.qsocialnow.validators.LocaleBeanValidator')" />
 							<x:span
 								sclass="@load(empty vmsgs[startDate] ? 'hidden' : 'help-block')">
@@ -78,7 +78,7 @@
 						</n:label>
 						<n:div class="col-sm-9">
 							<datebox id="endDate" sclass="input-group"
-								format="short"
+								format="medium"
 								value="@load(fxTrigger.trigger.end) @converter(adminVm.dateConverter, endDay = true) @save(fxTrigger.trigger.end, before='save')  @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxTrigger.trigger.init, label='trigger.enddate.validation', id = 'endDate', required = true)"  />
 							<x:span
 								sclass="@load(empty vmsgs[endDate] ? 'hidden' : 'help-block')">
@@ -247,9 +247,9 @@
 							<label value="${labels.trigger.form.invalid}"/>
 						</n:span>
 					</div>
-			    	<button onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
+			    	<button autodisabled="self" onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
 			    		label="${labels.app.button.save}" zclass="btn btn-success" />
-			    	<button href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.back}" zclass="btn btn-default"/>			    		
+			    	<button autodisabled="self" href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.back}" zclass="btn btn-default"/>			    		
 				</div>
 			</div>
 		</n:div>

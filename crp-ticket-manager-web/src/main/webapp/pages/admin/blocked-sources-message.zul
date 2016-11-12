@@ -22,7 +22,7 @@
 					</div>
   				</div>
   				<div class="modal-footer">
-    				<button zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
+    				<button autodisable="self" zclass="btn" sclass="btn-default" ca:data-dismiss="modal" label="${labels.app.button.close}"/>
   				</div>
 			</div>
 		</div>

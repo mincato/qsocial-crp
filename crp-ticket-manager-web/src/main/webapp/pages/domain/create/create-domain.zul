@@ -61,8 +61,8 @@
 						<include src="/pages/domain/edit-resolutions.zul"/>
     					
 						<div class="form-group text-center">
-						    <button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
-						    <button href="/pages/domain/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>
+						    <button autodisable="self" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
+						    <button autodisable="self" href="/pages/domain/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>
 						</div>
 				    </x:form>
 				</div>

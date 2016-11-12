@@ -18,7 +18,7 @@
 		${labels.trigger.action.tagSubject.emptyOptions}
 	</div>
 	<div class="form-group text-center">
-    	<button onClick="@command('save')" visible="@load(not empty tagSubjectActionVm.categorySetListView.list)" disabled="@load(not tagSubjectActionVm.categorySetListView.enabledAdd and not empty tagSubjectActionVm.categorySetListView.filteredList)" label="${labels.app.button.save}" zclass="btn btn-success" />
-    	<button onClick="@global-command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
+    	<button autodisable="self" onClick="@command('save')" visible="@load(not empty tagSubjectActionVm.categorySetListView.list)" disabled="@load(not tagSubjectActionVm.categorySetListView.enabledAdd and not empty tagSubjectActionVm.categorySetListView.filteredList)" label="${labels.app.button.save}" zclass="btn btn-success" />
+    	<button autodisable="self" onClick="@global-command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
 	</div>
 </div>

@@ -206,7 +206,7 @@ public class CaseTicketService extends CaseIndexService {
         if (filterRequest.getCloudsurfer() != null && filterRequest.getCloudsurfer().getWordList() != null) {
             WordsListFilterBean[] wordsList = filterRequest.getCloudsurfer().getWordList();
             // text
-            List<WordsListFilterBean> textsList = getTextWords(wordsList);
+            List<WordsListFilterBean> textsList = getWordsByType(wordsList, WordFilterType.TEXT);
             if (textsList != null && !textsList.isEmpty()) {
                 if (textsList.size() > 1) {
                     ShouldConditionsFilter conditionTermFilterText = new ShouldConditionsFilter();
@@ -223,7 +223,7 @@ public class CaseTicketService extends CaseIndexService {
                 }
             }
             // authors
-            List<WordsListFilterBean> authorsList = getAuthorsWords(wordsList);
+            List<WordsListFilterBean> authorsList = getWordsByType(wordsList, WordFilterType.AUTHOR);
             if (authorsList != null && !authorsList.isEmpty()) {
                 for (WordsListFilterBean wordsListFilterBean : authorsList) {
                     String[] authors = wordsListFilterBean.getPalabra().split("\\,");
@@ -243,7 +243,7 @@ public class CaseTicketService extends CaseIndexService {
             }
 
             // mentions
-            List<WordsListFilterBean> mentionsList = getMentionsWords(wordsList);
+            List<WordsListFilterBean> mentionsList = getWordsByType(wordsList, WordFilterType.MENTION);
             if (mentionsList != null && !mentionsList.isEmpty()) {
                 if (mentionsList.size() > 1) {
                     ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
@@ -262,7 +262,7 @@ public class CaseTicketService extends CaseIndexService {
             }
 
             // hashtags
-            List<WordsListFilterBean> hashTagsList = getHashTagsWords(wordsList);
+            List<WordsListFilterBean> hashTagsList = getWordsByType(wordsList, WordFilterType.HASHTAG);
             if (hashTagsList != null && !hashTagsList.isEmpty()) {
                 if (hashTagsList.size() > 1) {
                     ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
@@ -333,31 +333,10 @@ public class CaseTicketService extends CaseIndexService {
         return rangeFilter;
     }
 
-    private List<WordsListFilterBean> getTextWords(WordsListFilterBean[] wordsList) {
+    private List<WordsListFilterBean> getWordsByType(WordsListFilterBean[] wordsList, WordFilterType type) {
         List<WordsListFilterBean> words = Arrays.asList(wordsList);
         List<WordsListFilterBean> resultTextWords = words.stream()
-                .filter(word -> WordFilterType.TEXT.getName().equals(word.getTipo())).collect(Collectors.toList());
-        return resultTextWords;
-    }
-
-    private List<WordsListFilterBean> getAuthorsWords(WordsListFilterBean[] wordsList) {
-        List<WordsListFilterBean> words = Arrays.asList(wordsList);
-        List<WordsListFilterBean> resultTextWords = words.stream()
-                .filter(word -> WordFilterType.AUTHOR.getName().equals(word.getTipo())).collect(Collectors.toList());
-        return resultTextWords;
-    }
-
-    private List<WordsListFilterBean> getMentionsWords(WordsListFilterBean[] wordsList) {
-        List<WordsListFilterBean> words = Arrays.asList(wordsList);
-        List<WordsListFilterBean> resultTextWords = words.stream()
-                .filter(word -> WordFilterType.MENTION.getName().equals(word.getTipo())).collect(Collectors.toList());
-        return resultTextWords;
-    }
-
-    private List<WordsListFilterBean> getHashTagsWords(WordsListFilterBean[] wordsList) {
-        List<WordsListFilterBean> words = Arrays.asList(wordsList);
-        List<WordsListFilterBean> resultTextWords = words.stream()
-                .filter(word -> WordFilterType.HASHTAG.getName().equals(word.getTipo())).collect(Collectors.toList());
+                .filter(word -> type.getName().equals(word.getTipo())).collect(Collectors.toList());
         return resultTextWords;
     }
 
@@ -433,22 +412,55 @@ public class CaseTicketService extends CaseIndexService {
         return response;
     }
 
-    public Map<String, Long> getCasesCountByResolution(String domainId) {
+    public Map<String, Long> getCasesCountByResolution(CasesFilterRequest filterRequest) {
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        log.info("retrieving cases from :" + domainId);
 
+        List<RangeFilter> rangeFilters = new ArrayList<>();
         Map<String, String> searchValues = new HashMap<>();
-        if (domainId != null)
-            searchValues.put("domainId", domainId);
+        List<TermFieldFilter> termFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldTermsConditionsFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsRegexpFilters = new ArrayList<>();
 
-        SearchResponse<Case> response = repository
-                .queryByFieldsAndAggs(mapping, searchValues, null, null, "resolution");
+        configureFilters(filterRequest, searchValues, termFilters, rangeFilters, shouldConditionsFilters,
+                shouldTermsConditionsFilters, shouldConditionsRegexpFilters);
+
+        SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
+                shouldConditionsFilters, termFilters, "resolution");
         Map<String, Long> results = response.getCountAggregation();
         repository.closeClient();
         return results;
     }
+
+    public Map<String, Long> getResolutionsByAssigned(CasesFilterRequest filterRequest) {
+        RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
+        Repository<CaseType> repository = esfactory.initManager();
+        repository.initClient();
+
+        CaseMapping mapping = CaseMapping.getInstance();
+
+        List<RangeFilter> rangeFilters = new ArrayList<>();
+        Map<String, String> searchValues = new HashMap<>();
+        List<TermFieldFilter> termFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldTermsConditionsFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsRegexpFilters = new ArrayList<>();
+
+        configureFilters(filterRequest, searchValues, termFilters, rangeFilters, shouldConditionsFilters,
+                shouldTermsConditionsFilters, shouldConditionsRegexpFilters);
+
+        if (filterRequest.getIdResolution() != null)
+            searchValues.put("resolution", filterRequest.getIdResolution());
+
+        SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
+                shouldConditionsFilters, termFilters, "assignee.username");
+        Map<String, Long> results = response.getCountAggregation();
+        repository.closeClient();
+        return results;
+    }
+
 }
