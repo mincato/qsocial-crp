@@ -38,8 +38,7 @@ public class CaseResultsService {
     public PageResponse<ResultsListView> getResults(CasesFilterRequest filterRequest) {
 
         log.info("Trying to retrieve cases from :" + filterRequest.getDomain());
-        List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(null,
-                filterRequest.getDomain());
+        List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(filterRequest);
         if (casesByResolution != null && casesByResolution.size() > 0) {
             Domain domain = domainRepository.findOne(filterRequest.getDomain());
             if (domain != null) {
@@ -56,8 +55,7 @@ public class CaseResultsService {
 
     public PageResponse<ResultsListView> getResolutionsByUser(String idResolution, CasesFilterRequest filterRequest) {
         log.info("Trying to retrieve cases from :" + filterRequest.getDomain());
-        List<ResultsListView> casesByResolution = repository.sumarizeResolutionByUser(idResolution,
-                filterRequest.getDomain());
+        List<ResultsListView> casesByResolution = repository.sumarizeResolutionByUser(filterRequest);
         PageResponse<ResultsListView> page = new PageResponse<ResultsListView>(casesByResolution, null, null);
         return page;
     }

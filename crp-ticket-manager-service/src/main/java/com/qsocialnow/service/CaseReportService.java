@@ -172,8 +172,8 @@ public class CaseReportService {
     public byte[] getCasesByResolutionReport(CasesFilterRequestReport filterRequestReport) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(null, filterRequestReport
-                    .getFilterRequest().getDomain());
+            List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(filterRequestReport
+                    .getFilterRequest());
             if (casesByResolution != null && casesByResolution.size() > 0) {
                 Domain domain = domainRepository.findOne(filterRequestReport.getFilterRequest().getDomain());
                 if (domain != null) {
