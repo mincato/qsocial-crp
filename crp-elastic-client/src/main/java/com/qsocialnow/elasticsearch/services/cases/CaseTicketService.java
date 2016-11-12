@@ -412,42 +412,52 @@ public class CaseTicketService extends CaseIndexService {
         return response;
     }
 
-    public Map<String, Long> getCasesCountByResolution(String domainId) {
+    public Map<String, Long> getCasesCountByResolution(CasesFilterRequest filterRequest) {
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        log.info("retrieving cases from :" + domainId);
 
+        List<RangeFilter> rangeFilters = new ArrayList<>();
         Map<String, String> searchValues = new HashMap<>();
-        if (domainId != null)
-            searchValues.put("domainId", domainId);
+        List<TermFieldFilter> termFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldTermsConditionsFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsRegexpFilters = new ArrayList<>();
 
-        SearchResponse<Case> response = repository
-                .queryByFieldsAndAggs(mapping, searchValues, null, null, "resolution");
+        configureFilters(filterRequest, searchValues, termFilters, rangeFilters, shouldConditionsFilters,
+                shouldTermsConditionsFilters, shouldConditionsRegexpFilters);
+
+        SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
+                shouldConditionsFilters, termFilters, "resolution");
         Map<String, Long> results = response.getCountAggregation();
         repository.closeClient();
         return results;
     }
 
-    public Map<String, Long> getResolutionsByAssigned(String domainId, String resolutionId) {
+    public Map<String, Long> getResolutionsByAssigned(CasesFilterRequest filterRequest) {
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
 
         CaseMapping mapping = CaseMapping.getInstance();
-        log.info("retrieving cases from :" + domainId);
 
+        List<RangeFilter> rangeFilters = new ArrayList<>();
         Map<String, String> searchValues = new HashMap<>();
-        if (domainId != null)
-            searchValues.put("domainId", domainId);
+        List<TermFieldFilter> termFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldTermsConditionsFilters = new ArrayList<>();
+        List<ShouldConditionsFilter> shouldConditionsRegexpFilters = new ArrayList<>();
 
-        if (resolutionId != null)
-            searchValues.put("resolution", resolutionId);
+        configureFilters(filterRequest, searchValues, termFilters, rangeFilters, shouldConditionsFilters,
+                shouldTermsConditionsFilters, shouldConditionsRegexpFilters);
 
-        SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, null, null,
-                "assignee.username");
+        if (filterRequest.getIdResolution() != null)
+            searchValues.put("resolution", filterRequest.getIdResolution());
+
+        SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
+                shouldConditionsFilters, termFilters, "assignee.username");
         Map<String, Long> results = response.getCountAggregation();
         repository.closeClient();
         return results;

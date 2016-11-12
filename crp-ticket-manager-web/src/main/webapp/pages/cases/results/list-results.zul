@@ -33,32 +33,141 @@
         </n:div>
     </div>
     
-    <div visible="@load(vm.byResolution)">
-		<n:div class="row">
-	       <n:div class="col-lg-12">
-	           <div zclass="pane equal col-md-12 col-xs-12">
-	                 <n:div class="col-md-4">
-	                    <n:label class="control-label col-sm-4">${labels.cases.results.filter.domains}</n:label>
-		                <div zclass="input-group input-group-sm">
-		                       <selectbox sclass="form-control" model="@load(vm.domains)"
-		                           selectedItem="@bind(vm.domain)">
-		                           <template name="model">
-		                               <label value="${each.name}" />
-		                           </template>
-		                       </selectbox>
-		                </div>
-	                </n:div>
-	                <n:div class="col-md-1">
-	                   <div zclass="input-group input-group-sm">
-	                      <span zclass="input-group-btn">
-	                          <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
-						      <button autodisable="self" zclass="btn btn-primary" type="button" onClick="@command('download')"  iconSclass="z-icon-file-excel-o"></button>
-	                     </span>
+    <div visible="@load(vm.filterActive)">
+	  <n:div class="row">
+       <n:div class="col-lg-12">
+         <div zclass="pane equal col-md-12 col-xs-12">
+            <n:form class="form-inline">                
+                <x:div class="form-group" visible="@load(vm.domains ne null and not empty vm.domains)">
+                    <n:label class="control-label">${labels.cases.list.filter.domains}</n:label>
+                    <div zclass="input-group input-group-sm">
+                           <selectbox sclass="form-control" model="@load(vm.domains)"
+                               selectedItem="@bind(vm.domain)"
+                               onSelect="@command('selectDomain',domain = vm.domain)">
+                               <template name="model">
+                                   <label value="${each.name}" />
+                               </template>
+                           </selectbox>
+                     </div>
+                </x:div>
+                <x:div class="form-group" visible="@load(vm.triggers ne null and not empty vm.triggers)">
+                    <n:label class="control-label">${labels.cases.list.filter.triggers}</n:label>
+                    <div zclass="input-group input-group-sm">
+                        <selectbox sclass="form-control" model="@load(vm.triggers)"
+                            selectedItem="@bind(vm.trigger)"
+                            onSelect="@command('selectTrigger',trigger = vm.trigger)">
+                            <template name="model">
+                                <label value="${each.name}" />
+                            </template>
+                        </selectbox>
+                    </div>
+                </x:div>
+                <x:div class="form-group" visible="@load(vm.segments ne null and not empty vm.segments)">
+                    <n:label class="control-label">${labels.cases.list.filter.segments}</n:label>
+                    <div zclass="input-group input-group-sm">
+                           <selectbox sclass="form-control" model="@load(vm.segments)"
+                               selectedItem="@bind(vm.segment)">
+                               <template name="model">
+                                   <label value="${each.description}" />
+                               </template>
+                           </selectbox>
+                    </div>
+                </x:div>
+                 <x:div class="form-group" visible="@load(vm.users ne null and not empty vm.users)">
+                    <n:label class="control-label">${labels.cases.list.filter.user}</n:label>
+                    <div zclass="input-group input-group-sm">
+                           <selectbox sclass="form-control" model="@load(vm.users)"
+                               selectedItem="@bind(vm.userSelected)">
+                               <template name="model">
+                                   <label value="${each.username}" />
+                               </template>
+                           </selectbox>
+                    </div>
+                </x:div>
+                </n:form>
+            </div>
+       </n:div>
+    </n:div>
+     <n:div class="row">
+        <n:div class="col-lg-12">
+           <div zclass="pane equal col-md-12 col-xs-12">
+	           <n:div class="col-sm-11">
+	            <n:form class="form-inline">    
+	                <n:div class="form-group">
+	                    <div zclass="input-group input-group-sm">
+	                         <textbox zclass="form-control" value="@bind(vm.title)" onOK="@command('search')" placeholder="${labels.cases.list.filter.title}"/>
 	                   </div>
 	                </n:div>
-	            </div>
-	       </n:div>
-	    </n:div>
+	                <n:div class="form-group">
+	                    <div zclass="input-group input-group-sm">
+	                          <datebox sclass="input-group" format="medium" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
+	                    </div>
+	                </n:div>
+	                <n:div class="form-group">
+	                   <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
+	                       <datebox id="todate" sclass="input-group" format="medium" value="@load(vm.toDate) @save(vm.toDate, before='search') @converter('com.qsocialnow.converters.DateInputConverter', endDay = true) @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.list.filter.todate}" />
+	                    </x:div>
+	                </n:div>
+	                <n:div class="form-group">
+	                    <div zclass="input-group input-group-sm">
+	                         <textbox zclass="form-control" value="@bind(vm.subject)" onOK="@command('search')" placeholder="${labels.cases.list.filter.subject}"/>
+	                   </div>
+	                </n:div>
+	                <n:div class="form-group">
+                        <n:label class="control-label">${labels.cases.list.filter.priority}</n:label>
+                        <div zclass="input-group input-group-sm">
+                               <selectbox sclass="form-control" model="@load(vm.priorityOptions)"
+                                   selectedItem="@bind(vm.priority)">
+                                   <template name="model">
+                                       <label value="${c:l(c:cat('cases.priority.',each))}" />
+                                   </template>
+                               </selectbox>
+                        </div>
+                    </n:div>
+                   <div visible="@load(vm.byState)">
+		                <n:div class="form-group">
+		                    <n:label class="control-label">${labels.cases.list.filter.pendingResponse}</n:label>
+		                    <div zclass="input-group input-group-sm" >
+		                           <selectbox sclass="form-control" model="@load(vm.pendingOptions)"
+		                               selectedItem="@bind(vm.pendingResponse)">
+		                               <template name="model">
+		                                   <label value="${c:l(c:cat('cases.pendingResponse.',each))}" />
+		                               </template>
+		                           </selectbox>
+		                    </div>
+		                </n:div>
+		                <n:div class="form-group">
+		                    <n:label class="control-label">${labels.cases.list.filter.status}</n:label>
+		                    <div zclass="input-group input-group-sm">
+		                           <selectbox sclass="form-control" model="@load(vm.statusOptions)"
+		                               selectedItem="@bind(vm.status)">
+		                               <template name="model">
+		                                   <label value="${c:l(c:cat('cases.open.',each))}" />
+		                               </template>
+		                           </selectbox>
+		                    </div>
+		                </n:div>
+	                </div>
+	                
+	           </n:form>
+	           </n:div>
+           <n:div class="col-sm-1">
+                <n:form class="form-inline">    
+                        <n:div class="form-group">
+                 <div zclass="input-group input-group-sm">
+                    <span zclass="input-group-btn">
+                        <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>                          
+                  <button autodisable="self" zclass="btn btn-primary" type="button" onClick="@command('download')"  iconSclass="z-icon-file-excel-o"></button>
+                   </span>
+                 </div>
+                       </n:div>
+                  </n:form>
+          </n:div>
+       </div>
+    </n:div>
+    </n:div>
+	</div>	
+	<div visible="@load(vm.byResolution)">
 		<div class="row">
 	    	<n:div class="col-lg-12">
 	    		<div zclass="pane equal">
