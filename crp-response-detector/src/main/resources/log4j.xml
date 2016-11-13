@@ -19,12 +19,12 @@
 	</logger>
 	
 	<logger name="com.qsocialnow" additivity="false">
-		<level value="DEBUG" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>	
 
 	<logger name="com.qsocialnow.elasticsearch" additivity="false">
-		<level value="INFO" />
+		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
