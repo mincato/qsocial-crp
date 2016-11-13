@@ -15,4 +15,27 @@
  		<constructor-arg value="${app.twitter.app.configurator.path}"></constructor-arg>
 	</bean>
 	
+    <bean id="twitterSourceStrategy" init-method="start" destroy-method="stop" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
+        <property name="twitterConfig" ref="twitterConfig"></property>
+        <property name="queueConfig" ref="twitterQueueConfig"></property>
+        <property name="zookeeperClient" ref="zookeeperClient"></property>
+        <property name="twitterUsersZnodePath" value="${app.twitter.users.path}"></property>
+        <property name="sourceService" ref="sourceService"></property>
+    </bean>
+    
+   	<bean id="twitterQueueConfig" class="com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+		<constructor-arg ref="zookeeperCentralClient" />
+		<constructor-arg value="${app.twitter.queue.configurator.path}" />
+		<constructor-arg ref="twitterQueueConfiguratorWatcher" />
+	</bean>
+	
+	<bean id="twitterQueueConfiguratorWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
+		<constructor-arg value="twitterQueueConfig" />
+		<constructor-arg>
+			<value type="java.lang.Class">com.qsocialnow.common.config.QueueConfigurator</value>
+		</constructor-arg>
+	</bean>
+    
+	
+	
 </beans>

@@ -11,7 +11,8 @@ import com.qsocialnow.common.model.cases.Case;
 public class RegisterCommentCaseAction implements Action {
 
     @Override
-    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public AsyncAction execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+        return null;
     }
 
 }

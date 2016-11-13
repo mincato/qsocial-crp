@@ -48,7 +48,7 @@ public class UserResolverMapping implements Mapping<UserResolverType, UserResolv
     @Override
     public UserResolverType getDocumentType(UserResolver document) {
         UserResolverType userResolverType = new UserResolverType();
-        userResolverType.setActive(document.getActive());
+        userResolverType.setActive(document.isActive());
         userResolverType.setCredentials(document.getCredentials());
         userResolverType.setIdentifier(document.getIdentifier());
         userResolverType.setSource(document.getSource());
@@ -60,7 +60,7 @@ public class UserResolverMapping implements Mapping<UserResolverType, UserResolv
     public UserResolver getDocument(UserResolverType documentType) {
         UserResolver userResolver = new UserResolver();
         userResolver.setId(documentType.getId());
-        userResolver.setActive(documentType.getActive());
+        userResolver.setActive(documentType.isActive());
         userResolver.setCredentials(documentType.getCredentials());
         userResolver.setIdentifier(documentType.getIdentifier());
         userResolver.setSource(documentType.getSource());

@@ -27,14 +27,14 @@
 						<n:div class="form-group">
 							<n:label class="control-label col-sm-2">${labels.trigger.criteria.validFrom}</n:label>
 							<n:div class="col-sm-10">
-								<datebox sclass="input-group" format="short" value="@bind(fxCriteria.validateFrom)  @converter(adminVm.dateConverter)" />
+								<datebox sclass="input-group" format="medium" value="@bind(fxCriteria.validateFrom)  @converter(adminVm.dateConverter)" />
 							</n:div>
 	    				</n:div>
 				    		
 	    				<x:div sclass="@load(empty vmsgs[validto] ? 'form-group' : 'form-group has-error')">
 							<n:label class="control-label col-sm-2">${labels.trigger.criteria.validTo}</n:label>
 							<n:div class="col-sm-10">
-								<datebox id="validto" sclass="input-group" format="short" value="@load(fxCriteria.validateTo) 
+								<datebox id="validto" sclass="input-group" format="medium" value="@load(fxCriteria.validateTo) 
 									@save(fxCriteria.validateTo, before='save')
 									@converter(adminVm.dateConverter, endDay = true)
                         			@validator('com.qsocialnow.validators.ToDateValidator', 
@@ -98,19 +98,32 @@
 					<n:div class="form-group">
 						<n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
 						<n:div class="col-sm-10">
-							<datebox sclass="input-group" format="short+short" value="@bind(fxFilter.startDateTime)  @converter(adminVm.dateConverter)" />
+							<n:div class="col-sm-3">
+								<datebox sclass="input-group" format="medium" value="@bind(fxFilter.startDateTime) @converter(adminVm.dateConverter)" 
+									onChange="@command('initFilterStartTime', fxFilter = fxFilter)" />
+							</n:div>
+							<n:div class="col-sm-2">
+								 <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.startTime) @converter(adminVm.dateConverter)"></timebox>
+							</n:div>
 						</n:div>
     				</n:div>
     				<x:div sclass="@load(empty vmsgs[enddate] ? 'form-group' : 'form-group has-error')">
 						<n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
 						<n:div class="col-sm-10">
-							<datebox id="enddate" sclass="input-group" format="short+short" value="@load(fxFilter.endDateTime) 
-							@save(fxFilter.endDateTime, before='save')
-							@converter(adminVm.dateConverter)
-                        	@validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate')" />
-                        	<x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
-		    						<label value="@load(vmsgs[enddate])" />
-							</x:span>
+							<n:div class="col-sm-3">
+								<datebox id="enddate" sclass="input-group" format="medium" 
+								onChange="@command('initFilterEndTime', fxFilter = fxFilter)"
+								value="@load(fxFilter.endDateTime)
+								@save(fxFilter.endDateTime, before='save')
+								@converter(adminVm.dateConverter)
+								@validator('com.qsocialnow.validators.ToDateTimeValidator', fromDate = fxFilter.startDateTime, fromTime = fxFilter.startTime, toTime = fxFilter.endTime, label = 'trigger.criteria.enddate.validation', id='enddate')" />
+	                        	<x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
+			    						<label value="@load(vmsgs[enddate])" />
+								</x:span>
+							</n:div>
+							<n:div class="col-sm-2">
+								 <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.endTime) @converter(adminVm.dateConverter)"></timebox>
+							</n:div>
 						</n:div>
     				</x:div>
 			    </n:form>
@@ -375,7 +388,7 @@
 													<span>
 														<label value="@load(vm.createCategoryName(each))"/>
 														<span>
-															<button type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', filter=filterCategory, category=each)"/>
+															<button autodisable="self" type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', filter=filterCategory, category=each)"/>
 														</span>
 													</span>
 												</template>
@@ -461,8 +474,8 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<div class="form-group text-center">
-	    			<button onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
-	    			<button onClick="@command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
+	    			<button autodisable="self" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
+	    			<button autodisable="self" onClick="@command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
 				</div>
 			</div>
 		</n:div>

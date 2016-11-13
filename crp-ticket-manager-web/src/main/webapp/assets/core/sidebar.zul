@@ -1,6 +1,7 @@
 <zk xmlns:n="native">
 	<?taglib uri="/WEB-INF/tld/security.tld" prefix="sec"?>
-	<div xmlns:n="native" xmlns:x="xhtml">
+	<div xmlns:n="native" xmlns:x="xhtml" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('adminVm') @init('com.qsocialnow.viewmodel.AdminViewModel')">
 
 		<n:aside id="sidebar" class="sidebar affix"
 			role="complementary">

@@ -77,6 +77,28 @@ public class CaseService extends CaseIndexService {
         }
     }
 
+    public void stop() {
+        try {
+            if (consumer != null) {
+                consumer.stopConsumer();
+            }
+            if (producer != null) {
+                producer.stopProducer();
+            }
+            if (failConsumer != null) {
+                failConsumer.stopConsumer();
+            }
+            if (failProducer != null) {
+                failProducer.stopProducer();
+            }
+            if (queueService != null) {
+                queueService.shutdownQueueService();
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error. Cause", e);
+        }
+    }
+
     public String indexCase(Case document) {
 
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);

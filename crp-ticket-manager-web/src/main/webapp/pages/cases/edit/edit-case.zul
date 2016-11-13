@@ -6,8 +6,11 @@
 	<n:div class="row">
         <n:div class="col-sm-12">
             <n:div id="page-header" class="pane equal">
-                <n:h4>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h4>
-            </n:div>
+            	<n:div class="col-sm-12">
+            		<a style="color:#fff" zclass="btn-social-icon btn" sclass="@load(c:cat('btn-',vm.currentCase.source.icon))" href="${vm.currentCase.openCaseDeepLinkUrl}" target="_blank"><i sclass="@load('fa fa-'.concat(vm.currentCase.source.icon))" /></a>
+	    			<n:h4>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h4>
+            	</n:div>
+		    </n:div>
         </n:div>
     </n:div>	
 
@@ -72,19 +75,16 @@
             					</n:div>
             				</n:div>
             			</n:div>
-            			<n:div class="form-group">
+            			<div zclass="form-group"  visible="@load(not empty vm.currentCase.resolutionDescription)">
             				<n:label class="control-label col-sm-3">
-            					${labels.cases.details.assignee}
+            					${labels.cases.details.resolution}
             				</n:label>
             				<n:div class="col-sm-9">
             					<n:div sclass="form-control-static">
-            						<label
-            							visible="@load(not empty vm.currentCase.caseObject.assignee)"
-            							value="@load(vm.currentCase.caseObject.assignee.username)">
-            						</label>
+									<label value="@load(vm.currentCase.resolutionDescription)" ></label>
             					</n:div>
             				</n:div>
-            			</n:div>
+            			</div>
             		</n:div>
             	</n:div>
             	<n:hr/>
@@ -102,7 +102,7 @@
             				</n:div>
             			</n:div>
             		</n:div>
-            		<n:div class="col-sm-6">
+            		<div zclass="col-sm-6" visible="@load(not empty vm.currentCase.caseObject.closeDate)">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
             					${labels.cases.details.closedate}
@@ -114,11 +114,11 @@
             					</n:div>
             				</n:div>
             			</n:div>
-            		</n:div>
+            		</div>
             	</n:div>
-            	<n:hr/>
-            	<n:div class="row">
-            		<n:div class="col-sm-6">
+            	<x:hr sclass="@load(empty vm.currentCase.source and empty vm.currentCase.caseObject.subject ? 'hidden':'')"/>
+            	<div zclass="row" visible="@load(not empty vm.currentCase.source or not empty vm.currentCase.caseObject.subject)">
+            		<div zclass="col-sm-6" visible="@load(not empty vm.currentCase.source)">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
             					${labels.cases.details.source}
@@ -129,22 +129,50 @@
             					</n:div>
             				</n:div>
             			</n:div>
-            		</n:div>
-            		<n:div class="col-sm-6">
+            		</div>
+            		<div zclass="col-sm-6" visible="@load(not empty vm.currentCase.caseObject.subject and not empty vm.currentCase.caseObject.subject.identifier)">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
             					${labels.cases.details.subject}
             				</n:label>
             				<n:div class="col-sm-9">
             					<n:div sclass="form-control-static">
-									<label visible="@load(not empty vm.currentCase.caseObject.subject)" value="@load(vm.currentCase.caseObject.subject.identifier)"></label>
+									<label value="@load(vm.currentCase.caseObject.subject.identifier)"></label>
+            					</n:div>
+            				</n:div>
+            			</n:div>
+            		</div>
+            	</div>
+            	<x:hr sclass="@load(empty vm.currentCase.teamDescription and empty vm.currentCase.caseObject.assignee ? 'hidden':'')"/>
+            	<div class="row">
+            		<n:div class="col-sm-6">
+            			<n:div class="form-group">
+            				<n:label class="control-label col-sm-3">
+            					${labels.cases.details.team}
+            				</n:label>
+            				<n:div class="col-sm-9">
+            					<n:div sclass="form-control-static">
+									<label value="@load(vm.currentCase.teamDescription)"></label>
             					</n:div>
             				</n:div>
             			</n:div>
             		</n:div>
-            	</n:div>
-            	<n:hr/>
-            	<n:div class="row">
+            		<div zclass="col-sm-6" visible="@load(not empty vm.currentCase.caseObject.assignee)">
+            			<n:div class="form-group">
+            				<n:label class="control-label col-sm-3">
+            					${labels.cases.details.assignee}
+            				</n:label>
+            				<n:div class="col-sm-9">
+            					<n:div sclass="form-control-static">
+									<label value="@load(vm.currentCase.caseObject.assignee.username)"></label>
+            					</n:div>
+            				</n:div>
+            			</n:div>
+            		</div>
+            	</div>
+            	
+            	<x:hr sclass="@load(empty vm.currentCase.caseCategoriesSet ? 'hidden':'')"/>
+            	<div zclass="row" visible="@load(not empty vm.currentCase.caseCategoriesSet)">
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
@@ -152,16 +180,16 @@
             				</n:label>
             				<n:div class="col-sm-9">
             					<n:div sclass="form-control-static">
-            						<div
-            							children="@load(vm.currentCase.caseCategoriesSet)">
+            						<x:div children="@load(vm.currentCase.caseCategoriesSet)">
             							<template name="children">
-            								<span>
+            								<x:span data-toggle="tooltip" data-placement="top"
+            									title="@load(each.active ? '' : c:l('cases.casecategoryset.disabled'))">
             									<label
-            										sclass="label label-info"
+            										sclass="@load(each.active ? 'label label-info' : 'label label-inactive')"
             										value="${each.description}" />
-            								</span>
+            								</x:span>
             							</template>
-            						</div>
+            						</x:div>
             					</n:div>
             				</n:div>
             			</n:div>
@@ -176,11 +204,12 @@
             						<div
             							children="@load(vm.currentCase.caseCategories)">
             							<template name="children">
-            								<span>
-            									<label
-            										sclass="label label-info"
+            								<x:span data-toggle="tooltip" data-placement="top"
+            									title="@load(each.active ? '' : c:l('cases.casecategory.disabled'))">
+            									<label 
+            										sclass="@load(each.active ? 'label label-info' : 'label label-inactive')"
             										value="${each.description}" />
-            								</span>
+            								</x:span>
             							</template>
             						</div>
             					</n:div>
@@ -188,9 +217,9 @@
             			</n:div>
 
             		</n:div>
-            	</n:div>
-            	<n:hr/>
-            	<n:div class="row">
+            	</div>
+            	<x:hr sclass="@load(empty vm.currentCase.subjectCategoriesSet ? 'hidden':'')"/>
+            	<div class="row" visible="@load(not empty vm.currentCase.subjectCategoriesSet)">
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
@@ -200,9 +229,12 @@
             					<n:div sclass="form-control-static">
             						<div children="@load(vm.currentCase.subjectCategoriesSet)">
 										<template name="children">
-											<span>
-												<label sclass="label label-info" value="${each.description}"/>
-											</span>
+            								<x:span data-toggle="tooltip" data-placement="top"
+            									title="@load(each.active ? '' : c:l('cases.subjectcategoryset.disabled'))">
+            									<label
+            										sclass="@load(each.active ? 'label label-info' : 'label label-inactive')"
+            										value="${each.description}" />
+            								</x:span>
 										</template>
 									</div>
             					</n:div>
@@ -218,9 +250,12 @@
             					<n:div sclass="form-control-static">
 									<div children="@load(vm.currentCase.subjectCategories)">
 										<template name="children">
-											<span>
-												<label sclass="label label-info" value="${each.description}"/>
-											</span>
+            								<x:span data-toggle="tooltip" data-placement="top"
+            									title="@load(each.active ? '' : c:l('cases.subjectcategory.disabled'))">
+            									<label 
+            										sclass="@load(each.active ? 'label label-info' : 'label label-inactive')"
+            										value="${each.description}" />
+            								</x:span>
 										</template>
 									</div>
 								</n:div>
@@ -228,9 +263,9 @@
             			</n:div>
             			
             		</n:div>
-            	</n:div>
-            	<n:hr/>
-            	<n:div class="row">
+            	</div>
+            	<x:hr sclass="@load(empty vm.currentCase.caseObject.attachments ? 'hidden':'')"/>
+            	<div zclass="row" visible="@load(not empty vm.currentCase.caseObject.attachments)">
             		<n:div class="col-sm-6">
             			<n:div class="form-group">
             				<n:label class="control-label col-sm-3">
@@ -252,7 +287,7 @@
             			</n:div>
 
             		</n:div>
-            	</n:div>
+            	</div>
             </x:form>
 
         </div>
@@ -280,12 +315,12 @@
                 </n:div>
                 <n:div class="col-md-2">
                     <div zclass="input-group input-group-sm">
-                          <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
+                          <datebox sclass="input-group" format="medium" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
                     </div>
                 </n:div>
                 <n:div class="col-md-2">
                    <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
-                       <datebox id="todate" sclass="input-group" format="short" value="@load(vm.toDate) 
+                       <datebox id="todate" sclass="input-group" format="medium" value="@load(vm.toDate) 
                         @save(vm.toDate, before='search')
                         @converter('com.qsocialnow.converters.DateInputConverter', endDay = true)
                         @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.registry.filter.todate}" />
@@ -299,7 +334,7 @@
 	            <n:div class="col-md-1">
 	               <div zclass="input-group input-group-sm">
                       <span zclass="input-group-btn">
-                          <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+                          <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
                       </span>
                    </div>
                 </n:div>
@@ -337,7 +372,12 @@
 									<td visible="@load(each.automatic)">${labels.cases.registry.automatic.user}</td>
 									<td visible="@load(not each.automatic)">${each.user}</td>
 									<td class="list-text-column">${c:l(c:cat('cases.actions.',each.action))}</td>
-									<td visible="@load(each.deepLink eq null)">${each.description}</td>
+									<td visible="@load(each.deepLink eq null)">
+										${each.description}
+										<span sclass="@load(c:cat('registry-status registry-status-',c:toLowerCase(each.status)))" visible="@load(each.status ne null)">
+											<x:span data-toggle="tooltip" data-placement="top" title="@load(vm.createRegistryStatusMessage(each))" ></x:span>
+										</span>
+									</td>
                        				<td visible="@load(each.deepLink ne null)"><a href="${each.deepLink}" target="_blank">${each.description}</a></td>
                        				<td><label value="@load(each.date) @converter(vm.dateConverter)"/></td>
                        				<td></td>
@@ -348,7 +388,7 @@
 				</div>
 				
 				<div class="text-center" zclass="@bind(vm.moreResults? 'more-results':'hidden')">
-					<a style="text-decoration:none" onClick="@command('moreResults')"  >
+					<a autodisable="self" style="text-decoration:none" onClick="@command('moreResults')"  >
 			 			${labels.app.pagination.moreResults}
 					</a>
 				</div>
@@ -360,7 +400,7 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<div class="form-group text-center">
-					<button href="/pages/cases/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>	
+					<button autodisable="self" href="/pages/cases/list/index.zul" label="${labels.app.button.back}" zclass="btn btn-default"/>	
 				</div>
 			</div>
 		</n:div>

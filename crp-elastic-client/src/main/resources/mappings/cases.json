@@ -1,6 +1,14 @@
 {"settings":{
-        "analysis":{"analyzer":
+        "analysis":{
+                "filter" : 
+                            {"oda_stop" : {"type" : "stop","ignore_case" : true},
+                             "point_stop" :{"type": "pattern_replace","pattern": "(?:.*(?:\\.).*)+","replacement": ""},
+                             "digits_stop" :{"type": "pattern_replace","pattern": "^(\\d)+$","replacement": ""},
+                             "remove_empty": {"type": "stop","stopwords": [""]}},
+                "analyzer":
                                {"autocomplete":{"type":"custom","tokenizer": "autocomplete","filter":["lowercase"]},
                                 "autocomplete_search": {"tokenizer": "lowercase"},
-                                "insensitive_sort":{"type":"custom","tokenizer":"standard","filter":["lowercase"]}},
-         "tokenizer": {"autocomplete": {"type": "edge_ngram","min_gram": 2,"max_gram": 20}}}}}
+                                "lowercase_term": {"type":"custom","tokenizer":"keyword","filter":["lowercase"]},
+                                "oda_stopwords": {"type" : "custom","tokenizer": "standard","filter":  [ "lowercase", "asciifolding","oda_stop","point_stop","digits_stop","remove_empty" ]},
+                                "insensitive_sort":{"type":"custom","tokenizer":"keyword","filter":["lowercase","trim"]}},
+                "tokenizer": {"autocomplete": {"type": "edge_ngram","min_gram": 2,"max_gram": 20}}}}}

@@ -51,6 +51,7 @@ public class TeamMapping implements Mapping<TeamType, Team> {
         teamType.setName(document.getName());
         teamType.setUserResolvers(document.getUserResolvers());
         teamType.setUsers(document.getUsers());
+        teamType.setActive(document.isActive());
         return teamType;
     }
 
@@ -61,6 +62,7 @@ public class TeamMapping implements Mapping<TeamType, Team> {
         team.setName(documentType.getName());
         team.setUserResolvers(documentType.getUserResolvers());
         team.setUsers(documentType.getUsers());
+        team.setActive(documentType.isActive());
         return team;
     }
 

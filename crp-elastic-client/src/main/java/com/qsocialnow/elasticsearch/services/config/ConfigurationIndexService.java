@@ -37,6 +37,7 @@ public class ConfigurationIndexService {
 
     }
 
+    @SuppressWarnings("rawtypes")
     public void initIndex() {
         RepositoryFactory esfactory = new RepositoryFactory(configurator);
         Repository repository = esfactory.initManager();
@@ -54,6 +55,7 @@ public class ConfigurationIndexService {
         return indexName;
     }
 
+    @SuppressWarnings("rawtypes")
     private void createMappings(Repository repository, String index) {
         try {
 

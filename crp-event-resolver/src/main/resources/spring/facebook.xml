@@ -14,5 +14,25 @@
  		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
  		<constructor-arg value="${app.facebook.app.configurator.path}"></constructor-arg>
 	</bean>
+		
+	<bean id="facebookSourceStrategy" init-method="start" destroy-method="stop" class="com.qsocialnow.common.services.strategies.FacebookSourceStrategy">
+        <property name="facebookConfig" ref="facebookConfig"></property>
+        <property name="queueConfig" ref="facebookQueueConfig"></property>
+        <property name="zookeeperClient" ref="zookeeperClient"></property>
+        <property name="facebookUsersZnodePath" value="${app.facebook.users.path}"></property>
+    </bean>
+    
+   	<bean id="facebookQueueConfig" class="com.qsocialnow.eventresolver.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+		<constructor-arg ref="zookeeperCentralClient" />
+		<constructor-arg value="${app.facebook.queue.configurator.path}" />
+		<constructor-arg ref="facebookQueueConfiguratorWatcher" />
+	</bean>
+	
+	<bean id="facebookQueueConfiguratorWatcher" class="com.qsocialnow.eventresolver.config.ConfigWatcher">
+		<constructor-arg value="facebookQueueConfig" />
+		<constructor-arg>
+			<value type="java.lang.Class">com.qsocialnow.common.config.QueueConfigurator</value>
+		</constructor-arg>
+	</bean>
 	
 </beans>

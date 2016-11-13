@@ -16,9 +16,10 @@
 			children="@bind(fxTrigger.caseCategorySets) @template(each.editingStatus ? 'editable' : 'noneditable')">
 			<template name="noneditable">
 				<n:div class="list-group-item col-xs-11 col-sm-11">
-					<n:div class="col-xs-12 col-sm-6">
+					<x:div sclass="@load(each.caseCategorySet.active ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 strikethrough')"
+						data-toggle="tooltip" data-placement="left" title="@load(each.caseCategorySet.active ? '' : c:l('trigger.casecategoryset.disabled'))">
 						${each.caseCategorySet.description}
-					</n:div>
+					</x:div>
 					<n:div class="col-xs-8 col-sm-3">
 					</n:div>
 					<n:div class="col-xs-4 col-sm-3">

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -21,6 +22,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyCommand;
 import org.zkoss.bind.annotation.ToClientCommand;
 import org.zkoss.util.resource.Labels;
+import org.zkoss.web.Attributes;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
@@ -38,16 +40,16 @@ import com.qsocialnow.common.model.config.SubSeries;
 import com.qsocialnow.common.model.config.Thematic;
 import com.qsocialnow.common.model.config.WordFilter;
 import com.qsocialnow.common.model.config.WordFilterType;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilter;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilterBean;
 import com.qsocialnow.common.model.filter.FilterNormalizer;
-import com.qsocialnow.common.model.retroactive.AdministrativeUnitsFilter;
-import com.qsocialnow.common.model.retroactive.AdministrativeUnitsFilterBean;
-import com.qsocialnow.common.model.retroactive.FollowersCountRange;
-import com.qsocialnow.common.model.retroactive.RangeRequest;
+import com.qsocialnow.common.model.filter.FollowersCountRange;
+import com.qsocialnow.common.model.filter.RangeRequest;
+import com.qsocialnow.common.model.filter.WordsFilterRequestBean;
+import com.qsocialnow.common.model.filter.WordsListFilterBean;
 import com.qsocialnow.common.model.retroactive.RetroactiveProcess;
 import com.qsocialnow.common.model.retroactive.RetroactiveProcessRequest;
 import com.qsocialnow.common.model.retroactive.RetroactiveProcessStatus;
-import com.qsocialnow.common.model.retroactive.WordsFilterRequestBean;
-import com.qsocialnow.common.model.retroactive.WordsListFilterBean;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.model.AdmUnitFilterView;
 import com.qsocialnow.model.CategoryFilterView;
@@ -61,6 +63,7 @@ import com.qsocialnow.services.AutocompleteService;
 import com.qsocialnow.services.RetroactiveService;
 import com.qsocialnow.services.ThematicService;
 import com.qsocialnow.services.UserSessionService;
+import com.qsocialnow.util.DateTimeBoxComponent;
 import com.qsocialnow.viewmodel.AutocompleteListModel;
 
 @VariableResolver(DelegatingVariableResolver.class)
@@ -518,11 +521,14 @@ public class RetroactiveDashboardViewModel implements Serializable {
 
     private void addDateRangeFilter(RetroactiveProcessRequest request) {
         if (filterView.getStartDateTime() != null || filterView.getEndDateTime() != null) {
+            TimeZone timeZone = getTimeZone();
             if (filterView.getStartDateTime() != null) {
-                request.setTimeFrom(filterView.getStartDateTime());
+                request.setTimeFrom(DateTimeBoxComponent.mergeDate(filterView.getStartDateTime(),
+                        filterView.getStartTime(), timeZone));
             }
             if (filterView.getEndDateTime() != null) {
-                request.setTimeTo(filterView.getEndDateTime());
+                request.setTimeTo(DateTimeBoxComponent.mergeDate(filterView.getEndDateTime(), filterView.getEndTime(),
+                        timeZone));
             }
         }
 
@@ -621,6 +627,28 @@ public class RetroactiveDashboardViewModel implements Serializable {
             request.setAdministrativeUnitsFilter(administrativeUnitsFilter);
         }
 
+    }
+
+    @Command
+    public void initFilterEndTime(@BindingParam("fxFilter") FilterView fxFilter) {
+        if (fxFilter.getEndTime() == null) {
+            TimeZone timeZone = getTimeZone();
+            fxFilter.setEndTime(DateTimeBoxComponent.truncateTimeToday(timeZone));
+            BindUtils.postNotifyChange(null, null, fxFilter, "endTime");
+        }
+    }
+
+    @Command
+    public void initFilterStartTime(@BindingParam("fxFilter") FilterView fxFilter) {
+        if (fxFilter.getStartTime() == null) {
+            TimeZone timeZone = getTimeZone();
+            fxFilter.setStartTime(DateTimeBoxComponent.truncateTimeToday(timeZone));
+            BindUtils.postNotifyChange(null, null, fxFilter, "startTime");
+        }
+    }
+
+    private TimeZone getTimeZone() {
+        return (TimeZone) Executions.getCurrent().getSession().getAttribute(Attributes.PREFERRED_TIME_ZONE);
     }
 
 }

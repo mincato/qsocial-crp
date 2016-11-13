@@ -6,6 +6,16 @@ public class SubjectCategorySetListView {
 
     private String description;
 
+    private boolean active = true;
+
+    public static SubjectCategorySetListView create(SubjectCategorySet set) {
+        SubjectCategorySetListView subjectCategorySetListView = new SubjectCategorySetListView();
+        subjectCategorySetListView.setId(set.getId());
+        subjectCategorySetListView.setDescription(set.getDescription());
+        subjectCategorySetListView.setActive(set.isActive());
+        return subjectCategorySetListView;
+    }
+
     public String getId() {
         return id;
     }
@@ -20,6 +30,14 @@ public class SubjectCategorySetListView {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

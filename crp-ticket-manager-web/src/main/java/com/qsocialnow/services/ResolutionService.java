@@ -10,4 +10,6 @@ public interface ResolutionService {
 
     void delete(String domainId, String resolutionId);
 
+    Resolution findOne(String domainId, String resolutionId);
+
 }

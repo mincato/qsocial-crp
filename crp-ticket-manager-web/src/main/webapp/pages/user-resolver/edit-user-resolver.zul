@@ -44,13 +44,13 @@
 										</x:div>
 									</x:div>
 									<x:div class="form-group">
-										<n:label
-											class="control-label col-sm-2">
+										<n:label class="control-label col-sm-2">
 											${labels.userresolver.active.label}
 										</n:label>
 										<x:div class="col-sm-10">
-											<checkbox
-												checked="@bind(fx.userResolver.active)" />
+											<n:div class="form-switch form-control-static">
+												<checkbox zclass="switch-success" checked="@bind(vm.currentUserResolver.userResolver.active)"   /> 
+											</n:div>
 										</x:div>
 									</x:div>
 								</x:form>
@@ -59,10 +59,10 @@
 					</div>
 				</n:div>
 				<div class="modal-footer">
-					<button
+					<button autodisable="self"
 						onClick="@command('save')" label="${labels.app.button.save}"
 						zclass="btn btn-primary" />
-					<button zclass="btn" sclass="btn-default"
+					<button autodisable="self" zclass="btn" sclass="btn-default"
 						ca:data-dismiss="modal" label="${labels.app.button.cancel}" />
 				</div>
 			</x:div>

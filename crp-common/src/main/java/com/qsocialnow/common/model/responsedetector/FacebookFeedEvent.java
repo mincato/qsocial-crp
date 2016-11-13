@@ -4,8 +4,6 @@ public class FacebookFeedEvent {
 
     private final String caseId;
 
-    private final String eventId;
-
     private final String userId;
 
     private final String userName;
@@ -20,11 +18,9 @@ public class FacebookFeedEvent {
 
     private final String originalId;
 
-    public FacebookFeedEvent(final String caseId, final String eventId, final String userId, final String userName,
-            final String replyMessageId, final String messageId, final String commentId, final String rootCommentId,
-            final String userPageId, final String originalId) {
+    public FacebookFeedEvent(final String caseId, final String userId, final String userName, final String messageId,
+            final String commentId, final String rootCommentId, final String userPageId, final String originalId) {
         this.caseId = caseId;
-        this.eventId = eventId;
         this.userId = userId;
         this.userName = userName;
         this.rootCommentId = rootCommentId;
@@ -36,10 +32,6 @@ public class FacebookFeedEvent {
 
     public String getCaseId() {
         return caseId;
-    }
-
-    public String getEventId() {
-        return eventId;
     }
 
     public String getUserId() {
@@ -72,7 +64,7 @@ public class FacebookFeedEvent {
 
     @Override
     public int hashCode() {
-        return caseId.hashCode() + eventId.hashCode() + userId.hashCode() + userName.hashCode() + messageId.hashCode()
+        return caseId.hashCode() + userId.hashCode() + userName.hashCode() + messageId.hashCode()
                 + commentId.hashCode() + rootCommentId.hashCode() + userPageId.hashCode();
     }
 
@@ -88,9 +80,6 @@ public class FacebookFeedEvent {
             return false;
 
         FacebookFeedEvent other = (FacebookFeedEvent) obj;
-
-        if (!eventId.equals(other.eventId))
-            return false;
 
         if (!caseId.equals(other.caseId))
             return false;

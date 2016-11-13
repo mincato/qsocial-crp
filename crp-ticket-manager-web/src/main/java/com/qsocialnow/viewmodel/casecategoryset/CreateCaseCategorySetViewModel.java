@@ -37,6 +37,7 @@ public class CreateCaseCategorySetViewModel implements Serializable {
 
     private void initCaseCategorySet() {
         currentCaseCategorySet = new CaseCategorySetView();
+        currentCaseCategorySet.setActive(true);
         currentCaseCategorySet.setCategories(new ArrayList<CaseCategoryView>());
     }
 
@@ -48,8 +49,10 @@ public class CreateCaseCategorySetViewModel implements Serializable {
         newCaseCategorySet.setCategories(currentCaseCategorySet.getCategories().stream().map(category -> {
             CaseCategory newCategory = new CaseCategory();
             newCategory.setDescription(category.getDescription());
+            newCategory.setActive(currentCaseCategorySet.getActive());
             return newCategory;
         }).collect(Collectors.toList()));
+        newCaseCategorySet.setActive(currentCaseCategorySet.getActive());
         newCaseCategorySet = caseCategorySetService.create(newCaseCategorySet);
         NotificationHandler.addNotification(Labels.getLabel("casecategoryset.create.notification.success",
                 new String[] { newCaseCategorySet.getDescription() }));

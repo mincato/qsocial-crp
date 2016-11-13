@@ -51,17 +51,25 @@ public interface Repository<T> {
             String serchField, String searchValue);
 
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> fieldValues, List<RangeFilter> rangeFilters,
-            List<ShouldFilter> shouldFilters);
+            boolean sortOrder, Map<String, String> fieldValues, List<TermFieldFilter> termFilters,
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
+            List<ShouldConditionsFilter> shouldConditionsByRegexpFilters);
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> fieldValues,
-            List<RangeFilter> rangeFilters, List<ShouldFilter> shouldFilters, String aggregationField);
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
+            List<TermFieldFilter> termFilters, String aggregationField);
 
     public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> fieldValues, List<RangeFilter> rangeFilters,
-            List<ShouldFilter> shouldFilters);
+            boolean sortOrder, Map<String, String> fieldValues, List<TermFieldFilter> termFilters,
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
+            List<ShouldConditionsFilter> shouldConditionsByRegexpFilters);
 
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
+            Mapping<T, E> mapping);
+
+    public <E> SearchResult queryMatchAllAsJson(int from, int size, String sortField, boolean sortOrder,
             Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchChildMapping(int from, int size, String sortField, ChildMapping<T, E> mapping);
@@ -75,6 +83,9 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> searchWithFilters(Integer from, Integer size, String sortField, SortOrder sortOrder,
             BoolQueryBuilder filters, Mapping<T, E> mapping);
+
+    public <E> SearchResponse<E> searchWithFilters(String sortField, SortOrder sortOrder, BoolQueryBuilder filters,
+            Mapping<T, E> mapping);
 
     public <E> SearchResponse<E> searchWithFilters(BoolQueryBuilder filters, Mapping<T, E> mapping);
 

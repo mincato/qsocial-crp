@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class RegistryListView implements Serializable {
 
-    private static final long serialVersionUID = 4923657399304973277L;
+    private static final long serialVersionUID = 9136979763891611520L;
 
     private String id;
 
@@ -19,6 +19,10 @@ public class RegistryListView implements Serializable {
     private Boolean automatic;
 
     private String deepLink;
+
+    private ActionRegistryStatus status;
+
+    private ErrorType errorType;
 
     public String getId() {
         return id;
@@ -74,6 +78,22 @@ public class RegistryListView implements Serializable {
 
     public void setDeepLink(String deepLink) {
         this.deepLink = deepLink;
+    }
+
+    public ActionRegistryStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ActionRegistryStatus status) {
+        this.status = status;
+    }
+
+    public ErrorType getErrorType() {
+        return errorType;
+    }
+
+    public void setErrorType(ErrorType errorType) {
+        this.errorType = errorType;
     }
 
 }

@@ -108,6 +108,7 @@
 	<bean id="teamElasticService" class="com.qsocialnow.elasticsearch.services.config.TeamService">
 		<property name="indexConfiguration" ref="configurationIndexService"></property>
 		<property name="configurator" ref="elasticDomainConfig"></property>
+		<property name="userResolverService" ref="userResolverElasticService"></property>
 	</bean>
     
     <bean id="caseCategorySetElasticService" class="com.qsocialnow.elasticsearch.services.config.CaseCategorySetService">
@@ -160,6 +161,8 @@
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_SUBJECT}" value-ref="changeSubjectCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).TAG_SUBJECT}" value-ref="tagSubjectCaseAction"/>
     	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).CHANGE_PRIORITY}" value-ref="changePriorityCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).MODIFY_SUBJECT}" value-ref="modifySubjectCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REGISTER_SUBJECT_REPLY}" value-ref="registerSubjectReplyCaseAction"/>
 	</util:map>
 	
 	<util:map id="sources">
@@ -167,11 +170,46 @@
     	<entry key="#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}" value-ref="facebookSourceStrategy"/>
 	</util:map>
 	
-	<bean id="twitterSourceStrategy" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
+	<bean id="twitterSourceStrategy" init-method="start" destroy-method="stop" class="com.qsocialnow.common.services.strategies.TwitterSourceStrategy">
         <property name="twitterConfig" ref="twitterConfig"></property>
+        <property name="queueConfig" ref="twitterQueueConfig"></property>
+        <property name="zookeeperClient" ref="zookeeperClient"></property>
+        <property name="twitterUsersZnodePath" value="${app.twitter.users.path}"></property>
+        <property name="postProcess" ref="sourceMessagePostProcessImpl"></property>
+        <property name="sourceService" ref="sourceCommonService"></property>
     </bean>
     
-    <bean id="facebookSourceStrategy" class="com.qsocialnow.common.services.strategies.FacebookSourceStrategy">
-        <property name="facebookConfig" ref="facebookConfig"></property>
+    <bean id="sourceCommonService" init-method="start" destroy-method="stop" class="com.qsocialnow.common.services.SourceService">
+        <property name="zookeeperClient" ref="zookeeperClient"></property>
+        <property name="blockedSourcesZnodePath" value="${app.blocked.sources.path}"></property>
+        <property name="automaticSources" ref="automaticSources" />
     </bean>
+    
+    <util:list id="automaticSources">
+    	<value>#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_TWITTER}</value>
+    	<value>#{T(com.qsocialnow.common.util.FilterConstants).MEDIA_FACEBOOK}</value>
+    </util:list>
+    
+    <util:map id="postProcessActions">
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).REPLY}" value-ref="sendResponseCaseAction"/>
+    	<entry key="#{T(com.qsocialnow.common.model.config.ActionType).SEND_MESSAGE}" value-ref="sendMessageCaseAction"/>
+	</util:map>
+    
+    <bean id="facebookSourceStrategy" init-method="start" destroy-method="stop" class="com.qsocialnow.common.services.strategies.FacebookSourceStrategy">
+        <property name="facebookConfig" ref="facebookConfig"></property>
+        <property name="queueConfig" ref="facebookQueueConfig"></property>
+        <property name="zookeeperClient" ref="zookeeperClient"></property>
+        <property name="facebookUsersZnodePath" value="${app.facebook.users.path}"></property>
+        <property name="postProcess" ref="sourceMessagePostProcessImpl"></property>
+    </bean>
+    
+	<bean id="twitterQueueConfig" class="com.qsocialnow.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+		<constructor-arg ref="zookeeperCentralClient" />
+		<constructor-arg value="${app.twitter.queue.configurator.path}" />
+	</bean>
+	
+	<bean id="facebookQueueConfig" class="com.qsocialnow.factories.BigQueueConfiguratorFactory" factory-method="getConfigurator">
+		<constructor-arg ref="zookeeperCentralClient" />
+		<constructor-arg value="${app.facebook.queue.configurator.path}" />
+	</bean>
 </beans>

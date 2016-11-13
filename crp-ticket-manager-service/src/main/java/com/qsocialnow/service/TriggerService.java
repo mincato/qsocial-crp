@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.filter.FilterNormalizer;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.TriggerListRequest;
-import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.persistence.CaseCategorySetRepository;
 import com.qsocialnow.persistence.SubjectCategorySetRepository;
 import com.qsocialnow.persistence.TriggerRepository;
@@ -58,7 +59,7 @@ public class TriggerService {
                 });
             });
             triggerSaved = triggerRepository.save(domainId, trigger);
-            zookeeperClient.setData().forPath(domainsPath.concat(domainId));
+            updateZookeeperNode(domainId);
         } catch (Exception e) {
             log.error("There was an error creating trigger: " + trigger.getName(), e);
             throw new RuntimeException(e.getMessage());
@@ -77,8 +78,18 @@ public class TriggerService {
         return page;
     }
 
+    public List<TriggerListView> findAllActive(String domainId) {
+        List<TriggerListView> triggers = triggerRepository.findAllActive(domainId);
+        return triggers;
+    }
+
     public Trigger findOne(String domainId, String triggerId) {
         Trigger trigger = triggerRepository.findWithSegments(triggerId);
+        return trigger;
+    }
+
+    public Trigger findOneWithActiveSegments(String domainId, String triggerId) {
+        Trigger trigger = triggerRepository.findWithActiveSegments(triggerId);
         return trigger;
     }
 
@@ -96,6 +107,15 @@ public class TriggerService {
         }
     }
 
+    public List<SegmentListView> findActiveSegments(String domainId, String triggerId) {
+        try {
+            return triggerRepository.findActiveSegments(triggerId);
+        } catch (Exception e) {
+            log.error("There was an error finding segments");
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     public Trigger update(String domainId, String triggerId, Trigger trigger) {
         Trigger triggerSaved = null;
         try {
@@ -106,7 +126,7 @@ public class TriggerService {
             });
             trigger.setId(triggerId);
             triggerSaved = triggerRepository.update(domainId, trigger);
-            zookeeperClient.setData().forPath(domainsPath.concat(domainId));
+            updateZookeeperNode(domainId);
         } catch (Exception e) {
             log.error("There was an error updating trigger: " + trigger.getDescription(), e);
             throw new RuntimeException(e.getMessage());
@@ -120,6 +140,25 @@ public class TriggerService {
             Trigger trigger = triggerRepository.findOne(triggerId);
             if (CollectionUtils.isNotEmpty(trigger.getCaseCategoriesSetIds())) {
                 caseCategoriesSet = caseCategorySetRepository.findCategoriesSets(trigger.getCaseCategoriesSetIds());
+                caseCategoriesSet.stream().forEach(caseCategorySet -> {
+                    caseCategorySet.setCategories(caseCategorySetRepository.findCategories(caseCategorySet.getId()));
+                });
+            }
+        } catch (Exception e) {
+            log.error("There was an error getting subject categories");
+            throw new RuntimeException(e.getMessage());
+        }
+        return caseCategoriesSet;
+    }
+
+    public List<CaseCategorySet> findCaseCategoriesActive(String domainId, String triggerId) {
+
+        List<CaseCategorySet> caseCategoriesSet = new ArrayList<>();
+        try {
+            Trigger trigger = triggerRepository.findOne(triggerId);
+            if (CollectionUtils.isNotEmpty(trigger.getCaseCategoriesSetIds())) {
+                caseCategoriesSet = caseCategorySetRepository.findCategoriesSetsActive(trigger
+                        .getCaseCategoriesSetIds());
                 caseCategoriesSet.stream().forEach(caseCategorySet -> {
                     caseCategorySet.setCategories(caseCategorySetRepository.findCategories(caseCategorySet.getId()));
                 });
@@ -149,6 +188,14 @@ public class TriggerService {
             throw new RuntimeException(e.getMessage());
         }
         return subjectCategoriesSet;
+    }
+
+    private void updateZookeeperNode(String domainId) throws Exception {
+        String path = domainsPath.concat(domainId);
+        Stat stat = zookeeperClient.checkExists().forPath(path);
+        if (stat != null) {
+            zookeeperClient.setData().forPath(path);
+        }
     }
 
 }

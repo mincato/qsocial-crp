@@ -1,6 +1,10 @@
 package com.qsocialnow.common.model.config;
 
-public class SourceCredentials {
+import java.io.Serializable;
+
+public class SourceCredentials implements Serializable {
+
+    private static final long serialVersionUID = -8153690238891871012L;
 
     private SourceIdentifier identifier;
 

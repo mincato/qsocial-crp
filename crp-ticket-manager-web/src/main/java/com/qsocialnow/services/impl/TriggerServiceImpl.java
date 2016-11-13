@@ -96,6 +96,29 @@ public class TriggerServiceImpl implements TriggerService {
     }
 
     @Override
+    public List<TriggerListView> findAllActive(String domainId) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/triggerActive");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<TriggerListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<TriggerListView>>() {
+                    });
+
+            List<TriggerListView> triggers = response.getBody();
+            return triggers;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call domain service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Trigger findOne(String domainId, String triggerId) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -103,6 +126,23 @@ public class TriggerServiceImpl implements TriggerService {
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
                     .path("/trigger/" + triggerId);
+
+            Trigger trigger = restTemplate.getForObject(builder.toUriString(), Trigger.class);
+            return trigger;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Trigger findOneWithActiveSegments(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/triggerWithActiveSegments/" + triggerId);
 
             Trigger trigger = restTemplate.getForObject(builder.toUriString(), Trigger.class);
             return trigger;
@@ -173,6 +213,25 @@ public class TriggerServiceImpl implements TriggerService {
     }
 
     @Override
+    public List<SegmentListView> findActiveSegments(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/segmentsActive");
+
+            ResponseEntity<List<SegmentListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<SegmentListView>>() {
+                    });
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<CaseCategorySet> findCategories(String domainId, String triggerId) {
         try {
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
@@ -180,6 +239,25 @@ public class TriggerServiceImpl implements TriggerService {
             UriComponentsBuilder builder = UriComponentsBuilder
                     .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
                     .path("/trigger/" + triggerId).path("/caseCategories");
+
+            ResponseEntity<List<CaseCategorySet>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<CaseCategorySet>>() {
+                    });
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call trigger service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CaseCategorySet> findActiveCategories(String domainId, String triggerId) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+
+            UriComponentsBuilder builder = UriComponentsBuilder
+                    .fromHttpUrl(serviceUrlResolver.resolveUrl(domainServiceUrl)).path("/" + domainId)
+                    .path("/trigger/" + triggerId).path("/caseCategoriesActive");
 
             ResponseEntity<List<CaseCategorySet>> response = restTemplate.exchange(builder.toUriString(),
                     HttpMethod.GET, null, new ParameterizedTypeReference<List<CaseCategorySet>>() {

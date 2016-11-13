@@ -50,6 +50,7 @@ public class CaseCategoryMapping implements Mapping<CaseCategoryType, CaseCatego
         CaseCategoryType caseCategoryType = new CaseCategoryType();
         caseCategoryType.setId(document.getId());
         caseCategoryType.setDescription(document.getDescription());
+        caseCategoryType.setActive(document.isActive());
         return caseCategoryType;
     }
 
@@ -58,6 +59,7 @@ public class CaseCategoryMapping implements Mapping<CaseCategoryType, CaseCatego
         CaseCategory caseCategory = new CaseCategory();
         caseCategory.setId(documentType.getId());
         caseCategory.setDescription(documentType.getDescription());
+        caseCategory.setActive(documentType.isActive());
         return caseCategory;
     }
 

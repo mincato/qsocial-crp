@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.qsocialnow.crp</groupId>
 		<artifactId>case-resolution-platform</artifactId>
-		<version>0.6.3</version>
+		<version>0.7</version>
 	</parent>
 	<artifactId>crp-common</artifactId>
 	<packaging>jar</packaging>
@@ -27,9 +27,10 @@
 		<gson-version>2.7</gson-version>
 		
 		<twitter4j.version>4.0.4</twitter4j.version>
-		<facebook4j.version>2.4.7</facebook4j.version>
+		<facebook4j.version>2.4.8</facebook4j.version>
 		<jackson.version>2.6.4</jackson.version>
 		<bigqueue.version>0.7.0</bigqueue.version>
+		<curator.version>2.9.1</curator.version>
 	</properties>
 	
 	<repositories>
@@ -117,6 +118,13 @@
   			<groupId>com.leansoft</groupId>
   			<artifactId>bigqueue</artifactId>
   			<version>${bigqueue.version}</version>
+		</dependency>
+		
+		<!-- Curator -->
+		<dependency>
+			<groupId>org.apache.curator</groupId>
+			<artifactId>curator-recipes</artifactId>
+			<version>${curator.version}</version>
 		</dependency>
 
 	</dependencies>

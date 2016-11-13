@@ -1,6 +1,7 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
 	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.CasesViewModel')" 
+	form="@id('fxFilter') @load(vm.filter) @save(vm.filter, before='search') @validator('com.qsocialnow.validators.CriteriaFilterFormValidator')" validationMessages="@id('vmsgs')"
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
 		<n:div class="col-sm-12">
@@ -26,10 +27,9 @@
         </n:div>
     </div>
 	<n:div class="row">
-        <n:div class="col-lg-12">
-           <div zclass="pane equal col-md-12 col-xs-12">
-           				<n:form class="form-inline">				
-           
+       <n:div class="col-lg-12">
+         <div zclass="pane equal col-md-12 col-xs-12">
+           	<n:form class="form-inline">				
                 <x:div class="form-group" visible="@load(vm.domains ne null and not empty vm.domains)">
                     <n:label class="control-label">${labels.cases.list.filter.domains}</n:label>
                     <div zclass="input-group input-group-sm">
@@ -93,12 +93,12 @@
                 </n:div>
                 <n:div class="form-group">
                     <div zclass="input-group input-group-sm">
-                          <datebox sclass="input-group" format="short" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
+                          <datebox sclass="input-group" format="medium" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
                     </div>
                 </n:div>
                 <n:div class="form-group">
                    <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
-                       <datebox id="todate" sclass="input-group" format="short" value="@load(vm.toDate) @save(vm.toDate, before='search') @converter('com.qsocialnow.converters.DateInputConverter', endDay = true) @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.list.filter.todate}" />
+                       <datebox id="todate" sclass="input-group" format="medium" value="@load(vm.toDate) @save(vm.toDate, before='search') @converter('com.qsocialnow.converters.DateInputConverter', endDay = true) @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.list.filter.todate}" />
                     </x:div>
                 </n:div>
                 <n:div class="form-group">
@@ -148,8 +148,8 @@
       					<n:div class="form-group">
                  <div zclass="input-group input-group-sm">
                     <span zclass="input-group-btn">
-                        <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>                          
-				  <button zclass="btn btn-primary" type="button" onClick="@command('download')"  iconSclass="z-icon-file-excel-o"></button>
+                        <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>                          
+				  <button autodisable="self" zclass="btn btn-primary" type="button" onClick="@command('download')"  iconSclass="z-icon-file-excel-o"></button>
                    </span>
                  </div>
                        </n:div>
@@ -174,30 +174,405 @@
 	        </x:div>
 	        <n:div id="advancedFilters" class="pane equal panel-collapse collapse">
 	        <x:div class="panel-body"> 
-		    <x:form class="form-inline">    
-                <n:div class="form-group">
-                    <n:label class="control-label">${labels.cases.list.filter.caseCategories}</n:label>
-                    <div zclass="input-group input-group-sm">
-                           <selectbox sclass="form-control" model="@load(vm.caseCategoriesOptions)"
-                               selectedItem="@bind(vm.caseCategory)">
+		        <n:form class="form-inline">
+	                <n:div class="form-group">
+	                    <n:label class="control-label">${labels.cases.list.filter.caseCategories}</n:label>
+	                    <div zclass="input-group input-group-sm">
+	                           <selectbox sclass="form-control" model="@load(vm.caseCategoriesOptions)"
+	                               selectedItem="@bind(vm.caseCategory)">
+	                               <template name="model">
+	                                   <label value="${each.description}" />
+	                               </template>
+	                           </selectbox>
+	                    </div>
+	                </n:div>
+		            <n:div class="form-group">
+		                   <n:label class="control-label">${labels.cases.list.filter.subjectCategories}</n:label>
+		                   <div zclass="input-group input-group-sm">
+		                          <selectbox sclass="form-control" model="@load(vm.subjectCategoriesOptions)"
+		                              selectedItem="@bind(vm.subjectCategory)">
+		                              <template name="model">
+		                                  <label value="${each.description}" />
+		                              </template>
+		                          </selectbox>
+		                   </div>
+		             </n:div>
+		        </n:form>
+		        <n:br />
+                <n:hr/>
+                <n:form class="form-horizontal">
+                    <n:div class="form-group">
+                        <n:label class="control-label col-sm-2">${labels.cases.list.filter.source}</n:label>
+                        <x:div class="col-sm-6 text-center" children="@load(vm.mediaTypes)">
+                            <template name="children">
+                                <checkbox zclass="icon-input media" sclass="@load(each.media.icon)" checked="@bind(each.checked)" />
+                            </template>
+                        </x:div>
+                        <x:div class="col-sm-4 all icon-input">
+                            <checkbox zclass="icon-input all media_select_all" label="${labels.app.select.all}"/>
+                        </x:div>
+                    </n:div>
+                </n:form>
+                <n:br />
+                <n:hr />    
+                
+                <n:form class="form-horizontal">                                
+                    <n:div class="form-group">
+                        <n:label class="control-label col-sm-2">${labels.cases.list.filter.language}</n:label>
+                        <x:div class="col-sm-6 text-center" children="@load(vm.languages)">
+                            <template name="children">
+                                <checkbox zclass="image-input language" sclass="@load(each.language.image)" checked="@bind(each.checked)" />
+                            </template>
+                        </x:div>
+                        <x:div class="col-sm-4 all icon-input">
+                            <checkbox zclass="icon-input all language_select_all" label="${labels.app.select.all}"/>
+                        </x:div>
+                    </n:div>
+                </n:form>
+                <n:br />
+                <n:hr />
+
+                <n:form class="form-horizontal pane">                               
+                    <x:div class="@load(empty vmsgs[startdate] ? 'form-group' : 'form-group has-error')">
+                        <n:label class="control-label col-sm-2">${labels.trigger.startDate}</n:label>
+                        <n:div class="col-sm-10">
+                            <n:div class="col-sm-3"> 
+	                            <datebox id="startdate" sclass="input-group" format="medium" 
+	                            onChange="@command('initFilterStartTime', fxFilter = fxFilter)"
+	                            value="@bind(fxFilter.startDateTime) @converter('com.qsocialnow.converters.DateInputConverter')" />
+		                        <x:span sclass="@load(empty vmsgs[startdate] ? 'hidden' : 'help-block')">
+		                            <label value="@load(vmsgs[startdate])" />
+		                        </x:span>
+                           </n:div>
+	                       <n:div class="col-sm-2">
+	                            <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.startTime) @converter('com.qsocialnow.converters.DateInputConverter')"></timebox>
+	                       </n:div>
+	                  </n:div>
+                    </x:div>
+                    <x:div sclass="@load(empty vmsgs[enddate] ? 'form-group' : 'form-group has-error')">
+                        <n:label class="control-label col-sm-2">${labels.trigger.endDate}</n:label>
+                        <n:div class="col-sm-10">
+                           <n:div class="col-sm-3">
+	                            <datebox id="enddate" sclass="input-group" format="medium" 
+	                            onChange="@command('initFilterEndTime', fxFilter = fxFilter)"
+	                            value="@load(fxFilter.endDateTime) 
+	                            @save(fxFilter.endDateTime, before='search')
+	                            @converter('com.qsocialnow.converters.DateInputConverter')
+	                            @validator('com.qsocialnow.validators.ToDateValidator', fromDate = fxFilter.startDateTime, label = 'trigger.criteria.enddate.validation', id='enddate', required=false)" />
+	                            <x:span sclass="@load(empty vmsgs[enddate] ? 'hidden' : 'help-block')">
+	                                    <label value="@load(vmsgs[enddate])" />
+	                            </x:span>
+                           </n:div>
+                           <n:div class="col-sm-2">
+                                 <timebox sclass="input-group timebox" format="short" value="@bind(fxFilter.endTime) @converter('com.qsocialnow.converters.DateInputConverter')"></timebox>
+                           </n:div>
+                        </n:div>
+                    </x:div>
+                </n:form>
+               <n:br />
+	           <n:hr />
+	           <n:form class="form-horizontal">
+	               <n:div class="form-group">
+	                   <n:label class="control-label col-sm-2">${labels.cases.list.filter.connotation}</n:label>
+	                   <x:div class="col-sm-6 text-center" children="@load(vm.connotations)">
+	                       <template name="children">
+	                           <checkbox zclass="icon-input connotation" sclass="@load(each.connotation.icon)" checked="@bind(each.checked)" />
+	                       </template>
+	                   </x:div>
+	                   <x:div class="col-sm-4 all icon-input">
+	                       <checkbox zclass="icon-input all connotation_select_all" label="${labels.app.select.all}"/>
+	                   </x:div>
+	               </n:div>
+	           </n:form>
+	           <n:br />
+	           <n:hr />
+                <n:div>
+                     <n:label class="control-label col-sm-2 text-right">${labels.trigger.criteria.followers.title}</n:label>
+                     <n:form class="form-inline text-center">                                
+                         <n:div class="form-group">
+                             <n:label class="control-label">${labels.cases.list.filter.greater}</n:label>
+                             <longbox class="form-control" constraint="no negative"
+                                 value="@bind(fxFilter.followersGreaterThan)"></longbox>
+                         </n:div>
+                         <x:div sclass="@load(empty vmsgs[followerslessthan] ? 'form-group' : 'form-group has-error')">
+                             <n:label class="control-label">${labels.cases.list.filter.less}</n:label>
+                             <longbox id="followerslessthan" sclass="form-control" constraint="no negative"
+                                 value="@load(fxFilter.followersLessThan)  @save(fxFilter.followersLessThan, before='search')
+                                 @validator('com.qsocialnow.validators.LongGreaterThanValidator', greater = fxFilter.followersGreaterThan, id = 'followerslessthan')"></longbox>
+                             <x:span sclass="@load(empty vmsgs[followerslessthan] ? 'hidden' : 'help-block')">
+                                     <label value="@load(vmsgs[followerslessthan])" />
+                             </x:span>   
+                         </x:div>
+                     </n:form>
+                 </n:div>
+                
+                <n:br />
+                <n:hr />
+                <n:form class="form-horizontal">
+                    <x:div class="form-group">
+                        <n:label class="control-label col-sm-2 text-right">
+                            ${labels.trigger.criteria.word.title}
+                        </n:label>
+                        <n:div class="col-sm-10">
+                            <div zclass="pull-right">
+                                <a class="link-button" onClick="@command('addFilterWord', fxFilter=fxFilter)">
+                                    <i class="fa fa-plus-circle fa-2x"></i>
+                                    ${labels.trigger.criteria.add.filter}
+                                </a>
+                            </div>
+                        </n:div>
+                    </x:div>
+                    <div class="form-group">
+                        <n:div class="col-sm-offset-2 ">
+                            <x:ol class="list-group order" children="@bind(fxFilter.filterWords) ">
+                                <template name="children" var="filterWord">
+                                    <n:div class="list-group-item col-xs-11 col-sm-11">
+                                        <x:div 
+                            sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+                                            <listbox id="filterword_type_${filterWordStatus.index}" mold="select" sclass="form-control"
+                                                model="@load(vm.wordFilterTypeOptions)" multiple="false" checkmark="true"
+                                                selectedItem="@bind(filterWord.type)">
+                                                <template name="model">
+                                                    <listitem>
+                                                        <listcell
+                                                        label="${each}" />
+                                                    </listitem>
+                                                </template>
+                                            </listbox>
+                                            <x:span
+                                                sclass="@load(vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
+                                                <label
+                                                    value="@bind(vmsgs['filterword_type_'.concat(filterWordStatus.index)])" />
+                                            </x:span>
+                                        </x:div>
+                                        <x:div 
+                            sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-8 col-sm-3' : 'col-xs-8 col-sm-3 has-error')">
+                                            <textbox id="filterword_text_${filterWordStatus.index}" type="text" class="form-control" 
+                                                value="@bind(filterWord.inputText)"></textbox>
+                                            <x:span
+                                                sclass="@load(vmsgs['filterword_text_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
+                                                <label
+                                                    value="@bind(vmsgs['filterword_text_'.concat(filterWordStatus.index)])" />
+                                            </x:span>   
+                                        </x:div>
+                                        <n:div class="col-xs-4 col-sm-3">
+                                            <n:div class="pull-right">
+                                                <a zclass="btn-row-list"
+                                                    onClick="@command('removeFilterWord', fxFilter=fxFilter, filter = filterWord)">
+                                                    <i
+                                                        class="glyphicon glyphicon-erase fa-lg">
+                                                    </i>
+                                                </a>
+                                            </n:div>
+                                        </n:div>
+                                    </n:div>
+                                </template>
+                            </x:ol>
+                        </n:div>
+                    </div>
+                </n:form>
+                <n:br />
+                <n:hr />
+                
+                <n:form class="form-horizontal">
+                    <x:div class="form-group">
+                        <n:label class="control-label col-sm-2 text-right">
+                            ${labels.trigger.criteria.admUnit.title}
+                        </n:label>
+                        <n:div class="col-sm-10">
+                            <div zclass="pull-right">
+                                <a class="link-button" onClick="@command('addFilterAdmUnit', fxFilter=fxFilter)"
+                                    disabled="@load(not vm.enableAddAdmUnit)">
+                                    <i class="fa fa-plus-circle fa-2x"></i>
+                                    ${labels.trigger.criteria.add.filter}
+                                </a>
+                            </div>
+                        </n:div>
+                    </x:div>
+                    <div class="form-group">
+                        <n:div class="col-sm-offset-2 ">
+                            <x:ol class="list-group order" children="@bind(fxFilter.admUnitFilters) @template(each.editingStatus ? 'editable' : 'noneditable')">
+                                <template name="noneditable" var="filterAdmUnit">
+                                    <n:div
+                                        class="list-group-item col-xs-12 col-sm-11">
+                                        <n:div class="col-xs-6 col-sm-6">
+                                            <label value="@load(vm.createAdmUnitValue(filterAdmUnit.adminUnit))"/>
+                                        </n:div>
+                                        <n:div class="col-xs-2 col-sm-3">
+                                        </n:div>
+                                        <n:div class="col-xs-4 col-sm-3">
+                                            <n:div class="pull-right">
+                                                <a zclass="btn-row-list"
+                                                    onClick="@command('removeAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+                                                    <i
+                                                        class="glyphicon glyphicon-erase fa-lg">
+                                                    </i>
+                                                </a>
+                                            </n:div>
+                                        </n:div>
+                                    </n:div>
+                                </template>
+                                <template name="editable" var="filterAdmUnit">
+                                    <n:div class="list-group-item col-xs-11 col-sm-11">
+                                        <x:div 
+                                                sclass="@load(empty vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+                                            <combobox model="@load(vm.adminUnits)" autodrop="true" buttonVisible="false" selectedItem="@bind(filterAdmUnit.adminUnit)">
+                                                <template name="model">
+                                                    <comboitem label="@load(vm.createAdmUnitValue(each))" description="@load(vm.createAdmUnitDescription(each))"/>
+                                                </template>
+                                            </combobox>
+                                            <x:span
+                                                sclass="@load(vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)] ? 'hidden' : 'help-block')">
+                                                <label
+                                                    value="@bind(vmsgs['filteradmunit_'.concat(filterAdmUnitStatus.index)])" />
+                                            </x:span>
+                                        </x:div>
+                                        <n:div class="col-xs-8 col-sm-3">
+                                        </n:div>
+                                        <n:div class="col-xs-4 col-sm-3">
+                                            <n:div class="pull-right">
+                                                <a
+                                                    sclass="@load(filterAdmUnit.adminUnit eq null ? '' : 'btn-row-list')"
+                                                    disabled="@load(filterAdmUnit.adminUnit eq null)"
+                                                    onClick="@command('confirmAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+                                                    <i class="glyphicon glyphicon-ok fa-lg"></i>
+                                                </a>
+                                                <a zclass="btn-row-list"
+                                                    onClick="@command('removeAdmUnit', index = filterAdmUnitStatus.index, fxFilter = fxFilter)">
+                                                    <i
+                                                        class="glyphicon glyphicon-erase fa-lg">
+                                                    </i>
+                                                </a>
+                                            </n:div>
+                                        </n:div>
+                                    </n:div>
+                                </template>
+                            </x:ol>
+                        </n:div>
+                    </div>
+                </n:form>
+                <n:br />
+                <n:hr />
+                <n:div class="">
+                   <n:label class="control-label col-sm-2 text-right">${labels.trigger.criteria.thematics.title}</n:label>
+                   <n:form class="form-inline text-center">                                
+                       <x:div sclass="@load(empty vmsgs[thematic] ? 'form-group' : 'form-group has-error')">
+                           <n:label class="control-label">${labels.trigger.criteria.thematics.thematic}</n:label>
+                           <selectbox id="thematic" sclass="form-control" model="@load(vm.thematicsOptions)"
+                               onSelect="@command('selectThematic', fxFilter=fxFilter)"
+                               selectedItem="@bind(fxFilter.thematic)"
+                               >
                                <template name="model">
-                                   <label value="${each.description}" />
+                                   <label value="@load(each.nombre)" />
                                </template>
                            </selectbox>
-                    </div>
-                </n:div>
-                <n:div class="form-group">
-                    <n:label class="control-label">${labels.cases.list.filter.subjectCategories}</n:label>
-                    <div zclass="input-group input-group-sm">
-                           <selectbox sclass="form-control" model="@load(vm.subjectCategoriesOptions)"
-                               selectedItem="@bind(vm.subjectCategory)">
+                           <x:span
+                               sclass="@load(vmsgs[thematic] ? 'hidden' : 'help-block')">
+                               <label
+                                   value="@bind(vmsgs[thematic])" />
+                               </x:span>
+                       </x:div>
+                       <x:div sclass="@load(empty vmsgs[serie] ? 'form-group' : 'form-group has-error')" visible="@load(vm.serieOptions ne null and not empty vm.serieOptions)">
+                           <n:label class="control-label">${labels.trigger.criteria.thematics.serie}</n:label>
+                           <selectbox id="serie" sclass="form-control"  model="@load(vm.serieOptions)"
+                               onSelect="@command('selectSerie', fxFilter=fxFilter)"
+                               selectedItem="@bind(fxFilter.serie)">
                                <template name="model">
-                                   <label value="${each.description}" />
+                                   <label value="@load(each.nombre)" />
                                </template>
                            </selectbox>
-                    </div>
-                </n:div>
-		    </x:form>
+                           <x:span sclass="@load(vmsgs[serie] ? 'hidden' : 'help-block')">
+                               <label value="@bind(vmsgs[serie])" />
+                           </x:span>
+                       </x:div>
+                       <x:div sclass="form-group" visible="@load(vm.subSerieOptions ne null and not empty vm.subSerieOptions)">
+                           <n:label class="control-label">${labels.trigger.criteria.thematics.subSerie}</n:label>
+                           <selectbox sclass="form-control" model="@load(vm.subSerieOptions)"
+                               selectedItem="@bind(fxFilter.subSerie)">
+                               <template name="model">
+                                   <label value="@load(each.nombre)" />
+                               </template>
+                           </selectbox>
+                           <x:span sclass="@load(vmsgs['serie'] ? 'hidden' : 'help-block')">
+                               <label value="" />
+                           </x:span>
+                       </x:div>
+                   </n:form>
+               </n:div>
+               <n:br />
+               <x:hr visible="@load(vm.categoryGroupOptions ne null and not empty vm.categoryGroupOptions)" />
+		          <x:form class="form-horizontal" visible="@load(vm.categoryGroupOptions ne null and not empty vm.categoryGroupOptions)">
+		              <x:div class="form-group">
+		                  <n:label class="control-label col-sm-2 text-right">
+		                      ${labels.trigger.criteria.category.title}
+		                  </n:label>
+		                  <n:div class="col-sm-10">
+		                      <div zclass="pull-right">
+		                          <a class="link-button" onClick="@command('addFilterCategory', fxFilter=fxFilter)">
+		                              <i class="fa fa-plus-circle fa-2x"></i>
+		                              ${labels.trigger.criteria.add.category}
+		                          </a>
+		                      </div>
+		                  </n:div>
+		              </x:div>
+		              <div class="form-group">
+		                  <n:div class="col-sm-offset-2">
+		                      <x:ol class="list-group order" children="@bind(fxFilter.filterCategories)">
+		                          <template name="children" var="filterCategory">
+		                              <n:div class="list-group-item col-xs-11 col-sm-11">
+		                                  <x:div sclass="@load(empty vmsgs['filtercategory_'.concat(filterCategoryStatus.index)] ? 'col-xs-12 col-sm-6' : 'col-xs-12 col-sm-6 has-error')">
+		                                      <listbox id="filtercategory_${filterCategoryStatus.index}" mold="select" sclass="form-control"
+		                                          model="@load(vm.categoryGroupOptions)" multiple="false" checkmark="true"
+		                                          selectedItem="@bind(filterCategory.categoryGroup)"
+		                                          onSelect="@command('selectGroupCategory', filter=filterCategory)">
+		                                          <template name="model">
+		                                              <listitem>
+		                                                  <listcell
+		                                                  label="@load(vm.createCategoryName(each))" />
+		                                              </listitem>
+		                                          </template>
+		                                      </listbox>
+		                                      <x:span
+		                                          sclass="@load(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)] ? 'hidden' : 'help-block')">
+		                                          <label
+		                                              value="@bind(vmsgs['filtercategory_'.concat(filterCategoryStatus.index)])" />
+		                                      </x:span>
+		                                  </x:div>
+		                                  <n:div class="col-xs-6 col-sm-3">
+		                                      <div class="form-group" children="@load(filterCategory.categories)">
+		                                          <template name="children">
+		                                              <span>
+		                                                  <label value="@load(vm.createCategoryName(each))"/>
+		                                                  <span>
+		                                                      <button autodisable="self" type="button" sclass="remove" label="&#x00D7;" onClick="@command('removeCategory', filter=filterCategory, category=each)"/>
+		                                                  </span>
+		                                              </span>
+		                                          </template>
+		                                      </div>
+		                                  </n:div>
+		                                  <n:div class="col-xs-2 col-sm-1" >
+		                                      <a class="link-button" visible="@load(filterCategory.categories ne null)" onClick="@command('editCategories', fxFilter=fxFilter, filter = filterCategory)">
+		                                          <i class="fa fa-plus-circle fa-2x"></i>
+		                                      </a>
+		                                  </n:div>
+		                                  <n:div class="col-xs-4 col-sm-2">
+		                                      <n:div class="pull-right">
+		                                          <a zclass="btn-row-list"
+		                                              onClick="@command('removeFilterCategory', fxFilter=fxFilter, filter = filterCategory)">
+		                                              <i
+		                                                  class="glyphicon glyphicon-erase fa-lg">
+		                                              </i>
+		                                          </a>
+		                                      </n:div>
+		                                  </n:div>
+		                              </n:div>
+		                          </template>
+		                      </x:ol>
+		                  </n:div>
+		              </div>
+		          </x:form>
+		          <n:br />
+		          <x:hr />
 		   </x:div>
 	      </n:div>
 	      </div>
@@ -211,7 +586,7 @@
 			    		<thead>
 							<tr>
 							    <th sclass="@load(vm.sortField eq 'title' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
-							    onClick="@command('sortList' , sortField='title.raw')" >
+							    onClick="@command('sortList' , sortField='title.keyword')" >
 									${labels.cases.list.column.title}
 						    	</th>
 					    		<th sclass="@load(vm.sortField eq 'description' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
@@ -223,7 +598,7 @@
                                                 ${labels.cases.list.column.openDate}
                                  </th>
 					    		<th sclass="@load(vm.sortField eq 'subject.identifier' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')"
-					    			onClick="@command('sortList' , sortField='subject.identifier.raw')" >
+					    			onClick="@command('sortList' , sortField='subject.identifier.keyword')" >
 										${labels.cases.list.column.subject}
 					    		  </th>
 					    		 <th style="width:40px" sclass="@load(vm.sortField eq 'pendingResponse' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')"
@@ -249,7 +624,7 @@
 			    			<template name="children">
 								<tr>
 								    <td class="list-text-column">
-								    <a label="@load(each.title)" href="/pages/cases/edit/index.zul?case=${each.id}"></a></td>
+								    <a autodisable="self" label="@load(each.title)" href="/pages/cases/edit/index.zul?case=${each.id}"></a></td>
                        				<td class="text-center">${each.description}</td>
                        				<td class="text-center"><label value="@load(each.openDate) @converter(vm.dateConverter)"/></td>
                        				<td class="text-center">${each.subject}</td>
@@ -266,7 +641,7 @@
 				</div>
 				
 				<div class="text-center" zclass="@bind(vm.moreResults? 'more-results':'hidden')">
-					<a style="text-decoration:none" onClick="@command('moreResults')"  >
+					<a autodisable="self" style="text-decoration:none" onClick="@command('moreResults')"  >
 			 			${labels.app.pagination.moreResults}
 					</a>
 				</div>

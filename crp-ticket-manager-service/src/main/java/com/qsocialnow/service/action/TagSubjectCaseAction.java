@@ -20,7 +20,7 @@ public class TagSubjectCaseAction implements Action {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public AsyncAction execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         List<String> subjectCategoriesSet = (List<String>) parameters.get(ActionParameter.CATEGORIES_SET);
         caseObject.getSubject().setSubjectCategorySet(new HashSet<>(subjectCategoriesSet));
         List<String> subjectCategories = (List<String>) parameters.get(ActionParameter.CATEGORIES);
@@ -43,6 +43,7 @@ public class TagSubjectCaseAction implements Action {
         }
 
         subjectRepository.update(subject);
+        return null;
     }
 
 }

@@ -18,7 +18,7 @@
 								<div zclass="input-group input-group-sm">
 									  <textbox zclass="form-control" value="@bind(subjectVm.keyword)" onOK="@command('search')" />
 										<span zclass="input-group-btn">
-										    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+										    <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
 										</span>
 						    	</div>
 			                </n:div>
@@ -66,7 +66,7 @@
 				</div>
 			</n:div>
 			<n:div class="modal-footer">
-				<button ca:data-dismiss="modal" label="${labels.app.button.close}" zclass="btn btn-primary" />
+				<button autodisable="self" ca:data-dismiss="modal" label="${labels.app.button.close}" zclass="btn btn-primary" />
 			</n:div>
 		</div>
 	</n:div>

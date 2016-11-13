@@ -19,6 +19,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.UserResolver;
@@ -104,6 +105,7 @@ public class UsersResolverViewModel implements Serializable {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("userresolver", userResolverId);
         Executions.createComponents("/pages/user-resolver/edit-user-resolver.zul", null, arg);
+        Clients.evalJavaScript("initSwitch()");
     }
 
     @Command
@@ -123,7 +125,7 @@ public class UsersResolverViewModel implements Serializable {
                 UserResolverListView userResolverListView = userResolverOptional.get();
                 userResolverListView.setSource(userResolverChanged.getSource());
                 userResolverListView.setIdentifier(userResolverChanged.getIdentifier());
-                userResolverListView.setActive(userResolverChanged.getActive());
+                userResolverListView.setActive(userResolverChanged.isActive());
             }
         }
     }

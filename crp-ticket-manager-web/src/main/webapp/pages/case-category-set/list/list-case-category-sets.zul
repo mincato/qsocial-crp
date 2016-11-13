@@ -14,7 +14,7 @@
 					<div zclass="input-group input-group-sm">
 						  <textbox zclass="form-control" value="@bind(vm.keyword)" onOK="@command('search')" />
 							<span zclass="input-group-btn">
-							    <button zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
+							    <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>
 							</span>
 			    	</div>
                 </n:div>
@@ -46,19 +46,21 @@
 			    <thead>
 					<tr>
 					    <th>${labels.casecategoryset.list.column.description}</th>
+					    <th>${labels.casecategoryset.list.column.active}</th>
 					</tr>
 			    </thead>
 			    <tbody children="@bind(vm.caseCategorySets)">
 			    	<template name="children">
 					<tr>
 						<td class="list-text-column"><a label="@load(each.description)" onClick="@command('openEdit', casecategoryset=each.id)"> </a></td>
+						<td>${c:l(c:cat('casecategoryset.active.',each.active))}</td>
 	           		</tr>
                		</template>
 				</tbody>
 			</table>
 		  </div>
 			<div class="text-center" zclass="@bind(vm.moreResults?'more-results':'hidden')">
-				<a style="text-decoration:none" onClick="@command('moreResults')"  >
+				<a autodisable="self" style="text-decoration:none" onClick="@command('moreResults')"  >
 				 	${labels.app.pagination.moreResults}
 				</a>
 			</div>

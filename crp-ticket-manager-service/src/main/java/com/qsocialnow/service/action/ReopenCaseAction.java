@@ -11,9 +11,10 @@ import com.qsocialnow.common.model.cases.Case;
 public class ReopenCaseAction implements Action {
 
     @Override
-    public void execute(Case caseObject, Map<ActionParameter, Object> parameters) {
+    public AsyncAction execute(Case caseObject, Map<ActionParameter, Object> parameters) {
         caseObject.setCloseDate(null);
         caseObject.setOpen(true);
+        return null;
     }
 
 }

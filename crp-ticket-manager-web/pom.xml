@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.qsocialnow.crp</groupId>
 		<artifactId>case-resolution-platform</artifactId>
-		<version>0.6.3</version>
+		<version>0.7</version>
 	</parent>
 	<artifactId>crp-ticket-manager-web</artifactId>
 	<packaging>war</packaging>
@@ -36,8 +36,6 @@
 		<commons-collection.version>4.1</commons-collection.version>
 		<commons-lang.version>3.4</commons-lang.version>
 		
-		<twitter4j.version>4.0.4</twitter4j.version>
-		<facebook4j.version>2.4.6</facebook4j.version>
 	</properties>
 	<dependencies>
 
@@ -94,6 +92,16 @@
    			<version>${spring.version}</version>
   		</dependency>
   		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+   			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+   			<version>${spring.version}</version>
+		</dependency>
+  		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>2.2.2</version>
@@ -137,20 +145,6 @@
     		<version>1.11.38</version>
 		</dependency>
 		
-		<!-- Twitter -->
-		<dependency>
-	        <groupId>org.twitter4j</groupId>
-	        <artifactId>twitter4j-core</artifactId>
-	        <version>${twitter4j.version}</version>
-        </dependency>
-		
-		<!-- Facebook -->        
-		<dependency>
-			<groupId>org.facebook4j</groupId>
-			<artifactId>facebook4j-core</artifactId>
-			<version>${facebook4j.version}</version>
-		</dependency>
-		
 		<!-- Servlet API -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -170,6 +164,12 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>8.1.16.v20140903</version>
 				<configuration>
+				 	<systemProperties>
+            			<systemProperty>
+            				<name>spring.profiles.active</name>
+            				<value>development</value>
+        				</systemProperty>
+        			</systemProperties>
 					  <webAppConfig>
                                 <contextPath>/${project.artifactId}</contextPath>
                                 <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>

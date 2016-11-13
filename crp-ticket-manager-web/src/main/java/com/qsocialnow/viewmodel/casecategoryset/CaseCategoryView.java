@@ -11,6 +11,8 @@ public class CaseCategoryView {
     @NotBlank(message = "app.field.empty.validation")
     private String description;
 
+    private boolean active;
+
     public CaseCategoryView() {
         super();
     }
@@ -19,6 +21,7 @@ public class CaseCategoryView {
         super();
         this.id = category.getId();
         this.description = category.getDescription();
+        this.active = category.isActive();
     }
 
     public String getId() {
@@ -35,5 +38,13 @@ public class CaseCategoryView {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

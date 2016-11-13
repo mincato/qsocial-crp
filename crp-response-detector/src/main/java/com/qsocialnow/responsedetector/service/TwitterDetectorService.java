@@ -266,7 +266,6 @@ public class TwitterDetectorService extends SourceDetectorService {
                 if (conversationsByinReplyMessageId != null) {
                     if (conversationsByinReplyMessageId.getReplyMessageId().equals(inReplyToMessageId)) {
                         // is response from existing conversation
-                        event.setIdPadre(conversationsByinReplyMessageId.getEventId());
                         event.setOriginIdCase(conversationsByinReplyMessageId.getCaseId());
                         removeSourceConversation(inReplyToMessageId);
                     }

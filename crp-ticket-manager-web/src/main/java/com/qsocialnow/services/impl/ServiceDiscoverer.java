@@ -16,6 +16,7 @@ public class ServiceDiscoverer {
 
     private static final Logger log = LoggerFactory.getLogger(ServiceDiscoverer.class);
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public ServiceDiscoverer(String serviceName, CuratorFramework zookeeperClient, String basePath) throws Exception {
         JsonInstanceSerializer<Object> serializer = new JsonInstanceSerializer(Object.class);
         serviceDiscovery = ServiceDiscoveryBuilder.builder(Object.class).client(zookeeperClient).basePath(basePath)

@@ -1,14 +1,14 @@
 package com.qsocialnow.services.impl;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -55,7 +55,6 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public PageResponse<RegistryListView> findRegistriesBy(int pageNumber, int pageSize, String caseId, String keyword,
             String action, String user, Long fromDate, Long toDate) {
@@ -86,8 +85,15 @@ public class ActionRegistryServiceImpl implements ActionRegistryService {
                     .queryParam("pageNumber", pageNumber).queryParam("pageSize", pageSize);
 
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<PageResponse> response = restTemplate
-                    .getForEntity(builder.toUriString(), PageResponse.class);
+            ParameterizedTypeReference<PageResponse<RegistryListView>> typeRef = new ParameterizedTypeReference<PageResponse<RegistryListView>>() {
+            };
+            ResponseEntity<PageResponse<RegistryListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, typeRef);
+
+            /**
+             * ResponseEntity<PageResponse> response = restTemplate
+             * .getForEntity(builder.toUriString(), PageResponse.class);
+             */
 
             PageResponse<RegistryListView> registries = response.getBody();
             return registries;

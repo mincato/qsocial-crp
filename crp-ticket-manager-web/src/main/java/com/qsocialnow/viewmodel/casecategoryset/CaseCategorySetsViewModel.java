@@ -19,6 +19,7 @@ import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
+import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.CaseCategorySetListView;
@@ -83,6 +84,7 @@ public class CaseCategorySetsViewModel implements Serializable {
         Map<String, Object> arg = new HashMap<String, Object>();
         arg.put("casecategoryset", caseCategorySetId);
         Executions.createComponents("/pages/case-category-set/edit-case-category-set.zul", null, arg);
+        Clients.evalJavaScript("initSwitch()");
     }
 
     @GlobalCommand
@@ -95,6 +97,7 @@ public class CaseCategorySetsViewModel implements Serializable {
             if (caseCategorySetOptional.isPresent()) {
                 CaseCategorySetListView caseCategorySetListView = caseCategorySetOptional.get();
                 caseCategorySetListView.setDescription(caseCategorySetChanged.getDescription());
+                caseCategorySetListView.setActive(caseCategorySetChanged.getActive());
             }
         }
     }

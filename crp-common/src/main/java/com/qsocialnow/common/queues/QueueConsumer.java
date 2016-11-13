@@ -6,6 +6,7 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -26,7 +27,7 @@ public abstract class QueueConsumer<T> extends Thread {
 
     private QueueConsumerMonitor<T> monitor;
 
-    private int totalItemCounts;
+    private Integer totalItemCounts;
 
     private int initialDelay;
 
@@ -37,6 +38,8 @@ public abstract class QueueConsumer<T> extends Thread {
     private final String type;
 
     private final AtomicInteger consumingItemCount = new AtomicInteger(0);
+
+    private ScheduledFuture<?> scheduleWithFixedDelay;
 
     public QueueConsumer(final String type) {
         this.type = type;
@@ -91,20 +94,30 @@ public abstract class QueueConsumer<T> extends Thread {
                 try {
                     lock.wait();
                     byte[] item = null;
-                    int index = consumingItemCount.getAndIncrement();
-                    while (index < getTotalItemCounts()) {
+                    if (getTotalItemCounts() != null) {
+                        int index = consumingItemCount.getAndIncrement();
+                        while (index < getTotalItemCounts()) {
+                            if (!bigQueue.isEmpty()) {
+                                item = bigQueue.dequeue();
+                                log.debug("Consumer type " + this.type + " reading documents from queue.");
+                                process(readObjectFromQueue(item));
+                                index = consumingItemCount.getAndIncrement();
+                            } else {
+                                log.debug("Consumer type " + this.type + " queue empty.");
+                                break;
+                            }
+                        }
+                        consumingItemCount.set(0);
+                        save();
+                    } else {
                         if (!bigQueue.isEmpty()) {
                             item = bigQueue.dequeue();
                             log.debug("Consumer type " + this.type + " reading documents from queue.");
                             process(readObjectFromQueue(item));
-                            index = consumingItemCount.getAndIncrement();
                         } else {
                             log.debug("Consumer type " + this.type + " queue empty.");
-                            break;
                         }
                     }
-                    consumingItemCount.set(0);
-                    save();
                 } catch (Exception e) {
                     log.error("Error reading information from queue: " + this.type, e);
                 } finally {
@@ -120,9 +133,18 @@ public abstract class QueueConsumer<T> extends Thread {
         this.stop = true;
     }
 
+    public void changeInitialDelay(int newDelay) {
+        scheduleWithFixedDelay.cancel(false);
+        setInitialDelay(newDelay);
+        startMonitor();
+    }
+
     private void startMonitor() {
-        log.info("Starting monitor to check elements from queue - type:" + this.type);
-        executor.scheduleWithFixedDelay(monitor, getInitialDelay(), getDelay(), TimeUnit.SECONDS);
+        if (!executor.isShutdown()) {
+            log.info("Starting monitor to check elements from queue - type:" + this.type);
+            scheduleWithFixedDelay = executor.scheduleWithFixedDelay(monitor, getInitialDelay(), getDelay(),
+                    TimeUnit.SECONDS);
+        }
     }
 
     private void stopMonitor() {
@@ -132,11 +154,11 @@ public abstract class QueueConsumer<T> extends Thread {
         executor.shutdownNow();
     }
 
-    public int getTotalItemCounts() {
+    public Integer getTotalItemCounts() {
         return totalItemCounts;
     }
 
-    public void setTotalItemCounts(int totalItemCounts) {
+    public void setTotalItemCounts(Integer totalItemCounts) {
         this.totalItemCounts = totalItemCounts;
     }
 
@@ -159,4 +181,5 @@ public abstract class QueueConsumer<T> extends Thread {
     public String getType() {
         return type;
     }
+
 }

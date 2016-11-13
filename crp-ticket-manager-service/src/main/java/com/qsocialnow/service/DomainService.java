@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +50,11 @@ public class DomainService {
         Domain domainSaved = null;
         try {
             domainSaved = domainRepository.save(newDomain);
-            zookeeperClient.create().forPath(domainsPath.concat(newDomain.getId()));
+            if (domainSaved.isActive()) {
+                zookeeperClient.create().forPath(domainsPath.concat(newDomain.getId()));
+            }
         } catch (Exception e) {
             log.error("There was an error saving domain: " + newDomain.getName(), e);
-            // TODO rollback;
             throw new RuntimeException(e);
         }
         return domainSaved;
@@ -73,12 +75,28 @@ public class DomainService {
         try {
             domain.setId(domainId);
             domainSaved = domainRepository.update(domain);
-            zookeeperClient.setData().forPath(domainsPath.concat(domainId));
+            updateZookeeperDomainNode(domainId, domainSaved.isActive());
         } catch (Exception e) {
             log.error("There was an error updating domain: " + domain.getName(), e);
             throw new RuntimeException(e);
         }
         return domainSaved;
+    }
+
+    private void updateZookeeperDomainNode(String domainId, boolean active) throws Exception {
+        String path = domainsPath.concat(domainId);
+        Stat stat = zookeeperClient.checkExists().forPath(path);
+        if (stat == null) {
+            if (active) {
+                zookeeperClient.create().forPath(path);
+            }
+        } else {
+            if (active) {
+                zookeeperClient.setData().forPath(path);
+            } else {
+                zookeeperClient.delete().forPath(path);
+            }
+        }
     }
 
     public PageResponse<DomainListView> findAll(Integer pageNumber, Integer pageSize) {
@@ -90,6 +108,11 @@ public class DomainService {
         }
         PageResponse<DomainListView> page = new PageResponse<DomainListView>(domains, pageNumber, pageSize);
         return page;
+    }
+
+    public List<DomainListView> findAllActive() {
+        List<DomainListView> domains = domainRepository.findAllActive();
+        return domains;
     }
 
     public PageResponse<DomainListView> findAllByUserName(String userName) {

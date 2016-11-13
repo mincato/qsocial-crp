@@ -1,18 +1,17 @@
 package com.qsocialnow.services;
 
 import java.util.List;
-import java.util.Map;
 
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.common.model.pagination.PageRequest;
 
 public interface CaseService {
 
-    PageResponse<CaseListView> findAll(PageRequest pageRequest, Map<String, String> filters);
+    PageResponse<CaseListView> findAll(CasesFilterRequest filterRequest);
 
     Case findById(String caseId);
 
@@ -22,6 +21,8 @@ public interface CaseService {
 
     Case create(Case newCase);
 
-    byte[] getReport(Map<String, String> filters);
+    byte[] getReport(CasesFilterRequest filterRequest, String language, String timeZone);
+
+    String calculateGeoJson(CasesFilterRequest filterRequest);
 
 }

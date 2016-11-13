@@ -21,5 +21,14 @@
             Return true if access to analytics is allowed.
         </description>
     </function>
+     <function>
+        <name>isOdatech</name>
+        <function-class>com.qsocialnow.security.SecurityUtil</function-class>
+        <function-signature> boolean isOdatech() 
+        </function-signature>
+        <description> 
+            Return true if the user is odatech.
+        </description>
+    </function>
     ...
 </taglib>

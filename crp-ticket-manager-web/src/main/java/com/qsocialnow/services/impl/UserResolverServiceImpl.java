@@ -35,6 +35,9 @@ public class UserResolverServiceImpl implements UserResolverService {
     @Value("${userResolver.serviceurl}")
     private String userResolverServiceUrl;
 
+    @Value("${userResolverActive.serviceurl}")
+    private String userResolverActiveServiceUrl;
+
     @Autowired
     private ServiceUrlResolver serviceUrlResolver;
 
@@ -161,6 +164,27 @@ public class UserResolverServiceImpl implements UserResolverService {
             log.error("There was an error while trying to call user resolver service", e);
             throw new RuntimeException(e);
         }
+    }
 
+    @Override
+    public List<UserResolverListView> findAllActive() {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(serviceUrlResolver
+                    .resolveUrl(userResolverActiveServiceUrl));
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            ResponseEntity<List<UserResolverListView>> response = restTemplate.exchange(builder.toUriString(),
+                    HttpMethod.GET, null, new ParameterizedTypeReference<List<UserResolverListView>>() {
+                    });
+
+            List<UserResolverListView> userResolvers = response.getBody();
+            return userResolvers;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call user resolver service", e);
+            throw new RuntimeException(e);
+        }
     }
 }

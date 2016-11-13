@@ -76,6 +76,7 @@ SKINS
     @warning: #f1c40f;
     @danger: #e26a6a;
     @dark: #666666;
+    @inactive: #C4C3C3;
     
 /* ----- HEADER BUTTONS SKINS ----- */
 	@header-button-logo:#f15b29;
@@ -840,6 +841,7 @@ LABELS
     .label-info {background-color: @info;}
     .label-warning {background-color: @warning;}
     .label-danger {background-color: @danger;}
+    .label-inactive {background-color: @inactive;}
         
 /*******************************
 BADGES
@@ -1505,4 +1507,46 @@ hr {
 .label.label-case-close {
 	background-color: #64b3ac;
 }
+
+/*Action registry status*/
+
+ @registry-status-sending: #ea7d24;
+ @registry-status-sent: green;
+ @registry-status-error: red;
+ 
+.registry-status > span:before {
+	position: relative;
+    display: inline-block;
+    margin-left: 5px;
+  	margin-right: 5px;
+}
+       
+.registry-status.registry-status-sending > span:before {
+	font: normal normal normal 18px/1 FontAwesome;
+    content: "\f110";
+	color: @registry-status-sending;
+	-webkit-animation: fa-spin 1s infinite steps(8);
+	animation: fa-spin 1s infinite steps(8)
+}
+        
+.registry-status.registry-status-sent > span:before {
+	font: normal normal normal 18px/1 FontAwesome;
+    content: "\f05d";
+    color: @registry-status-sent;
+}
+        
+.registry-status.registry-status-error > span:before {
+	font: normal normal normal 18px/1 FontAwesome;
+    content: "\f05c";
+	color: @registry-status-error;
+}       
+
+.label.label-case-open {
+	background-color: @default;
+}
+
+.label.label-case-close {
+	background-color: #64b3ac;
+}
+
 

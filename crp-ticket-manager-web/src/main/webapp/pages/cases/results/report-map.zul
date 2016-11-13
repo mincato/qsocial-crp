@@ -1,0 +1,11 @@
+<?init class="com.qsocialnow.security.AuthenticationInit" roles="ADMIN"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<zk xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute">
+	<div class="row" >
+		<n:div class="col-sm-12">
+			<n:div class="pane equal">
+					<div id="map" ca:data-zmapbox=""  style="height:800px;"></div>	
+			</n:div>
+		</n:div>
+	</div>
+</zk>

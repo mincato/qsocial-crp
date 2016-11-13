@@ -18,6 +18,8 @@ import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -215,9 +217,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         List<Index> modelList = new ArrayList<Index>();
         // TODO:index by alias
         for (IdentityType identity : documents) {
+
             Index indexDocument;
             if (identity.getId() != null) {
-                log.info("Updating case: " + identity.getId());
+                log.info("Updating Document: " + identity.getId());
                 indexDocument = new Index.Builder(identity).index(mapping.getIndex()).type(mapping.getType())
                         .id(identity.getId()).build();
             } else {
@@ -240,8 +243,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 response.setFailedItems(result.getFailedItems());
             }
         } catch (IOException e) {
+            e.printStackTrace();
             log.error("Unexpected error: ", e);
         }
+
         return response;
     }
 
@@ -325,8 +330,10 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     public <E> SearchResponse<E> queryByIds(Mapping<T, E> mapping, String sortField, List<String> ids) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        if (sortField != null)
+        if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
 
         searchSourceBuilder.query(QueryBuilders.idsQuery(mapping.getType()).addIds(ids));
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex()).build();
@@ -337,11 +344,15 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             String searchField, String searchValue) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
-        if (size > 0)
+        if (size > 0) {
             searchSourceBuilder.from(from).size(size);
+        } else {
+            searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
+        }
 
-        if (sortField != null)
+        if (sortField != null) {
             searchSourceBuilder.sort(sortField, SortOrder.ASC);
+        }
 
         searchSourceBuilder.query(QueryBuilders.matchQuery(searchField, searchValue));
 
@@ -351,15 +362,43 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     public <E> SearchResponse<E> queryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> searchValues, List<RangeFilter> rangeFilters,
-            List<ShouldFilter> shouldFilters) {
+            boolean sortOrder, Map<String, String> searchValues, List<TermFieldFilter> termFilters,
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldConditionsFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
+            List<ShouldConditionsFilter> shouldConditionsByRegexpFilters) {
 
+        Search search = getSearchByQueryByFields(mapping, from, size, sortField, sortOrder, searchValues, termFilters,
+                rangeFilters, shouldConditionsFilters, shouldTermsConditionsFilters, shouldConditionsByRegexpFilters);
+        return executeSearch(mapping, search);
+    }
+
+    private <E> Search getSearchByQueryByFields(Mapping<T, E> mapping, int from, int size, String sortField,
+            boolean sortOrder, Map<String, String> searchValues, List<TermFieldFilter> termFilters,
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldConditionsFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
+            List<ShouldConditionsFilter> shouldConditionsByRegexpFilters) {
         SortOrder sortOrderValue;
-        if (sortOrder)
+        if (sortOrder) {
             sortOrderValue = SortOrder.ASC;
-        else
+        } else {
             sortOrderValue = SortOrder.DESC;
+        }
 
+        SearchSourceBuilder searchSourceBuilder = getSearchSourceBuilder(from, size, sortField, sortOrderValue,
+                searchValues, termFilters, rangeFilters, shouldConditionsFilters, shouldTermsConditionsFilters,
+                shouldConditionsByRegexpFilters);
+
+        log.info("Query: " + searchSourceBuilder.toString());
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+        return search;
+    }
+
+    private SearchSourceBuilder getSearchSourceBuilder(int from, int size, String sortField, SortOrder sortOrderValue,
+            Map<String, String> searchValues, List<TermFieldFilter> termFilters, List<RangeFilter> rangeFilters,
+            List<ShouldConditionsFilter> shouldConditionsFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
+            List<ShouldConditionsFilter> shouldConditionsByRegexpFilters) {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.from(from).size(size);
 
@@ -376,6 +415,22 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             boolQueryBuilder.must(QueryBuilders.matchAllQuery());
         }
 
+        if (termFilters != null) {
+            for (TermFieldFilter termField : termFilters) {
+                if (!termField.isNeedSplit()) {
+                    boolQueryBuilder.filter(QueryBuilders.termQuery(termField.getField(), termField.getValue()));
+                } else {
+                    String[] terms = termField.getValue().split("\\,");
+                    BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
+                    for (String term : terms) {
+                        QueryBuilder query = QueryBuilders.termQuery(termField.getField(), term.trim());
+                        boolFilterQueryBuilder.must(query);
+                    }
+                    boolQueryBuilder.filter(boolFilterQueryBuilder);
+                }
+            }
+        }
+
         if (rangeFilters != null) {
             for (RangeFilter rangeFilter : rangeFilters) {
                 if (rangeFilter.getRangeField() != null) {
@@ -389,33 +444,103 @@ public class ElasticsearchRepository<T> implements Repository<T> {
             }
         }
 
-        if (shouldFilters != null && shouldFilters.size() > 0) {
-            BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
-            for (ShouldFilter shouldFilter : shouldFilters) {
-                QueryBuilder query = QueryBuilders.matchPhraseQuery(shouldFilter.getField(), shouldFilter.getValue());
-                boolShouldQueryBuilder.should(query);
+        if (shouldConditionsFilters != null && !shouldConditionsFilters.isEmpty()) {
+            for (ShouldConditionsFilter shouldConditionFilter : shouldConditionsFilters) {
+                BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+
+                List<ShouldFilter> shouldFilters = shouldConditionFilter.getConditions();
+                for (ShouldFilter shouldFilter : shouldFilters) {
+                    QueryBuilder query = QueryBuilders.matchPhraseQuery(shouldFilter.getField(),
+                            shouldFilter.getValue());
+
+                    boolShouldQueryBuilder.should(query);
+                }
+                boolQueryBuilder.filter(boolShouldQueryBuilder);
             }
-            boolQueryBuilder.filter(boolShouldQueryBuilder);
         }
         searchSourceBuilder.query(boolQueryBuilder);
-        log.info("Query: " + searchSourceBuilder.toString());
 
-        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
-                .addType(mapping.getType()).build();
-        return executeSearch(mapping, search);
+        if (shouldTermsConditionsFilters != null && !shouldTermsConditionsFilters.isEmpty()) {
+            for (ShouldConditionsFilter shouldTermsConditionFilter : shouldTermsConditionsFilters) {
+
+                BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+                List<ShouldFilter> shouldFilters = shouldTermsConditionFilter.getConditions();
+
+                for (ShouldFilter shouldFilter : shouldFilters) {
+                    String[] terms = shouldFilter.getValue().split("\\,");
+                    BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
+                    for (String term : terms) {
+                        QueryBuilder query = QueryBuilders.termQuery(shouldFilter.getField(), term.trim());
+                        boolFilterQueryBuilder.must(query);
+                    }
+                    boolShouldQueryBuilder.should(boolFilterQueryBuilder);
+                }
+                boolQueryBuilder.filter(boolShouldQueryBuilder);
+            }
+        }
+        if (shouldConditionsByRegexpFilters != null && !shouldConditionsByRegexpFilters.isEmpty()) {
+            for (ShouldConditionsFilter shouldConditionFilter : shouldConditionsByRegexpFilters) {
+                BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+
+                List<ShouldFilter> shouldFilters = shouldConditionFilter.getConditions();
+                for (ShouldFilter shouldFilter : shouldFilters) {
+                    QueryBuilder query = QueryBuilders.regexpQuery(shouldFilter.getField(), shouldFilter.getValue());
+
+                    boolShouldQueryBuilder.should(query);
+                }
+                boolQueryBuilder.filter(boolShouldQueryBuilder);
+            }
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
+        return searchSourceBuilder;
     }
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> searchValues,
-            List<RangeFilter> rangeFilters, List<ShouldFilter> shouldFilters, String fieldAggregation) {
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
+            List<TermFieldFilter> termFilters, String fieldAggregation) {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        for (String searchField : searchValues.keySet()) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+
+        if (searchValues != null) {
+            for (String searchField : searchValues.keySet()) {
+                boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
+            }
+        } else {
+            boolQueryBuilder.must(QueryBuilders.matchAllQuery());
+        }
+        searchSourceBuilder.query(boolQueryBuilder);
+
+        if (termFilters != null) {
+            for (TermFieldFilter termField : termFilters) {
+                if (!termField.isNeedSplit()) {
+                    boolQueryBuilder.filter(QueryBuilders.termQuery(termField.getField(), termField.getValue()));
+                } else {
+                    String[] terms = termField.getValue().split("\\,");
+                    BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
+                    for (String term : terms) {
+                        QueryBuilder query = QueryBuilders.termQuery(termField.getField(), term.trim());
+                        boolFilterQueryBuilder.must(query);
+                    }
+                    boolQueryBuilder.filter(boolFilterQueryBuilder);
+                }
+            }
         }
 
-        searchSourceBuilder.query(boolQueryBuilder);
+        if (rangeFilters != null) {
+            for (RangeFilter rangeFilter : rangeFilters) {
+                if (rangeFilter.getRangeField() != null) {
+                    RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeFilter.getRangeField());
+                    if (rangeFilter.getRangeFrom() != null)
+                        range.gte(rangeFilter.getRangeFrom());
+                    if (rangeFilter.getRangeTo() != null)
+                        range.lte(rangeFilter.getRangeTo());
+                    boolQueryBuilder.filter(range);
+                }
+            }
+        }
+
         AbstractAggregationBuilder aggregation = AggregationBuilders.terms(RESULTS_AGG_NAME).field(fieldAggregation);
         searchSourceBuilder.aggregation(aggregation);
         log.info("Query: " + searchSourceBuilder.toString());
@@ -449,60 +574,41 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
-            boolean sortOrder, Map<String, String> searchValues, List<RangeFilter> rangeFilters,
-            List<ShouldFilter> shouldFilters) {
+            boolean sortOrder, Map<String, String> searchValues, List<TermFieldFilter> termFilters,
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldConditionsFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
+            List<ShouldConditionsFilter> shouldConditionsByRegexpFilters) {
 
-        SortOrder sortOrderValue;
-        if (sortOrder)
-            sortOrderValue = SortOrder.ASC;
-        else
-            sortOrderValue = SortOrder.DESC;
-
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderValue);
-
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        for (String searchField : searchValues.keySet()) {
-            boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
-        }
-
-        if (rangeFilters != null) {
-            for (RangeFilter rangeFilter : rangeFilters) {
-                if (rangeFilter.getRangeField() != null) {
-                    RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeFilter.getRangeField());
-                    if (rangeFilter.getRangeFrom() != null)
-                        range.gte(rangeFilter.getRangeFrom());
-                    if (rangeFilter.getRangeTo() != null)
-                        range.lte(rangeFilter.getRangeTo());
-                    boolQueryBuilder.filter(range);
-                }
-            }
-        }
-
-        if (shouldFilters != null) {
-            BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
-            for (ShouldFilter shouldFilter : shouldFilters) {
-                QueryBuilder query = QueryBuilders.matchQuery(shouldFilter.getField(), shouldFilter.getValue());
-                boolShouldQueryBuilder.should(query);
-            }
-            boolQueryBuilder.filter(boolShouldQueryBuilder);
-        }
-
-        searchSourceBuilder.query(boolQueryBuilder);
-        log.info("Query: " + searchSourceBuilder.toString());
-
-        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
-                .addType(mapping.getType()).build();
+        Search search = getSearchByQueryByFields(mapping, from, size, sortField, sortOrder, searchValues, termFilters,
+                rangeFilters, shouldConditionsFilters, shouldTermsConditionsFilters, shouldConditionsByRegexpFilters);
         return executeSearch(search);
     }
 
     public <E> SearchResponse<E> queryMatchAll(int from, int size, String sortField, boolean sortOrder,
             Mapping<T, E> mapping) {
+        Search search = getSearchByQueryMatchAll(from, size, sortField, sortOrder, mapping);
+        return executeSearch(mapping, search);
+    }
+
+    public <E> SearchResult queryMatchAllAsJson(int from, int size, String sortField, boolean sortOrder,
+            Mapping<T, E> mapping) {
+        Search search = getSearchByQueryMatchAll(from, size, sortField, sortOrder, mapping);
+        return executeSearch(search);
+    }
+
+    private <E> Search getSearchByQueryMatchAll(int from, int size, String sortField, boolean sortOrder,
+            Mapping<T, E> mapping) {
         SortOrder sortOrderEnum = sortOrder ? SortOrder.ASC : SortOrder.DESC;
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.from(from).size(size).sort(sortField, sortOrderEnum).query(QueryBuilders.matchAllQuery());
+
+        SortBuilder sortBuilder = SortBuilders.fieldSort(sortField);
+        sortBuilder.order(sortOrderEnum);
+        sortBuilder.missing("_last");
+
+        searchSourceBuilder.from(from).size(size).sort(sortBuilder).query(QueryBuilders.matchAllQuery());
+        log.info(searchSourceBuilder.toString());
         Search search = new Search.Builder(searchSourceBuilder.toString()).addType(mapping.getType()).build();
-        return executeSearch(mapping, search);
+        return search;
     }
 
     @Override
@@ -731,9 +837,46 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (from != null) {
             searchSourceBuilder.from(from);
         }
-        if (size != null) {
+        if (size == null) {
+            searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
+        } else {
             searchSourceBuilder.size(size);
         }
+        if (sortField != null) {
+            searchSourceBuilder.sort(sortField, sortOrder);
+        }
+        if (filters != null) {
+            searchSourceBuilder.query(filters);
+        }
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
+                .addType(mapping.getType()).build();
+
+        SearchResult result = null;
+        SearchResponse<E> response = new SearchResponse<E>();
+        try {
+            result = client.execute(search);
+
+        } catch (IOException e) {
+            log.error("Unexpected error: ", e);
+            throw new RepositoryException(e);
+        }
+
+        if (result.isSucceeded()) {
+            List<T> responses = (List<T>) result.getSourceAsObjectList(mapping.getClassType());
+            response.setSources(responses.stream().map(elasticDocument -> mapping.getDocument(elasticDocument))
+                    .collect(Collectors.toList()));
+        } else {
+            throw new RepositoryException(result.getErrorMessage());
+        }
+        return response;
+    }
+
+    @SuppressWarnings({ "deprecation", "unchecked" })
+    @Override
+    public <E> SearchResponse<E> searchWithFilters(String sortField, SortOrder sortOrder, BoolQueryBuilder filters,
+            Mapping<T, E> mapping) {
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.size(DEFAULT_SIZE_PAGE);
         if (sortField != null) {
             searchSourceBuilder.sort(sortField, sortOrder);
         }
