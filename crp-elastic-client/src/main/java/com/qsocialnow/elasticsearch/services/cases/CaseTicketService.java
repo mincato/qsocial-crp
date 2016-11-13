@@ -413,6 +413,18 @@ public class CaseTicketService extends CaseIndexService {
     }
 
     public Map<String, Long> getCasesCountByResolution(CasesFilterRequest filterRequest) {
+        return retrieveSumarizations(filterRequest, "resolution");
+    }
+
+    public Map<String, Long> getCasesCountByStatus(CasesFilterRequest filterRequest) {
+        return retrieveSumarizations(filterRequest, "open");
+    }
+
+    public Map<String, Long> getCasesCountByPending(CasesFilterRequest filterRequest) {
+        return retrieveSumarizations(filterRequest, "pendingResponse");
+    }
+
+    private Map<String, Long> retrieveSumarizations(CasesFilterRequest filterRequest, String aggregationField) {
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();
         repository.initClient();
@@ -430,7 +442,7 @@ public class CaseTicketService extends CaseIndexService {
                 shouldTermsConditionsFilters, shouldConditionsRegexpFilters);
 
         SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
-                shouldConditionsFilters, termFilters, "resolution");
+                shouldConditionsFilters, termFilters, aggregationField);
         Map<String, Long> results = response.getCountAggregation();
         repository.closeClient();
         return results;
@@ -455,6 +467,8 @@ public class CaseTicketService extends CaseIndexService {
 
         if (filterRequest.getIdResolution() != null)
             searchValues.put("resolution", filterRequest.getIdResolution());
+        else if (filterRequest.getStatus() != null)
+            searchValues.put("open", filterRequest.getStatus());
 
         SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
                 shouldConditionsFilters, termFilters, "assignee.username");

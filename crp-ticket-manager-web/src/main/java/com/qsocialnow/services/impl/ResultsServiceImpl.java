@@ -87,4 +87,20 @@ public class ResultsServiceImpl implements ResultsService {
         }
     }
 
+    @Override
+    @SuppressWarnings({ "unchecked" })
+    public PageResponse<ResultsListView> sumarizeStatusByUser(CasesFilterRequest filterRequest) {
+        try {
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            PageResponse<ResultsListView> results = restTemplate.postForObject(
+                    serviceUrlResolver.resolveUrl(caseServiceUrl) + "/status", filterRequest, PageResponse.class);
+
+            return results;
+
+        } catch (Exception e) {
+            log.error("There was an error while trying to call sumarize all service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }

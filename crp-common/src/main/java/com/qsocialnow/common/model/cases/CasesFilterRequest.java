@@ -90,6 +90,8 @@ public class CasesFilterRequest {
 
     private String idResolution;
 
+    private String fieldToSumarize;
+
     private List<Category> categoriesFilter;
 
     public PageRequest getPageRequest() {
@@ -418,6 +420,14 @@ public class CasesFilterRequest {
 
     public void setIdResolution(String idResolution) {
         this.idResolution = idResolution;
+    }
+
+    public String getFieldToSumarize() {
+        return fieldToSumarize;
+    }
+
+    public void setFieldToSumarize(String fieldToSumarize) {
+        this.fieldToSumarize = fieldToSumarize;
     }
 
 }

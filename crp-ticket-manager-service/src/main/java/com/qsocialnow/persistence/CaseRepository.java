@@ -77,6 +77,42 @@ public class CaseRepository {
         return results;
     }
 
+    public List<ResultsListView> sumarizeResolvedByStatus(CasesFilterRequest filterRequest) {
+        List<ResultsListView> results = new ArrayList<>();
+        try {
+            Map<String, Long> resultsRepo = caseElasticService.getCasesCountByStatus(filterRequest);
+            Set<String> resultKeys = resultsRepo.keySet();
+            for (String key : resultKeys) {
+                ResultsListView resultView = new ResultsListView();
+                resultView.setStatus(key);
+                resultView.setTotal(resultsRepo.get(key));
+                results.add(resultView);
+            }
+
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return results;
+    }
+
+    public List<ResultsListView> sumarizeResolvedByPending(CasesFilterRequest filterRequest) {
+        List<ResultsListView> results = new ArrayList<>();
+        try {
+            Map<String, Long> resultsRepo = caseElasticService.getCasesCountByPending(filterRequest);
+            Set<String> resultKeys = resultsRepo.keySet();
+            for (String key : resultKeys) {
+                ResultsListView resultView = new ResultsListView();
+                resultView.setPending(key);
+                resultView.setTotal(resultsRepo.get(key));
+                results.add(resultView);
+            }
+
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return results;
+    }
+
     public JsonArray findAllAsJsonObject(PageRequest pageRequest, CasesFilterRequest filterRequest) {
         JsonObject jsonObject = caseElasticService.getCasesAsJsonObject(pageRequest.getOffset(),
                 pageRequest.getLimit(), pageRequest.getSortField(), pageRequest.getSortOrder(), filterRequest);
