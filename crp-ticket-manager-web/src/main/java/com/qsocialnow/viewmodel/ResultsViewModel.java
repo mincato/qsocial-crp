@@ -372,7 +372,7 @@ public class ResultsViewModel implements Serializable {
                 this.byAdmin = false;
                 this.byState = false;
                 this.byMap = true;
-                //this.filterActive = true;
+                // this.filterActive = true;
                 break;
             default:
                 break;
