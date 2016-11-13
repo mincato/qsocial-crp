@@ -297,7 +297,7 @@ public class ResultsViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "currentStatus", "statusByUser", "filterActive", "statusByPending"})
+    @NotifyChange({ "currentStatus", "statusByUser", "filterActive", "statusByPending" })
     public void searchStatusByUser(@BindingParam("status") String status) {
         this.statusByUser.clear();
         this.statusByPending.clear();
