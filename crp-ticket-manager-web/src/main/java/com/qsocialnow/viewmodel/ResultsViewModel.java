@@ -309,8 +309,8 @@ public class ResultsViewModel implements Serializable {
         this.sumarizeResolutionsByUser(idResolution);
         this.currentResolution = resolution;
     }
-	
-	 @Command
+
+    @Command
     @NotifyChange({ "currentStatus", "statusByUser", "filterActive", "statusByPending" })
     public void searchStatusByUser(@BindingParam("status") String status) {
         this.statusByUser.clear();
@@ -341,11 +341,9 @@ public class ResultsViewModel implements Serializable {
         return pageResponse;
     }
 
-
-
     @Command
     @NotifyChange({ "byResolution", "resultsByUser", "currentResolution", "resultsByUser", "resultsState",
-            "statusByUser", "currentStatus", "byMap","byAdmin", "byState", "showFilters", "statusByPending" })
+            "statusByUser", "currentStatus", "byMap", "byAdmin", "byState", "showFilters", "statusByPending" })
     public void showOption() {
         this.showFilters = true;
         switch (this.reportType) {
@@ -356,7 +354,7 @@ public class ResultsViewModel implements Serializable {
                 this.results.clear();
                 this.resultsByUser.clear();
                 this.currentResolution = "";
-				this.byMap = false;
+                this.byMap = false;
                 break;
 
             case REPORT_OPTION_STATE:
@@ -368,13 +366,13 @@ public class ResultsViewModel implements Serializable {
                 this.statusByUser.clear();
                 this.statusByPending.clear();
                 this.currentStatus = "";
-                break; 
-             case REPORT_OPTION_MAP:
+                break;
+            case REPORT_OPTION_MAP:
                 this.byResolution = false;
                 this.byAdmin = false;
                 this.byState = false;
                 this.byMap = true;
-                this.filterActive = true;
+                //this.filterActive = true;
                 break;
             default:
                 break;
@@ -756,8 +754,8 @@ public class ResultsViewModel implements Serializable {
     public List<ResultsListView> getStatusByPending() {
         return statusByPending;
     }
-	
-	 public boolean isByMap() {
+
+    public boolean isByMap() {
         return byMap;
     }
 

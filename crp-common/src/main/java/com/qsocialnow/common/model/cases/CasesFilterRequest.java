@@ -432,8 +432,8 @@ public class CasesFilterRequest {
     public void setFieldToSumarize(String fieldToSumarize) {
         this.fieldToSumarize = fieldToSumarize;
     }
-	
-	public GeoSocialEventLocationMethod getLocationMethod() {
+
+    public GeoSocialEventLocationMethod getLocationMethod() {
         return locationMethod;
     }
 

@@ -22,7 +22,7 @@
           </n:div>  
 		</n:div>
     </n:div>
-    <div class="row" visible="@load((not vm.byMap  and empty vm.results and empty vm.resultsByUser) or (vm.byMap and empty vm.geoJson))">
+    <div class="row" visible="@load((vm.byResolution and empty vm.results and empty vm.resultsByUser) or (vm.byState and empty vm.resultsState and empty vm.statusByUser) or (vm.byMap and empty vm.geoJson))">
         <n:div class="col-lg-12">
             <div zclass="pane equal">
                 <div class="text-center" visible="@load(vm.filterActive)">
@@ -31,16 +31,6 @@
             </div>
         </n:div>
     </div>
-    
-	<div class="row" visible="@load(empty vm.resultsState and vm.byState and empty vm.statusByUser)">
-        <n:div class="col-lg-12">
-            <div zclass="pane equal">
-                <div class="text-center" visible="@load(vm.filterActive)">
-                    ${labels.app.pagination.noResultsFound} 
-                </div>
-            </div>
-        </n:div>
-    </div
     <div visible="@load(vm.showFilters)">
 	  <n:div class="row">
        <n:div class="col-lg-12">
@@ -161,7 +151,7 @@
 	           </n:div>
            <n:div class="col-sm-1">
                 <n:form class="form-inline">    
-                        <n:div class="form-group">
+                <n:div class="form-group">
                  <div zclass="input-group input-group-sm">
                     <span zclass="input-group-btn" visible="@load(not vm.byMap)">
                         <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>                          
@@ -170,9 +160,9 @@
                    <span  zclass="input-group-btn" visible="@load(vm.byMap)">
                    	    <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('searchByMap')"  iconSclass="z-icon-search"></button>                          
                    </span>
-                 </div>
-                       </n:div>
-                  </n:form>
+                </div>
+                </n:div>
+             </n:form>
           </n:div>
        </div>
     </n:div>
