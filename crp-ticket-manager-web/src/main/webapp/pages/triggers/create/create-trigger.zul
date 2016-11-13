@@ -247,9 +247,9 @@
 							<label value="${labels.trigger.form.invalid}"/>
 						</n:span>
 					</div>
-			    	<button autodisabled="self" onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
+			    	<button autodisable="self" onClick="@command('save')" disabled="@load(not triggerVm.resolutionListView.enabledAdd or not triggerVm.caseCategorySetListView.enabledAdd or not triggerVm.subjectCategorySetListView.enabledAdd)"
 			    		label="${labels.app.button.save}" zclass="btn btn-success" />
-			    	<button autodisabled="self" href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.back}" zclass="btn btn-default"/>			    		
+			    	<button autodisable="self" href="/pages/triggers/list/index.zul?domain=${triggerVm.domain}" label="${labels.app.button.back}" zclass="btn btn-default"/>			    		
 				</div>
 			</div>
 		</n:div>
