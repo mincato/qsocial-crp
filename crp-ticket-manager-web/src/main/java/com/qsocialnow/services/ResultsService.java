@@ -13,4 +13,6 @@ public interface ResultsService {
 
     PageResponse<ResultsListView> sumarizeResolutionByUser(CasesFilterRequest filterRequest);
 
+    PageResponse<ResultsListView> sumarizeStatusByUser(CasesFilterRequest filterRequest);
+
 }

@@ -91,6 +91,8 @@ public class CasesFilterRequest {
 
     private String idResolution;
 
+    private String fieldToSumarize;
+
     private List<Category> categoriesFilter;
 
     private GeoSocialEventLocationMethod locationMethod;
@@ -423,12 +425,19 @@ public class CasesFilterRequest {
         this.idResolution = idResolution;
     }
 
-    public GeoSocialEventLocationMethod getLocationMethod() {
+    public String getFieldToSumarize() {
+        return fieldToSumarize;
+    }
+
+    public void setFieldToSumarize(String fieldToSumarize) {
+        this.fieldToSumarize = fieldToSumarize;
+    }
+	
+	public GeoSocialEventLocationMethod getLocationMethod() {
         return locationMethod;
     }
 
     public void setLocationMethod(GeoSocialEventLocationMethod locationMethod) {
         this.locationMethod = locationMethod;
     }
-
 }

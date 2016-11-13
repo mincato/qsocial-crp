@@ -12,6 +12,10 @@ public class ResultsListView implements Serializable {
 
     private String assigned;
 
+    private String status;
+
+    private String pending;
+
     private Long total;
 
     public String getIdResolution() {
@@ -44,5 +48,21 @@ public class ResultsListView implements Serializable {
 
     public void setAssigned(String assigned) {
         this.assigned = assigned;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPending() {
+        return pending;
+    }
+
+    public void setPending(String pending) {
+        this.pending = pending;
     }
 }

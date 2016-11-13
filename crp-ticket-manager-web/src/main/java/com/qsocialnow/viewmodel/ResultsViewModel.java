@@ -27,6 +27,7 @@ import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.common.util.UserConstants;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
@@ -92,8 +93,17 @@ public class ResultsViewModel implements Serializable {
 
     private List<ResultsListView> resultsByUser = new ArrayList<>();
 
+    private List<ResultsListView> resultsState = new ArrayList<>();
+
+    private List<ResultsListView> statusByUser = new ArrayList<>();
+
+    private List<ResultsListView> statusByPending = new ArrayList<>();
+
+    private String currentStatus;
     // filters
     private boolean filterActive;
+
+    private boolean showFilters;
 
     private List<DomainListView> domains = new ArrayList<>();
 
@@ -162,6 +172,7 @@ public class ResultsViewModel implements Serializable {
     @Init
     public void init() {
         this.filterActive = false;
+        this.showFilters = false;
         this.resultsTypeOptions = getResultsOptionsList();
         this.domains = getDomainsList();
         this.users = getUsersList();
@@ -192,10 +203,29 @@ public class ResultsViewModel implements Serializable {
         filterRequest.setPageRequest(pageRequest);
         filterRequest.setFilterActive(filterActive);
         setFilters(filterRequest);
+        filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_RESOLUTION);
         PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
 
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.results.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
+        return pageResponse;
+    }
+
+    private PageResponse<ResultsListView> sumarizeCasesByStatus() {
+        CasesFilterRequest filterRequest = new CasesFilterRequest();
+        PageRequest pageRequest = new PageRequest(activePage, pageSize, "");
+        filterRequest.setPageRequest(pageRequest);
+        filterRequest.setFilterActive(filterActive);
+        setFilters(filterRequest);
+        filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_STATUS);
+        PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
+
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.resultsState.addAll(pageResponse.getItems());
             this.moreResults = true;
         } else {
             this.moreResults = false;
@@ -221,15 +251,41 @@ public class ResultsViewModel implements Serializable {
         return pageResponse;
     }
 
+    private PageResponse<ResultsListView> sumarizeStatusByUser(String status) {
+        CasesFilterRequest filterRequest = new CasesFilterRequest();
+        PageRequest pageRequest = new PageRequest(activePage, pageSize, "");
+        filterRequest.setPageRequest(pageRequest);
+        filterRequest.setFilterActive(filterActive);
+        setFilters(filterRequest);
+        filterRequest.setStatus(status);
+
+        PageResponse<ResultsListView> pageResponse = resultsService.sumarizeStatusByUser(filterRequest);
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.statusByUser.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
+        return pageResponse;
+    }
+
     @Command
-    @NotifyChange({ "results", "moreResults", "filterActive", "resultsByUser", "currentResolution" })
+    @NotifyChange({ "results", "moreResults", "filterActive", "resultsByUser", "currentResolution", "resultsState",
+            "statusByUser" })
     public void search() {
-        this.filterActive = true;
         this.setDefaultPage();
-        this.results.clear();
-        this.resultsByUser.clear();
-        this.currentResolution = "";
-        this.sumarizeCases();
+        this.filterActive = true;
+        if (byResolution) {
+            this.results.clear();
+            this.resultsByUser.clear();
+            this.currentResolution = "";
+            this.sumarizeCases();
+        } else if (byState) {
+            this.resultsState.clear();
+            this.statusByUser.clear();
+            this.currentStatus = "";
+            this.sumarizeCasesByStatus();
+        }
     }
 
     @Command
@@ -253,17 +309,54 @@ public class ResultsViewModel implements Serializable {
         this.sumarizeResolutionsByUser(idResolution);
         this.currentResolution = resolution;
     }
+	
+	 @Command
+    @NotifyChange({ "currentStatus", "statusByUser", "filterActive", "statusByPending" })
+    public void searchStatusByUser(@BindingParam("status") String status) {
+        this.statusByUser.clear();
+        this.statusByPending.clear();
+        this.setDefaultPage();
+        this.sumarizeStatusByUser(status);
+        this.sumarizeStatusByPending(status);
+        this.currentStatus = status;
+    }
+
+    private PageResponse<ResultsListView> sumarizeStatusByPending(String status) {
+        CasesFilterRequest filterRequest = new CasesFilterRequest();
+        PageRequest pageRequest = new PageRequest(activePage, pageSize, "");
+        filterRequest.setPageRequest(pageRequest);
+        filterRequest.setFilterActive(filterActive);
+        setFilters(filterRequest);
+        filterRequest.setStatus(status);
+        filterRequest.setPendingResponse("true");
+        filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_PENDING);
+
+        PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.statusByPending.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
+        return pageResponse;
+    }
+
+
 
     @Command
-    @NotifyChange({ "byResolution", "byAdmin", "byState", "byMap", "filterActive" })
+    @NotifyChange({ "byResolution", "resultsByUser", "currentResolution", "resultsByUser", "resultsState",
+            "statusByUser", "currentStatus", "byMap","byAdmin", "byState", "showFilters", "statusByPending" })
     public void showOption() {
+        this.showFilters = true;
         switch (this.reportType) {
             case REPORT_OPTION_RESOLUTION:
                 this.byResolution = true;
                 this.byAdmin = false;
                 this.byState = false;
-                this.byMap = false;
-                this.filterActive = true;
+                this.results.clear();
+                this.resultsByUser.clear();
+                this.currentResolution = "";
+				this.byMap = false;
                 break;
 
             case REPORT_OPTION_STATE:
@@ -271,16 +364,18 @@ public class ResultsViewModel implements Serializable {
                 this.byAdmin = false;
                 this.byState = true;
                 this.byMap = false;
-                this.filterActive = true;
-                break;
-            case REPORT_OPTION_MAP:
+                this.resultsState.clear();
+                this.statusByUser.clear();
+                this.statusByPending.clear();
+                this.currentStatus = "";
+                break; 
+             case REPORT_OPTION_MAP:
                 this.byResolution = false;
                 this.byAdmin = false;
                 this.byState = false;
                 this.byMap = true;
                 this.filterActive = true;
                 break;
-
             default:
                 break;
         }
@@ -375,6 +470,14 @@ public class ResultsViewModel implements Serializable {
         return new ArrayList<String>(Arrays.asList(options));
     }
 
+    public String getCurrentStatus() {
+        return currentStatus;
+    }
+
+    public void setCurrentStatus(String currentStatus) {
+        this.currentStatus = currentStatus;
+    }
+
     private List<String> getPriorityOptionsList() {
         String[] options = { ALL_OPTION_VALUE, HIGH_OPTION_VALUE, MEDIUM_OPTION_VALUE, LOW_OPTION_VALUE };
         return new ArrayList<String>(Arrays.asList(options));
@@ -434,6 +537,10 @@ public class ResultsViewModel implements Serializable {
 
     public void setResults(List<ResultsListView> results) {
         this.results = results;
+    }
+
+    public List<ResultsListView> getResultsState() {
+        return resultsState;
     }
 
     private void setDefaultPage() {
@@ -634,7 +741,23 @@ public class ResultsViewModel implements Serializable {
         return priorityOptions;
     }
 
-    public boolean isByMap() {
+    public List<ResultsListView> getStatusByUser() {
+        return statusByUser;
+    }
+
+    public boolean isShowFilters() {
+        return showFilters;
+    }
+
+    public void setShowFilters(boolean showFilters) {
+        this.showFilters = showFilters;
+    }
+
+    public List<ResultsListView> getStatusByPending() {
+        return statusByPending;
+    }
+	
+	 public boolean isByMap() {
         return byMap;
     }
 
@@ -663,5 +786,4 @@ public class ResultsViewModel implements Serializable {
     public void setGeoJson(String geoJson) {
         this.geoJson = geoJson;
     }
-
 }
