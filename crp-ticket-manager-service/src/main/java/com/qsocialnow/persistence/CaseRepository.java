@@ -109,31 +109,31 @@ public class CaseRepository {
         return id != null;
     }
 
-	public List<CaseLocationView> findCasesLocations(PageRequest pageRequest) {
-		 List<CaseLocationView> cases = new ArrayList<>();
+    public List<CaseLocationView> findCasesLocations(CasesFilterRequest filterRequest) {
+        List<CaseLocationView> cases = new ArrayList<>();
+        try {
+            List<Case> casesRepo = caseElasticService.getCasesByFilters(filterRequest);
 
-	        try {
-	        	CasesFilterRequest filterRequest = new CasesFilterRequest();
-	        	filterRequest.setPageRequest(pageRequest);
-	        	List<Case> casesRepo = caseElasticService.getCasesByFilters(filterRequest);
+            for (Case caseRepo : casesRepo) {
+                if (caseRepo.getTriggerEvent() != null) {
+                    CaseLocationView caseView = new CaseLocationView();
+                    caseView.setId(caseRepo.getId());
+                    caseView.setLocation(caseRepo.getTriggerEvent().getLocation() != null ? caseRepo.getTriggerEvent()
+                            .getLocation() : null);
+                    caseView.setLocationMethod(caseRepo.getTriggerEvent().getLocationMethod() != null ? caseRepo
+                            .getTriggerEvent().getLocationMethod() : null);
+                    caseView.setOriginalLocation(caseRepo.getTriggerEvent().getOriginalLocation() != null ? caseRepo
+                            .getTriggerEvent().getOriginalLocation() : null);
+                    cases.add(caseView);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return cases;
+    }
 
-	            for (Case caseRepo : casesRepo) {
-	            	if (caseRepo.getTriggerEvent() != null) {
-		                CaseLocationView caseView = new CaseLocationView();
-		                caseView.setId(caseRepo.getId());
-		                caseView.setLocation(caseRepo.getTriggerEvent().getLocation() != null ? caseRepo.getTriggerEvent().getLocation() : null);
-		                caseView.setLocationMethod(caseRepo.getTriggerEvent().getLocationMethod() != null ? caseRepo.getTriggerEvent().getLocationMethod() : null );
-		                caseView.setOriginalLocation(caseRepo.getTriggerEvent().getOriginalLocation() != null ? caseRepo.getTriggerEvent().getOriginalLocation() : null);
-		                cases.add(caseView);
-	            	}
-	            }
-	        } catch (Exception e) {
-	            log.error("Unexpected error", e);
-	        }
-	        return cases;
-	}
-
-	public List<ResultsListView> sumarizeResolutionByUser(CasesFilterRequest filterRequest) {
+    public List<ResultsListView> sumarizeResolutionByUser(CasesFilterRequest filterRequest) {
         List<ResultsListView> results = new ArrayList<>();
         try {
             Map<String, Long> resultsRepo = caseElasticService.getResolutionsByAssigned(filterRequest);

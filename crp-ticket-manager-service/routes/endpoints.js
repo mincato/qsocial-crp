@@ -124,7 +124,7 @@ router.post('/cases/resolutions/:id', function (req, res) {
 	  caseService.getResolutionsByUser(resolutionsId,request, asyncResponse);
 });
 
-router.get('/cases/map', function (req, res) {
+router.post('/cases/map', function (req, res) {
 	function asyncResponse(err,response) {
 	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
 
@@ -140,13 +140,14 @@ router.get('/cases/map', function (req, res) {
 	    } else {
 	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
 	    }
-
 	  }
-	  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
-	  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
+	  prettyJSON(req.body);
+	  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.CasesFilterRequest');
+	  var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
 	  
 	  var caseMapService = javaContext.getBeanSync("caseMapService");
-	  caseMapService.getGeoJson(pageNumber, pageSize, asyncResponse);
+	  caseMapService.getGeoJson(request, asyncResponse);
 });
 
 router.post('/cases/list', function (req, res) {

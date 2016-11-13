@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.ActionParameter;
 import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
@@ -184,18 +183,17 @@ public class CaseServiceImpl implements CaseService {
     }
 
     @Override
-    public String calculateGeoJson(int pageNumber, int pageSize) {
-       try {
-    		 UriComponentsBuilder builder = UriComponentsBuilder
-    	                .fromHttpUrl(serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/map").queryParam("pageNumber", pageNumber)
-                        .queryParam("pageSize", pageSize);
-    	     RestTemplate restTemplate = RestTemplateFactory.createRestTemplate(); 
-    	     String geoJson = restTemplate.getForObject(builder.toUriString(), String.class);
-             return geoJson.toString();
-         } catch (Exception e) {
-             log.error("There was an error while trying to call retroactive service", e);
-             throw new RuntimeException(e);
-         }
+    public String calculateGeoJson(CasesFilterRequest filterRequest) {
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/map");
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            String geoJson = restTemplate.postForObject(builder.toUriString(), filterRequest, String.class);
+            return geoJson.toString();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call case map service", e);
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package com.qsocialnow.common.model.cases;
 import java.util.List;
 
 import com.qsocialnow.common.model.config.Category;
+import com.qsocialnow.common.model.event.GeoSocialEventLocationMethod;
 import com.qsocialnow.common.model.filter.AdministrativeUnitsFilter;
 import com.qsocialnow.common.model.filter.RangeRequest;
 import com.qsocialnow.common.model.filter.WordsFilterRequestBean;
@@ -91,6 +92,8 @@ public class CasesFilterRequest {
     private String idResolution;
 
     private List<Category> categoriesFilter;
+
+    private GeoSocialEventLocationMethod locationMethod;
 
     public PageRequest getPageRequest() {
         return pageRequest;
@@ -418,6 +421,14 @@ public class CasesFilterRequest {
 
     public void setIdResolution(String idResolution) {
         this.idResolution = idResolution;
+    }
+
+    public GeoSocialEventLocationMethod getLocationMethod() {
+        return locationMethod;
+    }
+
+    public void setLocationMethod(GeoSocialEventLocationMethod locationMethod) {
+        this.locationMethod = locationMethod;
     }
 
 }

@@ -5,15 +5,16 @@ function (wgt, dataValue) {
 	var self = this;
 	if (self.after) {
 		self.after('$clientUpdate', function (evt) {
-			console.log('clien update');
+			
+			if (evt) {
 			var map = new mapboxgl.Map({
 				container: uuid, // container id
-				style: 'mapbox://styles/mapbox/dark-v9', //stylesheet location
-				center: [-103.59179687498357, 40.66995747013945], // starting position
-				zoom: 3 // starting zoom
+				style: 'mapbox://styles/mapbox/light-v9', //stylesheet location
+				center: [-60, -20], // starting position
+				zoom: 3, // starting zoom,
 			});
-			if (evt) {
-				map.on('load', function() {
+			
+			map.on('load', function() {
 					var data = JSON.parse(evt);
 					map.addSource("points", {
 	        	        type: "geojson",

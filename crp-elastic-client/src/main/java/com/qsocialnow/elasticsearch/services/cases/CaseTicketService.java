@@ -64,7 +64,8 @@ public class CaseTicketService extends CaseIndexService {
         CaseMapping mapping = CaseMapping.getInstance();
 
         SearchResponse<Case> response;
-        if (!filterRequest.isFilterActive() && filterRequest.getUserName() == null) {
+        if (!filterRequest.isFilterActive() && filterRequest.getUserName() == null
+                && filterRequest.getLocationMethod() == null) {
             response = repository.queryMatchAll(filterRequest.getPageRequest().getOffset(), filterRequest
                     .getPageRequest().getPageSize(), filterRequest.getPageRequest().getSortField(), filterRequest
                     .getPageRequest().getSortOrder(), mapping);
@@ -316,6 +317,10 @@ public class CaseTicketService extends CaseIndexService {
                 termFilters.add(new TermFieldFilter("triggerEvent.categorias", String.valueOf(filterRequest
                         .getCategories()[0])));
             }
+        }
+        if (filterRequest.getLocationMethod() != null) {
+            termFilters.add(new TermFieldFilter("triggerEvent.locationMethod", filterRequest.getLocationMethod()
+                    .getLocationMethod()));
         }
 
     }

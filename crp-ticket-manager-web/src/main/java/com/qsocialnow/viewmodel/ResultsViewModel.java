@@ -10,6 +10,8 @@ import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.annotation.NotifyCommand;
+import org.zkoss.bind.annotation.ToClientCommand;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
@@ -26,12 +28,15 @@ import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.converters.DateConverter;
+import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ResultsService;
 import com.qsocialnow.services.TriggerService;
 import com.qsocialnow.services.UserService;
 import com.qsocialnow.services.UserSessionService;
 
+@NotifyCommand(value = "zmapbox$clientUpdate", onChange = "_vm_.geoJson")
+@ToClientCommand({ "zmapbox$clientUpdate" })
 @VariableResolver(DelegatingVariableResolver.class)
 public class ResultsViewModel implements Serializable {
 
@@ -40,6 +45,8 @@ public class ResultsViewModel implements Serializable {
     private static final String REPORT_OPTION_ADMIN = "admin";
 
     private static final String REPORT_OPTION_RESOLUTION = "resolution";
+
+    private static final String REPORT_OPTION_MAP = "map";
 
     private static final long serialVersionUID = 2259179419421396093L;
 
@@ -136,6 +143,8 @@ public class ResultsViewModel implements Serializable {
 
     private boolean byState;
 
+    private boolean byMap;
+
     @WireVariable
     private UserSessionService userSessionService;
 
@@ -144,6 +153,11 @@ public class ResultsViewModel implements Serializable {
 
     @WireVariable
     private UserService userService;
+
+    @WireVariable
+    private CaseService caseService;
+
+    private String geoJson;
 
     @Init
     public void init() {
@@ -241,13 +255,14 @@ public class ResultsViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "byResolution", "byAdmin", "byState", "filterActive" })
+    @NotifyChange({ "byResolution", "byAdmin", "byState", "byMap", "filterActive" })
     public void showOption() {
         switch (this.reportType) {
             case REPORT_OPTION_RESOLUTION:
                 this.byResolution = true;
                 this.byAdmin = false;
                 this.byState = false;
+                this.byMap = false;
                 this.filterActive = true;
                 break;
 
@@ -255,6 +270,14 @@ public class ResultsViewModel implements Serializable {
                 this.byResolution = false;
                 this.byAdmin = false;
                 this.byState = true;
+                this.byMap = false;
+                this.filterActive = true;
+                break;
+            case REPORT_OPTION_MAP:
+                this.byResolution = false;
+                this.byAdmin = false;
+                this.byState = false;
+                this.byMap = true;
                 this.filterActive = true;
                 break;
 
@@ -419,7 +442,7 @@ public class ResultsViewModel implements Serializable {
     }
 
     private List<String> getResultsOptionsList() {
-        String[] options = { REPORT_OPTION_RESOLUTION, REPORT_OPTION_STATE };
+        String[] options = { REPORT_OPTION_RESOLUTION, REPORT_OPTION_STATE, REPORT_OPTION_MAP };
         return new ArrayList<String>(Arrays.asList(options));
     }
 
@@ -610,4 +633,35 @@ public class ResultsViewModel implements Serializable {
     public List<String> getPriorityOptions() {
         return priorityOptions;
     }
+
+    public boolean isByMap() {
+        return byMap;
+    }
+
+    public void setByMap(boolean byMap) {
+        this.byMap = byMap;
+    }
+
+    @Command
+    @NotifyChange("geoJson")
+    public void searchByMap() {
+        PageRequest pageRequest = new PageRequest(0, 1000, "openDate");
+        CasesFilterRequest filterRequest = new CasesFilterRequest();
+        filterRequest.setPageRequest(pageRequest);
+        filterRequest.setFilterActive(filterActive);
+        setFilters(filterRequest);
+        geoJson = caseService.calculateGeoJson(filterRequest);
+        if (geoJson.isEmpty()) {
+            geoJson = null;
+        }
+    }
+
+    public String getGeoJson() {
+        return geoJson;
+    }
+
+    public void setGeoJson(String geoJson) {
+        this.geoJson = geoJson;
+    }
+
 }
