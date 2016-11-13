@@ -182,4 +182,18 @@ public class CaseServiceImpl implements CaseService {
 
     }
 
+    @Override
+    public String calculateGeoJson(CasesFilterRequest filterRequest) {
+        try {
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/map");
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            String geoJson = restTemplate.postForObject(builder.toUriString(), filterRequest, String.class);
+            return geoJson.toString();
+        } catch (Exception e) {
+            log.error("There was an error while trying to call case map service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
 }

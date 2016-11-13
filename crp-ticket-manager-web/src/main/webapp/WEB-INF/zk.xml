@@ -43,7 +43,7 @@
 	    	<name>modal</name>
 	    	<script>
 	        	function (wgt, dataValue) {
-	            	$(wgt.$n()).modal({
+	        		$(wgt.$n()).modal({
   						backdrop: 'static',   // This disable for click outside event
     					keyboard: true        // This for keyboard event
 					});
@@ -99,5 +99,13 @@
     		<script src="/assets/js/inputNumber.js">
     		</script>
 		</data-handler>
+		
+		<data-handler>
+    		<name>zmapbox</name>
+    		<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css" rel="stylesheet" />
+    		<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js">
+    		</script>
+    		<script src="/assets/js/zmapbox.js" /> 
+    	</data-handler>
 	</client-config>
 </zk>
