@@ -34,7 +34,7 @@ public class AnalyticsAuthService {
     private final static String ZOOKEEPER_PATH_TOKENS = "/tokens/{0}";
     private final static String ZOOKEEPER_PATH_SESSIONS = "/sessions/{0}";
 
-    private final static String URL_PATTERN = "{0}?_token={1}";
+    private final static String URL_PATTERN = "{0}?token={1}";
 
     public void redirectAnalyticsHome() {
         String shortToken = UUID.randomUUID().toString();
