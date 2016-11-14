@@ -3,14 +3,9 @@ package com.qsocialnow.service;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.config.ActionType;
@@ -24,8 +19,6 @@ import com.qsocialnow.service.action.Action;
 
 @Service
 public class CaseResultsService {
-
-    private static final Logger log = LoggerFactory.getLogger(CaseResultsService.class);
 
     @Autowired
     private CaseRepository repository;
