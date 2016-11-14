@@ -1,6 +1,7 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <x:div class="container-fluid" apply="org.zkoss.bind.BindComposer"
-	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.ResultsViewModel')" 
+	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.ResultsViewModel')"
+	form="@id('report')" validationMessages="@id('vmsgs')"
 	border="normal" contentStyle="overflow:auto" xmlns:n="native" xmlns:x="xhtml">
 	<n:div class="row">
 		<n:div class="col-lg-12">
@@ -36,16 +37,20 @@
        <n:div class="col-lg-12">
          <div zclass="pane equal col-md-12 col-xs-12">
             <n:form class="form-inline">                
-                <x:div class="form-group" visible="@load(vm.domains ne null and not empty vm.domains)">
+                <x:div class="form-group" sclass="@load(empty vmsgs[domain] ? 'form-group' : 'form-group has-error')" visible="@load(vm.domains ne null and not empty vm.domains)">
                     <n:label class="control-label">${labels.cases.list.filter.domains}</n:label>
                     <div zclass="input-group input-group-sm">
-                           <selectbox sclass="form-control" model="@load(vm.domains)"
-                               selectedItem="@bind(vm.domain)"
-                               onSelect="@command('selectDomain',domain = vm.domain)">
+                           <selectbox id="domain"  sclass="form-control" model="@load(vm.domains)"
+                               onSelect="@command('selectDomain',domain = vm.domain)"
+                               selectedItem="@bind(vm.domain) @save(vm.domain, before='search') @validator('com.qsocialnow.validators.RequiredValidator')">
                                <template name="model">
                                    <label value="${each.name}" />
                                </template>
                            </selectbox>
+                           <x:span sclass="@load(vmsgs[domain] ? 'hidden' : 'help-block')">
+                           <label
+                                value="@bind(vmsgs[domain])" />
+                           </x:span>
                      </div>
                 </x:div>
                 <x:div class="form-group" visible="@load(vm.triggers ne null and not empty vm.triggers)">
@@ -93,19 +98,24 @@
 	            <n:form class="form-inline">    
 	                <n:div class="form-group">
 	                    <div zclass="input-group input-group-sm">
-	                         <textbox zclass="form-control" value="@bind(vm.title)" onOK="@command('search')" placeholder="${labels.cases.list.filter.title}"/>
+	                         <textbox zclass="form-control" value="@bind(vm.title)" onOK="@command('search')" placeholder="${labels.cases.list.filter.title}" />
 	                   </div>
 	                </n:div>
 	                <n:div class="form-group">
 	                    <div zclass="input-group input-group-sm">
-	                          <datebox sclass="input-group" format="medium" value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
+	                          <datebox sclass="input-group" format="medium" 
+	                          value="@bind(vm.fromDate) @converter('com.qsocialnow.converters.DateInputConverter')" placeholder="${labels.cases.registry.filter.fromdate}" />
 	                    </div>
 	                </n:div>
 	                <n:div class="form-group">
 	                   <x:div sclass="@load(empty vmsgs[todate] ? 'input-group input-group-sm' : 'input-group input-group-sm has-error')" >
 	                       <datebox id="todate" sclass="input-group" format="medium" value="@load(vm.toDate) @save(vm.toDate, before='search') @converter('com.qsocialnow.converters.DateInputConverter', endDay = true) @validator('com.qsocialnow.validators.ToDateValidator', fromDate = vm.fromDate, id = 'todate')" placeholder="${labels.cases.list.filter.todate}" />
 	                    </x:div>
+	                    <x:span sclass="@load(empty vmsgs[todate] ? 'hidden' : 'help-block')">
+                            <label value="@load(vmsgs[todate])" />
+                        </x:span>
 	                </n:div>
+	                
 	                <n:div class="form-group">
 	                    <div zclass="input-group input-group-sm">
 	                         <textbox zclass="form-control" value="@bind(vm.subject)" onOK="@command('search')" placeholder="${labels.cases.list.filter.subject}"/>
@@ -122,31 +132,6 @@
                                </selectbox>
                         </div>
                     </n:div>
-                   <div visible="@load(vm.byState)">
-		                <n:div class="form-group">
-		                    <n:label class="control-label">${labels.cases.list.filter.pendingResponse}</n:label>
-		                    <div zclass="input-group input-group-sm" >
-		                           <selectbox sclass="form-control" model="@load(vm.pendingOptions)"
-		                               selectedItem="@bind(vm.pendingResponse)">
-		                               <template name="model">
-		                                   <label value="${c:l(c:cat('cases.pendingResponse.',each))}" />
-		                               </template>
-		                           </selectbox>
-		                    </div>
-		                </n:div>
-		                <n:div class="form-group">
-		                    <n:label class="control-label">${labels.cases.list.filter.status}</n:label>
-		                    <div zclass="input-group input-group-sm">
-		                           <selectbox sclass="form-control" model="@load(vm.statusOptions)"
-		                               selectedItem="@bind(vm.status)">
-		                               <template name="model">
-		                                   <label value="${c:l(c:cat('cases.open.',each))}" />
-		                               </template>
-		                           </selectbox>
-		                    </div>
-		                </n:div>
-	                </div>
-	                
 	           </n:form>
 	           </n:div>
            <n:div class="col-sm-1">
