@@ -6,7 +6,7 @@
 <?link href="/assets/css/problematics.css" rel="stylesheet"?>
 <?link href="/assets/css/ui.css" rel="stylesheet"?>
 <?link id="theme" href="/assets/css/themes/theme-qsocial.css" rel="stylesheet" type="text/css"?>
-<?link href="/css/open_sans.css" rel="stylesheet" type="text/css"?>
+<?link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'?>
 <?link href="/vendor/fonts/font-awesome.min.css" rel="stylesheet"?>
 <?link rel="shortcut icon" href="/imgs/favicon.png" type="image/x-icon" ?>
 <zk xmlns:n="native">
