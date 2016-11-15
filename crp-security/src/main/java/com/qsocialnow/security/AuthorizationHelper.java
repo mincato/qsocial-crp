@@ -13,7 +13,7 @@ import com.qsocialnow.security.exception.TokenNotFoundException;
 
 public class AuthorizationHelper {
 
-	private static final String TOKEN_REQUEST_PARAMETER = "_token";
+	private static final String TOKEN_REQUEST_PARAMETER = "token";
 	private static final String TOKEN_SESSION_PARAMETER = "token";
 	private static final String SHORT_TOKEN_SESSION_PARAMETER = "shortToken";
 
