@@ -95,11 +95,14 @@ public class ResultsViewModel implements Serializable {
 
     private List<ResultsListView> resultsState = new ArrayList<>();
 
+    private List<ResultsListView> adminUnits = new ArrayList<>();
+
     private List<ResultsListView> statusByUser = new ArrayList<>();
 
     private List<ResultsListView> statusByPending = new ArrayList<>();
 
     private String currentStatus;
+
     // filters
     private boolean filterActive;
 
@@ -127,6 +130,8 @@ public class ResultsViewModel implements Serializable {
 
     private List<String> priorityOptions = new ArrayList<>();
 
+    private List<String> adminUnitsOptions = new ArrayList<>();
+
     private List<String> resultsTypeOptions = new ArrayList<>();
 
     private Long fromDate;
@@ -144,6 +149,8 @@ public class ResultsViewModel implements Serializable {
     private String priority;
 
     private String pendingResponse;
+
+    private String adminUnit;
 
     private String reportType;
 
@@ -179,6 +186,7 @@ public class ResultsViewModel implements Serializable {
         this.pendingOptions = getPendingOptionsList();
         this.statusOptions = getStatusOptionsList();
         this.priorityOptions = getPriorityOptionsList();
+        this.adminUnitsOptions = getAdminUnitsOptionsList();
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
     }
 
@@ -233,6 +241,24 @@ public class ResultsViewModel implements Serializable {
         return pageResponse;
     }
 
+    private PageResponse<ResultsListView> sumarizeCasesByUnitAdmin() {
+        CasesFilterRequest filterRequest = new CasesFilterRequest();
+        PageRequest pageRequest = new PageRequest(activePage, 10, "");
+        filterRequest.setPageRequest(pageRequest);
+        filterRequest.setFilterActive(filterActive);
+        setFilters(filterRequest);
+        filterRequest.setFieldToSumarize(adminUnit);
+        PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
+
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            this.adminUnits.addAll(pageResponse.getItems());
+            this.moreResults = true;
+        } else {
+            this.moreResults = false;
+        }
+        return pageResponse;
+    }
+
     private PageResponse<ResultsListView> sumarizeResolutionsByUser(String idResolution) {
         CasesFilterRequest filterRequest = new CasesFilterRequest();
         PageRequest pageRequest = new PageRequest(activePage, pageSize, "");
@@ -271,7 +297,7 @@ public class ResultsViewModel implements Serializable {
 
     @Command
     @NotifyChange({ "results", "moreResults", "filterActive", "resultsByUser", "currentResolution", "resultsState",
-            "statusByUser" })
+            "statusByUser", "adminUnits" })
     public void search() {
         this.setDefaultPage();
         this.filterActive = true;
@@ -285,6 +311,9 @@ public class ResultsViewModel implements Serializable {
             this.statusByUser.clear();
             this.currentStatus = "";
             this.sumarizeCasesByStatus();
+        } else if (byAdmin) {
+            this.adminUnits.clear();
+            this.sumarizeCasesByUnitAdmin();
         }
     }
 
@@ -343,9 +372,11 @@ public class ResultsViewModel implements Serializable {
 
     @Command
     @NotifyChange({ "byResolution", "resultsByUser", "currentResolution", "resultsByUser", "resultsState",
-            "statusByUser", "currentStatus", "byMap", "byAdmin", "byState", "showFilters", "statusByPending" })
+            "statusByUser", "currentStatus", "byMap", "byAdmin", "byAdmin", "byState", "showFilters",
+            "statusByPending", "adminUnits" })
     public void showOption() {
         this.showFilters = true;
+        this.filterActive = false;
         switch (this.reportType) {
             case REPORT_OPTION_RESOLUTION:
                 this.byResolution = true;
@@ -374,6 +405,14 @@ public class ResultsViewModel implements Serializable {
                 this.byMap = true;
                 // this.filterActive = true;
                 break;
+            case REPORT_OPTION_ADMIN:
+                this.byResolution = false;
+                this.byAdmin = false;
+                this.byState = false;
+                this.byMap = false;
+                this.adminUnits.clear();
+                this.byAdmin = true;
+
             default:
                 break;
         }
@@ -481,6 +520,14 @@ public class ResultsViewModel implements Serializable {
         return new ArrayList<String>(Arrays.asList(options));
     }
 
+    private List<String> getAdminUnitsOptionsList() {
+        String[] options = { UserConstants.REPORT_BY_UA_CONTINENT, UserConstants.REPORT_BY_UA_COUNTRY,
+                UserConstants.REPORT_BY_UA_CITY, UserConstants.REPORT_BY_UA_NEIGHBORHOOD,
+                UserConstants.REPORT_BY_UA_ADM1, UserConstants.REPORT_BY_UA_ADM2, UserConstants.REPORT_BY_UA_ADM3,
+                UserConstants.REPORT_BY_UA_ADM4 };
+        return new ArrayList<String>(Arrays.asList(options));
+    }
+
     private void setFilters(CasesFilterRequest filterRequest) {
         if (Strings.isNotEmpty(this.title)) {
             filterRequest.setTitle(this.title);
@@ -547,7 +594,7 @@ public class ResultsViewModel implements Serializable {
     }
 
     private List<String> getResultsOptionsList() {
-        String[] options = { REPORT_OPTION_RESOLUTION, REPORT_OPTION_STATE, REPORT_OPTION_MAP };
+        String[] options = { REPORT_OPTION_RESOLUTION, REPORT_OPTION_ADMIN, REPORT_OPTION_STATE, REPORT_OPTION_MAP };
         return new ArrayList<String>(Arrays.asList(options));
     }
 
@@ -783,5 +830,21 @@ public class ResultsViewModel implements Serializable {
 
     public void setGeoJson(String geoJson) {
         this.geoJson = geoJson;
+    }
+
+    public List<ResultsListView> getAdminUnits() {
+        return adminUnits;
+    }
+
+    public List<String> getAdminUnitsOptions() {
+        return adminUnitsOptions;
+    }
+
+    public String getAdminUnit() {
+        return adminUnit;
+    }
+
+    public void setAdminUnit(String adminUnit) {
+        this.adminUnit = adminUnit;
     }
 }

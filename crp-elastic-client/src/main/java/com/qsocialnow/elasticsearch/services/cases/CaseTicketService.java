@@ -429,6 +429,10 @@ public class CaseTicketService extends CaseIndexService {
         return retrieveSumarizations(filterRequest, "pendingResponse");
     }
 
+    public Map<String, Long> getCasesCountBySelectedAdminUnit(CasesFilterRequest filterRequest) {
+        return retrieveSumarizations(filterRequest, "triggerEvent." + filterRequest.getFieldToSumarize());
+    }
+
     private Map<String, Long> retrieveSumarizations(CasesFilterRequest filterRequest, String aggregationField) {
         RepositoryFactory<CaseType> esfactory = new RepositoryFactory<CaseType>(elasticSearchCaseConfigurator);
         Repository<CaseType> repository = esfactory.initManager();

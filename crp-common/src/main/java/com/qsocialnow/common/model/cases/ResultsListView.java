@@ -10,6 +10,8 @@ public class ResultsListView implements Serializable {
 
     private String resolution;
 
+    private String unitAdmin;
+
     private String assigned;
 
     private String status;
@@ -64,5 +66,13 @@ public class ResultsListView implements Serializable {
 
     public void setPending(String pending) {
         this.pending = pending;
+    }
+
+    public String getUnitAdmin() {
+        return unitAdmin;
+    }
+
+    public void setUnitAdmin(String unitAdmin) {
+        this.unitAdmin = unitAdmin;
     }
 }
