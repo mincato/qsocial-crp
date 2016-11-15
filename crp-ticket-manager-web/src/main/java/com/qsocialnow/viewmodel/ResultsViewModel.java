@@ -41,23 +41,7 @@ import com.qsocialnow.services.UserSessionService;
 @VariableResolver(DelegatingVariableResolver.class)
 public class ResultsViewModel implements Serializable {
 
-    private static final String NEIGHBORHOOD_OPTION_VALUE = "neighborhood";
-
-	private static final String CITY_OPTION_VALUE = "city";
-
-	private static final String ADM4_OPTION_VALUE = "adm4";
-
-	private static final String ADM3_OPTION_VALUE = "adm3";
-
-	private static final String ADM2_OPTION_VALUE = "adm2";
-
-	private static final String ADM1_OPTION_VALUE = "adm1";
-
-	private static final String COUNTRY_OPTION_VALUE = "country";
-
-	private static final String CONTINENT_OPTION_VALUE = "continent";
-
-	private static final String REPORT_OPTION_STATE = "state";
+    private static final String REPORT_OPTION_STATE = "state";
 
     private static final String REPORT_OPTION_ADMIN = "admin";
 
@@ -110,7 +94,7 @@ public class ResultsViewModel implements Serializable {
     private List<ResultsListView> resultsByUser = new ArrayList<>();
 
     private List<ResultsListView> resultsState = new ArrayList<>();
-    
+
     private List<ResultsListView> adminUnits = new ArrayList<>();
 
     private List<ResultsListView> statusByUser = new ArrayList<>();
@@ -118,8 +102,7 @@ public class ResultsViewModel implements Serializable {
     private List<ResultsListView> statusByPending = new ArrayList<>();
 
     private String currentStatus;
-    
-    private String currentUnitAdmin;
+
     // filters
     private boolean filterActive;
 
@@ -146,7 +129,7 @@ public class ResultsViewModel implements Serializable {
     private List<String> statusOptions = new ArrayList<>();
 
     private List<String> priorityOptions = new ArrayList<>();
-    
+
     private List<String> adminUnitsOptions = new ArrayList<>();
 
     private List<String> resultsTypeOptions = new ArrayList<>();
@@ -166,6 +149,8 @@ public class ResultsViewModel implements Serializable {
     private String priority;
 
     private String pendingResponse;
+
+    private String adminUnit;
 
     private String reportType;
 
@@ -255,14 +240,14 @@ public class ResultsViewModel implements Serializable {
         }
         return pageResponse;
     }
-    
+
     private PageResponse<ResultsListView> sumarizeCasesByUnitAdmin() {
         CasesFilterRequest filterRequest = new CasesFilterRequest();
-        PageRequest pageRequest = new PageRequest(activePage, pageSize, "");
+        PageRequest pageRequest = new PageRequest(activePage, 10, "");
         filterRequest.setPageRequest(pageRequest);
         filterRequest.setFilterActive(filterActive);
         setFilters(filterRequest);
-        filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_STATUS);
+        filterRequest.setFieldToSumarize(adminUnit);
         PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
 
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
@@ -312,7 +297,7 @@ public class ResultsViewModel implements Serializable {
 
     @Command
     @NotifyChange({ "results", "moreResults", "filterActive", "resultsByUser", "currentResolution", "resultsState",
-            "statusByUser" })
+            "statusByUser", "adminUnits" })
     public void search() {
         this.setDefaultPage();
         this.filterActive = true;
@@ -326,9 +311,8 @@ public class ResultsViewModel implements Serializable {
             this.statusByUser.clear();
             this.currentStatus = "";
             this.sumarizeCasesByStatus();
-        }else if (byAdmin){
-        	this.adminUnits.clear();
-            this.currentUnitAdmin = "";
+        } else if (byAdmin) {
+            this.adminUnits.clear();
             this.sumarizeCasesByUnitAdmin();
         }
     }
@@ -388,9 +372,11 @@ public class ResultsViewModel implements Serializable {
 
     @Command
     @NotifyChange({ "byResolution", "resultsByUser", "currentResolution", "resultsByUser", "resultsState",
-            "statusByUser", "currentStatus", "byMap", "byAdmin","byAdmin","byState", "showFilters", "statusByPending" })
+            "statusByUser", "currentStatus", "byMap", "byAdmin", "byAdmin", "byState", "showFilters",
+            "statusByPending", "adminUnits" })
     public void showOption() {
         this.showFilters = true;
+        this.filterActive = false;
         switch (this.reportType) {
             case REPORT_OPTION_RESOLUTION:
                 this.byResolution = true;
@@ -419,12 +405,13 @@ public class ResultsViewModel implements Serializable {
                 this.byMap = true;
                 // this.filterActive = true;
                 break;
-            case REPORT_OPTION_ADMIN:    
-            	this.byResolution = false;
+            case REPORT_OPTION_ADMIN:
+                this.byResolution = false;
                 this.byAdmin = false;
                 this.byState = false;
                 this.byMap = false;
-                this.byAdmin=true;
+                this.adminUnits.clear();
+                this.byAdmin = true;
 
             default:
                 break;
@@ -533,11 +520,13 @@ public class ResultsViewModel implements Serializable {
         return new ArrayList<String>(Arrays.asList(options));
     }
 
-	private List<String> getAdminUnitsOptionsList() {
-		String[] options = { CONTINENT_OPTION_VALUE, COUNTRY_OPTION_VALUE, ADM1_OPTION_VALUE, ADM2_OPTION_VALUE,
-				ADM3_OPTION_VALUE, ADM4_OPTION_VALUE, CITY_OPTION_VALUE, NEIGHBORHOOD_OPTION_VALUE };
-		return new ArrayList<String>(Arrays.asList(options));
-	}
+    private List<String> getAdminUnitsOptionsList() {
+        String[] options = { UserConstants.REPORT_BY_UA_CONTINENT, UserConstants.REPORT_BY_UA_COUNTRY,
+                UserConstants.REPORT_BY_UA_CITY, UserConstants.REPORT_BY_UA_NEIGHBORHOOD,
+                UserConstants.REPORT_BY_UA_ADM1, UserConstants.REPORT_BY_UA_ADM2, UserConstants.REPORT_BY_UA_ADM3,
+                UserConstants.REPORT_BY_UA_ADM4 };
+        return new ArrayList<String>(Arrays.asList(options));
+    }
 
     private void setFilters(CasesFilterRequest filterRequest) {
         if (Strings.isNotEmpty(this.title)) {
@@ -843,19 +832,19 @@ public class ResultsViewModel implements Serializable {
         this.geoJson = geoJson;
     }
 
-	public List<ResultsListView> getAdminUnits() {
-		return adminUnits;
-	}
+    public List<ResultsListView> getAdminUnits() {
+        return adminUnits;
+    }
 
-	public String getCurrentUnitAdmin() {
-		return currentUnitAdmin;
-	}
+    public List<String> getAdminUnitsOptions() {
+        return adminUnitsOptions;
+    }
 
-	public void setCurrentUnitAdmin(String currentUnitAdmin) {
-		this.currentUnitAdmin = currentUnitAdmin;
-	}
+    public String getAdminUnit() {
+        return adminUnit;
+    }
 
-	public List<String> getAdminUnitsOptions() {
-		return adminUnitsOptions;
-	}
+    public void setAdminUnit(String adminUnit) {
+        this.adminUnit = adminUnit;
+    }
 }

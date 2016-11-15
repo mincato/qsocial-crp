@@ -134,27 +134,6 @@
                     </n:div>
 	           </n:form>
 	       </n:div>	       
-	       <n:div class="col-lg-12">
-            <div zclass="pane equal col-md-12 col-xs-12" visible="@load(vm.byAdmin)">
-            <n:form class="form-inline">                
-                <x:div class="form-group" sclass="@load(empty vmsgs[admin] ? 'form-group' : 'form-group has-error')" visible="@load(vm.domains ne null and not empty vm.domains)">
-                    <n:label class="control-label">${labels.cases.results.report.option.admin}</n:label>
-                    <div zclass="input-group input-group-sm">
-                           <selectbox sclass="form-control" model="@load(vm.adminUnitsOptions)"
-                                   selectedItem="@bind(vm.priority)">
-                                   <template name="model">
-                                       <label value="${c:l(c:cat('cases.results.admin.',each))}" />
-                                   </template>
-                           </selectbox>
-                           <x:span sclass="@load(vmsgs[admin] ? 'hidden' : 'help-block')">
-                           <label
-                                value="@bind(vmsgs[admin])" />
-                           </x:span>
-                     </div>
-                </x:div>
-	       </n:form>
-	       </div>
-	       </n:div>
            <n:div class="col-sm-1">
                 <n:form class="form-inline">    
                 <n:div class="form-group">
@@ -173,9 +152,6 @@
        </div>
     </n:div>
     </n:div>
-    
-    
-    
 	</div>	
 	<div visible="@load(vm.byResolution)">
 		<div class="row">
@@ -322,6 +298,25 @@
          </div>
     </div>
     <div visible="@load(vm.byAdmin)">
+        <div zclass="pane equal col-md-12 col-xs-12">
+            <n:form class="form-inline">                
+                <x:div class="form-group" sclass="@load(empty vmsgs[admin] ? 'form-group' : 'form-group has-error')" visible="@load(vm.domains ne null and not empty vm.domains)">
+                    <n:label class="control-label">${labels.cases.results.report.option.admin}</n:label>
+                    <div zclass="input-group input-group-sm" disabled="@load(!vm.byAdmin)">
+                           <selectbox disabled="@load(!vm.byAdmin)" id="adminUnit" sclass="form-control" model="@load(vm.adminUnitsOptions)"
+                                   selectedItem="@bind(vm.adminUnit) @save(vm.adminUnit, before='search') @validator(self.disabled?'com.qsocialnow.validators.DisabledValidator':'com.qsocialnow.validators.RequiredValidator')">
+                                   <template name="model">
+                                       <label value="${c:l(c:cat('cases.results.admin.',each))}" />
+                                   </template>
+                           </selectbox>
+                           <x:span sclass="@load(vmsgs[adminUnit] ? 'hidden' : 'help-block')">
+                           <label
+                                value="@bind(vmsgs[adminUnit])" />
+                           </x:span>
+                     </div>
+                </x:div>
+           </n:form>
+        </div>
         <div class="row">
             <n:div class="col-lg-12">
                 <div zclass="pane equal">
@@ -336,9 +331,7 @@
                             <tbody children="@bind(vm.adminUnits)">
                                 <template name="children">
                                     <tr>
-                                        <td class="list-text-column">
-                                           <a label="@load(each.resolution)" href="#" onClick="@command('searchResolutionByUser',idResolution=each.idResolution,resolution=each.resolution)"></a>
-                                        </td>
+                                        <td class="list-text-column">${each.unitAdmin}</td>
                                         <td class="list-text-column">${each.total}</td>
                                     </tr>
                                 </template>
