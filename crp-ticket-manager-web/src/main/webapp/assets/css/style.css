@@ -2785,7 +2785,7 @@ ul.thematic {
 
 .image-input.portuguese input:checked + label
 {
-	background: url('/crp-ticket-manager-web/imgs/br.svg');
+	background: url('/qaction/imgs/br.svg');
 	background-size: contain;
   	background-position: 50%;
   	background-repeat: no-repeat;
@@ -2797,7 +2797,7 @@ ul.thematic {
 
 .image-input.english input:checked + label
 {
-	background: url('/crp-ticket-manager-web/imgs/gb.svg');
+	background: url('/qaction/imgs/gb.svg');
 	background-size: contain;
   	background-position: 50%;
   	background-repeat: no-repeat;
@@ -2809,7 +2809,7 @@ ul.thematic {
 
 .image-input.spanish input:checked + label
 {
-	background: url('/crp-ticket-manager-web/imgs/es.svg');
+	background: url('/qaction/imgs/es.svg');
 	background-size: contain;
   	background-position: 50%;
   	background-repeat: no-repeat;
@@ -2821,7 +2821,7 @@ ul.thematic {
 
 .image-input.spanish input + label
 {
-	background: url('/crp-ticket-manager-web/imgs/es.svg');
+	background: url('/qaction/imgs/es.svg');
 	background-size: contain;
   	background-position: 50%;
   	background-repeat: no-repeat;
@@ -2832,7 +2832,7 @@ ul.thematic {
 }
 
 .image-input.english input + label {
-	background: url('/crp-ticket-manager-web/imgs/gb.svg');
+	background: url('/qaction/imgs/gb.svg');
 	background-size: contain;
   	background-position: 50%;
   	background-repeat: no-repeat;
@@ -2843,7 +2843,7 @@ ul.thematic {
 }
 
 .image-input.portuguese input + label {
-	background: url('/crp-ticket-manager-web/imgs/br.svg');
+	background: url('/qaction/imgs/br.svg');
 	background-size: contain;
   	background-position: 50%;
   	background-repeat: no-repeat;
