@@ -45,7 +45,7 @@ public class HeaderViewModel implements Serializable {
     @Init
     public void init() {
         if (userSessionService.isOdatech()) {
-            organizations = organizationService.getOrganizations();
+            organizations = organizationService.getActiveOrganizations();
             ClientOrganization currentOrganization = organizationService.getCurrentOrganization();
             Optional<ClientOrganization> optionalOrganization = organizations.stream()
                     .filter(organization -> organization.getId().equals(currentOrganization.getId())).findFirst();
