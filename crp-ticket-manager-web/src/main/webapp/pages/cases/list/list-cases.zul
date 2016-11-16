@@ -614,7 +614,7 @@
                                     	${labels.cases.list.column.assignee}
                                 </th>
                                 <th sclass="@load(vm.sortField eq 'priority' ? vm.sortOrder ? 'sort desc' : 'sort asc' : 'sort')" 
-                                	onClick="@command('sortList',sortField='priority')">
+                                	onClick="@command('sortList',sortField='priorityOrder')">
 										${labels.cases.list.column.priority}
                                     
                                 </th>
