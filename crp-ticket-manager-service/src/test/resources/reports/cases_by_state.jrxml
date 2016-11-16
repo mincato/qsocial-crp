@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2016-11-16T21:56:27 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cases_by_resolution" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="reports" whenResourceMissingType="Error" isIgnorePagination="true" uuid="d53c67b3-256c-4657-8dff-c8dfe54defd0">
+<!-- 2016-11-16T21:56:42 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cases_by_state" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="reports" whenResourceMissingType="Error" isIgnorePagination="true" uuid="d53c67b3-256c-4657-8dff-c8dfe54defd0">
 	<style name="Table_GROUP" mode="Opaque" backcolor="#FCB141"/>
 	<subDataset name="byUserDS" uuid="05d23cf5-f484-46c5-a2d8-6a6a82952d24">
+		<parameter name="BY_PENDING_RESPONSE" class="java.util.Map"/>
 		<queryString>
 			<![CDATA[]]>
 		</queryString>
@@ -13,28 +14,32 @@
 		<field name="total" class="java.lang.Long">
 			<fieldDescription><![CDATA[total]]></fieldDescription>
 		</field>
-		<field name="resolution" class="java.lang.String">
-			<fieldDescription><![CDATA[resolution]]></fieldDescription>
-		</field>
-		<field name="idResolution" class="java.lang.String">
-			<fieldDescription><![CDATA[idResolution]]></fieldDescription>
-		</field>
-		<group name="byResolution">
-			<groupExpression><![CDATA[$F{idResolution}]]></groupExpression>
+		<field name="status" class="java.lang.String"/>
+		<group name="byState">
+			<groupExpression><![CDATA[$F{status}]]></groupExpression>
 		</group>
 	</subDataset>
+	<subDataset name="byPendingResponse" uuid="a754a9d5-ce21-451f-a5a1-79975efef9f3">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="total" class="java.lang.Long">
+			<fieldDescription><![CDATA[total]]></fieldDescription>
+		</field>
+		<field name="status" class="java.lang.String">
+			<fieldDescription><![CDATA[status]]></fieldDescription>
+		</field>
+	</subDataset>
 	<parameter name="BY_USER" class="java.util.List" isForPrompting="false"/>
+	<parameter name="BY_PENDING_RESPONSE" class="java.util.Map" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="resolution" class="java.lang.String">
-		<fieldDescription><![CDATA[resolution]]></fieldDescription>
-	</field>
 	<field name="total" class="java.lang.Long">
 		<fieldDescription><![CDATA[total]]></fieldDescription>
 	</field>
-	<field name="idResolution" class="java.lang.String">
-		<fieldDescription><![CDATA[idResolution]]></fieldDescription>
+	<field name="status" class="java.lang.String">
+		<fieldDescription><![CDATA[status]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -50,7 +55,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$R{cases.resolution.column}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$R{cases.state.column}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="210" y="0" width="100" height="20" uuid="c4419428-ccac-4831-afcb-2c6e1c5b69ac">
@@ -87,7 +92,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textFieldExpression><![CDATA[$F{resolution}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["1".equals($F{status}) ? $R{cases.state.open} : $R{cases.state.close}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="210" y="0" width="100" height="20" uuid="9b1255e8-10a2-4268-b2f9-a271f4647167">
@@ -115,17 +120,20 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="81" splitType="Stretch">
+		<band height="110" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<componentElement>
-				<reportElement x="0" y="10" width="310" height="60" uuid="435d2950-ead3-48d2-8f08-b1acf5659bfa">
+				<reportElement x="0" y="10" width="310" height="100" uuid="435d2950-ead3-48d2-8f08-b1acf5659bfa">
 					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<datasetRun subDataset="byUserDS" uuid="c0f4f7d3-79ab-49c5-ad33-ff4b3e81080f">
+					<datasetRun subDataset="byUserDS" uuid="7674c470-d7ee-4db1-afde-faea935114a3">
 						<datasetParameter name="REPORT_RESOURCE_BUNDLE">
 							<datasetParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="BY_PENDING_RESPONSE">
+							<datasetParameterExpression><![CDATA[$P{BY_PENDING_RESPONSE}]]></datasetParameterExpression>
 						</datasetParameter>
 						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{BY_USER})]]></dataSourceExpression>
 					</datasetRun>
@@ -135,7 +143,7 @@
 						<jr:tableHeader height="0" rowSpan="1">
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
 						</jr:tableHeader>
-						<jr:groupHeader groupName="byResolution">
+						<jr:groupHeader groupName="byState">
 							<jr:cell style="Table_GROUP" height="20" rowSpan="1">
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
 								<textField>
@@ -145,7 +153,7 @@
 									<textElement>
 										<font isBold="true"/>
 									</textElement>
-									<textFieldExpression><![CDATA[MessageFormat.format($R{cases.resolution.by.user.title} ,$F{resolution})]]></textFieldExpression>
+									<textFieldExpression><![CDATA[MessageFormat.format($R{cases.state.by.user.title} ,"1".equals($F{status}) ? $R{cases.state.open} : $R{cases.state.close})]]></textFieldExpression>
 								</textField>
 							</jr:cell>
 						</jr:groupHeader>
@@ -156,7 +164,7 @@
 							<jr:tableHeader height="0" rowSpan="1">
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
 							</jr:tableHeader>
-							<jr:groupHeader groupName="byResolution">
+							<jr:groupHeader groupName="byState">
 								<jr:cell height="20" rowSpan="1">
 									<property name="com.jaspersoft.studio.unit.height" value="px"/>
 									<textField>
@@ -168,6 +176,20 @@
 									</textField>
 								</jr:cell>
 							</jr:groupHeader>
+							<jr:groupFooter groupName="byState">
+								<jr:cell height="40" rowSpan="1">
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+									<textField>
+										<reportElement x="0" y="0" width="210" height="40" uuid="12f194e6-e7cf-440f-8263-8e8df468bfa3">
+											<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+										</reportElement>
+										<textElement verticalAlignment="Middle">
+											<font isBold="true"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$R{cases.pendingResponse.value}]]></textFieldExpression>
+									</textField>
+								</jr:cell>
+							</jr:groupFooter>
 							<jr:columnHeader height="0" rowSpan="1">
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -184,7 +206,7 @@
 							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 							<jr:tableHeader height="0" rowSpan="1"/>
-							<jr:groupHeader groupName="byResolution">
+							<jr:groupHeader groupName="byState">
 								<jr:cell height="20" rowSpan="1">
 									<textField>
 										<reportElement x="0" y="0" width="100" height="20" uuid="85e164fd-49ce-4355-99f3-8a715b14c5d0"/>
@@ -195,6 +217,15 @@
 									</textField>
 								</jr:cell>
 							</jr:groupHeader>
+							<jr:groupFooter groupName="byState">
+								<jr:cell height="40" rowSpan="1">
+									<textField>
+										<reportElement x="0" y="0" width="100" height="40" uuid="d44fccea-db36-4067-aef1-0bd41ba6cde7"/>
+										<textElement textAlignment="Right" verticalAlignment="Middle"/>
+										<textFieldExpression><![CDATA[((com.qsocialnow.common.model.cases.ResultsListView)$P{BY_PENDING_RESPONSE}.get($F{status})).getTotal()]]></textFieldExpression>
+									</textField>
+								</jr:cell>
+							</jr:groupFooter>
 							<jr:columnHeader height="0" rowSpan="1">
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
 								<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -203,7 +234,7 @@
 								<property name="com.jaspersoft.studio.unit.height" value="px"/>
 								<textField>
 									<reportElement x="0" y="0" width="100" height="20" uuid="ac556bf3-af3f-46c3-aa1f-2b9bc6f27a15"/>
-									<textElement textAlignment="Right"/>
+									<textElement textAlignment="Right" verticalAlignment="Top"/>
 									<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 								</textField>
 							</jr:detailCell>

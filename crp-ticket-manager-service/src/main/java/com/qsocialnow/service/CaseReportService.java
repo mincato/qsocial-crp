@@ -11,33 +11,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
-
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.google.gson.JsonArray;
-import com.qsocialnow.common.model.cases.CasesFilterRequest;
-import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
-import com.qsocialnow.common.model.cases.ResultsListView;
-import com.qsocialnow.common.model.config.Domain;
-import com.qsocialnow.common.model.config.Resolution;
-import com.qsocialnow.common.model.config.Team;
-import com.qsocialnow.common.model.config.User;
-import com.qsocialnow.common.model.pagination.PageRequest;
-import com.qsocialnow.common.model.pagination.PageResponse;
-import com.qsocialnow.persistence.CaseCategoryRepository;
-import com.qsocialnow.persistence.CaseRepository;
-import com.qsocialnow.persistence.DomainRepository;
-import com.qsocialnow.persistence.ReportRepository;
-import com.qsocialnow.persistence.ResolutionRepository;
-import com.qsocialnow.persistence.SegmentRepository;
-import com.qsocialnow.persistence.SubjectCategoryRepository;
-import com.qsocialnow.persistence.TeamRepository;
-import com.qsocialnow.persistence.TriggerRepository;
 
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRParameter;
@@ -49,6 +22,31 @@ import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.gson.JsonArray;
+import com.qsocialnow.common.model.cases.CasesFilterRequest;
+import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
+import com.qsocialnow.common.model.cases.ResultsListView;
+import com.qsocialnow.common.model.config.Team;
+import com.qsocialnow.common.model.config.User;
+import com.qsocialnow.common.model.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.common.util.UserConstants;
+import com.qsocialnow.persistence.CaseCategoryRepository;
+import com.qsocialnow.persistence.CaseRepository;
+import com.qsocialnow.persistence.DomainRepository;
+import com.qsocialnow.persistence.ReportRepository;
+import com.qsocialnow.persistence.ResolutionRepository;
+import com.qsocialnow.persistence.SegmentRepository;
+import com.qsocialnow.persistence.SubjectCategoryRepository;
+import com.qsocialnow.persistence.TeamRepository;
+import com.qsocialnow.persistence.TriggerRepository;
 
 @Service
 public class CaseReportService {
@@ -89,6 +87,10 @@ public class CaseReportService {
     private static final String JASPER_CASES_REPORT_PATH = "/reports/cases.jasper";
 
     private static final String JASPER_CASES_BY_RESOLUTION_REPORT_PATH = "/reports/cases_by_resolution.jasper";
+
+    private static final String JASPER_CASES_BY_STATE_REPORT_PATH = "/reports/cases_by_state.jasper";
+    
+    private static final String  JASPER_CASES_BY_ADMINISTRATIVE_UNIT_REPORT_PATH = "/reports/cases_by_administrative_unit.jasper";
 
     public byte[] getReport(CasesFilterRequestReport filterRequestReport) {
         try {
@@ -155,7 +157,7 @@ public class CaseReportService {
         exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
         SimpleXlsReportConfiguration xlsReportConfiguration = new SimpleXlsReportConfiguration();
         xlsReportConfiguration.setOnePagePerSheet(false);
-        xlsReportConfiguration.setRemoveEmptySpaceBetweenRows(true);
+        xlsReportConfiguration.setRemoveEmptySpaceBetweenRows(false);
         xlsReportConfiguration.setDetectCellType(true);
         xlsReportConfiguration.setWhitePageBackground(false);
         exporter.setConfiguration(xlsReportConfiguration);
@@ -170,24 +172,23 @@ public class CaseReportService {
         return print;
     }
 
-    public byte[] getCasesByResolutionReport(CasesFilterRequestReport filterRequestReport) {
+    public byte[] getAggregationsReport(CasesFilterRequestReport filterRequestReport) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
             PageResponse<ResultsListView>  pageResponse = caseResultsService.getResults(filterRequestReport.getFilterRequest());
             List<ResultsListView> results = pageResponse.getItems();
-            
-            Map<String, List<ResultsListView>> aggregationByUser = new HashMap<String, List<ResultsListView>>();
-            for (ResultsListView result : results) {
-            	filterRequestReport.getFilterRequest().setIdResolution(result.getIdResolution());
-            	aggregationByUser.put(result.getIdResolution(), repository.sumarizeResolutionByUser(filterRequestReport.getFilterRequest()));
+            String fileName = getFile(filterRequestReport.getFilterRequest().getFieldToSumarize());
+            if (UserConstants.REPORT_BY_RESOLUTION.equals(filterRequestReport.getFilterRequest().getFieldToSumarize())) {
+            	configureParamsByResolution(filterRequestReport.getFilterRequest(), params, results);
+            } else if (UserConstants.REPORT_BY_STATUS.equals(filterRequestReport.getFilterRequest().getFieldToSumarize())) {
+            	configureParamsByState(filterRequestReport.getFilterRequest(), params, results);
             }
-            params.put("AGGREGATION_BY_USER", aggregationByUser);
             Locale locale = filterRequestReport.getLanguage() != null ? new Locale(filterRequestReport.getLanguage())
                     : Locale.getDefault();
             ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
             params.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
 
-            InputStream reportStream = this.getClass().getResourceAsStream(JASPER_CASES_BY_RESOLUTION_REPORT_PATH);
+            InputStream reportStream = this.getClass().getResourceAsStream(fileName);
             JasperPrint print = JasperFillManager.fillReport(reportStream, params, new JRBeanCollectionDataSource(
                     results));
             byte[] data = exportPrintToExcel(print);
@@ -197,4 +198,58 @@ public class CaseReportService {
         }
         return null;
     }
+
+	private void configureParamsByResolution(
+			CasesFilterRequest filterRequest,
+			Map<String, Object> params, List<ResultsListView> results) {
+		List<ResultsListView> resultsByUser = new ArrayList<ResultsListView>();
+		
+		for (ResultsListView result : results) {
+			filterRequest.setIdResolution(result.getIdResolution());
+			List<ResultsListView> items = repository.sumarizeResolutionByUser(filterRequest);
+			for (ResultsListView item : items) {
+				item.setIdResolution(result.getIdResolution());
+				item.setResolution(result.getResolution());
+				resultsByUser.add(item);
+			}
+		}
+		params.put("BY_USER", resultsByUser);
+	}
+	
+	private void configureParamsByState(
+			CasesFilterRequest filterRequest,
+			Map<String, Object> params, List<ResultsListView> results) {
+		List<ResultsListView> resultsByUser = new ArrayList<ResultsListView>();
+		
+		for (ResultsListView result : results) {
+			filterRequest.setStatus(result.getStatus());
+			List<ResultsListView> items = repository.sumarizeResolutionByUser(filterRequest);
+			for (ResultsListView item: items) {
+				item.setStatus(result.getStatus());
+				resultsByUser.add(item);
+			}
+		}
+		params.put("BY_USER", resultsByUser);
+	
+		Map<String, ResultsListView> resultsByPendingResponse = new HashMap<String, ResultsListView>();
+		for (ResultsListView result : results) {
+			filterRequest.setStatus(result.getStatus());
+		    filterRequest.setPendingResponse("true");
+	        filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_PENDING);
+	        List<ResultsListView> items = repository.sumarizeByPending(filterRequest);
+			for (ResultsListView item: items) {
+				resultsByPendingResponse.put(result.getStatus(), item);
+			}
+		}
+		params.put("BY_PENDING_RESPONSE", resultsByPendingResponse);
+	}
+	
+	private String getFile(String fieldToSumarize) {
+		if (UserConstants.REPORT_BY_RESOLUTION.equals(fieldToSumarize)) {
+			return JASPER_CASES_BY_RESOLUTION_REPORT_PATH;
+		} else if (UserConstants.REPORT_BY_STATUS.equals(fieldToSumarize)) {
+			return JASPER_CASES_BY_STATE_REPORT_PATH;
+        }
+		return JASPER_CASES_BY_ADMINISTRATIVE_UNIT_REPORT_PATH;
+	}
 }

@@ -57,7 +57,7 @@ public class ResultsServiceImpl implements ResultsService {
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/resolutions/report");
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/aggregations/report");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
