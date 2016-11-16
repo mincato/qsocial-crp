@@ -322,6 +322,13 @@ public class ResultsViewModel implements Serializable {
         CasesFilterRequest filterRequest = new CasesFilterRequest();
         filterRequest.setFilterActive(filterActive);
         setFilters(filterRequest);
+        if (byResolution) {
+        	 filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_RESOLUTION);
+        } else if (byState) {
+        	filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_STATUS);
+        } else if (byAdmin) {
+        	 filterRequest.setFieldToSumarize(adminUnit);
+        }
         CasesFilterRequestReport filterRequestReport = new CasesFilterRequestReport();
         filterRequestReport.setFilterRequest(filterRequest);
         filterRequestReport.setLanguage(userSessionService.getLanguage());

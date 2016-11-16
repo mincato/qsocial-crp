@@ -28,6 +28,7 @@ import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageRequest;
+import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.persistence.CaseCategoryRepository;
 import com.qsocialnow.persistence.CaseRepository;
 import com.qsocialnow.persistence.DomainRepository;
@@ -172,18 +173,15 @@ public class CaseReportService {
     public byte[] getCasesByResolutionReport(CasesFilterRequestReport filterRequestReport) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            List<ResultsListView> casesByResolution = repository.sumarizeResolvedByResolution(filterRequestReport
-                    .getFilterRequest());
-            if (casesByResolution != null && casesByResolution.size() > 0) {
-                Domain domain = domainRepository.findOne(filterRequestReport.getFilterRequest().getDomain());
-                if (domain != null) {
-                    List<Resolution> resolutions = domain.getResolutions();
-                    Map<String, String> resolutionById = resolutions.stream().collect(
-                            Collectors.toMap(x -> x.getId(), x -> x.getDescription()));
-                    casesByResolution.stream().forEach(
-                            result -> result.setResolution(resolutionById.get(result.getResolution())));
-                }
+            PageResponse<ResultsListView>  pageResponse = caseResultsService.getResults(filterRequestReport.getFilterRequest());
+            List<ResultsListView> results = pageResponse.getItems();
+            
+            Map<String, List<ResultsListView>> aggregationByUser = new HashMap<String, List<ResultsListView>>();
+            for (ResultsListView result : results) {
+            	filterRequestReport.getFilterRequest().setIdResolution(result.getIdResolution());
+            	aggregationByUser.put(result.getIdResolution(), repository.sumarizeResolutionByUser(filterRequestReport.getFilterRequest()));
             }
+            params.put("AGGREGATION_BY_USER", aggregationByUser);
             Locale locale = filterRequestReport.getLanguage() != null ? new Locale(filterRequestReport.getLanguage())
                     : Locale.getDefault();
             ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
@@ -191,7 +189,7 @@ public class CaseReportService {
 
             InputStream reportStream = this.getClass().getResourceAsStream(JASPER_CASES_BY_RESOLUTION_REPORT_PATH);
             JasperPrint print = JasperFillManager.fillReport(reportStream, params, new JRBeanCollectionDataSource(
-                    casesByResolution));
+                    results));
             byte[] data = exportPrintToExcel(print);
             return data;
         } catch (Exception e) {
