@@ -10,6 +10,8 @@ public interface OrganizationService {
 
     List<ClientOrganization> getOrganizations();
 
+    List<ClientOrganization> getActiveOrganizations();
+
     void setCurrentOrganization(ClientOrganization organization);
 
 }
