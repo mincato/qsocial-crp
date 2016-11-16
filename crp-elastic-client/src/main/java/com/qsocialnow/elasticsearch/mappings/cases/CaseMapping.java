@@ -85,6 +85,7 @@ public class CaseMapping implements DynamicMapping, Mapping<CaseType, Case> {
         caseType.setLastModifiedTimestamp(document.getLastModifiedTimestamp());
         caseType.setMessages(document.getMessages());
         caseType.setPriority(document.getPriority());
+        caseType.setPriorityOrder(document.getPriority().getSortOrder());
         return caseType;
     }
 
