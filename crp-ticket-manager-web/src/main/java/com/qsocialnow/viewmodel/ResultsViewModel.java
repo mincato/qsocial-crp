@@ -4,8 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -21,6 +26,7 @@ import org.zkoss.zul.Filedownload;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
+import com.qsocialnow.common.model.config.AdminUnit;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
@@ -29,6 +35,7 @@ import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.util.UserConstants;
 import com.qsocialnow.converters.DateConverter;
+import com.qsocialnow.services.AdminUnitsService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ResultsService;
@@ -174,6 +181,9 @@ public class ResultsViewModel implements Serializable {
     @WireVariable
     private CaseService caseService;
 
+    @WireVariable
+    private AdminUnitsService adminUnitsService;
+
     private String geoJson;
 
     @Init
@@ -249,9 +259,24 @@ public class ResultsViewModel implements Serializable {
         setFilters(filterRequest);
         filterRequest.setFieldToSumarize(adminUnit);
         PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
-
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
-            this.adminUnits.addAll(pageResponse.getItems());
+            List<ResultsListView> items = pageResponse.getItems();
+            ObjectMapper mapper = new ObjectMapper();
+            List<ResultsListView> results = mapper.convertValue(items, new TypeReference<List<ResultsListView>>() {
+            });
+            List<String> ids = results.stream().map(ResultsListView::getUnitAdmin).collect(Collectors.toList());
+
+            String query = StringUtils.join(ids, ",");
+            List<AdminUnit> adminRanking = adminUnitsService.findUnitAdminsByGeoIds(query,
+                    userSessionService.getLanguage());
+
+            Map<Long, String> adminUnitById = adminRanking.stream().collect(
+                    Collectors.toMap(AdminUnit::getGeoNameId, AdminUnit::getTranslation));
+
+            results.stream().forEach(
+                    result -> result.setUnitAdmin(adminUnitById.get(Long.valueOf(result.getUnitAdmin()))));
+
+            this.adminUnits.addAll(results);
             this.moreResults = true;
         } else {
             this.moreResults = false;
