@@ -45,7 +45,7 @@ router.post('/cases/report', function (req, res) {
 	  caseReportService.getReport(request, asyncResponse);
 });
 
-router.post('/cases/resolutions/report', function (req, res) {
+router.post('/cases/aggregations/report', function (req, res) {
 	  function asyncResponse(err,response) {
 	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
 
@@ -68,7 +68,7 @@ router.post('/cases/resolutions/report', function (req, res) {
 	  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.CasesFilterRequestReport');
 	  var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
 	  var caseReportService = javaContext.getBeanSync("caseReportService");
-	  caseReportService.getCasesByResolutionReport(request, asyncResponse);
+	  caseReportService.getAggregationsReport(request, asyncResponse);
 	  
 });
 
