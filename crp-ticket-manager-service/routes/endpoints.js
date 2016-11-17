@@ -45,6 +45,34 @@ router.post('/cases/report', function (req, res) {
 	  caseReportService.getReport(request, asyncResponse);
 });
 
+router.post('/cases/aggregations/administrative-unit/report', function (req, res) {
+	  function asyncResponse(err,response) {
+	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	    	  res.writeHead(200, {
+	    	        'Content-Type': 'application/vnd.ms-excel',
+	    	        'Content-Length': response.length
+	    	    });
+	    	    res.end(new Buffer(response, 'binary'))
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  prettyJSON(req.body);
+	  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.CaseAggregationReport');
+	  var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+	  var caseReportService = javaContext.getBeanSync("caseReportService");
+	  caseReportService.getAggregationsAdministrativeUnitReport(request, asyncResponse);
+	  
+});
+
 router.post('/cases/aggregations/report', function (req, res) {
 	  function asyncResponse(err,response) {
 	    if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }

@@ -23,6 +23,7 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Filedownload;
 
+import com.qsocialnow.common.model.cases.CaseAggregationReport;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
@@ -261,27 +262,30 @@ public class ResultsViewModel implements Serializable {
         PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             List<ResultsListView> items = pageResponse.getItems();
-            ObjectMapper mapper = new ObjectMapper();
-            List<ResultsListView> results = mapper.convertValue(items, new TypeReference<List<ResultsListView>>() {
-            });
-            List<String> ids = results.stream().map(ResultsListView::getUnitAdmin).collect(Collectors.toList());
-
-            String query = StringUtils.join(ids, ",");
-            List<AdminUnit> adminRanking = adminUnitsService.findUnitAdminsByGeoIds(query,
-                    userSessionService.getLanguage());
-
-            Map<Long, String> adminUnitById = adminRanking.stream().collect(
-                    Collectors.toMap(AdminUnit::getGeoNameId, AdminUnit::getTranslation));
-
-            results.stream().forEach(
-                    result -> result.setUnitAdmin(adminUnitById.get(Long.valueOf(result.getUnitAdmin()))));
-
+            List<ResultsListView> results = setUnitAdminName(items);
             this.adminUnits.addAll(results);
             this.moreResults = true;
         } else {
             this.moreResults = false;
         }
         return pageResponse;
+    }
+
+    private List<ResultsListView> setUnitAdminName(List<ResultsListView> items) {
+        ObjectMapper mapper = new ObjectMapper();
+        List<ResultsListView> results = mapper.convertValue(items, new TypeReference<List<ResultsListView>>() {
+        });
+        List<String> ids = results.stream().map(ResultsListView::getUnitAdmin).collect(Collectors.toList());
+
+        String query = StringUtils.join(ids, ",");
+        List<AdminUnit> adminRanking = adminUnitsService
+                .findUnitAdminsByGeoIds(query, userSessionService.getLanguage());
+
+        Map<Long, String> adminUnitById = adminRanking.stream().collect(
+                Collectors.toMap(AdminUnit::getGeoNameId, AdminUnit::getTranslation));
+
+        results.stream().forEach(result -> result.setUnitAdmin(adminUnitById.get(Long.valueOf(result.getUnitAdmin()))));
+        return results;
     }
 
     private PageResponse<ResultsListView> sumarizeResolutionsByUser(String idResolution) {
@@ -347,18 +351,37 @@ public class ResultsViewModel implements Serializable {
         CasesFilterRequest filterRequest = new CasesFilterRequest();
         filterRequest.setFilterActive(filterActive);
         setFilters(filterRequest);
-        if (byResolution) {
-        	 filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_RESOLUTION);
-        } else if (byState) {
-        	filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_STATUS);
-        } else if (byAdmin) {
-        	 filterRequest.setFieldToSumarize(adminUnit);
-        }
         CasesFilterRequestReport filterRequestReport = new CasesFilterRequestReport();
         filterRequestReport.setFilterRequest(filterRequest);
         filterRequestReport.setLanguage(userSessionService.getLanguage());
-        byte[] data = resultsService.getReport(filterRequestReport);
-        Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
+        byte[] data = null;
+        if (byResolution) {
+            filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_RESOLUTION);
+            data = resultsService.getReport(filterRequestReport);
+        } else if (byState) {
+            filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_STATUS);
+            data = resultsService.getReport(filterRequestReport);
+        } else if (byAdmin) {
+            data = getReportByAdministrativeUnit(filterRequest, data);
+        }
+        if (data != null) {
+            Filedownload.save(data, "application/vnd.ms-excel", "file.xls");
+        }
+    }
+
+    private byte[] getReportByAdministrativeUnit(CasesFilterRequest filterRequest, byte[] data) {
+        PageRequest pageRequest = new PageRequest(0, 10, "");
+        filterRequest.setPageRequest(pageRequest);
+        filterRequest.setFieldToSumarize(adminUnit);
+        PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
+        if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
+            List<ResultsListView> results = setUnitAdminName(pageResponse.getItems());
+            CaseAggregationReport caseAggregationReport = new CaseAggregationReport();
+            caseAggregationReport.setItems(results);
+            caseAggregationReport.setLanguage(userSessionService.getLanguage());
+            data = resultsService.getReportByAdministrativeUnit(caseAggregationReport);
+        }
+        return data;
     }
 
     @Command
