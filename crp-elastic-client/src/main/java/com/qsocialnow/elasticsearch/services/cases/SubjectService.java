@@ -2,6 +2,7 @@ package com.qsocialnow.elasticsearch.services.cases;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -56,6 +57,9 @@ public class SubjectService extends CaseIndexService {
         }
         if (subjectListRequest.getSource() != null) {
             filters = filters.must(QueryBuilders.matchQuery("source", subjectListRequest.getSource()));
+        }
+        if (!StringUtils.isEmpty(subjectListRequest.getSourceName())) {
+            filters = filters.must(QueryBuilders.matchQuery("sourceName", subjectListRequest.getSourceName()));
         }
 
         SubjectMapping mapping = SubjectMapping.getInstance();
