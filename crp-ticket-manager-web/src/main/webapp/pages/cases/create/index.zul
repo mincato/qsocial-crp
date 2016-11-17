@@ -50,9 +50,16 @@
 	 zk.afterMount(function() {
 	  
 	    $(document).ready(function() {
-     $('.green input').iCheck({
-		    checkboxClass: 'icheckbox_square-green',
-		    radioClass: 'iradio_square-green',
-		}); });});
+     		$('.green input').iCheck({
+		    	checkboxClass: 'icheckbox_square-green',
+		    	radioClass: 'iradio_square-green',
+			});
+			
+			var combobox = $('.z-combobox');
+			var combobox_input = $('.z-combobox > input:first');
+			combobox.removeClass('z-combobox');
+			combobox_input.addClass('form-control');
+		});
+	});
     </script>
 </zk>
