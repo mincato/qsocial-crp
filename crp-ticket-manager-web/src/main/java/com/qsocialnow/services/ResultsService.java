@@ -1,5 +1,6 @@
 package com.qsocialnow.services;
 
+import com.qsocialnow.common.model.cases.CaseAggregationReport;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
@@ -14,5 +15,7 @@ public interface ResultsService {
     PageResponse<ResultsListView> sumarizeResolutionByUser(CasesFilterRequest filterRequest);
 
     PageResponse<ResultsListView> sumarizeStatusByUser(CasesFilterRequest filterRequest);
+
+    byte[] getReportByAdministrativeUnit(CaseAggregationReport caseAggregationReport);
 
 }

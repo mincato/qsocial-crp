@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
+import com.qsocialnow.common.model.cases.CaseAggregationReport;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
@@ -89,8 +90,8 @@ public class CaseReportService {
     private static final String JASPER_CASES_BY_RESOLUTION_REPORT_PATH = "/reports/cases_by_resolution.jasper";
 
     private static final String JASPER_CASES_BY_STATE_REPORT_PATH = "/reports/cases_by_state.jasper";
-    
-    private static final String  JASPER_CASES_BY_ADMINISTRATIVE_UNIT_REPORT_PATH = "/reports/cases_by_administrative_unit.jasper";
+
+    private static final String JASPER_CASES_BY_ADMINISTRATIVE_UNIT_REPORT_PATH = "/reports/cases_by_administrative_unit.jasper";
 
     public byte[] getReport(CasesFilterRequestReport filterRequestReport) {
         try {
@@ -175,13 +176,15 @@ public class CaseReportService {
     public byte[] getAggregationsReport(CasesFilterRequestReport filterRequestReport) {
         try {
             Map<String, Object> params = new HashMap<String, Object>();
-            PageResponse<ResultsListView>  pageResponse = caseResultsService.getResults(filterRequestReport.getFilterRequest());
+            PageResponse<ResultsListView> pageResponse = caseResultsService.getResults(filterRequestReport
+                    .getFilterRequest());
             List<ResultsListView> results = pageResponse.getItems();
             String fileName = getFile(filterRequestReport.getFilterRequest().getFieldToSumarize());
             if (UserConstants.REPORT_BY_RESOLUTION.equals(filterRequestReport.getFilterRequest().getFieldToSumarize())) {
-            	configureParamsByResolution(filterRequestReport.getFilterRequest(), params, results);
-            } else if (UserConstants.REPORT_BY_STATUS.equals(filterRequestReport.getFilterRequest().getFieldToSumarize())) {
-            	configureParamsByState(filterRequestReport.getFilterRequest(), params, results);
+                configureParamsByResolution(filterRequestReport.getFilterRequest(), params, results);
+            } else if (UserConstants.REPORT_BY_STATUS.equals(filterRequestReport.getFilterRequest()
+                    .getFieldToSumarize())) {
+                configureParamsByState(filterRequestReport.getFilterRequest(), params, results);
             }
             Locale locale = filterRequestReport.getLanguage() != null ? new Locale(filterRequestReport.getLanguage())
                     : Locale.getDefault();
@@ -199,57 +202,76 @@ public class CaseReportService {
         return null;
     }
 
-	private void configureParamsByResolution(
-			CasesFilterRequest filterRequest,
-			Map<String, Object> params, List<ResultsListView> results) {
-		List<ResultsListView> resultsByUser = new ArrayList<ResultsListView>();
-		
-		for (ResultsListView result : results) {
-			filterRequest.setIdResolution(result.getIdResolution());
-			List<ResultsListView> items = repository.sumarizeResolutionByUser(filterRequest);
-			for (ResultsListView item : items) {
-				item.setIdResolution(result.getIdResolution());
-				item.setResolution(result.getResolution());
-				resultsByUser.add(item);
-			}
-		}
-		params.put("BY_USER", resultsByUser);
-	}
-	
-	private void configureParamsByState(
-			CasesFilterRequest filterRequest,
-			Map<String, Object> params, List<ResultsListView> results) {
-		List<ResultsListView> resultsByUser = new ArrayList<ResultsListView>();
-		
-		for (ResultsListView result : results) {
-			filterRequest.setStatus(result.getStatus());
-			List<ResultsListView> items = repository.sumarizeResolutionByUser(filterRequest);
-			for (ResultsListView item: items) {
-				item.setStatus(result.getStatus());
-				resultsByUser.add(item);
-			}
-		}
-		params.put("BY_USER", resultsByUser);
-	
-		Map<String, ResultsListView> resultsByPendingResponse = new HashMap<String, ResultsListView>();
-		for (ResultsListView result : results) {
-			filterRequest.setStatus(result.getStatus());
-		    filterRequest.setPendingResponse("true");
-	        filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_PENDING);
-	        List<ResultsListView> items = repository.sumarizeByPending(filterRequest);
-			for (ResultsListView item: items) {
-				resultsByPendingResponse.put(result.getStatus(), item);
-			}
-		}
-		params.put("BY_PENDING_RESPONSE", resultsByPendingResponse);
-	}
-	
-	private String getFile(String fieldToSumarize) {
-		if (UserConstants.REPORT_BY_RESOLUTION.equals(fieldToSumarize)) {
-			return JASPER_CASES_BY_RESOLUTION_REPORT_PATH;
-		} else if (UserConstants.REPORT_BY_STATUS.equals(fieldToSumarize)) {
-			return JASPER_CASES_BY_STATE_REPORT_PATH;
+    private void configureParamsByResolution(CasesFilterRequest filterRequest, Map<String, Object> params,
+            List<ResultsListView> results) {
+        List<ResultsListView> resultsByUser = new ArrayList<ResultsListView>();
+
+        for (ResultsListView result : results) {
+            filterRequest.setIdResolution(result.getIdResolution());
+            List<ResultsListView> items = repository.sumarizeResolutionByUser(filterRequest);
+            for (ResultsListView item : items) {
+                item.setIdResolution(result.getIdResolution());
+                item.setResolution(result.getResolution());
+                resultsByUser.add(item);
+            }
         }
-		return JASPER_CASES_BY_ADMINISTRATIVE_UNIT_REPORT_PATH;
-	}
+        params.put("BY_USER", resultsByUser);
+    }
+
+    private void configureParamsByState(CasesFilterRequest filterRequest, Map<String, Object> params,
+            List<ResultsListView> results) {
+        List<ResultsListView> resultsByUser = new ArrayList<ResultsListView>();
+
+        for (ResultsListView result : results) {
+            filterRequest.setStatus(result.getStatus());
+            List<ResultsListView> items = repository.sumarizeResolutionByUser(filterRequest);
+            for (ResultsListView item : items) {
+                item.setStatus(result.getStatus());
+                resultsByUser.add(item);
+            }
+        }
+        params.put("BY_USER", resultsByUser);
+
+        Map<String, ResultsListView> resultsByPendingResponse = new HashMap<String, ResultsListView>();
+        for (ResultsListView result : results) {
+            filterRequest.setStatus(result.getStatus());
+            filterRequest.setPendingResponse("true");
+            filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_PENDING);
+            List<ResultsListView> items = repository.sumarizeByPending(filterRequest);
+            for (ResultsListView item : items) {
+                resultsByPendingResponse.put(result.getStatus(), item);
+            }
+        }
+        params.put("BY_PENDING_RESPONSE", resultsByPendingResponse);
+    }
+
+    private String getFile(String fieldToSumarize) {
+        if (UserConstants.REPORT_BY_RESOLUTION.equals(fieldToSumarize)) {
+            return JASPER_CASES_BY_RESOLUTION_REPORT_PATH;
+        } else if (UserConstants.REPORT_BY_STATUS.equals(fieldToSumarize)) {
+            return JASPER_CASES_BY_STATE_REPORT_PATH;
+        }
+        return null;
+    }
+
+    public byte[] getAggregationsAdministrativeUnitReport(CaseAggregationReport caseAggregationReport) {
+        try {
+            Map<String, Object> params = new HashMap<String, Object>();
+            List<ResultsListView> results = caseAggregationReport.getItems();
+            String fileName = JASPER_CASES_BY_ADMINISTRATIVE_UNIT_REPORT_PATH;
+            Locale locale = caseAggregationReport.getLanguage() != null ? new Locale(
+                    caseAggregationReport.getLanguage()) : Locale.getDefault();
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_FILE_NAME, locale);
+            params.put(JRParameter.REPORT_RESOURCE_BUNDLE, resourceBundle);
+
+            InputStream reportStream = this.getClass().getResourceAsStream(fileName);
+            JasperPrint print = JasperFillManager.fillReport(reportStream, params, new JRBeanCollectionDataSource(
+                    results));
+            byte[] data = exportPrintToExcel(print);
+            return data;
+        } catch (Exception e) {
+            log.error("error", e);
+        }
+        return null;
+    }
 }
