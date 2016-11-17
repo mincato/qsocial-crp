@@ -7,7 +7,7 @@
 			role="complementary">
 			<n:div class="sidebar-content">
 				<n:div class="sidebar-title">
-					<i class="fa fa-bullseye"></i>
+					<i class="fa fa-chevron-circle-right"></i>
 					<n:h4>${labels.sidebar.title}</n:h4>
 				</n:div>
 				<ul id="sidebar-nav" class="sidebar-nav">
