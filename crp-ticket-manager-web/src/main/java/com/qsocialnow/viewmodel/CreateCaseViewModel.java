@@ -2,13 +2,21 @@ package com.qsocialnow.viewmodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.Property;
+import org.zkoss.bind.ValidationContext;
+import org.zkoss.bind.Validator;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.validator.AbstractValidator;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
@@ -16,9 +24,11 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.AdminUnit;
 import com.qsocialnow.common.model.config.BaseAdminUnit;
 import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.event.Event;
@@ -101,6 +111,7 @@ public class CreateCaseViewModel implements Serializable {
 
         newCase.getTriggerEvent().setTitulo(newCase.getTitle());
         newCase.getActionsRegistry().get(0).getEvent().setTitulo(newCase.getTitle());
+        newCase.setSubject(currentCase.getSelectedSubject());
 
         if (currentCase.getAdminUnit() != null) {
             fillAdmUnit(currentCase.getAdminUnit(), newCase.getTriggerEvent());
@@ -211,6 +222,40 @@ public class CreateCaseViewModel implements Serializable {
 
     public void setAdminUnits(AutocompleteListModel<AdminUnit> adminUnits) {
         this.adminUnits = adminUnits;
+    }
+
+    private CaseView fxCaseView = null;
+
+    @Command
+    public void selectSubject(@BindingParam("newCase") CaseView newCase) {
+        this.fxCaseView = newCase;
+        Map<String, Object> params = new HashMap<>();
+        params.put("source", Media.MANUAL.getValue());
+        Executions.createComponents("/pages/cases/create/choose-manual-subject.zul", null, params);
+    }
+
+    @GlobalCommand
+    public void changeSubject(@BindingParam("subject") Subject subject) {
+        this.fxCaseView.setSelectedSubject(subject);
+        BindUtils.postNotifyChange(null, null, this.fxCaseView, "selectedSubject");
+        this.fxCaseView = null;
+    }
+
+    public Validator getFormValidator() {
+        return new AbstractValidator() {
+
+            private static final String EMPTY_FIELD_KEY_LABEL = "app.field.empty.validation";
+
+            private static final String SUBJECT_FIELD_ID = "subject";
+
+            public void validate(ValidationContext context) {
+                Map<String, Property> beanProps = context.getProperties(context.getProperty().getBase());
+                CaseView caseView = (CaseView) beanProps.get(".").getValue();
+                if (caseView.getSelectedSubject() == null) {
+                    addInvalidMessage(context, SUBJECT_FIELD_ID, Labels.getLabel(EMPTY_FIELD_KEY_LABEL));
+                }
+            }
+        };
     }
 
 }

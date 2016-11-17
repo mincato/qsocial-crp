@@ -6,9 +6,12 @@ public class SubjectListRequest {
 
     private final String source;
 
-    public SubjectListRequest(String identifier, String source) {
+    private final String sourceName;
+
+    public SubjectListRequest(String identifier, String source, String sourceName) {
         this.identifier = identifier;
         this.source = source;
+        this.sourceName = sourceName;
     }
 
     public String getIdentifier() {
@@ -17,6 +20,10 @@ public class SubjectListRequest {
 
     public String getSource() {
         return source;
+    }
+
+    public String getSourceName() {
+        return sourceName;
     }
 
 }

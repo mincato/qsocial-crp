@@ -4,7 +4,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.qsocialnow.common.model.cases.Case;
-import com.qsocialnow.common.model.config.AdmUnitFilter;
+import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.AdminUnit;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.SegmentListView;
@@ -25,6 +25,9 @@ public class CaseView {
     private SegmentListView selectedSegment;
 
     private AdminUnit adminUnit;
+
+    @NotNull(message = "app.subject.null.validation")
+    private Subject selectedSubject;
 
     public CaseView() {
     }
@@ -67,6 +70,14 @@ public class CaseView {
 
     public void setAdminUnit(AdminUnit adminUnit) {
         this.adminUnit = adminUnit;
+    }
+
+    public Subject getSelectedSubject() {
+        return selectedSubject;
+    }
+
+    public void setSelectedSubject(Subject selectedSubject) {
+        this.selectedSubject = selectedSubject;
     }
 
 }

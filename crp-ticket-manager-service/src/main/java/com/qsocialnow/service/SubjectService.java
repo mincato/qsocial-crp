@@ -22,9 +22,10 @@ public class SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String identifier, String source) {
+    public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String identifier,
+            String source, String sourceName) {
         List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize, null),
-                new SubjectListRequest(identifier, source));
+                new SubjectListRequest(identifier, source, sourceName));
 
         PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageNumber, pageSize);
         return page;

@@ -23,6 +23,7 @@ import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.Trigger;
@@ -55,6 +56,9 @@ public class CaseService {
 
     @Autowired
     private DomainRepository domainRepository;
+
+    @Autowired
+    private SubjectService subjectService;
 
     @Resource
     private Map<ActionType, Action> actions;
@@ -95,6 +99,9 @@ public class CaseService {
         try {
             Case caseObject = newCase;
             if (newCase.getId() == null) {
+                if (Media.MANUAL.getValue().equals(newCase.getSource()) && newCase.getSubject().getId() == null) {
+                    newCase.setSubject(subjectService.createSubject(newCase.getSubject()));
+                }
                 caseObject = repository.save(newCase);
                 if (newCase.getActionsRegistry() != null && newCase.getActionsRegistry().size() > 0)
                     actionRegistryRepository.create(caseObject.getId(), newCase.getActionsRegistry().get(0));

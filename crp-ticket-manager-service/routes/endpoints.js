@@ -1962,9 +1962,10 @@ router.get('/subjects', function (req, res) {
   var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
   var identifier = req.query.identifier ? req.query.identifier : null;
   var source = req.query.source ? req.query.source : null;
+  var sourceName = req.query.source ? req.query.sourceName : null;
     
   var subjectService = javaContext.getBeanSync("subjectService");	  
-  subjectService.findAll(pageNumber, pageSize, identifier, source, asyncResponse);
+  subjectService.findAll(pageNumber, pageSize, identifier, source, sourceName, asyncResponse);
 });
 
 router.get('/subjects/:id', function (req, res) {
