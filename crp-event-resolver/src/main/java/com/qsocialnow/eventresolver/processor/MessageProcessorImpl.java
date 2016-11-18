@@ -73,16 +73,23 @@ public class MessageProcessorImpl implements MessageProcessor {
 
     private void logMessageNotDetected(Event inputBeanDocument) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(String.format("Message were not detected to execute an action: %s", inputBeanDocument.getId()));
-            LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+            try {
+                LOGGER.debug(String.format("Message were not detected to execute an action: %s",
+                        inputBeanDocument.getId()));
+                LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+            } catch (Exception e) {
+            }
         }
     }
 
     private void logProcessingEvent(Event inputBeanDocument, String domainId) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
-            LOGGER.debug(String.format("Message: %s", inputBeanDocument));
-            LOGGER.debug(String.format("Searching for domain: %s", domainId));
+            try {
+                LOGGER.debug(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
+                LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+                LOGGER.debug(String.format("Searching for domain: %s", domainId));
+            } catch (Exception e) {
+            }
         }
     }
 

@@ -47,17 +47,23 @@ public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
 
     private void logMessageNotDetected(Event inputBeanDocument) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(String.format("Message from Response Detect were not detected to execute an action: %s",
-                    inputBeanDocument.getId()));
-            LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+            try {
+                LOGGER.debug(String.format("Message from Response Detect were not detected to execute an action: %s",
+                        inputBeanDocument.getId()));
+                LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+            } catch (Exception e) {
+            }
         }
     }
 
     private void logProcessingEvent(Event inputBeanDocument, String domainId) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(String.format("Processing message from Response Detector using domain %s: %s", domainId,
-                    inputBeanDocument.getId()));
-            LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+            try {
+                LOGGER.debug(String.format("Processing message from Response Detector using domain %s: %s", domainId,
+                        inputBeanDocument.getId()));
+                LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+            } catch (Exception e) {
+            }
         }
     }
 
