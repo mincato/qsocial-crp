@@ -30,7 +30,7 @@ public class MessageResponseDetectorProcessorImpl implements MessageProcessor {
         // reintentar ES
         Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);
         if (inputBeanDocument == null) {
-        	return;
+            return;
         }
 
         String domainId = message.getGroup();

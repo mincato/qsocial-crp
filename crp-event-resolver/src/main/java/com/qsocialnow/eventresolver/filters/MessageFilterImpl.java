@@ -10,7 +10,7 @@ import com.qsocialnow.common.model.event.Event;
 @Service
 @Qualifier("messageFilter")
 public class MessageFilterImpl implements MessageFilter {
-	
+
     @Override
     public boolean shouldProcess(Event message, Domain domain) {
         boolean shouldProcess = false;

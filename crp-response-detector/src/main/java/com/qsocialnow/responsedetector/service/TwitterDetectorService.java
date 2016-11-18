@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.base.Strings;
 import com.google.gson.GsonBuilder;
+import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.model.responsedetector.TwitterMessageEvent;
 import com.qsocialnow.common.util.FilterConstants;
@@ -47,6 +48,8 @@ public class TwitterDetectorService extends SourceDetectorService {
     private TwitterStreamClient twitterStreamClient;
 
     private TwitterConfigurator configurator;
+
+    private QueueConfigurator queueConfig;
 
     private boolean startListening = false;
 
@@ -176,12 +179,12 @@ public class TwitterDetectorService extends SourceDetectorService {
 
     private void checkMessageResponses(String replyId, String nodePath, TwitterMessageEvent twitterMessageEvent) {
         if (twitterClient == null) {
-            this.twitterClient = new TwitterClient(this);
+            this.twitterClient = new TwitterClient(this, queueConfig);
             twitterClient.initTwitterClient(configurator);
         }
         nodePaths.put(replyId, nodePath);
         conversations.put(replyId, twitterMessageEvent);
-        twitterClient.checkAnyMention(twitterMessageEvent);
+        twitterClient.checkMentions(twitterMessageEvent);
     }
 
     public void stop() {
@@ -269,5 +272,9 @@ public class TwitterDetectorService extends SourceDetectorService {
     @Override
     public String getUserIdToTrack(String idRootComment) {
         return null;
+    }
+
+    public void setQueueConfig(QueueConfigurator queueConfig) {
+        this.queueConfig = queueConfig;
     }
 }
