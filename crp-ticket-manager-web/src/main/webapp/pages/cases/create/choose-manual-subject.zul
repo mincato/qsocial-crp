@@ -164,30 +164,6 @@
 										</x:span>
 									</x:div>
 								</x:div>
-								<n:div class="form-group">
-									<n:label
-										class="control-label col-sm-2">
-										${labels.cases.subject.name.label}
-									</n:label>
-									<x:div class="col-sm-10">
-										<textbox type="text"
-											class="form-control" name="normal_input"
-											value="@bind(subjectFx.name)">
-										</textbox>
-									</x:div>
-								</n:div>
-								<n:div class="form-group">
-									<n:label
-										class="control-label col-sm-2">
-										${labels.cases.subject.lastname.label}
-									</n:label>
-									<x:div class="col-sm-10">
-										<textbox type="text"
-											class="form-control" name="normal_input"
-											value="@bind(subjectFx.lastName)">
-										</textbox>
-									</x:div>
-								</n:div>
 							</x:form>
 						</div>
 					</n:div>

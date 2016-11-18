@@ -1993,6 +1993,30 @@ router.get('/subjects/:id', function (req, res) {
   subjectService.findOne(subjectId, asyncResponse);
 });
 
+router.get('/persons/:id', function (req, res) {
+
+	  function asyncResponse(err,response) {
+	    var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+	    if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+
+	    if(response !== null) {
+	      try {
+	        res.set('Content-Type', 'application/json');
+	        res.send(gson.toJsonSync(response));
+	      } catch(ex) {
+	        res.status(500).json(ex.cause.getMessageSync());
+	      }
+	    } else {
+	      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+	    }
+
+	  }
+	  
+	  var personId = req.params.id;	
+	  var personService = javaContext.getBeanSync("personService");	  
+	  personService.findOne(personId, asyncResponse);
+});
 
 router.put('/subjects/:id', function (req, res) {
 
@@ -2025,6 +2049,38 @@ subjectService.update(subjectId,subject,asyncResponse);
 
 });
 
+router.put('/persons/:id', function (req, res) {
+
+	function asyncResponse(err,response) {
+		var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
+
+		if(err)  { res.status(500).json(err.cause.getMessageSync()); return; }
+
+		if(response !== null) {
+			try {
+				res.set('Content-Type','application/json');
+				res.send(gson.toJsonSync(response));
+			} catch(ex) {
+				res.status(500).json(ex.cause.getMessageSync());
+			}
+		} else {
+			res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+		}
+	}
+
+	prettyJSON(req.body);
+
+	var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+	var clazz = java.findClassSync('com.qsocialnow.common.model.cases.Person');
+	var person = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+
+	var personId = req.params.id;	
+	var personService = javaContext.getBeanSync("personService");	  
+	personService.update(personId,subject,asyncResponse);
+
+});
+
+
 router.post('/subjects', function (req, res) {
 
 function asyncResponse(err,response) {
@@ -2054,6 +2110,9 @@ var subjectService = javaContext.getBeanSync("subjectService");
 subjectService.createSubject(subject, asyncResponse);
 
 });
+
+
+
 
 router.get('/users', function (req, res) {
 
