@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -272,13 +273,14 @@ public class CaseTicketService extends CaseIndexService {
                 if (textsList.size() > 1) {
                     ShouldConditionsFilter conditionTermFilterText = new ShouldConditionsFilter();
                     for (WordsListFilterBean textWord : textsList) {
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto", textWord.getPalabra());
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto",
+                                StringUtils.lowerCase(textWord.getPalabra()));
                         conditionTermFilterText.addShouldCondition(shouldFilter);
                     }
                     shouldTermsConditionsFilters.add(conditionTermFilterText);
                 } else {
-                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto", textsList.get(0)
-                            .getPalabra());
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto",
+                            StringUtils.lowerCase(textsList.get(0).getPalabra()));
                     termFilter.setNeedSplit(true);
                     termFilters.add(termFilter);
                 }
@@ -310,13 +312,15 @@ public class CaseTicketService extends CaseIndexService {
                     ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
                     for (WordsListFilterBean textWord : mentionsList) {
                         String mentions = textWord.getPalabra().replaceAll("@", "");
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.menciones", mentions);
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.menciones",
+                                StringUtils.lowerCase(mentions));
                         hashTermsFilterText.addShouldCondition(shouldFilter);
                     }
                     shouldTermsConditionsFilters.add(hashTermsFilterText);
                 } else {
                     String mentions = mentionsList.get(0).getPalabra().replaceAll("@", "");
-                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.menciones", mentions);
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.menciones",
+                            StringUtils.lowerCase(mentions));
                     termFilter.setNeedSplit(true);
                     termFilters.add(termFilter);
                 }
@@ -329,13 +333,15 @@ public class CaseTicketService extends CaseIndexService {
                     ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
                     for (WordsListFilterBean textWord : hashTagsList) {
                         String hashTags = textWord.getPalabra().replaceAll("#", "");
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.hashTags", hashTags);
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.hashTags",
+                                StringUtils.lowerCase(hashTags));
                         hashTermsFilterText.addShouldCondition(shouldFilter);
                     }
                     shouldTermsConditionsFilters.add(hashTermsFilterText);
                 } else {
                     String hashTags = hashTagsList.get(0).getPalabra().replaceAll("#", "");
-                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.hashTags", hashTags);
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.hashTags",
+                            StringUtils.lowerCase(hashTags));
                     termFilter.setNeedSplit(true);
                     termFilters.add(termFilter);
                 }

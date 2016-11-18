@@ -171,7 +171,7 @@
         				</systemProperty>
         			</systemProperties>
 					  <webAppConfig>
-                                <contextPath>/${project.artifactId}</contextPath>
+                                <contextPath>/qaction</contextPath>
                                 <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
                       </webAppConfig>
 					  <contextHandlers>
