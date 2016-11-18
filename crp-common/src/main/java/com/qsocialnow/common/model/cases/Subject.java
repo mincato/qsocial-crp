@@ -6,8 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.validation.Valid;
-
 import com.qsocialnow.common.model.event.GeoSocialEventLocationMethod;
 import com.qsocialnow.common.util.SubjectIdentifierNormalizer;
 
@@ -28,30 +26,21 @@ public class Subject implements Serializable {
 
     private String profileImage;
 
-    private String name;
-
-    private String lastName;
-
-    private String address;
-
     private Date signedDate;
 
     private Date lastAccionDate;
 
-    private Integer age;
-
     private Set<String> subjectCategorySet;
 
     private Set<String> subjectCategory;
-
-    @Valid
-    private ContactInfo contactInfo;
 
     private GeoSocialEventLocationMethod locationMethod;
 
     private String sourceName;
 
     private String location;
+
+    private String personId;
 
     public String getId() {
         return id;
@@ -77,30 +66,6 @@ public class Subject implements Serializable {
         this.profileImage = profileImage;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Date getSignedDate() {
         return signedDate;
     }
@@ -115,22 +80,6 @@ public class Subject implements Serializable {
 
     public void setLastAccionDate(Date lastAccionDate) {
         this.lastAccionDate = lastAccionDate;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public ContactInfo getContactInfo() {
-        return contactInfo;
-    }
-
-    public void setContactInfo(ContactInfo contactInfo) {
-        this.contactInfo = contactInfo;
     }
 
     public String getSourceId() {
@@ -202,6 +151,14 @@ public class Subject implements Serializable {
 
     public void setSourceName(String sourceName) {
         this.sourceName = sourceName;
+    }
+
+    public String getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(String personId) {
+        this.personId = personId;
     }
 
 }

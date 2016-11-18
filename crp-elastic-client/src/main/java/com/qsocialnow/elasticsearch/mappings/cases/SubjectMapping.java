@@ -54,12 +54,7 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
     public SubjectType getDocumentType(Subject document) {
         SubjectType subjectType = new SubjectType();
         subjectType.setId(document.getId());
-        subjectType.setAddress(document.getAddress());
-        subjectType.setAge(document.getAge());
-        subjectType.setContactInfo(document.getContactInfo());
         subjectType.setLastAccionDate(document.getLastAccionDate());
-        subjectType.setLastName(document.getLastName());
-        subjectType.setName(document.getName());
         subjectType.setSignedDate(document.getSignedDate());
         subjectType.setSourceId(document.getSourceId());
         subjectType.setIdentifier(document.getIdentifier());
@@ -70,6 +65,7 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
         subjectType.setLocation(document.getLocation());
         subjectType.setLocationMethod(document.getLocationMethod());
         subjectType.setSourceName(document.getSourceName());
+        subjectType.setPersonId(document.getPersonId());
         return subjectType;
     }
 
@@ -77,14 +73,9 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
     public Subject getDocument(SubjectType documentType) {
         Subject subject = new Subject();
         subject.setId(documentType.getId());
-        subject.setAddress(documentType.getAddress());
 
-        subject.setAge(documentType.getAge());
-        subject.setContactInfo(documentType.getContactInfo());
         subject.setLastAccionDate(documentType.getLastAccionDate());
 
-        subject.setLastName(documentType.getLastName());
-        subject.setName(documentType.getName());
         subject.setSignedDate(documentType.getSignedDate());
         subject.setSourceId(documentType.getSourceId());
         subject.setIdentifier(documentType.getIdentifier());
@@ -96,6 +87,8 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
         subject.setLocation(documentType.getLocation());
         subject.setLocationMethod(documentType.getLocationMethod());
         subject.setSourceName(documentType.getSourceName());
+
+        subject.setPersonId(documentType.getPersonId());
         return subject;
     }
 }

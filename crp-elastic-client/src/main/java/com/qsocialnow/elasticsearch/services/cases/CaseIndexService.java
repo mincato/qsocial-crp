@@ -47,6 +47,7 @@ public class CaseIndexService {
             createIndex(repository, INDEX_NAME);
             createMappings(repository, INDEX_NAME);
         }
+        repository.closeClient();
     }
 
     public <T> String getIndex(Repository<T> repository) {

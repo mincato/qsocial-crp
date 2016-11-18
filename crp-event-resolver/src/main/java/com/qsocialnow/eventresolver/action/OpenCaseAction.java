@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.qsocialnow.common.model.cases.Case;
+import com.qsocialnow.common.model.cases.Person;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUser;
@@ -18,6 +19,7 @@ import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.services.SourceService;
+import com.qsocialnow.elasticsearch.services.cases.PersonService;
 import com.qsocialnow.elasticsearch.services.cases.SubjectService;
 import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
 import com.qsocialnow.eventresolver.service.TeamService;
@@ -27,6 +29,9 @@ public class OpenCaseAction {
 
     @Autowired
     private SubjectService subjectService;
+
+    @Autowired
+    private PersonService personService;
 
     @Autowired
     private SourceService sourceService;
@@ -50,6 +55,9 @@ public class OpenCaseAction {
                 log.debug("Creating subject: " + sourceId + " identifier:" + inputElement.getUsuarioCreacion()
                         + " source:" + inputElement.getMedioId());
 
+                String personId = createPerson(inputElement);
+
+                subject.setPersonId(personId);
                 subject.setLastAccionDate(new Date()); //
                 subject.setSignedDate(new Date());
                 subject.setIdentifier(inputElement.getUsuarioCreacion());
@@ -81,6 +89,11 @@ public class OpenCaseAction {
             log.error("There was an error executing action", e);
         }
         return newCase;
+    }
+
+    private String createPerson(Event inputElement) {
+        Person person = new Person();
+        return personService.indexPerson(person);
     }
 
     private BaseUser getRandomUser(String teamId) {
