@@ -38,7 +38,11 @@ public class MessageProcessorImpl implements MessageProcessor {
 
     public void process(Message message) throws Exception {
         // reintentar ES
-        Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);
+        Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);        
+        if (inputBeanDocument == null) {
+        	return;
+        }
+        
         String domainId = message.getGroup();
         logProcessingEvent(inputBeanDocument, domainId);
 
