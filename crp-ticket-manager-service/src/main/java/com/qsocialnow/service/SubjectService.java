@@ -41,10 +41,10 @@ public class SubjectService {
         try {
             subjectSaved = subjectRepository.save(subject);
             if (subjectSaved.getId() == null) {
-                throw new Exception("There was an error creating Subject: " + subject.getName());
+                throw new Exception("There was an error creating Subject: " + subject.getSourceName());
             }
         } catch (Exception e) {
-            log.error("There was an error creating Subject: " + subject.getName(), e);
+            log.error("There was an error creating Subject: " + subject.getSourceName(), e);
             throw new RuntimeException(e.getMessage());
         }
         return subjectSaved;
@@ -57,7 +57,7 @@ public class SubjectService {
                 return subject;
 
         } catch (Exception e) {
-            log.error("There was an error updating Subject: " + subject.getName(), e);
+            log.error("There was an error updating Subject: " + subject.getSourceName(), e);
             throw new RuntimeException(e.getMessage());
         }
         return null;

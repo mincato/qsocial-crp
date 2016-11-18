@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.qsocialnow.common.model.cases.Person;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.Media;
 
@@ -11,6 +12,9 @@ public class SubjectView {
 
     @Valid
     private Subject subject;
+
+    @Valid
+    private Person person;
 
     private Media source;
 
@@ -38,6 +42,14 @@ public class SubjectView {
 
     public void setCategories(List<SubjectCategoryView> categories) {
         this.categories = categories;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
 }

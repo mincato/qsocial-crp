@@ -134,6 +134,10 @@
     <bean id="subjectElasticService" class="com.qsocialnow.elasticsearch.services.cases.SubjectService">
          <constructor-arg ref="configurationProvider" />
     </bean>
+    
+    <bean id="personElasticService" class="com.qsocialnow.elasticsearch.services.cases.PersonService">
+         <constructor-arg ref="configurationProvider" />
+    </bean>    
 
 	<bean id="serviceDiscoveryRegister" class="com.qsocialnow.ServiceDiscoveryRegister" destroy-method="close">
 	</bean>

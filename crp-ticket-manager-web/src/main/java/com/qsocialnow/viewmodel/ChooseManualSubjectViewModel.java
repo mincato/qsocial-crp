@@ -27,6 +27,7 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Div;
 
+import com.qsocialnow.common.model.cases.Person;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.config.Media;
@@ -59,6 +60,8 @@ public class ChooseManualSubjectViewModel implements Serializable {
     private boolean selected = false;
 
     private Subject subject;
+
+    private Person person;
 
     private String source;
 
@@ -164,6 +167,7 @@ public class ChooseManualSubjectViewModel implements Serializable {
         this.enabledCreateSubject = true;
         this.subject = new Subject();
         this.subject.setSource(Media.MANUAL.getValue());
+        this.person = new Person();
     }
 
     @Command
@@ -241,5 +245,13 @@ public class ChooseManualSubjectViewModel implements Serializable {
 
     public void setSubject(Subject subject) {
         this.subject = subject;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }

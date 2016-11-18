@@ -30,6 +30,10 @@
     <bean id="subjectService" class="com.qsocialnow.elasticsearch.services.cases.SubjectService">
         <constructor-arg ref="configurationProvider" />
     </bean>
+    
+    <bean id="personService" class="com.qsocialnow.elasticsearch.services.cases.PersonService">
+        <constructor-arg ref="configurationProvider" />
+    </bean>    
    
    <bean id="registryService" class="com.qsocialnow.elasticsearch.services.cases.ActionRegistryService">
         <constructor-arg ref="configurationProvider" />

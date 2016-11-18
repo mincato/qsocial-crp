@@ -11,6 +11,7 @@ import org.zkoss.bind.annotation.ToClientCommand;
 import org.zkoss.util.resource.Labels;
 import org.zkoss.zk.ui.util.Clients;
 
+import com.qsocialnow.common.model.cases.Person;
 import com.qsocialnow.common.model.cases.Subject;
 
 @NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.saved")
@@ -29,6 +30,8 @@ public class EditSubjectViewModel extends AbstractEditSubjectViewModel implement
     public void save() {
         Subject subject = getSubjectService().update(getCurrentSubject().getSubject());
         getCurrentSubject().setSubject(subject);
+        Person person = getPersonService().update(getCurrentSubject().getPerson());
+        getCurrentSubject().setPerson(person);
         Clients.showNotification(Labels.getLabel("subject.edit.notification.success",
                 new String[] { subject.getIdentifier() }));
 
