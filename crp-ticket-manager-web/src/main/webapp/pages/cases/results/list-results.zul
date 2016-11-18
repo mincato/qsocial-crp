@@ -227,7 +227,7 @@
                                     <tr>
                                         <td class="list-text-column">
                                            <label 
-                                        sclass="@load(each.status eq 1 ? 'label label-case-open' : 'label label-case-close')" 
+                                        sclass="@load(each.status eq 1 ? 'label label-case-open label-link' : 'label label-case-close label-link')" 
                                         value="@load(c:l(c:cat('cases.results.open.',each.status)))" onClick="@command('searchStatusByUser',status=each.status)"></label> 
                                         
                                         </td>
@@ -295,7 +295,7 @@
                         </div>
                     </div>
                 </n:div>
-         </div>fa
+         </div>
     </div>
     <div class="row" visible="@load(vm.byAdmin)">
          <n:div class="col-lg-12">

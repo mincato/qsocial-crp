@@ -3,6 +3,7 @@
 
 <?link href="/vendor/bootstrap/bootstrap.min.css" rel="stylesheet"?>
 <?link href="/vendor/bootstrap/bootstrap-social.css" rel="stylesheet"?>
+<?link href="/css/social.css" rel="stylesheet"?>
 <?link href="/assets/css/style.css" rel="stylesheet"?>
 <?link href="/assets/css/footer.css" rel="stylesheet"?>
 <?link href="/assets/css/preloader.css" rel="stylesheet"?>
