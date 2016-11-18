@@ -2076,7 +2076,7 @@ router.put('/persons/:id', function (req, res) {
 
 	var personId = req.params.id;	
 	var personService = javaContext.getBeanSync("personService");	  
-	personService.update(personId,subject,asyncResponse);
+	personService.update(personId,person,asyncResponse);
 
 });
 

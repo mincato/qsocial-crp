@@ -72,7 +72,7 @@ public class PersonMapping implements DynamicMapping, Mapping<PersonType, Person
         person.setContactInfo(personType.getContactInfo());
         person.setAge(personType.getAge());
         person.setName(personType.getName());
-        person.setLastName(person.getLastName());
+        person.setLastName(personType.getLastName());
         person.setSignedDate(personType.getSignedDate());
         return person;
     }
