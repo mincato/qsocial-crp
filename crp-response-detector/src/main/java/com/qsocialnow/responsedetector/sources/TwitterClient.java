@@ -4,10 +4,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.model.responsedetector.TwitterMessageEvent;
+import com.qsocialnow.common.queues.QueueConsumer;
+import com.qsocialnow.common.queues.QueueProducer;
+import com.qsocialnow.common.queues.QueueService;
+import com.qsocialnow.common.queues.QueueServiceFactory;
+import com.qsocialnow.common.queues.QueueType;
+import com.qsocialnow.common.services.strategies.CheckHistoryTask;
+import com.qsocialnow.common.services.strategies.TwitterMessageQueueConsumer;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
 import com.qsocialnow.responsedetector.service.SourceDetectorService;
 
@@ -21,40 +30,66 @@ import twitter4j.User;
 import twitter4j.auth.AccessToken;
 import twitter4j.conf.ConfigurationBuilder;
 
-public class TwitterClient {
+public class TwitterClient implements CheckHistoryTask<TwitterMessageEvent> {
 
     private ConfigurationBuilder configurationBuilder;
 
     private SourceDetectorService sourceService;
 
+    private QueueConfigurator queueConfig;
+
     private static Twitter twitter;
 
     private static final Logger log = LoggerFactory.getLogger(TwitterClient.class);
 
-    public TwitterClient(SourceDetectorService sourceService) {
+    private QueueService queueService;
+
+    private QueueProducer<TwitterMessageEvent> queueProducer;
+
+    private QueueConsumer<TwitterMessageEvent> queueConsumer;
+
+    private TwitterConfigurator twitterConfig;
+
+    public TwitterClient(SourceDetectorService sourceService, QueueConfigurator queueConfig) {
         this.sourceService = sourceService;
+        this.queueConfig = queueConfig;
+        initQueue();
     }
 
-    public void initTwitterClient(TwitterConfigurator twitterConfigurator) {
+    private void initQueue() {
+        this.queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(
+                StringUtils.join(new String[] { QueueType.MESSAGES.type(), "timeline" }, "_"), queueConfig);
+
+        this.queueProducer = new QueueProducer<TwitterMessageEvent>(queueService.getType());
+        this.queueConsumer = new TwitterMessageQueueConsumer(queueService.getType(), this);
+        queueProducer.addConsumer(queueConsumer);
+        queueService.startProducerConsumer(queueProducer, queueConsumer);
+    }
+
+    public void initTwitterClient(TwitterConfigurator twitterConfig) {
+        this.twitterConfig = twitterConfig;
         configurationBuilder = new ConfigurationBuilder();
-        configurationBuilder.setOAuthConsumerKey(twitterConfigurator.getOAuthConsumerKey())
-                .setOAuthConsumerSecret(twitterConfigurator.getOAuthConsumerSecret())
-                .setOAuthAccessToken(twitterConfigurator.getOAuthAccessToken())
-                .setOAuthAccessTokenSecret(twitterConfigurator.getOAuthAccessTokenSecret());
+        configurationBuilder.setOAuthConsumerKey(twitterConfig.getOAuthConsumerKey())
+                .setOAuthConsumerSecret(twitterConfig.getOAuthConsumerSecret())
+                .setOAuthAccessToken(twitterConfig.getOAuthAccessToken())
+                .setOAuthAccessTokenSecret(twitterConfig.getOAuthAccessTokenSecret());
         configurationBuilder.setUserStreamRepliesAllEnabled(true);
 
         if (twitter == null) {
             twitter = TwitterFactory.getSingleton();
             log.debug("Initializing twitter client succesfully");
-            twitter.setOAuthConsumer(twitterConfigurator.getOAuthConsumerKey(),
-                    twitterConfigurator.getOAuthConsumerSecret());
-            AccessToken accessToken = new AccessToken(twitterConfigurator.getOAuthAccessToken(),
-                    twitterConfigurator.getOAuthAccessTokenSecret());
+            twitter.setOAuthConsumer(twitterConfig.getOAuthConsumerKey(), twitterConfig.getOAuthConsumerSecret());
+            AccessToken accessToken = new AccessToken(twitterConfig.getOAuthAccessToken(),
+                    twitterConfig.getOAuthAccessTokenSecret());
             twitter.setOAuthAccessToken(accessToken);
         }
     }
 
-    public void checkAnyMention(TwitterMessageEvent messageEvent) {
+    public void checkMentions(TwitterMessageEvent twitterMessageEvent) {
+        this.queueProducer.addItem(twitterMessageEvent);
+    }
+
+    public void checkHistory(TwitterMessageEvent messageEvent) {
         try {
             List<Status> statuses = twitter.getUserTimeline();
             log.debug("Starting to read user timeline : " + statuses.size()
@@ -83,11 +118,20 @@ public class TwitterClient {
                 }
             }
         } catch (TwitterException e) {
-            log.error("Unable to retrieve user mentions :" + e);
+            log.error("There was an error trying retrieve user mentions from twitter", e);
+            if (twitterConfig.getRetryErrorCodes().contains(e.getErrorCode())
+                    || twitterConfig.getRetryStatusCodes().contains(e.getStatusCode())) {
+                queueConsumer.changeInitialDelay(queueConfig.getFailDelay());
+                queueProducer.addItem(messageEvent);
+            } else {
+                if (twitterConfig.getBlockErrorCodes().contains(e.getErrorCode())) {
+                    // sourceService.blockSource(FilterConstants.MEDIA_TWITTER);
+                }
+            }
+
         } finally {
 
         }
-        ;
     }
 
     private List<Status> getResponsesFromTweet(Status status) {
@@ -121,5 +165,4 @@ public class TwitterClient {
         }
         return replies;
     }
-
 }
