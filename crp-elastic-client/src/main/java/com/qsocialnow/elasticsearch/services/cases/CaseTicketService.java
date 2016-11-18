@@ -30,7 +30,6 @@ import com.qsocialnow.elasticsearch.repositories.SearchResponse;
 import com.qsocialnow.elasticsearch.repositories.ShouldConditionsFilter;
 import com.qsocialnow.elasticsearch.repositories.ShouldFilter;
 import com.qsocialnow.elasticsearch.repositories.TermFieldFilter;
-import com.sun.java_cup.internal.runtime.lr_parser;
 
 import io.searchbox.core.SearchResult;
 
