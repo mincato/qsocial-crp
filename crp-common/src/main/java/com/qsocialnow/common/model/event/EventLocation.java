@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class EventLocation implements Serializable {
 
-   private static final long serialVersionUID = -8875193134922331125L;
-    
+    private static final long serialVersionUID = -8875193134922331125L;
+
     private Double lat;
     private Double lon;
 

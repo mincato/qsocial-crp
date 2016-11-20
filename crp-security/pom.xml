@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.qsocialnow.crp</groupId>
 		<artifactId>case-resolution-platform</artifactId>
-		<version>0.7.2-SNAPSHOT</version>
+		<version>0.7.3-SNAPSHOT</version>
 	</parent>
 	<artifactId>crp-security</artifactId>
 	<name>CRP Security</name>
