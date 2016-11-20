@@ -1,0 +1,38 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+	sclass="modal fade" ca:data-modal=""
+	ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
+	ca:data-open-event="shown.bs.modal"  onModalOpen="@command('open')"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('vm') @init('com.qsocialnow.viewmodel.ChooseCoordinatesManualCaseViewModel')"
+	validationMessages="@id('vmsgs')">
+	<n:div class="modal-dialog">
+		<div class="modal-content">
+			<n:div class="modal-header">
+				<n:button type="button" class="close"
+					data-dismiss="modal" aria-label="Close">
+					<n:span aria-hidden="true">&#x00D7;</n:span>
+				</n:button>
+				<n:h4 class="modal-title">
+					${labels.cases.choose.coordinates.title}
+				</n:h4>
+			</n:div>
+			<n:div class="modal-body" style="height:600px;">
+				<n:div class="row">
+					<n:div class="col-lg-12">
+						<div zclass="pane equal">
+							<div ca:data-zmapbox-modal="" style="height:550px;width=500px" >
+							</div>
+						</div>
+					</n:div>
+				</n:div>
+			</n:div>
+			<n:div class="modal-footer">
+				<button autodisable="self" zclass="btn"
+					sclass="btn-default" ca:data-dismiss="modal"
+					label="${labels.app.button.cancel}" />
+
+			</n:div>
+		</div>
+	</n:div>
+</div>
