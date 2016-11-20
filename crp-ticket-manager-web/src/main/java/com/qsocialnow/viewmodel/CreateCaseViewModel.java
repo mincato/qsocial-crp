@@ -119,11 +119,11 @@ public class CreateCaseViewModel implements Serializable {
             fillAdmUnit(currentCase.getAdminUnit(), newCase.getTriggerEvent());
         }
         if (currentCase.getLatitude() != null && currentCase.getLongitude() != null) {
-        	EventLocation eventLocation = new EventLocation();
-        	eventLocation.setLat(currentCase.getLatitude());
-        	eventLocation.setLon(currentCase.getLongitude());
-        	newCase.getTriggerEvent().setLocation(eventLocation);
-        	newCase.getTriggerEvent().setLocationMethod(GeoSocialEventLocationMethod.GEO_LOCATION);
+            EventLocation eventLocation = new EventLocation();
+            eventLocation.setLat(currentCase.getLatitude());
+            eventLocation.setLon(currentCase.getLongitude());
+            newCase.getTriggerEvent().setLocation(eventLocation);
+            newCase.getTriggerEvent().setLocationMethod(GeoSocialEventLocationMethod.GEO_LOCATION);
         }
 
         newCase.setDomainId(currentCase.getSelectedDomain().getId());
@@ -266,16 +266,16 @@ public class CreateCaseViewModel implements Serializable {
             }
         };
     }
-    
+
     @Command
     public void selectCoordinates(@BindingParam("newCase") CaseView newCase) {
         this.fxCaseView = newCase;
         Executions.createComponents("/pages/cases/create/choose-coordinates.zul", null, null);
     }
-    
+
     @GlobalCommand
     public void changeCoordinates(@BindingParam("latitude") Double latitude, @BindingParam("longitude") Double longitude) {
-    	this.fxCaseView.setLatitude(latitude);
+        this.fxCaseView.setLatitude(latitude);
         this.fxCaseView.setLongitude(longitude);
         BindUtils.postNotifyChange(null, null, this.fxCaseView, "latitude");
         BindUtils.postNotifyChange(null, null, this.fxCaseView, "longitude");

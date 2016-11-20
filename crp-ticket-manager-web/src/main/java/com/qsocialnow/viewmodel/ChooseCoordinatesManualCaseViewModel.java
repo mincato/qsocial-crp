@@ -20,23 +20,21 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Div;
 
 @VariableResolver(DelegatingVariableResolver.class)
-@NotifyCommands({
-@NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.selected"),
-@NotifyCommand(value = "zmapbox-modal$refresh", onChange = "_vm_.refreshMap"),
-})
-@ToClientCommand({"modal$closeEvent" , "zmapbox-modal$refresh"})
-@ToServerCommand({"zmapbox-modal$chooseCoordinatesEvent", "modal$openEvent"})
+@NotifyCommands({ @NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.selected"),
+        @NotifyCommand(value = "zmapbox-modal$refresh", onChange = "_vm_.refreshMap"), })
+@ToClientCommand({ "modal$closeEvent", "zmapbox-modal$refresh" })
+@ToServerCommand({ "zmapbox-modal$chooseCoordinatesEvent", "modal$openEvent" })
 public class ChooseCoordinatesManualCaseViewModel implements Serializable {
 
-	private static final long serialVersionUID = -4008288120380459785L;
+    private static final long serialVersionUID = -4008288120380459785L;
 
     private boolean selected = false;
-    
-    private Double latitude;
-	private Double longitude;
 
-	private boolean refreshMap = false;
-	
+    private Double latitude;
+    private Double longitude;
+
+    private boolean refreshMap = false;
+
     @Init
     public void init() {
     }
@@ -55,13 +53,13 @@ public class ChooseCoordinatesManualCaseViewModel implements Serializable {
             BindUtils.postGlobalCommand(null, null, "changeCoordinates", args);
         }
     }
-    
+
     @Command
     @NotifyChange("refreshMap")
     public void open(@ContextParam(ContextType.VIEW) Div comp) {
-    	refreshMap = true;
+        refreshMap = true;
     }
-    
+
     @Command("zmapbox-modal$chooseCoordinatesEvent")
     @NotifyChange("selected")
     public void choose(@BindingParam("lng") Double lng, @BindingParam("lat") Double lat) {
@@ -70,16 +68,12 @@ public class ChooseCoordinatesManualCaseViewModel implements Serializable {
         this.selected = true;
     }
 
-	public boolean isRefreshMap() {
-		return refreshMap;
-	}
+    public boolean isRefreshMap() {
+        return refreshMap;
+    }
 
-	public void setRefreshMap(boolean refreshMap) {
-		this.refreshMap = refreshMap;
-	}
+    public void setRefreshMap(boolean refreshMap) {
+        this.refreshMap = refreshMap;
+    }
 
-
-    
-
-   
 }
