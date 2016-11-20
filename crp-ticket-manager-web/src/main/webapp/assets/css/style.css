@@ -2917,6 +2917,11 @@ button.remove {
 	align-items: center;
 }
 
+#page-header > div:first-of-type   {
+	display: flex;
+	align-items: center;
+}
+
 #page-header > div > h4 {
 	display: inline-block;
 }
