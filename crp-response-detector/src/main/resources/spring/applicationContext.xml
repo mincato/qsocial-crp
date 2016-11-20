@@ -66,6 +66,8 @@
 		<ref bean="facebookDetectorService" />
 	</util:list>
 	
-	<bean id="twitterDetectorService" class="com.qsocialnow.responsedetector.service.TwitterDetectorService"></bean>
+	<bean id="twitterDetectorService" class="com.qsocialnow.responsedetector.service.TwitterDetectorService">
+	   <property name="queueConfig" ref="queueConfig"></property>
+	</bean>
 	<bean id="facebookDetectorService" class="com.qsocialnow.responsedetector.service.FacebookDetectorService"></bean>
 </beans>

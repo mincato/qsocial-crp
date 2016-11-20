@@ -39,6 +39,10 @@ public class MessageProcessorImpl implements MessageProcessor {
     public void process(Message message) throws Exception {
         // reintentar ES
         Event inputBeanDocument = new GsonBuilder().create().fromJson(message.getMessage(), Event.class);
+        if (inputBeanDocument == null) {
+            return;
+        }
+
         String domainId = message.getGroup();
         logProcessingEvent(inputBeanDocument, domainId);
 
@@ -73,16 +77,23 @@ public class MessageProcessorImpl implements MessageProcessor {
 
     private void logMessageNotDetected(Event inputBeanDocument) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(String.format("Message were not detected to execute an action: %s", inputBeanDocument.getId()));
-            LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+            try {
+                LOGGER.debug(String.format("Message were not detected to execute an action: %s",
+                        inputBeanDocument.getId()));
+                LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+            } catch (Exception e) {
+            }
         }
     }
 
     private void logProcessingEvent(Event inputBeanDocument, String domainId) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
-            LOGGER.debug(String.format("Message: %s", inputBeanDocument));
-            LOGGER.debug(String.format("Searching for domain: %s", domainId));
+            try {
+                LOGGER.debug(String.format("Processing message for domain %s: %s", domainId, inputBeanDocument.getId()));
+                LOGGER.debug(String.format("Message: %s", inputBeanDocument));
+                LOGGER.debug(String.format("Searching for domain: %s", domainId));
+            } catch (Exception e) {
+            }
         }
     }
 

@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.qsocialnow.crp</groupId>
 		<artifactId>case-resolution-platform</artifactId>
-		<version>0.7</version>
+		<version>0.7.1</version>
 	</parent>
 	<artifactId>crp-ticket-manager-web</artifactId>
 	<packaging>war</packaging>
@@ -171,7 +171,7 @@
         				</systemProperty>
         			</systemProperties>
 					  <webAppConfig>
-                                <contextPath>/${project.artifactId}</contextPath>
+                                <contextPath>/qaction</contextPath>
                                 <allowDuplicateFragmentNames>true</allowDuplicateFragmentNames>
                       </webAppConfig>
 					  <contextHandlers>

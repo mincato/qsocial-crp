@@ -21,13 +21,17 @@ import com.qsocialnow.common.model.cases.ActionRequest;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
+import com.qsocialnow.common.model.cases.Person;
+import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.Domain;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.Resolution;
 import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.Trigger;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.pagination.PageResponse;
+import com.qsocialnow.elasticsearch.services.cases.PersonService;
 import com.qsocialnow.persistence.ActionRegistryRepository;
 import com.qsocialnow.persistence.CaseRepository;
 import com.qsocialnow.persistence.DomainRepository;
@@ -55,6 +59,12 @@ public class CaseService {
 
     @Autowired
     private DomainRepository domainRepository;
+
+    @Autowired
+    private SubjectService subjectService;
+
+    @Autowired
+    private PersonService personService;
 
     @Resource
     private Map<ActionType, Action> actions;
@@ -95,6 +105,10 @@ public class CaseService {
         try {
             Case caseObject = newCase;
             if (newCase.getId() == null) {
+                if (Media.MANUAL.getValue().equals(newCase.getSource()) && newCase.getSubject().getId() == null) {
+                    Subject subject = initSubject(newCase);
+                    newCase.setSubject(subjectService.createSubject(subject));
+                }
                 caseObject = repository.save(newCase);
                 if (newCase.getActionsRegistry() != null && newCase.getActionsRegistry().size() > 0)
                     actionRegistryRepository.create(caseObject.getId(), newCase.getActionsRegistry().get(0));
@@ -106,6 +120,14 @@ public class CaseService {
             log.error("There was an error executing action", e);
             throw e;
         }
+    }
+
+    public Subject initSubject(Case newCase) {
+        Person person = new Person();
+        String personId = personService.indexPerson(person);
+        Subject subject = newCase.getSubject();
+        subject.setPersonId(personId);
+        return subject;
     }
 
     public Case executeAction(String caseId, ActionRequest actionRequest) {

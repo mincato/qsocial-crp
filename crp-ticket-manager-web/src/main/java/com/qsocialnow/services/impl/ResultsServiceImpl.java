@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.cases.CaseAggregationReport;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
@@ -57,7 +58,7 @@ public class ResultsServiceImpl implements ResultsService {
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
 
             UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/resolutions/report");
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/aggregations/report");
 
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
             restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
@@ -99,6 +100,26 @@ public class ResultsServiceImpl implements ResultsService {
 
         } catch (Exception e) {
             log.error("There was an error while trying to call sumarize all service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public byte[] getReportByAdministrativeUnit(CaseAggregationReport caseAggregationReport) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+
+            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
+                    serviceUrlResolver.resolveUrl(caseServiceUrl)).path("/aggregations/administrative-unit/report");
+
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            restTemplate.getMessageConverters().add(new ByteArrayHttpMessageConverter());
+            byte[] data = restTemplate.postForObject(builder.toUriString(), caseAggregationReport, byte[].class);
+
+            return data;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call results report service", e);
             throw new RuntimeException(e);
         }
     }

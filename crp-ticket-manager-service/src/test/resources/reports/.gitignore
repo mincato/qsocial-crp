@@ -1,2 +1,6 @@
 /cases.jasper
 /cases_by_resolution.jasper
+/cases_by_status.jasper
+/cases_by_state.jasper
+/cases_by_unit_admin.jasper
+/cases_by_administrative_unit.jasper

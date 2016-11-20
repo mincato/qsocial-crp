@@ -18,11 +18,13 @@ import org.zkoss.zul.Div;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.model.cases.ContactInfo;
+import com.qsocialnow.common.model.cases.Person;
 import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.SubjectCategory;
 import com.qsocialnow.common.model.config.SubjectCategorySet;
 import com.qsocialnow.common.model.event.PolygonLocation;
+import com.qsocialnow.services.PersonService;
 import com.qsocialnow.services.SubjectCategorySetService;
 import com.qsocialnow.services.SubjectService;
 
@@ -35,6 +37,9 @@ public class AbstractEditSubjectViewModel implements Serializable {
     private SubjectService subjectService;
 
     @WireVariable
+    private PersonService personService;
+
+    @WireVariable
     private SubjectCategorySetService subjectCategorySetService;
 
     private SubjectView currentSubject;
@@ -43,12 +48,16 @@ public class AbstractEditSubjectViewModel implements Serializable {
 
     protected void initSubject(String subjectId) {
         Subject subject = subjectService.findOne(subjectId);
+        Person person = personService.findOne(subject.getPersonId());
+
         currentSubject = new SubjectView();
         currentSubject.setSubject(subject);
+        currentSubject.setPerson(person);
+
         currentSubject.setSource(Media.getByValue(currentSubject.getSubject().getSource()));
         currentSubject.setCategories(new ArrayList<SubjectCategoryView>());
-        if (currentSubject.getSubject().getContactInfo() == null) {
-            currentSubject.getSubject().setContactInfo(new ContactInfo());
+        if (currentSubject.getPerson().getContactInfo() == null) {
+            currentSubject.getPerson().setContactInfo(new ContactInfo());
         }
         if (!CollectionUtils.isEmpty(currentSubject.getSubject().getSubjectCategorySet())) {
             initCategories(currentSubject.getCategories(), currentSubject.getSubject().getSubjectCategorySet(),
@@ -88,6 +97,10 @@ public class AbstractEditSubjectViewModel implements Serializable {
 
     public SubjectService getSubjectService() {
         return subjectService;
+    }
+
+    public PersonService getPersonService() {
+        return personService;
     }
 
     public void setSaved(boolean saved) {

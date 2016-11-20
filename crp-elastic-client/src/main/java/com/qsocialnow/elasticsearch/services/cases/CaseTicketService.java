@@ -7,8 +7,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +18,7 @@ import com.google.gson.JsonObject;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.config.WordFilterType;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilterBean;
 import com.qsocialnow.common.model.filter.FollowersCountRange;
 import com.qsocialnow.common.model.filter.WordsListFilterBean;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
@@ -137,6 +140,63 @@ public class CaseTicketService extends CaseIndexService {
         if (filterRequest.getSubjectCategory() != null)
             termFilters.add(new TermFieldFilter("subject.subjectCategory", filterRequest.getSubjectCategory()));
 
+        if (filterRequest.getAdministrativeUnitsFilter() != null
+                && filterRequest.getAdministrativeUnitsFilter().getAdministrativeUnitsFilterBeans() != null) {
+            AdministrativeUnitsFilterBean[] adminUnits = filterRequest.getAdministrativeUnitsFilter()
+                    .getAdministrativeUnitsFilterBeans();
+            if (adminUnits.length > 1) {
+                Map<String, List<Long>> adminUnitsValues = getAdminUnitsValues(adminUnits);
+
+                Set<String> attributes = adminUnitsValues.keySet();
+                for (String field : attributes) {
+                    List<Long> fieldValues = adminUnitsValues.get(field);
+                    if (fieldValues != null) {
+                        if (fieldValues.size() > 1) {
+                            ShouldConditionsFilter conditionFilterMedia = new ShouldConditionsFilter();
+                            for (Long value : fieldValues) {
+                                ShouldFilter shouldFilter = new ShouldFilter("triggerEvent." + field,
+                                        String.valueOf(value));
+                                conditionFilterMedia.addShouldCondition(shouldFilter);
+                            }
+                            shouldConditionsFilters.add(conditionFilterMedia);
+                        } else {
+                            termFilters.add(new TermFieldFilter("triggerEvent." + field, String.valueOf(fieldValues
+                                    .get(0))));
+                        }
+                    }
+                }
+            } else {
+                AdministrativeUnitsFilterBean adminUnit = adminUnits[0];
+                if (adminUnit.getContinent() != null) {
+                    termFilters.add(new TermFieldFilter("triggerEvent.continent", String.valueOf(adminUnit
+                            .getContinent())));
+                }
+                if (adminUnit.getCountry() != null) {
+                    termFilters
+                            .add(new TermFieldFilter("triggerEvent.country", String.valueOf(adminUnit.getCountry())));
+                }
+                if (adminUnit.getCity() != null) {
+                    termFilters.add(new TermFieldFilter("triggerEvent.city", String.valueOf(adminUnit.getCity())));
+                }
+                if (adminUnit.getNeighborhood() != null) {
+                    termFilters.add(new TermFieldFilter("triggerEvent.neighborhood", String.valueOf(adminUnit
+                            .getNeighborhood())));
+                }
+                if (adminUnit.getAdm1() != null) {
+                    termFilters.add(new TermFieldFilter("triggerEvent.adm1", String.valueOf(adminUnit.getAdm1())));
+                }
+                if (adminUnit.getAdm2() != null) {
+                    termFilters.add(new TermFieldFilter("triggerEvent.adm2", String.valueOf(adminUnit.getAdm2())));
+                }
+                if (adminUnit.getAdm3() != null) {
+                    termFilters.add(new TermFieldFilter("triggerEvent.adm3", String.valueOf(adminUnit.getAdm3())));
+                }
+                if (adminUnit.getAdm4() != null) {
+                    termFilters.add(new TermFieldFilter("triggerEvent.adm4", String.valueOf(adminUnit.getAdm4())));
+                }
+            }
+        }
+
         List<String> teamsToFilter = filterRequest.getTeamsToFilter();
         if (teamsToFilter == null || (teamsToFilter != null && teamsToFilter.size() == 0)) {
             if (filterRequest.getUsername() != null) {
@@ -212,13 +272,14 @@ public class CaseTicketService extends CaseIndexService {
                 if (textsList.size() > 1) {
                     ShouldConditionsFilter conditionTermFilterText = new ShouldConditionsFilter();
                     for (WordsListFilterBean textWord : textsList) {
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto", textWord.getPalabra());
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto",
+                                StringUtils.lowerCase(textWord.getPalabra()));
                         conditionTermFilterText.addShouldCondition(shouldFilter);
                     }
                     shouldTermsConditionsFilters.add(conditionTermFilterText);
                 } else {
-                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto", textsList.get(0)
-                            .getPalabra());
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto",
+                            StringUtils.lowerCase(textsList.get(0).getPalabra()));
                     termFilter.setNeedSplit(true);
                     termFilters.add(termFilter);
                 }
@@ -250,13 +311,15 @@ public class CaseTicketService extends CaseIndexService {
                     ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
                     for (WordsListFilterBean textWord : mentionsList) {
                         String mentions = textWord.getPalabra().replaceAll("@", "");
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.menciones", mentions);
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.menciones",
+                                StringUtils.lowerCase(mentions));
                         hashTermsFilterText.addShouldCondition(shouldFilter);
                     }
                     shouldTermsConditionsFilters.add(hashTermsFilterText);
                 } else {
                     String mentions = mentionsList.get(0).getPalabra().replaceAll("@", "");
-                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.menciones", mentions);
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.menciones",
+                            StringUtils.lowerCase(mentions));
                     termFilter.setNeedSplit(true);
                     termFilters.add(termFilter);
                 }
@@ -269,13 +332,15 @@ public class CaseTicketService extends CaseIndexService {
                     ShouldConditionsFilter hashTermsFilterText = new ShouldConditionsFilter();
                     for (WordsListFilterBean textWord : hashTagsList) {
                         String hashTags = textWord.getPalabra().replaceAll("#", "");
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.hashTags", hashTags);
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.hashTags",
+                                StringUtils.lowerCase(hashTags));
                         hashTermsFilterText.addShouldCondition(shouldFilter);
                     }
                     shouldTermsConditionsFilters.add(hashTermsFilterText);
                 } else {
                     String hashTags = hashTagsList.get(0).getPalabra().replaceAll("#", "");
-                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.hashTags", hashTags);
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.hashTags",
+                            StringUtils.lowerCase(hashTags));
                     termFilter.setNeedSplit(true);
                     termFilters.add(termFilter);
                 }
@@ -323,6 +388,78 @@ public class CaseTicketService extends CaseIndexService {
                     .getLocationMethod()));
         }
 
+    }
+
+    private Map<String, List<Long>> getAdminUnitsValues(AdministrativeUnitsFilterBean[] adminUnits) {
+        Map<String, List<Long>> adminUnitsByValue = new HashMap<>();
+        List<Long> continentValues = null;
+        List<Long> countryValues = null;
+        List<Long> cityValues = null;
+        List<Long> neighborhoodValues = null;
+        List<Long> adm1Values = null;
+        List<Long> adm2Values = null;
+        List<Long> adm3Values = null;
+        List<Long> adm4Values = null;
+
+        for (AdministrativeUnitsFilterBean administrativeUnitsFilterBean : adminUnits) {
+            if (administrativeUnitsFilterBean.getContinent() != null) {
+                if (continentValues == null) {
+                    continentValues = new ArrayList<>();
+                }
+                continentValues.add(administrativeUnitsFilterBean.getContinent());
+            }
+            if (administrativeUnitsFilterBean.getCountry() != null) {
+                if (countryValues == null) {
+                    countryValues = new ArrayList<>();
+                }
+                countryValues.add(administrativeUnitsFilterBean.getCountry());
+            }
+            if (administrativeUnitsFilterBean.getCity() != null) {
+                if (cityValues == null) {
+                    cityValues = new ArrayList<>();
+                }
+                cityValues.add(administrativeUnitsFilterBean.getCity());
+            }
+            if (administrativeUnitsFilterBean.getNeighborhood() != null) {
+                if (neighborhoodValues == null) {
+                    neighborhoodValues = new ArrayList<>();
+                }
+                neighborhoodValues.add(administrativeUnitsFilterBean.getCity());
+            }
+            if (administrativeUnitsFilterBean.getAdm1() != null) {
+                if (adm1Values == null) {
+                    adm1Values = new ArrayList<>();
+                }
+                adm1Values.add(administrativeUnitsFilterBean.getAdm1());
+            }
+            if (administrativeUnitsFilterBean.getAdm2() != null) {
+                if (adm2Values == null) {
+                    adm2Values = new ArrayList<>();
+                }
+                adm2Values.add(administrativeUnitsFilterBean.getAdm2());
+            }
+            if (administrativeUnitsFilterBean.getAdm3() != null) {
+                if (adm3Values == null) {
+                    adm3Values = new ArrayList<>();
+                }
+                adm3Values.add(administrativeUnitsFilterBean.getAdm3());
+            }
+            if (administrativeUnitsFilterBean.getAdm4() != null) {
+                if (adm4Values == null) {
+                    adm4Values = new ArrayList<>();
+                }
+                adm4Values.add(administrativeUnitsFilterBean.getAdm4());
+            }
+        }
+        adminUnitsByValue.put("continent", continentValues);
+        adminUnitsByValue.put("country", countryValues);
+        adminUnitsByValue.put("city", cityValues);
+        adminUnitsByValue.put("neighborhood", neighborhoodValues);
+        adminUnitsByValue.put("adm1", adm1Values);
+        adminUnitsByValue.put("adm2", adm2Values);
+        adminUnitsByValue.put("adm3", adm3Values);
+        adminUnitsByValue.put("adm4", adm4Values);
+        return adminUnitsByValue;
     }
 
     private RangeFilter getFollowersRange(CasesFilterRequest filterRequest) {
@@ -427,6 +564,10 @@ public class CaseTicketService extends CaseIndexService {
 
     public Map<String, Long> getCasesCountByPending(CasesFilterRequest filterRequest) {
         return retrieveSumarizations(filterRequest, "pendingResponse");
+    }
+
+    public Map<String, Long> getCasesCountBySelectedAdminUnit(CasesFilterRequest filterRequest) {
+        return retrieveSumarizations(filterRequest, "triggerEvent." + filterRequest.getFieldToSumarize());
     }
 
     private Map<String, Long> retrieveSumarizations(CasesFilterRequest filterRequest, String aggregationField) {

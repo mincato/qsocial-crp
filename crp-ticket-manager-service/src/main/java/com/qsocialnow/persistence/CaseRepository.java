@@ -78,7 +78,7 @@ public class CaseRepository {
         return results;
     }
 
-    public List<ResultsListView> sumarizeResolvedByStatus(CasesFilterRequest filterRequest) {
+    public List<ResultsListView> sumarizeByStatus(CasesFilterRequest filterRequest) {
         List<ResultsListView> results = new ArrayList<>();
         try {
             Map<String, Long> resultsRepo = caseElasticService.getCasesCountByStatus(filterRequest);
@@ -96,7 +96,7 @@ public class CaseRepository {
         return results;
     }
 
-    public List<ResultsListView> sumarizeResolvedByPending(CasesFilterRequest filterRequest) {
+    public List<ResultsListView> sumarizeByPending(CasesFilterRequest filterRequest) {
         List<ResultsListView> results = new ArrayList<>();
         try {
             Map<String, Long> resultsRepo = caseElasticService.getCasesCountByPending(filterRequest);
@@ -104,6 +104,24 @@ public class CaseRepository {
             for (String key : resultKeys) {
                 ResultsListView resultView = new ResultsListView();
                 resultView.setPending(key);
+                resultView.setTotal(resultsRepo.get(key));
+                results.add(resultView);
+            }
+
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return results;
+    }
+
+    public List<ResultsListView> sumarizeByUnitAdmin(CasesFilterRequest filterRequest) {
+        List<ResultsListView> results = new ArrayList<>();
+        try {
+            Map<String, Long> resultsRepo = caseElasticService.getCasesCountBySelectedAdminUnit(filterRequest);
+            Set<String> resultKeys = resultsRepo.keySet();
+            for (String key : resultKeys) {
+                ResultsListView resultView = new ResultsListView();
+                resultView.setUnitAdmin(key);
                 resultView.setTotal(resultsRepo.get(key));
                 results.add(resultView);
             }

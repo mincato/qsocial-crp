@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.BaseUser;
 import com.qsocialnow.common.model.config.BaseUserResolver;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.Source;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.services.SourceService;
@@ -143,9 +145,34 @@ public class Case implements Serializable {
         registry.setAutomatic(true);
         registry.setDate(openDate);
 
+        Event event = createEvent();
+
+        Message message = new Message();
+        message.setId(event.getId());
+        message.setFromResponseDetector(false);
+        newCase.addMessage(message);
+
+        newCase.setSource(event.getMedioId());
+
+        Source source = new Source();
+        source.setId(event.getMedioId());
+        source.setManual(true);
+        newCase.setCaseSource(source);
+
+        newCase.setTriggerEvent(event);
+        registry.setEvent(event);
+
         registries.add(registry);
         newCase.setActionsRegistry(registries);
         return newCase;
+    }
+
+    private static Event createEvent() {
+        Event event = new Event();
+        String eventId = UUID.randomUUID().toString();
+        event.setId(eventId);
+        event.setMedioId(Media.MANUAL.getValue());
+        return event;
     }
 
     public List<ActionType> getAllowedManualActions() {
@@ -159,8 +186,10 @@ public class Case implements Serializable {
                 actionsAllowed.add(ActionType.PENDING_RESPONSE);
 
             if (this.getSubject() != null) {
-                actionsAllowed.add(ActionType.REPLY);
-                actionsAllowed.add(ActionType.SEND_MESSAGE);
+                if (!this.getCaseSource().isManual()) {
+                    actionsAllowed.add(ActionType.REPLY);
+                    actionsAllowed.add(ActionType.SEND_MESSAGE);
+                }
                 actionsAllowed.add(ActionType.TAG_SUBJECT);
                 actionsAllowed.add(ActionType.MODIFY_SUBJECT);
             }

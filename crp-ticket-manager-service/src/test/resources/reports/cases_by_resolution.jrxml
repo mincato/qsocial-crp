@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2016-11-04T10:24:13 -->
+<!-- 2016-11-16T21:56:27 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cases_by_resolution" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" resourceBundle="reports" whenResourceMissingType="Error" isIgnorePagination="true" uuid="d53c67b3-256c-4657-8dff-c8dfe54defd0">
+	<style name="Table_GROUP" mode="Opaque" backcolor="#FCB141"/>
+	<subDataset name="byUserDS" uuid="05d23cf5-f484-46c5-a2d8-6a6a82952d24">
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="assigned" class="java.lang.String">
+			<fieldDescription><![CDATA[assigned]]></fieldDescription>
+		</field>
+		<field name="total" class="java.lang.Long">
+			<fieldDescription><![CDATA[total]]></fieldDescription>
+		</field>
+		<field name="resolution" class="java.lang.String">
+			<fieldDescription><![CDATA[resolution]]></fieldDescription>
+		</field>
+		<field name="idResolution" class="java.lang.String">
+			<fieldDescription><![CDATA[idResolution]]></fieldDescription>
+		</field>
+		<group name="byResolution">
+			<groupExpression><![CDATA[$F{idResolution}]]></groupExpression>
+		</group>
+	</subDataset>
+	<parameter name="BY_USER" class="java.util.List" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -10,6 +32,9 @@
 	</field>
 	<field name="total" class="java.lang.Long">
 		<fieldDescription><![CDATA[total]]></fieldDescription>
+	</field>
+	<field name="idResolution" class="java.lang.String">
+		<fieldDescription><![CDATA[idResolution]]></fieldDescription>
 	</field>
 	<background>
 		<band splitType="Stretch"/>
@@ -56,12 +81,25 @@
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="210" height="20" uuid="77ca8ee9-adf7-442a-986e-398d61c6d6bf">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
 				<textFieldExpression><![CDATA[$F{resolution}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="210" y="0" width="100" height="20" uuid="9b1255e8-10a2-4268-b2f9-a271f4647167">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -77,8 +115,102 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band splitType="Stretch">
+		<band height="81" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<componentElement>
+				<reportElement x="0" y="10" width="310" height="60" uuid="435d2950-ead3-48d2-8f08-b1acf5659bfa">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="byUserDS" uuid="c0f4f7d3-79ab-49c5-ad33-ff4b3e81080f">
+						<datasetParameter name="REPORT_RESOURCE_BUNDLE">
+							<datasetParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></datasetParameterExpression>
+						</datasetParameter>
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($P{BY_USER})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:columnGroup width="310" uuid="064e7e1a-3eeb-4ff8-ad1f-408763c585fb">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [2]"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<jr:tableHeader height="0" rowSpan="1">
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						</jr:tableHeader>
+						<jr:groupHeader groupName="byResolution">
+							<jr:cell style="Table_GROUP" height="20" rowSpan="1">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								<textField>
+									<reportElement x="0" y="0" width="310" height="20" uuid="89919d58-1f4d-4cc0-be61-5b27a54ce1c6">
+										<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+									</reportElement>
+									<textElement>
+										<font isBold="true"/>
+									</textElement>
+									<textFieldExpression><![CDATA[MessageFormat.format($R{cases.resolution.by.user.title} ,$F{resolution})]]></textFieldExpression>
+								</textField>
+							</jr:cell>
+						</jr:groupHeader>
+						<jr:column width="210" uuid="38dae2b5-bbea-4296-8a45-fe2243cbc9ea">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+							<jr:tableHeader height="0" rowSpan="1">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</jr:tableHeader>
+							<jr:groupHeader groupName="byResolution">
+								<jr:cell height="20" rowSpan="1">
+									<property name="com.jaspersoft.studio.unit.height" value="px"/>
+									<textField>
+										<reportElement x="0" y="0" width="210" height="20" uuid="82d2d3a5-af5f-4938-a513-9207355042fb"/>
+										<textElement>
+											<font isBold="true"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$R{cases.user.column}]]></textFieldExpression>
+									</textField>
+								</jr:cell>
+							</jr:groupHeader>
+							<jr:columnHeader height="0" rowSpan="1">
+								<property name="com.jaspersoft.studio.unit.width" value="px"/>
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							</jr:columnHeader>
+							<jr:detailCell height="20">
+								<textField>
+									<reportElement x="0" y="0" width="210" height="20" uuid="5ef74912-52b2-49f4-9df6-116fc00e2c18"/>
+									<textFieldExpression><![CDATA[$F{assigned}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="100" uuid="33cfdd8b-bd05-41ba-bef4-157da6ab12b6">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+							<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+							<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+							<jr:tableHeader height="0" rowSpan="1"/>
+							<jr:groupHeader groupName="byResolution">
+								<jr:cell height="20" rowSpan="1">
+									<textField>
+										<reportElement x="0" y="0" width="100" height="20" uuid="85e164fd-49ce-4355-99f3-8a715b14c5d0"/>
+										<textElement>
+											<font isBold="true"/>
+										</textElement>
+										<textFieldExpression><![CDATA[$R{cases.total.column}]]></textFieldExpression>
+									</textField>
+								</jr:cell>
+							</jr:groupHeader>
+							<jr:columnHeader height="0" rowSpan="1">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								<property name="com.jaspersoft.studio.unit.width" value="px"/>
+							</jr:columnHeader>
+							<jr:detailCell height="20">
+								<property name="com.jaspersoft.studio.unit.height" value="px"/>
+								<textField>
+									<reportElement x="0" y="0" width="100" height="20" uuid="ac556bf3-af3f-46c3-aa1f-2b9bc6f27a15"/>
+									<textElement textAlignment="Right"/>
+									<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+				</jr:table>
+			</componentElement>
 		</band>
 	</summary>
 </jasperReport>

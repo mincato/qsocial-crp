@@ -1,16 +1,13 @@
 package com.qsocialnow.service;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import javax.annotation.Resource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.ResultsListView;
 import com.qsocialnow.common.model.config.ActionType;
@@ -25,8 +22,6 @@ import com.qsocialnow.service.action.Action;
 @Service
 public class CaseResultsService {
 
-    private static final Logger log = LoggerFactory.getLogger(CaseResultsService.class);
-
     @Autowired
     private CaseRepository repository;
 
@@ -38,6 +33,7 @@ public class CaseResultsService {
 
     public PageResponse<ResultsListView> getResults(CasesFilterRequest filterRequest) {
         List<ResultsListView> casesToSumarize = null;
+
         if (UserConstants.REPORT_BY_RESOLUTION.equals(filterRequest.getFieldToSumarize())) {
             casesToSumarize = repository.sumarizeResolvedByResolution(filterRequest);
             if (casesToSumarize != null && casesToSumarize.size() > 0) {
@@ -51,11 +47,23 @@ public class CaseResultsService {
                 }
             }
         } else if (UserConstants.REPORT_BY_STATUS.equals(filterRequest.getFieldToSumarize())) {
-            casesToSumarize = repository.sumarizeResolvedByStatus(filterRequest);
+            casesToSumarize = repository.sumarizeByStatus(filterRequest);
 
         } else if (UserConstants.REPORT_BY_PENDING.equals(filterRequest.getFieldToSumarize())) {
-            casesToSumarize = repository.sumarizeResolvedByStatus(filterRequest);
+            casesToSumarize = repository.sumarizeByPending(filterRequest);
+        } else {
+            casesToSumarize = repository.sumarizeByUnitAdmin(filterRequest);
         }
+
+        Collections.sort(casesToSumarize, new Comparator<ResultsListView>() {
+
+            @Override
+            public int compare(ResultsListView o1, ResultsListView o2) {
+                Long r1 = (o1 == null) ? Long.MAX_VALUE : o1.getTotal();
+                Long r2 = (o2 == null) ? Long.MAX_VALUE : o2.getTotal();
+                return r2.compareTo(r1);
+            }
+        });
         PageResponse<ResultsListView> page = new PageResponse<ResultsListView>(casesToSumarize, null, null);
         return page;
     }

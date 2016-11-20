@@ -1,6 +1,8 @@
 package com.qsocialnow.common.model.responsedetector;
 
-public class TwitterMessageEvent {
+import java.io.Serializable;
+
+public class TwitterMessageEvent implements Serializable {
 
     private final String caseId;
 

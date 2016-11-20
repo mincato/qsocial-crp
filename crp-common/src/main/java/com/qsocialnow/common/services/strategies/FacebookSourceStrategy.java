@@ -157,10 +157,7 @@ public class FacebookSourceStrategy implements SourceStrategy, AsyncTask<SourceM
                 if (request.getIdOriginal() != null && request.getIdOriginal().equals(request.getPostId())) {
                     id = request.getPostId();
                 } else {
-                    Reading reading = new Reading();
-                    reading.addParameter("fields", "parent");
-                    Comment comment = facebook.getComment(request.getPostId(), reading);
-                    comment = comment.getParent();
+                    Comment comment = readParent(request, facebook);
 
                     log.debug("Reading comment in facebook strategy:" + comment);
 
@@ -189,6 +186,17 @@ public class FacebookSourceStrategy implements SourceStrategy, AsyncTask<SourceM
                 sourceMessageResponse.setSourceErrorMessage(e.getMessage());
                 return sourceMessageResponse;
             }
+        }
+    }
+
+    private Comment readParent(SourceMessageRequest request, Facebook facebook) throws FacebookException {
+        try {
+            Reading reading = new Reading();
+            reading.addParameter("fields", "parent");
+            Comment comment = facebook.getComment(request.getPostId(), reading);
+            return comment.getParent();
+        } catch (Exception e) {
+            return null;
         }
     }
 

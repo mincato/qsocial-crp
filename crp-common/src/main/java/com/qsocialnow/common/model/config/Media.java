@@ -5,7 +5,7 @@ import com.qsocialnow.common.util.FilterConstants;
 public enum Media {
 
     FACEBOOK(FilterConstants.MEDIA_FACEBOOK, "facebook", "Facebook", 0), TWITTER(FilterConstants.MEDIA_TWITTER,
-            "twitter", "Twitter", 140);
+            "twitter", "Twitter", 140), MANUAL(-1L, "manual", "Manual", 0);
 
     private Media(Long value, String icon, String name, Integer maxlength) {
         this.value = value;

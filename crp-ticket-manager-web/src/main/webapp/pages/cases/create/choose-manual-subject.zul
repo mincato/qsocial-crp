@@ -1,0 +1,182 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+<div xmlns:x="xhtml" xmlns:n="native" xmlns:ca="client/attribute"
+	sclass="modal fade" ca:data-modal=""
+	ca:data-close-event="hidden.bs.modal" onModalClose="@command('close')"
+	apply="org.zkoss.bind.BindComposer"
+	viewModel="@id('subjectVm') @init('com.qsocialnow.viewmodel.ChooseManualSubjectViewModel', source=arg.source)"
+	validationMessages="@id('vmsgs')">
+	<n:div class="modal-dialog">
+		<div class="modal-content">
+			<n:div class="modal-header">
+				<n:button type="button" class="close"
+					data-dismiss="modal" aria-label="Close">
+					<n:span aria-hidden="true">&#x00D7;</n:span>
+				</n:button>
+				<n:h4 class="modal-title">
+					${labels.cases.actions.changeSubject.select.title}
+				</n:h4>
+			</n:div>
+			<n:div class="modal-body">
+				<n:div class="row">
+					<n:div class="col-lg-12">
+						<div zclass="pane equal col-md-12 col-xs-12" visible="@load(not subjectVm.enabledCreateSubject)">
+							<n:div
+								class="col-md-offset-1 col-md-5 col-xs-6">
+								<div
+									zclass="input-group input-group-sm">
+									<textbox zclass="form-control"
+										value="@bind(subjectVm.keyword)" onOK="@command('search')" />
+									<span zclass="input-group-btn">
+										<button autodisable="self"
+											zclass="btn btn-default" type="button"
+											onClick="@command('search')" iconSclass="z-icon-search">
+										</button>
+									</span>
+								</div>
+							</n:div>
+							<n:div
+								class="col-md-offset-1 col-md-5 col-xs-6">
+								<a class="link-button  pull-right"
+									onClick="@command('initCreateSubject')">
+									${labels.cases.create.subject.action}
+									<i
+										class="fa fa-plus-circle fa-2x">
+									</i>
+								</a>
+							</n:div>
+						</div>
+					</n:div>
+				</n:div>
+				<div class="row"
+					visible="@load(not subjectVm.enabledCreateSubject)">
+					<n:div>
+						<div zclass="pane equal">
+							<div zclass="table-responsive">
+								<table
+									class="table table-striped table-hover">
+									<thead>
+										<tr>
+											<th></th>
+											<th>
+												${labels.subject.list.column.identifier}
+											</th>
+											<th>
+												${labels.subject.list.column.sourceName}
+											</th>
+											<th>
+												${labels.subject.list.column.action}
+											</th>
+										</tr>
+									</thead>
+									<tbody
+										children="@bind(subjectVm.subjects)">
+										<template name="children">
+											<tr>
+												<td>
+													<span
+														zclass="btn btn-social-icon"
+														sclass="@load(c:cat('btn-',each.media.icon))">
+														<i
+															sclass="@load('fa fa-'.concat(each.media.icon))" />
+													</span>
+												</td>
+												<td
+													class="list-text-column">
+													<a
+														label="@load(each.identifier)"
+														onClick="@command('selectSubject', subject=each)">
+													</a>
+												</td>
+												<td>
+													${each.sourceName}
+												</td>
+												<td>
+													<ul
+														class="list-inline">
+														<li>
+															<a
+																class="btn-row-list">
+																<i
+																	onClick="@command('selectSubject', subject=each)"
+																	class="fa fa-check" data-toggle="tooltip"
+																	data-placement="top"
+																	title="${labels.cases.actions.changeSubject.select.action}">
+																</i>
+															</a>
+														</li>
+													</ul>
+												</td>
+											</tr>
+										</template>
+									</tbody>
+								</table>
+							</div>
+							<div class="text-center"
+								zclass="@bind(vm.moreResults?'more-results':'hidden')">
+								<a style="text-decoration:none"
+									onClick="@command('moreResults')">
+									${labels.app.pagination.moreResults}
+								</a>
+							</div>
+						</div>
+					</n:div>
+				</div>
+				<div class="row"
+					visible="@load(subjectVm.enabledCreateSubject)">
+					<n:div>
+						<div zclass="pane equal">
+							<x:form class="form-horizontal" 
+							form="@id('subjectFx') @load(subjectVm.subject) @save(subjectVm.subject, before={'createSubject'}) 
+							@validator(subjectVm.formValidator)">
+								<x:div
+									sclass="@load(empty vmsgs['sourceName'] ? 'form-group' : 'form-group has-error')">
+									<n:label
+										class="control-label col-sm-2">
+										${labels.cases.subject.sourceName.label}
+									</n:label>
+									<x:div class="col-sm-10">
+										<textbox type="text" 
+											class="form-control" id="sourceName" name="normal_input"
+											value="@bind(subjectFx.sourceName)" >
+										</textbox>
+										<x:span
+											sclass="@load(empty vmsgs['sourceName'] ? 'hidden' : 'help-block')">
+											<label
+												value="@load(vmsgs['sourceName'])" />
+										</x:span>
+									</x:div>
+								</x:div>
+								<x:div
+									sclass="@load(empty vmsgs['identifier'] ? 'form-group' : 'form-group has-error')">
+									<n:label
+										class="control-label col-sm-2">
+										${labels.cases.subject.identifier.label}
+									</n:label>
+									<x:div class="col-sm-10">
+										<textbox type="text"
+											class="form-control" id="identifier" name="normal_input"
+											value="@bind(subjectFx.identifier)">
+										</textbox>
+										<x:span
+											sclass="@load(empty vmsgs['identifier'] ? 'hidden' : 'help-block')">
+											<label
+												value="@load(vmsgs['identifier'])" />
+										</x:span>
+									</x:div>
+								</x:div>
+							</x:form>
+						</div>
+					</n:div>
+				</div>
+			</n:div>
+			<n:div class="modal-footer">
+				<button autodisable="self" ca:data-dismiss="modal" visible="@load(not subjectVm.enabledCreateSubject)"
+					label="${labels.app.button.close}" zclass="btn btn-primary" />
+				<button autodisable="self" onClick="@command('createSubject')" visible="@load(subjectVm.enabledCreateSubject)"
+						label="${labels.app.button.save}" zclass="btn btn-primary" />
+				<button autodisable="self" zclass="btn" sclass="btn-default" visible="@load(subjectVm.enabledCreateSubject)"
+						onClick="@command('cancelCreateSubject')" label="${labels.app.button.cancel}" />	
+			</n:div>
+		</div>
+	</n:div>
+</div>

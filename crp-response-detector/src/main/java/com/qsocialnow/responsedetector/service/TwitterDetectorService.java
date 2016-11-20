@@ -1,7 +1,9 @@
 package com.qsocialnow.responsedetector.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.base.Strings;
 import com.google.gson.GsonBuilder;
+import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.model.responsedetector.TwitterMessageEvent;
 import com.qsocialnow.common.util.FilterConstants;
@@ -46,11 +49,17 @@ public class TwitterDetectorService extends SourceDetectorService {
 
     private TwitterConfigurator configurator;
 
+    private QueueConfigurator queueConfig;
+
     private boolean startListening = false;
 
     private HashMap<String, TwitterMessageEvent> conversations;
 
     private HashMap<String, String> nodePaths;
+
+    private TwitterClient twitterClient;
+
+    private List<String> tracks;
 
     @Override
     public void run() {
@@ -62,8 +71,9 @@ public class TwitterDetectorService extends SourceDetectorService {
             twitterStreamClient.initClient(this);
             conversations = new HashMap<String, TwitterMessageEvent>();
             nodePaths = new HashMap<String, String>();
-
             treeCache = new TreeCache(zookeeperClient, appConfig.getTwitterUsersZnodePath());
+            tracks = new ArrayList<String>();
+
             addListener();
             treeCache.start();
 
@@ -84,19 +94,6 @@ public class TwitterDetectorService extends SourceDetectorService {
                         String nodePath = event.getData().getPath();
 
                         log.debug("Adding node:" + nodeAdded + " from path: " + event.getData().getPath());
-                        /*
-                         * if (event.getData() != null) { String
-                         * userResolverNode =
-                         * ZKPaths.getNodeFromPath(event.getData().getPath());
-                         * byte[] messageBytes = event.getData().getData(); if
-                         * (messageBytes != null) { TwitterMessageEvent[]
-                         * twitterMessageEvents = new
-                         * GsonBuilder().create().fromJson( new
-                         * String(messageBytes), TwitterMessageEvent[].class);
-                         * if (twitterMessageEvents != null) {
-                         * addTwitterMessage(userResolverNode,
-                         * twitterMessageEvents); } } } break;
-                         */
                         if (event.getData().getData() != null) {
                             String nodeValue = new String(event.getData().getData());
                             log.debug("Adding node value:-" + nodeValue + "-");
@@ -131,32 +128,8 @@ public class TwitterDetectorService extends SourceDetectorService {
                             log.debug("Adding Init Twitter node:" + initialChildData.getPath() + " "
                                     + initialChildData.getData());
                         }
-                        /*
-                         * List<ChildData> initialData = initialChildData.get
-                         * 
-                         * if (initialData != null && initialData.size() > 0) {
-                         * 
-                         * List<String> userResolversFilters = new
-                         * ArrayList<String>(); for (ChildData childData :
-                         * initialData) { String userResolverToFilter =
-                         * ZKPaths.getNodeFromPath(childData.getPath());
-                         * log.debug
-                         * ("User Resolver - Message added at Init process: " +
-                         * userResolverToFilter);
-                         * conversations.put(userResolverToFilter, null);
-                         * userResolversFilters.add(userResolverToFilter);
-                         * 
-                         * if (childData.getData() != null) { byte[]
-                         * messageBytes = childData.getData();
-                         * TwitterMessageEvent[] twitterMessageEvents = new
-                         * GsonBuilder().create().fromJson( new
-                         * String(messageBytes), TwitterMessageEvent[].class);
-                         * if (twitterMessageEvents != null) {
-                         * checkMessageResponses(userResolverToFilter,
-                         * twitterMessageEvents); } } }
-                         * twitterStreamClient.addTrackFilters
-                         * (userResolversFilters); }
-                         */startListening = true;
+                        initToTrackFilter();
+                        startListening = true;
                         break;
                     }
                     case NODE_UPDATED: {
@@ -180,10 +153,14 @@ public class TwitterDetectorService extends SourceDetectorService {
     private void addUserResolverTrack(String userResolverToFilter) {
         try {
             log.debug("Adding UserResolver:" + userResolverToFilter);
-            twitterStreamClient.addTrackFilter(userResolverToFilter);
+            tracks.add(userResolverToFilter);
         } catch (Exception e) {
             log.error("There was an error adding new User Resolver to track :" + userResolverToFilter, e);
         }
+    }
+
+    private void initToTrackFilter() {
+        twitterStreamClient.addTrackFilters(tracks);
     }
 
     private void addTwitterMessage(String replyMessageId, String nodePath, TwitterMessageEvent twitterMessageEvent) {
@@ -201,11 +178,13 @@ public class TwitterDetectorService extends SourceDetectorService {
     }
 
     private void checkMessageResponses(String replyId, String nodePath, TwitterMessageEvent twitterMessageEvent) {
-        TwitterClient twitterClient = new TwitterClient(this);
-        twitterClient.initTwitterClient(configurator);
+        if (twitterClient == null) {
+            this.twitterClient = new TwitterClient(this, queueConfig);
+            twitterClient.initTwitterClient(configurator);
+        }
         nodePaths.put(replyId, nodePath);
         conversations.put(replyId, twitterMessageEvent);
-        twitterClient.checkAnyMention(twitterMessageEvent);
+        twitterClient.checkMentions(twitterMessageEvent);
     }
 
     public void stop() {
@@ -293,5 +272,9 @@ public class TwitterDetectorService extends SourceDetectorService {
     @Override
     public String getUserIdToTrack(String idRootComment) {
         return null;
+    }
+
+    public void setQueueConfig(QueueConfigurator queueConfig) {
+        this.queueConfig = queueConfig;
     }
 }
