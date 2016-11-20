@@ -12,6 +12,7 @@ import org.zkoss.bind.annotation.ContextType;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.bind.annotation.NotifyCommand;
+import org.zkoss.bind.annotation.NotifyCommands;
 import org.zkoss.bind.annotation.ToClientCommand;
 import org.zkoss.bind.annotation.ToServerCommand;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
@@ -19,9 +20,12 @@ import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Div;
 
 @VariableResolver(DelegatingVariableResolver.class)
-@NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.selected")
-@ToClientCommand("modal$closeEvent")
-@ToServerCommand({"zmapbox-modal$chooseCoordinatesEvent"})
+@NotifyCommands({
+@NotifyCommand(value = "modal$closeEvent", onChange = "_vm_.selected"),
+@NotifyCommand(value = "zmapbox-modal$refresh", onChange = "_vm_.refreshMap"),
+})
+@ToClientCommand({"modal$closeEvent" , "zmapbox-modal$refresh"})
+@ToServerCommand({"zmapbox-modal$chooseCoordinatesEvent", "modal$openEvent"})
 public class ChooseCoordinatesManualCaseViewModel implements Serializable {
 
 	private static final long serialVersionUID = -4008288120380459785L;
@@ -31,6 +35,8 @@ public class ChooseCoordinatesManualCaseViewModel implements Serializable {
     private Double latitude;
 	private Double longitude;
 
+	private boolean refreshMap = false;
+	
     @Init
     public void init() {
     }
@@ -50,6 +56,12 @@ public class ChooseCoordinatesManualCaseViewModel implements Serializable {
         }
     }
     
+    @Command
+    @NotifyChange("refreshMap")
+    public void open(@ContextParam(ContextType.VIEW) Div comp) {
+    	refreshMap = true;
+    }
+    
     @Command("zmapbox-modal$chooseCoordinatesEvent")
     @NotifyChange("selected")
     public void choose(@BindingParam("lng") Double lng, @BindingParam("lat") Double lat) {
@@ -57,6 +69,16 @@ public class ChooseCoordinatesManualCaseViewModel implements Serializable {
         this.longitude = lng;
         this.selected = true;
     }
+
+	public boolean isRefreshMap() {
+		return refreshMap;
+	}
+
+	public void setRefreshMap(boolean refreshMap) {
+		this.refreshMap = refreshMap;
+	}
+
+
     
 
    

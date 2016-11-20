@@ -71,6 +71,16 @@
     		</script>
 		</data-handler>
 		<data-handler>
+    		<name>open-event</name>
+    		<script>
+        		function (wgt, dataValue) {
+            		$(wgt.$n()).on(dataValue, function() {
+                		wgt.fire("onModalOpen", null, {toServer: true});
+            		});
+        		}
+    		</script>
+		</data-handler>
+		<data-handler>
 	    	<name>collapse</name>
 	    	<script>
 	        	function (wgt, dataValue) {
@@ -102,15 +112,15 @@
 		
 		<data-handler>
     		<name>zmapbox</name>
-    		<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css" rel="stylesheet" />
-    		<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js">
+    		<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css" rel="stylesheet" />
+    		<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js">
     		</script>
     		<script src="/assets/js/zmapbox.js" /> 
     	</data-handler>
     	<data-handler>
     		<name>zmapbox-modal</name>
-    		<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.css" rel="stylesheet" />
-    		<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.26.0/mapbox-gl.js">
+    		<link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.css" rel="stylesheet" />
+    		<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js">
     		</script>
     		<script src="/assets/js/zmapbox-modal.js" /> 
     	</data-handler>

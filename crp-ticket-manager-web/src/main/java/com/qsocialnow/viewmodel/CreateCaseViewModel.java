@@ -32,6 +32,8 @@ import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.event.Event;
+import com.qsocialnow.common.model.event.EventLocation;
+import com.qsocialnow.common.model.event.GeoSocialEventLocationMethod;
 import com.qsocialnow.handler.NotificationHandler;
 import com.qsocialnow.model.CaseView;
 import com.qsocialnow.services.AutocompleteService;
@@ -115,6 +117,13 @@ public class CreateCaseViewModel implements Serializable {
 
         if (currentCase.getAdminUnit() != null) {
             fillAdmUnit(currentCase.getAdminUnit(), newCase.getTriggerEvent());
+        }
+        if (currentCase.getLatitude() != null && currentCase.getLongitude() != null) {
+        	EventLocation eventLocation = new EventLocation();
+        	eventLocation.setLat(currentCase.getLatitude());
+        	eventLocation.setLon(currentCase.getLongitude());
+        	newCase.getTriggerEvent().setLocation(eventLocation);
+        	newCase.getTriggerEvent().setLocationMethod(GeoSocialEventLocationMethod.GEO_LOCATION);
         }
 
         newCase.setDomainId(currentCase.getSelectedDomain().getId());

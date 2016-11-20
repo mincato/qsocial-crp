@@ -40,8 +40,10 @@ public class CaseMapService {
                     JsonObject geometry = new JsonObject();
                     geometry.addProperty("type", "Point");
                     JsonArray coordinates = new JsonArray();
-                    coordinates.add(location.getLocation().getLongitud());
-                    coordinates.add(location.getLocation().getLatitud());
+                    
+                    coordinates.add(location.getLocation().getLon());
+                    coordinates.add(location.getLocation().getLat());
+                    
                     geometry.add("coordinates", coordinates);
                     point.add("geometry", geometry);
                     JsonObject properties = new JsonObject();
