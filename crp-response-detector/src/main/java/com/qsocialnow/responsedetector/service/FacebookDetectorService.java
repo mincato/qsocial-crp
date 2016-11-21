@@ -241,4 +241,9 @@ public class FacebookDetectorService extends SourceDetectorService {
         FacebookFeedEvent conversationsByCommentId = conversations.get(idRootComment);
         return conversationsByCommentId != null ? conversationsByCommentId.getUserId() : null;
     }
+
+    @Override
+    public void checkErrors(Exception ex) {
+
+    }
 }

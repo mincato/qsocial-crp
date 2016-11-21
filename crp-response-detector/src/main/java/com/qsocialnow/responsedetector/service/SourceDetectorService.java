@@ -13,4 +13,6 @@ public abstract class SourceDetectorService implements Runnable {
     public abstract String getReplyIdToTrack(String idRootComment);
 
     public abstract String getUserIdToTrack(String idRootComment);
+
+    public abstract void checkErrors(Exception ex);
 }
