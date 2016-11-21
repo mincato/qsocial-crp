@@ -1,3 +1,7 @@
 .btn-manual {
 	content:url(../imgs/source-manual.png);
 }
+
+.label-link {
+	cursor: pointer;
+}

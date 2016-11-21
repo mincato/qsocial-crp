@@ -186,8 +186,10 @@ public class Case implements Serializable {
                 actionsAllowed.add(ActionType.PENDING_RESPONSE);
 
             if (this.getSubject() != null) {
-                actionsAllowed.add(ActionType.REPLY);
-                actionsAllowed.add(ActionType.SEND_MESSAGE);
+                if (!this.getCaseSource().isManual()) {
+                    actionsAllowed.add(ActionType.REPLY);
+                    actionsAllowed.add(ActionType.SEND_MESSAGE);
+                }
                 actionsAllowed.add(ActionType.TAG_SUBJECT);
                 actionsAllowed.add(ActionType.MODIFY_SUBJECT);
             }
