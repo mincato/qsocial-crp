@@ -4,30 +4,28 @@ import java.io.Serializable;
 
 public class EventLocation implements Serializable {
 
-    /**
-	 * 
-	 */
     private static final long serialVersionUID = -8875193134922331125L;
+
     private Double lat;
     private Double lon;
 
     public EventLocation() {
     }
 
-    public Double getLatitud() {
+    public Double getLat() {
         return lat;
     }
 
-    public void setLatitud(Double latitud) {
-        this.lat = latitud;
+    public void setLat(Double lat) {
+        this.lat = lat;
     }
 
-    public Double getLongitud() {
+    public Double getLon() {
         return lon;
     }
 
-    public void setLongitud(Double longitud) {
-        this.lon = longitud;
+    public void setLon(Double lon) {
+        this.lon = lon;
     }
 
 }
