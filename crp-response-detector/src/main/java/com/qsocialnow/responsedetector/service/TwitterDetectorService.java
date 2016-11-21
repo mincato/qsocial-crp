@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.TreeCache;
@@ -20,6 +21,13 @@ import com.google.gson.GsonBuilder;
 import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.model.responsedetector.TwitterMessageEvent;
+import com.qsocialnow.common.queues.QueueConsumer;
+import com.qsocialnow.common.queues.QueueProducer;
+import com.qsocialnow.common.queues.QueueService;
+import com.qsocialnow.common.queues.QueueServiceFactory;
+import com.qsocialnow.common.queues.QueueType;
+import com.qsocialnow.common.services.strategies.TwitterUserToTrackQueueConsumer;
+import com.qsocialnow.common.services.strategies.UserToTrackTask;
 import com.qsocialnow.common.util.FilterConstants;
 import com.qsocialnow.responsedetector.config.ResponseDetectorConfig;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
@@ -27,7 +35,9 @@ import com.qsocialnow.responsedetector.factories.TwitterConfiguratorFactory;
 import com.qsocialnow.responsedetector.sources.TwitterClient;
 import com.qsocialnow.responsedetector.sources.TwitterStreamClient;
 
-public class TwitterDetectorService extends SourceDetectorService {
+import twitter4j.TwitterException;
+
+public class TwitterDetectorService extends SourceDetectorService implements UserToTrackTask<String> {
 
     private static final Logger log = LoggerFactory.getLogger(TwitterDetectorService.class);
 
@@ -61,6 +71,12 @@ public class TwitterDetectorService extends SourceDetectorService {
 
     private List<String> tracks;
 
+    private QueueService queueService;
+
+    private QueueProducer<String> queueProducer;
+
+    private QueueConsumer<String> queueConsumer;
+
     @Override
     public void run() {
 
@@ -74,6 +90,7 @@ public class TwitterDetectorService extends SourceDetectorService {
             treeCache = new TreeCache(zookeeperClient, appConfig.getTwitterUsersZnodePath());
             tracks = new ArrayList<String>();
 
+            initQueue();
             addListener();
             treeCache.start();
 
@@ -81,6 +98,16 @@ public class TwitterDetectorService extends SourceDetectorService {
             log.error("There was an unexpected error", e);
             System.exit(1);
         }
+    }
+
+    private void initQueue() {
+        this.queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(
+                StringUtils.join(new String[] { QueueType.MESSAGES.type(), "track" }, "_"), queueConfig);
+
+        this.queueProducer = new QueueProducer<String>(queueService.getType());
+        this.queueConsumer = new TwitterUserToTrackQueueConsumer(queueService.getType(), this);
+        queueProducer.addConsumer(queueConsumer);
+        queueService.startProducerConsumer(queueProducer, queueConsumer);
     }
 
     private void addListener() {
@@ -128,7 +155,7 @@ public class TwitterDetectorService extends SourceDetectorService {
                             log.debug("Adding Init Twitter node:" + initialChildData.getPath() + " "
                                     + initialChildData.getData());
                         }
-                        initToTrackFilter();
+                        initTrackFilters();
                         startListening = true;
                         break;
                     }
@@ -153,14 +180,36 @@ public class TwitterDetectorService extends SourceDetectorService {
     private void addUserResolverTrack(String userResolverToFilter) {
         try {
             log.debug("Adding UserResolver:" + userResolverToFilter);
-            tracks.add(userResolverToFilter);
+            if (!startListening) {
+                tracks.add(userResolverToFilter);
+            } else {
+                this.queueProducer.addItem(userResolverToFilter);
+            }
         } catch (Exception e) {
             log.error("There was an error adding new User Resolver to track :" + userResolverToFilter, e);
         }
     }
 
-    private void initToTrackFilter() {
-        twitterStreamClient.addTrackFilters(tracks);
+    @Override
+    public void checkErrors(Exception ex) {
+        log.error("Checking exception error adding new User Resolver to track list ", ex);
+        if (ex instanceof TwitterException) {
+            if (configurator.getRetryErrorCodes().contains(((TwitterException) ex).getStatusCode())
+                    || configurator.getRetryStatusCodes().contains(((TwitterException) ex).getStatusCode())) {
+                queueConsumer.changeInitialDelay(queueConfig.getFailDelay());
+            }
+        }
+    }
+
+    private void initTrackFilters() {
+        addNewTrackFilters(this.tracks);
+    }
+
+    @Override
+    public void addNewTrackFilters(List<String> newTracks) {
+        if (!newTracks.isEmpty()) {
+            twitterStreamClient.addTrackFilters(newTracks);
+        }
     }
 
     private void addTwitterMessage(String replyMessageId, String nodePath, TwitterMessageEvent twitterMessageEvent) {
@@ -277,4 +326,17 @@ public class TwitterDetectorService extends SourceDetectorService {
     public void setQueueConfig(QueueConfigurator queueConfig) {
         this.queueConfig = queueConfig;
     }
+
+    public void setQueueService(QueueService queueService) {
+        this.queueService = queueService;
+    }
+
+    public void setQueueProducer(QueueProducer<String> queueProducer) {
+        this.queueProducer = queueProducer;
+    }
+
+    public void setQueueConsumer(QueueConsumer<String> queueConsumer) {
+        this.queueConsumer = queueConsumer;
+    }
+
 }

@@ -65,5 +65,4 @@ public class MessageQueueConsumer extends QueueConsumer<Message> {
             }
         }
     }
-
 }
