@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Supplier;
 import com.qsocialnow.common.exception.RepositoryException;
+import com.qsocialnow.common.util.UserConstants;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
@@ -44,6 +45,7 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.search.aggregation.MissingAggregation;
 import io.searchbox.core.search.aggregation.TermsAggregation;
 import io.searchbox.core.search.aggregation.TermsAggregation.Entry;
 import io.searchbox.indices.CreateIndex;
@@ -56,6 +58,8 @@ import vc.inreach.aws.request.AWSSigner;
 import vc.inreach.aws.request.AWSSigningRequestInterceptor;
 
 public class ElasticsearchRepository<T> implements Repository<T> {
+
+    private static final String RESULTS_AGG_MISSING = "Missing";
 
     private static final String RESULTS_AGG_NAME = "Results";
 
@@ -497,7 +501,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> searchValues,
             List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
-            List<TermFieldFilter> termFilters, String fieldAggregation) {
+            List<TermFieldFilter> termFilters, String fieldAggregation, boolean findMissing) {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
@@ -543,6 +547,12 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
         AbstractAggregationBuilder aggregation = AggregationBuilders.terms(RESULTS_AGG_NAME).field(fieldAggregation);
         searchSourceBuilder.aggregation(aggregation);
+
+        if (findMissing) {
+            AbstractAggregationBuilder missingAggregation = AggregationBuilders.missing(RESULTS_AGG_MISSING).field(
+                    fieldAggregation);
+            searchSourceBuilder.aggregation(missingAggregation);
+        }
         log.info("Query: " + searchSourceBuilder.toString());
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
@@ -559,6 +569,12 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 if (entries != null) {
                     for (Entry entry : entries) {
                         aggregations.put(entry.getKey(), entry.getCount());
+                    }
+                }
+                if (findMissing) {
+                    MissingAggregation missing = result.getAggregations().getMissingAggregation(RESULTS_AGG_MISSING);
+                    if (missing.getMissing() != null && missing.getMissing() > 0) {
+                        aggregations.put(null, missing.getMissing());
                     }
                 }
                 response.setCountAggregation(aggregations);

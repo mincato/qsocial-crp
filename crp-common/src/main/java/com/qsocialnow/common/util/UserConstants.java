@@ -30,4 +30,6 @@ public class UserConstants {
 
     public static final String REPORT_BY_UA_NEIGHBORHOOD = "neighborhood";
 
+    public static final String NO_DATA_AGG = "no value";
+
 }
