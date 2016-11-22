@@ -183,7 +183,7 @@
 	    <div class="row" visible="@load(vm.resultsByUser ne null and not empty vm.resultsByUser)">
 			    <n:div class="col-lg-12">
                      <n:div class="col-sm-12">
-		                <n:h6>${labels.cases.results.column.resolution} : <label sclass="fa fa-1x" value="@load(vm.currentResolution)"/></n:h6>
+		                <n:h6>${labels.cases.results.column.resolution} : <label sclass="fa-1x" value="@load(vm.currentResolution)"/></n:h6>
 		             </n:div>
                </n:div>
 	            <n:div class="col-lg-12">
@@ -225,12 +225,9 @@
                             <tbody children="@bind(vm.resultsState)">
                                 <template name="children">
                                     <tr>
-                                        <td class="list-text-column">
-                                           <label 
-                                        sclass="@load(each.status eq 1 ? 'label label-case-open label-link' : 'label label-case-close label-link')" 
-                                        value="@load(c:l(c:cat('cases.results.open.',each.status)))" onClick="@command('searchStatusByUser',status=each.status)"></label> 
-                                        
-                                        </td>
+                                        <td class="btn" onClick="@command('searchStatusByUser',status=each.status)"><label 
+                                        sclass="@load(each.status eq 1? 'label label-case-open' : 'label label-case-close')" 
+                                        value="@load(c:l(c:cat('cases.results.open.',each.status)))"></label></td>
                                         <td class="list-text-column">${each.total}</td>
                                     </tr>
                                 </template>

@@ -98,13 +98,15 @@ public class FacebookClient {
                             JSONObject jsonComment = comments.getJSONObject(i);
                             Comment comment = DataObjectFactory.createComment(jsonComment.toString());
 
-                            log.debug("Comment: " + comment.getId() + " from:" + comment.getFrom().getName()
-                                    + " parent: " + comment.getParent() + " message:" + comment.getMessage());
+                            log.debug("Comment: " + comment.getId() + " from: id: " + comment.getFrom().getId()
+                                    + " from name:" + comment.getFrom().getName() + " parent: " + comment.getParent()
+                                    + " message:" + comment.getMessage());
 
                             if (startToTrackComment) {
+                                log.debug("Finding user:" + userToTrack + " and comment:" + comment.getId()
+                                        + "from conversation rootReply:" + commentId);
+
                                 if (comment.getFrom().getId().equals(userToTrack)) {
-                                    log.debug("Finding user:" + userToTrack + " and comment:" + comment.getId()
-                                            + "from conversation rootReply:" + commentId);
                                     Date createdTime = comment.getCreatedTime();
                                     sourceService.processEvent(true, createdTime.getTime(), null, null,
                                             comment.getId(), comment.getMessage(), commentId,
