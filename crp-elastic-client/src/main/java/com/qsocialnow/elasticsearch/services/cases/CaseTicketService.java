@@ -272,14 +272,15 @@ public class CaseTicketService extends CaseIndexService {
                 if (textsList.size() > 1) {
                     ShouldConditionsFilter conditionTermFilterText = new ShouldConditionsFilter();
                     for (WordsListFilterBean textWord : textsList) {
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto",
-                                StringUtils.lowerCase(textWord.getPalabra()));
+                        String word = com.qsocialnow.common.util.StringUtils.removeAccentuation(textWord.getPalabra());
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto", StringUtils.lowerCase(word));
                         conditionTermFilterText.addShouldCondition(shouldFilter);
                     }
                     shouldTermsConditionsFilters.add(conditionTermFilterText);
                 } else {
-                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto",
-                            StringUtils.lowerCase(textsList.get(0).getPalabra()));
+                    String word = com.qsocialnow.common.util.StringUtils.removeAccentuation(textsList.get(0)
+                            .getPalabra());
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto", StringUtils.lowerCase(word));
                     termFilter.setNeedSplit(true);
                     termFilters.add(termFilter);
                 }
