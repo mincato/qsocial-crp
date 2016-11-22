@@ -203,7 +203,6 @@ public class ResponseDetectorStreamListener implements UserStreamListener {
 
     @Override
     public void onException(Exception ex) {
-        ex.printStackTrace();
-        log.debug("onException:" + ex.getMessage());
+        sourceService.checkErrors(ex);
     }
 }

@@ -10,6 +10,9 @@
             		<a style="color:#fff" zclass="btn-social-icon btn" sclass="@load(c:cat('btn-',vm.currentCase.source.icon))" href="${vm.currentCase.openCaseDeepLinkUrl}" target="_blank"><i sclass="@load('fa fa-'.concat(vm.currentCase.source.icon))" /></a>
 	    			<n:h4>${labels.cases.list.column.title} / ${vm.currentCase.caseObject.title} </n:h4>
             	</n:div>
+            	<n:div class="col-md-6">
+					<a class="link-button  pull-right" href="/pages/cases/list/index.zul"> <i class="fa fa-arrow-circle-o-left fa-3x"></i></a>
+            	</n:div>
 		    </n:div>
         </n:div>
     </n:div>
@@ -470,7 +473,6 @@
 			</div>
 		</n:div>
 	</div>
-	<n:br/>
 	<div class="row">
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">

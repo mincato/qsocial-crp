@@ -12,91 +12,91 @@ import com.qsocialnow.common.model.config.TriggerListView;
 
 public class CaseView {
 
-	@Valid
-	private Case newCase;
+    @Valid
+    private Case newCase;
 
-	@NotNull(message = "app.field.empty.validation")
-	private DomainListView selectedDomain;
+    @NotNull(message = "app.field.empty.validation")
+    private DomainListView selectedDomain;
 
-	@NotNull(message = "app.field.empty.validation")
-	private TriggerListView selectedTrigger;
+    @NotNull(message = "app.field.empty.validation")
+    private TriggerListView selectedTrigger;
 
-	@NotNull(message = "app.field.empty.validation")
-	private SegmentListView selectedSegment;
+    @NotNull(message = "app.field.empty.validation")
+    private SegmentListView selectedSegment;
 
-	private AdminUnit adminUnit;
+    private AdminUnit adminUnit;
 
-	@NotNull(message = "app.subject.null.validation")
-	private Subject selectedSubject;
+    @NotNull(message = "app.subject.null.validation")
+    private Subject selectedSubject;
 
-	private Double latitude;
-	private Double longitude;
+    private Double latitude;
+    private Double longitude;
 
-	public CaseView() {
-	}
+    public CaseView() {
+    }
 
-	public Case getNewCase() {
-		return newCase;
-	}
+    public Case getNewCase() {
+        return newCase;
+    }
 
-	public void setNewCase(Case newCase) {
-		this.newCase = newCase;
-	}
+    public void setNewCase(Case newCase) {
+        this.newCase = newCase;
+    }
 
-	public DomainListView getSelectedDomain() {
-		return selectedDomain;
-	}
+    public DomainListView getSelectedDomain() {
+        return selectedDomain;
+    }
 
-	public void setSelectedDomain(DomainListView selectedDomain) {
-		this.selectedDomain = selectedDomain;
-	}
+    public void setSelectedDomain(DomainListView selectedDomain) {
+        this.selectedDomain = selectedDomain;
+    }
 
-	public TriggerListView getSelectedTrigger() {
-		return selectedTrigger;
-	}
+    public TriggerListView getSelectedTrigger() {
+        return selectedTrigger;
+    }
 
-	public void setSelectedTrigger(TriggerListView selectedTrigger) {
-		this.selectedTrigger = selectedTrigger;
-	}
+    public void setSelectedTrigger(TriggerListView selectedTrigger) {
+        this.selectedTrigger = selectedTrigger;
+    }
 
-	public SegmentListView getSelectedSegment() {
-		return selectedSegment;
-	}
+    public SegmentListView getSelectedSegment() {
+        return selectedSegment;
+    }
 
-	public void setSelectedSegment(SegmentListView selectedSegment) {
-		this.selectedSegment = selectedSegment;
-	}
+    public void setSelectedSegment(SegmentListView selectedSegment) {
+        this.selectedSegment = selectedSegment;
+    }
 
-	public AdminUnit getAdminUnit() {
-		return adminUnit;
-	}
+    public AdminUnit getAdminUnit() {
+        return adminUnit;
+    }
 
-	public void setAdminUnit(AdminUnit adminUnit) {
-		this.adminUnit = adminUnit;
-	}
+    public void setAdminUnit(AdminUnit adminUnit) {
+        this.adminUnit = adminUnit;
+    }
 
-	public Subject getSelectedSubject() {
-		return selectedSubject;
-	}
+    public Subject getSelectedSubject() {
+        return selectedSubject;
+    }
 
-	public void setSelectedSubject(Subject selectedSubject) {
-		this.selectedSubject = selectedSubject;
-	}
+    public void setSelectedSubject(Subject selectedSubject) {
+        this.selectedSubject = selectedSubject;
+    }
 
-	public Double getLatitude() {
-		return latitude;
-	}
+    public Double getLatitude() {
+        return latitude;
+    }
 
-	public void setLatitude(Double latitude) {
-		this.latitude = latitude;
-	}
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
 
-	public Double getLongitude() {
-		return longitude;
-	}
+    public Double getLongitude() {
+        return longitude;
+    }
 
-	public void setLongitude(Double longitude) {
-		this.longitude = longitude;
-	}
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
 
 }

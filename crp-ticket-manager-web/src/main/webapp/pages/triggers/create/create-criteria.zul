@@ -5,7 +5,10 @@
 	<n:div class="row">
 		<n:div class="col-lg-12">
 			<n:div id="page-header" class="pane equal">
-				<n:h4>${labels.trigger.criteria.title}</n:h4>
+				<n:div class="col-sm-12">
+					<i class="fa fa-exchange fa-2x"></i>
+					<n:h4>${labels.trigger.criteria.title}</n:h4>
+				</n:div>
 			</n:div>
 		</n:div>
 	</n:div>	
