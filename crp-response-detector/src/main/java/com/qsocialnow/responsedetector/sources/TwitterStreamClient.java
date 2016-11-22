@@ -37,18 +37,6 @@ public class TwitterStreamClient {
         this.twitterStream.addListener(new ResponseDetectorStreamListener(sourceDetectorService));
     }
 
-    public void addTrackFilter(String track) {
-        mentionToTrackList.add(track);
-        tweetFilterQuery = new FilterQuery();
-
-        String[] mentions = new String[mentionToTrackList.size()];
-        mentions = mentionToTrackList.toArray(mentions);
-
-        tweetFilterQuery.track(mentions); // OR on keywords
-        // init stream to filter user mentions/replies
-        twitterStream.filter(tweetFilterQuery);
-    }
-
     public void addTrackFilters(List<String> tracks) {
         mentionToTrackList.addAll(tracks);
         tweetFilterQuery = new FilterQuery();
@@ -59,6 +47,7 @@ public class TwitterStreamClient {
         tweetFilterQuery.track(mentions); // OR on keywords
         // init stream to filter user mentions/replies
         twitterStream.filter(tweetFilterQuery);
+
     }
 
     public void stop() {

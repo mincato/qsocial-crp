@@ -35,6 +35,7 @@ import com.qsocialnow.responsedetector.factories.TwitterConfiguratorFactory;
 import com.qsocialnow.responsedetector.sources.TwitterClient;
 import com.qsocialnow.responsedetector.sources.TwitterStreamClient;
 
+import scala.util.parsing.combinator.testing.Str;
 import twitter4j.TwitterException;
 
 public class TwitterDetectorService extends SourceDetectorService implements UserToTrackTask<String> {
@@ -202,24 +203,29 @@ public class TwitterDetectorService extends SourceDetectorService implements Use
     }
 
     private void initTrackFilters() {
-        addNewTrackFilters(this.tracks);
+        if (!startListening) {
+            if (!this.tracks.isEmpty())
+                twitterStreamClient.addTrackFilters(this.tracks);
+        }
     }
 
     @Override
     public void addNewTrackFilters(List<String> newTracks) {
         if (!newTracks.isEmpty()) {
-            twitterStreamClient.addTrackFilters(newTracks);
+            if (startListening) {
+                twitterStreamClient.addTrackFilters(newTracks);
+            }
         }
     }
 
     private void addTwitterMessage(String replyMessageId, String nodePath, TwitterMessageEvent twitterMessageEvent) {
         try {
             if (startListening) {
-                log.debug("Adding message conversation :" + replyMessageId + " from Case:"
-                        + twitterMessageEvent.getCaseId());
+                log.debug("Adding message conversation from reply:" + twitterMessageEvent.getMessageId()
+                        + " from Case:" + twitterMessageEvent.getCaseId());
 
-                nodePaths.put(replyMessageId, nodePath);
-                conversations.put(replyMessageId, twitterMessageEvent);
+                nodePaths.put(twitterMessageEvent.getMessageId(), nodePath);
+                conversations.put(twitterMessageEvent.getMessageId(), twitterMessageEvent);
             }
         } catch (Exception e) {
             log.error("There was an error adding converstaion: " + replyMessageId, e);
@@ -231,8 +237,8 @@ public class TwitterDetectorService extends SourceDetectorService implements Use
             this.twitterClient = new TwitterClient(this, queueConfig);
             twitterClient.initTwitterClient(configurator);
         }
-        nodePaths.put(replyId, nodePath);
-        conversations.put(replyId, twitterMessageEvent);
+        nodePaths.put(twitterMessageEvent.getMessageId(), nodePath);
+        conversations.put(twitterMessageEvent.getMessageId(), twitterMessageEvent);
         twitterClient.checkMentions(twitterMessageEvent);
     }
 
@@ -288,11 +294,11 @@ public class TwitterDetectorService extends SourceDetectorService implements Use
                     }
                 }
             }
-
+            log.info("creating event: response:" + isResponseFromMessage + " inreply:" + inReplyToMessageId);
             if (isResponseFromMessage) {
                 TwitterMessageEvent conversationsByinReplyMessageId = conversations.get(inReplyToMessageId);
                 if (conversationsByinReplyMessageId != null) {
-                    if (conversationsByinReplyMessageId.getReplyMessageId().equals(inReplyToMessageId)) {
+                    if (conversationsByinReplyMessageId.getMessageId().equals(inReplyToMessageId)) {
                         // is response from existing conversation
                         event.setOriginIdCase(conversationsByinReplyMessageId.getCaseId());
                         removeSourceConversation(inReplyToMessageId);
