@@ -94,7 +94,7 @@
      <n:div class="row">
         <n:div class="col-lg-12">
            <div zclass="pane equal col-md-12 col-xs-12">
-	           <n:div class="col-sm-11">
+	           <n:div class="col-sm-10">
 	            <n:form class="form-inline">    
 	                <n:div class="form-group">
 	                    <div zclass="input-group input-group-sm">
@@ -134,21 +134,17 @@
                     </n:div>
 	           </n:form>
 	       </n:div>	       
-           <n:div class="col-sm-1">
-                <n:form class="form-inline">    
-                <n:div class="form-group">
-                 <div zclass="input-group input-group-sm">
-                    <span zclass="input-group-btn" visible="@load(not vm.byMap)">
+           <n:div class="col-sm-2">
+               <n:div class=" pull-right no-padding">
+                    <span visible="@load(not vm.byMap)">
                         <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>                          
                   		<button autodisable="self" zclass="btn btn-primary" type="button" onClick="@command('download')"  iconSclass="z-icon-file-excel-o"></button>
                    </span>
-                   <span  zclass="input-group-btn" visible="@load(vm.byMap)">
+                   <span visible="@load(vm.byMap)">
                    	    <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('searchByMap')"  iconSclass="z-icon-search"></button>                          
                    </span>
-                </div>
-                </n:div>
-             </n:form>
-          </n:div>
+               </n:div>
+		</n:div>
        </div>
     </n:div>
     </n:div>
