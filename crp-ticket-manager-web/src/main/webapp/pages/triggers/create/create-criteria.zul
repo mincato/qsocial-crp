@@ -477,6 +477,11 @@
 		<n:div class="col-lg-12">
 			<div zclass="pane equal">
 				<div class="form-group text-center">
+					<div class="form-group has-error" visible="@load(not empty vmsgs)" >
+						<n:span class="help-block">
+							<label value="${labels.trigger.form.invalid}"/>
+						</n:span>
+					</div>
 	    			<button autodisable="self" onClick="@command('save')" label="${labels.app.button.save}" zclass="btn btn-success" />
 	    			<button autodisable="self" onClick="@command('cancel')" label="${labels.app.button.cancel}" zclass="btn btn-default"/>
 				</div>

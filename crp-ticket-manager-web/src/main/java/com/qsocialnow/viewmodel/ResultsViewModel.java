@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -427,19 +428,37 @@ public class ResultsViewModel implements Serializable {
 
     @Command
     @NotifyChange({ "byResolution", "resultsByUser", "currentResolution", "resultsByUser", "resultsState",
-            "statusByUser", "currentStatus", "byMap", "byAdmin", "byAdmin", "byState", "showFilters",
-            "statusByPending", "adminUnits" })
+            "statusByUser", "currentStatus", "byMap", "byAdmin", "byState", "showFilters", "statusByPending",
+            "adminUnits", "geoJson", "filterActive", "results" })
     public void showOption() {
         this.showFilters = true;
         this.filterActive = false;
+        this.geoJson = null;
+        if (!CollectionUtils.isEmpty(this.results)) {
+            this.results.clear();
+        }
+        if (!CollectionUtils.isEmpty(this.resultsByUser)) {
+            this.resultsByUser.clear();
+        }
+        this.currentResolution = "";
+        if (!CollectionUtils.isEmpty(this.resultsState)) {
+            this.resultsState.clear();
+        }
+        if (!CollectionUtils.isEmpty(this.statusByUser)) {
+            this.statusByUser.clear();
+        }
+        if (!CollectionUtils.isEmpty(this.statusByPending)) {
+            this.statusByPending.clear();
+        }
+        if (!CollectionUtils.isEmpty(this.adminUnits)) {
+            this.adminUnits.clear();
+        }
+        this.currentStatus = "";
         switch (this.reportType) {
             case REPORT_OPTION_RESOLUTION:
                 this.byResolution = true;
                 this.byAdmin = false;
                 this.byState = false;
-                this.results.clear();
-                this.resultsByUser.clear();
-                this.currentResolution = "";
                 this.byMap = false;
                 break;
 
@@ -448,26 +467,18 @@ public class ResultsViewModel implements Serializable {
                 this.byAdmin = false;
                 this.byState = true;
                 this.byMap = false;
-                this.resultsState.clear();
-                this.statusByUser.clear();
-                this.statusByPending.clear();
-                this.currentStatus = "";
                 break;
             case REPORT_OPTION_MAP:
                 this.byResolution = false;
                 this.byAdmin = false;
                 this.byState = false;
                 this.byMap = true;
-                // this.filterActive = true;
                 break;
             case REPORT_OPTION_ADMIN:
                 this.byResolution = false;
-                this.byAdmin = false;
+                this.byAdmin = true;
                 this.byState = false;
                 this.byMap = false;
-                this.adminUnits.clear();
-                this.byAdmin = true;
-
             default:
                 break;
         }
@@ -866,8 +877,9 @@ public class ResultsViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange("geoJson")
+    @NotifyChange({ "geoJson", "filterActive" })
     public void searchByMap() {
+        this.filterActive = true;
         PageRequest pageRequest = new PageRequest(0, 1000, "openDate");
         CasesFilterRequest filterRequest = new CasesFilterRequest();
         filterRequest.setPageRequest(pageRequest);
