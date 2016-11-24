@@ -23,7 +23,7 @@
           </n:div>  
 		</n:div>
     </n:div>
-    <div class="row" visible="@load((vm.byResolution and empty vm.results and empty vm.resultsByUser) or (vm.byState and empty vm.resultsState and empty vm.statusByUser) or (vm.byMap and empty vm.geoJson))">
+    <div class="row" visible="@load((vm.reportType.byResolution and empty vm.results and empty vm.resultsByUser) or (vm.reportType.byState and empty vm.resultsState and empty vm.statusByUser) or (vm.reportType.byMap and empty vm.geoJson))">
         <n:div class="col-lg-12">
             <div zclass="pane equal">
                 <div class="text-center" visible="@load(vm.filterActive)">
@@ -136,11 +136,11 @@
 	       </n:div>	       
            <n:div class="col-sm-2">
                <n:div class=" pull-right no-padding">
-                    <span visible="@load(not vm.byMap)">
+                    <span visible="@load(not vm.reportType.byMap)">
                         <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('search')"  iconSclass="z-icon-search"></button>                          
                   		<button autodisable="self" zclass="btn btn-primary" type="button" onClick="@command('download')"  iconSclass="z-icon-file-excel-o"></button>
                    </span>
-                   <span visible="@load(vm.byMap)">
+                   <span visible="@load(vm.reportType.byMap)">
                    	    <button autodisable="self" zclass="btn btn-default" type="button" onClick="@command('searchByMap')"  iconSclass="z-icon-search"></button>                          
                    </span>
                </n:div>
@@ -149,7 +149,7 @@
     </n:div>
     </n:div>
 	</div>	
-	<div visible="@load(vm.byResolution)">
+	<div visible="@load(vm.reportType.byResolution)">
 		<div class="row">
 	    	<n:div class="col-lg-12">
 	    		<div zclass="pane equal">
@@ -206,7 +206,7 @@
 	            </n:div>
 	     </div>
     </div>
-    <div visible="@load(vm.byState)">
+    <div visible="@load(vm.reportType.byState)">
         <div class="row">
             <n:div class="col-lg-12">
                 <div zclass="pane equal">
@@ -291,22 +291,22 @@
                 </n:div>
          </div>
     </div>
-    <div class="row" visible="@load(vm.byAdmin)">
+    <div class="row" visible="@load(vm.reportType.byAdmin)">
          <n:div class="col-lg-12">
 	        <div zclass="pane equal">
 	            <n:form class="form-inline">                
-	                <x:div class="form-group" sclass="@load(empty vmsgs[admin] ? 'form-group' : 'form-group has-error')" visible="@load(vm.domains ne null and not empty vm.domains)">
-	                    <n:label class="control-label">${labels.cases.results.report.option.admin}</n:label>
-	                    <div zclass="input-group input-group-sm" disabled="@load(!vm.byAdmin)">
-	                           <selectbox disabled="@load(!vm.byAdmin)" id="adminUnit" sclass="form-control" model="@load(vm.adminUnitsOptions)"
-	                                   selectedItem="@bind(vm.adminUnit) @save(vm.adminUnit, before={'search','download'}) @validator(self.disabled?'com.qsocialnow.validators.DisabledValidator':'com.qsocialnow.validators.RequiredValidator')">
+	                <x:div class="form-group" sclass="@load(empty vmsgs[adminUnitType] ? 'form-group' : 'form-group has-error')" visible="@load(vm.domains ne null and not empty vm.domains)">
+	                    <n:label class="control-label">${labels.cases.results.report.admin.unit.type}</n:label>
+	                    <div zclass="input-group input-group-sm" disabled="@load(!vm.reportType.byAdmin)">
+	                           <selectbox disabled="@load(!vm.reportType.byAdmin)" id="adminUnitType" sclass="form-control" model="@load(vm.adminUnitsTypes)"
+	                                   selectedItem="@bind(vm.adminUnitType) @save(vm.adminUnitType, before={'search','download'}) @validator(self.disabled?'com.qsocialnow.validators.DisabledValidator':'com.qsocialnow.validators.RequiredValidator')">
 	                                   <template name="model">
 	                                       <label value="${c:l(c:cat('cases.results.admin.',each))}" />
 	                                   </template>
 	                           </selectbox>
-	                           <x:span sclass="@load(vmsgs[adminUnit] ? 'hidden' : 'help-block')">
+	                           <x:span sclass="@load(vmsgs[adminUnitType] ? 'hidden' : 'help-block')">
 	                           <label
-	                                value="@bind(vmsgs[adminUnit])" />
+	                                value="@bind(vmsgs[adminUnitType])" />
 	                           </x:span>
 	                     </div>
 	                </x:div>
@@ -314,7 +314,27 @@
 	        </div>
         </n:div>
      </div>   
-     <div class="row" visible="@load(vm.byAdmin)">
+      <div class="row" visible="@load(vm.reportType.byMap and vm.domains ne null and not empty vm.domains)">
+         <n:div class="col-lg-12">
+	        <div zclass="pane equal">
+	            <n:form class="form-inline">                
+	                <x:div sclass="@load(empty vmsgs[adminUnitOption] ? 'form-group' : 'form-group has-error')">
+	                    <n:label class="control-label">${labels.cases.results.report.admin.unit.$}</n:label>
+	                           <combobox id="adminUnitOption" model="@load(vm.adminUnitsOptions)" autodrop="true" buttonVisible="false" selectedItem="@load(vm.adminUnitOption) @save(vm.adminUnitOption, before={'searchByMap'}) @validator(self.disabled?'com.qsocialnow.validators.DisabledValidator':'com.qsocialnow.validators.RequiredValidator')">
+									<template name="model">
+										<comboitem label="@load(vm.createAdmUnitValue(each))" description="@load(vm.createAdmUnitDescription(each))"/>
+									</template>
+								</combobox>
+	                           <x:span sclass="@load(vmsgs[adminUnitOption] ? 'hidden' : 'help-block')">
+	                           <label
+	                                value="@bind(vmsgs[adminUnitOption])" />
+	                           </x:span>
+	                </x:div>
+	           </n:form>
+	        </div>
+        </n:div>
+     </div>   
+     <div class="row" visible="@load(vm.reportType.byAdmin)">
             <n:div class="col-lg-12">
                 <div zclass="pane equal">
                     <div zclass="table-responsive" >
@@ -339,5 +359,5 @@
             </n:div>
         </div>
     
-    <include visible="@load(vm.byMap)" src="report-map.zul" />
+    <include visible="@load(vm.reportType.byMap)" src="report-map.zul" />
 </x:div>
