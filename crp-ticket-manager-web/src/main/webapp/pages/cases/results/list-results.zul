@@ -179,7 +179,7 @@
 	    <div class="row" visible="@load(vm.resultsByUser ne null and not empty vm.resultsByUser)">
 			    <n:div class="col-lg-12">
                      <n:div class="col-sm-12">
-		                <n:h4>${labels.cases.results.column.resolution} : <label sclass="label" value="@load(vm.currentResolution)"/></n:h4>
+		                <n:h4>${labels.cases.results.column.resolution} : <label sclass="label label-resolution" value="@load(vm.currentResolution)"/></n:h4>
 		             </n:div>
                </n:div>
 	            <n:div class="col-lg-12">
