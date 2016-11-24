@@ -56,6 +56,7 @@
 			
 			parent.addClass('input-group');
 			parent.addClass('input-group-sm'); 
+			parent.removeClass('z-combobox');
 		});
 	});
     </script>
