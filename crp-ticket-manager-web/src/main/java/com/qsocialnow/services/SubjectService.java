@@ -3,6 +3,7 @@ package com.qsocialnow.services;
 import java.util.Map;
 
 import com.qsocialnow.common.model.cases.Subject;
+import com.qsocialnow.common.model.cases.SubjectFilterRequest;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 
@@ -16,4 +17,5 @@ public interface SubjectService {
 
     PageResponse<SubjectListView> findAll(int pageNumber, int pageSize, Map<String, String> filters);
 
+    PageResponse<SubjectListView> verify(SubjectFilterRequest subjectFilter);
 }

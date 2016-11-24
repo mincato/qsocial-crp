@@ -69,4 +69,26 @@ public class SubjectRepository {
         return id != null;
     }
 
+    public List<SubjectListView> verify(PageRequest pageRequest, SubjectListRequest subjectListRequest) {
+        List<SubjectListView> subjects = new ArrayList<>();
+
+        try {
+            List<Subject> subjectsRepo = subjectElasticService.verifySubjects(pageRequest.getOffset(),
+                    pageRequest.getLimit(), subjectListRequest);
+            if (subjectsRepo != null) {
+                for (Subject subjectRepo : subjectsRepo) {
+                    SubjectListView subjectListView = new SubjectListView();
+                    subjectListView.setId(subjectRepo.getId());
+                    subjectListView.setSourceName(subjectRepo.getSourceName());
+                    subjectListView.setIdentifier(subjectRepo.getIdentifier());
+                    subjectListView.setSource(subjectRepo.getSource());
+                    subjects.add(subjectListView);
+                }
+            }
+        } catch (Exception e) {
+            log.error("Unexpected error", e);
+        }
+        return subjects;
+    }
+
 }

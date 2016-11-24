@@ -1968,6 +1968,29 @@ router.get('/subjects', function (req, res) {
   subjectService.findAll(pageNumber, pageSize, identifier, source, sourceName, asyncResponse);
 });
 
+router.post('/subjects/verify', function (req, res) {
+    function asyncResponse(err,response) {
+   	if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
+    if(response !== null) {
+      try {
+        res.set('Content-Type', 'application/json');
+        res.send(gson.toJsonSync(response));
+      } catch(ex) {
+        res.status(500).json(ex.cause.getMessageSync());
+      }
+    } else {
+      res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
+    }
+
+  }
+  prettyJSON(req.body);
+  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.SubjectFilterRequest');
+  var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
+  var subjectService = javaContext.getBeanSync("subjectService");	  
+  subjectService.verify(request,asyncResponse);
+});
+
 router.get('/subjects/:id', function (req, res) {
 
   function asyncResponse(err,response) {
