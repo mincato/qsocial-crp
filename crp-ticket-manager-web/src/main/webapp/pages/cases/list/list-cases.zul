@@ -371,7 +371,7 @@
                                         <x:div 
                             sclass="@load(empty vmsgs['filterword_type_'.concat(filterWordStatus.index)] ? 'col-xs-8 col-sm-3' : 'col-xs-8 col-sm-3 has-error')">
                                             <textbox id="filterword_text_${filterWordStatus.index}" type="text" class="form-control" 
-                                                value="@bind(filterWord.inputText)"></textbox>
+                                                value="@bind(filterWord.inputText)" onOK="@command('search')"></textbox>
                                             <x:span
                                                 sclass="@load(vmsgs['filterword_text_'.concat(filterWordStatus.index)] ? 'hidden' : 'help-block')">
                                                 <label
