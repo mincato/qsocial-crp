@@ -864,6 +864,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (filters != null) {
             searchSourceBuilder.query(filters);
         }
+
+        log.info(searchSourceBuilder.toString());
+
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 

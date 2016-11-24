@@ -74,6 +74,36 @@ public class SubjectService extends CaseIndexService {
         return subjects;
     }
 
+    public List<Subject> verifySubjects(int from, int size, SubjectListRequest subjectListRequest) {
+
+        RepositoryFactory<SubjectType> esfactory = new RepositoryFactory<SubjectType>(elasticSearchCaseConfigurator);
+        Repository<SubjectType> repository = esfactory.initManager();
+        repository.initClient();
+
+        BoolQueryBuilder filters = QueryBuilders.boolQuery();
+        if (subjectListRequest.getIdentifier() != null) {
+            String identifier = StringUtils.lowerCase(subjectListRequest.getIdentifier().trim());
+            filters = filters.must(QueryBuilders.termQuery("identifier.keyword", identifier));
+        }
+        if (subjectListRequest.getSource() != null) {
+            filters = filters.must(QueryBuilders.termQuery("source", subjectListRequest.getSource()));
+        }
+        if (!StringUtils.isEmpty(subjectListRequest.getSourceName())) {
+            String source = StringUtils.lowerCase(subjectListRequest.getSourceName().trim());
+            filters = filters.must(QueryBuilders.termQuery("sourceName.keyword", source));
+        }
+
+        SubjectMapping mapping = SubjectMapping.getInstance();
+        mapping.setIndex(this.getQueryIndex());
+        SearchResponse<Subject> response = repository.searchWithFilters(from, size, "identifier", SortOrder.ASC,
+                filters, mapping);
+
+        List<Subject> subjects = response.getSources();
+
+        repository.closeClient();
+        return subjects;
+    }
+
     public Subject findSubjectsByOriginUser(String sourceId) {
         Subject subject = null;
         RepositoryFactory<SubjectType> esfactory = new RepositoryFactory<SubjectType>(elasticSearchCaseConfigurator);

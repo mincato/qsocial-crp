@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.cases.Subject;
+import com.qsocialnow.common.model.cases.SubjectFilterRequest;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.SubjectListRequest;
@@ -28,6 +29,19 @@ public class SubjectService {
                 new SubjectListRequest(identifier, source, sourceName));
 
         PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageNumber, pageSize);
+        return page;
+    }
+
+    public PageResponse<SubjectListView> verify(SubjectFilterRequest filterRequest) {
+        PageRequest pageRequest = filterRequest.getPageRequest();
+
+        List<SubjectListView> subjects = subjectRepository.verify(new PageRequest(pageRequest.getPageNumber(),
+                pageRequest.getPageSize(), null),
+                new SubjectListRequest(filterRequest.getIdentifier(), String.valueOf(filterRequest.getSource()),
+                        filterRequest.getSourceName()));
+
+        PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageRequest.getPageNumber(),
+                pageRequest.getPageSize());
         return page;
     }
 

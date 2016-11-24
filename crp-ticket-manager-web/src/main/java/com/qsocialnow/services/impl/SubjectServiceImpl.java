@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.qsocialnow.common.model.cases.CaseListView;
 import com.qsocialnow.common.model.cases.Subject;
+import com.qsocialnow.common.model.cases.SubjectFilterRequest;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
@@ -115,6 +117,23 @@ public class SubjectServiceImpl implements SubjectService {
                     });
 
             PageResponse<SubjectListView> subjects = response.getBody();
+            return subjects;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call Subject service", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @Override
+    public PageResponse<SubjectListView> verify(SubjectFilterRequest filterRequest) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            PageResponse<SubjectListView> subjects = restTemplate.postForObject(
+                    serviceUrlResolver.resolveUrl(subjectServiceUrl) + "/verify", filterRequest, PageResponse.class);
+
             return subjects;
         } catch (Exception e) {
             log.error("There was an error while trying to call Subject service", e);

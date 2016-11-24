@@ -29,8 +29,10 @@ import org.zkoss.zul.Div;
 
 import com.qsocialnow.common.model.cases.Person;
 import com.qsocialnow.common.model.cases.Subject;
+import com.qsocialnow.common.model.cases.SubjectFilterRequest;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.config.Media;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.SubjectService;
 
@@ -46,6 +48,7 @@ public class ChooseManualSubjectViewModel implements Serializable {
     private static final int ACTIVE_PAGE_DEFAULT = 0;
 
     private int pageSize = PAGE_SIZE_DEFAULT;
+
     private int activePage = ACTIVE_PAGE_DEFAULT;
 
     @WireVariable
@@ -211,10 +214,12 @@ public class ChooseManualSubjectViewModel implements Serializable {
                 if (StringUtils.isEmpty(subject.getSourceName())) {
                     addInvalidMessage(context, SOURCE_NAME_FIELD_ID, Labels.getLabel(EMPTY_FIELD_KEY_LABEL));
                 } else {
-                    Map<String, String> filters = new HashMap<String, String>();
-                    filters.put("sourceName", subject.getSourceName());
-                    filters.put("source", Media.MANUAL.getValue().toString());
-                    PageResponse<SubjectListView> pageResponse = vm.subjectService.findAll(0, 1, filters);
+                    SubjectFilterRequest filterRequest = new SubjectFilterRequest();
+                    PageRequest pageRequest = new PageRequest(0, 1, null);
+                    filterRequest.setPageRequest(pageRequest);
+                    filterRequest.setSourceName(subject.getSourceName());
+                    filterRequest.setSource(Media.MANUAL.getValue());
+                    PageResponse<SubjectListView> pageResponse = vm.subjectService.verify(filterRequest);
                     if (!CollectionUtils.isEmpty(pageResponse.getItems())) {
                         addInvalidMessage(context, SOURCE_NAME_FIELD_ID,
                                 Labels.getLabel(SOURCE_NAME_UNIQUE_VALIDATION_LABEL));
@@ -227,7 +232,12 @@ public class ChooseManualSubjectViewModel implements Serializable {
                     Map<String, String> filters = new HashMap<String, String>();
                     filters.put("identifier", subject.getIdentifier());
                     filters.put("source", Media.MANUAL.getValue().toString());
-                    PageResponse<SubjectListView> pageResponse = vm.subjectService.findAll(0, 1, filters);
+                    SubjectFilterRequest filterRequest = new SubjectFilterRequest();
+                    PageRequest pageRequest = new PageRequest(0, 1, null);
+                    filterRequest.setPageRequest(pageRequest);
+                    filterRequest.setIdentifier(subject.getIdentifier());
+                    filterRequest.setSource(Media.MANUAL.getValue());
+                    PageResponse<SubjectListView> pageResponse = vm.subjectService.verify(filterRequest);
                     if (!CollectionUtils.isEmpty(pageResponse.getItems())) {
                         addInvalidMessage(context, IDENTIFIER_FIELD_ID,
                                 Labels.getLabel(IDENTIFIER_UNIQUE_VALIDATION_LABEL));
