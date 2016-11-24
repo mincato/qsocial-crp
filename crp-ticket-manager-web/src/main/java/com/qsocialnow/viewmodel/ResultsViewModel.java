@@ -28,16 +28,22 @@ import com.qsocialnow.common.model.cases.CaseAggregationReport;
 import com.qsocialnow.common.model.cases.CasesFilterRequest;
 import com.qsocialnow.common.model.cases.CasesFilterRequestReport;
 import com.qsocialnow.common.model.cases.ResultsListView;
+import com.qsocialnow.common.model.config.AdmUnitFilter;
 import com.qsocialnow.common.model.config.AdminUnit;
+import com.qsocialnow.common.model.config.BaseAdminUnit;
 import com.qsocialnow.common.model.config.DomainListView;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilter;
+import com.qsocialnow.common.model.filter.AdministrativeUnitsFilterBean;
+import com.qsocialnow.common.model.filter.FilterNormalizer;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.util.UserConstants;
 import com.qsocialnow.converters.DateConverter;
 import com.qsocialnow.services.AdminUnitsService;
+import com.qsocialnow.services.AutocompleteService;
 import com.qsocialnow.services.CaseService;
 import com.qsocialnow.services.DomainService;
 import com.qsocialnow.services.ResultsService;
@@ -49,14 +55,6 @@ import com.qsocialnow.services.UserSessionService;
 @ToClientCommand({ "zmapbox$clientUpdate" })
 @VariableResolver(DelegatingVariableResolver.class)
 public class ResultsViewModel implements Serializable {
-
-    private static final String REPORT_OPTION_STATE = "state";
-
-    private static final String REPORT_OPTION_ADMIN = "admin";
-
-    private static final String REPORT_OPTION_RESOLUTION = "resolution";
-
-    private static final String REPORT_OPTION_MAP = "map";
 
     private static final long serialVersionUID = 2259179419421396093L;
 
@@ -139,9 +137,9 @@ public class ResultsViewModel implements Serializable {
 
     private List<String> priorityOptions = new ArrayList<>();
 
-    private List<String> adminUnitsOptions = new ArrayList<>();
+    private List<String> adminUnitsTypes = new ArrayList<>();
 
-    private List<String> resultsTypeOptions = new ArrayList<>();
+    private List<CasesReportOption> resultsTypeOptions = new ArrayList<>();
 
     private Long fromDate;
 
@@ -159,17 +157,16 @@ public class ResultsViewModel implements Serializable {
 
     private String pendingResponse;
 
-    private String adminUnit;
+    private String adminUnitType;
 
-    private String reportType;
+    private CasesReportOption reportType;
 
-    private boolean byResolution;
+    private AutocompleteListModel<AdminUnit> adminUnitsOptions;
 
-    private boolean byAdmin;
+    private AdminUnit adminUnitOption;
 
-    private boolean byState;
-
-    private boolean byMap;
+    @WireVariable
+    private AutocompleteService<AdminUnit> adminUnitsAutocompleteService;
 
     @WireVariable
     private UserSessionService userSessionService;
@@ -186,6 +183,9 @@ public class ResultsViewModel implements Serializable {
     @WireVariable
     private AdminUnitsService adminUnitsService;
 
+    @WireVariable
+    private FilterNormalizer filterNormalizer;
+
     private String geoJson;
 
     @Init
@@ -198,8 +198,10 @@ public class ResultsViewModel implements Serializable {
         this.pendingOptions = getPendingOptionsList();
         this.statusOptions = getStatusOptionsList();
         this.priorityOptions = getPriorityOptionsList();
-        this.adminUnitsOptions = getAdminUnitsOptionsList();
+        this.adminUnitsTypes = getAdminUnitsTypeList();
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
+        this.adminUnitsOptions = new AutocompleteListModel<AdminUnit>(adminUnitsAutocompleteService,
+                userSessionService.getLanguage());
     }
 
     public Integer getPageSize() {
@@ -259,7 +261,7 @@ public class ResultsViewModel implements Serializable {
         filterRequest.setPageRequest(pageRequest);
         filterRequest.setFilterActive(filterActive);
         setFilters(filterRequest);
-        filterRequest.setFieldToSumarize(adminUnit);
+        filterRequest.setFieldToSumarize(adminUnitType);
         PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             List<ResultsListView> items = pageResponse.getItems();
@@ -331,17 +333,17 @@ public class ResultsViewModel implements Serializable {
     public void search() {
         this.setDefaultPage();
         this.filterActive = true;
-        if (byResolution) {
+        if (reportType.isByResolution()) {
             this.results.clear();
             this.resultsByUser.clear();
             this.currentResolution = "";
             this.sumarizeCases();
-        } else if (byState) {
+        } else if (reportType.isByState()) {
             this.resultsState.clear();
             this.statusByUser.clear();
             this.currentStatus = "";
             this.sumarizeCasesByStatus();
-        } else if (byAdmin) {
+        } else if (reportType.isByAdmin()) {
             this.adminUnits.clear();
             this.sumarizeCasesByUnitAdmin();
         }
@@ -356,13 +358,13 @@ public class ResultsViewModel implements Serializable {
         filterRequestReport.setFilterRequest(filterRequest);
         filterRequestReport.setLanguage(userSessionService.getLanguage());
         byte[] data = null;
-        if (byResolution) {
+        if (reportType.isByResolution()) {
             filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_RESOLUTION);
             data = resultsService.getReport(filterRequestReport);
-        } else if (byState) {
+        } else if (reportType.isByState()) {
             filterRequest.setFieldToSumarize(UserConstants.REPORT_BY_STATUS);
             data = resultsService.getReport(filterRequestReport);
-        } else if (byAdmin) {
+        } else if (reportType.isByAdmin()) {
             data = getReportByAdministrativeUnit(filterRequest, data);
         }
         if (data != null) {
@@ -373,7 +375,7 @@ public class ResultsViewModel implements Serializable {
     private byte[] getReportByAdministrativeUnit(CasesFilterRequest filterRequest, byte[] data) {
         PageRequest pageRequest = new PageRequest(0, 10, "");
         filterRequest.setPageRequest(pageRequest);
-        filterRequest.setFieldToSumarize(adminUnit);
+        filterRequest.setFieldToSumarize(adminUnitType);
         PageResponse<ResultsListView> pageResponse = resultsService.sumarizeAll(filterRequest);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             List<ResultsListView> results = setUnitAdminName(pageResponse.getItems());
@@ -427,9 +429,8 @@ public class ResultsViewModel implements Serializable {
     }
 
     @Command
-    @NotifyChange({ "byResolution", "resultsByUser", "currentResolution", "resultsByUser", "resultsState",
-            "statusByUser", "currentStatus", "byMap", "byAdmin", "byState", "showFilters", "statusByPending",
-            "adminUnits", "geoJson", "filterActive", "results" })
+    @NotifyChange({ "resultsByUser", "currentResolution", "resultsByUser", "resultsState", "statusByUser",
+            "currentStatus", "showFilters", "statusByPending", "adminUnits", "geoJson", "filterActive", "results" })
     public void showOption() {
         this.showFilters = true;
         this.filterActive = false;
@@ -454,34 +455,7 @@ public class ResultsViewModel implements Serializable {
             this.adminUnits.clear();
         }
         this.currentStatus = "";
-        switch (this.reportType) {
-            case REPORT_OPTION_RESOLUTION:
-                this.byResolution = true;
-                this.byAdmin = false;
-                this.byState = false;
-                this.byMap = false;
-                break;
 
-            case REPORT_OPTION_STATE:
-                this.byResolution = false;
-                this.byAdmin = false;
-                this.byState = true;
-                this.byMap = false;
-                break;
-            case REPORT_OPTION_MAP:
-                this.byResolution = false;
-                this.byAdmin = false;
-                this.byState = false;
-                this.byMap = true;
-                break;
-            case REPORT_OPTION_ADMIN:
-                this.byResolution = false;
-                this.byAdmin = true;
-                this.byState = false;
-                this.byMap = false;
-            default:
-                break;
-        }
     }
 
     private List<DomainListView> getDomainsList() {
@@ -586,7 +560,7 @@ public class ResultsViewModel implements Serializable {
         return new ArrayList<String>(Arrays.asList(options));
     }
 
-    private List<String> getAdminUnitsOptionsList() {
+    private List<String> getAdminUnitsTypeList() {
         String[] options = { UserConstants.REPORT_BY_UA_CONTINENT, UserConstants.REPORT_BY_UA_COUNTRY,
                 UserConstants.REPORT_BY_UA_CITY, UserConstants.REPORT_BY_UA_NEIGHBORHOOD,
                 UserConstants.REPORT_BY_UA_ADM1, UserConstants.REPORT_BY_UA_ADM2, UserConstants.REPORT_BY_UA_ADM3,
@@ -611,7 +585,7 @@ public class ResultsViewModel implements Serializable {
             filterRequest.setSegment(this.segment.getId());
         }
 
-        if (!this.byResolution) {
+        if (!this.reportType.isByResolution()) {
             if (pendingResponse != null && !pendingResponse.equals(ALL_OPTION_VALUE)) {
                 filterRequest.setPendingResponse(this.pendingResponse);
             }
@@ -640,6 +614,10 @@ public class ResultsViewModel implements Serializable {
         if (Strings.isNotEmpty(this.subject)) {
             filterRequest.setSubject(this.subject);
         }
+
+        if (this.reportType.isByMap()) {
+            addAdmUnitFilters(filterRequest, adminUnitOption);
+        }
     }
 
     public List<ResultsListView> getResults() {
@@ -659,9 +637,8 @@ public class ResultsViewModel implements Serializable {
         this.activePage = ACTIVE_PAGE_DEFAULT;
     }
 
-    private List<String> getResultsOptionsList() {
-        String[] options = { REPORT_OPTION_RESOLUTION, REPORT_OPTION_ADMIN, REPORT_OPTION_STATE, REPORT_OPTION_MAP };
-        return new ArrayList<String>(Arrays.asList(options));
+    private List<CasesReportOption> getResultsOptionsList() {
+        return new ArrayList<CasesReportOption>(Arrays.asList(CasesReportOption.values()));
     }
 
     public boolean isFilterActive() {
@@ -776,44 +753,20 @@ public class ResultsViewModel implements Serializable {
         this.segment = segment;
     }
 
-    public List<String> getResultsTypeOptions() {
+    public List<CasesReportOption> getResultsTypeOptions() {
         return resultsTypeOptions;
     }
 
-    public void setResultsTypeOptions(List<String> resultsTypeOptions) {
+    public void setResultsTypeOptions(List<CasesReportOption> resultsTypeOptions) {
         this.resultsTypeOptions = resultsTypeOptions;
     }
 
-    public String getReportType() {
+    public CasesReportOption getReportType() {
         return reportType;
     }
 
-    public void setReportType(String reportType) {
+    public void setReportType(CasesReportOption reportType) {
         this.reportType = reportType;
-    }
-
-    public boolean isByResolution() {
-        return byResolution;
-    }
-
-    public void setByResolution(boolean byResolution) {
-        this.byResolution = byResolution;
-    }
-
-    public boolean isByAdmin() {
-        return byAdmin;
-    }
-
-    public void setByAdmin(boolean byAdmin) {
-        this.byAdmin = byAdmin;
-    }
-
-    public boolean isByState() {
-        return byState;
-    }
-
-    public void setByState(boolean byState) {
-        this.byState = byState;
     }
 
     public List<ResultsListView> getResultsByUser() {
@@ -868,14 +821,6 @@ public class ResultsViewModel implements Serializable {
         return statusByPending;
     }
 
-    public boolean isByMap() {
-        return byMap;
-    }
-
-    public void setByMap(boolean byMap) {
-        this.byMap = byMap;
-    }
-
     @Command
     @NotifyChange({ "geoJson", "filterActive" })
     public void searchByMap() {
@@ -903,15 +848,75 @@ public class ResultsViewModel implements Serializable {
         return adminUnits;
     }
 
-    public List<String> getAdminUnitsOptions() {
+    public List<String> getAdminUnitsTypes() {
+        return adminUnitsTypes;
+    }
+
+    public String getAdminUnitType() {
+        return adminUnitType;
+    }
+
+    public void setAdminUnitType(String adminUnitType) {
+        this.adminUnitType = adminUnitType;
+    }
+
+    @Command
+    public String createAdmUnitValue(AdminUnit adminUnit) {
+        StringBuilder sb = new StringBuilder();
+        addAdmUnitText(sb, adminUnit);
+        return sb.toString();
+    }
+
+    @Command
+    public String createAdmUnitDescription(AdminUnit adminUnit) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < adminUnit.getParents().size(); i++) {
+            BaseAdminUnit baseAdminUnit = adminUnit.getParents().get(i);
+            if (i > 0 && i < adminUnit.getParents().size() - 1) {
+                sb.append(" - ");
+            }
+            addAdmUnitText(sb, baseAdminUnit);
+        }
+        return sb.toString();
+    }
+
+    private void addAdmUnitText(StringBuilder sb, BaseAdminUnit adminUnit) {
+        sb.append(adminUnit.getTranslation());
+        sb.append("(");
+        sb.append(Labels.getLabel("trigger.criteria.admUnit.value." + adminUnit.getType().name()));
+        sb.append(")");
+    }
+
+    private void addAdmUnitFilters(CasesFilterRequest request, AdminUnit adminUnit) {
+        AdmUnitFilter admUnitFilter = new AdmUnitFilter();
+        admUnitFilter.setAdminUnit(adminUnit);
+        AdministrativeUnitsFilterBean administrativeUnitsFilterBean = new AdministrativeUnitsFilterBean();
+        administrativeUnitsFilterBean.setAdm1(admUnitFilter.getAdm1());
+        administrativeUnitsFilterBean.setAdm2(admUnitFilter.getAdm2());
+        administrativeUnitsFilterBean.setAdm3(admUnitFilter.getAdm3());
+        administrativeUnitsFilterBean.setAdm4(admUnitFilter.getAdm4());
+        administrativeUnitsFilterBean.setContinent(admUnitFilter.getContinent());
+        administrativeUnitsFilterBean.setCountry(admUnitFilter.getCountry());
+        administrativeUnitsFilterBean.setCity(admUnitFilter.getCity());
+        administrativeUnitsFilterBean.setNeighborhood(admUnitFilter.getNeighborhood());
+        administrativeUnitsFilterBean.setAdminUnit(admUnitFilter.getAdminUnit());
+        AdministrativeUnitsFilterBean[] administrativeUnitsFilterBeans = new AdministrativeUnitsFilterBean[1];
+        administrativeUnitsFilterBeans[0] = administrativeUnitsFilterBean;
+        AdministrativeUnitsFilter administrativeUnitsFilter = new AdministrativeUnitsFilter();
+        administrativeUnitsFilter.setAdministrativeUnitsFilterBeans(administrativeUnitsFilterBeans);
+        request.setAdministrativeUnitsFilter(administrativeUnitsFilter);
+    }
+
+    public AutocompleteListModel<AdminUnit> getAdminUnitsOptions() {
         return adminUnitsOptions;
     }
 
-    public String getAdminUnit() {
-        return adminUnit;
+    public AdminUnit getAdminUnitOption() {
+        return adminUnitOption;
     }
 
-    public void setAdminUnit(String adminUnit) {
-        this.adminUnit = adminUnit;
+    public void setAdminUnitOption(AdminUnit adminUnitOption) {
+        this.adminUnitOption = adminUnitOption;
     }
+
 }
