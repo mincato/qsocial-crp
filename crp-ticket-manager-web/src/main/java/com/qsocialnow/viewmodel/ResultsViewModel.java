@@ -32,16 +32,20 @@ import com.qsocialnow.common.model.config.AdmUnitFilter;
 import com.qsocialnow.common.model.config.AdminUnit;
 import com.qsocialnow.common.model.config.BaseAdminUnit;
 import com.qsocialnow.common.model.config.DomainListView;
+import com.qsocialnow.common.model.config.Media;
 import com.qsocialnow.common.model.config.SegmentListView;
 import com.qsocialnow.common.model.config.TriggerListView;
 import com.qsocialnow.common.model.config.UserListView;
 import com.qsocialnow.common.model.filter.AdministrativeUnitsFilter;
 import com.qsocialnow.common.model.filter.AdministrativeUnitsFilterBean;
 import com.qsocialnow.common.model.filter.FilterNormalizer;
+import com.qsocialnow.common.model.filter.FollowersCountRange;
+import com.qsocialnow.common.model.filter.RangeRequest;
 import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.util.UserConstants;
 import com.qsocialnow.converters.DateConverter;
+import com.qsocialnow.model.MediaView;
 import com.qsocialnow.services.AdminUnitsService;
 import com.qsocialnow.services.AutocompleteService;
 import com.qsocialnow.services.CaseService;
@@ -159,6 +163,12 @@ public class ResultsViewModel implements Serializable {
 
     private String adminUnitType;
 
+    private Long followersGreaterThan;
+
+    private Long followersLessThan;
+
+    private List<MediaView> mediaTypes;
+
     private CasesReportOption reportType;
 
     private AutocompleteListModel<AdminUnit> adminUnitsOptions;
@@ -202,6 +212,7 @@ public class ResultsViewModel implements Serializable {
         this.dateConverter = new DateConverter(userSessionService.getTimeZone());
         this.adminUnitsOptions = new AutocompleteListModel<AdminUnit>(adminUnitsAutocompleteService,
                 userSessionService.getLanguage());
+        initMediaTypesOptions();
     }
 
     public Integer getPageSize() {
@@ -617,6 +628,8 @@ public class ResultsViewModel implements Serializable {
 
         if (this.reportType.isByMap()) {
             addAdmUnitFilters(filterRequest, adminUnitOption);
+            addFollowersFilter(filterRequest, followersGreaterThan, followersLessThan);
+            addMediaFilter(filterRequest, mediaTypes);
         }
     }
 
@@ -890,6 +903,7 @@ public class ResultsViewModel implements Serializable {
     private void addAdmUnitFilters(CasesFilterRequest request, AdminUnit adminUnit) {
         AdmUnitFilter admUnitFilter = new AdmUnitFilter();
         admUnitFilter.setAdminUnit(adminUnit);
+        filterNormalizer.normalizeAdmUnitFilter(admUnitFilter);
         AdministrativeUnitsFilterBean administrativeUnitsFilterBean = new AdministrativeUnitsFilterBean();
         administrativeUnitsFilterBean.setAdm1(admUnitFilter.getAdm1());
         administrativeUnitsFilterBean.setAdm2(admUnitFilter.getAdm2());
@@ -907,6 +921,37 @@ public class ResultsViewModel implements Serializable {
         request.setAdministrativeUnitsFilter(administrativeUnitsFilter);
     }
 
+    private void addFollowersFilter(CasesFilterRequest request, Long followersGreaterThan, Long followersLessThan) {
+        if (followersGreaterThan != null || followersLessThan != null) {
+            RangeRequest rangeRequest = new RangeRequest();
+            FollowersCountRange followersCount = new FollowersCountRange();
+            followersCount.setGt(followersGreaterThan);
+            followersCount.setLt(followersLessThan);
+            rangeRequest.setFollowersCount(followersCount);
+            request.setRange(rangeRequest);
+        }
+    }
+
+    private void addMediaFilter(CasesFilterRequest request, List<MediaView> mediaTypes) {
+        List<MediaView> mediasPicked = mediaTypes.stream().filter(media -> media.isChecked())
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(mediasPicked) && mediasPicked.size() < mediaTypes.size()) {
+            Integer[] options = mediasPicked.stream().map(media -> media.getMedia().getValue().intValue())
+                    .toArray(size -> new Integer[size]);
+            request.setMediums(options);
+        }
+    }
+
+    private void initMediaTypesOptions() {
+        mediaTypes = new ArrayList<>();
+        for (Media media : Media.values()) {
+            MediaView mediaView = new MediaView();
+            mediaView.setMedia(media);
+            mediaView.setChecked(false);
+            mediaTypes.add(mediaView);
+        }
+    }
+
     public AutocompleteListModel<AdminUnit> getAdminUnitsOptions() {
         return adminUnitsOptions;
     }
@@ -917,6 +962,30 @@ public class ResultsViewModel implements Serializable {
 
     public void setAdminUnitOption(AdminUnit adminUnitOption) {
         this.adminUnitOption = adminUnitOption;
+    }
+
+    public Long getFollowersGreaterThan() {
+        return followersGreaterThan;
+    }
+
+    public void setFollowersGreaterThan(Long followersGreaterThan) {
+        this.followersGreaterThan = followersGreaterThan;
+    }
+
+    public Long getFollowersLessThan() {
+        return followersLessThan;
+    }
+
+    public void setFollowersLessThan(Long followersLessThan) {
+        this.followersLessThan = followersLessThan;
+    }
+
+    public List<MediaView> getMediaTypes() {
+        return mediaTypes;
+    }
+
+    public void setMediaTypes(List<MediaView> mediaTypes) {
+        this.mediaTypes = mediaTypes;
     }
 
 }

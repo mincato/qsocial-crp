@@ -2,8 +2,8 @@ package com.qsocialnow.viewmodel;
 
 public enum CasesReportOption {
 
-    STATE(false, false, true, false), ADMIN(false, true, false, false), RESOLUTION(true, false, false, false), MAP(
-            false, false, false, true);
+    ADMIN(false, true, false, false), MAP(false, false, false, true), RESOLUTION(true, false, false, false), STATE(
+            false, false, true, false);
 
     private boolean byResolution;
 
