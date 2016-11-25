@@ -1938,13 +1938,10 @@ router.get('/thematics/:thematicId/series/:serieId/categories', function (req, r
 
 
 
-router.get('/subjects', function (req, res) {
-
+router.post('/subjects', function (req, res) {
     function asyncResponse(err,response) {
     var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateSerialize()).setPrettyPrintingSync().createSync();
-
     if(err)  { console.log(err); res.status(500).json(err.cause.getMessageSync()); return; }
-
     if(response !== null) {
       try {
         res.set('Content-Type', 'application/json');
@@ -1955,17 +1952,14 @@ router.get('/subjects', function (req, res) {
     } else {
       res.status(500).json("Token " + req.body['tokenId'] + " invalid.");
     }
-
   }
   
-  var pageNumber = req.query.pageNumber ? parseInt(req.query.pageNumber) : null;
-  var pageSize = req.query.pageSize ? parseInt(req.query.pageSize) : null;
-  var identifier = req.query.identifier ? req.query.identifier : null;
-  var source = req.query.source ? req.query.source : null;
-  var sourceName = req.query.source ? req.query.sourceName : null;
-    
+  prettyJSON(req.body);
+  var gson = new GsonBuilder().registerTypeAdapterSync(DateClazz, new JSONDateDeserialize()).setPrettyPrintingSync().createSync();
+  var clazz = java.findClassSync('com.qsocialnow.common.model.cases.SubjectFilterRequest');
+  var request = gson.fromJsonSync(JSON.stringify(req.body), clazz);
   var subjectService = javaContext.getBeanSync("subjectService");	  
-  subjectService.findAll(pageNumber, pageSize, identifier, source, sourceName, asyncResponse);
+  subjectService.findAll(request, asyncResponse);
 });
 
 router.post('/subjects/verify', function (req, res) {

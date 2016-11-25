@@ -12,6 +12,8 @@ public class SubjectFilterRequest {
 
     private String id;
 
+    private String keyword;
+
     // identifier aka usuarioOriginal
     private String identifier;
 
@@ -127,5 +129,13 @@ public class SubjectFilterRequest {
 
     public void setPersonId(String personId) {
         this.personId = personId;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 }

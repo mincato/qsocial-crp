@@ -129,7 +129,12 @@ public class ChooseManualSubjectViewModel implements Serializable {
     }
 
     private PageResponse<SubjectListView> findSubjects() {
-        PageResponse<SubjectListView> pageResponse = subjectService.findAll(activePage, pageSize, getFilters());
+        SubjectFilterRequest filterRequest = new SubjectFilterRequest();
+        PageRequest pageRequest = new PageRequest(activePage, pageSize, null);
+        filterRequest.setPageRequest(pageRequest);
+        setFilters(filterRequest);
+
+        PageResponse<SubjectListView> pageResponse = subjectService.findAll(filterRequest);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.subjects.addAll(pageResponse.getItems());
             this.moreResults = true;
@@ -148,15 +153,13 @@ public class ChooseManualSubjectViewModel implements Serializable {
         this.findSubjects();
     }
 
-    private Map<String, String> getFilters() {
-        Map<String, String> filters = new HashMap<String, String>();
+    private void setFilters(SubjectFilterRequest filterRequest) {
         if (!StringUtils.isBlank(this.keyword)) {
-            filters.put("identifier", this.keyword);
+            filterRequest.setKeyword(this.keyword);
         }
         if (this.source != null) {
-            filters.put("source", source);
+            filterRequest.setSource(Long.valueOf(source));
         }
-        return filters;
     }
 
     private void setDefaultPage() {
@@ -229,9 +232,6 @@ public class ChooseManualSubjectViewModel implements Serializable {
                 if (StringUtils.isEmpty(subject.getIdentifier())) {
                     addInvalidMessage(context, IDENTIFIER_FIELD_ID, Labels.getLabel(EMPTY_FIELD_KEY_LABEL));
                 } else {
-                    Map<String, String> filters = new HashMap<String, String>();
-                    filters.put("identifier", subject.getIdentifier());
-                    filters.put("source", Media.MANUAL.getValue().toString());
                     SubjectFilterRequest filterRequest = new SubjectFilterRequest();
                     PageRequest pageRequest = new PageRequest(0, 1, null);
                     filterRequest.setPageRequest(pageRequest);
