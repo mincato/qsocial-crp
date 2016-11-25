@@ -500,8 +500,8 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> searchValues,
             List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
-            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
-            List<TermFieldFilter> termFilters, String fieldAggregation, boolean findMissing) {
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters, List<TermFieldFilter> termFilters,
+            String fieldAggregation, boolean findMissing) {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 

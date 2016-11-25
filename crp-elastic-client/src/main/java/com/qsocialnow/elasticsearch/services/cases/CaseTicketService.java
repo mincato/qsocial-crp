@@ -590,7 +590,7 @@ public class CaseTicketService extends CaseIndexService {
                 shouldTermsConditionsFilters, shouldConditionsRegexpFilters);
 
         SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
-                shouldConditionsFilters,shouldTermsConditionsFilters,termFilters, aggregationField, false);
+                shouldConditionsFilters, shouldTermsConditionsFilters, termFilters, aggregationField, false);
         Map<String, Long> results = response.getCountAggregation();
         repository.closeClient();
         return results;
@@ -619,7 +619,7 @@ public class CaseTicketService extends CaseIndexService {
             searchValues.put("open", filterRequest.getStatus());
 
         SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
-                shouldConditionsFilters,shouldTermsConditionsFilters,termFilters, "assignee.username", true);
+                shouldConditionsFilters, shouldTermsConditionsFilters, termFilters, "assignee.username", true);
         Map<String, Long> results = response.getCountAggregation();
         repository.closeClient();
         return results;
