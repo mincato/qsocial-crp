@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
@@ -51,22 +52,36 @@ public class SubjectService extends CaseIndexService {
         Repository<SubjectType> repository = esfactory.initManager();
         repository.initClient();
 
-        BoolQueryBuilder filters = QueryBuilders.boolQuery();
-        if (subjectListRequest.getIdentifier() != null) {
-            filters = filters.must(QueryBuilders.matchQuery("identifier", subjectListRequest.getIdentifier()));
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        if (subjectListRequest.getKeyword() != null) {
+            String subject = StringUtils.lowerCase(subjectListRequest.getKeyword().trim());
+            BoolQueryBuilder boolShouldQueryBuilder = QueryBuilders.boolQuery();
+
+            BoolQueryBuilder boolIdentifierFilterQueryBuilder = QueryBuilders.boolQuery();
+            QueryBuilder query = QueryBuilders.termQuery("identifier", subject);
+            boolIdentifierFilterQueryBuilder.must(query);
+            boolShouldQueryBuilder.should(boolIdentifierFilterQueryBuilder);
+
+            BoolQueryBuilder boolSourceNameFilterQueryBuilder = QueryBuilders.boolQuery();
+            QueryBuilder querySourceName = QueryBuilders.termQuery("sourceName", subject);
+            boolSourceNameFilterQueryBuilder.must(querySourceName);
+            boolShouldQueryBuilder.should(boolSourceNameFilterQueryBuilder);
+
+            boolQueryBuilder.filter(boolShouldQueryBuilder);
         }
+
         if (subjectListRequest.getSource() != null) {
-            filters = filters.must(QueryBuilders.matchQuery("source", subjectListRequest.getSource()));
-        }
-        if (!StringUtils.isEmpty(subjectListRequest.getSourceName())) {
-            filters = filters.must(QueryBuilders.matchQuery("sourceName", subjectListRequest.getSourceName()));
+            BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
+            QueryBuilder query = QueryBuilders.termQuery("source", subjectListRequest.getSource());
+            boolFilterQueryBuilder.must(query);
+            boolQueryBuilder.filter(boolFilterQueryBuilder);
         }
 
         SubjectMapping mapping = SubjectMapping.getInstance();
         mapping.setIndex(this.getQueryIndex());
 
         SearchResponse<Subject> response = repository.searchWithFilters(from, size, "identifier", SortOrder.ASC,
-                filters, mapping);
+                boolQueryBuilder, mapping);
 
         List<Subject> subjects = response.getSources();
 

@@ -8,10 +8,17 @@ public class SubjectListRequest {
 
     private final String sourceName;
 
-    public SubjectListRequest(String identifier, String source, String sourceName) {
+    private final String keyword;
+
+    public SubjectListRequest(String keyword, String identifier, String source, String sourceName) {
+        this.keyword = keyword;
         this.identifier = identifier;
         this.source = source;
         this.sourceName = sourceName;
+    }
+
+    public String getKeyword() {
+        return keyword;
     }
 
     public String getIdentifier() {

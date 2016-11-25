@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
@@ -19,7 +21,11 @@ import org.zkoss.zk.ui.select.annotation.VariableResolver;
 import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
+import com.qsocialnow.common.model.cases.ResultsListView;
+import com.qsocialnow.common.model.cases.SubjectFilterRequest;
 import com.qsocialnow.common.model.cases.SubjectListView;
+import com.qsocialnow.common.model.config.Media;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.SubjectService;
 
@@ -75,9 +81,17 @@ public class SubjectsViewModel implements Serializable {
     }
 
     private PageResponse<SubjectListView> findSubjects() {
-        PageResponse<SubjectListView> pageResponse = subjectService.findAll(activePage, pageSize, getFilters());
+        SubjectFilterRequest filterRequest = new SubjectFilterRequest();
+        PageRequest pageRequest = new PageRequest(activePage, pageSize, null);
+        filterRequest.setPageRequest(pageRequest);
+        setFilters(filterRequest);
+        PageResponse<SubjectListView> pageResponse = subjectService.findAll(filterRequest);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
-            this.subjects.addAll(pageResponse.getItems());
+            ObjectMapper mapper = new ObjectMapper();
+            List<SubjectListView> subjectListViews = mapper.convertValue(pageResponse.getItems(),
+                    new TypeReference<List<SubjectListView>>() {
+                    });
+            this.subjects.addAll(subjectListViews);
             this.moreResults = true;
         } else {
             this.moreResults = false;
@@ -95,13 +109,10 @@ public class SubjectsViewModel implements Serializable {
         this.findSubjects();
     }
 
-    private Map<String, String> getFilters() {
-        if (this.keyword == null || this.keyword.isEmpty() || !filterActive) {
-            return null;
+    private void setFilters(SubjectFilterRequest filterRequest) {
+        if (this.keyword != null && !this.keyword.isEmpty()) {
+            filterRequest.setKeyword(this.keyword);
         }
-        Map<String, String> filters = new HashMap<String, String>();
-        filters.put("identifier", this.keyword);
-        return filters;
     }
 
     private void setDefaultPage() {

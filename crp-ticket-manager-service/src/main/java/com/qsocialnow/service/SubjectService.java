@@ -23,12 +23,15 @@ public class SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String identifier,
-            String source, String sourceName) {
-        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize, null),
-                new SubjectListRequest(identifier, source, sourceName));
+    public PageResponse<SubjectListView> findAll(SubjectFilterRequest filterRequest) {
 
-        PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageNumber, pageSize);
+        List<SubjectListView> subjects = subjectRepository.findAll(
+                filterRequest.getPageRequest(),
+                new SubjectListRequest(filterRequest.getKeyword(), filterRequest.getIdentifier(), filterRequest
+                        .getSourceId(), filterRequest.getSourceName()));
+
+        PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, filterRequest.getPageRequest()
+                .getPageNumber(), filterRequest.getPageRequest().getPageSize());
         return page;
     }
 
@@ -37,7 +40,7 @@ public class SubjectService {
 
         List<SubjectListView> subjects = subjectRepository.verify(new PageRequest(pageRequest.getPageNumber(),
                 pageRequest.getPageSize(), null),
-                new SubjectListRequest(filterRequest.getIdentifier(), String.valueOf(filterRequest.getSource()),
+                new SubjectListRequest(null, filterRequest.getIdentifier(), String.valueOf(filterRequest.getSource()),
                         filterRequest.getSourceName()));
 
         PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageRequest.getPageNumber(),

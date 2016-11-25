@@ -217,13 +217,14 @@ public class CaseTicketService extends CaseIndexService {
 
         if (filterRequest.getSubject() != null) {
             ShouldConditionsFilter conditionFilterSubject = new ShouldConditionsFilter();
-            ShouldFilter shouldFilterSubjetIdentifier = new ShouldFilter("subject.identifier",
-                    filterRequest.getSubject());
-            ShouldFilter shouldFilterSubjetSourceName = new ShouldFilter("subject.sourceName",
-                    filterRequest.getSubject());
+            String subject = StringUtils.lowerCase(filterRequest.getSubject().trim());
+
+            ShouldFilter shouldFilterSubjetIdentifier = new ShouldFilter("subject.identifier", subject);
+            ShouldFilter shouldFilterSubjetSourceName = new ShouldFilter("subject.sourceName", subject);
+
             conditionFilterSubject.addShouldCondition(shouldFilterSubjetIdentifier);
             conditionFilterSubject.addShouldCondition(shouldFilterSubjetSourceName);
-            shouldConditionsFilters.add(conditionFilterSubject);
+            shouldTermsConditionsFilters.add(conditionFilterSubject);
         }
 
         if (filterRequest.getMediums() != null && filterRequest.getMediums().length > 0) {
