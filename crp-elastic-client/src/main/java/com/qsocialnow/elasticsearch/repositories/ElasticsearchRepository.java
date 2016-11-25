@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Supplier;
 import com.qsocialnow.common.exception.RepositoryException;
-import com.qsocialnow.common.util.UserConstants;
 import com.qsocialnow.elasticsearch.configuration.AWSElasticsearchConfigurationProvider;
 import com.qsocialnow.elasticsearch.configuration.Configurator;
 import com.qsocialnow.elasticsearch.mappings.ChildMapping;
@@ -501,6 +500,7 @@ public class ElasticsearchRepository<T> implements Repository<T> {
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> searchValues,
             List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
             List<TermFieldFilter> termFilters, String fieldAggregation, boolean findMissing) {
 
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();

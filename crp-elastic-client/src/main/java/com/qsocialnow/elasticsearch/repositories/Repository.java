@@ -58,6 +58,7 @@ public interface Repository<T> {
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> fieldValues,
             List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters,
             List<TermFieldFilter> termFilters, String aggregationField, boolean findMissing);
 
     public <E> SearchResult queryByFieldsAsJson(Mapping<T, E> mapping, int from, int size, String sortField,
