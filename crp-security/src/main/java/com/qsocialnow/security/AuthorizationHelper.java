@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.log4j.Logger;
 
 import com.qsocialnow.security.exception.ShortTokenExpiredException;
 import com.qsocialnow.security.exception.TokenNotFoundException;
@@ -18,6 +19,8 @@ public class AuthorizationHelper {
 	private static final String SHORT_TOKEN_SESSION_PARAMETER = "shortToken";
 
 	public static final String USER_SESSION_PARAMETER = "user";
+	
+	private static final Logger LOGGER = Logger.getLogger(AuthorizationHelper.class);
 
 	public boolean saveUserInSession(ServletRequest request, CuratorFramework curatorFramework) {
 
@@ -39,6 +42,15 @@ public class AuthorizationHelper {
 			}
 
 			UserData user = tokenHandler.verifyToken(token);
+			
+			if (LOGGER.isDebugEnabled() && user != null) {
+				LOGGER.debug("======== USER = " + user.getUsername());				
+				LOGGER.debug("isOdatech = " + user.isOdatech());
+				LOGGER.debug("isPrcAdmin = " + user.isPrcAdmin());
+				LOGGER.debug("isAnalyticsAllowed = " + user.isAnalyticsAllowed());
+				LOGGER.debug("language = " + user.getLanguage());
+				LOGGER.debug("timeZone = " + user.getTimezone());
+			}
 
 			UserActivityData activity = zookeeperClient.findUserActivityData(token);
 			

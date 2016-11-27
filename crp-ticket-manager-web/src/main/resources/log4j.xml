@@ -10,6 +10,11 @@
         </layout>
     </appender>
     
+	<logger name="com.qsocialnow.security.AuthorizationHelper" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="consoleAppender" />
+	</logger>
+    
     <root>
         <priority value="INFO" />
         <appender-ref ref="consoleAppender" />
