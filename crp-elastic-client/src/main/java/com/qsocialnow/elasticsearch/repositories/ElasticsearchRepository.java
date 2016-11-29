@@ -44,6 +44,7 @@ import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.search.aggregation.MissingAggregation;
 import io.searchbox.core.search.aggregation.TermsAggregation;
 import io.searchbox.core.search.aggregation.TermsAggregation.Entry;
 import io.searchbox.indices.CreateIndex;
@@ -56,6 +57,8 @@ import vc.inreach.aws.request.AWSSigner;
 import vc.inreach.aws.request.AWSSigningRequestInterceptor;
 
 public class ElasticsearchRepository<T> implements Repository<T> {
+
+    private static final String RESULTS_AGG_MISSING = "Missing";
 
     private static final String RESULTS_AGG_NAME = "Results";
 
@@ -496,53 +499,21 @@ public class ElasticsearchRepository<T> implements Repository<T> {
     }
 
     public <E> SearchResponse<E> queryByFieldsAndAggs(Mapping<T, E> mapping, Map<String, String> searchValues,
-            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldFilters,
-            List<TermFieldFilter> termFilters, String fieldAggregation) {
+            List<RangeFilter> rangeFilters, List<ShouldConditionsFilter> shouldConditionsFilters,
+            List<ShouldConditionsFilter> shouldTermsConditionsFilters, List<TermFieldFilter> termFilters,
+            String fieldAggregation, boolean findMissing) {
 
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-
-        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-
-        if (searchValues != null) {
-            for (String searchField : searchValues.keySet()) {
-                boolQueryBuilder.must(QueryBuilders.matchQuery(searchField, searchValues.get(searchField)));
-            }
-        } else {
-            boolQueryBuilder.must(QueryBuilders.matchAllQuery());
-        }
-        searchSourceBuilder.query(boolQueryBuilder);
-
-        if (termFilters != null) {
-            for (TermFieldFilter termField : termFilters) {
-                if (!termField.isNeedSplit()) {
-                    boolQueryBuilder.filter(QueryBuilders.termQuery(termField.getField(), termField.getValue()));
-                } else {
-                    String[] terms = termField.getValue().split("\\,");
-                    BoolQueryBuilder boolFilterQueryBuilder = QueryBuilders.boolQuery();
-                    for (String term : terms) {
-                        QueryBuilder query = QueryBuilders.termQuery(termField.getField(), term.trim());
-                        boolFilterQueryBuilder.must(query);
-                    }
-                    boolQueryBuilder.filter(boolFilterQueryBuilder);
-                }
-            }
-        }
-
-        if (rangeFilters != null) {
-            for (RangeFilter rangeFilter : rangeFilters) {
-                if (rangeFilter.getRangeField() != null) {
-                    RangeQueryBuilder range = QueryBuilders.rangeQuery(rangeFilter.getRangeField());
-                    if (rangeFilter.getRangeFrom() != null)
-                        range.gte(rangeFilter.getRangeFrom());
-                    if (rangeFilter.getRangeTo() != null)
-                        range.lte(rangeFilter.getRangeTo());
-                    boolQueryBuilder.filter(range);
-                }
-            }
-        }
+        SearchSourceBuilder searchSourceBuilder = getSearchSourceBuilder(0, -1, null, null, searchValues, termFilters,
+                rangeFilters, shouldConditionsFilters, shouldTermsConditionsFilters, null);
 
         AbstractAggregationBuilder aggregation = AggregationBuilders.terms(RESULTS_AGG_NAME).field(fieldAggregation);
         searchSourceBuilder.aggregation(aggregation);
+
+        if (findMissing) {
+            AbstractAggregationBuilder missingAggregation = AggregationBuilders.missing(RESULTS_AGG_MISSING).field(
+                    fieldAggregation);
+            searchSourceBuilder.aggregation(missingAggregation);
+        }
         log.info("Query: " + searchSourceBuilder.toString());
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
@@ -559,6 +530,12 @@ public class ElasticsearchRepository<T> implements Repository<T> {
                 if (entries != null) {
                     for (Entry entry : entries) {
                         aggregations.put(entry.getKey(), entry.getCount());
+                    }
+                }
+                if (findMissing) {
+                    MissingAggregation missing = result.getAggregations().getMissingAggregation(RESULTS_AGG_MISSING);
+                    if (missing.getMissing() != null && missing.getMissing() > 0) {
+                        aggregations.put(null, missing.getMissing());
                     }
                 }
                 response.setCountAggregation(aggregations);
@@ -848,6 +825,9 @@ public class ElasticsearchRepository<T> implements Repository<T> {
         if (filters != null) {
             searchSourceBuilder.query(filters);
         }
+
+        log.info(searchSourceBuilder.toString());
+
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex(mapping.getIndex())
                 .addType(mapping.getType()).build();
 

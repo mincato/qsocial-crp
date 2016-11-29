@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.qsocialnow.common.model.cases.Subject;
+import com.qsocialnow.common.model.cases.SubjectFilterRequest;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.common.model.request.SubjectListRequest;
@@ -22,12 +23,28 @@ public class SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
 
-    public PageResponse<SubjectListView> findAll(Integer pageNumber, Integer pageSize, String identifier,
-            String source, String sourceName) {
-        List<SubjectListView> subjects = subjectRepository.findAll(new PageRequest(pageNumber, pageSize, null),
-                new SubjectListRequest(identifier, source, sourceName));
+    public PageResponse<SubjectListView> findAll(SubjectFilterRequest filterRequest) {
 
-        PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageNumber, pageSize);
+        List<SubjectListView> subjects = subjectRepository.findAll(
+                filterRequest.getPageRequest(),
+                new SubjectListRequest(filterRequest.getKeyword(), filterRequest.getIdentifier(), filterRequest
+                        .getSourceId(), filterRequest.getSourceName()));
+
+        PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, filterRequest.getPageRequest()
+                .getPageNumber(), filterRequest.getPageRequest().getPageSize());
+        return page;
+    }
+
+    public PageResponse<SubjectListView> verify(SubjectFilterRequest filterRequest) {
+        PageRequest pageRequest = filterRequest.getPageRequest();
+
+        List<SubjectListView> subjects = subjectRepository.verify(new PageRequest(pageRequest.getPageNumber(),
+                pageRequest.getPageSize(), null),
+                new SubjectListRequest(null, filterRequest.getIdentifier(), String.valueOf(filterRequest.getSource()),
+                        filterRequest.getSourceName()));
+
+        PageResponse<SubjectListView> page = new PageResponse<SubjectListView>(subjects, pageRequest.getPageNumber(),
+                pageRequest.getPageSize());
         return page;
     }
 

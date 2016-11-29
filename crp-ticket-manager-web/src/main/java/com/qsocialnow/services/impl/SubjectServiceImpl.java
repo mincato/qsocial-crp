@@ -1,14 +1,11 @@
 package com.qsocialnow.services.impl;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.qsocialnow.common.model.cases.Subject;
+import com.qsocialnow.common.model.cases.SubjectFilterRequest;
 import com.qsocialnow.common.model.cases.SubjectListView;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.factories.RestTemplateFactory;
@@ -94,27 +92,32 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public PageResponse<SubjectListView> findAll(int pageNumber, int pageSize, Map<String, String> filters) {
+    @SuppressWarnings({ "unchecked" })
+    public PageResponse<SubjectListView> findAll(SubjectFilterRequest filterRequest) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(
-                    serviceUrlResolver.resolveUrl(subjectServiceUrl)).queryParam("pageNumber", pageNumber);
-
-            if (filters != null) {
-                for (Map.Entry<String, String> filter : filters.entrySet()) {
-                    builder.queryParam(filter.getKey(), filter.getValue());
-                }
-            }
-
             RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            PageResponse<SubjectListView> subjects = restTemplate.postForObject(
+                    serviceUrlResolver.resolveUrl(subjectServiceUrl), filterRequest, PageResponse.class);
 
-            ResponseEntity<PageResponse<SubjectListView>> response = restTemplate.exchange(builder.toUriString(),
-                    HttpMethod.GET, null, new ParameterizedTypeReference<PageResponse<SubjectListView>>() {
-                    });
+            return subjects;
+        } catch (Exception e) {
+            log.error("There was an error while trying to call Subject service", e);
+            throw new RuntimeException(e);
+        }
+    }
 
-            PageResponse<SubjectListView> subjects = response.getBody();
+    @SuppressWarnings({ "unchecked" })
+    @Override
+    public PageResponse<SubjectListView> verify(SubjectFilterRequest filterRequest) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+            RestTemplate restTemplate = RestTemplateFactory.createRestTemplate();
+            PageResponse<SubjectListView> subjects = restTemplate.postForObject(
+                    serviceUrlResolver.resolveUrl(subjectServiceUrl) + "/verify", filterRequest, PageResponse.class);
+
             return subjects;
         } catch (Exception e) {
             log.error("There was an error while trying to call Subject service", e);

@@ -217,13 +217,14 @@ public class CaseTicketService extends CaseIndexService {
 
         if (filterRequest.getSubject() != null) {
             ShouldConditionsFilter conditionFilterSubject = new ShouldConditionsFilter();
-            ShouldFilter shouldFilterSubjetIdentifier = new ShouldFilter("subject.identifier",
-                    filterRequest.getSubject());
-            ShouldFilter shouldFilterSubjetSourceName = new ShouldFilter("subject.sourceName",
-                    filterRequest.getSubject());
+            String subject = StringUtils.lowerCase(filterRequest.getSubject().trim());
+
+            ShouldFilter shouldFilterSubjetIdentifier = new ShouldFilter("subject.identifier", subject);
+            ShouldFilter shouldFilterSubjetSourceName = new ShouldFilter("subject.sourceName", subject);
+
             conditionFilterSubject.addShouldCondition(shouldFilterSubjetIdentifier);
             conditionFilterSubject.addShouldCondition(shouldFilterSubjetSourceName);
-            shouldConditionsFilters.add(conditionFilterSubject);
+            shouldTermsConditionsFilters.add(conditionFilterSubject);
         }
 
         if (filterRequest.getMediums() != null && filterRequest.getMediums().length > 0) {
@@ -272,14 +273,15 @@ public class CaseTicketService extends CaseIndexService {
                 if (textsList.size() > 1) {
                     ShouldConditionsFilter conditionTermFilterText = new ShouldConditionsFilter();
                     for (WordsListFilterBean textWord : textsList) {
-                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto",
-                                StringUtils.lowerCase(textWord.getPalabra()));
+                        String word = com.qsocialnow.common.util.StringUtils.removeAccentuation(textWord.getPalabra());
+                        ShouldFilter shouldFilter = new ShouldFilter("triggerEvent.texto", StringUtils.lowerCase(word));
                         conditionTermFilterText.addShouldCondition(shouldFilter);
                     }
                     shouldTermsConditionsFilters.add(conditionTermFilterText);
                 } else {
-                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto",
-                            StringUtils.lowerCase(textsList.get(0).getPalabra()));
+                    String word = com.qsocialnow.common.util.StringUtils.removeAccentuation(textsList.get(0)
+                            .getPalabra());
+                    TermFieldFilter termFilter = new TermFieldFilter("triggerEvent.texto", StringUtils.lowerCase(word));
                     termFilter.setNeedSplit(true);
                     termFilters.add(termFilter);
                 }
@@ -588,7 +590,7 @@ public class CaseTicketService extends CaseIndexService {
                 shouldTermsConditionsFilters, shouldConditionsRegexpFilters);
 
         SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
-                shouldConditionsFilters, termFilters, aggregationField);
+                shouldConditionsFilters, shouldTermsConditionsFilters, termFilters, aggregationField, false);
         Map<String, Long> results = response.getCountAggregation();
         repository.closeClient();
         return results;
@@ -617,7 +619,7 @@ public class CaseTicketService extends CaseIndexService {
             searchValues.put("open", filterRequest.getStatus());
 
         SearchResponse<Case> response = repository.queryByFieldsAndAggs(mapping, searchValues, rangeFilters,
-                shouldConditionsFilters, termFilters, "assignee.username");
+                shouldConditionsFilters, shouldTermsConditionsFilters, termFilters, "assignee.username", true);
         Map<String, Long> results = response.getCountAggregation();
         repository.closeClient();
         return results;

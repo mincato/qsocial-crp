@@ -21,7 +21,9 @@ import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 import org.zkoss.zul.Div;
 
+import com.qsocialnow.common.model.cases.SubjectFilterRequest;
 import com.qsocialnow.common.model.cases.SubjectListView;
+import com.qsocialnow.common.model.pagination.PageRequest;
 import com.qsocialnow.common.model.pagination.PageResponse;
 import com.qsocialnow.services.SubjectService;
 
@@ -109,7 +111,12 @@ public class ChooseSubjectViewModel implements Serializable {
     }
 
     private PageResponse<SubjectListView> findSubjects() {
-        PageResponse<SubjectListView> pageResponse = subjectService.findAll(activePage, pageSize, getFilters());
+        SubjectFilterRequest filterRequest = new SubjectFilterRequest();
+        PageRequest pageRequest = new PageRequest(activePage, pageSize, null);
+        filterRequest.setPageRequest(pageRequest);
+        setFilters(filterRequest);
+
+        PageResponse<SubjectListView> pageResponse = subjectService.findAll(filterRequest);
         if (pageResponse.getItems() != null && !pageResponse.getItems().isEmpty()) {
             this.subjects.addAll(pageResponse.getItems());
             this.moreResults = true;
@@ -128,15 +135,13 @@ public class ChooseSubjectViewModel implements Serializable {
         this.findSubjects();
     }
 
-    private Map<String, String> getFilters() {
-        Map<String, String> filters = new HashMap<String, String>();
+    private void setFilters(SubjectFilterRequest filterRequest) {
         if (!StringUtils.isBlank(this.keyword)) {
-            filters.put("identifier", this.keyword);
+            filterRequest.setKeyword(this.keyword);
         }
         if (this.source != null) {
-            filters.put("source", source);
+            filterRequest.setSource(Long.valueOf(source));
         }
-        return filters;
     }
 
     private void setDefaultPage() {
