@@ -21,6 +21,8 @@ public class Subject implements Serializable {
     // sourceId aka idUsuarioOriginal
     private String sourceId;
 
+    private String originalSourceId;
+
     // source aka medioId
     private Long source;
 
@@ -159,6 +161,14 @@ public class Subject implements Serializable {
 
     public void setPersonId(String personId) {
         this.personId = personId;
+    }
+
+    public String getOriginalSourceId() {
+        return originalSourceId;
+    }
+
+    public void setOriginalSourceId(String originalSourceId) {
+        this.originalSourceId = originalSourceId;
     }
 
 }
