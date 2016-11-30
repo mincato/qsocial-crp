@@ -23,32 +23,32 @@
     </appender>	
 
 	<logger name="io.searchbox" additivity="false">
-		<level value="INFO" />
+		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 	
 	<logger name="com.qsocialnow" additivity="false">
-		<level value="DEBUG" />
+		<level value="INFO" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
 	<logger name="com.qsocialnow.elasticsearch" additivity="false">
-		<level value="INFO" />
+		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
 	<logger name="kafka" additivity="false">
-		<level value="INFO" />
+		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
 	<logger name="org.apache" additivity="false">
-		<level value="INFO" />
+		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 
 	<logger name="org.I0Itec" additivity="false">
-		<level value="INFO" />
+		<level value="WARN" />
 		<appender-ref ref="fileAppender" />
 	</logger>
 	
