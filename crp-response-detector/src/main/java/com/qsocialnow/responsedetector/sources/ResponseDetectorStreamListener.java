@@ -5,7 +5,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.qsocialnow.responsedetector.service.SourceDetectorService;
+import com.qsocialnow.responsedetector.service.TwitterDetectorService;
 
 import twitter4j.DirectMessage;
 import twitter4j.StallWarning;
@@ -18,9 +18,9 @@ import twitter4j.UserStreamListener;
 
 public class ResponseDetectorStreamListener implements UserStreamListener {
 
-    private SourceDetectorService sourceService;
+    private TwitterDetectorService sourceService;
 
-    public ResponseDetectorStreamListener(SourceDetectorService sourceDetectorService) {
+    public ResponseDetectorStreamListener(TwitterDetectorService sourceDetectorService) {
         this.sourceService = sourceDetectorService;
     }
 
