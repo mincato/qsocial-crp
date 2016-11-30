@@ -57,7 +57,7 @@ public class DefaultUpsertCaseStrategy implements UpsertCaseStrategy {
                 }
             }
         } else {
-            if (Boolean.TRUE.equals(input.getEsReproduccion())) {
+            if (Boolean.TRUE.equals(input.getEsReproduccion()) && Boolean.FALSE.equals(input.getEsSecundario())) {
                 log.debug("The event is a reproduction, so it is discarded");
             } else {
                 if (detectionCriteria.isAlwaysOpenCase()) {
