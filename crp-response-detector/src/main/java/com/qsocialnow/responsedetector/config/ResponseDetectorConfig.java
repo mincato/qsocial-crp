@@ -24,8 +24,8 @@ public class ResponseDetectorConfig {
     @Value("${app.twitter.users.path}")
     private String twitterUsersZnodePath;
 
-    @Value("${app.facebook.users.path}")
-    private String facebookUsersZnodePath;
+    @Value("${app.facebook.conversations.path}")
+    private String facebookConversationsZnodePath;
 
     public String getZookeeperHost() {
         return zookeeperHost;
@@ -51,8 +51,8 @@ public class ResponseDetectorConfig {
         return facebookAppConfiguratorZnodePath;
     }
 
-    public String getFacebookUsersZnodePath() {
-        return facebookUsersZnodePath;
+    public String getFacebookConversationsZnodePath() {
+        return facebookConversationsZnodePath;
     }
 
 }

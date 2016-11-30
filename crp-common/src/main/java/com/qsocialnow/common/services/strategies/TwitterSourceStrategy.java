@@ -25,6 +25,7 @@ import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.SourceCredentials;
 import com.qsocialnow.common.model.config.UserResolver;
+import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.queues.QueueConsumer;
 import com.qsocialnow.common.queues.QueueProducer;
 import com.qsocialnow.common.queues.QueueService;
@@ -180,6 +181,11 @@ public class TwitterSourceStrategy implements SourceStrategy, AsyncTask<SourceMe
                 return sourceMessageResponse;
             }
         }
+    }
+
+    @Override
+    public String getOriginalSourceId(Event event) {
+        return null;
     }
 
     private void initQueues(String userResolver) {

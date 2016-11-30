@@ -10,7 +10,7 @@ public class FacebookFeedEvent {
 
     private final String messageId;
 
-    private final String commentId;
+    private String commentId;
 
     private final String rootCommentId;
 
@@ -60,6 +60,10 @@ public class FacebookFeedEvent {
 
     public String getOriginalId() {
         return originalId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
     @Override

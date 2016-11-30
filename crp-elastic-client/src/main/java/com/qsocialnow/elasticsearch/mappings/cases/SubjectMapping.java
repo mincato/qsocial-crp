@@ -57,6 +57,7 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
         subjectType.setLastAccionDate(document.getLastAccionDate());
         subjectType.setSignedDate(document.getSignedDate());
         subjectType.setSourceId(document.getSourceId());
+        subjectType.setOriginalSourceId(document.getOriginalSourceId());
         subjectType.setIdentifier(document.getIdentifier());
         subjectType.setSource(document.getSource());
         subjectType.setProfileImage(document.getProfileImage());
@@ -78,6 +79,7 @@ public class SubjectMapping implements DynamicMapping, Mapping<SubjectType, Subj
 
         subject.setSignedDate(documentType.getSignedDate());
         subject.setSourceId(documentType.getSourceId());
+        subject.setOriginalSourceId(documentType.getOriginalSourceId());
         subject.setIdentifier(documentType.getIdentifier());
         subject.setSource(documentType.getSource());
         subject.setProfileImage(documentType.getProfileImage());
