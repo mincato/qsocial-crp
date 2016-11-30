@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
-import com.qsocialnow.responsedetector.service.SourceDetectorService;
+import com.qsocialnow.responsedetector.service.TwitterDetectorService;
 
 import twitter4j.FilterQuery;
 import twitter4j.TwitterStream;
@@ -32,7 +32,7 @@ public class TwitterStreamClient {
         configurationBuilder.setUserStreamRepliesAllEnabled(true);
     }
 
-    public void initClient(SourceDetectorService sourceDetectorService) {
+    public void initClient(TwitterDetectorService sourceDetectorService) {
         this.twitterStream = new TwitterStreamFactory(configurationBuilder.build()).getInstance();
         this.twitterStream.addListener(new ResponseDetectorStreamListener(sourceDetectorService));
     }

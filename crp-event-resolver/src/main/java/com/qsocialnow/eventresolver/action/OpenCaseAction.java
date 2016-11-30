@@ -2,7 +2,10 @@ package com.qsocialnow.eventresolver.action;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+
+import javax.annotation.Resource;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -19,6 +22,7 @@ import com.qsocialnow.common.model.config.Team;
 import com.qsocialnow.common.model.config.User;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.services.SourceService;
+import com.qsocialnow.common.services.strategies.SourceStrategy;
 import com.qsocialnow.elasticsearch.services.cases.PersonService;
 import com.qsocialnow.elasticsearch.services.cases.SubjectService;
 import com.qsocialnow.eventresolver.processor.ExecutionMessageRequest;
@@ -38,6 +42,9 @@ public class OpenCaseAction {
 
     @Autowired
     private TeamService teamService;
+
+    @Resource
+    private Map<Long, SourceStrategy> sources;
 
     private Random random = new Random();
 
@@ -62,6 +69,10 @@ public class OpenCaseAction {
                 subject.setSignedDate(new Date());
                 subject.setIdentifier(inputElement.getUsuarioCreacion());
                 subject.setSourceId(sourceId);
+                if (sources.get(inputElement.getMedioId()) != null) {
+                    String originalSourceId = sources.get(inputElement.getMedioId()).getOriginalSourceId(inputElement);
+                    subject.setOriginalSourceId(originalSourceId != null ? originalSourceId : sourceId);
+                }
                 subject.setProfileImage(inputElement.getProfileImage());
                 subject.setSourceName(inputElement.getName() != null ? inputElement.getName() : subject.getIdentifier());
                 subject.setLocationMethod(inputElement.getLocationMethod());

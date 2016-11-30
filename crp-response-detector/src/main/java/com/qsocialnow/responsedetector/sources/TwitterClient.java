@@ -18,7 +18,7 @@ import com.qsocialnow.common.queues.QueueType;
 import com.qsocialnow.common.services.strategies.CheckHistoryTask;
 import com.qsocialnow.common.services.strategies.TwitterMessageQueueConsumer;
 import com.qsocialnow.responsedetector.config.TwitterConfigurator;
-import com.qsocialnow.responsedetector.service.SourceDetectorService;
+import com.qsocialnow.responsedetector.service.TwitterDetectorService;
 
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -34,7 +34,7 @@ public class TwitterClient implements CheckHistoryTask<TwitterMessageEvent> {
 
     private ConfigurationBuilder configurationBuilder;
 
-    private SourceDetectorService sourceService;
+    private TwitterDetectorService sourceService;
 
     private QueueConfigurator queueConfig;
 
@@ -50,7 +50,7 @@ public class TwitterClient implements CheckHistoryTask<TwitterMessageEvent> {
 
     private TwitterConfigurator twitterConfig;
 
-    public TwitterClient(SourceDetectorService sourceService, QueueConfigurator queueConfig) {
+    public TwitterClient(TwitterDetectorService sourceService, QueueConfigurator queueConfig) {
         this.sourceService = sourceService;
         this.queueConfig = queueConfig;
         initQueue();

@@ -2,14 +2,13 @@ package com.qsocialnow.common.services.strategies;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheEvent;
 import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
-import org.apache.curator.framework.recipes.cache.PathChildrenCache.StartMode;
 import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +18,7 @@ import com.qsocialnow.common.config.QueueConfigurator;
 import com.qsocialnow.common.exception.SourceException;
 import com.qsocialnow.common.model.cases.Case;
 import com.qsocialnow.common.model.cases.ErrorType;
-import com.qsocialnow.common.model.cases.Subject;
 import com.qsocialnow.common.model.config.ActionType;
-import com.qsocialnow.common.model.config.SourceCredentials;
 import com.qsocialnow.common.model.config.UserResolver;
 import com.qsocialnow.common.model.event.Event;
 import com.qsocialnow.common.queues.QueueConsumer;
@@ -34,6 +31,7 @@ import facebook4j.Comment;
 import facebook4j.Facebook;
 import facebook4j.FacebookException;
 import facebook4j.FacebookFactory;
+import facebook4j.Post;
 import facebook4j.Reading;
 import facebook4j.auth.AccessToken;
 import facebook4j.conf.ConfigurationBuilder;
@@ -200,6 +198,36 @@ public class FacebookSourceStrategy implements SourceStrategy, AsyncTask<SourceM
         }
     }
 
+    @Override
+    public String getOriginalSourceId(Event event) {
+        String sourceId = null;
+        try {
+            ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+            configurationBuilder.setOAuthAppId(facebookConfig.getOAuthAppId());
+            configurationBuilder.setOAuthAppSecret(facebookConfig.getOAuthAppSecret());
+            FacebookFactory facebookFactory = new FacebookFactory(configurationBuilder.build());
+            AccessToken accessToken = new AccessToken(facebookConfig.getOAuthAccessToken());
+            Facebook facebook = facebookFactory.getInstance(accessToken);
+            Reading reading = new Reading();
+            reading.fields("from");
+
+            if (event.getEsSecundario()) {
+                Comment comment = facebook.getComment(event.getId(), reading);
+                if (comment != null && comment.getFrom() != null) {
+                    sourceId = comment.getFrom().getId();
+                }
+            } else {
+                Post post = facebook.getPost(event.getId(), reading);
+                if (post != null && post.getFrom() != null) {
+                    sourceId = post.getFrom().getId();
+                }
+            }
+        } catch (Throwable e) {
+            log.error("There was an error retrieving original source id from facebook", e);
+        }
+        return sourceId;
+    }
+
     private void initQueues(String userResolver) {
         if (!queueServices.containsKey(userResolver)) {
             QueueService queueService = QueueServiceFactory.getInstance().getQueueServiceInstance(
@@ -236,28 +264,25 @@ public class FacebookSourceStrategy implements SourceStrategy, AsyncTask<SourceM
         this.zookeeperClient = zookeeperClient;
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, FacebookException {
         FacebookConfig facebookConfig = new FacebookConfig("203868393359312", "222526b3c76c56db5ccd5daa20b5f07b", "",
                 "", "");
         FacebookSourceStrategy facebookSourceStrategy = new FacebookSourceStrategy();
         facebookSourceStrategy.setFacebookConfig(facebookConfig);
 
-        Case caseObject = new Case();
-        Event triggerEvent = new Event();
-        triggerEvent.setIdOriginal("1643796052578463_1645858559038879");
-        caseObject.setTriggerEvent(triggerEvent);
-        caseObject.setLastPostId("1643796052578463_1645858559038879");
-        Subject subject = new Subject();
-        subject.setIdentifier("usurioenojado");
-        caseObject.setSubject(subject);
-        UserResolver userResolver = new UserResolver();
-        SourceCredentials credentials = new SourceCredentials();
-        credentials
-                .setToken("EAAC5as8qx9ABAD1zA0oj4pZC6A7baNcFgF5c1GfTLb2m4t9DdCwNtMvHbXl1tuxnnZBe4uEAVZBCoZCylO2NrV8uKTEZAbCWedFJPHGI2TVv6qV6K5KefSDKyGCRUN1KvmMEAV6DsRbvhFOCHB5pSNsAZAcRuEhgLKduahXavzDQZDZD");
-        userResolver.setCredentials(credentials);
-        IntStream.range(0, 10000).forEach(nbr -> {
-            System.out.println(facebookSourceStrategy.sendMessage(caseObject, userResolver, "hola " + nbr, null));
-        });
+        ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
+        configurationBuilder.setOAuthAppId(facebookConfig.getOAuthAppId());
+        configurationBuilder.setOAuthAppSecret(facebookConfig.getOAuthAppSecret());
+        FacebookFactory facebookFactory = new FacebookFactory(configurationBuilder.build());
+        AccessToken accessToken = new AccessToken(
+                "EAAC5as8qx9ABAD1zA0oj4pZC6A7baNcFgF5c1GfTLb2m4t9DdCwNtMvHbXl1tuxnnZBe4uEAVZBCoZCylO2NrV8uKTEZAbCWedFJPHGI2TVv6qV6K5KefSDKyGCRUN1KvmMEAV6DsRbvhFOCHB5pSNsAZAcRuEhgLKduahXavzDQZDZD");
+        Facebook facebook = facebookFactory.getInstance(accessToken);
+
+        Reading reading = new Reading();
+        reading.fields("from");
+        Post post = facebook.getPost("1643796052578463_1670841949873873", reading);
+        System.out.println(post.getFrom().getId());
+
     }
 
 }

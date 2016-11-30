@@ -35,7 +35,6 @@ import com.qsocialnow.responsedetector.factories.TwitterConfiguratorFactory;
 import com.qsocialnow.responsedetector.sources.TwitterClient;
 import com.qsocialnow.responsedetector.sources.TwitterStreamClient;
 
-import scala.util.parsing.combinator.testing.Str;
 import twitter4j.TwitterException;
 
 public class TwitterDetectorService extends SourceDetectorService implements UserToTrackTask<String> {
@@ -191,7 +190,6 @@ public class TwitterDetectorService extends SourceDetectorService implements Use
         }
     }
 
-    @Override
     public void checkErrors(Exception ex) {
         log.error("Checking exception error adding new User Resolver to track list ", ex);
         if (ex instanceof TwitterException) {
@@ -255,7 +253,6 @@ public class TwitterDetectorService extends SourceDetectorService implements Use
         }
     }
 
-    @Override
     public void removeSourceConversation(String conversation) {
         try {
             String nodePath = nodePaths.get(conversation);
@@ -267,7 +264,6 @@ public class TwitterDetectorService extends SourceDetectorService implements Use
         }
     }
 
-    @Override
     public void processEvent(Boolean isResponseFromMessage, Long timestamp, String userResolver, String[] userMentions,
             String sourceMessageId, String messageText, String inReplyToMessageId, String userId, String userName,
             String userProfileImage) {
@@ -317,16 +313,6 @@ public class TwitterDetectorService extends SourceDetectorService implements Use
         } catch (Exception e) {
             log.error("Error trying to register event :" + e);
         }
-    }
-
-    @Override
-    public String getReplyIdToTrack(String idRootComment) {
-        return null;
-    }
-
-    @Override
-    public String getUserIdToTrack(String idRootComment) {
-        return null;
     }
 
     public void setQueueConfig(QueueConfigurator queueConfig) {

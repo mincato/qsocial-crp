@@ -48,9 +48,10 @@ public class SendMessageCaseAction implements AsyncAction, SourceMessagePostProc
         ActionRegistryStatus status;
         if (response.getErrorType() == null) {
             Case caseObject = caseRepository.findOne(response.getRequest().getCaseId());
-            if (caseObject.getIdRootComment() == null)
-                caseObject.setIdRootComment(response.getPostId());
-
+            if (caseObject.getIdRootComment() == null) {
+                if (response.getRequest() != null && response.getRequest().getIdOriginal() != null)
+                    caseObject.setIdRootComment(response.getRequest().getIdOriginal());
+            }
             caseObject.addMessage(new Message(response.getPostId(), false));
             caseRepository.update(caseObject);
 
