@@ -2,8 +2,6 @@ package com.qsocialnow.common.config;
 
 public class QueueConfigurator implements RefreshableConfig<QueueConfigurator> {
 
-    private static final int TOTAL_ITEM_COUNTS = 200;
-
     private static final int TOTAL_FAIL_ITEM_COUNTS = 400;
 
     private static final int TOTAL_MAX_DEAD_ITEM_COUNTS = 1200;
@@ -15,6 +13,10 @@ public class QueueConfigurator implements RefreshableConfig<QueueConfigurator> {
     private static final int INITIAL_DELAY = 30;
 
     private static final String DEAD_LETTER_QUEUE_DIR = "/deadLetterQueue";
+
+    private static final int CLEAN_INITIAL_DELAY = 10;
+
+    private static final int CLEAN_DELAY = 30;
 
     private String baseDir;
 
@@ -35,6 +37,10 @@ public class QueueConfigurator implements RefreshableConfig<QueueConfigurator> {
     private int totalFailItemCounts = TOTAL_FAIL_ITEM_COUNTS;
 
     private int totalMaxDeadItemCounts = TOTAL_MAX_DEAD_ITEM_COUNTS;
+
+    private int cleanInitialDelay = CLEAN_INITIAL_DELAY;
+
+    private int cleanDelay = CLEAN_DELAY;
 
     public QueueConfigurator(final String baseDir, final String queueDir, final String errorQueueDir) {
         this.baseDir = baseDir;
@@ -80,6 +86,14 @@ public class QueueConfigurator implements RefreshableConfig<QueueConfigurator> {
 
     public int getTotalMaxDeadItemCounts() {
         return totalMaxDeadItemCounts;
+    }
+
+    public int getCleanDelay() {
+        return cleanDelay;
+    }
+
+    public int getCleanInitialDelay() {
+        return cleanInitialDelay;
     }
 
     @Override
