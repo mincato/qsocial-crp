@@ -3,6 +3,7 @@ package com.qsocialnow.common.queues;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -38,6 +39,8 @@ public class QueueService {
 
     private QueueConfigurator queueConfiguration;
 
+    private ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+
     // private static QueueService instance;
 
     QueueService(QueueConfigurator queueConfiguration) {
@@ -55,6 +58,7 @@ public class QueueService {
             if (bigQueue == null) {
                 bigQueue = new BigQueueImpl(queueDir, type);
                 log.info("Creating queue:" + type + " successfully..");
+                startCleanMonitor();
             }
             isQueueReady = true;
 
@@ -114,6 +118,14 @@ public class QueueService {
         serviceFailProducerConsumer.execute(producer);
     }
 
+    private void startCleanMonitor() {
+        if (!executor.isShutdown()) {
+            log.info("Starting monitor to clean files for queue - type:" + this.type);
+            executor.scheduleWithFixedDelay(new CleanQueuesMonitor(), queueConfiguration.getCleanInitialDelay(),
+                    queueConfiguration.getCleanDelay(), TimeUnit.SECONDS);
+        }
+    }
+
     public void shutdownQueueService() {
         try {
             if (serviceProducerConsumer != null) {
@@ -124,7 +136,23 @@ public class QueueService {
                 serviceFailProducerConsumer.shutdown();
                 serviceFailProducerConsumer.awaitTermination(10L, TimeUnit.SECONDS);
             }
-        } catch (InterruptedException e) {
+            if (executor != null) {
+                executor.shutdown();
+            }
+            if (bigQueue != null) {
+                log.debug("gc de big queue for queue - type:" + this.type);
+                bigQueue.gc();
+                bigQueue.close();
+            }
+            if (bigQueueFail != null) {
+                bigQueueFail.gc();
+                bigQueueFail.close();
+            }
+            if (deadLetterQueue != null) {
+                deadLetterQueue.gc();
+                deadLetterQueue.close();
+            }
+        } catch (Exception e) {
             log.error("Unexpected error trying to shutdown queue service. Cause", e);
         }
 
@@ -133,4 +161,28 @@ public class QueueService {
     public String getType() {
         return type;
     }
+
+    class CleanQueuesMonitor implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                if (bigQueue != null) {
+                    log.debug("gc de big queue for queue - type:" + type);
+                    bigQueue.gc();
+                }
+                if (bigQueueFail != null) {
+                    bigQueueFail.gc();
+                }
+                if (deadLetterQueue != null) {
+                    deadLetterQueue.gc();
+                }
+            } catch (Exception e) {
+                log.error("There was an error cleaning queues", e);
+            }
+
+        }
+
+    }
+
 }
