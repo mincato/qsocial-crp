@@ -16,7 +16,7 @@
         <module>crp-security</module>
         <module>crp-ticket-manager-web</module>
         <module>crp-response-detector</module>
-    <module>crp-retroactive-process</module>
+        <module>crp-retroactive-process</module>
   </modules>
 
     <properties>
@@ -51,4 +51,3 @@
 
     <version>0.7.7-SNAPSHOT</version>
 </project>
-
