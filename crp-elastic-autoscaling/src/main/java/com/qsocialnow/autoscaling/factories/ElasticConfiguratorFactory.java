@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 import com.qsocialnow.autoscaling.config.ConfigWatcher;
 import com.qsocialnow.autoscaling.config.Configurator;
 
-
 public class ElasticConfiguratorFactory {
 
     public static Configurator getConfigurator(CuratorFramework zookeeperClient, String elasticConfiguratorZnodePath,
