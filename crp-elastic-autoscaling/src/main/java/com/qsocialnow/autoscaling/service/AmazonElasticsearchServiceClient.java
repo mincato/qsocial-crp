@@ -1,10 +1,13 @@
 package com.qsocialnow.autoscaling.service;
 
+import java.util.Collection;
+
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.AmazonWebServiceClient;
 import com.amazonaws.AmazonWebServiceRequest;
 import com.amazonaws.AmazonWebServiceResponse;
 import com.amazonaws.ClientConfiguration;
+import com.amazonaws.ClientConfigurationFactory;
 import com.amazonaws.PredefinedClientConfigurations;
 import com.amazonaws.Request;
 import com.amazonaws.Response;
@@ -18,7 +21,9 @@ import com.amazonaws.protocol.json.JsonClientMetadata;
 import com.amazonaws.protocol.json.JsonErrorResponseMetadata;
 import com.amazonaws.protocol.json.JsonOperationMetadata;
 import com.amazonaws.protocol.json.SdkJsonProtocolFactory;
+import com.amazonaws.regions.InMemoryRegionImpl;
 import com.amazonaws.regions.Region;
+import com.amazonaws.regions.RegionImpl;
 import com.amazonaws.services.elasticsearch.AWSElasticsearch;
 import com.amazonaws.services.elasticsearch.model.AddTagsRequest;
 import com.amazonaws.services.elasticsearch.model.AddTagsResult;
@@ -40,6 +45,8 @@ import com.amazonaws.services.elasticsearch.model.RemoveTagsRequest;
 import com.amazonaws.services.elasticsearch.model.RemoveTagsResult;
 import com.amazonaws.services.elasticsearch.model.UpdateElasticsearchDomainConfigRequest;
 import com.amazonaws.services.elasticsearch.model.UpdateElasticsearchDomainConfigResult;
+import com.amazonaws.services.elasticsearch.model.transform.DescribeElasticsearchDomainConfigRequestMarshaller;
+import com.amazonaws.services.elasticsearch.model.transform.DescribeElasticsearchDomainConfigResultJsonUnmarshaller;
 import com.amazonaws.services.elasticsearch.model.transform.UpdateElasticsearchDomainConfigRequestMarshaller;
 import com.amazonaws.services.elasticsearch.model.transform.UpdateElasticsearchDomainConfigResultJsonUnmarshaller;
 import com.amazonaws.util.AWSRequestMetrics;
@@ -53,46 +60,37 @@ public class AmazonElasticsearchServiceClient extends AmazonWebServiceClient imp
 
     /** Default signing name for the service. */
     private static final String DEFAULT_SIGNING_NAME = "es";
-    
+
     private AWSElasticsearchConfigurationProvider configurator;
+
+    /**
+     * Client configuration factory providing ClientConfigurations tailored to
+     * this client
+     */
+    protected static final ClientConfigurationFactory configFactory = new ClientConfigurationFactory();
 
     private final SdkJsonProtocolFactory protocolFactory = new SdkJsonProtocolFactory(new JsonClientMetadata()
             .withProtocolVersion("1.1").withSupportsCbor(false).withContentTypeOverride("")
             .withBaseServiceExceptionClass(com.amazonaws.services.elasticsearch.model.AWSElasticsearchException.class));
 
-    public AmazonElasticsearchServiceClient(AWSCredentials awsCredentials) {
-        this(awsCredentials, com.amazonaws.PredefinedClientConfigurations.defaultConfig());
-    }
-
     public AmazonElasticsearchServiceClient(AWSElasticsearchConfigurationProvider configurator) {
-    	super(PredefinedClientConfigurations.defaultConfig());
-        this.configurator=configurator;
-    	this.awsCredentialsProvider = new StaticCredentialsProvider(configurator);
+        super(configFactory.getConfig());
+        this.configurator = configurator;
+        this.awsCredentialsProvider = new StaticCredentialsProvider(configurator);
         init();
-    
-    }
 
-    public AmazonElasticsearchServiceClient(AWSCredentials awsCredentials, ClientConfiguration clientConfiguration) {
-        super(clientConfiguration);
-        this.awsCredentialsProvider = new StaticCredentialsProvider(awsCredentials);
-        init();
     }
 
     private void init() {
-        setEndpoint("https://es.us-east-1.amazonaws.com");
-        setServiceNameIntern(DEFAULT_SIGNING_NAME);
-    }
+        setEndpoint(this.configurator.getEndpoint());
+        setEndpointPrefix(ENDPOINT_PREFIX);
+        String regionName = this.configurator.getRegion();
+        RegionImpl impl = new InMemoryRegionImpl(regionName, "prc-cases");
 
-    @Override
-    public void setEndpoint(String endpoint) {
-        // TODO Auto-generated method stub
+        Region region = new Region(impl);
+        setRegion(region);
 
-    }
-
-    @Override
-    public void setRegion(Region region) {
-        // TODO Auto-generated method stub
-
+        // setServiceNameIntern(DEFAULT_SIGNING_NAME);
     }
 
     @Override
@@ -119,8 +117,36 @@ public class AmazonElasticsearchServiceClient extends AmazonWebServiceClient imp
     @Override
     public DescribeElasticsearchDomainConfigResult describeElasticsearchDomainConfig(
             DescribeElasticsearchDomainConfigRequest describeElasticsearchDomainConfigRequest) {
-        // TODO Auto-generated method stub
-        return null;
+
+        ExecutionContext executionContext = createExecutionContext(describeElasticsearchDomainConfigRequest);
+        AWSRequestMetrics awsRequestMetrics = executionContext.getAwsRequestMetrics();
+        awsRequestMetrics.startEvent(Field.ClientExecuteTime);
+        Request<DescribeElasticsearchDomainConfigRequest> request = null;
+        Response<DescribeElasticsearchDomainConfigResult> response = null;
+
+        try {
+            awsRequestMetrics.startEvent(Field.RequestMarshallTime);
+            try {
+                request = new DescribeElasticsearchDomainConfigRequestMarshaller(protocolFactory).marshall(super
+                        .beforeMarshalling(describeElasticsearchDomainConfigRequest));
+                // Binds the request metrics to the current request.
+                request.setAWSRequestMetrics(awsRequestMetrics);
+            } finally {
+                awsRequestMetrics.endEvent(Field.RequestMarshallTime);
+            }
+
+            HttpResponseHandler<AmazonWebServiceResponse<DescribeElasticsearchDomainConfigResult>> responseHandler = protocolFactory
+                    .createResponseHandler(new JsonOperationMetadata().withPayloadJson(true)
+                            .withHasStreamingSuccessResponse(false),
+                            new DescribeElasticsearchDomainConfigResultJsonUnmarshaller());
+            response = invoke(request, responseHandler, executionContext);
+
+            return response.getAwsResponse();
+
+        } finally {
+
+            endClientExecution(awsRequestMetrics, request, response);
+        }
     }
 
     @Override
@@ -224,8 +250,8 @@ public class AmazonElasticsearchServiceClient extends AmazonWebServiceClient imp
         return null;
     }
 
-	public AWSElasticsearchConfigurationProvider getConfigurator() {
-		return configurator;
-	}
+    public AWSElasticsearchConfigurationProvider getConfigurator() {
+        return configurator;
+    }
 
 }
