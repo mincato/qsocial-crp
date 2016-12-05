@@ -20,6 +20,10 @@
          <constructor-arg ref="elasticCaseConfigWatcher" />
     </bean>
     
+    <bean id="amazonClient" class="com.qsocialnow.autoscaling.service.AmazonElasticsearchServiceClient">
+         <constructor-arg ref="elasticCaseConfig"></constructor-arg>
+    </bean>
+    
     <bean id="elasticCaseConfigWatcher" class="com.qsocialnow.autoscaling.config.ConfigWatcher">
 		<constructor-arg value="configurationProvider" />
 		<constructor-arg>

@@ -22,8 +22,11 @@
 	   <property name="elasticsearchProcessor" ref="elasticsearchBeanProcessor"></property>
 	</bean>
 	
-	<bean id="elasticsearchBeanProcessor" class="com.qsocialnow.autoscaling.processor.ElasticsearchProcessor">
+	<bean id="elasticsearchBeanProcessor" class="com.qsocialnow.autoscaling.processor.AutoScalingProcessor">
         <property name="healthService" ref="healthElasticsearchService"></property>
+    	<property name="amazonClient" ref="amazonClient"></property>
     </bean>
+    
+    
 	
 </beans>

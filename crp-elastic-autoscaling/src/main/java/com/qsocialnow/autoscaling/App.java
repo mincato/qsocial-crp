@@ -8,21 +8,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.qsocialnow.autoscaling.processor.ElasticsearchProcessor;
+import com.qsocialnow.autoscaling.processor.AutoScalingProcessor;
 
 public class App {
 
-    private ElasticsearchProcessor elasticsearchProcessor;
+    private AutoScalingProcessor elasticsearchProcessor;
 
     private static final Logger log = LoggerFactory.getLogger(App.class);
 
     public static void main(String[] args) {
-    	if (!lock())
-        {
-    		log.error("Check that no other instance of elasticserch-autoscaling is running and if so, delete the file autoscaling.lock");
+        if (!lock()) {
+            log.error("Check that no other instance of elasticserch-autoscaling is running and if so, delete the file autoscaling.lock");
             return;
         }
-    	log.info("Starting autoscaling service");
+        log.info("Starting autoscaling service");
         ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
                 "classpath:spring/applicationContext.xml");
         context.registerShutdownHook();
@@ -37,27 +36,21 @@ public class App {
 
     }
 
-    public void setElasticsearchProcessor(ElasticsearchProcessor elasticsearchProcessor) {
+    public void setElasticsearchProcessor(AutoScalingProcessor elasticsearchProcessor) {
         this.elasticsearchProcessor = elasticsearchProcessor;
     }
-    
-    private static boolean lock()
-    {
-      try
-       {
-           final File file=new File("autoscaling.lock");
-           if (file.createNewFile())
-           {
-               file.deleteOnExit();
-               return true;
-           }
-           return false;
-       }
-       catch (IOException e)
-       {
-           return false;
-       }
-   }
-    
-    
+
+    private static boolean lock() {
+        try {
+            final File file = new File("autoscaling.lock");
+            if (file.createNewFile()) {
+                file.deleteOnExit();
+                return true;
+            }
+            return false;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
 }

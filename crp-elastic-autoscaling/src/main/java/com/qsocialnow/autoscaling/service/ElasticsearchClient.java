@@ -105,7 +105,7 @@ public class ElasticsearchClient {
                         }, host);
                         if (node != null) {
                             log.info("Indices:" + node.getName() + " indexing: " + node.getIndices().toString()
-                                    + " indexing: " + node.getOs().toString());
+                                    + " indexing: " + node.getFs().toString());
                             indicesInfo.add(node);
                         }
                     }
