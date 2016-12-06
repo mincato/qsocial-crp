@@ -19,7 +19,6 @@ public class HealthService {
     }
 
     public List<Node> checkClusterStatus() {
-        log.info("Starting elastic client");
         ElasticsearchClient client = new ElasticsearchClient(this.configurator);
         client.initClient();
         List<Node> nodes = client.checkClusterHealth();
