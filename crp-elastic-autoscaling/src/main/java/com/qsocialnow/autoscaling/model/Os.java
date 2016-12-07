@@ -11,7 +11,7 @@ public class Os {
 
     @SerializedName("timestamp")
     @Expose
-    private Integer timestamp;
+    private Long timestamp;
     @SerializedName("cpu_percent")
     @Expose
     private Integer cpuPercent;
@@ -37,7 +37,7 @@ public class Os {
      * @param swap
      * @param loadAverage
      */
-    public Os(Integer timestamp, Integer cpuPercent, Double loadAverage, Mem mem) {
+    public Os(Long timestamp, Integer cpuPercent, Double loadAverage, Mem mem) {
         super();
         this.timestamp = timestamp;
         this.cpuPercent = cpuPercent;
@@ -49,7 +49,7 @@ public class Os {
      *
      * @return The timestamp
      */
-    public Integer getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
@@ -58,7 +58,7 @@ public class Os {
      * @param timestamp
      *            The timestamp
      */
-    public void setTimestamp(Integer timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 

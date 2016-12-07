@@ -73,7 +73,7 @@ public class ElasticsearchClient {
     }
 
     public void closeClient() {
-        if (client == null) {
+        if (client != null) {
             client.shutdownClient();
         }
     }
@@ -100,12 +100,9 @@ public class ElasticsearchClient {
                 if (nodes != null) {
                     for (Entry<String, JsonElement> entry : nodes.entrySet()) {
                         JsonObject host = entry.getValue().getAsJsonObject();
-
                         Node node = unmarshall(new TypeToken<Node>() {
                         }, host);
                         if (node != null) {
-                            log.info("Indices:" + node.getName() + " indexing: " + node.getIndices().toString()
-                                    + " indexing: " + node.getOs().toString());
                             indicesInfo.add(node);
                         }
                     }
@@ -119,6 +116,7 @@ public class ElasticsearchClient {
             log.error("Unexpected error: ", e);
 
         }
+        log.info("retrieveing ES configuration #Nodes :" + indicesInfo.size());
         return indicesInfo;
     }
 

@@ -6,9 +6,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Docs {
 
-    private Integer count;
+    private Long count;
 
-    private Integer deleted;
+    private Long deleted;
 
     public Docs() {
     }
@@ -18,7 +18,7 @@ public class Docs {
      * @param count
      * @param deleted
      */
-    public Docs(Integer count, Integer deleted) {
+    public Docs(Long count, Long deleted) {
         this.count = count;
         this.deleted = deleted;
     }
@@ -27,7 +27,7 @@ public class Docs {
      *
      * @return The count
      */
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
@@ -36,7 +36,7 @@ public class Docs {
      * @param count
      *            The count
      */
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 
@@ -44,7 +44,7 @@ public class Docs {
      *
      * @return The deleted
      */
-    public Integer getDeleted() {
+    public Long getDeleted() {
         return deleted;
     }
 
@@ -53,7 +53,7 @@ public class Docs {
      * @param deleted
      *            The deleted
      */
-    public void setDeleted(Integer deleted) {
+    public void setDeleted(Long deleted) {
         this.deleted = deleted;
     }
 

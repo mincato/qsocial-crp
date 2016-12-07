@@ -21,6 +21,10 @@ public class Node {
     @Expose
     private Os os;
 
+    @SerializedName("fs")
+    @Expose
+    private Fs fs;
+
     /**
      * No args constructor for use in serialization
      *
@@ -41,11 +45,12 @@ public class Node {
      * @param script
      * @param breakers
      */
-    public Node(Integer timestamp, String name, Indices indices, Os os) {
+    public Node(Integer timestamp, String name, Indices indices, Os os, Fs fs) {
         super();
         this.name = name;
         this.indices = indices;
         this.os = os;
+        this.fs = fs;
     }
 
     /**
@@ -99,6 +104,14 @@ public class Node {
         this.os = os;
     }
 
+    public Fs getFs() {
+        return fs;
+    }
+
+    public void setFs(Fs fs) {
+        this.fs = fs;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -106,7 +119,7 @@ public class Node {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(name).append(indices).append(os).toHashCode();
+        return new HashCodeBuilder().append(name).append(indices).append(os).append(fs).toHashCode();
     }
 
     @Override
@@ -118,7 +131,8 @@ public class Node {
             return false;
         }
         Node rhs = ((Node) other);
-        return new EqualsBuilder().append(name, rhs.name).append(indices, rhs.indices).append(os, rhs.os).isEquals();
+        return new EqualsBuilder().append(name, rhs.name).append(indices, rhs.indices).append(os, rhs.os)
+                .append(fs, rhs.fs).isEquals();
     }
 
 }

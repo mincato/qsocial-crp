@@ -11,16 +11,20 @@ public class Mem {
 
     @SerializedName("total_in_bytes")
     @Expose
-    private Integer totalInBytes;
+    private Long totalInBytes;
+
     @SerializedName("free_in_bytes")
     @Expose
-    private Integer freeInBytes;
+    private Long freeInBytes;
+
     @SerializedName("used_in_bytes")
     @Expose
-    private Integer usedInBytes;
+    private Long usedInBytes;
+
     @SerializedName("free_percent")
     @Expose
     private Integer freePercent;
+
     @SerializedName("used_percent")
     @Expose
     private Integer usedPercent;
@@ -40,7 +44,7 @@ public class Mem {
      * @param freeInBytes
      * @param freePercent
      */
-    public Mem(Integer totalInBytes, Integer freeInBytes, Integer usedInBytes, Integer freePercent, Integer usedPercent) {
+    public Mem(Long totalInBytes, Long freeInBytes, Long usedInBytes, Integer freePercent, Integer usedPercent) {
         super();
         this.totalInBytes = totalInBytes;
         this.freeInBytes = freeInBytes;
@@ -53,7 +57,7 @@ public class Mem {
      *
      * @return The totalInBytes
      */
-    public Integer getTotalInBytes() {
+    public Long getTotalInBytes() {
         return totalInBytes;
     }
 
@@ -62,7 +66,7 @@ public class Mem {
      * @param totalInBytes
      *            The total_in_bytes
      */
-    public void setTotalInBytes(Integer totalInBytes) {
+    public void setTotalInBytes(Long totalInBytes) {
         this.totalInBytes = totalInBytes;
     }
 
@@ -70,7 +74,7 @@ public class Mem {
      *
      * @return The freeInBytes
      */
-    public Integer getFreeInBytes() {
+    public Long getFreeInBytes() {
         return freeInBytes;
     }
 
@@ -79,7 +83,7 @@ public class Mem {
      * @param freeInBytes
      *            The free_in_bytes
      */
-    public void setFreeInBytes(Integer freeInBytes) {
+    public void setFreeInBytes(Long freeInBytes) {
         this.freeInBytes = freeInBytes;
     }
 
@@ -87,7 +91,7 @@ public class Mem {
      *
      * @return The usedInBytes
      */
-    public Integer getUsedInBytes() {
+    public Long getUsedInBytes() {
         return usedInBytes;
     }
 
@@ -96,7 +100,7 @@ public class Mem {
      * @param usedInBytes
      *            The used_in_bytes
      */
-    public void setUsedInBytes(Integer usedInBytes) {
+    public void setUsedInBytes(Long usedInBytes) {
         this.usedInBytes = usedInBytes;
     }
 
