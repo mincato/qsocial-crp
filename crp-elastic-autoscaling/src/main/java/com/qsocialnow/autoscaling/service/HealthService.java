@@ -28,10 +28,6 @@ public class HealthService {
 
     }
 
-    private boolean validateAlarms(List<Node> nodes) {
-        return true;
-    }
-
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
         this.configurator = configurator;
     }

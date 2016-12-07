@@ -12,7 +12,7 @@ import com.qsocialnow.autoscaling.processor.AutoScalingProcessor;
 
 public class App {
 
-    private AutoScalingProcessor elasticsearchProcessor;
+    private AutoScalingProcessor autoScalingProcessor;
 
     private static final Logger log = LoggerFactory.getLogger(App.class);
 
@@ -28,7 +28,7 @@ public class App {
     }
 
     public void start() {
-        this.elasticsearchProcessor.execute();
+        this.autoScalingProcessor.execute();
     }
 
     public void close() {
@@ -36,8 +36,8 @@ public class App {
 
     }
 
-    public void setElasticsearchProcessor(AutoScalingProcessor elasticsearchProcessor) {
-        this.elasticsearchProcessor = elasticsearchProcessor;
+    public void setAutoScalingProcessor(AutoScalingProcessor autoScalingProcessor) {
+        this.autoScalingProcessor = autoScalingProcessor;
     }
 
     private static boolean lock() {

@@ -19,10 +19,10 @@
  	<context:property-placeholder location="${extPropDir:classpath:}application.properties, classpath:config.properties" ignore-unresolvable="true"/>
  	
  	<bean id="app" init-method="start" destroy-method="close" class="com.qsocialnow.autoscaling.App">
-	   <property name="elasticsearchProcessor" ref="elasticsearchBeanProcessor"></property>
+	   <property name="autoScalingProcessor" ref="autoScalingBeanProcessor"></property>
 	</bean>
 	
-	<bean id="elasticsearchBeanProcessor" class="com.qsocialnow.autoscaling.processor.AutoScalingProcessor">
+	<bean id="autoScalingBeanProcessor" class="com.qsocialnow.autoscaling.processor.AutoScalingProcessor">
         <property name="healthService" ref="healthElasticsearchService"></property>
     	<property name="amazonClient" ref="amazonClient"></property>
     </bean>

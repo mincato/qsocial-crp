@@ -11,15 +11,15 @@ public class Total {
 
     @SerializedName("total_in_bytes")
     @Expose
-    private Integer totalInBytes;
+    private Long totalInBytes;
 
     @SerializedName("free_in_bytes")
     @Expose
-    private Integer freeInBytes;
+    private Long freeInBytes;
 
     @SerializedName("available_in_bytes")
     @Expose
-    private Integer availableInBytes;
+    private Long availableInBytes;
 
     /**
      * No args constructor for use in serialization
@@ -36,34 +36,34 @@ public class Total {
      * @param freeInBytes
      * @param freePercent
      */
-    public Total(Integer totalInBytes, Integer freeInBytes, Integer availableInBytes) {
+    public Total(Long totalInBytes, Long freeInBytes, Long availableInBytes) {
         super();
         this.totalInBytes = totalInBytes;
         this.freeInBytes = freeInBytes;
         this.availableInBytes = availableInBytes;
     }
 
-    public Integer getTotalInBytes() {
+    public Long getTotalInBytes() {
         return totalInBytes;
     }
 
-    public void setTotalInBytes(Integer totalInBytes) {
+    public void setTotalInBytes(Long totalInBytes) {
         this.totalInBytes = totalInBytes;
     }
 
-    public Integer getFreeInBytes() {
+    public Long getFreeInBytes() {
         return freeInBytes;
     }
 
-    public void setFreeInBytes(Integer freeInBytes) {
+    public void setFreeInBytes(Long freeInBytes) {
         this.freeInBytes = freeInBytes;
     }
 
-    public Integer getAvailableInBytes() {
+    public Long getAvailableInBytes() {
         return availableInBytes;
     }
 
-    public void setAvailableInBytes(Integer availableInBytes) {
+    public void setAvailableInBytes(Long availableInBytes) {
         this.availableInBytes = availableInBytes;
     }
 

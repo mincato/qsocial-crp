@@ -11,10 +11,10 @@ public class Store {
 
     @SerializedName("size_in_bytes")
     @Expose
-    private Integer sizeInBytes;
+    private Long sizeInBytes;
     @SerializedName("throttle_time_in_millis")
     @Expose
-    private Integer throttleTimeInMillis;
+    private Long throttleTimeInMillis;
 
     /**
      * No args constructor for use in serialization
@@ -28,7 +28,7 @@ public class Store {
      * @param throttleTimeInMillis
      * @param sizeInBytes
      */
-    public Store(Integer sizeInBytes, Integer throttleTimeInMillis) {
+    public Store(Long sizeInBytes, Long throttleTimeInMillis) {
         this.sizeInBytes = sizeInBytes;
         this.throttleTimeInMillis = throttleTimeInMillis;
     }
@@ -37,7 +37,7 @@ public class Store {
      *
      * @return The sizeInBytes
      */
-    public Integer getSizeInBytes() {
+    public Long getSizeInBytes() {
         return sizeInBytes;
     }
 
@@ -46,7 +46,7 @@ public class Store {
      * @param sizeInBytes
      *            The size_in_bytes
      */
-    public void setSizeInBytes(Integer sizeInBytes) {
+    public void setSizeInBytes(Long sizeInBytes) {
         this.sizeInBytes = sizeInBytes;
     }
 
@@ -54,7 +54,7 @@ public class Store {
      *
      * @return The throttleTimeInMillis
      */
-    public Integer getThrottleTimeInMillis() {
+    public Long getThrottleTimeInMillis() {
         return throttleTimeInMillis;
     }
 
@@ -63,7 +63,7 @@ public class Store {
      * @param throttleTimeInMillis
      *            The throttle_time_in_millis
      */
-    public void setThrottleTimeInMillis(Integer throttleTimeInMillis) {
+    public void setThrottleTimeInMillis(Long throttleTimeInMillis) {
         this.throttleTimeInMillis = throttleTimeInMillis;
     }
 

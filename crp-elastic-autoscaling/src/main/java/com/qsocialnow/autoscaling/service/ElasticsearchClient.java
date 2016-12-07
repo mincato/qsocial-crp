@@ -100,7 +100,6 @@ public class ElasticsearchClient {
                 if (nodes != null) {
                     for (Entry<String, JsonElement> entry : nodes.entrySet()) {
                         JsonObject host = entry.getValue().getAsJsonObject();
-
                         Node node = unmarshall(new TypeToken<Node>() {
                         }, host);
                         if (node != null) {
