@@ -12,19 +12,19 @@ public class Mem {
     @SerializedName("total_in_bytes")
     @Expose
     private Long totalInBytes;
-    
+
     @SerializedName("free_in_bytes")
     @Expose
     private Long freeInBytes;
-    
+
     @SerializedName("used_in_bytes")
     @Expose
     private Long usedInBytes;
-    
+
     @SerializedName("free_percent")
     @Expose
     private Integer freePercent;
-    
+
     @SerializedName("used_percent")
     @Expose
     private Integer usedPercent;

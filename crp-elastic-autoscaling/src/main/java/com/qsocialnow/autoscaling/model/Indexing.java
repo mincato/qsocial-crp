@@ -40,9 +40,9 @@ public class Indexing {
     @Expose
     private Long throttleTimeInMillis;
 
-    public Indexing(Long indexTotal, Long indexTimeInMillis, Long indexCurrent, Long indexFailed,
-            Long deleteTotal, Long deleteTimeInMillis, Long deleteCurrent, Long noopUpdateTotal,
-            Boolean isThrottled, Long throttleTimeInMillis) {
+    public Indexing(Long indexTotal, Long indexTimeInMillis, Long indexCurrent, Long indexFailed, Long deleteTotal,
+            Long deleteTimeInMillis, Long deleteCurrent, Long noopUpdateTotal, Boolean isThrottled,
+            Long throttleTimeInMillis) {
         this.indexTotal = indexTotal;
         this.indexTimeInMillis = indexTimeInMillis;
         this.indexCurrent = indexCurrent;
