@@ -20,19 +20,4 @@
  		</constructor-arg>
 	</bean>
 	
-	<bean id="zookeeperConnectionString" class="com.qsocialnow.autoscaling.factories.ZookeeperConnectionStringFactory" factory-method="create">
- 		<constructor-arg ref="zookeeperCentralClient"></constructor-arg>
- 		<constructor-arg value="${app.zookeeper.configurator.path}"></constructor-arg>
-	</bean>
-	
-	<bean id="zookeeperClient" init-method="start" destroy-method="close" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient">
- 		<constructor-arg ref="zookeeperConnectionString"></constructor-arg>
- 		<constructor-arg>
- 			<bean class="org.apache.curator.retry.ExponentialBackoffRetry">
-				<constructor-arg  value="1000"></constructor-arg>
-				<constructor-arg  value="3"></constructor-arg>
-			</bean>
- 		</constructor-arg>
-	</bean>
-	
 </beans>

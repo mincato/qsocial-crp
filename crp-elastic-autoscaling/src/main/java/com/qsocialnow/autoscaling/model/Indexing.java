@@ -11,38 +11,38 @@ public class Indexing {
 
     @SerializedName("index_total")
     @Expose
-    private Integer indexTotal;
+    private Long indexTotal;
     @SerializedName("index_time_in_millis")
     @Expose
-    private Integer indexTimeInMillis;
+    private Long indexTimeInMillis;
     @SerializedName("index_current")
     @Expose
-    private Integer indexCurrent;
+    private Long indexCurrent;
     @SerializedName("index_failed")
     @Expose
-    private Integer indexFailed;
+    private Long indexFailed;
     @SerializedName("delete_total")
     @Expose
-    private Integer deleteTotal;
+    private Long deleteTotal;
     @SerializedName("delete_time_in_millis")
     @Expose
-    private Integer deleteTimeInMillis;
+    private Long deleteTimeInMillis;
     @SerializedName("delete_current")
     @Expose
-    private Integer deleteCurrent;
+    private Long deleteCurrent;
     @SerializedName("noop_update_total")
     @Expose
-    private Integer noopUpdateTotal;
+    private Long noopUpdateTotal;
     @SerializedName("is_throttled")
     @Expose
     private Boolean isThrottled;
     @SerializedName("throttle_time_in_millis")
     @Expose
-    private Integer throttleTimeInMillis;
+    private Long throttleTimeInMillis;
 
-    public Indexing(Integer indexTotal, Integer indexTimeInMillis, Integer indexCurrent, Integer indexFailed,
-            Integer deleteTotal, Integer deleteTimeInMillis, Integer deleteCurrent, Integer noopUpdateTotal,
-            Boolean isThrottled, Integer throttleTimeInMillis) {
+    public Indexing(Long indexTotal, Long indexTimeInMillis, Long indexCurrent, Long indexFailed, Long deleteTotal,
+            Long deleteTimeInMillis, Long deleteCurrent, Long noopUpdateTotal, Boolean isThrottled,
+            Long throttleTimeInMillis) {
         this.indexTotal = indexTotal;
         this.indexTimeInMillis = indexTimeInMillis;
         this.indexCurrent = indexCurrent;
@@ -59,7 +59,7 @@ public class Indexing {
      *
      * @return The indexTotal
      */
-    public Integer getIndexTotal() {
+    public Long getIndexTotal() {
         return indexTotal;
     }
 
@@ -68,7 +68,7 @@ public class Indexing {
      * @param indexTotal
      *            The index_total
      */
-    public void setIndexTotal(Integer indexTotal) {
+    public void setIndexTotal(Long indexTotal) {
         this.indexTotal = indexTotal;
     }
 
@@ -76,7 +76,7 @@ public class Indexing {
      *
      * @return The indexTimeInMillis
      */
-    public Integer getIndexTimeInMillis() {
+    public Long getIndexTimeInMillis() {
         return indexTimeInMillis;
     }
 
@@ -85,7 +85,7 @@ public class Indexing {
      * @param indexTimeInMillis
      *            The index_time_in_millis
      */
-    public void setIndexTimeInMillis(Integer indexTimeInMillis) {
+    public void setIndexTimeInMillis(Long indexTimeInMillis) {
         this.indexTimeInMillis = indexTimeInMillis;
     }
 
@@ -93,7 +93,7 @@ public class Indexing {
      *
      * @return The indexCurrent
      */
-    public Integer getIndexCurrent() {
+    public Long getIndexCurrent() {
         return indexCurrent;
     }
 
@@ -102,7 +102,7 @@ public class Indexing {
      * @param indexCurrent
      *            The index_current
      */
-    public void setIndexCurrent(Integer indexCurrent) {
+    public void setIndexCurrent(Long indexCurrent) {
         this.indexCurrent = indexCurrent;
     }
 
@@ -110,7 +110,7 @@ public class Indexing {
      *
      * @return The indexFailed
      */
-    public Integer getIndexFailed() {
+    public Long getIndexFailed() {
         return indexFailed;
     }
 
@@ -119,7 +119,7 @@ public class Indexing {
      * @param indexFailed
      *            The index_failed
      */
-    public void setIndexFailed(Integer indexFailed) {
+    public void setIndexFailed(Long indexFailed) {
         this.indexFailed = indexFailed;
     }
 
@@ -127,7 +127,7 @@ public class Indexing {
      *
      * @return The deleteTotal
      */
-    public Integer getDeleteTotal() {
+    public Long getDeleteTotal() {
         return deleteTotal;
     }
 
@@ -136,7 +136,7 @@ public class Indexing {
      * @param deleteTotal
      *            The delete_total
      */
-    public void setDeleteTotal(Integer deleteTotal) {
+    public void setDeleteTotal(Long deleteTotal) {
         this.deleteTotal = deleteTotal;
     }
 
@@ -144,7 +144,7 @@ public class Indexing {
      *
      * @return The deleteTimeInMillis
      */
-    public Integer getDeleteTimeInMillis() {
+    public Long getDeleteTimeInMillis() {
         return deleteTimeInMillis;
     }
 
@@ -153,7 +153,7 @@ public class Indexing {
      * @param deleteTimeInMillis
      *            The delete_time_in_millis
      */
-    public void setDeleteTimeInMillis(Integer deleteTimeInMillis) {
+    public void setDeleteTimeInMillis(Long deleteTimeInMillis) {
         this.deleteTimeInMillis = deleteTimeInMillis;
     }
 
@@ -161,7 +161,7 @@ public class Indexing {
      *
      * @return The deleteCurrent
      */
-    public Integer getDeleteCurrent() {
+    public Long getDeleteCurrent() {
         return deleteCurrent;
     }
 
@@ -170,7 +170,7 @@ public class Indexing {
      * @param deleteCurrent
      *            The delete_current
      */
-    public void setDeleteCurrent(Integer deleteCurrent) {
+    public void setDeleteCurrent(Long deleteCurrent) {
         this.deleteCurrent = deleteCurrent;
     }
 
@@ -178,7 +178,7 @@ public class Indexing {
      *
      * @return The noopUpdateTotal
      */
-    public Integer getNoopUpdateTotal() {
+    public Long getNoopUpdateTotal() {
         return noopUpdateTotal;
     }
 
@@ -187,7 +187,7 @@ public class Indexing {
      * @param noopUpdateTotal
      *            The noop_update_total
      */
-    public void setNoopUpdateTotal(Integer noopUpdateTotal) {
+    public void setNoopUpdateTotal(Long noopUpdateTotal) {
         this.noopUpdateTotal = noopUpdateTotal;
     }
 
@@ -212,7 +212,7 @@ public class Indexing {
      *
      * @return The throttleTimeInMillis
      */
-    public Integer getThrottleTimeInMillis() {
+    public Long getThrottleTimeInMillis() {
         return throttleTimeInMillis;
     }
 
@@ -221,7 +221,7 @@ public class Indexing {
      * @param throttleTimeInMillis
      *            The throttle_time_in_millis
      */
-    public void setThrottleTimeInMillis(Integer throttleTimeInMillis) {
+    public void setThrottleTimeInMillis(Long throttleTimeInMillis) {
         this.throttleTimeInMillis = throttleTimeInMillis;
     }
 

@@ -53,6 +53,7 @@ public class ActionRegistryMapping implements DynamicMapping, Mapping<ActionRegi
     @Override
     public ActionRegistryType getDocumentType(ActionRegistry document) {
         ActionRegistryType actionRegistryType = new ActionRegistryType();
+        actionRegistryType.setId(document.getId());
         actionRegistryType.setAction(document.getAction());
         actionRegistryType.setAutomatic(document.getAutomatic());
         actionRegistryType.setComment(document.getComment());

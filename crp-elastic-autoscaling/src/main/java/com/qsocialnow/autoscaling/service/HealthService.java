@@ -18,17 +18,14 @@ public class HealthService {
 
     }
 
-    public void checkClusterStatus() {
-        log.info("Starting elastic client");
+    public List<Node> checkClusterStatus() {
         ElasticsearchClient client = new ElasticsearchClient(this.configurator);
         client.initClient();
         List<Node> nodes = client.checkClusterHealth();
         client.closeClient();
-        
-        //check metrics value
-        
-        //take care autoscaling action based on metrics values 
-        
+
+        return nodes;
+
     }
 
     public void setConfigurator(AWSElasticsearchConfigurationProvider configurator) {
