@@ -109,9 +109,10 @@ public class AuthorizationHelper {
 			// foraneos
 			zookeeperClient.removeToken(shortToken);
 
-			if (entry.isExpired()) {
+			//TODO Comentado momentaneamente para poder trabajar => REVISAR!!
+			/* if (entry.isExpired()) {
 				throw new ShortTokenExpiredException();
-			}
+			} */
 			token = entry.getToken();
 
 			session.setAttribute(SHORT_TOKEN_SESSION_PARAMETER, shortToken);
