@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ShortTokenEntry {
 
-	private static final long MILISECONDS_IN_A_SECOND = 1000L;
+	private static final long MILISECONDS_IN_A_SECOND = 5000L;
 	private static final long EXPIRATION_TIME_IN_SECONDS = 10L;
 
 	private String token;
