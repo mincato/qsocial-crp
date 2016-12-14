@@ -143,7 +143,7 @@ public class AutoScalingProcessor {
     private boolean isValidFSFreeMemory(Fs fs) {
         if (fs != null && fs.getTotal() != null) {
             Total total = fs.getTotal();
-            double consumed = (total.getFreeInBytes() * 100.0f) / total.getTotalInBytes();
+            double consumed = 100.0f - (total.getFreeInBytes() * 100.0f) / total.getTotalInBytes();
             log.info("Data Node: free: " + total.getFreeInBytes() + " total: " + total.getTotalInBytes()
                     + " - total% consumed: " + consumed);
             return consumed < ALLOWED_MEMORY_SIZE;
