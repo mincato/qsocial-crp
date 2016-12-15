@@ -13,12 +13,14 @@ import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.zk.ui.select.annotation.VariableResolver;
+import org.zkoss.zk.ui.select.annotation.WireVariable;
 import org.zkoss.zkplus.spring.DelegatingVariableResolver;
 
 import com.qsocialnow.common.model.config.ActionType;
 import com.qsocialnow.common.model.config.AutomaticActionCriteria;
 import com.qsocialnow.model.SegmentView;
 import com.qsocialnow.model.TriggerView;
+import com.qsocialnow.services.UserSessionService;
 
 @VariableResolver(DelegatingVariableResolver.class)
 public class CreateActionViewModel implements Serializable {
@@ -33,9 +35,15 @@ public class CreateActionViewModel implements Serializable {
 
     private SegmentView segment;
 
+    @WireVariable
+    private UserSessionService userSessionService;
+
     @Init
     public void init() {
         this.actionOptions = new ArrayList<>(ActionType.automaticActions);
+        if (!userSessionService.isOdatech()) {
+            this.actionOptions.remove(ActionType.REPLY);
+        }
     }
 
     @GlobalCommand
